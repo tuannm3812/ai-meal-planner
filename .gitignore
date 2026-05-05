@@ -1,0 +1,18 @@
+# Python
+venv/
+__pycache__/
+*.py[cod]
+.env
+
+# Frontend
+node_modules/
+dist/
+dist-ssr/
+
+# Logs and local files
+*.log
+*.local
+.DS_Store
+.idea/
+.vscode/*
+!.vscode/extensions.json
