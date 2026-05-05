@@ -1,7 +1,8 @@
 import axios from 'axios'
 import { useMemo, useState } from 'react'
 
-const API_URL = 'http://localhost:8000/generate-meal-plan'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_URL = `${API_BASE_URL}/generate-meal-plan`
 
 const formatCurrency = (value) =>
   new Intl.NumberFormat('en-AU', {
@@ -248,7 +249,7 @@ function App() {
                             {item.store_product_name}
                           </p>
                           <p className="mt-1 text-sm text-slate-600">
-                            {item.original_item_name} · {item.category_or_aisle}
+                            {item.original_item_name} - {item.category_or_aisle}
                           </p>
                         </div>
                         <p className="text-lg font-semibold text-slate-950 sm:text-right">

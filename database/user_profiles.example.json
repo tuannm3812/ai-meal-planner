@@ -1,0 +1,18 @@
+{
+  "default": {
+    "age": 28,
+    "gender": "m",
+    "weight": 80.0,
+    "height": 180.0,
+    "workout_level": 1.55,
+    "dietary_restrictions": ["dairy-free", "high-protein"]
+  },
+  "user_123": {
+    "age": 28,
+    "gender": "m",
+    "weight": 80.0,
+    "height": 180.0,
+    "workout_level": 1.55,
+    "dietary_restrictions": ["dairy-free", "high-protein"]
+  }
+}
