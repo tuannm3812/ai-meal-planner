@@ -1,8 +1,10 @@
 import json
 import logging
+import re
+import time
 from typing import Any, Dict, List
 from urllib.parse import urlencode
-from urllib.request import urlopen
+from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
@@ -38,9 +40,18 @@ class MealNutrition(BaseModel):
 
 
 class NutritionAgent:
-    def __init__(self, usda_api_key: str | None = None):
+    def __init__(
+        self,
+        usda_api_key: str | None = None,
+        fatsecret_client_id: str | None = None,
+        fatsecret_client_secret: str | None = None,
+    ):
         self.api_key = usda_api_key
         self.base_url = "https://api.nal.usda.gov/fdc/v1/foods/search"
+        self.fatsecret_client_id = fatsecret_client_id
+        self.fatsecret_client_secret = fatsecret_client_secret
+        self.fatsecret_token: str | None = None
+        self.fatsecret_token_expires_at = 0.0
 
     def calculate_meal_macros(self, ingredients: List[Any]) -> MealNutrition:
         processed_ingredients = []
@@ -52,7 +63,7 @@ class NutritionAgent:
             grams = ingredient.base_quantity_grams
             base_macros = self._query_macros_per_100g(name)
 
-            if base_macros["source"] != "usda_fooddata_central":
+            if base_macros["source"] not in {"usda_fooddata_central", "fatsecret_platform"}:
                 warnings.append(f"Estimated nutrition for {name}")
 
             scale_factor = grams / 100.0
@@ -82,7 +93,7 @@ class NutritionAgent:
             total_fat=round(totals["fat"], 1),
             metadata=AgentMetadata(
                 agent_name="NutritionAgent",
-                source="usda_or_estimated",
+                source="usda_fatsecret_or_estimated",
                 confidence=confidence,
                 warnings=warnings,
             ),
@@ -92,10 +103,18 @@ class NutritionAgent:
         if self.api_key:
             try:
                 usda_result = self._query_usda_database(item_name)
-                if usda_result:
+                if self._has_usable_macros(usda_result):
                     return usda_result
             except Exception as exc:
                 logger.warning("USDA lookup failed for %s: %s", item_name, exc)
+
+        if self.fatsecret_client_id and self.fatsecret_client_secret:
+            try:
+                fatsecret_result = self._query_fatsecret_database(item_name)
+                if self._has_usable_macros(fatsecret_result):
+                    return fatsecret_result
+            except Exception as exc:
+                logger.warning("FatSecret lookup failed for %s: %s", item_name, exc)
 
         return self._estimate_macros_per_100g(item_name)
 
@@ -120,6 +139,98 @@ class NutritionAgent:
             "confidence": 0.9,
         }
 
+    def _query_fatsecret_database(self, item_name: str) -> Dict[str, Any] | None:
+        token = self._get_fatsecret_token()
+        request_body = urlencode(
+            {
+                "method": "foods.search",
+                "search_expression": item_name,
+                "format": "json",
+                "max_results": 1,
+            }
+        ).encode("utf-8")
+        request = Request(
+            "https://platform.fatsecret.com/rest/server.api",
+            data=request_body,
+            headers={
+                "Authorization": f"Bearer {token}",
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            method="POST",
+        )
+
+        with urlopen(request, timeout=8) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+
+        if "error" in payload:
+            error = payload["error"]
+            raise RuntimeError(f"FatSecret API error {error.get('code')}: {error.get('message')}")
+
+        foods = payload.get("foods", {}).get("food", [])
+        if isinstance(foods, dict):
+            foods = [foods]
+        if not foods:
+            return None
+
+        description = foods[0].get("food_description", "")
+        macros = self._parse_fatsecret_description(description)
+        if not macros:
+            return None
+
+        return {
+            **macros,
+            "source": "fatsecret_platform",
+            "confidence": 0.84,
+        }
+
+    def _get_fatsecret_token(self) -> str:
+        if self.fatsecret_token and time.time() < self.fatsecret_token_expires_at:
+            return self.fatsecret_token
+
+        request_body = urlencode(
+            {
+                "grant_type": "client_credentials",
+                "scope": "basic",
+            }
+        ).encode("utf-8")
+        request = Request(
+            "https://oauth.fatsecret.com/connect/token",
+            data=request_body,
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+            method="POST",
+        )
+        credentials = f"{self.fatsecret_client_id}:{self.fatsecret_client_secret}"
+        request.add_header(
+            "Authorization",
+            f"Basic {self._basic_auth_token(credentials)}",
+        )
+
+        with urlopen(request, timeout=8) as response:
+            payload = json.loads(response.read().decode("utf-8"))
+
+        self.fatsecret_token = payload["access_token"]
+        self.fatsecret_token_expires_at = time.time() + int(payload.get("expires_in", 3600)) - 60
+        return self.fatsecret_token
+
+    def _parse_fatsecret_description(self, description: str) -> Dict[str, float] | None:
+        if "per 100g" not in description.lower():
+            return None
+
+        patterns = {
+            "calories": r"Calories:\s*([0-9.]+)\s*kcal",
+            "fat": r"Fat:\s*([0-9.]+)\s*g",
+            "carbs": r"Carbs:\s*([0-9.]+)\s*g",
+            "protein": r"Protein:\s*([0-9.]+)\s*g",
+        }
+        values = {}
+        for key, pattern in patterns.items():
+            match = re.search(pattern, description, flags=re.IGNORECASE)
+            if not match:
+                return None
+            values[key] = float(match.group(1))
+
+        return values
+
     def _estimate_macros_per_100g(self, item_name: str) -> Dict[str, Any]:
         name = item_name.lower()
         lookup = {
@@ -129,6 +240,7 @@ class NutritionAgent:
             "firm tofu": {"calories": 144, "protein": 17, "carbs": 3, "fat": 9},
             "whole wheat hamburger bun": {"calories": 260, "protein": 10, "carbs": 44, "fat": 4},
             "wholemeal pasta": {"calories": 348, "protein": 14, "carbs": 70, "fat": 2.5},
+            "rice noodles": {"calories": 364, "protein": 6, "carbs": 80, "fat": 0.6},
             "brown rice": {"calories": 123, "protein": 2.7, "carbs": 25.6, "fat": 1},
             "mixed salad greens": {"calories": 15, "protein": 1.5, "carbs": 3, "fat": 0.2},
             "baby spinach": {"calories": 23, "protein": 2.9, "carbs": 3.6, "fat": 0.4},
@@ -159,6 +271,18 @@ class NutritionAgent:
             if partial_key in nutrient_name:
                 return float(nutrient.get("value", 0))
         return float(by_name.get(fallback_key.lower(), {}).get("value", 0))
+
+    @staticmethod
+    def _basic_auth_token(credentials: str) -> str:
+        import base64
+
+        return base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
+
+    @staticmethod
+    def _has_usable_macros(macros: Dict[str, Any] | None) -> bool:
+        if not macros:
+            return False
+        return any(float(macros.get(key, 0)) > 0 for key in ["calories", "protein", "carbs", "fat"])
 
     @staticmethod
     def _average_confidence(items: List[IngredientMacro]) -> float:

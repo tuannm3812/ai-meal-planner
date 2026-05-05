@@ -1,8 +1,6 @@
 import logging
 from typing import Any, List
 
-from google import genai
-from google.genai import types
 from pydantic import BaseModel, Field
 
 
@@ -63,9 +61,22 @@ class MealDefinitionAgent:
     def __init__(self, db_connection: Any, gemini_api_key: str | None = None):
         self.db = db_connection
         self.model = None
+        self.types = None
+        self.model_unavailable_reason = "No Gemini API key configured"
 
         if gemini_api_key:
-            self.model = genai.Client(api_key=gemini_api_key)
+            try:
+                from google import genai
+                from google.genai import types
+
+                self.model = genai.Client(api_key=gemini_api_key)
+                self.types = types
+                self.model_unavailable_reason = ""
+            except ImportError:
+                self.model_unavailable_reason = "google-genai is not installed in the active Python environment"
+                logger.warning(
+                    "google-genai is not installed; meal generation will use deterministic fallbacks."
+                )
 
     def calculate_bmr(
         self,
@@ -93,7 +104,12 @@ class MealDefinitionAgent:
         )
 
         if not self.model:
-            return self._fallback_payload(craving, user_biometrics, target_calories, "No Gemini API key configured")
+            return self._fallback_payload(
+                craving,
+                user_biometrics,
+                target_calories,
+                self.model_unavailable_reason,
+            )
 
         prompt = self._build_prompt(craving, target_calories, user_biometrics["dietary_restrictions"])
 
@@ -101,7 +117,7 @@ class MealDefinitionAgent:
             response = self.model.models.generate_content(
                 model="gemini-2.0-flash",
                 contents=prompt,
-                config=types.GenerateContentConfig(
+                config=self.types.GenerateContentConfig(
                     response_mime_type="application/json",
                     response_schema=LlmMealPlanPayload,
                 ),
@@ -152,7 +168,15 @@ class MealDefinitionAgent:
     ) -> MealPlanPayload:
         craving_lower = craving.lower()
 
-        if "pasta" in craving_lower:
+        if "noodle" in craving_lower or "asian" in craving_lower:
+            meal_name = "High-Protein Asian Tofu Noodle Bowl"
+            ingredients = [
+                {"item_name": "firm tofu", "base_quantity_grams": 180},
+                {"item_name": "rice noodles", "base_quantity_grams": 90},
+                {"item_name": "broccoli", "base_quantity_grams": 120},
+                {"item_name": "soy sauce", "base_quantity_grams": 20},
+            ]
+        elif "pasta" in craving_lower:
             meal_name = "High-Protein Tomato Turkey Pasta"
             ingredients = [
                 {"item_name": "lean turkey mince", "base_quantity_grams": 160},

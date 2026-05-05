@@ -135,6 +135,11 @@ class SupermarketAgent:
                 "aisle": "Pantry",
                 "price": 2.80,
             },
+            "rice noodles": {
+                "sku": "Rice Noodles 375g",
+                "aisle": "Asian Foods",
+                "price": 2.70,
+            },
             "brown rice": {
                 "sku": "Brown Rice 1kg",
                 "aisle": "Pantry",

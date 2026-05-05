@@ -23,6 +23,8 @@ class AppSettings:
     allowed_origins: List[str]
     gemini_api_key: str | None
     usda_api_key: str | None
+    fatsecret_client_id: str | None
+    fatsecret_client_secret: str | None
     maps_api_key: str | None
     inventory_api_key: str | None
     data_dir: Path
@@ -38,6 +40,8 @@ class AppSettings:
             ),
             gemini_api_key=os.getenv("GEMINI_API_KEY"),
             usda_api_key=os.getenv("USDA_API_KEY"),
+            fatsecret_client_id=os.getenv("FATSECRET_CLIENT_ID"),
+            fatsecret_client_secret=os.getenv("FATSECRET_CLIENT_SECRET"),
             maps_api_key=os.getenv("MAPS_API_KEY"),
             inventory_api_key=os.getenv("INVENTORY_API_KEY"),
             data_dir=BASE_DIR / "database",

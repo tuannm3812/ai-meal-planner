@@ -8,7 +8,7 @@ The project combines a FastAPI backend with a React dashboard. The backend orche
 
 - Craving-based meal generation using a meal definition agent
 - User context support through file-backed profile data with a default fallback
-- Nutrition calculation with optional USDA FoodData Central lookup and local estimates
+- Nutrition calculation with optional USDA and FatSecret lookup plus local estimates
 - Supermarket product mapping with estimated shopping cost and confidence metadata
 - React dashboard with loading, error, and results states
 - FastAPI endpoints for generation, health checks, and user meal history
@@ -69,6 +69,8 @@ APP_ENV=development
 ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 GEMINI_API_KEY=your_gemini_api_key_here
 USDA_API_KEY=optional_usda_api_key_here
+FATSECRET_CLIENT_ID=optional_fatsecret_client_id_here
+FATSECRET_CLIENT_SECRET=optional_fatsecret_client_secret_here
 ```
 
 Run the API:
@@ -205,6 +207,8 @@ curl http://localhost:8000/health
 
 - The backend includes deterministic fallbacks so the workflow stays usable when optional external APIs are unavailable.
 - Nutrition and grocery results include source and confidence metadata for safer user-facing display.
+- Nutrition provider order is USDA, then FatSecret, then local reference/category estimates.
+- FatSecret may require your server IP address to be allowed in the FatSecret developer console before food search calls succeed.
 - Generated meal history is saved to `database/meal_history.json`, which is intentionally ignored by Git.
 - `backend/.env`, `venv`, `node_modules`, build output, and Python caches are intentionally ignored by Git.
 

@@ -49,7 +49,11 @@ meal_agent = MealDefinitionAgent(
     db_connection=user_profiles,
     gemini_api_key=settings.gemini_api_key,
 )
-nutrition_agent = NutritionAgent(usda_api_key=settings.usda_api_key)
+nutrition_agent = NutritionAgent(
+    usda_api_key=settings.usda_api_key,
+    fatsecret_client_id=settings.fatsecret_client_id,
+    fatsecret_client_secret=settings.fatsecret_client_secret,
+)
 supermarket_agent = SupermarketAgent(
     maps_api_key=settings.maps_api_key,
     inventory_api_key=settings.inventory_api_key,
@@ -64,6 +68,9 @@ async def health_check() -> Dict[str, Any]:
         "services": {
             "gemini_configured": bool(settings.gemini_api_key),
             "usda_configured": bool(settings.usda_api_key),
+            "fatsecret_configured": bool(
+                settings.fatsecret_client_id and settings.fatsecret_client_secret
+            ),
             "history_store": str(meal_history.history_path),
         },
     }
