@@ -29,6 +29,7 @@ ai-meal-planner/
 |   |   |   |-- meal_plans.py
 |   |   |   `-- user_profiles.py
 |   |   |-- schemas/
+|   |   |   |-- requests.py
 |   |   |   |-- meal_plan.py
 |   |   |   |-- nutrition.py
 |   |   |   `-- user_profile.py
@@ -39,6 +40,8 @@ ai-meal-planner/
 |   |-- tests/
 |   |-- requirements.txt
 |   `-- README.md
+|-- render.yaml
+|-- runtime.txt
 |-- data/
 |   |-- external/
 |   |-- processed/
@@ -62,14 +65,14 @@ ai-meal-planner/
 
 ## Current-to-Target Migration
 
-The repository now follows the target package layout. Continue tightening it incrementally:
+The repository now follows most of the target package layout. Continue tightening it incrementally:
 
-1. Move shared Pydantic models into `backend/app/schemas/`.
-2. Move API route handlers out of `main.py` into `backend/app/api/routes/`.
-3. Extract external API calls into `backend/app/services/`.
-4. Add reusable calorie model feature transforms under `backend/app/ml/`.
-5. Add retrieval-backed meal generation under `backend/app/rag/`.
-6. Add tests as each module is moved.
+1. Move API route handlers out of `main.py` into `backend/app/api/routes/`.
+2. Move agent response models into `backend/app/schemas/` once the API contracts stabilize.
+3. Extract USDA/FatSecret clients into `backend/app/services/`.
+4. Split JSON storage repositories by domain when replacing local files with a managed database.
+5. Add reusable calorie model feature transforms under `backend/app/ml/`.
+6. Keep retrieval quality tests updated whenever the meal corpus changes.
 
 ## Naming
 

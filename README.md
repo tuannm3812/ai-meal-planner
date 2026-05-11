@@ -17,24 +17,26 @@ The project combines a FastAPI backend, ML-ready agent modules, and a lightweigh
 
 - Calorie target calculation with a dedicated calorie expenditure agent
 - Promoted compact Kaggle-trained calorie expenditure model artifact
-- Local vector RAG meal retrieval to reduce Gemini calls and handle rate limits
-- Preference-aware meal generation using typed ingredient outputs
+- Local vector RAG meal retrieval to avoid Gemini dependency for base meal creation
+- Hard filtering for allergies and health constraints before retrieval
+- Portion scaling, ingredient substitution rules, and structured retrieval metadata
 - Nutrition calculation with optional USDA and FatSecret lookup plus local estimates
+- User feedback capture for likes, ratings, saved meals, and notes
 - User context support through file-backed profile data with a default fallback
 - Supermarket product mapping with estimated shopping cost and confidence metadata
-- FastAPI endpoints for generation, health checks, and user meal history
+- FastAPI endpoints for generation, health checks, user meal history, and feedback
 - Streamlit API client for backend-first testing and demos
 - React dashboard retained for later frontend refinement
 
 ## Tech Stack
 
 - Backend: Python, FastAPI, Pydantic, Uvicorn
-- ML/RAG: scikit-learn, TF-IDF vector retrieval, Kaggle-trained calorie model
-- AI: Google Gemini via `google-genai`, used only when retrieval cannot satisfy the meal request
+- ML/RAG: scikit-learn, TF-IDF vector retrieval, optional sentence-transformers + FAISS, Kaggle-trained calorie model
+- AI: Google Gemini via `google-genai`, reserved for optional final explanation/adaptation
 - Nutrition: USDA FoodData Central, optional FatSecret, trusted local fallbacks
 - Demo UI: Streamlit
 - Frontend: React, Vite, Tailwind CSS, Axios
-- Tooling: Ruff, pytest, ESLint, npm
+- Tooling: pytest, GitHub Actions CI, Ruff config, ESLint, npm
 
 ## Project Structure
 
@@ -69,6 +71,7 @@ ai-meal-planner/
 |-- .env.example
 |-- requirements.txt
 |-- pyproject.toml
+|-- render.yaml
 `-- README.md
 ```
 
@@ -79,14 +82,15 @@ See `docs/architecture/system_architecture.md` and `docs/engineering/repo_struct
 ```text
 User profile + craving
 -> CalorieExpenditureAgent predicts daily expenditure
--> MealRecommendationAgent retrieves a meal from local vector RAG
--> Gemini is used only if retrieval cannot find a strong match
+-> MealRecommendationAgent filters constraints and retrieves from local vector RAG
+-> Portion scaling and substitution rules adapt the selected template
+-> Optional Gemini final explanation only when ENABLE_GEMINI_ADAPTATION=1
 -> NutritionVerificationAgent verifies ingredients through USDA/FatSecret/local references
 -> SupermarketAgent maps ingredients to local grocery estimates
 -> Streamlit renders the response for testing
 ```
 
-The meal path is retrieval-first so common cravings work even when Gemini is rate limited.
+The meal path is retrieval-first so common cravings work even when Gemini is rate limited or disabled.
 
 ## Getting Started
 
@@ -95,7 +99,7 @@ The meal path is retrieval-first so common cravings work even when Gemini is rat
 - Python 3.11+
 - Node.js 20+
 - npm
-- Optional: a Gemini API key for live AI generation
+- Optional: a Gemini API key for final meal explanations
 - Optional: a USDA FoodData Central API key for live nutrition lookup
 
 ### Backend Setup
@@ -144,6 +148,10 @@ INVENTORY_API_KEY=
 CALORIE_MODEL_PATH=models/calorie_expenditure/calorie_expenditure_model.joblib
 CALORIE_MODEL_VERSION=hist_gradient_boosting_deep_v0.1.0
 MEAL_CORPUS_PATH=data/meal_corpus/meals.json
+RAG_BACKEND=auto
+RAG_EMBEDDING_CACHE_DIR=data/vector_index
+RAG_EMBEDDING_ACTIVATION_SIZE=50
+ENABLE_GEMINI_ADAPTATION=0
 ```
 
 `MAPS_API_KEY` and `INVENTORY_API_KEY` are placeholders for later live grocery integrations. You can leave them blank; the current supermarket agent uses local fallback store and price estimates.
@@ -360,11 +368,11 @@ Response shape:
     },
     "meal_definition": {
       "craving_input": "high-protein burger",
-      "structured_meal_name": "API Rate Limited - Fallback Turkey Burger",
+      "structured_meal_name": "High-Protein Turkey Burger Bowl",
       "ingredients": [
         {
           "item_name": "lean turkey mince",
-          "base_quantity_grams": 160
+          "base_quantity_grams": 255
         }
       ]
     },
@@ -372,8 +380,13 @@ Response shape:
       "agent_name": "MealRecommendationAgent",
       "source": "local_vector_rag_meal_corpus",
       "confidence": 0.72,
-      "warnings": []
+      "warnings": ["Retrieved meal template turkey_burger_bowl using local vector RAG."]
     }
+  },
+  "portion_scaling": {
+    "target_meal_calories": 777,
+    "estimated_template_calories": 425.4,
+    "scale_factor": 1.6
   },
   "nutrition": {
     "ingredients_macros": [],
@@ -401,6 +414,27 @@ Response shape:
 ### `GET /meal-plans/{user_id}`
 
 Returns the latest saved meal plan generations for a user. The local JSON history file is intended for early production pilots and can be replaced with Postgres, Firestore, or another managed store later.
+
+### `POST /meal-feedback`
+
+Stores lightweight preference feedback for a generated meal:
+
+```json
+{
+  "user_id": "user_123",
+  "request_id": "2b4b7ac8-4c4a-4d21-aebd-4a7dc9c85854",
+  "meal_id": "turkey_burger_bowl",
+  "meal_name": "High-Protein Turkey Burger Bowl",
+  "liked": true,
+  "rating": 5,
+  "saved": true,
+  "notes": "Good lunch option"
+}
+```
+
+### `GET /meal-feedback/{user_id}` and `GET /saved-meals/{user_id}`
+
+Returns all feedback or only saved meals for the given user.
 
 ### `POST /calorie-expenditure/predict`
 
@@ -438,6 +472,8 @@ uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```powershell
 python -m pytest -q
 ```
+
+CI runs the same tests on GitHub Actions for every push and pull request to `main`.
 
 ### Health Smoke Test
 
@@ -569,13 +605,22 @@ In Streamlit, choose a plain-language activity level. The numeric multiplier is 
 
 ## Roadmap
 
-- Integrate calorie expenditure output directly into the meal recommendation orchestration
-- Expand the meal corpus from the current seed set to a normalized recipe dataset
-- Use saved meals and ratings to personalize retrieval ranking
-- Add macro-target balancing on top of current calorie portion scaling
-- Expand optional LLM final explanation after retrieval
-- Move meal history and user profiles to a managed database
-- Expand USDA FoodData Central integration and serving-size normalization
-- Replace local supermarket estimates with live inventory and store APIs
-- Add persistent production storage for feedback, history, and user profiles
-- Improve dashboard UI, result explainability, and meal history views
+### Next
+
+- Deploy the FastAPI backend publicly on Render and point Streamlit Cloud `API_BASE_URL` to that service.
+- Add a calorie-budget handoff so `/generate-meal-plan` can use the latest `/calorie-expenditure/predict` result instead of only profile BMR.
+- Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates, then run the retrieval regression suite.
+- Use saved meals, likes, dislikes, and ratings as ranking features in `MealVectorRetriever`.
+
+### After Backend Stabilizes
+
+- Move local JSON stores for history, feedback, and profiles to Postgres or another managed database.
+- Add macro-target balancing on top of current calorie portion scaling.
+- Expand USDA FoodData Central integration with better serving-size normalization and ingredient matching.
+- Enable FAISS-backed sentence embeddings after corpus expansion and compare against TF-IDF in CI.
+
+### Later
+
+- Replace local supermarket estimates with live inventory and store APIs.
+- Refine the Streamlit demo into a cleaner user testing surface.
+- Promote React from parked dashboard to production frontend once backend contracts settle.

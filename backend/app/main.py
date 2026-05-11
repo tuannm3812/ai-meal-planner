@@ -6,7 +6,6 @@ from uuid import uuid4
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
 
 try:
     from .agents.calorie_expenditure_agent import (
@@ -22,6 +21,7 @@ try:
         MealPlanRepository,
         UserProfileRepository,
     )
+    from .schemas.requests import MealFeedbackRequest, MealRequest
 except ImportError:
     from backend.app.agents.calorie_expenditure_agent import (
         CalorieExpenditureAgent,
@@ -36,29 +36,11 @@ except ImportError:
         MealPlanRepository,
         UserProfileRepository,
     )
+    from backend.app.schemas.requests import MealFeedbackRequest, MealRequest
 
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-
-
-class MealRequest(BaseModel):
-    user_id: str = Field(default="user_123", min_length=3, max_length=80)
-    craving: str = Field(min_length=2, max_length=180)
-    location: str = Field(default="Earlwood, NSW", min_length=2, max_length=160)
-    health_conditions: list[str] = Field(default_factory=list)
-    dietary_preferences: list[str] = Field(default_factory=list)
-
-
-class MealFeedbackRequest(BaseModel):
-    user_id: str = Field(default="user_123", min_length=3, max_length=80)
-    request_id: str = Field(min_length=8, max_length=120)
-    meal_id: str | None = Field(default=None, max_length=120)
-    meal_name: str = Field(min_length=2, max_length=180)
-    liked: bool | None = None
-    rating: int | None = Field(default=None, ge=1, le=5)
-    saved: bool = False
-    notes: str | None = Field(default=None, max_length=500)
 
 
 settings = AppSettings.from_env()
