@@ -41,6 +41,13 @@ class RetrievalCandidate(BaseModel):
     matched_terms: list[str] = Field(default_factory=list)
 
 
+class AppliedSubstitution(BaseModel):
+    original_name: str
+    replacement_name: str
+    replacement_grams: int = Field(gt=0)
+    reason: str
+
+
 class RetrievalMetadata(BaseModel):
     query: str
     retriever: str
@@ -48,6 +55,13 @@ class RetrievalMetadata(BaseModel):
     selected_score: float = Field(ge=0)
     matched_terms: list[str] = Field(default_factory=list)
     candidates: list[RetrievalCandidate] = Field(default_factory=list)
+    substitutions: list[AppliedSubstitution] = Field(default_factory=list)
+
+
+class PortionScalingMetadata(BaseModel):
+    target_meal_calories: int = Field(gt=0)
+    estimated_template_calories: float = Field(ge=0)
+    scale_factor: float = Field(gt=0)
 
 
 class MealPlanPayload(BaseModel):
@@ -55,6 +69,7 @@ class MealPlanPayload(BaseModel):
     meal_definition: MealDefinition
     metadata: AgentMetadata
     retrieval: RetrievalMetadata | None = None
+    portion_scaling: PortionScalingMetadata | None = None
 
 
 class LlmIngredient(BaseModel):
@@ -257,12 +272,27 @@ class MealRecommendationAgent:
         result: MealRetrievalResult,
         candidates: list[MealRetrievalResult],
     ) -> MealPlanPayload:
+        substituted_ingredients = self._apply_substitutions(result)
+        scaled_ingredients, scaling_metadata = self._scale_ingredients_to_meal_target(
+            substituted_ingredients,
+            target_calories,
+        )
         warnings = [
             f"Retrieved meal template {result.meal.meal_id} using local vector RAG.",
             *result.warnings,
         ]
         if result.matched_terms:
             warnings.append(f"Matched terms: {', '.join(result.matched_terms)}")
+        if result.substitutions:
+            warnings.append(
+                f"Applied {len(result.substitutions)} ingredient substitution(s) for constraints."
+            )
+        if scaling_metadata:
+            warnings.append(
+                "Scaled portions from "
+                f"{scaling_metadata.estimated_template_calories:.0f} kcal toward "
+                f"{scaling_metadata.target_meal_calories} kcal."
+            )
 
         return MealPlanPayload(
             user_context=UserContext(
@@ -272,13 +302,7 @@ class MealRecommendationAgent:
             meal_definition=MealDefinition(
                 craving_input=craving,
                 structured_meal_name=result.meal.name,
-                ingredients=[
-                    Ingredient(
-                        item_name=ingredient.item_name,
-                        base_quantity_grams=ingredient.base_quantity_grams,
-                    )
-                    for ingredient in result.meal.ingredients
-                ],
+                ingredients=scaled_ingredients,
             ),
             metadata=AgentMetadata(
                 agent_name="MealRecommendationAgent",
@@ -292,6 +316,15 @@ class MealRecommendationAgent:
                 selected_meal_id=result.meal.meal_id,
                 selected_score=result.score,
                 matched_terms=result.matched_terms,
+                substitutions=[
+                    AppliedSubstitution(
+                        original_name=substitution.original_name,
+                        replacement_name=substitution.replacement_name,
+                        replacement_grams=substitution.replacement_grams,
+                        reason=substitution.reason,
+                    )
+                    for substitution in result.substitutions
+                ],
                 candidates=[
                     RetrievalCandidate(
                         meal_id=candidate.meal.meal_id,
@@ -303,6 +336,114 @@ class MealRecommendationAgent:
                     for candidate in candidates
                 ],
             ),
+            portion_scaling=scaling_metadata,
+        )
+
+    def _apply_substitutions(self, result: MealRetrievalResult) -> list[Ingredient]:
+        substitutions_by_name = {
+            substitution.original_name.strip().lower(): substitution
+            for substitution in result.substitutions
+        }
+        ingredients = []
+        for ingredient in result.meal.ingredients:
+            substitution = substitutions_by_name.get(ingredient.item_name.strip().lower())
+            if substitution:
+                ingredients.append(
+                    Ingredient(
+                        item_name=substitution.replacement_name,
+                        base_quantity_grams=substitution.replacement_grams,
+                    )
+                )
+            else:
+                ingredients.append(
+                    Ingredient(
+                        item_name=ingredient.item_name,
+                        base_quantity_grams=ingredient.base_quantity_grams,
+                    )
+                )
+        return ingredients
+
+    def _scale_ingredients_to_meal_target(
+        self,
+        ingredients: list[Ingredient],
+        daily_calorie_target: int,
+    ) -> tuple[list[Ingredient], PortionScalingMetadata | None]:
+        estimated_template_calories = self._estimate_ingredient_calories(ingredients)
+        if estimated_template_calories <= 0:
+            return ingredients, None
+
+        target_meal_calories = int(max(350, min(850, round(daily_calorie_target * 0.28))))
+        scale_factor = max(0.65, min(1.6, target_meal_calories / estimated_template_calories))
+        scaled_ingredients = [
+            Ingredient(
+                item_name=ingredient.item_name,
+                base_quantity_grams=max(
+                    5,
+                    int(round(ingredient.base_quantity_grams * scale_factor / 5) * 5),
+                ),
+            )
+            for ingredient in ingredients
+        ]
+        return scaled_ingredients, PortionScalingMetadata(
+            target_meal_calories=target_meal_calories,
+            estimated_template_calories=round(estimated_template_calories, 1),
+            scale_factor=round(scale_factor, 2),
+        )
+
+    @staticmethod
+    def _estimate_ingredient_calories(ingredients: list[Ingredient]) -> float:
+        calories_per_100g = {
+            "avocado": 160,
+            "baby spinach": 23,
+            "banana": 89,
+            "black beans": 132,
+            "broccoli": 35,
+            "brown rice": 123,
+            "chicken breast": 165,
+            "chickpeas": 164,
+            "coconut aminos": 60,
+            "corn tortilla": 218,
+            "cottage cheese": 98,
+            "cucumber": 15,
+            "firm tofu": 144,
+            "gluten-free bread": 247,
+            "gluten-free bun": 260,
+            "gluten-free pasta": 350,
+            "greek yogurt": 59,
+            "lean beef mince": 176,
+            "lean beef steak": 170,
+            "lean turkey mince": 150,
+            "low sodium chicken broth": 7,
+            "low sodium soy sauce": 53,
+            "mixed salad greens": 15,
+            "mixed vegetables": 65,
+            "oat milk": 43,
+            "olive oil": 884,
+            "peanut butter": 588,
+            "rice noodles": 364,
+            "rolled oats": 389,
+            "salmon fillet": 208,
+            "sesame oil": 884,
+            "shrimp": 85,
+            "soy milk": 33,
+            "soy sauce": 53,
+            "soy yogurt": 54,
+            "sunflower seed butter": 617,
+            "sweet potato": 86,
+            "tomato": 18,
+            "tomato passata": 33,
+            "tuna": 116,
+            "whole egg": 143,
+            "whole wheat bread": 247,
+            "whole wheat hamburger bun": 260,
+            "whole wheat tortilla": 310,
+            "wholemeal pasta": 348,
+        }
+        return sum(
+            calories_per_100g.get(ingredient.item_name.strip().lower(), 120)
+            * ingredient.base_quantity_grams
+            / 100
+            for ingredient in ingredients
         )
 
     def _fallback_payload(

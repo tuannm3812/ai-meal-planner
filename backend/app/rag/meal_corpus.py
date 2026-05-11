@@ -8,6 +8,9 @@ class CorpusIngredient(BaseModel):
     item_name: str = Field(min_length=2)
     base_quantity_grams: int = Field(gt=0, le=2000)
 
+    def normalized_name(self) -> str:
+        return self.item_name.strip().lower().replace("_", " ").replace("-", " ")
+
 
 class MealCorpusItem(BaseModel):
     meal_id: str

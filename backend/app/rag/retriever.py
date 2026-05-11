@@ -6,6 +6,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 from .meal_corpus import MealCorpusItem, load_meal_corpus
+from .rules import (
+    PlannedSubstitution,
+    constraint_groups,
+    meal_is_allowed,
+    substitution_plan_for_meal,
+)
 
 
 @dataclass(frozen=True)
@@ -14,6 +20,7 @@ class MealRetrievalResult:
     score: float
     matched_terms: list[str]
     warnings: list[str]
+    substitutions: list[PlannedSubstitution]
     rank: int = 0
 
 
@@ -43,6 +50,9 @@ class MealVectorRetriever:
         dietary_restrictions = self._normalize_items(dietary_restrictions or [])
         dietary_preferences = self._normalize_items(dietary_preferences or [])
         health_conditions = self._normalize_items(health_conditions or [])
+        hard_constraint_groups = constraint_groups(
+            [*dietary_restrictions, *dietary_preferences, *health_conditions]
+        )
 
         query_terms = self._content_terms(query)
         expanded_query = " ".join(
@@ -50,7 +60,6 @@ class MealVectorRetriever:
                 query,
                 " ".join(dietary_restrictions),
                 " ".join(dietary_preferences),
-                " ".join(health_conditions),
             ]
         )
         query_vector = self.vectorizer.transform([expanded_query.lower()])
@@ -58,6 +67,9 @@ class MealVectorRetriever:
 
         scored_results = []
         for index, meal in enumerate(self.meals):
+            if not meal_is_allowed(meal, hard_constraint_groups, health_conditions):
+                continue
+
             craving_overlap = self._craving_overlap(meal, query_terms)
             score = float(similarities[index])
             if query_terms and craving_overlap == 0:
@@ -73,6 +85,7 @@ class MealVectorRetriever:
                     score=round(max(score, 0.0), 4),
                     matched_terms=self._matched_terms(meal, expanded_query),
                     warnings=warnings,
+                    substitutions=substitution_plan_for_meal(meal, hard_constraint_groups),
                 )
             )
 
@@ -87,6 +100,7 @@ class MealVectorRetriever:
                     score=result.score,
                     matched_terms=result.matched_terms,
                     warnings=result.warnings,
+                    substitutions=result.substitutions,
                     rank=rank,
                 )
             )

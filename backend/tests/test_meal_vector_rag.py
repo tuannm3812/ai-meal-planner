@@ -50,6 +50,8 @@ def test_meal_agent_uses_vector_rag_before_gemini() -> None:
     assert payload.retrieval is not None
     assert payload.retrieval.selected_meal_id == "chicken_fried_rice"
     assert payload.retrieval.candidates
+    assert payload.portion_scaling is not None
+    assert payload.portion_scaling.target_meal_calories > 0
     assert "Fried Rice" in payload.meal_definition.structured_meal_name
     assert any(
         ingredient.item_name in {"chicken breast", "firm tofu"}
@@ -75,3 +77,39 @@ def test_vector_retriever_has_broader_seed_corpus() -> None:
     retriever = MealVectorRetriever(CORPUS_PATH)
 
     assert len(retriever.meals) >= 30
+
+
+def test_vector_retriever_hard_filters_health_constraints() -> None:
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    result = retriever.best_match(
+        query="fried rice",
+        dietary_preferences=["high protein"],
+        health_conditions=["kidney disease"],
+    )
+
+    assert result is not None
+    assert "kidney disease" not in result.meal.avoid_conditions
+
+
+def test_meal_agent_substitutes_gluten_ingredient_before_returning_payload() -> None:
+    agent = MealRecommendationAgent(
+        db_connection=FakeUserProfileRepository(),
+        gemini_api_key=None,
+        meal_corpus_path=CORPUS_PATH,
+    )
+
+    payload = agent.generate_meal_payload(
+        craving="burger",
+        user_id="user_123",
+        dietary_preferences=["gluten free", "high protein"],
+    )
+
+    ingredient_names = {
+        ingredient.item_name.lower()
+        for ingredient in payload.meal_definition.ingredients
+    }
+    assert "whole wheat hamburger bun" not in ingredient_names
+    assert "gluten-free bun" in ingredient_names
+    assert payload.retrieval is not None
+    assert payload.retrieval.substitutions

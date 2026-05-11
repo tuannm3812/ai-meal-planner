@@ -221,6 +221,12 @@ The current Streamlit app is an API client. For deployed testing, the FastAPI ba
 
 Local Streamlit can also read environment variables or `.streamlit/secrets.toml`. The app does not require a secrets file; missing secrets fall back to `http://localhost:8000`.
 
+Deployment dependency notes:
+
+- `runtime.txt` pins Streamlit Cloud to Python 3.11.
+- `pyproject.toml` includes minimal Poetry metadata so Streamlit Cloud does not fail dependency detection.
+- `requirements.txt` still delegates to `backend/requirements.txt` for local and uv-based installs.
+
 Recommended GitHub repository metadata:
 
 ```text
@@ -458,13 +464,13 @@ backend/app/rag/meal_corpus.py
 backend/app/rag/retriever.py
 ```
 
-The current seed corpus contains 34 curated meal templates. The meal recommendation flow retrieves from the local vector corpus before calling Gemini. If retrieval finds a strong match, the API returns a typed meal plan with:
+The current seed corpus contains 34 curated meal templates. The meal recommendation flow filters health/allergy conflicts, retrieves from the local vector corpus, applies known substitutions, and scales portions before calling Gemini. If retrieval finds a strong match, the API returns a typed meal plan with:
 
 ```text
 metadata.source = local_vector_rag_meal_corpus
 ```
 
-RAG responses also include a structured `retrieval` block with the selected meal id, score, matched terms, retriever version, and top candidates.
+RAG responses also include a structured `retrieval` block with the selected meal id, score, matched terms, retriever version, substitutions, and top candidates. Portion scaling metadata is returned in `portion_scaling`.
 
 Gemini is only used when retrieval cannot find a strong enough match or when later adaptation logic requires it.
 

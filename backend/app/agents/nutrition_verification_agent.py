@@ -142,6 +142,20 @@ class NutritionVerificationAgent:
             "sweet potato": {"calories": 86, "protein": 1.6, "carbs": 20.1, "fat": 0.1},
             "cucumber": {"calories": 15, "protein": 0.7, "carbs": 3.6, "fat": 0.1},
             "peanut butter": {"calories": 588, "protein": 25.1, "carbs": 20.0, "fat": 50.0},
+            "coconut aminos": {"calories": 60, "protein": 0, "carbs": 12.0, "fat": 0},
+            "corn tortilla": {"calories": 218, "protein": 5.7, "carbs": 44.6, "fat": 2.9},
+            "gluten-free bread": {"calories": 247, "protein": 4.3, "carbs": 50.0, "fat": 4.3},
+            "gluten-free bun": {"calories": 260, "protein": 5.0, "carbs": 49.0, "fat": 5.0},
+            "gluten-free pasta": {"calories": 350, "protein": 6.0, "carbs": 77.0, "fat": 1.5},
+            "oat milk": {"calories": 43, "protein": 0.8, "carbs": 6.7, "fat": 1.5},
+            "olive oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
+            "soy yogurt": {"calories": 54, "protein": 3.5, "carbs": 5.7, "fat": 1.8},
+            "sunflower seed butter": {
+                "calories": 617,
+                "protein": 17.3,
+                "carbs": 23.0,
+                "fat": 55.0,
+            },
         }
         macros = lookup.get(item_name.strip().lower())
         if not macros:
@@ -171,6 +185,15 @@ class NutritionVerificationAgent:
             "sweet potato": "sweet potato raw",
             "lean beef steak": "beef steak lean raw",
             "lean beef mince": "ground beef lean raw",
+            "coconut aminos": "coconut aminos sauce",
+            "corn tortilla": "corn tortilla",
+            "gluten-free bread": "gluten free bread",
+            "gluten-free bun": "gluten free hamburger bun",
+            "gluten-free pasta": "gluten free pasta",
+            "oat milk": "oat milk unsweetened",
+            "olive oil": "olive oil",
+            "soy yogurt": "soy yogurt plain",
+            "sunflower seed butter": "sunflower seed butter",
         }
         return lookup.get(item_name.strip().lower(), item_name)
 
@@ -321,6 +344,20 @@ class NutritionVerificationAgent:
             "cottage cheese": {"calories": 98, "protein": 11.1, "carbs": 3.4, "fat": 4.3},
             "whole wheat bread": {"calories": 247, "protein": 13, "carbs": 41, "fat": 4.2},
             "low sodium chicken broth": {"calories": 7, "protein": 1, "carbs": 0.4, "fat": 0.2},
+            "coconut aminos": {"calories": 60, "protein": 0, "carbs": 12.0, "fat": 0},
+            "corn tortilla": {"calories": 218, "protein": 5.7, "carbs": 44.6, "fat": 2.9},
+            "gluten-free bread": {"calories": 247, "protein": 4.3, "carbs": 50.0, "fat": 4.3},
+            "gluten-free bun": {"calories": 260, "protein": 5.0, "carbs": 49.0, "fat": 5.0},
+            "gluten-free pasta": {"calories": 350, "protein": 6.0, "carbs": 77.0, "fat": 1.5},
+            "oat milk": {"calories": 43, "protein": 0.8, "carbs": 6.7, "fat": 1.5},
+            "olive oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
+            "soy yogurt": {"calories": 54, "protein": 3.5, "carbs": 5.7, "fat": 1.8},
+            "sunflower seed butter": {
+                "calories": 617,
+                "protein": 17.3,
+                "carbs": 23.0,
+                "fat": 55.0,
+            },
         }
 
         if name in lookup:

@@ -8,8 +8,10 @@ Reduce Gemini usage by retrieving structured meal templates before calling an LL
 
 ```text
 User craving + preferences
+-> hard safety filter for allergies, dietary constraints, and health conflicts
 -> local TF-IDF vector search over data/meal_corpus/meals.json
--> structured meal template
+-> structured meal template with known ingredient substitutions
+-> portion scaling against meal calorie target
 -> USDA/FatSecret/local nutrition verification
 -> shopping list fallback estimates
 ```
@@ -47,6 +49,14 @@ Each item contains:
 - `avoid_conditions`
 - `ingredients`
 
+Hard filtering happens before vector scoring. Meals that conflict with selected health
+conditions are removed, and ingredient-level allergy conflicts are removed unless a
+known substitution can make the meal safe.
+
+Known substitution examples include wheat buns to gluten-free buns, soy sauce to
+coconut aminos, whole egg to tofu, dairy yogurt to soy yogurt, and peanut butter to
+sunflower seed butter.
+
 ## API Contract
 
 When a meal is selected through retrieval, the meal plan includes:
@@ -63,7 +73,13 @@ When a meal is selected through retrieval, the meal plan includes:
     "selected_meal_id": "chicken_fried_rice",
     "selected_score": 0.72,
     "matched_terms": ["fried", "rice"],
+    "substitutions": [],
     "candidates": []
+  },
+  "portion_scaling": {
+    "target_meal_calories": 820,
+    "estimated_template_calories": 510.4,
+    "scale_factor": 1.6
   }
 }
 ```
@@ -74,8 +90,7 @@ The UI should use `metadata.source` for high-level display and `retrieval` for d
 
 - Expand corpus coverage to 50-100 curated meals first, then move to a larger normalized recipe corpus.
 - Evaluate external recipe sources such as Food.com/RecipeNLG-style datasets or a licensed recipe API, then verify all nutrition through USDA FoodData Central.
-- Add calorie-budget portion scaling.
-- Add substitution rules for allergies and preferences.
+- Add richer substitution coverage for tree nuts, halal, kosher, and low-FODMAP.
 - Add LLM adaptation only after retrieval when needed.
 - Add retrieval evaluation examples for common cravings.
 
