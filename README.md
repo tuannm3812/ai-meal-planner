@@ -7,6 +7,7 @@ The project combines a FastAPI backend, ML-ready agent modules, and a lightweigh
 ## Features
 
 - Calorie target calculation with a dedicated calorie expenditure agent
+- Promoted compact Kaggle-trained calorie expenditure model artifact
 - Preference-aware meal generation using typed ingredient outputs
 - Planned RAG layer for retrieving known meals before LLM adaptation
 - Nutrition calculation with optional USDA and FatSecret lookup plus local estimates
@@ -46,11 +47,14 @@ ai-meal-planner/
 |-- notebooks/
 |-- database/
 |   `-- user_profiles.example.json
+|-- streamlit_app/
+|   `-- app.py
 |-- frontend/
 |   |-- src/
 |   |-- package.json
 |   `-- tailwind.config.js
 |-- .env.example
+|-- requirements.txt
 |-- pyproject.toml
 `-- README.md
 ```
@@ -65,32 +69,41 @@ See `docs/architecture/system_architecture.md` and `docs/engineering/repo_struct
 - Node.js 20+
 - npm
 - Optional: a Gemini API key for live AI generation
+- Optional: a USDA FoodData Central API key for live nutrition lookup
 
 ### Backend Setup
 
-From the project root:
+Run these commands from the project root in PowerShell:
 
-```bash
-cd backend
-python -m venv ../venv
-../venv/Scripts/activate
-pip install -r requirements.txt
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -r backend/requirements.txt
 ```
 
 Create `backend/.env` from `.env.example`:
 
-```env
-APP_ENV=development
-ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
-GEMINI_API_KEY=your_gemini_api_key_here
-USDA_API_KEY=optional_usda_api_key_here
-FATSECRET_CLIENT_ID=optional_fatsecret_client_id_here
-FATSECRET_CLIENT_SECRET=optional_fatsecret_client_secret_here
+```powershell
+Copy-Item .env.example backend/.env
 ```
 
-Run the API:
+Then edit `backend/.env` as needed:
 
-```bash
+```env
+APP_ENV=development
+ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173,http://localhost:8501
+GEMINI_API_KEY=
+USDA_API_KEY=
+FATSECRET_CLIENT_ID=
+FATSECRET_CLIENT_SECRET=
+CALORIE_MODEL_PATH=models/calorie_expenditure/calorie_expenditure_model.joblib
+CALORIE_MODEL_VERSION=hist_gradient_boosting_deep_v0.1.0
+```
+
+Run the API from the project root:
+
+```powershell
 uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
 ```
 
@@ -106,26 +119,86 @@ Interactive API docs are available at:
 http://localhost:8000/docs
 ```
 
+### Streamlit Demo
+
+With the backend running in one terminal, start the Streamlit demo in another terminal:
+
+```powershell
+.\.venv\Scripts\Activate.ps1
+streamlit run streamlit_app/app.py
+```
+
+The Streamlit demo runs at:
+
+```text
+http://localhost:8501
+```
+
+To point Streamlit at a deployed API:
+
+```powershell
+$env:API_BASE_URL="https://your-backend.example.com"
+streamlit run streamlit_app/app.py
+```
+
+### Streamlit Cloud Deployment
+
+Use these values in Streamlit Community Cloud:
+
+```text
+Repository: tuannm3812/ai-meal-planner
+Branch: main
+Main file path: streamlit_app/app.py
+App URL: choose an available slug, for example tuannm-ai-meal-planner
+```
+
+Use a forward slash in `streamlit_app/app.py`. A Windows backslash path such as `streamlit_app\app.py` can show as missing in Streamlit Cloud.
+
+Add secrets in Streamlit Cloud under app settings:
+
+```toml
+API_BASE_URL = "https://your-fastapi-backend-url"
+GEMINI_API_KEY = "optional-gemini-key"
+```
+
+The current Streamlit app is an API client. For deployed testing, the FastAPI backend must also be running somewhere reachable by `API_BASE_URL`.
+
+Recommended GitHub repository metadata:
+
+```text
+Name: ai-meal-planner
+Description: Backend-first AI meal planner with calorie expenditure prediction, meal generation, and nutrition verification.
+```
+
+The Streamlit sidebar includes an optional Gemini API key field for testing meal generation. In production, prefer configuring `GEMINI_API_KEY` on the backend environment instead of entering it in the UI.
+
 ### Frontend Setup
 
-In a second terminal:
+In another terminal:
 
-```bash
+```powershell
 cd frontend
 npm install
 npm run dev
-```
-
-For a deployed backend, set the API base URL before building:
-
-```env
-VITE_API_URL=https://your-backend.example.com
 ```
 
 The dashboard runs at:
 
 ```text
 http://localhost:5173
+```
+
+For a deployed backend, set the API base URL before building:
+
+```powershell
+$env:VITE_API_URL="https://your-backend.example.com"
+npm run build
+```
+
+Or create a local frontend env file:
+
+```text
+VITE_API_URL=https://your-backend.example.com
 ```
 
 ## API
@@ -207,44 +280,102 @@ Request body:
   "height_cm": 180,
   "weight_kg": 80,
   "activity_multiplier": 1.55,
+  "duration_minutes": 30,
+  "heart_rate_bpm": 100,
+  "body_temp_c": 40,
   "goal": "maintain",
   "health_conditions": ["hypertension"]
 }
 ```
 
-Returns estimated daily expenditure, meal calorie budget, model version, confidence, and health-context warnings.
+Returns estimated daily expenditure, meal calorie budget, model version, confidence, and health-context warnings. The trained model predicts exercise calories from `duration_minutes`, `heart_rate_bpm`, and `body_temp_c`; the agent adds that to a BMR-based daily estimate.
 
 ## Development Commands
 
-Frontend:
+Run backend commands from the project root with the Python venv activated.
 
-```bash
+### Backend
+
+```powershell
+uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+### Backend Tests
+
+```powershell
+python -m pytest -q
+```
+
+### Health Smoke Test
+
+```powershell
+curl http://localhost:8000/health
+```
+
+### Calorie Prediction Smoke Test
+
+```powershell
+$body = @{
+  age = 28
+  sex = "male"
+  height_cm = 180
+  weight_kg = 80
+  activity_multiplier = 1.55
+  duration_minutes = 30
+  heart_rate_bpm = 100
+  body_temp_c = 40
+  goal = "maintain"
+  health_conditions = @()
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Uri http://localhost:8000/calorie-expenditure/predict `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+Expected shape:
+
+```json
+{
+  "estimated_daily_expenditure_kcal": 2924.7,
+  "meal_calorie_budget_kcal": 2924.7,
+  "model_version": "hist_gradient_boosting_deep_v0.1.0",
+  "confidence": 0.82,
+  "warnings": []
+}
+```
+
+The exact calorie value can vary slightly by dependency version, but the response should use the trained model version rather than the fallback model.
+
+### Streamlit
+
+```powershell
+streamlit run streamlit_app/app.py
+```
+
+### Frontend
+
+```powershell
 cd frontend
 npm run lint
 npm run build
 ```
 
-Backend:
-
-```bash
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
-```
-
-Smoke test:
-
-```bash
-curl http://localhost:8000/health
-```
-
-Kaggle training notebook:
+### Kaggle Training Notebook and Promoted Model
 
 ```text
 notebooks/calorie_expenditure_kaggle_training.ipynb
+models/calorie_expenditure/calorie_expenditure_model.joblib
+models/calorie_expenditure/metrics.json
+models/calorie_expenditure/feature_schema.json
 ```
 
 ## Notes
 
-- The backend includes deterministic fallbacks so the workflow stays usable when optional external APIs are unavailable.
+- The backend includes deterministic fallbacks so the workflow stays usable when optional external APIs or model artifacts are unavailable.
+- The promoted calorie expenditure model was trained with scikit-learn 1.6.1; keep that version pinned for compatible artifact loading.
 - Nutrition and grocery results include source and confidence metadata for safer user-facing display.
 - Nutrition provider order is USDA, then FatSecret, then local reference/category estimates.
 - FatSecret may require your server IP address to be allowed in the FatSecret developer console before food search calls succeed.
@@ -253,7 +384,7 @@ notebooks/calorie_expenditure_kaggle_training.ipynb
 
 ## Roadmap
 
-- Add the calorie expenditure ML training and inference pipeline using the Kaggle Playground S5E5 regression dataset
+- Integrate calorie expenditure output directly into the meal recommendation orchestration
 - Split the current meal definition flow into Calorie Expenditure, Meal Recommendation, and Nutrition Verification agents
 - Add RAG over a curated meal corpus to reduce free-form generation dependency
 - Add a Streamlit app for backend-first demos
