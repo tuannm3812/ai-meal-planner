@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: ai-meal-planner-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        value: https://tuannm3812-ai-meal-planner.streamlit.app,http://localhost:8501,http://127.0.0.1:8501
+      - key: RAG_BACKEND
+        value: auto
+      - key: RAG_EMBEDDING_ACTIVATION_SIZE
+        value: "50"
+      - key: ENABLE_GEMINI_ADAPTATION
+        value: "0"
+      - key: PYTHON_VERSION
+        value: "3.11.9"

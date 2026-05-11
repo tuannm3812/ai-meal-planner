@@ -98,6 +98,9 @@ def parse_extra_items(raw_value: str) -> list[str]:
 
 st.title("AI Meal Planner")
 
+if "latest_meal_result" not in st.session_state:
+    st.session_state.latest_meal_result = None
+
 with st.sidebar:
     st.subheader("API")
     api_base_url = st.text_input("Base URL", value=DEFAULT_API_BASE_URL)
@@ -222,6 +225,7 @@ with meal_tab:
                         headers={"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
                     )
 
+                st.session_state.latest_meal_result = meal_result
                 meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
                 nutrition = meal_result.get("nutrition", {})
                 shopping_list = meal_result.get("shopping_list", {})
@@ -260,6 +264,51 @@ with meal_tab:
                 render_api_error(exc)
         else:
             st.info("Submit a craving to call `/generate-meal-plan`.")
+
+        latest_meal_result = st.session_state.latest_meal_result
+        if latest_meal_result:
+            meal_definition = latest_meal_result.get("meal_plan", {}).get("meal_definition", {})
+            retrieval = latest_meal_result.get("meal_plan", {}).get("retrieval") or {}
+            st.divider()
+            st.subheader("Feedback")
+            feedback_cols = st.columns([0.5, 0.5, 0.7, 1.2])
+            liked_label = feedback_cols[0].selectbox(
+                "Like",
+                options=["No signal", "Like", "Dislike"],
+            )
+            rating = feedback_cols[1].selectbox(
+                "Rating",
+                options=["No rating", 1, 2, 3, 4, 5],
+                index=0,
+            )
+            saved = feedback_cols[2].checkbox("Save meal")
+            notes = feedback_cols[3].text_input("Notes", value="")
+            if st.button("Submit feedback"):
+                liked = None
+                if liked_label == "Like":
+                    liked = True
+                elif liked_label == "Dislike":
+                    liked = False
+                try:
+                    feedback_result = request_json(
+                        "POST",
+                        api_base_url,
+                        "/meal-feedback",
+                        {
+                            "user_id": user_id,
+                            "request_id": latest_meal_result.get("request_id", ""),
+                            "meal_id": retrieval.get("selected_meal_id"),
+                            "meal_name": meal_definition.get("structured_meal_name", "Unknown meal"),
+                            "liked": liked,
+                            "rating": rating if isinstance(rating, int) else None,
+                            "saved": saved,
+                            "notes": notes or None,
+                        },
+                    )
+                    st.success("Feedback saved")
+                    st.json(feedback_result)
+                except Exception as exc:
+                    render_api_error(exc)
 
 with calorie_tab:
     st.subheader("Calorie Expenditure")
@@ -322,5 +371,19 @@ with history_tab:
             items = history_result.get("items", [])
             st.metric("Records", len(items))
             st.json(history_result)
+        except Exception as exc:
+            render_api_error(exc)
+
+    st.divider()
+    st.subheader("Saved Meals")
+    if st.button("Load saved meals"):
+        try:
+            saved_result = request_json(
+                "GET",
+                api_base_url,
+                f"/saved-meals/{user_id}?limit={history_limit}",
+            )
+            st.metric("Saved", len(saved_result.get("items", [])))
+            st.json(saved_result)
         except Exception as exc:
             render_api_error(exc)

@@ -14,6 +14,7 @@ dist-ssr/
 *.log
 *.local
 database/meal_history.json
+database/meal_feedback.json
 database/user_profiles.json
 data/raw/
 data/processed/

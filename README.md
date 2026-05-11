@@ -221,6 +221,50 @@ The current Streamlit app is an API client. For deployed testing, the FastAPI ba
 
 Local Streamlit can also read environment variables or `.streamlit/secrets.toml`. The app does not require a secrets file; missing secrets fall back to `http://localhost:8000`.
 
+### Public FastAPI Deployment
+
+The repo includes `render.yaml` for a first public FastAPI deployment on Render.
+
+Render setup:
+
+```text
+Repository: tuannm3812/ai-meal-planner
+Service type: Web Service
+Build command: pip install -r backend/requirements.txt
+Start command: uvicorn backend.app.main:app --host 0.0.0.0 --port $PORT
+Health check path: /health
+```
+
+Required Render environment variables:
+
+```text
+APP_ENV=production
+ALLOWED_ORIGINS=https://tuannm3812-ai-meal-planner.streamlit.app,http://localhost:8501,http://127.0.0.1:8501
+USDA_API_KEY=your-usda-key
+RAG_BACKEND=auto
+ENABLE_GEMINI_ADAPTATION=0
+```
+
+Optional Render environment variables:
+
+```text
+GEMINI_API_KEY=only-if-final-explanations-are-enabled
+FATSECRET_CLIENT_ID=optional
+FATSECRET_CLIENT_SECRET=optional
+```
+
+After Render gives you a public URL, verify:
+
+```text
+https://your-render-service.onrender.com/health
+```
+
+Then set Streamlit Cloud secret:
+
+```toml
+API_BASE_URL = "https://your-render-service.onrender.com"
+```
+
 Deployment dependency notes:
 
 - `runtime.txt` pins Streamlit Cloud to Python 3.11.
@@ -236,6 +280,18 @@ Description: Backend-first AI meal planner with calorie expenditure prediction, 
 ```
 
 The Streamlit sidebar includes an optional Gemini API key field for testing meal generation. In production, prefer configuring `GEMINI_API_KEY` on the backend environment instead of entering it in the UI.
+
+### User Feedback
+
+The backend supports lightweight feedback signals that can later train preference-aware retrieval:
+
+```text
+POST /meal-feedback
+GET /meal-feedback/{user_id}
+GET /saved-meals/{user_id}
+```
+
+Feedback captures `liked`, `rating`, `saved`, and optional notes. Local feedback is stored in `database/meal_feedback.json`, which is ignored by Git.
 
 ### Frontend Setup
 
@@ -515,12 +571,11 @@ In Streamlit, choose a plain-language activity level. The numeric multiplier is 
 
 - Integrate calorie expenditure output directly into the meal recommendation orchestration
 - Expand the meal corpus from the current seed set to a normalized recipe dataset
-- Add serving-size adjustment against calorie budgets and macro targets
-- Add optional LLM adaptation after retrieval for substitutions, portion tuning, and explanation
-- Add retrieval evaluation fixtures for common cravings, restrictions, and health conditions
+- Use saved meals and ratings to personalize retrieval ranking
+- Add macro-target balancing on top of current calorie portion scaling
+- Expand optional LLM final explanation after retrieval
 - Move meal history and user profiles to a managed database
 - Expand USDA FoodData Central integration and serving-size normalization
 - Replace local supermarket estimates with live inventory and store APIs
-- Add automated backend tests
-- Add deployment configuration for frontend and backend
+- Add persistent production storage for feedback, history, and user profiles
 - Improve dashboard UI, result explainability, and meal history views

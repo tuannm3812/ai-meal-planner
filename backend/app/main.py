@@ -17,7 +17,11 @@ try:
     from .agents.nutrition_verification_agent import NutritionVerificationAgent
     from .agents.supermarket_agent import SupermarketAgent
     from .core.config import AppSettings
-    from .repositories.storage import MealPlanRepository, UserProfileRepository
+    from .repositories.storage import (
+        MealFeedbackRepository,
+        MealPlanRepository,
+        UserProfileRepository,
+    )
 except ImportError:
     from backend.app.agents.calorie_expenditure_agent import (
         CalorieExpenditureAgent,
@@ -27,7 +31,11 @@ except ImportError:
     from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
     from backend.app.agents.supermarket_agent import SupermarketAgent
     from backend.app.core.config import AppSettings
-    from backend.app.repositories.storage import MealPlanRepository, UserProfileRepository
+    from backend.app.repositories.storage import (
+        MealFeedbackRepository,
+        MealPlanRepository,
+        UserProfileRepository,
+    )
 
 
 logging.basicConfig(level=logging.INFO)
@@ -40,6 +48,17 @@ class MealRequest(BaseModel):
     location: str = Field(default="Earlwood, NSW", min_length=2, max_length=160)
     health_conditions: list[str] = Field(default_factory=list)
     dietary_preferences: list[str] = Field(default_factory=list)
+
+
+class MealFeedbackRequest(BaseModel):
+    user_id: str = Field(default="user_123", min_length=3, max_length=80)
+    request_id: str = Field(min_length=8, max_length=120)
+    meal_id: str | None = Field(default=None, max_length=120)
+    meal_name: str = Field(min_length=2, max_length=180)
+    liked: bool | None = None
+    rating: int | None = Field(default=None, ge=1, le=5)
+    saved: bool = False
+    notes: str | None = Field(default=None, max_length=500)
 
 
 settings = AppSettings.from_env()
@@ -55,6 +74,7 @@ app.add_middleware(
 
 user_profiles = UserProfileRepository(settings.data_dir)
 meal_history = MealPlanRepository(settings.data_dir)
+meal_feedback = MealFeedbackRepository(settings.data_dir)
 meal_recommendation_agent = MealRecommendationAgent(
     db_connection=user_profiles,
     gemini_api_key=settings.gemini_api_key,
@@ -91,6 +111,8 @@ async def root() -> Dict[str, Any]:
             "meal_plan": "/generate-meal-plan",
             "calorie_prediction": "/calorie-expenditure/predict",
             "meal_history": "/meal-plans/{user_id}",
+            "meal_feedback": "/meal-feedback",
+            "saved_meals": "/saved-meals/{user_id}",
         },
     }
 
@@ -107,6 +129,7 @@ async def health_check() -> Dict[str, Any]:
                 settings.fatsecret_client_id and settings.fatsecret_client_secret
             ),
             "history_store": str(meal_history.history_path),
+            "feedback_store": str(meal_feedback.feedback_path),
             "calorie_model_configured": bool(calorie_expenditure_agent.model),
             "calorie_model_path": str(settings.calorie_model_path),
             "calorie_model_warning": calorie_expenditure_agent.model_warning,
@@ -181,6 +204,45 @@ async def list_meal_plans(user_id: str, limit: int = 20) -> Dict[str, Any]:
         "user_id": user_id,
         "limit": safe_limit,
         "items": meal_history.list_for_user(user_id=user_id, limit=safe_limit),
+    }
+
+
+@app.post("/meal-feedback")
+async def save_meal_feedback(request: MealFeedbackRequest) -> Dict[str, Any]:
+    if request.liked is None and request.rating is None and not request.saved:
+        raise HTTPException(
+            status_code=400,
+            detail="Provide at least one feedback signal: liked, rating, or saved.",
+        )
+
+    record = meal_feedback.save(request.model_dump())
+    return {
+        "status": "success",
+        "item": record,
+    }
+
+
+@app.get("/meal-feedback/{user_id}")
+async def list_meal_feedback(user_id: str, limit: int = 20) -> Dict[str, Any]:
+    safe_limit = max(1, min(limit, 100))
+    return {
+        "user_id": user_id,
+        "limit": safe_limit,
+        "items": meal_feedback.list_for_user(user_id=user_id, limit=safe_limit),
+    }
+
+
+@app.get("/saved-meals/{user_id}")
+async def list_saved_meals(user_id: str, limit: int = 20) -> Dict[str, Any]:
+    safe_limit = max(1, min(limit, 100))
+    return {
+        "user_id": user_id,
+        "limit": safe_limit,
+        "items": meal_feedback.list_for_user(
+            user_id=user_id,
+            limit=safe_limit,
+            saved_only=True,
+        ),
     }
 
 

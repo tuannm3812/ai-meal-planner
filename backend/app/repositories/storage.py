@@ -69,3 +69,45 @@ class MealPlanRepository:
 
         with self.history_path.open("r", encoding="utf-8") as history_file:
             return json.load(history_file)
+
+
+class MealFeedbackRepository:
+    def __init__(self, data_dir: Path):
+        self.data_dir = data_dir
+        self.feedback_path = data_dir / "meal_feedback.json"
+        self._lock = Lock()
+        self.data_dir.mkdir(parents=True, exist_ok=True)
+
+    def save(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        record = {
+            "saved_at": datetime.now(UTC).isoformat(),
+            **payload,
+        }
+
+        with self._lock:
+            records = self._load_records()
+            records.append(record)
+            with self.feedback_path.open("w", encoding="utf-8") as feedback_file:
+                json.dump(records[-500:], feedback_file, indent=2)
+        return record
+
+    def list_for_user(
+        self,
+        user_id: str,
+        limit: int = 20,
+        saved_only: bool = False,
+    ) -> List[Dict[str, Any]]:
+        records = self._load_records()
+        user_records = [
+            record for record in records if record.get("user_id") == user_id
+        ]
+        if saved_only:
+            user_records = [record for record in user_records if record.get("saved")]
+        return list(reversed(user_records[-limit:]))
+
+    def _load_records(self) -> List[Dict[str, Any]]:
+        if not self.feedback_path.exists():
+            return []
+
+        with self.feedback_path.open("r", encoding="utf-8") as feedback_file:
+            return json.load(feedback_file)
