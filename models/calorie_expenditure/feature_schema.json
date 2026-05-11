@@ -1,0 +1,26 @@
+{
+  "target_column": "Calories",
+  "id_columns": [
+    "id"
+  ],
+  "feature_columns": [
+    "Sex",
+    "Age",
+    "Height",
+    "Weight",
+    "Duration",
+    "Heart_Rate",
+    "Body_Temp"
+  ],
+  "numeric_columns": [
+    "Age",
+    "Height",
+    "Weight",
+    "Duration",
+    "Heart_Rate",
+    "Body_Temp"
+  ],
+  "categorical_columns": [
+    "Sex"
+  ]
+}

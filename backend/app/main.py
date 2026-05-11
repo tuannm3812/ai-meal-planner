@@ -4,7 +4,7 @@ from typing import Any, Dict
 from uuid import uuid4
 
 import uvicorn
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, Header, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -66,7 +66,10 @@ supermarket_agent = SupermarketAgent(
     maps_api_key=settings.maps_api_key,
     inventory_api_key=settings.inventory_api_key,
 )
-calorie_expenditure_agent = CalorieExpenditureAgent()
+calorie_expenditure_agent = CalorieExpenditureAgent(
+    model_path=settings.calorie_model_path,
+    model_version=settings.calorie_model_version,
+)
 
 
 @app.get("/health")
@@ -81,17 +84,30 @@ async def health_check() -> Dict[str, Any]:
                 settings.fatsecret_client_id and settings.fatsecret_client_secret
             ),
             "history_store": str(meal_history.history_path),
+            "calorie_model_configured": bool(calorie_expenditure_agent.model),
+            "calorie_model_path": str(settings.calorie_model_path),
+            "calorie_model_warning": calorie_expenditure_agent.model_warning,
         },
     }
 
 
 @app.post("/generate-meal-plan")
-async def generate_meal_plan(request: MealRequest) -> Dict[str, Any]:
+async def generate_meal_plan(
+    request: MealRequest,
+    x_gemini_api_key: str | None = Header(default=None),
+) -> Dict[str, Any]:
     request_id = str(uuid4())
     generated_at = datetime.now(UTC).isoformat()
 
     try:
-        meal_payload = meal_recommendation_agent.generate_meal_payload(
+        active_meal_agent = meal_recommendation_agent
+        if x_gemini_api_key and not settings.gemini_api_key:
+            active_meal_agent = MealRecommendationAgent(
+                db_connection=user_profiles,
+                gemini_api_key=x_gemini_api_key,
+            )
+
+        meal_payload = active_meal_agent.generate_meal_payload(
             craving=request.craving.strip(),
             user_id=request.user_id.strip(),
         )

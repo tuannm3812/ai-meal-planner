@@ -35,10 +35,21 @@ class CalorieExpenditureAgent:
         if model_path and model_path.exists():
             try:
                 import joblib
+                import warnings
 
-                self.model = joblib.load(model_path)
+                with warnings.catch_warnings(record=True) as caught_warnings:
+                    warnings.simplefilter("always")
+                    self.model = joblib.load(model_path)
+                if caught_warnings:
+                    warning_count = len(caught_warnings)
+                    self.model_warning = (
+                        f"Loaded calorie model with {warning_count} compatibility warning(s). "
+                        "Install pinned backend requirements before production use."
+                    )
             except Exception as exc:
                 self.model_warning = f"Unable to load calorie model: {exc}"
+        elif model_path:
+            self.model_warning = f"Calorie model artifact not found: {model_path}"
 
     def predict(self, request: CalorieExpenditureRequest) -> CalorieExpenditureResponse:
         warnings = self._health_warnings(request.health_conditions)
@@ -46,7 +57,8 @@ class CalorieExpenditureAgent:
             warnings.append(self.model_warning)
 
         if self.model:
-            expenditure = self._predict_with_model(request)
+            exercise_calories = self._predict_exercise_calories(request)
+            expenditure = self._estimate_with_bmr(request) + exercise_calories
             confidence = 0.82
             model_version = self.model_version
         else:
@@ -64,7 +76,7 @@ class CalorieExpenditureAgent:
             warnings=warnings,
         )
 
-    def _predict_with_model(self, request: CalorieExpenditureRequest) -> float:
+    def _predict_exercise_calories(self, request: CalorieExpenditureRequest) -> float:
         import pandas as pd
 
         row = {
@@ -77,8 +89,7 @@ class CalorieExpenditureAgent:
             "Body_Temp": request.body_temp_c or 37,
         }
         prediction = self.model.predict(pd.DataFrame([row]))[0]
-        exercise_calories = max(float(prediction), 0.0)
-        return self._estimate_with_bmr(request) + exercise_calories
+        return max(float(prediction), 0.0)
 
     @staticmethod
     def _estimate_with_bmr(request: CalorieExpenditureRequest) -> float:

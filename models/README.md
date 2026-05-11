@@ -1,12 +1,13 @@
 # Model Artifacts
 
-Trained model artifacts belong here during local development.
+Trained model artifacts belong here.
 
-Use versioned names, for example:
+Current promoted calorie expenditure artifacts:
 
 ```text
-models/calorie_expenditure/calorie_expenditure_v0.1.0.joblib
-models/calorie_expenditure/calorie_expenditure_v0.1.0.metrics.json
+models/calorie_expenditure/calorie_expenditure_model.joblib
+models/calorie_expenditure/metrics.json
+models/calorie_expenditure/feature_schema.json
 ```
 
-Large model artifacts should not be committed. Promote production-ready models through a registry or managed artifact store.
+This compact model is intentionally committed because it is under 1 MB and required for local backend inference. Do not commit large model artifacts, Kaggle submissions, or raw datasets. Use a release or managed artifact store for anything large.

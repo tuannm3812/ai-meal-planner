@@ -1,0 +1,25 @@
+{
+  "competition": "playground-series-s5e5",
+  "target": "Calories",
+  "best_model_name": "hist_gradient_boosting_deep",
+  "validation_metrics": {
+    "hist_gradient_boosting_fast": {
+      "mae": 2.313612385735067,
+      "rmse": 3.8062821431121767,
+      "rmsle": 0.06142744153703342,
+      "r2": 0.9962618109996645
+    },
+    "hist_gradient_boosting_deep": {
+      "mae": 2.236377954754719,
+      "rmse": 3.7203255727191817,
+      "rmsle": 0.06050840463054979,
+      "r2": 0.9964287422555296
+    }
+  },
+  "selected_metric": "rmsle",
+  "random_state": 42,
+  "train_rows": 750000,
+  "feature_count": 7,
+  "artifact_size_mb": 0.64,
+  "artifact_policy": "Compact boosted models only; avoid full random forest artifacts."
+}

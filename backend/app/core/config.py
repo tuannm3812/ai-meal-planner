@@ -28,9 +28,17 @@ class AppSettings:
     maps_api_key: str | None
     inventory_api_key: str | None
     data_dir: Path
+    calorie_model_path: Path
+    calorie_model_version: str
 
     @classmethod
     def from_env(cls) -> "AppSettings":
+        raw_model_path = os.getenv("CALORIE_MODEL_PATH")
+        calorie_model_path = (
+            _resolve_repo_path(raw_model_path)
+            if raw_model_path
+            else BASE_DIR / "models" / "calorie_expenditure" / "calorie_expenditure_model.joblib"
+        )
         return cls(
             app_name=os.getenv("APP_NAME", "Multi-Agent Meal Planner API"),
             environment=os.getenv("APP_ENV", "development"),
@@ -45,4 +53,16 @@ class AppSettings:
             maps_api_key=os.getenv("MAPS_API_KEY"),
             inventory_api_key=os.getenv("INVENTORY_API_KEY"),
             data_dir=BASE_DIR / "database",
+            calorie_model_path=calorie_model_path,
+            calorie_model_version=os.getenv(
+                "CALORIE_MODEL_VERSION",
+                "hist_gradient_boosting_deep_v0.1.0",
+            ),
         )
+
+
+def _resolve_repo_path(path_value: str) -> Path:
+    path = Path(path_value)
+    if path.is_absolute():
+        return path
+    return BASE_DIR / path

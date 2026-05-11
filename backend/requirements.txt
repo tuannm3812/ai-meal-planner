@@ -1,11 +1,12 @@
 fastapi
 google-genai
-joblib
-numpy
-pandas
+joblib>=1.4,<2
+numpy>=1.26,<3
+pandas>=2.2,<3
 pydantic
 python-dotenv
+pytest
 requests
-scikit-learn
+scikit-learn==1.6.1
 streamlit
 uvicorn

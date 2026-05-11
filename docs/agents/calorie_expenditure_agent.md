@@ -12,9 +12,25 @@ Predict calorie expenditure and produce a meal calorie budget for downstream mea
 - Goal such as maintain, weight loss, or muscle gain.
 - Health conditions used as recommendation constraints.
 
-## Model Plan
+## Promoted Model
 
-Train a regression model with the Kaggle Playground Series S5E5 calorie expenditure dataset. Start with the notebook in `notebooks/calorie_expenditure_kaggle_training.ipynb`, then promote the exported `joblib` artifact into `models/calorie_expenditure/`.
+The current promoted artifact lives at `models/calorie_expenditure/calorie_expenditure_model.joblib`.
+
+Training source: Kaggle Playground Series S5E5 calorie expenditure dataset.
+
+Current model: `hist_gradient_boosting_deep_v0.1.0`.
+
+The model predicts exercise calories from:
+
+- `Sex`
+- `Age`
+- `Height`
+- `Weight`
+- `Duration`
+- `Heart_Rate`
+- `Body_Temp`
+
+The backend agent adds predicted exercise calories to a BMR-based daily estimate, then adjusts the meal calorie budget by goal.
 
 ## Outputs
 
