@@ -100,9 +100,14 @@ class NutritionVerificationAgent:
         )
 
     def _query_macros_per_100g(self, item_name: str) -> Dict[str, Any]:
+        local_override = self._trusted_local_override(item_name)
+        if local_override:
+            return local_override
+
+        search_name = self._normalize_search_name(item_name)
         if self.api_key:
             try:
-                usda_result = self._query_usda_database(item_name)
+                usda_result = self._query_usda_database(search_name)
                 if self._has_usable_macros(usda_result):
                     return usda_result
             except Exception as exc:
@@ -110,13 +115,39 @@ class NutritionVerificationAgent:
 
         if self.fatsecret_client_id and self.fatsecret_client_secret:
             try:
-                fatsecret_result = self._query_fatsecret_database(item_name)
+                fatsecret_result = self._query_fatsecret_database(search_name)
                 if self._has_usable_macros(fatsecret_result):
                     return fatsecret_result
             except Exception as exc:
                 logger.warning("FatSecret lookup failed for %s: %s", item_name, exc)
 
         return self._estimate_macros_per_100g(item_name)
+
+    @staticmethod
+    def _trusted_local_override(item_name: str) -> Dict[str, Any] | None:
+        lookup = {
+            "whole egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
+            "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
+            "mixed vegetables": {"calories": 65, "protein": 3.3, "carbs": 13, "fat": 0.2},
+            "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
+        }
+        macros = lookup.get(item_name.strip().lower())
+        if not macros:
+            return None
+        return {**macros, "source": "trusted_local_reference", "confidence": 0.82}
+
+    @staticmethod
+    def _normalize_search_name(item_name: str) -> str:
+        lookup = {
+            "egg": "whole egg raw",
+            "whole egg": "whole egg raw",
+            "chicken breast": "chicken breast raw skinless boneless",
+            "cooked white rice": "white rice cooked",
+            "mixed vegetables": "mixed vegetables frozen",
+            "low sodium soy sauce": "soy sauce low sodium",
+            "tuna": "tuna canned in water",
+        }
+        return lookup.get(item_name.strip().lower(), item_name)
 
     def _query_usda_database(self, item_name: str) -> Dict[str, Any] | None:
         query = urlencode({"api_key": self.api_key, "query": item_name, "pageSize": 1})
@@ -249,6 +280,14 @@ class NutritionVerificationAgent:
             "tomato passata": {"calories": 33, "protein": 1.6, "carbs": 5.5, "fat": 0.2},
             "avocado": {"calories": 160, "protein": 2, "carbs": 8.5, "fat": 14.7},
             "soy sauce": {"calories": 53, "protein": 8, "carbs": 4.9, "fat": 0.6},
+            "low sodium soy sauce": {"calories": 53, "protein": 8, "carbs": 4.9, "fat": 0.6},
+            "whole egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
+            "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
+            "cooked white rice": {"calories": 130, "protein": 2.7, "carbs": 28.2, "fat": 0.3},
+            "mixed vegetables": {"calories": 65, "protein": 3.3, "carbs": 13, "fat": 0.2},
+            "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
+            "whole wheat tortilla": {"calories": 310, "protein": 9, "carbs": 50, "fat": 8},
+            "tuna": {"calories": 116, "protein": 25.5, "carbs": 0, "fat": 0.8},
         }
 
         if name in lookup:

@@ -1,14 +1,31 @@
+import os
+from pathlib import Path
+import tomllib
 from typing import Any
 
 import requests
 import streamlit as st
 
 
+st.set_page_config(page_title="AI Meal Planner", page_icon="A", layout="wide")
+
+
 def get_secret(name: str, default: str = "") -> str:
-    try:
-        return str(st.secrets.get(name, default))
-    except Exception:
-        return default
+    env_value = os.getenv(name)
+    if env_value:
+        return env_value
+
+    local_secrets_path = Path(".streamlit") / "secrets.toml"
+    if local_secrets_path.exists():
+        try:
+            secrets = tomllib.loads(local_secrets_path.read_text(encoding="utf-8"))
+            value = secrets.get(name)
+            if value:
+                return str(value)
+        except tomllib.TOMLDecodeError:
+            return default
+
+    return default
 
 
 DEFAULT_API_BASE_URL = get_secret("API_BASE_URL", "http://localhost:8000")
@@ -35,6 +52,13 @@ DIETARY_PREFERENCES = [
     "Halal",
     "Kosher",
 ]
+ACTIVITY_LEVELS = {
+    "Sedentary - little or no exercise": 1.2,
+    "Light - exercise 1-3 days/week": 1.375,
+    "Moderate - exercise 3-5 days/week": 1.55,
+    "Very active - hard exercise 6-7 days/week": 1.725,
+    "Extra active - physical job or athlete": 1.9,
+}
 
 
 def request_json(
@@ -72,7 +96,6 @@ def parse_extra_items(raw_value: str) -> list[str]:
     return [item.strip() for item in raw_value.split(",") if item.strip()]
 
 
-st.set_page_config(page_title="AI Meal Planner", page_icon="A", layout="wide")
 st.title("AI Meal Planner")
 
 with st.sidebar:
@@ -131,7 +154,28 @@ with st.sidebar:
     sex = st.selectbox("Sex", options=["male", "female"], index=0)
     height_cm = st.number_input("Height (cm)", min_value=80.0, max_value=260.0, value=180.0)
     weight_kg = st.number_input("Weight (kg)", min_value=20.0, max_value=350.0, value=80.0)
-    activity_multiplier = st.slider("Activity multiplier", 1.0, 2.5, 1.55, 0.05)
+    activity_level = st.selectbox(
+        "Activity level",
+        options=list(ACTIVITY_LEVELS),
+        index=2,
+        help=(
+            "Used to estimate daily calorie expenditure from BMR. "
+            "Moderate activity is 1.55, meaning roughly 55% above resting needs."
+        ),
+    )
+    activity_multiplier = ACTIVITY_LEVELS[activity_level]
+    with st.expander("Advanced activity multiplier"):
+        activity_multiplier = st.slider(
+            "Manual multiplier",
+            1.0,
+            2.5,
+            activity_multiplier,
+            0.025,
+            help=(
+                "Typical values: 1.2 sedentary, 1.375 light, 1.55 moderate, "
+                "1.725 very active, 1.9 extra active."
+            ),
+        )
     duration_minutes = st.number_input("Exercise duration (min)", min_value=1.0, max_value=600.0, value=30.0)
     heart_rate_bpm = st.number_input("Heart rate (bpm)", min_value=20.0, max_value=240.0, value=100.0)
     body_temp_c = st.number_input("Body temp (C)", min_value=30.0, max_value=45.0, value=40.0)
@@ -172,6 +216,8 @@ with meal_tab:
                             "user_id": user_id,
                             "craving": craving,
                             "location": location,
+                            "health_conditions": selected_health_conditions,
+                            "dietary_preferences": dietary_preferences,
                         },
                         headers={"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
                     )
@@ -179,8 +225,13 @@ with meal_tab:
                 meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
                 nutrition = meal_result.get("nutrition", {})
                 shopping_list = meal_result.get("shopping_list", {})
+                metadata = meal_result.get("meal_plan", {}).get("metadata", {})
 
                 st.success(meal_definition.get("structured_meal_name", "Meal generated"))
+                st.caption(
+                    f"Source: {metadata.get('source', 'unknown')} | "
+                    f"Confidence: {metadata.get('confidence', 0):.0%}"
+                )
                 metric_cols = st.columns(4)
                 metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
                 metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
@@ -189,6 +240,10 @@ with meal_tab:
 
                 with st.expander("Ingredients", expanded=True):
                     st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
+                if metadata.get("warnings"):
+                    with st.expander("Retrieval and generation notes", expanded=True):
+                        for warning in metadata["warnings"]:
+                            st.write(f"- {warning}")
                 with st.expander("Nutrition details"):
                     st.json(nutrition)
                 with st.expander("Shopping list"):

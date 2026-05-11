@@ -1,7 +1,10 @@
 import logging
+from pathlib import Path
 from typing import Any, List
 
 from pydantic import BaseModel, Field
+
+from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
 
 
 logger = logging.getLogger(__name__)
@@ -58,11 +61,24 @@ class LlmMealPlanPayload(BaseModel):
 
 
 class MealRecommendationAgent:
-    def __init__(self, db_connection: Any, gemini_api_key: str | None = None):
+    def __init__(
+        self,
+        db_connection: Any,
+        gemini_api_key: str | None = None,
+        meal_retriever: MealVectorRetriever | None = None,
+        meal_corpus_path: Path | None = None,
+    ):
         self.db = db_connection
         self.model = None
         self.types = None
         self.model_unavailable_reason = "No Gemini API key configured"
+        self.meal_retriever = meal_retriever
+
+        if not self.meal_retriever and meal_corpus_path and meal_corpus_path.exists():
+            try:
+                self.meal_retriever = MealVectorRetriever(meal_corpus_path)
+            except Exception as exc:
+                logger.warning("Meal vector retriever failed to initialize: %s", exc)
 
         if gemini_api_key:
             try:
@@ -93,7 +109,13 @@ class MealRecommendationAgent:
 
         return int(bmr * activity_multiplier)
 
-    def generate_meal_payload(self, craving: str, user_id: str) -> MealPlanPayload:
+    def generate_meal_payload(
+        self,
+        craving: str,
+        user_id: str,
+        health_conditions: list[str] | None = None,
+        dietary_preferences: list[str] | None = None,
+    ) -> MealPlanPayload:
         user_biometrics = self.db.fetch_user_profile(user_id)
         target_calories = self.calculate_bmr(
             age=user_biometrics["age"],
@@ -102,6 +124,23 @@ class MealRecommendationAgent:
             height_cm=user_biometrics["height"],
             activity_multiplier=user_biometrics["workout_level"],
         )
+        health_conditions = health_conditions or []
+        dietary_preferences = dietary_preferences or []
+        dietary_restrictions = user_biometrics["dietary_restrictions"]
+
+        retrieved_meal = self._retrieve_meal(
+            craving=craving,
+            dietary_restrictions=dietary_restrictions,
+            health_conditions=health_conditions,
+            dietary_preferences=dietary_preferences,
+        )
+        if retrieved_meal:
+            return self._payload_from_retrieval(
+                craving=craving,
+                target_calories=target_calories,
+                dietary_restrictions=dietary_restrictions,
+                result=retrieved_meal,
+            )
 
         if not self.model:
             return self._fallback_payload(
@@ -111,7 +150,13 @@ class MealRecommendationAgent:
                 self.model_unavailable_reason,
             )
 
-        prompt = self._build_prompt(craving, target_calories, user_biometrics["dietary_restrictions"])
+        prompt = self._build_prompt(
+            craving,
+            target_calories,
+            dietary_restrictions,
+            health_conditions,
+            dietary_preferences,
+        )
 
         try:
             response = self.model.models.generate_content(
@@ -147,17 +192,77 @@ class MealRecommendationAgent:
         craving: str,
         target_calories: int,
         dietary_restrictions: List[str],
+        health_conditions: list[str] | None = None,
+        dietary_preferences: list[str] | None = None,
     ) -> str:
+        health_conditions = health_conditions or []
+        dietary_preferences = dietary_preferences or []
         return f"""
         You are an expert culinary AI orchestrator.
         The user is craving: {craving}.
         Their daily caloric target is {target_calories} kcal.
         Their dietary restrictions are: {", ".join(dietary_restrictions)}.
+        Their health constraints are: {", ".join(health_conditions) or "none"}.
+        Their dietary preferences are: {", ".join(dietary_preferences) or "none"}.
 
         Design one practical meal that satisfies the craving while respecting
         all restrictions. Use raw grocery ingredients only. Keep ingredient
         names plain and searchable, and provide gram quantities.
         """
+
+    def _retrieve_meal(
+        self,
+        craving: str,
+        dietary_restrictions: list[str],
+        health_conditions: list[str],
+        dietary_preferences: list[str],
+    ) -> MealRetrievalResult | None:
+        if not self.meal_retriever:
+            return None
+        return self.meal_retriever.best_match(
+            query=craving,
+            dietary_restrictions=dietary_restrictions,
+            health_conditions=health_conditions,
+            dietary_preferences=dietary_preferences,
+        )
+
+    def _payload_from_retrieval(
+        self,
+        craving: str,
+        target_calories: int,
+        dietary_restrictions: list[str],
+        result: MealRetrievalResult,
+    ) -> MealPlanPayload:
+        warnings = [
+            f"Retrieved meal template {result.meal.meal_id} using local vector RAG.",
+            *result.warnings,
+        ]
+        if result.matched_terms:
+            warnings.append(f"Matched terms: {', '.join(result.matched_terms)}")
+
+        return MealPlanPayload(
+            user_context=UserContext(
+                caloric_target=target_calories,
+                dietary_restrictions=dietary_restrictions,
+            ),
+            meal_definition=MealDefinition(
+                craving_input=craving,
+                structured_meal_name=result.meal.name,
+                ingredients=[
+                    Ingredient(
+                        item_name=ingredient.item_name,
+                        base_quantity_grams=ingredient.base_quantity_grams,
+                    )
+                    for ingredient in result.meal.ingredients
+                ],
+            ),
+            metadata=AgentMetadata(
+                agent_name="MealRecommendationAgent",
+                source="local_vector_rag_meal_corpus",
+                confidence=min(round(result.score, 2), 0.95),
+                warnings=warnings,
+            ),
+        )
 
     def _fallback_payload(
         self,

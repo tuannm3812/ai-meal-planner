@@ -38,6 +38,8 @@ class MealRequest(BaseModel):
     user_id: str = Field(default="user_123", min_length=3, max_length=80)
     craving: str = Field(min_length=2, max_length=180)
     location: str = Field(default="Earlwood, NSW", min_length=2, max_length=160)
+    health_conditions: list[str] = Field(default_factory=list)
+    dietary_preferences: list[str] = Field(default_factory=list)
 
 
 settings = AppSettings.from_env()
@@ -56,6 +58,7 @@ meal_history = MealPlanRepository(settings.data_dir)
 meal_recommendation_agent = MealRecommendationAgent(
     db_connection=user_profiles,
     gemini_api_key=settings.gemini_api_key,
+    meal_corpus_path=settings.meal_corpus_path,
 )
 nutrition_verification_agent = NutritionVerificationAgent(
     usda_api_key=settings.usda_api_key,
@@ -70,6 +73,22 @@ calorie_expenditure_agent = CalorieExpenditureAgent(
     model_path=settings.calorie_model_path,
     model_version=settings.calorie_model_version,
 )
+
+
+@app.get("/")
+async def root() -> Dict[str, Any]:
+    return {
+        "name": settings.app_name,
+        "status": "ok",
+        "message": "AI Meal Planner API is running. Open /docs for interactive API docs.",
+        "links": {
+            "health": "/health",
+            "docs": "/docs",
+            "meal_plan": "/generate-meal-plan",
+            "calorie_prediction": "/calorie-expenditure/predict",
+            "meal_history": "/meal-plans/{user_id}",
+        },
+    }
 
 
 @app.get("/health")
@@ -105,11 +124,14 @@ async def generate_meal_plan(
             active_meal_agent = MealRecommendationAgent(
                 db_connection=user_profiles,
                 gemini_api_key=x_gemini_api_key,
+                meal_corpus_path=settings.meal_corpus_path,
             )
 
         meal_payload = active_meal_agent.generate_meal_payload(
             craving=request.craving.strip(),
             user_id=request.user_id.strip(),
+            health_conditions=request.health_conditions,
+            dietary_preferences=request.dietary_preferences,
         )
         nutrition_payload = nutrition_verification_agent.calculate_meal_macros(
             ingredients=meal_payload.meal_definition.ingredients,

@@ -1,0 +1,205 @@
+[
+  {
+    "meal_id": "chicken_fried_rice",
+    "name": "Chicken Fried Rice",
+    "description": "High-protein fried rice with chicken, egg, vegetables, and soy sauce.",
+    "tags": ["fried rice", "rice", "asian", "chicken", "high protein", "dairy free"],
+    "dietary_flags": ["dairy-free", "high-protein"],
+    "avoid_conditions": ["kidney disease"],
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 160},
+      {"item_name": "cooked white rice", "base_quantity_grams": 180},
+      {"item_name": "whole egg", "base_quantity_grams": 50},
+      {"item_name": "mixed vegetables", "base_quantity_grams": 120},
+      {"item_name": "soy sauce", "base_quantity_grams": 15}
+    ]
+  },
+  {
+    "meal_id": "tofu_fried_rice",
+    "name": "Tofu Fried Rice",
+    "description": "Plant-based fried rice with tofu, rice, vegetables, and low-sodium soy sauce.",
+    "tags": ["fried rice", "rice", "asian", "tofu", "vegan", "vegetarian", "dairy free"],
+    "dietary_flags": ["vegan", "vegetarian", "dairy-free"],
+    "avoid_conditions": ["kidney disease"],
+    "ingredients": [
+      {"item_name": "firm tofu", "base_quantity_grams": 180},
+      {"item_name": "cooked white rice", "base_quantity_grams": 170},
+      {"item_name": "mixed vegetables", "base_quantity_grams": 140},
+      {"item_name": "low sodium soy sauce", "base_quantity_grams": 15},
+      {"item_name": "sesame oil", "base_quantity_grams": 8}
+    ]
+  },
+  {
+    "meal_id": "turkey_burger_bowl",
+    "name": "High-Protein Turkey Burger Bowl",
+    "description": "Burger-style bowl with lean turkey, bun, tomato, and salad greens.",
+    "tags": ["burger", "burger bowl", "turkey", "high protein", "dairy free"],
+    "dietary_flags": ["dairy-free", "high-protein"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "lean turkey mince", "base_quantity_grams": 160},
+      {"item_name": "whole wheat hamburger bun", "base_quantity_grams": 60},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 100},
+      {"item_name": "tomato", "base_quantity_grams": 80}
+    ]
+  },
+  {
+    "meal_id": "turkey_tomato_pasta",
+    "name": "High-Protein Tomato Turkey Pasta",
+    "description": "Lean turkey pasta with tomato passata and spinach.",
+    "tags": ["pasta", "italian", "turkey", "tomato", "high protein"],
+    "dietary_flags": ["high-protein"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "lean turkey mince", "base_quantity_grams": 160},
+      {"item_name": "wholemeal pasta", "base_quantity_grams": 90},
+      {"item_name": "tomato passata", "base_quantity_grams": 160},
+      {"item_name": "baby spinach", "base_quantity_grams": 60}
+    ]
+  },
+  {
+    "meal_id": "chicken_avocado_salad",
+    "name": "Chicken Avocado Power Salad",
+    "description": "Chicken salad with avocado, greens, and brown rice.",
+    "tags": ["salad", "chicken", "avocado", "high protein", "gluten free"],
+    "dietary_flags": ["gluten-free", "high-protein"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 170},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 120},
+      {"item_name": "avocado", "base_quantity_grams": 70},
+      {"item_name": "brown rice", "base_quantity_grams": 80}
+    ]
+  },
+  {
+    "meal_id": "tofu_noodle_bowl",
+    "name": "High-Protein Asian Tofu Noodle Bowl",
+    "description": "Tofu noodle bowl with broccoli and soy sauce.",
+    "tags": ["noodle", "asian", "tofu", "vegan", "vegetarian", "dairy free"],
+    "dietary_flags": ["vegan", "vegetarian", "dairy-free"],
+    "avoid_conditions": ["kidney disease"],
+    "ingredients": [
+      {"item_name": "firm tofu", "base_quantity_grams": 180},
+      {"item_name": "rice noodles", "base_quantity_grams": 90},
+      {"item_name": "broccoli", "base_quantity_grams": 120},
+      {"item_name": "soy sauce", "base_quantity_grams": 20}
+    ]
+  },
+  {
+    "meal_id": "chicken_stir_fry",
+    "name": "Chicken Vegetable Stir Fry",
+    "description": "Chicken and vegetable stir fry served with brown rice.",
+    "tags": ["stir fry", "asian", "chicken", "rice", "high protein"],
+    "dietary_flags": ["high-protein", "dairy-free"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 170},
+      {"item_name": "brown rice", "base_quantity_grams": 120},
+      {"item_name": "broccoli", "base_quantity_grams": 120},
+      {"item_name": "mixed vegetables", "base_quantity_grams": 100},
+      {"item_name": "soy sauce", "base_quantity_grams": 15}
+    ]
+  },
+  {
+    "meal_id": "vegetarian_omelette",
+    "name": "Vegetarian Spinach Omelette",
+    "description": "Egg omelette with spinach, tomato, and avocado.",
+    "tags": ["omelette", "breakfast", "egg", "vegetarian", "low carb", "high protein"],
+    "dietary_flags": ["vegetarian", "gluten-free", "low-carb"],
+    "avoid_conditions": ["high cholesterol"],
+    "ingredients": [
+      {"item_name": "whole egg", "base_quantity_grams": 100},
+      {"item_name": "baby spinach", "base_quantity_grams": 80},
+      {"item_name": "tomato", "base_quantity_grams": 80},
+      {"item_name": "avocado", "base_quantity_grams": 60}
+    ]
+  },
+  {
+    "meal_id": "tuna_rice_bowl",
+    "name": "Tuna Brown Rice Bowl",
+    "description": "Tuna rice bowl with greens, avocado, and tomato.",
+    "tags": ["tuna", "rice bowl", "fish", "high protein", "quick meal"],
+    "dietary_flags": ["high-protein", "dairy-free"],
+    "avoid_conditions": ["pregnancy", "kidney disease"],
+    "ingredients": [
+      {"item_name": "tuna", "base_quantity_grams": 140},
+      {"item_name": "brown rice", "base_quantity_grams": 120},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 100},
+      {"item_name": "avocado", "base_quantity_grams": 60},
+      {"item_name": "tomato", "base_quantity_grams": 80}
+    ]
+  },
+  {
+    "meal_id": "chicken_wrap",
+    "name": "Chicken Salad Wrap",
+    "description": "Chicken wrap with salad greens, tomato, and avocado.",
+    "tags": ["wrap", "chicken", "lunch", "high protein"],
+    "dietary_flags": ["high-protein"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 160},
+      {"item_name": "whole wheat tortilla", "base_quantity_grams": 70},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 80},
+      {"item_name": "tomato", "base_quantity_grams": 80},
+      {"item_name": "avocado", "base_quantity_grams": 50}
+    ]
+  },
+  {
+    "meal_id": "low_sodium_chicken_bowl",
+    "name": "Low-Sodium Chicken Rice Bowl",
+    "description": "Chicken and rice bowl designed for lower sodium preferences.",
+    "tags": ["low sodium", "chicken", "rice bowl", "hypertension", "high protein"],
+    "dietary_flags": ["low-sodium", "high-protein", "dairy-free"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 170},
+      {"item_name": "brown rice", "base_quantity_grams": 120},
+      {"item_name": "broccoli", "base_quantity_grams": 120},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 80},
+      {"item_name": "avocado", "base_quantity_grams": 50}
+    ]
+  },
+  {
+    "meal_id": "vegan_burrito_bowl",
+    "name": "Vegan Burrito Bowl",
+    "description": "Plant-based burrito bowl with tofu, rice, greens, tomato, and avocado.",
+    "tags": ["burrito bowl", "mexican", "vegan", "vegetarian", "rice bowl"],
+    "dietary_flags": ["vegan", "vegetarian", "dairy-free"],
+    "avoid_conditions": [],
+    "ingredients": [
+      {"item_name": "firm tofu", "base_quantity_grams": 170},
+      {"item_name": "brown rice", "base_quantity_grams": 120},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 100},
+      {"item_name": "tomato", "base_quantity_grams": 90},
+      {"item_name": "avocado", "base_quantity_grams": 70}
+    ]
+  },
+  {
+    "meal_id": "lean_steak_rice_plate",
+    "name": "Lean Steak Rice Plate",
+    "description": "Lean steak with brown rice, broccoli, and tomato for a high-protein meal.",
+    "tags": ["steak", "beef", "rice", "high protein", "dinner"],
+    "dietary_flags": ["high-protein", "dairy-free"],
+    "avoid_conditions": ["heart disease", "high cholesterol"],
+    "ingredients": [
+      {"item_name": "lean beef steak", "base_quantity_grams": 170},
+      {"item_name": "brown rice", "base_quantity_grams": 120},
+      {"item_name": "broccoli", "base_quantity_grams": 140},
+      {"item_name": "tomato", "base_quantity_grams": 80}
+    ]
+  },
+  {
+    "meal_id": "steak_salad_bowl",
+    "name": "Steak Salad Bowl",
+    "description": "Sliced lean steak over salad greens with avocado and tomato.",
+    "tags": ["steak", "beef", "salad", "low carb", "high protein", "gluten free"],
+    "dietary_flags": ["high-protein", "gluten-free", "low-carb"],
+    "avoid_conditions": ["heart disease", "high cholesterol"],
+    "ingredients": [
+      {"item_name": "lean beef steak", "base_quantity_grams": 160},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 130},
+      {"item_name": "avocado", "base_quantity_grams": 60},
+      {"item_name": "tomato", "base_quantity_grams": 90}
+    ]
+  }
+]

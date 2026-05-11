@@ -30,6 +30,7 @@ class AppSettings:
     data_dir: Path
     calorie_model_path: Path
     calorie_model_version: str
+    meal_corpus_path: Path
 
     @classmethod
     def from_env(cls) -> "AppSettings":
@@ -57,6 +58,9 @@ class AppSettings:
             calorie_model_version=os.getenv(
                 "CALORIE_MODEL_VERSION",
                 "hist_gradient_boosting_deep_v0.1.0",
+            ),
+            meal_corpus_path=_resolve_repo_path(
+                os.getenv("MEAL_CORPUS_PATH", "data/meal_corpus/meals.json")
             ),
         )
 
