@@ -1,46 +1,61 @@
 # AI Meal Planner
 
-A multi-agent meal planning app that turns a user's craving into a structured meal plan, nutrition summary, and supermarket shopping list.
+A backend-first, multi-agent meal planning app that predicts calorie needs, recommends meals from user preferences, and verifies nutrition with authoritative food data.
 
-The project combines a FastAPI backend with a React dashboard. The backend orchestrates specialized agents for meal definition, macro calculation, and grocery mapping. The frontend provides a clean dashboard for submitting a craving and reviewing the generated result.
+The project combines a FastAPI backend, ML-ready agent modules, and a lightweight path to Streamlit demos. React remains in the repo for later UI refinement, but backend contracts come first.
 
 ## Features
 
-- Craving-based meal generation using a meal definition agent
-- User context support through file-backed profile data with a default fallback
+- Calorie target calculation with a dedicated calorie expenditure agent
+- Preference-aware meal generation using typed ingredient outputs
+- Planned RAG layer for retrieving known meals before LLM adaptation
 - Nutrition calculation with optional USDA and FatSecret lookup plus local estimates
+- User context support through file-backed profile data with a default fallback
 - Supermarket product mapping with estimated shopping cost and confidence metadata
-- React dashboard with loading, error, and results states
 - FastAPI endpoints for generation, health checks, and user meal history
+- React dashboard retained for later frontend refinement
 
 ## Tech Stack
 
 - Backend: Python, FastAPI, Pydantic, Uvicorn
+- ML: scikit-learn-compatible training notebook for Kaggle
 - AI: Google Gemini via `google-genai`
 - Frontend: React, Vite, Tailwind CSS, Axios
-- Tooling: ESLint, npm
+- Tooling: Ruff, pytest, ESLint, npm
 
 ## Project Structure
 
 ```text
 ai-meal-planner/
 |-- backend/
-|   |-- config.py
+|   |-- app/
+|   |   |-- agents/
+|   |   |-- core/
+|   |   |-- ml/
+|   |   |-- rag/
+|   |   |-- repositories/
+|   |   |-- schemas/
+|   |   |-- services/
+|   |   `-- main.py
+|   |-- tests/
 |   |-- main.py
-|   |-- meal_definition_agent.py
-|   |-- nutrition_agent.py
-|   |-- requirements.txt
-|   |-- storage.py
-|   `-- supermarket_agent.py
-|-- blueprints/
+|   `-- requirements.txt
+|-- data/
+|-- docs/
+|-- models/
+|-- notebooks/
 |-- database/
 |   `-- user_profiles.example.json
 |-- frontend/
 |   |-- src/
 |   |-- package.json
 |   `-- tailwind.config.js
+|-- .env.example
+|-- pyproject.toml
 `-- README.md
 ```
+
+See `docs/architecture/system_architecture.md` and `docs/engineering/repo_structure_conventions.md` for deeper design notes.
 
 ## Getting Started
 
@@ -62,7 +77,7 @@ python -m venv ../venv
 pip install -r requirements.txt
 ```
 
-Create `backend/.env` from the example file:
+Create `backend/.env` from `.env.example`:
 
 ```env
 APP_ENV=development
@@ -181,6 +196,24 @@ Response shape:
 
 Returns the latest saved meal plan generations for a user. The local JSON history file is intended for early production pilots and can be replaced with Postgres, Firestore, or another managed store later.
 
+### `POST /calorie-expenditure/predict`
+
+Request body:
+
+```json
+{
+  "age": 28,
+  "sex": "male",
+  "height_cm": 180,
+  "weight_kg": 80,
+  "activity_multiplier": 1.55,
+  "goal": "maintain",
+  "health_conditions": ["hypertension"]
+}
+```
+
+Returns estimated daily expenditure, meal calorie budget, model version, confidence, and health-context warnings.
+
 ## Development Commands
 
 Frontend:
@@ -203,6 +236,12 @@ Smoke test:
 curl http://localhost:8000/health
 ```
 
+Kaggle training notebook:
+
+```text
+notebooks/calorie_expenditure_kaggle_training.ipynb
+```
+
 ## Notes
 
 - The backend includes deterministic fallbacks so the workflow stays usable when optional external APIs are unavailable.
@@ -214,6 +253,10 @@ curl http://localhost:8000/health
 
 ## Roadmap
 
+- Add the calorie expenditure ML training and inference pipeline using the Kaggle Playground S5E5 regression dataset
+- Split the current meal definition flow into Calorie Expenditure, Meal Recommendation, and Nutrition Verification agents
+- Add RAG over a curated meal corpus to reduce free-form generation dependency
+- Add a Streamlit app for backend-first demos
 - Move meal history and user profiles to a managed database
 - Expand USDA FoodData Central integration and serving-size normalization
 - Replace local supermarket estimates with live inventory and store APIs

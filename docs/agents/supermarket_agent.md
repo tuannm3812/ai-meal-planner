@@ -5,7 +5,7 @@ A localized Sub-Agent that acts as the real-world connector. It takes the struct
 
 ## MCP Tool Integration
 *   **Tool**: Mapping API (e.g., Google Places) to locate the nearest supermarket, and Grocery/Inventory APIs to map generic ingredients to specific store SKUs and estimated prices.
-*   **Action**: Performs geographic radius searches and semantic matching between the Meal Definition Agent's `item_name` and the store's inventory database.
+*   **Action**: Performs geographic radius searches and semantic matching between the Meal Recommendation Agent's `item_name` and the store's inventory database.
 
 ## Inputs
 *   `MealPlanPayload.meal_definition.ingredients` (Array of items and quantities).
