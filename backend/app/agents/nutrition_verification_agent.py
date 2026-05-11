@@ -39,7 +39,7 @@ class MealNutrition(BaseModel):
     metadata: AgentMetadata
 
 
-class NutritionAgent:
+class NutritionVerificationAgent:
     def __init__(
         self,
         usda_api_key: str | None = None,
@@ -92,7 +92,7 @@ class NutritionAgent:
             total_carbs=round(totals["carbs"], 1),
             total_fat=round(totals["fat"], 1),
             metadata=AgentMetadata(
-                agent_name="NutritionAgent",
+                agent_name="NutritionVerificationAgent",
                 source="usda_fatsecret_or_estimated",
                 confidence=confidence,
                 warnings=warnings,

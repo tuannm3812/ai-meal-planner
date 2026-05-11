@@ -1,5 +1,11 @@
 fastapi
 google-genai
+joblib
+numpy
+pandas
 pydantic
 python-dotenv
+requests
+scikit-learn
+streamlit
 uvicorn

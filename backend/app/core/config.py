@@ -6,7 +6,7 @@ from typing import List
 from dotenv import load_dotenv
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parents[3]
 if os.getenv("SKIP_DOTENV") != "1":
     load_dotenv(BASE_DIR / "backend" / ".env")
 

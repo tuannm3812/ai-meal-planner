@@ -57,7 +57,7 @@ class LlmMealPlanPayload(BaseModel):
     meal_definition: LlmMealDefinition
 
 
-class MealDefinitionAgent:
+class MealRecommendationAgent:
     def __init__(self, db_connection: Any, gemini_api_key: str | None = None):
         self.db = db_connection
         self.model = None
@@ -127,7 +127,7 @@ class MealDefinitionAgent:
                 user_context=UserContext.model_validate(llm_payload.user_context.model_dump()),
                 meal_definition=MealDefinition.model_validate(llm_payload.meal_definition.model_dump()),
                 metadata=AgentMetadata(
-                    agent_name="MealDefinitionAgent",
+                    agent_name="MealRecommendationAgent",
                     source="gemini-2.0-flash",
                     confidence=0.86,
                 ),
@@ -220,7 +220,7 @@ class MealDefinitionAgent:
                 ingredients=[Ingredient(**ingredient) for ingredient in ingredients],
             ),
             metadata=AgentMetadata(
-                agent_name="MealDefinitionAgent",
+                agent_name="MealRecommendationAgent",
                 source="deterministic_fallback",
                 confidence=0.62,
                 warnings=[warning],
