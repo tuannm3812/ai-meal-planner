@@ -226,6 +226,7 @@ Deployment dependency notes:
 - `runtime.txt` pins Streamlit Cloud to Python 3.11.
 - `pyproject.toml` includes minimal Poetry metadata so Streamlit Cloud does not fail dependency detection.
 - `requirements.txt` still delegates to `backend/requirements.txt` for local and uv-based installs.
+- Semantic RAG dependencies are optional; install them only when you are ready to run the FAISS embedding backend.
 
 Recommended GitHub repository metadata:
 
@@ -464,7 +465,7 @@ backend/app/rag/meal_corpus.py
 backend/app/rag/retriever.py
 ```
 
-The current seed corpus contains 34 curated meal templates. The meal recommendation flow filters health/allergy conflicts, retrieves from the local vector corpus, applies known substitutions, and scales portions before calling Gemini. If retrieval finds a strong match, the API returns a typed meal plan with:
+The current seed corpus contains 34 curated meal templates. The meal recommendation flow filters health/allergy conflicts, retrieves from the local vector corpus, applies known substitutions, and scales portions before any optional Gemini step. If retrieval finds a strong match, the API returns a typed meal plan with:
 
 ```text
 metadata.source = local_vector_rag_meal_corpus
@@ -472,7 +473,18 @@ metadata.source = local_vector_rag_meal_corpus
 
 RAG responses also include a structured `retrieval` block with the selected meal id, score, matched terms, retriever version, substitutions, and top candidates. Portion scaling metadata is returned in `portion_scaling`.
 
-Gemini is only used when retrieval cannot find a strong enough match or when later adaptation logic requires it.
+Gemini is no longer used to create the base meal. It is reserved for optional final explanation/adaptation with `ENABLE_GEMINI_ADAPTATION=1`.
+
+Semantic retrieval is prepared but conservative by default:
+
+```powershell
+pip install ".[semantic-rag]"
+$env:RAG_BACKEND="sentence-transformers"
+$env:RAG_EMBEDDING_ACTIVATION_SIZE="30"
+uvicorn backend.app.main:app --reload
+```
+
+In production, keep `RAG_BACKEND=auto`. Auto mode keeps TF-IDF for small corpora and moves to local sentence embeddings plus FAISS when the corpus reaches `RAG_EMBEDDING_ACTIVATION_SIZE`, which defaults to `50`.
 
 ### Activity Multiplier
 

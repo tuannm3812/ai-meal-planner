@@ -22,6 +22,7 @@ class FakeUserProfileRepository:
 def test_vector_retriever_matches_fried_rice() -> None:
     retriever = MealVectorRetriever(CORPUS_PATH)
 
+    assert retriever.active_backend == "tfidf_vector_retriever_v0.1"
     result = retriever.best_match(
         query="fried rice",
         dietary_restrictions=["dairy-free"],
@@ -77,6 +78,17 @@ def test_vector_retriever_has_broader_seed_corpus() -> None:
     retriever = MealVectorRetriever(CORPUS_PATH)
 
     assert len(retriever.meals) >= 30
+
+
+def test_vector_retriever_keeps_tfidf_until_embedding_threshold() -> None:
+    retriever = MealVectorRetriever(
+        CORPUS_PATH,
+        backend="auto",
+        embedding_activation_size=10_000,
+    )
+
+    assert retriever.embedding_index is None
+    assert retriever.active_backend == "tfidf_vector_retriever_v0.1"
 
 
 def test_vector_retriever_hard_filters_health_constraints() -> None:

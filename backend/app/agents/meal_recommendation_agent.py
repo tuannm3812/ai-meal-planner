@@ -31,6 +31,7 @@ class AgentMetadata(BaseModel):
     source: str
     confidence: float = Field(ge=0, le=1)
     warnings: List[str] = Field(default_factory=list)
+    explanation: str | None = None
 
 
 class RetrievalCandidate(BaseModel):
@@ -93,6 +94,10 @@ class LlmMealPlanPayload(BaseModel):
     meal_definition: LlmMealDefinition
 
 
+class LlmMealExplanation(BaseModel):
+    explanation: str
+
+
 class MealRecommendationAgent:
     def __init__(
         self,
@@ -100,16 +105,26 @@ class MealRecommendationAgent:
         gemini_api_key: str | None = None,
         meal_retriever: MealVectorRetriever | None = None,
         meal_corpus_path: Path | None = None,
+        enable_llm_adaptation: bool = False,
+        rag_backend: str = "auto",
+        rag_embedding_cache_dir: Path | None = None,
+        rag_embedding_activation_size: int = 50,
     ):
         self.db = db_connection
         self.model = None
         self.types = None
         self.model_unavailable_reason = "No Gemini API key configured"
         self.meal_retriever = meal_retriever
+        self.enable_llm_adaptation = enable_llm_adaptation
 
         if not self.meal_retriever and meal_corpus_path and meal_corpus_path.exists():
             try:
-                self.meal_retriever = MealVectorRetriever(meal_corpus_path)
+                self.meal_retriever = MealVectorRetriever(
+                    meal_corpus_path,
+                    backend=rag_backend,
+                    embedding_cache_dir=rag_embedding_cache_dir,
+                    embedding_activation_size=rag_embedding_activation_size,
+                )
             except Exception as exc:
                 logger.warning("Meal vector retriever failed to initialize: %s", exc)
 
@@ -168,52 +183,23 @@ class MealRecommendationAgent:
             dietary_preferences=dietary_preferences,
         )
         if retrieval_results:
-            return self._payload_from_retrieval(
+            payload = self._payload_from_retrieval(
                 craving=craving,
                 target_calories=target_calories,
                 dietary_restrictions=dietary_restrictions,
                 result=retrieval_results[0],
                 candidates=retrieval_results,
             )
-
-        if not self.model:
-            return self._fallback_payload(
-                craving,
-                user_biometrics,
-                target_calories,
-                self.model_unavailable_reason,
+            return self._adapt_final_payload(
+                payload=payload,
+                health_conditions=health_conditions,
+                dietary_preferences=dietary_preferences,
             )
 
-        prompt = self._build_prompt(
-            craving,
-            target_calories,
-            dietary_restrictions,
-            health_conditions,
-            dietary_preferences,
-        )
-
-        try:
-            response = self.model.models.generate_content(
-                model="gemini-2.0-flash",
-                contents=prompt,
-                config=self.types.GenerateContentConfig(
-                    response_mime_type="application/json",
-                    response_schema=LlmMealPlanPayload,
-                ),
-            )
-            llm_payload = LlmMealPlanPayload.model_validate_json(response.text)
-            return MealPlanPayload(
-                user_context=UserContext.model_validate(llm_payload.user_context.model_dump()),
-                meal_definition=MealDefinition.model_validate(llm_payload.meal_definition.model_dump()),
-                metadata=AgentMetadata(
-                    agent_name="MealRecommendationAgent",
-                    source="gemini-2.0-flash",
-                    confidence=0.86,
-                ),
-            )
-        except Exception as exc:
-            logger.warning("Gemini meal generation failed; using deterministic fallback: %s", exc)
-            return self._fallback_payload(craving, user_biometrics, target_calories, str(exc))
+        warning = "No strong local RAG match found; using deterministic fallback."
+        if self.model and not self.enable_llm_adaptation:
+            warning += " Gemini base meal generation is disabled by design."
+        return self._fallback_payload(craving, user_biometrics, target_calories, warning)
 
     def predict_user_preferences(self, historical_meals: Any) -> Any:
         train_df = historical_meals.extract_to_dataframe()
@@ -221,27 +207,29 @@ class MealRecommendationAgent:
         log_reg_clf.fit(train_df[["protein_ratio", "carb_ratio"]], train_df["user_rating"])
         return log_reg_clf
 
-    def _build_prompt(
+    def _build_adaptation_prompt(
         self,
-        craving: str,
-        target_calories: int,
-        dietary_restrictions: List[str],
+        payload: MealPlanPayload,
         health_conditions: list[str] | None = None,
         dietary_preferences: list[str] | None = None,
     ) -> str:
         health_conditions = health_conditions or []
         dietary_preferences = dietary_preferences or []
+        ingredients = ", ".join(
+            f"{ingredient.item_name} ({ingredient.base_quantity_grams}g)"
+            for ingredient in payload.meal_definition.ingredients
+        )
         return f"""
-        You are an expert culinary AI orchestrator.
-        The user is craving: {craving}.
-        Their daily caloric target is {target_calories} kcal.
-        Their dietary restrictions are: {", ".join(dietary_restrictions)}.
+        Explain why this already-selected meal fits the user's request.
+        Do not invent new ingredients, calories, or medical advice.
+        Meal: {payload.meal_definition.structured_meal_name}
+        Ingredients: {ingredients}
+        Daily caloric target: {payload.user_context.caloric_target} kcal.
+        Dietary restrictions: {", ".join(payload.user_context.dietary_restrictions)}.
         Their health constraints are: {", ".join(health_conditions) or "none"}.
         Their dietary preferences are: {", ".join(dietary_preferences) or "none"}.
 
-        Design one practical meal that satisfies the craving while respecting
-        all restrictions. Use raw grocery ingredients only. Keep ingredient
-        names plain and searchable, and provide gram quantities.
+        Return one concise explanation sentence for the UI.
         """
 
     def _retrieve_meals(
@@ -312,7 +300,9 @@ class MealRecommendationAgent:
             ),
             retrieval=RetrievalMetadata(
                 query=craving,
-                retriever="tfidf_vector_retriever_v0.1",
+                retriever=self.meal_retriever.active_backend
+                if self.meal_retriever
+                else "unknown_retriever",
                 selected_meal_id=result.meal.meal_id,
                 selected_score=result.score,
                 matched_terms=result.matched_terms,
@@ -338,6 +328,37 @@ class MealRecommendationAgent:
             ),
             portion_scaling=scaling_metadata,
         )
+
+    def _adapt_final_payload(
+        self,
+        payload: MealPlanPayload,
+        health_conditions: list[str],
+        dietary_preferences: list[str],
+    ) -> MealPlanPayload:
+        if not self.enable_llm_adaptation or not self.model or not self.types:
+            return payload
+
+        try:
+            response = self.model.models.generate_content(
+                model="gemini-2.0-flash",
+                contents=self._build_adaptation_prompt(
+                    payload=payload,
+                    health_conditions=health_conditions,
+                    dietary_preferences=dietary_preferences,
+                ),
+                config=self.types.GenerateContentConfig(
+                    response_mime_type="application/json",
+                    response_schema=LlmMealExplanation,
+                ),
+            )
+            explanation = LlmMealExplanation.model_validate_json(response.text).explanation
+            payload.metadata.source = f"{payload.metadata.source}+gemini_final_explanation"
+            payload.metadata.explanation = explanation
+            payload.metadata.warnings.append("Gemini used only for final explanation.")
+        except Exception as exc:
+            logger.warning("Gemini final explanation failed: %s", exc)
+            payload.metadata.warnings.append(f"Gemini final explanation unavailable: {exc}")
+        return payload
 
     def _apply_substitutions(self, result: MealRetrievalResult) -> list[Ingredient]:
         substitutions_by_name = {

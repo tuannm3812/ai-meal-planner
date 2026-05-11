@@ -9,25 +9,43 @@ Reduce Gemini usage by retrieving structured meal templates before calling an LL
 ```text
 User craving + preferences
 -> hard safety filter for allergies, dietary constraints, and health conflicts
--> local TF-IDF vector search over data/meal_corpus/meals.json
+-> local vector search over data/meal_corpus/meals.json
 -> structured meal template with known ingredient substitutions
 -> portion scaling against meal calorie target
+-> optional Gemini final explanation only
 -> USDA/FatSecret/local nutrition verification
 -> shopping list fallback estimates
 ```
 
-If the retriever finds a strong match, Gemini is not called.
+Gemini is not used to create the base meal. When enabled, it only writes a short final explanation for an already-selected local meal.
 
-## Why TF-IDF First
+## Retriever Backends
 
-TF-IDF keeps local and Streamlit deployment simple:
+The default backend is still TF-IDF because it keeps local and Streamlit deployment simple:
 
 - No embedding API quota.
 - No large model download.
 - No vector database service.
 - Deterministic behavior in tests.
 
-The interface is intentionally isolated in `backend/app/rag/retriever.py`, so the implementation can later be replaced with sentence embeddings or a managed vector database.
+The interface is isolated in `backend/app/rag/retriever.py`.
+
+Semantic retrieval is implemented in `backend/app/rag/embedding_index.py` using:
+
+- `sentence-transformers` for local sentence embeddings.
+- `faiss-cpu` for local vector search.
+- `data/vector_index/` for ignored local embedding cache files.
+
+Auto mode only activates embeddings once the corpus reaches `RAG_EMBEDDING_ACTIVATION_SIZE`, which defaults to `50`. This avoids slowing down the MVP deployment while the corpus is still small.
+
+Useful environment variables:
+
+```text
+RAG_BACKEND=auto
+RAG_EMBEDDING_CACHE_DIR=data/vector_index
+RAG_EMBEDDING_ACTIVATION_SIZE=50
+ENABLE_GEMINI_ADAPTATION=0
+```
 
 ## Corpus
 
@@ -90,8 +108,9 @@ The UI should use `metadata.source` for high-level display and `retrieval` for d
 
 - Expand corpus coverage to 50-100 curated meals first, then move to a larger normalized recipe corpus.
 - Evaluate external recipe sources such as Food.com/RecipeNLG-style datasets or a licensed recipe API, then verify all nutrition through USDA FoodData Central.
+- Install `.[semantic-rag]` and evaluate `sentence-transformers` + FAISS retrieval once the corpus reaches 50+ meals.
 - Add richer substitution coverage for tree nuts, halal, kosher, and low-FODMAP.
-- Add LLM adaptation only after retrieval when needed.
+- Add Gemini adaptation only after retrieval when explanation quality matters.
 - Add retrieval evaluation examples for common cravings.
 
 ## Data Source Guidance

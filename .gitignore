@@ -18,6 +18,7 @@ database/user_profiles.json
 data/raw/
 data/processed/
 data/external/
+data/vector_index/
 models/**/*.joblib
 models/**/*.pkl
 models/**/*.onnx

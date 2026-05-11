@@ -59,6 +59,10 @@ meal_recommendation_agent = MealRecommendationAgent(
     db_connection=user_profiles,
     gemini_api_key=settings.gemini_api_key,
     meal_corpus_path=settings.meal_corpus_path,
+    enable_llm_adaptation=settings.enable_gemini_adaptation,
+    rag_backend=settings.rag_backend,
+    rag_embedding_cache_dir=settings.rag_embedding_cache_dir,
+    rag_embedding_activation_size=settings.rag_embedding_activation_size,
 )
 nutrition_verification_agent = NutritionVerificationAgent(
     usda_api_key=settings.usda_api_key,
@@ -106,6 +110,10 @@ async def health_check() -> Dict[str, Any]:
             "calorie_model_configured": bool(calorie_expenditure_agent.model),
             "calorie_model_path": str(settings.calorie_model_path),
             "calorie_model_warning": calorie_expenditure_agent.model_warning,
+            "rag_backend": meal_recommendation_agent.meal_retriever.active_backend
+            if meal_recommendation_agent.meal_retriever
+            else "unavailable",
+            "gemini_adaptation_enabled": settings.enable_gemini_adaptation,
         },
     }
 
@@ -125,6 +133,10 @@ async def generate_meal_plan(
                 db_connection=user_profiles,
                 gemini_api_key=x_gemini_api_key,
                 meal_corpus_path=settings.meal_corpus_path,
+                enable_llm_adaptation=settings.enable_gemini_adaptation,
+                rag_backend=settings.rag_backend,
+                rag_embedding_cache_dir=settings.rag_embedding_cache_dir,
+                rag_embedding_activation_size=settings.rag_embedding_activation_size,
             )
 
         meal_payload = active_meal_agent.generate_meal_payload(

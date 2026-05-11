@@ -233,6 +233,8 @@ with meal_tab:
                     f"Source: {metadata.get('source', 'unknown')} | "
                     f"Confidence: {metadata.get('confidence', 0):.0%}"
                 )
+                if metadata.get("explanation"):
+                    st.info(metadata["explanation"])
                 metric_cols = st.columns(4)
                 metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
                 metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")

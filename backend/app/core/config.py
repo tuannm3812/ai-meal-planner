@@ -31,6 +31,10 @@ class AppSettings:
     calorie_model_path: Path
     calorie_model_version: str
     meal_corpus_path: Path
+    rag_backend: str
+    rag_embedding_cache_dir: Path
+    rag_embedding_activation_size: int
+    enable_gemini_adaptation: bool
 
     @classmethod
     def from_env(cls) -> "AppSettings":
@@ -62,6 +66,13 @@ class AppSettings:
             meal_corpus_path=_resolve_repo_path(
                 os.getenv("MEAL_CORPUS_PATH", "data/meal_corpus/meals.json")
             ),
+            rag_backend=os.getenv("RAG_BACKEND", "auto"),
+            rag_embedding_cache_dir=_resolve_repo_path(
+                os.getenv("RAG_EMBEDDING_CACHE_DIR", "data/vector_index")
+            ),
+            rag_embedding_activation_size=int(os.getenv("RAG_EMBEDDING_ACTIVATION_SIZE", "50")),
+            enable_gemini_adaptation=os.getenv("ENABLE_GEMINI_ADAPTATION", "0").lower()
+            in {"1", "true", "yes"},
         )
 
 

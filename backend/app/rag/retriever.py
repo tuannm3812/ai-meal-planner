@@ -2,9 +2,11 @@ from dataclasses import dataclass
 from pathlib import Path
 import re
 
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+from .embedding_index import LocalEmbeddingIndex
 from .meal_corpus import MealCorpusItem, load_meal_corpus
 from .rules import (
     PlannedSubstitution,
@@ -25,19 +27,32 @@ class MealRetrievalResult:
 
 
 class MealVectorRetriever:
-    def __init__(self, corpus_path: Path, min_score: float = 0.16):
+    def __init__(
+        self,
+        corpus_path: Path,
+        min_score: float = 0.16,
+        backend: str = "auto",
+        embedding_cache_dir: Path | None = None,
+        embedding_activation_size: int = 50,
+    ):
         self.corpus_path = corpus_path
         self.min_score = min_score
+        self.requested_backend = backend
+        self.active_backend = "tfidf_vector_retriever_v0.1"
         self.meals = load_meal_corpus(corpus_path)
+        self.documents = [meal.retrieval_text() for meal in self.meals]
+        self.embedding_index = self._build_embedding_index(
+            backend=backend,
+            embedding_cache_dir=embedding_cache_dir,
+            embedding_activation_size=embedding_activation_size,
+        )
         self.vectorizer = TfidfVectorizer(
             lowercase=True,
             ngram_range=(1, 2),
             stop_words="english",
             sublinear_tf=True,
         )
-        self.document_matrix = self.vectorizer.fit_transform(
-            [meal.retrieval_text() for meal in self.meals]
-        )
+        self.document_matrix = self.vectorizer.fit_transform(self.documents)
 
     def retrieve(
         self,
@@ -62,8 +77,7 @@ class MealVectorRetriever:
                 " ".join(dietary_preferences),
             ]
         )
-        query_vector = self.vectorizer.transform([expanded_query.lower()])
-        similarities = cosine_similarity(query_vector, self.document_matrix).ravel()
+        similarities = self._similarities(expanded_query)
 
         scored_results = []
         for index, meal in enumerate(self.meals):
@@ -105,6 +119,38 @@ class MealVectorRetriever:
                 )
             )
         return ranked_results[:top_k]
+
+    def _build_embedding_index(
+        self,
+        backend: str,
+        embedding_cache_dir: Path | None,
+        embedding_activation_size: int,
+    ) -> LocalEmbeddingIndex | None:
+        requested_backend = backend.strip().lower()
+        if requested_backend not in {"auto", "sentence-transformers", "sentence_transformers"}:
+            return None
+        if requested_backend == "auto" and len(self.meals) < embedding_activation_size:
+            return None
+
+        index = LocalEmbeddingIndex(
+            documents=self.documents,
+            cache_dir=embedding_cache_dir or self.corpus_path.parent / ".vector_cache",
+        )
+        if not index.available:
+            return None
+        self.active_backend = index.backend_name
+        return index
+
+    def _similarities(self, expanded_query: str) -> np.ndarray:
+        if self.embedding_index:
+            embedding_results = self.embedding_index.search(expanded_query.lower(), len(self.meals))
+            similarities = np.zeros(len(self.meals), dtype="float32")
+            for result in embedding_results:
+                similarities[result.corpus_index] = result.score
+            return similarities
+
+        query_vector = self.vectorizer.transform([expanded_query.lower()])
+        return cosine_similarity(query_vector, self.document_matrix).ravel()
 
     def best_match(
         self,
