@@ -35,6 +35,8 @@ Meal templates live in:
 data/meal_corpus/meals.json
 ```
 
+The current seed corpus contains 34 curated meal templates across bowls, salads, wraps, pasta, breakfast, soups, vegetarian, vegan, seafood, poultry, turkey, beef, low-sodium, and high-protein options.
+
 Each item contains:
 
 - `meal_id`
@@ -45,9 +47,32 @@ Each item contains:
 - `avoid_conditions`
 - `ingredients`
 
+## API Contract
+
+When a meal is selected through retrieval, the meal plan includes:
+
+```json
+{
+  "metadata": {
+    "source": "local_vector_rag_meal_corpus",
+    "confidence": 0.72
+  },
+  "retrieval": {
+    "query": "fried rice",
+    "retriever": "tfidf_vector_retriever_v0.1",
+    "selected_meal_id": "chicken_fried_rice",
+    "selected_score": 0.72,
+    "matched_terms": ["fried", "rice"],
+    "candidates": []
+  }
+}
+```
+
+The UI should use `metadata.source` for high-level display and `retrieval` for debugging/evaluation.
+
 ## Next Improvements
 
-- Expand corpus coverage to 50-100 meals first, then move to a larger normalized recipe corpus.
+- Expand corpus coverage to 50-100 curated meals first, then move to a larger normalized recipe corpus.
 - Evaluate external recipe sources such as Food.com/RecipeNLG-style datasets or a licensed recipe API, then verify all nutrition through USDA FoodData Central.
 - Add calorie-budget portion scaling.
 - Add substitution rules for allergies and preferences.

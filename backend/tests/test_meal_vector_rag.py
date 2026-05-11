@@ -47,6 +47,9 @@ def test_meal_agent_uses_vector_rag_before_gemini() -> None:
     )
 
     assert payload.metadata.source == "local_vector_rag_meal_corpus"
+    assert payload.retrieval is not None
+    assert payload.retrieval.selected_meal_id == "chicken_fried_rice"
+    assert payload.retrieval.candidates
     assert "Fried Rice" in payload.meal_definition.structured_meal_name
     assert any(
         ingredient.item_name in {"chicken breast", "firm tofu"}
@@ -66,3 +69,9 @@ def test_vector_retriever_respects_primary_craving() -> None:
     assert result is not None
     assert "steak" in result.meal.meal_id
     assert "Steak" in result.meal.name
+
+
+def test_vector_retriever_has_broader_seed_corpus() -> None:
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    assert len(retriever.meals) >= 30

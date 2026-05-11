@@ -130,6 +130,18 @@ class NutritionVerificationAgent:
             "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
             "mixed vegetables": {"calories": 65, "protein": 3.3, "carbs": 13, "fat": 0.2},
             "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
+            "cooked quinoa": {"calories": 120, "protein": 4.4, "carbs": 21.3, "fat": 1.9},
+            "chickpeas": {"calories": 164, "protein": 8.9, "carbs": 27.4, "fat": 2.6},
+            "lentils": {"calories": 116, "protein": 9.0, "carbs": 20.1, "fat": 0.4},
+            "kidney beans": {"calories": 127, "protein": 8.7, "carbs": 22.8, "fat": 0.5},
+            "black beans": {"calories": 132, "protein": 8.9, "carbs": 23.7, "fat": 0.5},
+            "rolled oats": {"calories": 389, "protein": 16.9, "carbs": 66.3, "fat": 6.9},
+            "banana": {"calories": 89, "protein": 1.1, "carbs": 22.8, "fat": 0.3},
+            "chia seeds": {"calories": 486, "protein": 16.5, "carbs": 42.1, "fat": 30.7},
+            "soy milk": {"calories": 33, "protein": 2.9, "carbs": 1.7, "fat": 1.8},
+            "sweet potato": {"calories": 86, "protein": 1.6, "carbs": 20.1, "fat": 0.1},
+            "cucumber": {"calories": 15, "protein": 0.7, "carbs": 3.6, "fat": 0.1},
+            "peanut butter": {"calories": 588, "protein": 25.1, "carbs": 20.0, "fat": 50.0},
         }
         macros = lookup.get(item_name.strip().lower())
         if not macros:
@@ -146,6 +158,19 @@ class NutritionVerificationAgent:
             "mixed vegetables": "mixed vegetables frozen",
             "low sodium soy sauce": "soy sauce low sodium",
             "tuna": "tuna canned in water",
+            "salmon fillet": "salmon raw",
+            "cooked quinoa": "quinoa cooked",
+            "shrimp": "shrimp raw",
+            "chickpeas": "chickpeas cooked",
+            "lentils": "lentils cooked",
+            "kidney beans": "kidney beans cooked",
+            "black beans": "black beans cooked",
+            "rolled oats": "oats rolled",
+            "greek yogurt": "greek yogurt plain nonfat",
+            "soy milk": "soy milk unsweetened",
+            "sweet potato": "sweet potato raw",
+            "lean beef steak": "beef steak lean raw",
+            "lean beef mince": "ground beef lean raw",
         }
         return lookup.get(item_name.strip().lower(), item_name)
 
@@ -288,6 +313,14 @@ class NutritionVerificationAgent:
             "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
             "whole wheat tortilla": {"calories": 310, "protein": 9, "carbs": 50, "fat": 8},
             "tuna": {"calories": 116, "protein": 25.5, "carbs": 0, "fat": 0.8},
+            "salmon fillet": {"calories": 208, "protein": 20.4, "carbs": 0, "fat": 13.4},
+            "shrimp": {"calories": 85, "protein": 20.1, "carbs": 0.2, "fat": 0.5},
+            "lean beef steak": {"calories": 170, "protein": 26, "carbs": 0, "fat": 7},
+            "lean beef mince": {"calories": 176, "protein": 20, "carbs": 0, "fat": 10},
+            "greek yogurt": {"calories": 59, "protein": 10.3, "carbs": 3.6, "fat": 0.4},
+            "cottage cheese": {"calories": 98, "protein": 11.1, "carbs": 3.4, "fat": 4.3},
+            "whole wheat bread": {"calories": 247, "protein": 13, "carbs": 41, "fat": 4.2},
+            "low sodium chicken broth": {"calories": 7, "protein": 1, "carbs": 0.4, "fat": 0.2},
         }
 
         if name in lookup:

@@ -226,6 +226,7 @@ with meal_tab:
                 nutrition = meal_result.get("nutrition", {})
                 shopping_list = meal_result.get("shopping_list", {})
                 metadata = meal_result.get("meal_plan", {}).get("metadata", {})
+                retrieval = meal_result.get("meal_plan", {}).get("retrieval")
 
                 st.success(meal_definition.get("structured_meal_name", "Meal generated"))
                 st.caption(
@@ -244,6 +245,9 @@ with meal_tab:
                     with st.expander("Retrieval and generation notes", expanded=True):
                         for warning in metadata["warnings"]:
                             st.write(f"- {warning}")
+                if retrieval:
+                    with st.expander("RAG retrieval contract", expanded=True):
+                        st.json(retrieval)
                 with st.expander("Nutrition details"):
                     st.json(nutrition)
                 with st.expander("Shopping list"):

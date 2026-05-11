@@ -33,10 +33,28 @@ class AgentMetadata(BaseModel):
     warnings: List[str] = Field(default_factory=list)
 
 
+class RetrievalCandidate(BaseModel):
+    meal_id: str
+    name: str
+    score: float = Field(ge=0)
+    rank: int = Field(ge=1)
+    matched_terms: list[str] = Field(default_factory=list)
+
+
+class RetrievalMetadata(BaseModel):
+    query: str
+    retriever: str
+    selected_meal_id: str
+    selected_score: float = Field(ge=0)
+    matched_terms: list[str] = Field(default_factory=list)
+    candidates: list[RetrievalCandidate] = Field(default_factory=list)
+
+
 class MealPlanPayload(BaseModel):
     user_context: UserContext
     meal_definition: MealDefinition
     metadata: AgentMetadata
+    retrieval: RetrievalMetadata | None = None
 
 
 class LlmIngredient(BaseModel):
@@ -128,18 +146,19 @@ class MealRecommendationAgent:
         dietary_preferences = dietary_preferences or []
         dietary_restrictions = user_biometrics["dietary_restrictions"]
 
-        retrieved_meal = self._retrieve_meal(
+        retrieval_results = self._retrieve_meals(
             craving=craving,
             dietary_restrictions=dietary_restrictions,
             health_conditions=health_conditions,
             dietary_preferences=dietary_preferences,
         )
-        if retrieved_meal:
+        if retrieval_results:
             return self._payload_from_retrieval(
                 craving=craving,
                 target_calories=target_calories,
                 dietary_restrictions=dietary_restrictions,
-                result=retrieved_meal,
+                result=retrieval_results[0],
+                candidates=retrieval_results,
             )
 
         if not self.model:
@@ -210,21 +229,25 @@ class MealRecommendationAgent:
         names plain and searchable, and provide gram quantities.
         """
 
-    def _retrieve_meal(
+    def _retrieve_meals(
         self,
         craving: str,
         dietary_restrictions: list[str],
         health_conditions: list[str],
         dietary_preferences: list[str],
-    ) -> MealRetrievalResult | None:
+    ) -> list[MealRetrievalResult]:
         if not self.meal_retriever:
-            return None
-        return self.meal_retriever.best_match(
+            return []
+        results = self.meal_retriever.retrieve(
             query=craving,
             dietary_restrictions=dietary_restrictions,
             health_conditions=health_conditions,
             dietary_preferences=dietary_preferences,
+            top_k=3,
         )
+        if not results or results[0].score < self.meal_retriever.min_score:
+            return []
+        return results
 
     def _payload_from_retrieval(
         self,
@@ -232,6 +255,7 @@ class MealRecommendationAgent:
         target_calories: int,
         dietary_restrictions: list[str],
         result: MealRetrievalResult,
+        candidates: list[MealRetrievalResult],
     ) -> MealPlanPayload:
         warnings = [
             f"Retrieved meal template {result.meal.meal_id} using local vector RAG.",
@@ -261,6 +285,23 @@ class MealRecommendationAgent:
                 source="local_vector_rag_meal_corpus",
                 confidence=min(round(result.score, 2), 0.95),
                 warnings=warnings,
+            ),
+            retrieval=RetrievalMetadata(
+                query=craving,
+                retriever="tfidf_vector_retriever_v0.1",
+                selected_meal_id=result.meal.meal_id,
+                selected_score=result.score,
+                matched_terms=result.matched_terms,
+                candidates=[
+                    RetrievalCandidate(
+                        meal_id=candidate.meal.meal_id,
+                        name=candidate.meal.name,
+                        score=candidate.score,
+                        rank=candidate.rank,
+                        matched_terms=candidate.matched_terms,
+                    )
+                    for candidate in candidates
+                ],
             ),
         )
 

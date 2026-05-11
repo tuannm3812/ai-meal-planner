@@ -1,5 +1,14 @@
 # AI Meal Planner
 
+![AI Meal Planner hero](https://assets.epicurious.com/photos/689523e500efe724a5ef8bb5/16:9/w_2560%2Cc_limit/NABRAND-15854_HF_Refresh_PeakIIConcepts_2025-07_Shot01.jpg)
+
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Demo-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML%20%2B%20RAG-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
+![USDA](https://img.shields.io/badge/USDA-Nutrition%20Verification-2E7D32?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-backend--first%20MVP-blue?style=for-the-badge)
+
 A backend-first, multi-agent meal planning app that predicts calorie needs, recommends meals from user preferences, and verifies nutrition with authoritative food data.
 
 The project combines a FastAPI backend, ML-ready agent modules, and a lightweight path to Streamlit demos. React remains in the repo for later UI refinement, but backend contracts come first.
@@ -449,11 +458,13 @@ backend/app/rag/meal_corpus.py
 backend/app/rag/retriever.py
 ```
 
-The meal recommendation flow retrieves from the local vector corpus before calling Gemini. If retrieval finds a strong match, the API returns a typed meal plan with:
+The current seed corpus contains 34 curated meal templates. The meal recommendation flow retrieves from the local vector corpus before calling Gemini. If retrieval finds a strong match, the API returns a typed meal plan with:
 
 ```text
 metadata.source = local_vector_rag_meal_corpus
 ```
+
+RAG responses also include a structured `retrieval` block with the selected meal id, score, matched terms, retriever version, and top candidates.
 
 Gemini is only used when retrieval cannot find a strong enough match or when later adaptation logic requires it.
 

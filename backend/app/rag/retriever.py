@@ -14,6 +14,7 @@ class MealRetrievalResult:
     score: float
     matched_terms: list[str]
     warnings: list[str]
+    rank: int = 0
 
 
 class MealVectorRetriever:
@@ -55,7 +56,7 @@ class MealVectorRetriever:
         query_vector = self.vectorizer.transform([expanded_query.lower()])
         similarities = cosine_similarity(query_vector, self.document_matrix).ravel()
 
-        results = []
+        scored_results = []
         for index, meal in enumerate(self.meals):
             craving_overlap = self._craving_overlap(meal, query_terms)
             score = float(similarities[index])
@@ -66,7 +67,7 @@ class MealVectorRetriever:
             score += min(craving_overlap * 0.1, 0.3)
             score -= self._condition_penalty(meal, health_conditions)
             warnings = self._warnings_for(meal, health_conditions)
-            results.append(
+            scored_results.append(
                 MealRetrievalResult(
                     meal=meal,
                     score=round(max(score, 0.0), 4),
@@ -75,7 +76,21 @@ class MealVectorRetriever:
                 )
             )
 
-        return sorted(results, key=lambda result: result.score, reverse=True)[:top_k]
+        ranked_results = []
+        for rank, result in enumerate(
+            sorted(scored_results, key=lambda result: result.score, reverse=True),
+            start=1,
+        ):
+            ranked_results.append(
+                MealRetrievalResult(
+                    meal=result.meal,
+                    score=result.score,
+                    matched_terms=result.matched_terms,
+                    warnings=result.warnings,
+                    rank=rank,
+                )
+            )
+        return ranked_results[:top_k]
 
     def best_match(
         self,
