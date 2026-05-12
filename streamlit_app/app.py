@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 import tomllib
 from typing import Any
+from datetime import UTC, datetime
+from uuid import uuid4
 
 import requests
 import streamlit as st
@@ -14,6 +16,13 @@ def get_secret(name: str, default: str = "") -> str:
     env_value = os.getenv(name)
     if env_value:
         return env_value
+
+    try:
+        value = st.secrets.get(name)
+        if value:
+            return str(value)
+    except Exception:
+        pass
 
     local_secrets_path = Path(".streamlit") / "secrets.toml"
     if local_secrets_path.exists():
@@ -96,6 +105,141 @@ def parse_extra_items(raw_value: str) -> list[str]:
     return [item.strip() for item in raw_value.split(",") if item.strip()]
 
 
+class StreamlitUserProfileRepository:
+    def __init__(
+        self,
+        age: int,
+        sex: str,
+        height_cm: float,
+        weight_kg: float,
+        activity_multiplier: float,
+        dietary_restrictions: list[str],
+    ):
+        self.profile = {
+            "age": age,
+            "gender": "m" if sex.lower().startswith("male") else "f",
+            "height": height_cm,
+            "weight": weight_kg,
+            "workout_level": activity_multiplier,
+            "dietary_restrictions": dietary_restrictions,
+        }
+
+    def fetch_user_profile(self, user_id: str) -> dict[str, Any]:
+        return self.profile
+
+
+def local_demo_request(
+    path: str,
+    payload: dict[str, Any] | None,
+    profile: dict[str, Any],
+    api_key: str = "",
+) -> dict[str, Any]:
+    try:
+        from backend.app.agents.calorie_expenditure_agent import (
+            CalorieExpenditureAgent,
+            CalorieExpenditureRequest,
+        )
+        from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
+        from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
+        from backend.app.agents.supermarket_agent import SupermarketAgent
+        from backend.app.repositories.storage import MealFeedbackRepository, MealPlanRepository
+    except ImportError as exc:
+        raise RuntimeError(f"Local demo mode cannot import backend modules: {exc}") from exc
+
+    payload = payload or {}
+    data_dir = Path("database")
+    user_repository = StreamlitUserProfileRepository(
+        age=int(profile["age"]),
+        sex=str(profile["sex"]),
+        height_cm=float(profile["height_cm"]),
+        weight_kg=float(profile["weight_kg"]),
+        activity_multiplier=float(profile["activity_multiplier"]),
+        dietary_restrictions=profile["dietary_restrictions"],
+    )
+
+    if path == "/health":
+        return {
+            "status": "ok",
+            "environment": "streamlit_demo",
+            "services": {
+                "mode": "self_contained_streamlit",
+                "gemini_configured": bool(api_key),
+                "usda_configured": bool(get_secret("USDA_API_KEY")),
+                "rag_backend": "local",
+            },
+        }
+
+    if path == "/generate-meal-plan":
+        request_id = str(uuid4())
+        meal_agent = MealRecommendationAgent(
+            db_connection=user_repository,
+            gemini_api_key=api_key or None,
+            meal_corpus_path=Path("data/meal_corpus/meals.json"),
+            enable_llm_adaptation=get_secret("ENABLE_GEMINI_ADAPTATION", "0") == "1",
+        )
+        nutrition_agent = NutritionVerificationAgent(
+            usda_api_key=get_secret("USDA_API_KEY") or None,
+            fatsecret_client_id=get_secret("FATSECRET_CLIENT_ID") or None,
+            fatsecret_client_secret=get_secret("FATSECRET_CLIENT_SECRET") or None,
+        )
+        supermarket_agent = SupermarketAgent()
+        meal_payload = meal_agent.generate_meal_payload(
+            craving=payload["craving"],
+            user_id=payload.get("user_id", "user_123"),
+            health_conditions=payload.get("health_conditions", []),
+            dietary_preferences=payload.get("dietary_preferences", []),
+        )
+        nutrition_payload = nutrition_agent.calculate_meal_macros(
+            meal_payload.meal_definition.ingredients
+        )
+        shopping_payload = supermarket_agent.generate_shopping_list(
+            meal_payload.meal_definition.ingredients,
+            payload.get("location", "Earlwood, NSW"),
+        )
+        response = {
+            "status": "success",
+            "request_id": request_id,
+            "generated_at": datetime.now(UTC).isoformat(),
+            "request": payload,
+            "meal_plan": meal_payload.model_dump(),
+            "nutrition": nutrition_payload.model_dump(),
+            "shopping_list": shopping_payload.model_dump(),
+        }
+        MealPlanRepository(data_dir).save(response)
+        return response
+
+    if path == "/calorie-expenditure/predict":
+        agent = CalorieExpenditureAgent(
+            model_path=Path("models/calorie_expenditure/calorie_expenditure_model.joblib"),
+            model_version="hist_gradient_boosting_deep_v0.1.0",
+        )
+        request = CalorieExpenditureRequest.model_validate(payload)
+        return agent.predict(request).model_dump()
+
+    if path == "/meal-feedback":
+        record = MealFeedbackRepository(data_dir).save(payload)
+        return {"status": "success", "item": record}
+
+    if path.startswith("/meal-plans/"):
+        user_id = path.split("/", 2)[2].split("?", 1)[0]
+        return {
+            "user_id": user_id,
+            "items": MealPlanRepository(data_dir).list_for_user(user_id=user_id),
+        }
+
+    if path.startswith("/saved-meals/"):
+        user_id = path.split("/", 2)[2].split("?", 1)[0]
+        return {
+            "user_id": user_id,
+            "items": MealFeedbackRepository(data_dir).list_for_user(
+                user_id=user_id,
+                saved_only=True,
+            ),
+        }
+
+    raise ValueError(f"Unsupported local demo path: {path}")
+
+
 st.title("AI Meal Planner")
 
 if "latest_meal_result" not in st.session_state:
@@ -104,6 +248,11 @@ if "latest_meal_result" not in st.session_state:
 with st.sidebar:
     st.subheader("API")
     api_base_url = st.text_input("Base URL", value=DEFAULT_API_BASE_URL)
+    use_demo_mode = st.toggle(
+        "Self-contained Streamlit demo",
+        value=get_secret("STREAMLIT_DEMO_MODE", "0") == "1",
+        help="Run the demo directly inside Streamlit without calling FastAPI.",
+    )
     health_payload: dict[str, Any] = {}
     with st.expander("Deployment settings"):
         st.markdown(
@@ -118,19 +267,36 @@ with st.sidebar:
                     "**Secrets**",
                     "```toml",
                     'API_BASE_URL = "https://your-backend-url"',
-                    'GEMINI_API_KEY = "optional-key-for-future-direct-streamlit-mode"',
+                    'STREAMLIT_DEMO_MODE = "1"',
+                    'GEMINI_API_KEY = "optional-key-for-final-explanations"',
                     "```",
                 ]
             )
         )
 
     try:
-        health_payload = request_json("GET", api_base_url, "/health")
-        st.success("API online")
+        if use_demo_mode:
+            health_payload = local_demo_request(
+                "/health",
+                None,
+                {
+                    "age": 28,
+                    "sex": "male",
+                    "height_cm": 180.0,
+                    "weight_kg": 80.0,
+                    "activity_multiplier": 1.55,
+                    "dietary_restrictions": ["dairy-free", "high-protein"],
+                },
+                get_secret("GEMINI_API_KEY"),
+            )
+            st.success("Demo mode ready")
+        else:
+            health_payload = request_json("GET", api_base_url, "/health")
+            st.success("API online")
         with st.expander("Health payload"):
             st.json(health_payload)
     except Exception as exc:
-        st.warning("API offline or unreachable")
+        st.warning("API offline, unreachable, or demo mode unavailable")
         with st.expander("Connection details"):
             render_api_error(exc)
 
@@ -195,6 +361,34 @@ with st.sidebar:
 selected_health_conditions = [
     condition for condition in health_condition_options if condition != "None"
 ] + parse_extra_items(extra_health_conditions)
+streamlit_profile = {
+    "age": age,
+    "sex": sex,
+    "height_cm": height_cm,
+    "weight_kg": weight_kg,
+    "activity_multiplier": activity_multiplier,
+    "dietary_restrictions": [
+        preference.lower().replace(" ", "-")
+        for preference in dietary_preferences
+        if preference.lower() in {"dairy free", "gluten free", "high protein"}
+    ],
+}
+
+
+def call_demo_or_api(
+    method: str,
+    path: str,
+    payload: dict[str, Any] | None = None,
+    headers: dict[str, str] | None = None,
+) -> dict[str, Any]:
+    if use_demo_mode:
+        return local_demo_request(
+            path=path,
+            payload=payload,
+            profile=streamlit_profile,
+            api_key=gemini_api_key,
+        )
+    return request_json(method, api_base_url, path, payload, headers)
 
 meal_tab, calorie_tab, history_tab = st.tabs(["Meal Plan", "Calories", "History"])
 
@@ -211,9 +405,8 @@ with meal_tab:
         if generate_meal:
             try:
                 with st.spinner("Planning meal..."):
-                    meal_result = request_json(
+                    meal_result = call_demo_or_api(
                         "POST",
-                        api_base_url,
                         "/generate-meal-plan",
                         {
                             "user_id": user_id,
@@ -222,7 +415,7 @@ with meal_tab:
                             "health_conditions": selected_health_conditions,
                             "dietary_preferences": dietary_preferences,
                         },
-                        headers={"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
+                        {"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
                     )
 
                 st.session_state.latest_meal_result = meal_result
@@ -290,9 +483,8 @@ with meal_tab:
                 elif liked_label == "Dislike":
                     liked = False
                 try:
-                    feedback_result = request_json(
+                    feedback_result = call_demo_or_api(
                         "POST",
-                        api_base_url,
                         "/meal-feedback",
                         {
                             "user_id": user_id,
@@ -338,9 +530,8 @@ with calorie_tab:
     if st.button("Predict expenditure", type="primary"):
         try:
             with st.spinner("Predicting calorie budget..."):
-                calorie_result = request_json(
+                calorie_result = call_demo_or_api(
                     "POST",
-                    api_base_url,
                     "/calorie-expenditure/predict",
                     calorie_payload,
                 )
@@ -363,9 +554,8 @@ with history_tab:
     history_limit = st.slider("Limit", 1, 50, 10)
     if st.button("Load history"):
         try:
-            history_result = request_json(
+            history_result = call_demo_or_api(
                 "GET",
-                api_base_url,
                 f"/meal-plans/{user_id}?limit={history_limit}",
             )
             items = history_result.get("items", [])
@@ -378,9 +568,8 @@ with history_tab:
     st.subheader("Saved Meals")
     if st.button("Load saved meals"):
         try:
-            saved_result = request_json(
+            saved_result = call_demo_or_api(
                 "GET",
-                api_base_url,
                 f"/saved-meals/{user_id}?limit={history_limit}",
             )
             st.metric("Saved", len(saved_result.get("items", [])))

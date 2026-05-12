@@ -92,6 +92,18 @@ User profile + craving
 
 The meal path is retrieval-first so common cravings work even when Gemini is rate limited or disabled.
 
+## Demo Modes
+
+Use one of these modes depending on what you are testing:
+
+| Mode | Best for | Backend required |
+| --- | --- | --- |
+| Self-contained Streamlit demo | Sharing the Streamlit Cloud URL without deploying FastAPI | No |
+| Streamlit + local FastAPI | Local API testing and debugging | Yes |
+| Streamlit Cloud + public FastAPI | End-to-end deployed demo | Yes, deployed on Render or similar |
+
+Self-contained Streamlit mode imports the same backend agents directly. It is useful for demos, but FastAPI remains the production API boundary.
+
 ## Getting Started
 
 ### Prerequisites
@@ -161,27 +173,47 @@ Restart the backend after changing `backend/.env`; FastAPI reads those values at
 Run the API from the project root:
 
 ```powershell
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8010 --reload
 ```
 
 The backend root endpoint runs at:
 
 ```text
-http://localhost:8000
+http://127.0.0.1:8010
 ```
 
 If you open the root URL in a browser, you should see a small JSON status payload. Interactive API docs are available at:
 
 ```text
-http://localhost:8000/docs
+http://127.0.0.1:8010/docs
+```
+
+If port `8000` fails on Windows with `WinError 10013`, another Python process or a reserved port rule is usually blocking it. Check and either stop the process or use `8010`:
+
+```powershell
+Get-NetTCPConnection -LocalPort 8000 -ErrorAction SilentlyContinue |
+  Select-Object LocalAddress,LocalPort,State,OwningProcess
+
+Get-Process -Id <OwningProcess>
+Stop-Process -Id <OwningProcess>
+
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8010 --reload
 ```
 
 ### Streamlit Demo
 
-With the backend running in one terminal, start the Streamlit demo in another terminal:
+For a self-contained demo without FastAPI:
+
+```powershell
+$env:STREAMLIT_DEMO_MODE="1"
+streamlit run streamlit_app/app.py
+```
+
+For API-client mode with the backend running in another terminal:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
+$env:API_BASE_URL="http://127.0.0.1:8010"
 streamlit run streamlit_app/app.py
 ```
 
@@ -222,12 +254,19 @@ Add secrets in Streamlit Cloud under app settings:
 
 ```toml
 API_BASE_URL = "https://your-fastapi-backend-url"
-GEMINI_API_KEY = "optional-gemini-key"
+STREAMLIT_DEMO_MODE = "0"
+GEMINI_API_KEY = "optional-key-for-final-explanations"
 ```
 
-The current Streamlit app is an API client. For deployed testing, the FastAPI backend must also be running somewhere reachable by `API_BASE_URL`.
+For a live Streamlit-only demo without a public backend, set:
 
-Local Streamlit can also read environment variables or `.streamlit/secrets.toml`. The app does not require a secrets file; missing secrets fall back to `http://localhost:8000`.
+```toml
+STREAMLIT_DEMO_MODE = "1"
+```
+
+In this mode Streamlit imports the same backend agents directly and does not call `API_BASE_URL`. For deployed API testing, keep `STREAMLIT_DEMO_MODE = "0"` and deploy FastAPI somewhere reachable by `API_BASE_URL`.
+
+Local Streamlit can also read environment variables or `.streamlit/secrets.toml`. The app does not require a secrets file; missing secrets fall back to `http://localhost:8000`, but `http://127.0.0.1:8010` is recommended on Windows when port `8000` is already occupied.
 
 ### Public FastAPI Deployment
 
@@ -334,7 +373,7 @@ VITE_API_URL=https://your-backend.example.com
 
 ### `GET /`
 
-Returns a small API status payload plus useful endpoint links. This exists so opening `http://localhost:8000` in a browser does not show a 404.
+Returns a small API status payload plus useful endpoint links. This exists so opening the API root in a browser does not show a 404.
 
 ### `GET /health`
 
@@ -381,12 +420,12 @@ Response shape:
       "source": "local_vector_rag_meal_corpus",
       "confidence": 0.72,
       "warnings": ["Retrieved meal template turkey_burger_bowl using local vector RAG."]
+    },
+    "portion_scaling": {
+      "target_meal_calories": 777,
+      "estimated_template_calories": 425.4,
+      "scale_factor": 1.6
     }
-  },
-  "portion_scaling": {
-    "target_meal_calories": 777,
-    "estimated_template_calories": 425.4,
-    "scale_factor": 1.6
   },
   "nutrition": {
     "ingredients_macros": [],
@@ -464,7 +503,7 @@ Run backend commands from the project root with the Python venv activated.
 ### Backend
 
 ```powershell
-uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8010 --reload
 ```
 
 ### Backend Tests
@@ -478,15 +517,15 @@ CI runs the same tests on GitHub Actions for every push and pull request to `mai
 ### Health Smoke Test
 
 ```powershell
-curl http://localhost:8000/health
+curl http://127.0.0.1:8010/health
 ```
 
 Browser checks:
 
 ```text
-http://localhost:8000          # API root status payload
-http://localhost:8000/docs     # Interactive Swagger docs
-http://localhost:8000/health   # Service health JSON
+http://127.0.0.1:8010          # API root status payload
+http://127.0.0.1:8010/docs     # Interactive Swagger docs
+http://127.0.0.1:8010/health   # Service health JSON
 ```
 
 ### Calorie Prediction Smoke Test
@@ -506,7 +545,7 @@ $body = @{
 } | ConvertTo-Json
 
 Invoke-RestMethod `
-  -Uri http://localhost:8000/calorie-expenditure/predict `
+  -Uri http://127.0.0.1:8010/calorie-expenditure/predict `
   -Method Post `
   -ContentType "application/json" `
   -Body $body
