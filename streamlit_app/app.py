@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import sys
 import tomllib
 from typing import Any
 from datetime import UTC, datetime
@@ -8,6 +9,10 @@ from uuid import uuid4
 import requests
 import streamlit as st
 
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
 
 st.set_page_config(page_title="AI Meal Planner", page_icon="A", layout="wide")
 
