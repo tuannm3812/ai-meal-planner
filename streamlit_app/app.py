@@ -43,6 +43,8 @@ def get_secret(name: str, default: str = "") -> str:
 
 
 DEFAULT_API_BASE_URL = get_secret("API_BASE_URL", "http://localhost:8000")
+DEMO_DATA_DIR = Path("/tmp/ai_meal_planner") if os.getenv("STREAMLIT_SHARING") else Path("database")
+DEMO_DATA_DIR.mkdir(parents=True, exist_ok=True)
 COMMON_HEALTH_CONDITIONS = [
     "None",
     "Diabetes",
@@ -139,20 +141,26 @@ def local_demo_request(
     profile: dict[str, Any],
     api_key: str = "",
 ) -> dict[str, Any]:
+    payload = payload or {}
+    if path == "/health":
+        return {
+            "status": "ok",
+            "environment": "streamlit_demo",
+            "services": {
+                "mode": "self_contained_streamlit",
+                "gemini_configured": bool(api_key),
+                "usda_configured": bool(get_secret("USDA_API_KEY")),
+                "rag_backend": "lazy_loaded_local",
+            },
+        }
+
     try:
-        from backend.app.agents.calorie_expenditure_agent import (
-            CalorieExpenditureAgent,
-            CalorieExpenditureRequest,
-        )
-        from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
         from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
         from backend.app.agents.supermarket_agent import SupermarketAgent
         from backend.app.repositories.storage import MealFeedbackRepository, MealPlanRepository
     except ImportError as exc:
-        raise RuntimeError(f"Local demo mode cannot import backend modules: {exc}") from exc
+        raise RuntimeError(f"Local demo mode cannot import backend storage modules: {exc}") from exc
 
-    payload = payload or {}
-    data_dir = Path("database")
     user_repository = StreamlitUserProfileRepository(
         age=int(profile["age"]),
         sex=str(profile["sex"]),
@@ -162,19 +170,12 @@ def local_demo_request(
         dietary_restrictions=profile["dietary_restrictions"],
     )
 
-    if path == "/health":
-        return {
-            "status": "ok",
-            "environment": "streamlit_demo",
-            "services": {
-                "mode": "self_contained_streamlit",
-                "gemini_configured": bool(api_key),
-                "usda_configured": bool(get_secret("USDA_API_KEY")),
-                "rag_backend": "local",
-            },
-        }
-
     if path == "/generate-meal-plan":
+        try:
+            from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
+        except ImportError as exc:
+            raise RuntimeError(f"Local demo mode cannot import meal agent: {exc}") from exc
+
         request_id = str(uuid4())
         meal_agent = MealRecommendationAgent(
             db_connection=user_repository,
@@ -210,10 +211,18 @@ def local_demo_request(
             "nutrition": nutrition_payload.model_dump(),
             "shopping_list": shopping_payload.model_dump(),
         }
-        MealPlanRepository(data_dir).save(response)
+        MealPlanRepository(DEMO_DATA_DIR).save(response)
         return response
 
     if path == "/calorie-expenditure/predict":
+        try:
+            from backend.app.agents.calorie_expenditure_agent import (
+                CalorieExpenditureAgent,
+                CalorieExpenditureRequest,
+            )
+        except ImportError as exc:
+            raise RuntimeError(f"Local demo mode cannot import calorie agent: {exc}") from exc
+
         agent = CalorieExpenditureAgent(
             model_path=Path("models/calorie_expenditure/calorie_expenditure_model.joblib"),
             model_version="hist_gradient_boosting_deep_v0.1.0",
@@ -222,21 +231,21 @@ def local_demo_request(
         return agent.predict(request).model_dump()
 
     if path == "/meal-feedback":
-        record = MealFeedbackRepository(data_dir).save(payload)
+        record = MealFeedbackRepository(DEMO_DATA_DIR).save(payload)
         return {"status": "success", "item": record}
 
     if path.startswith("/meal-plans/"):
         user_id = path.split("/", 2)[2].split("?", 1)[0]
         return {
             "user_id": user_id,
-            "items": MealPlanRepository(data_dir).list_for_user(user_id=user_id),
+            "items": MealPlanRepository(DEMO_DATA_DIR).list_for_user(user_id=user_id),
         }
 
     if path.startswith("/saved-meals/"):
         user_id = path.split("/", 2)[2].split("?", 1)[0]
         return {
             "user_id": user_id,
-            "items": MealFeedbackRepository(data_dir).list_for_user(
+            "items": MealFeedbackRepository(DEMO_DATA_DIR).list_for_user(
                 user_id=user_id,
                 saved_only=True,
             ),
