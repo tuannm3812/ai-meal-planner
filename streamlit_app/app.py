@@ -112,6 +112,23 @@ def parse_extra_items(raw_value: str) -> list[str]:
     return [item.strip() for item in raw_value.split(",") if item.strip()]
 
 
+def is_meal_like_input(value: str) -> bool:
+    normalized_value = value.strip().lower()
+    polite_only = {
+        "thank you",
+        "thanks",
+        "hello",
+        "hi",
+        "hey",
+        "ok",
+        "okay",
+        "test",
+    }
+    if normalized_value in polite_only:
+        return False
+    return len(normalized_value) >= 3
+
+
 class StreamlitUserProfileRepository:
     def __init__(
         self,
@@ -260,13 +277,18 @@ if "latest_meal_result" not in st.session_state:
     st.session_state.latest_meal_result = None
 
 with st.sidebar:
-    st.subheader("API")
-    api_base_url = st.text_input("Base URL", value=DEFAULT_API_BASE_URL)
+    st.subheader("Run Mode")
     use_demo_mode = st.toggle(
         "Self-contained Streamlit demo",
         value=get_secret("STREAMLIT_DEMO_MODE", "0") == "1",
         help="Run the demo directly inside Streamlit without calling FastAPI.",
     )
+    api_base_url = DEFAULT_API_BASE_URL
+    if use_demo_mode:
+        st.caption("Using local agents inside Streamlit. FastAPI is not required for this demo.")
+    else:
+        st.subheader("API")
+        api_base_url = st.text_input("Base URL", value=DEFAULT_API_BASE_URL)
     health_payload: dict[str, Any] = {}
     with st.expander("Deployment settings"):
         st.markdown(
@@ -314,21 +336,20 @@ with st.sidebar:
         with st.expander("Connection details"):
             render_api_error(exc)
 
-    st.divider()
-    st.subheader("AI Keys")
-    gemini_key_source = "configured on API" if health_payload.get("services", {}).get("gemini_configured") else "not configured"
-    st.caption(f"Gemini status: {gemini_key_source}")
-    gemini_api_key = st.text_input(
-        "Gemini API key",
-        value=get_secret("GEMINI_API_KEY"),
-        type="password",
-        help=(
-            "For deployed testing, set this in Streamlit secrets. "
-            "The current FastAPI backend reads Gemini from backend/.env at startup."
-        ),
-    )
-    if gemini_api_key and not health_payload.get("services", {}).get("gemini_configured"):
-        st.info("The UI captured a key, but the API must also be configured or restarted with GEMINI_API_KEY.")
+    gemini_api_key = get_secret("GEMINI_API_KEY")
+    with st.expander("Optional AI keys"):
+        gemini_key_source = (
+            "configured"
+            if health_payload.get("services", {}).get("gemini_configured") or gemini_api_key
+            else "not configured"
+        )
+        st.caption(f"Gemini status: {gemini_key_source}")
+        gemini_api_key = st.text_input(
+            "Gemini API key",
+            value=gemini_api_key,
+            type="password",
+            help="Optional. Gemini is only used for final explanation when enabled.",
+        )
 
     st.divider()
     st.subheader("Profile")
@@ -417,58 +438,61 @@ with meal_tab:
     with right_col:
         st.subheader("Response")
         if generate_meal:
-            try:
-                with st.spinner("Planning meal..."):
-                    meal_result = call_demo_or_api(
-                        "POST",
-                        "/generate-meal-plan",
-                        {
-                            "user_id": user_id,
-                            "craving": craving,
-                            "location": location,
-                            "health_conditions": selected_health_conditions,
-                            "dietary_preferences": dietary_preferences,
-                        },
-                        {"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
+            if not is_meal_like_input(craving):
+                st.warning("Enter a meal craving or goal, for example `salmon bowl`, `fried rice`, or `high-protein burger`.")
+            else:
+                try:
+                    with st.spinner("Planning meal..."):
+                        meal_result = call_demo_or_api(
+                            "POST",
+                            "/generate-meal-plan",
+                            {
+                                "user_id": user_id,
+                                "craving": craving,
+                                "location": location,
+                                "health_conditions": selected_health_conditions,
+                                "dietary_preferences": dietary_preferences,
+                            },
+                            {"X-Gemini-API-Key": gemini_api_key} if gemini_api_key else None,
+                        )
+
+                    st.session_state.latest_meal_result = meal_result
+                    meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
+                    nutrition = meal_result.get("nutrition", {})
+                    shopping_list = meal_result.get("shopping_list", {})
+                    metadata = meal_result.get("meal_plan", {}).get("metadata", {})
+                    retrieval = meal_result.get("meal_plan", {}).get("retrieval")
+
+                    st.success(meal_definition.get("structured_meal_name", "Meal generated"))
+                    st.caption(
+                        f"Source: {metadata.get('source', 'unknown')} | "
+                        f"Confidence: {metadata.get('confidence', 0):.0%}"
                     )
+                    if metadata.get("explanation"):
+                        st.info(metadata["explanation"])
+                    metric_cols = st.columns(4)
+                    metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
+                    metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
+                    metric_cols[2].metric("Carbs", f"{nutrition.get('total_carbs', 0)} g")
+                    metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
 
-                st.session_state.latest_meal_result = meal_result
-                meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
-                nutrition = meal_result.get("nutrition", {})
-                shopping_list = meal_result.get("shopping_list", {})
-                metadata = meal_result.get("meal_plan", {}).get("metadata", {})
-                retrieval = meal_result.get("meal_plan", {}).get("retrieval")
-
-                st.success(meal_definition.get("structured_meal_name", "Meal generated"))
-                st.caption(
-                    f"Source: {metadata.get('source', 'unknown')} | "
-                    f"Confidence: {metadata.get('confidence', 0):.0%}"
-                )
-                if metadata.get("explanation"):
-                    st.info(metadata["explanation"])
-                metric_cols = st.columns(4)
-                metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
-                metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
-                metric_cols[2].metric("Carbs", f"{nutrition.get('total_carbs', 0)} g")
-                metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
-
-                with st.expander("Ingredients", expanded=True):
-                    st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
-                if metadata.get("warnings"):
-                    with st.expander("Retrieval and generation notes", expanded=True):
-                        for warning in metadata["warnings"]:
-                            st.write(f"- {warning}")
-                if retrieval:
-                    with st.expander("RAG retrieval contract", expanded=True):
-                        st.json(retrieval)
-                with st.expander("Nutrition details"):
-                    st.json(nutrition)
-                with st.expander("Shopping list"):
-                    st.json(shopping_list)
-                with st.expander("Raw API response"):
-                    st.json(meal_result)
-            except Exception as exc:
-                render_api_error(exc)
+                    with st.expander("Ingredients", expanded=True):
+                        st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
+                    if metadata.get("warnings"):
+                        with st.expander("Retrieval and generation notes", expanded=True):
+                            for warning in metadata["warnings"]:
+                                st.write(f"- {warning}")
+                    if retrieval:
+                        with st.expander("RAG retrieval contract", expanded=True):
+                            st.json(retrieval)
+                    with st.expander("Nutrition details"):
+                        st.json(nutrition)
+                    with st.expander("Shopping list"):
+                        st.json(shopping_list)
+                    with st.expander("Raw API response"):
+                        st.json(meal_result)
+                except Exception as exc:
+                    render_api_error(exc)
         else:
             st.info("Submit a craving to call `/generate-meal-plan`.")
 
