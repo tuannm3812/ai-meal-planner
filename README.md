@@ -15,13 +15,13 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 
 **Live Demo:** https://tuannm3812-ai-meal-planner.streamlit.app/
 
-## Current Delivery Focus
+## 1. Current Delivery Focus
 
 - Build a dependable API foundation for meal generation, calorie prediction, nutrition verification, feedback, and shopping-list estimates
 - Deploy and validate the product through Streamlit while the core recommendation workflow matures
 - Preserve the React frontend path for the next phase of UX refinement and production interface work
 
-## Features
+## 2. Features
 
 - Calorie target calculation with a dedicated calorie expenditure agent
 - Kaggle-trained calorie expenditure model artifact promoted into the backend workflow
@@ -34,7 +34,7 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 - Supermarket product mapping with estimated shopping cost and confidence metadata
 - Streamlit demo for local testing and deployed product review
 
-## Tech Stack
+## 3. Tech Stack
 
 - Backend: Python, FastAPI, Pydantic, Uvicorn
 - ML/RAG: scikit-learn, TF-IDF vector retrieval, optional sentence-transformers + FAISS
@@ -44,7 +44,7 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 - Frontend: React, Vite, Tailwind CSS, Axios
 - Tooling: pytest, GitHub Actions CI, Ruff config, ESLint, npm
 
-## Architecture
+## 4. Architecture
 
 ```text
 User profile + craving
@@ -59,7 +59,7 @@ User profile + craving
 
 The meal path is retrieval-first so common cravings continue to work when external AI services are rate limited or disabled.
 
-## Project Structure
+## 5. Project Structure
 
 ```text
 ai-meal-planner/
@@ -92,15 +92,15 @@ ai-meal-planner/
 
 See `docs/architecture/system_architecture.md` and `docs/engineering/repo_structure_conventions.md` for deeper design notes.
 
-## Quick Start
+## 6. Quick Start
 
-### Prerequisites
+### 6.1 Prerequisites
 
 - Python 3.11+
 - Optional: Node.js 20+ and npm for the React dashboard
 - Optional: Gemini, USDA, and FatSecret API keys for live external integrations
 
-### Backend API
+### 6.2 Backend API
 
 Run these commands from the project root:
 
@@ -125,7 +125,7 @@ Interactive API docs are available at:
 http://127.0.0.1:8010/docs
 ```
 
-### Streamlit Demo
+### 6.3 Streamlit Demo
 
 For a local self-contained demo:
 
@@ -153,7 +153,7 @@ The deployed Streamlit Community Cloud demo is available at:
 https://tuannm3812-ai-meal-planner.streamlit.app/
 ```
 
-### React Dashboard
+### 6.4 React Dashboard
 
 The React dashboard is retained for the next frontend refinement phase.
 
@@ -169,7 +169,7 @@ Local React development runs at:
 http://localhost:5173
 ```
 
-## Configuration
+## 7. Configuration
 
 Create `backend/.env` from `.env.example` and adjust values as needed:
 
@@ -189,7 +189,7 @@ ENABLE_GEMINI_ADAPTATION=0
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
 
-## API Overview
+## 8. API Overview
 
 | Method | Endpoint | Purpose |
 | --- | --- | --- |
@@ -231,7 +231,7 @@ Example calorie-prediction request:
 }
 ```
 
-## Development
+## 9. Development
 
 Run backend tests:
 
@@ -253,7 +253,7 @@ npm run lint
 npm run build
 ```
 
-## Model and Retrieval Assets
+## 10. Model and Retrieval Assets
 
 ```text
 notebooks/calorie_expenditure_kaggle_training.ipynb
@@ -268,7 +268,7 @@ The current seed corpus contains 34 curated meal templates. The recommendation f
 
 Semantic retrieval is prepared but conservative by default. In production, `RAG_BACKEND=auto` keeps TF-IDF for small corpora and moves to sentence embeddings plus FAISS when the corpus reaches the configured activation size.
 
-## Roadmap
+## 11. Roadmap
 
 - Connect `/generate-meal-plan` more tightly with the latest `/calorie-expenditure/predict` result
 - Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
