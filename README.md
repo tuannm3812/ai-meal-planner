@@ -2,12 +2,12 @@
 
 ![AI Meal Planner hero](https://assets.epicurious.com/photos/689523e500efe724a5ef8bb5/16:9/w_2560%2Cc_limit/NABRAND-15854_HF_Refresh_PeakIIConcepts_2025-07_Shot01.jpg)
 
-![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=for-the-badge&logo=fastapi&logoColor=white)
-![Streamlit](https://img.shields.io/badge/Streamlit-Live%20Demo-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
-![scikit-learn](https://img.shields.io/badge/scikit--learn-ML%20%2B%20RAG-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)
-![USDA](https://img.shields.io/badge/USDA-Nutrition%20Verification-2E7D32?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-API--focused%20MVP-blue?style=for-the-badge)
+![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat&logo=fastapi&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-Live%20Demo-FF4B4B?style=flat&logo=streamlit&logoColor=white)
+![scikit-learn](https://img.shields.io/badge/scikit--learn-ML%20%2B%20RAG-F7931E?style=flat&logo=scikitlearn&logoColor=white)
+![USDA](https://img.shields.io/badge/USDA-Nutrition%20Verification-2E7D32?style=flat)
+![Status](https://img.shields.io/badge/status-API--focused%20MVP-blue?style=flat)
 
 AI Meal Planner is a multi-agent meal planning application that estimates calorie needs, recommends meals from user preferences, verifies nutrition, and prepares a practical shopping-list estimate.
 
