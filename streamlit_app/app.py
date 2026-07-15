@@ -167,6 +167,11 @@ def local_demo_request(
                 "mode": "self_contained_streamlit",
                 "gemini_configured": bool(api_key),
                 "usda_configured": bool(get_secret("USDA_API_KEY")),
+                "fatsecret_configured": bool(get_secret("FATSECRET_CLIENT_ID"))
+                and bool(get_secret("FATSECRET_CLIENT_SECRET")),
+                "calorie_model_configured": Path(
+                    "models/calorie_expenditure/calorie_expenditure_model.joblib"
+                ).exists(),
                 "rag_backend": "lazy_loaded_local",
             },
         }
@@ -329,7 +334,22 @@ with st.sidebar:
         else:
             health_payload = request_json("GET", api_base_url, "/health")
             st.success("API online")
-        with st.expander("Health payload"):
+        services = health_payload.get("services", {})
+        status_lines = [
+            ("Gemini", services.get("gemini_configured")),
+            ("USDA", services.get("usda_configured")),
+            ("FatSecret", services.get("fatsecret_configured")),
+            ("Calorie model", services.get("calorie_model_configured")),
+        ]
+        for label, configured in status_lines:
+            if configured:
+                st.success(f"{label}: configured", icon="✅")
+            else:
+                st.warning(f"{label}: not configured", icon="⚠️")
+        rag_backend = services.get("rag_backend")
+        if rag_backend:
+            st.caption(f"RAG backend: `{rag_backend}`")
+        with st.expander("Full health payload"):
             st.json(health_payload)
     except Exception as exc:
         st.warning("API offline, unreachable, or demo mode unavailable")
@@ -487,8 +507,16 @@ with meal_tab:
                             st.json(retrieval)
                     with st.expander("Nutrition details"):
                         st.json(nutrition)
-                    with st.expander("Shopping list"):
-                        st.json(shopping_list)
+                    with st.expander("Shopping list", expanded=True):
+                        shopping_items = shopping_list.get("shopping_list", [])
+                        if shopping_items:
+                            st.dataframe(shopping_items, use_container_width=True)
+                            st.metric(
+                                "Estimated total",
+                                f"${shopping_list.get('total_estimated_cost', 0):,.2f}",
+                            )
+                        else:
+                            st.caption("No shopping list items returned.")
                     with st.expander("Raw API response"):
                         st.json(meal_result)
                 except Exception as exc:
@@ -592,13 +620,17 @@ with history_tab:
     history_limit = st.slider("Limit", 1, 50, 10)
     if st.button("Load history"):
         try:
-            history_result = call_demo_or_api(
-                "GET",
-                f"/meal-plans/{user_id}?limit={history_limit}",
-            )
+            with st.spinner("Loading meal history..."):
+                history_result = call_demo_or_api(
+                    "GET",
+                    f"/meal-plans/{user_id}?limit={history_limit}",
+                )
             items = history_result.get("items", [])
             st.metric("Records", len(items))
-            st.json(history_result)
+            if items:
+                st.json(history_result)
+            else:
+                st.info("No meal history yet — generate a plan first.")
         except Exception as exc:
             render_api_error(exc)
 
@@ -606,11 +638,16 @@ with history_tab:
     st.subheader("Saved Meals")
     if st.button("Load saved meals"):
         try:
-            saved_result = call_demo_or_api(
-                "GET",
-                f"/saved-meals/{user_id}?limit={history_limit}",
-            )
-            st.metric("Saved", len(saved_result.get("items", [])))
-            st.json(saved_result)
+            with st.spinner("Loading saved meals..."):
+                saved_result = call_demo_or_api(
+                    "GET",
+                    f"/saved-meals/{user_id}?limit={history_limit}",
+                )
+            items = saved_result.get("items", [])
+            st.metric("Saved", len(items))
+            if items:
+                st.json(saved_result)
+            else:
+                st.info("No saved meals yet — mark a meal as saved from the Meal Plan tab.")
         except Exception as exc:
             render_api_error(exc)
