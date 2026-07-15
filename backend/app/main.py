@@ -5,6 +5,7 @@ from uuid import uuid4
 
 import uvicorn
 from fastapi import FastAPI, Header, HTTPException
+from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 
 try:
@@ -134,26 +135,28 @@ async def generate_meal_plan(
     try:
         active_meal_agent = meal_recommendation_agent
         if x_gemini_api_key and not settings.gemini_api_key:
+            # Reuse the already-built retriever (TF-IDF/embedding index) instead of
+            # reloading the corpus and re-embedding it on every request.
             active_meal_agent = MealRecommendationAgent(
                 db_connection=user_profiles,
                 gemini_api_key=x_gemini_api_key,
-                meal_corpus_path=settings.meal_corpus_path,
+                meal_retriever=meal_recommendation_agent.meal_retriever,
                 enable_llm_adaptation=settings.enable_gemini_adaptation,
-                rag_backend=settings.rag_backend,
-                rag_embedding_cache_dir=settings.rag_embedding_cache_dir,
-                rag_embedding_activation_size=settings.rag_embedding_activation_size,
             )
 
-        meal_payload = active_meal_agent.generate_meal_payload(
+        meal_payload = await run_in_threadpool(
+            active_meal_agent.generate_meal_payload,
             craving=request.craving.strip(),
             user_id=request.user_id.strip(),
             health_conditions=request.health_conditions,
             dietary_preferences=request.dietary_preferences,
         )
-        nutrition_payload = nutrition_verification_agent.calculate_meal_macros(
+        nutrition_payload = await run_in_threadpool(
+            nutrition_verification_agent.calculate_meal_macros,
             ingredients=meal_payload.meal_definition.ingredients,
         )
-        supermarket_payload = supermarket_agent.generate_shopping_list(
+        supermarket_payload = await run_in_threadpool(
+            supermarket_agent.generate_shopping_list,
             ingredients=meal_payload.meal_definition.ingredients,
             user_location=request.location.strip(),
         )
@@ -167,7 +170,7 @@ async def generate_meal_plan(
             "nutrition": nutrition_payload.model_dump(),
             "shopping_list": supermarket_payload.model_dump(),
         }
-        meal_history.save(response)
+        await run_in_threadpool(meal_history.save, response)
         return response
     except Exception as exc:
         logger.exception("Meal plan generation failed for request %s", request_id)
@@ -176,16 +179,18 @@ async def generate_meal_plan(
 
 @app.post("/calorie-expenditure/predict")
 async def predict_calorie_expenditure(request: CalorieExpenditureRequest) -> Dict[str, Any]:
-    return calorie_expenditure_agent.predict(request).model_dump()
+    response = await run_in_threadpool(calorie_expenditure_agent.predict, request)
+    return response.model_dump()
 
 
 @app.get("/meal-plans/{user_id}")
 async def list_meal_plans(user_id: str, limit: int = 20) -> Dict[str, Any]:
     safe_limit = max(1, min(limit, 50))
+    items = await run_in_threadpool(meal_history.list_for_user, user_id=user_id, limit=safe_limit)
     return {
         "user_id": user_id,
         "limit": safe_limit,
-        "items": meal_history.list_for_user(user_id=user_id, limit=safe_limit),
+        "items": items,
     }
 
 
@@ -197,7 +202,7 @@ async def save_meal_feedback(request: MealFeedbackRequest) -> Dict[str, Any]:
             detail="Provide at least one feedback signal: liked, rating, or saved.",
         )
 
-    record = meal_feedback.save(request.model_dump())
+    record = await run_in_threadpool(meal_feedback.save, request.model_dump())
     return {
         "status": "success",
         "item": record,
@@ -207,24 +212,27 @@ async def save_meal_feedback(request: MealFeedbackRequest) -> Dict[str, Any]:
 @app.get("/meal-feedback/{user_id}")
 async def list_meal_feedback(user_id: str, limit: int = 20) -> Dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
+    items = await run_in_threadpool(meal_feedback.list_for_user, user_id=user_id, limit=safe_limit)
     return {
         "user_id": user_id,
         "limit": safe_limit,
-        "items": meal_feedback.list_for_user(user_id=user_id, limit=safe_limit),
+        "items": items,
     }
 
 
 @app.get("/saved-meals/{user_id}")
 async def list_saved_meals(user_id: str, limit: int = 20) -> Dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
+    items = await run_in_threadpool(
+        meal_feedback.list_for_user,
+        user_id=user_id,
+        limit=safe_limit,
+        saved_only=True,
+    )
     return {
         "user_id": user_id,
         "limit": safe_limit,
-        "items": meal_feedback.list_for_user(
-            user_id=user_id,
-            limit=safe_limit,
-            saved_only=True,
-        ),
+        "items": items,
     }
 
 

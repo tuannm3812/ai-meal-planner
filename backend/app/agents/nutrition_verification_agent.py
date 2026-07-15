@@ -8,6 +8,8 @@ from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
+from ..schemas.requests import Ingredient
+
 
 logger = logging.getLogger(__name__)
 
@@ -40,6 +42,9 @@ class MealNutrition(BaseModel):
 
 
 class NutritionVerificationAgent:
+    _FAILURE_THRESHOLD = 3
+    _COOLDOWN_SECONDS = 120
+
     def __init__(
         self,
         usda_api_key: str | None = None,
@@ -53,7 +58,15 @@ class NutritionVerificationAgent:
         self.fatsecret_token: str | None = None
         self.fatsecret_token_expires_at = 0.0
 
-    def calculate_meal_macros(self, ingredients: List[Any]) -> MealNutrition:
+        # Successful API lookups are cached per normalized ingredient name for the
+        # process lifetime; estimates/local-table results are cheap and not cached.
+        self._macro_cache: Dict[str, Dict[str, Any]] = {}
+        self._usda_consecutive_failures = 0
+        self._usda_cooldown_until = 0.0
+        self._fatsecret_consecutive_failures = 0
+        self._fatsecret_cooldown_until = 0.0
+
+    def calculate_meal_macros(self, ingredients: List[Ingredient]) -> MealNutrition:
         processed_ingredients = []
         totals = {"calories": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0}
         warnings = []
@@ -105,23 +118,61 @@ class NutritionVerificationAgent:
             return local_override
 
         search_name = self._normalize_search_name(item_name)
-        if self.api_key:
+        cached = self._macro_cache.get(search_name)
+        if cached:
+            return cached
+
+        if self.api_key and not self._in_cooldown(self._usda_cooldown_until):
             try:
                 usda_result = self._query_usda_database(search_name)
+                self._usda_consecutive_failures = 0
                 if self._has_usable_macros(usda_result):
+                    self._macro_cache[search_name] = usda_result
                     return usda_result
             except Exception as exc:
                 logger.warning("USDA lookup failed for %s: %s", item_name, exc)
+                self._register_failure("usda")
 
-        if self.fatsecret_client_id and self.fatsecret_client_secret:
+        if (
+            self.fatsecret_client_id
+            and self.fatsecret_client_secret
+            and not self._in_cooldown(self._fatsecret_cooldown_until)
+        ):
             try:
                 fatsecret_result = self._query_fatsecret_database(search_name)
+                self._fatsecret_consecutive_failures = 0
                 if self._has_usable_macros(fatsecret_result):
+                    self._macro_cache[search_name] = fatsecret_result
                     return fatsecret_result
             except Exception as exc:
                 logger.warning("FatSecret lookup failed for %s: %s", item_name, exc)
+                self._register_failure("fatsecret")
 
         return self._estimate_macros_per_100g(item_name)
+
+    @staticmethod
+    def _in_cooldown(cooldown_until: float) -> bool:
+        return time.time() < cooldown_until
+
+    def _register_failure(self, backend: str) -> None:
+        if backend == "usda":
+            self._usda_consecutive_failures += 1
+            if self._usda_consecutive_failures >= self._FAILURE_THRESHOLD:
+                self._usda_cooldown_until = time.time() + self._COOLDOWN_SECONDS
+                logger.warning(
+                    "USDA lookups paused for %ss after %d consecutive failures.",
+                    self._COOLDOWN_SECONDS,
+                    self._usda_consecutive_failures,
+                )
+        else:
+            self._fatsecret_consecutive_failures += 1
+            if self._fatsecret_consecutive_failures >= self._FAILURE_THRESHOLD:
+                self._fatsecret_cooldown_until = time.time() + self._COOLDOWN_SECONDS
+                logger.warning(
+                    "FatSecret lookups paused for %ss after %d consecutive failures.",
+                    self._COOLDOWN_SECONDS,
+                    self._fatsecret_consecutive_failures,
+                )
 
     @staticmethod
     def _trusted_local_override(item_name: str) -> Dict[str, Any] | None:

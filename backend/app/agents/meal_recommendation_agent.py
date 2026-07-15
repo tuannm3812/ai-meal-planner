@@ -5,14 +5,10 @@ from typing import Any, List
 from pydantic import BaseModel, Field
 
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
+from ..schemas.requests import Ingredient
 
 
 logger = logging.getLogger(__name__)
-
-
-class Ingredient(BaseModel):
-    item_name: str = Field(min_length=2)
-    base_quantity_grams: int = Field(gt=0, le=2000)
 
 
 class MealDefinition(BaseModel):
@@ -71,27 +67,6 @@ class MealPlanPayload(BaseModel):
     metadata: AgentMetadata
     retrieval: RetrievalMetadata | None = None
     portion_scaling: PortionScalingMetadata | None = None
-
-
-class LlmIngredient(BaseModel):
-    item_name: str
-    base_quantity_grams: int
-
-
-class LlmMealDefinition(BaseModel):
-    craving_input: str
-    structured_meal_name: str
-    ingredients: List[LlmIngredient]
-
-
-class LlmUserContext(BaseModel):
-    caloric_target: int
-    dietary_restrictions: List[str]
-
-
-class LlmMealPlanPayload(BaseModel):
-    user_context: LlmUserContext
-    meal_definition: LlmMealDefinition
 
 
 class LlmMealExplanation(BaseModel):

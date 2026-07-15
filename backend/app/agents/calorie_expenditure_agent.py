@@ -1,7 +1,12 @@
+import logging
 from pathlib import Path
 from typing import Any
 
+import pandas as pd
 from pydantic import BaseModel, Field
+
+
+logger = logging.getLogger(__name__)
 
 
 class CalorieExpenditureRequest(BaseModel):
@@ -26,6 +31,9 @@ class CalorieExpenditureResponse(BaseModel):
 
 
 class CalorieExpenditureAgent:
+    _TRAINED_SEX_CATEGORIES = {"male", "female"}
+    _SEX_ALIASES = {"m": "male", "male": "male", "f": "female", "female": "female"}
+
     def __init__(self, model_path: Path | None = None, model_version: str = "rule_based_v0.1.0"):
         self.model_path = model_path
         self.model_version = model_version
@@ -51,13 +59,40 @@ class CalorieExpenditureAgent:
         elif model_path:
             self.model_warning = f"Calorie model artifact not found: {model_path}"
 
+        if self.model is not None:
+            self._warm_up_model()
+
+    def _warm_up_model(self) -> None:
+        # Absorbs first-call JIT/bin-cache costs at startup instead of on the first user request.
+        try:
+            self.model.predict(
+                pd.DataFrame(
+                    [
+                        {
+                            "Sex": "male",
+                            "Age": 30,
+                            "Height": 175.0,
+                            "Weight": 75.0,
+                            "Duration": 30.0,
+                            "Heart_Rate": 100.0,
+                            "Body_Temp": 37.0,
+                        }
+                    ]
+                )
+            )
+        except Exception as exc:
+            logger.warning("Calorie model warm-up prediction failed: %s", exc)
+
     def predict(self, request: CalorieExpenditureRequest) -> CalorieExpenditureResponse:
         warnings = self._health_warnings(request.health_conditions)
         if self.model_warning:
             warnings.append(self.model_warning)
 
         if self.model:
-            exercise_calories = self._predict_exercise_calories(request)
+            normalized_sex, sex_warning = self._normalize_sex_category(request.sex)
+            if sex_warning:
+                warnings.append(sex_warning)
+            exercise_calories = self._predict_exercise_calories(request, normalized_sex)
             expenditure = self._estimate_with_bmr(request) + exercise_calories
             confidence = 0.82
             model_version = self.model_version
@@ -76,11 +111,20 @@ class CalorieExpenditureAgent:
             warnings=warnings,
         )
 
-    def _predict_exercise_calories(self, request: CalorieExpenditureRequest) -> float:
-        import pandas as pd
+    @classmethod
+    def _normalize_sex_category(cls, sex: str) -> tuple[str, str | None]:
+        normalized = sex.strip().lower()
+        mapped = cls._SEX_ALIASES.get(normalized)
+        if mapped:
+            return mapped, None
+        return normalized, (
+            f"Unrecognized sex value '{sex}'; the calorie model was trained on "
+            f"{sorted(cls._TRAINED_SEX_CATEGORIES)} and may return a degraded prediction."
+        )
 
+    def _predict_exercise_calories(self, request: CalorieExpenditureRequest, normalized_sex: str) -> float:
         row = {
-            "Sex": request.sex,
+            "Sex": normalized_sex,
             "Age": request.age,
             "Height": request.height_cm,
             "Weight": request.weight_kg,

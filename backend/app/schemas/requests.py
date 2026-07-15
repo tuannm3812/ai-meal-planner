@@ -1,6 +1,11 @@
 from pydantic import BaseModel, Field
 
 
+class Ingredient(BaseModel):
+    item_name: str = Field(min_length=2)
+    base_quantity_grams: int = Field(gt=0, le=2000)
+
+
 class MealRequest(BaseModel):
     user_id: str = Field(default="user_123", min_length=3, max_length=80)
     craving: str = Field(min_length=2, max_length=180)

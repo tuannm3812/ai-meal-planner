@@ -3,6 +3,8 @@ from typing import Any, Dict, List
 
 from pydantic import BaseModel, Field
 
+from ..schemas.requests import Ingredient
+
 
 logger = logging.getLogger(__name__)
 
@@ -41,7 +43,7 @@ class SupermarketAgent:
         self.maps_api_key = maps_api_key
         self.inventory_api_key = inventory_api_key
 
-    def generate_shopping_list(self, ingredients: List[Any], user_location: str) -> SupermarketPayload:
+    def generate_shopping_list(self, ingredients: List[Ingredient], user_location: str) -> SupermarketPayload:
         store = self._locate_nearest_store(user_location)
         shopping_list_items = []
         warnings = []
