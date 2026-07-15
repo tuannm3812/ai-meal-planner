@@ -11,7 +11,7 @@
 
 AI Meal Planner is a multi-agent meal planning application that estimates calorie needs, recommends meals from user preferences, verifies nutrition, and prepares a practical shopping-list estimate.
 
-The current phase focuses on a reliable FastAPI service, ML-ready agent modules, and a deployed Streamlit experience for testing and demonstration. The React dashboard remains in the repository and will continue to be refined in the next frontend phase once the API contracts and core workflows are stable.
+The current phase focuses on a reliable FastAPI service, ML-ready agent modules, and two client experiences for testing and demonstration: a deployed Streamlit app and a React dashboard, both covering meal planning, calorie prediction, and history/saved-meal review.
 
 **Live Demo:** https://tuannm3812-ai-meal-planner.streamlit.app/
 
@@ -19,7 +19,7 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 
 - Build a dependable API foundation for meal generation, calorie prediction, nutrition verification, feedback, and shopping-list estimates
 - Deploy and validate the product through Streamlit while the core recommendation workflow matures
-- Preserve the React frontend path for the next phase of UX refinement and production interface work
+- Streamlit and React now cover the same core workflow (meal plan, calorie prediction, history); harden the React dashboard toward a production interface next
 
 ## 2. Features
 
@@ -32,7 +32,8 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 - User feedback capture for likes, ratings, saved meals, and notes
 - File-backed user profiles and meal history for early pilots
 - Supermarket product mapping with estimated shopping cost and confidence metadata
-- Streamlit demo for local testing and deployed product review
+- Cached USDA/FatSecret nutrition lookups with automatic per-provider cooldown after repeated failures, so a slow or misconfigured provider degrades gracefully instead of stalling every request
+- Streamlit demo and React dashboard, both covering meal plan generation, calorie prediction, and meal/feedback history
 
 ## 3. Tech Stack
 
@@ -155,7 +156,7 @@ https://tuannm3812-ai-meal-planner.streamlit.app/
 
 ### 6.4 React Dashboard
 
-The React dashboard is retained for the next frontend refinement phase.
+The React dashboard covers the same three workflows as the Streamlit app: meal plan generation, calorie prediction, and meal/feedback history, with the FastAPI backend as its only dependency (no demo mode).
 
 ```powershell
 cd frontend
@@ -275,4 +276,4 @@ Semantic retrieval is prepared but conservative by default. In production, `RAG_
 - Use saved meals, likes, dislikes, and ratings as ranking features in retrieval
 - Move local JSON stores for history, feedback, and profiles to a managed database
 - Improve macro-target balancing, serving-size normalization, and ingredient matching
-- Continue refining the Streamlit experience while preparing the React dashboard for the next production frontend phase
+- Add authentication and persistent accounts to the React dashboard as it moves toward a production interface
