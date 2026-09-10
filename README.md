@@ -120,19 +120,19 @@ python -m venv .venv
 python -m pip install --upgrade pip
 pip install -r backend/requirements.txt
 Copy-Item .env.example backend/.env
-uvicorn backend.app.main:app --host 127.0.0.1 --port 8010 --reload
+uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 The API runs at:
 
 ```text
-http://127.0.0.1:8010
+http://127.0.0.1:8000
 ```
 
 Interactive API docs are available at:
 
 ```text
-http://127.0.0.1:8010/docs
+http://127.0.0.1:8000/docs
 ```
 
 ### 6.3 Streamlit Demo
@@ -147,7 +147,7 @@ streamlit run streamlit_app/app.py
 For API-client mode with FastAPI running locally:
 
 ```powershell
-$env:API_BASE_URL="http://127.0.0.1:8010"
+$env:API_BASE_URL="http://127.0.0.1:8000"
 streamlit run streamlit_app/app.py
 ```
 
@@ -252,7 +252,7 @@ python -m pytest -q
 Run a health smoke test:
 
 ```powershell
-curl http://127.0.0.1:8010/health
+curl http://127.0.0.1:8000/health
 ```
 
 Build and lint the React dashboard:
