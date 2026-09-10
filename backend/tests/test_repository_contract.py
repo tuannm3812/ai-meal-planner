@@ -22,7 +22,7 @@ def _skip_until_implemented(backend: str) -> None:
     """Skip the SQLite branch until Task 4 lands it."""
     if backend == "sqlite":
         try:
-            import backend.app.repositories.sql  # noqa: F401
+            import backend.app.repositories.sql
         except ImportError:
             pytest.skip("SQLite backend not implemented yet (Task 4)")
 
@@ -138,3 +138,29 @@ def test_feedback_is_isolated_per_user(feedback_store: Any) -> None:
     feedback_store.save({"user_id": "u1", "n": 1})
     feedback_store.save({"user_id": "u2", "n": 2})
     assert [item["n"] for item in feedback_store.list_for_user("u1")] == [1]
+
+
+def test_feedback_saved_only_filters_before_applying_the_limit(feedback_store: Any) -> None:
+    """The filter runs first, then the limit - not the other way round.
+
+    With n=0..4 and saved=(n%2==0), filtering first then taking two gives
+    [4, 2]. Slicing to two first and then filtering would give only [4]. A SQL
+    backend that filtered in Python after an unconditional LIMIT would diverge
+    here and nowhere else.
+    """
+    for i in range(5):
+        feedback_store.save({"user_id": "u1", "n": i, "saved": i % 2 == 0})
+    result = feedback_store.list_for_user("u1", limit=2, saved_only=True)
+    assert [item["n"] for item in result] == [4, 2]
+
+
+def test_feedback_for_an_unknown_user_is_empty(feedback_store: Any) -> None:
+    """No rows must mean an empty list, not None and not an exception."""
+    assert feedback_store.list_for_user("nobody") == []
+
+
+def test_limit_defaults_to_twenty(plan_store: Any) -> None:
+    """The default is part of the contract; a backend must not pick its own."""
+    for i in range(25):
+        plan_store.save({"request": {"user_id": "u1"}, "n": i})
+    assert len(plan_store.list_for_user("u1")) == 20
