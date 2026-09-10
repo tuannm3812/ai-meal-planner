@@ -41,12 +41,17 @@ dev = [
 line-length = 100
 target-version = "py311"
 
+# Notebooks are Kaggle run artifacts, not living source: their committed cell
+# outputs are the only surviving record of a run (master standard §12.1), so the
+# source must keep matching what produced them (§4). Reformatting them breaks
+# that correspondence, so ruff does not touch them.
+extend-exclude = ["*.ipynb"]
+# force-exclude so an explicitly-named path cannot bypass the rule above.
+force-exclude = true
+
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "UP"]
 ignore = []
-
-[tool.ruff.lint.per-file-ignores]
-"*.ipynb" = ["E501"]
 
 [tool.pytest.ini_options]
 testpaths = ["backend/tests"]

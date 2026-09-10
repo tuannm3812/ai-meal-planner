@@ -29,9 +29,15 @@ subject of the repo.
   and `test_calorie_model_artifact_loads_and_predicts` asserts against it. The
   `.gitignore` uses the master §8 blanket-rule-plus-negation pattern so the
   exception is visible rather than accidental. Do not "tidy" this.
-- **Notebooks ignore `E501` only.** Set in `[tool.ruff.lint.per-file-ignores]`,
-  using the slack that master §3 already grants to notebook display and print
-  calls. Every other rule still applies to notebooks.
+- **Ruff does not touch notebooks at all.** Set via `extend-exclude` plus
+  `force-exclude` in `[tool.ruff]`. A notebook here is a Kaggle *run artifact*,
+  not living source: master §12.1 establishes that its committed cell outputs are
+  the only surviving record of a run, and master §4 forbids committing outputs
+  whose source has changed without a rerun. Reformatting a notebook breaks that
+  correspondence and silently invalidates the provenance of the shipped model.
+  So the source stays byte-identical to whatever produced the committed outputs.
+  Changing a notebook means rerunning it on the platform and committing the new
+  outputs together with the new source.
 - **`scikit-learn` is pinned exactly to `1.6.1`.** The shipped model artifact was
   trained under it; unpinning silently risks load-time incompatibility warnings and
   changed predictions.
