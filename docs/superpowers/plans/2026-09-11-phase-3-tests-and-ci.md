@@ -993,20 +993,20 @@ MSG
 Per spec §8: done when every endpoint has a test, the contract suite runs green against both
 storage backends, and CI enforces the coverage floor.
 
-- [ ] `uv run pytest` green, with the coverage floor active. Report the real count and percentage
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` clean
-- [ ] Every endpoint has a test — 8 routes covered by `test_api_endpoints.py` (delivered in Phase 1)
-- [ ] The contract suite passes against **both** backends with **zero skips**
-- [ ] The coverage floor was **proved to fail** when raised above the real number, then restored
-- [ ] `npm test` passes, and was **proved to fail** on a broken assertion, then restored
-- [ ] `npm run lint` and `npm run build` still pass
-- [ ] The network guard is active: a test making a real connection fails
-- [ ] `nutrition_verification_agent.py` is well above its 51% baseline — report the figure
-- [ ] The retrieval regression suite passes unchanged
-- [ ] `uv lock --check` passes and `backend/requirements.txt` is unchanged (dev-only additions)
-- [ ] `scikit-learn` still exactly `1.6.1`
-- [ ] `git status --short` clean; `database/*.json` md5-unchanged; no `.env` or `.db` staged
-- [ ] **No production code changed** — `git diff <merge-base> HEAD -- backend/app streamlit_app frontend/src/App.jsx` shows nothing but the new test files
-- [ ] Phase 3 entry appended to `docs/5_agent_log.md`; this checklist ticked
+- [x] `uv run pytest` green, with the coverage floor active. Report the real count and percentage
+- [x] `uv run ruff check .` and `uv run ruff format --check .` clean
+- [x] Every endpoint has a test — 8 routes covered by `test_api_endpoints.py` (delivered in Phase 1)
+- [x] The contract suite passes against **both** backends with **zero skips**
+- [x] The coverage floor was **proved to fail** when raised above the real number, then restored
+- [x] `npm test` passes, and was **proved to fail** on a broken assertion, then restored
+- [x] `npm run lint` and `npm run build` still pass
+- [x] The network guard is active: a test making a real connection fails
+- [x] `nutrition_verification_agent.py` is well above its 51% baseline — report the figure
+- [x] The retrieval regression suite passes unchanged
+- [x] `uv lock --check` passes and `backend/requirements.txt` is unchanged (dev-only additions)
+- [x] `scikit-learn` still exactly `1.6.1`
+- [x] `git status --short` clean; `database/*.json` md5-unchanged; no `.env` or `.db` staged
+- [x] **No production code changed** — `git diff <merge-base> HEAD -- backend/app streamlit_app frontend/src/App.jsx` shows nothing but the new test files
+- [x] Phase 3 entry appended to `docs/5_agent_log.md`; this checklist ticked
 
 Then write the Phase 4 plan from spec §9.
