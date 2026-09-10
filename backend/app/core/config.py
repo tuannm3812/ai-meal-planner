@@ -33,10 +33,20 @@ class AppSettings(BaseSettings):
         env_file_encoding="utf-8",
         extra="ignore",
         case_sensitive=False,
+        # environment is aliased to APP_ENV. Without this, AppSettings(environment=...)
+        # would silently fall back to the default instead of raising, because
+        # extra="ignore" swallows the unrecognised keyword.
+        populate_by_name=True,
     )
 
     app_name: str = "Multi-Agent Meal Planner API"
     environment: str = Field(default="development", alias="APP_ENV")
+    # NoDecode is required: pydantic-settings treats list[str] as a complex type and
+    # runs json.loads() on the raw env value BEFORE any field_validator, so a
+    # comma-separated ALLOWED_ORIGINS raises SettingsError. NoDecode skips that and
+    # lets _split_csv handle it. Trade-off: the JSON-list form ALLOWED_ORIGINS=["a","b"]
+    # is no longer parsed - it would be comma-split into garbage. The previous
+    # implementation never supported that form either, and nothing here uses it.
     allowed_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173"]
     )
@@ -56,6 +66,9 @@ class AppSettings(BaseSettings):
     rag_backend: str = "auto"
     rag_embedding_cache_dir: Path = BASE_DIR / "data" / "vector_index"
     rag_embedding_activation_size: int = 50
+    # Pydantic's bool coercion is slightly wider than the previous rule
+    # (value.lower() in {"1", "true", "yes"}): it also accepts on/off. No shipped
+    # .env uses those, so no resolved value changes, but the rule is not identical.
     enable_gemini_adaptation: bool = False
 
     storage_backend: Literal["json", "sqlite"] = "sqlite"

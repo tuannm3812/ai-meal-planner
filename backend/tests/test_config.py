@@ -56,3 +56,19 @@ def test_sqlite_path_defaults_under_the_data_dir() -> None:
     settings = AppSettings()
     assert settings.sqlite_path == settings.data_dir / "ai_meal_planner.db"
     assert isinstance(settings.sqlite_path, Path)
+
+
+def test_environment_is_settable_by_field_name_and_by_alias(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Both forms must work, and neither may silently fall back to the default.
+
+    `environment` is aliased to APP_ENV. Without populate_by_name, constructing
+    AppSettings(environment=...) silently yielded "development" because
+    extra="ignore" swallowed the keyword.
+    """
+    monkeypatch.setenv("APP_ENV", "staging")
+    assert AppSettings().environment == "staging"
+    monkeypatch.delenv("APP_ENV", raising=False)
+    assert AppSettings(environment="by-field-name").environment == "by-field-name"
+    assert AppSettings(APP_ENV="by-alias").environment == "by-alias"
