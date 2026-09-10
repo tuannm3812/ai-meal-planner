@@ -3,8 +3,10 @@ name: CI
 on:
   push:
     branches: [main]
+  # Every pull request, whatever its base. Restricting this to base `main` meant a
+  # stacked PR - one refactor phase targeting the previous phase's branch - got no
+  # CI run at all, silently, which defeats the point of the gate.
   pull_request:
-    branches: [main]
 
 jobs:
   backend:
