@@ -193,3 +193,81 @@ push.
 
 **Lesson worth keeping:** "verified via the API" is not one thing. Check the
 artifact the consumer actually resolves.
+
+## 2026-09-11 — Codex — independent review of Claude's Phase 0
+
+**Scope:** reviewed `d9ce89e..7730e6c` against the master standard, project
+deltas, refactor design and Phase 0 plan. The working tree was clean at the
+start. A separate reviewer checked dependency, packaging and CI changes;
+Codex checked documentation, notebook changes and local verification. This
+entry is the only tracked change made by this review.
+
+**Assessment:** no application regression identified in the reviewed Phase 0
+changes. The foundation is usable and the local gates pass. One standards
+finding needs resolution before describing standards alignment as complete;
+the documentation corrections below should also be carried into the next
+planning pass. This is a review, not implementation of Phases 1–4.
+
+**Findings and discussion for Claude:**
+
+1. **Medium — changed notebook retains execution evidence from the old source.**
+   `notebooks/calorie_expenditure_kaggle_training.ipynb` removes the unused
+   `RandomForestRegressor` import and reformats code, but retains all seven
+   populated output cells and all eight execution counts from the baseline.
+   Recorded Papermill execution still ends on 2026-05-11. Master §4 and §10
+   require clearing outputs when code changes without a platform rerun;
+   the Phase 0 log provides no such rerun evidence. Source normalization and
+   AST comparison found formatting-only changes in seven cells and the unused
+   import removal in the eighth, so this is a provenance/standards issue,
+   not evidence that the model's metrics are wrong. Suggested resolution:
+   clear outputs and execution counts, or provide a trusted rerun of the
+   changed source. Preserve the shipped artifact and its metrics.
+2. **Low — the backlog overstates the calorie integration gap.**
+   `docs/4_next_steps.md:21–22` says no user-facing endpoint consumes the
+   trained model. `backend/app/main.py:180–183` already routes
+   `/calorie-expenditure/predict` to the calorie agent. The missing consumer
+   is specifically `/generate-meal-plan`, as the corrected README explains.
+   Narrow the backlog wording so Phase 1 does not accidentally duplicate an
+   existing endpoint.
+3. **Low — the spec still gives the misleading test count corrected in the log.**
+   The design spec §2.3 says "13 tests"; fresh pytest execution collects and
+   passes 19 cases. If retaining 13 as the function count, explicitly distinguish
+   functions from parametrized cases. The first log entry's correction did
+   not reach this source document.
+
+**Planning discussion:** `docs/4_next_steps.md:72–74` and design §7 describe
+adopting `pydantic-settings` as adding no dependency because Pydantic already
+exists. Neither `pyproject.toml` nor `uv.lock` includes `pydantic-settings`.
+Phase 2 should explicitly account for adding and locking that package instead
+of assuming the current dependency set provides it. Also, the architecture
+divergence note says to remove it after Phase 1, but includes embedding
+persistence, which Phase 1 does not promise. Update individual claims as they
+are implemented rather than deleting the entire caveat automatically.
+
+**Verified locally:**
+
+- `UV_CACHE_DIR=/private/tmp/meal-review-uv uv run --locked --offline pytest`:
+  **19 passed**, Python 3.11; one joblib physical-core detection warning.
+- With the same cache and locked/offline options, `ruff check .`: clean;
+  `ruff format --check .`: **48 files already formatted**.
+- `npm run lint` and `npm run build`: passed using the installed Node
+  **24.18.0** from nvm. Build produced JS 252.64 kB and CSS 12.56 kB.
+- A locked, offline requirements export to a temporary file matched the
+  committed export after excluding the generated command header. That header
+  differs because the verification adds flags and changes the output path;
+  this is not dependency drift. The committed export was not rewritten.
+- Notebook JSON parses; normalized source/AST and retained outputs compared
+  with `d9ce89e`. Relative Markdown file links in README and numbered docs
+  `0` through `5` resolve; heading anchors were not checked.
+
+**Limits and findings not sustained:** the initial uv command could not use
+the default cache under sandbox permissions, and npm was absent from PATH;
+a temporary cache and the existing nvm runtime resolved both. These were local
+environment issues, not project failures. Python 3.12, CI's Node 20, a fresh
+dependency install, hosted applications and the reported GitHub Actions run
+were not independently exercised here. Wheel packaging excludes root model
+and corpus assets, but documented execution uses a source checkout, so no
+standalone-wheel regression is claimed. The known missing orchestrator,
+calorie-budget wiring and atomic JSON writes remain later-phase work, not
+new defects introduced by Phase 0. No application code, prior log entries,
+notebook outputs or other documents were changed.
