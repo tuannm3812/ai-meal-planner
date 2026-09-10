@@ -64,6 +64,8 @@ The meal path is retrieval-first so common cravings continue to work when extern
 
 ```text
 ai-meal-planner/
+|-- AGENTS.md
+|-- CLAUDE.md
 |-- backend/
 |   |-- app/
 |   |   |-- agents/
@@ -97,6 +99,7 @@ ai-meal-planner/
 |-- render.yaml
 |-- requirements.txt
 |-- runtime.txt
+|-- uv.lock
 `-- README.md
 ```
 
@@ -106,49 +109,58 @@ See [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/0_coding_stand
 
 ### 6.1 Prerequisites
 
-- Python 3.11+
+- [uv](https://docs.astral.sh/uv/) — manages the Python version and dependencies
 - Optional: Node.js 20+ and npm for the React dashboard
 - Optional: Gemini, USDA, and FatSecret API keys for live external integrations
 
+`uv` installs and pins Python 3.11 itself, so no system Python is required.
+
 ### 6.2 Backend API
 
-Run these commands from the project root:
+Run these commands from the project root. They work identically on macOS, Linux
+and Windows.
+
+```bash
+uv sync --all-groups
+cp backend/.env.example backend/.env
+uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+On Windows PowerShell, substitute the copy step:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r backend/requirements.txt
-Copy-Item .env.example backend/.env
-uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+Copy-Item backend/.env.example backend/.env
 ```
 
-The API runs at:
-
-```text
-http://127.0.0.1:8000
-```
-
-Interactive API docs are available at:
-
-```text
-http://127.0.0.1:8000/docs
-```
+The API runs at `http://127.0.0.1:8000`, with interactive docs at
+`http://127.0.0.1:8000/docs`.
 
 ### 6.3 Streamlit Demo
 
 For a local self-contained demo:
 
+```bash
+STREAMLIT_DEMO_MODE=1 uv run streamlit run streamlit_app/app.py
+```
+
+On Windows PowerShell:
+
 ```powershell
 $env:STREAMLIT_DEMO_MODE="1"
-streamlit run streamlit_app/app.py
+uv run streamlit run streamlit_app/app.py
 ```
 
 For API-client mode with FastAPI running locally:
 
+```bash
+API_BASE_URL=http://127.0.0.1:8000 uv run streamlit run streamlit_app/app.py
+```
+
+On Windows PowerShell:
+
 ```powershell
 $env:API_BASE_URL="http://127.0.0.1:8000"
-streamlit run streamlit_app/app.py
+uv run streamlit run streamlit_app/app.py
 ```
 
 The local Streamlit app runs at:
@@ -167,7 +179,10 @@ https://tuannm3812-ai-meal-planner.streamlit.app/
 
 The React dashboard covers the same three workflows as the Streamlit app: meal plan generation, calorie prediction, and meal/feedback history, with the FastAPI backend as its only dependency (no demo mode).
 
-```powershell
+If the backend is not reachable at `localhost:8000`, copy `frontend/.env.example`
+to `frontend/.env.local` and adjust it before starting the dev server.
+
+```bash
 cd frontend
 npm install
 npm run dev
@@ -243,25 +258,37 @@ Example calorie-prediction request:
 
 ## 9. Development
 
-Run backend tests:
+Run the backend checks — the same gates CI enforces:
 
-```powershell
-python -m pytest -q
-```
-
-Run a health smoke test:
-
-```powershell
-curl http://127.0.0.1:8000/health
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
 ```
 
 Build and lint the React dashboard:
 
-```powershell
+```bash
 cd frontend
+npm ci
 npm run lint
 npm run build
 ```
+
+Health smoke test, with the backend running:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+**Dependencies:** `pyproject.toml` is the only file to edit by hand. After
+changing it, run `uv lock` and regenerate the export that Render installs from:
+
+```bash
+uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o backend/requirements.txt
+```
+
+CI fails if `backend/requirements.txt` drifts from `uv.lock`.
 
 ## 10. Model and Retrieval Assets
 
