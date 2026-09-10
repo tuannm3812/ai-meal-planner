@@ -22,6 +22,10 @@
 - **Google-style docstrings** on every public class and function you add or substantially edit (master standard §3).
 - **No new dependencies.** `pydantic-settings` is NOT installed and is Phase 2's problem, not this phase's.
 - Work on branch `refactor/phase-1-backend-architecture`. Do not push or open PRs; the controller handles that.
+- **When you change a function's signature, grep the WHOLE repo for callers, not just
+  `backend/`.** `streamlit_app/app.py` calls the agents directly and has no test coverage, so a
+  missed caller there breaks local demo mode silently while the suite stays green. This already
+  happened once in Task 1. Use `grep -rn "<name>" --include="*.py" . | grep -v node_modules`.
 
 ## Critical Domain Facts
 
