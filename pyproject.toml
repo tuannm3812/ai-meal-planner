@@ -65,5 +65,5 @@ testpaths = ["backend/tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-q"
+addopts = "-q --cov=backend/app --cov-report=term-missing --cov-fail-under=89"
 markers = ["allow_network: test may open real network connections"]
