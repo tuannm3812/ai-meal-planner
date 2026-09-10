@@ -36,6 +36,7 @@ packages = ["backend"]
 [dependency-groups]
 dev = [
   "pytest>=8",
+  "pytest-cov>=7.1.0",
   "ruff==0.16.4",
 ]
 
@@ -64,4 +65,5 @@ testpaths = ["backend/tests"]
 python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-addopts = "-q"
+addopts = "-q --cov=backend/app --cov-report=term-missing"
+markers = ["allow_network: test may open real network connections"]

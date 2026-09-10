@@ -457,3 +457,89 @@ cannot alter an existing table, verified by adding a column and confirming a sec
 return the same built-in default. The typed domain exceptions defined in Phase 1
 are still never raised. SQLite runs in the default rollback-journal mode; WAL would
 help if writes ever contend.
+
+## 2026-09-11 — Claude Sonnet 5 — Phase 3 tests, CI, and the coverage gate
+
+**Delivered** on `refactor/phase-3-tests-and-ci`. Backend coverage of
+`backend/app` went **82% → 90%** (1337 statements, 134 missed), and the frontend
+got its first tests. Per-module: `nutrition_verification_agent.py` 51% → 97%,
+`supermarket_agent.py` 79% → 100%, `rag/rules.py` 90% → 100%. Test count 122 at
+the start of the phase → **214 backend + 5 frontend**, none skipped.
+
+**A network guard now enforces the spec's "no network access in CI."**
+`backend/tests/conftest.py` patches `urllib.request.urlopen`,
+`socket.socket.connect` and `socket.create_connection` to raise `RuntimeError`
+unless a test is marked `@pytest.mark.allow_network`; `test_network_guard.py`
+exercises all three vectors directly.
+
+**CI now enforces the coverage floor it measures, not an aspiration.**
+`uv run pytest --cov=backend/app --cov-report=term` reported `TOTAL 1337 134
+90%` (Step 1 of this task). Per the plan, the floor is that number rounded down
+minus one: **89**. `pyproject.toml`'s `addopts` is now
+`"-q --cov=backend/app --cov-report=term-missing --cov-fail-under=89"`, so
+every local `uv run pytest` — not just CI — now runs and enforces coverage; the
+wall-clock cost is a coverage-instrumentation overhead, roughly 5s → 7s for the
+full suite. The `frontend` job gained a `Test` step (`npm test`, i.e. `vitest
+run`) between Lint and Build, so a component that renders nothing can no
+longer pass CI. The backend job needed no workflow change: `uv run pytest`
+already picks the floor up from `addopts`.
+
+**Both gates were proved to fail, not just configured.** Raising
+`--cov-fail-under` to 99 made `uv run pytest` exit 1 with `FAIL Required test
+coverage of 99% not reached. Total coverage: 89.98%`; restoring 89 returned to
+exit 0 with `Required test coverage of 89% reached`. Inverting one assertion in
+`frontend/src/App.test.jsx` (`toBeInTheDocument` → `not.toBeInTheDocument`)
+made `npm test` exit 1 with the Vitest failure for that assertion, 4 of 5 tests
+otherwise still passing; reverting it returned 5/5 passing, exit 0. Both edits
+were reverted before commit — `git diff` shows no change to `App.test.jsx`.
+
+**Two test-quality defects were found by review during this phase, not by the
+tests themselves:**
+
+1. **A cooldown test read the constant it was supposed to pin.** The suite
+   looped `range(_FAILURE_THRESHOLD)` and asserted against that same constant,
+   so mutating `_FAILURE_THRESHOLD` from 3 to 99 produced no failure — the test
+   moved with the mutation instead of constraining it. Fixed by hardcoding the
+   literal `3` in the loops and adding a test that pins
+   `_FAILURE_THRESHOLD == 3` and `_COOLDOWN_SECONDS == 120` against the
+   values the agent's own warning message and the README promise. Verified:
+   the same mutation now fails three tests where it previously failed none.
+2. **The network guard itself initially left raw sockets open.** It patched
+   `urlopen`, `create_connection` and `httpx`, but not `socket.connect` to a
+   literal IP — no DNS lookup, no urllib, straight to the network. The gap
+   existed because the guard's own test used `example.invalid`, which fails in
+   `getaddrinfo` before a socket is ever created, so the missing patch looked
+   effective when it was not. Fixed by patching `socket.socket.connect` too and
+   testing it against a literal IP instead of a hostname.
+
+**An open product question, pinned by tests rather than resolved:**
+`kidney_disease` is the only constraint group with a block list in
+`blocked_groups_for_ingredient` (kidney beans, lentils, chickpeas, tofu, soy
+sauce) but no corresponding `SUBSTITUTION_RULES` entry. Every other blocked
+group — egg, dairy, gluten, soy, vegan, vegetarian — has at least one
+substitution that lets a meal survive; a meal containing a kidney-blocked
+ingredient is rejected outright instead. This may be the right conservative
+default: the vegan pattern would suggest swapping egg for tofu, but tofu is
+itself on the kidney_disease block list, so a naive substitution would
+recreate the problem it was meant to solve. It was never written down as
+intentional, though. The behaviour is now covered by tests, so a future change
+to it will be a deliberate decision, not an accidental regression.
+
+**Left uncovered on purpose:** `rag/embedding_index.py` sits at 32%. Its
+sentence-transformers/FAISS code path is behind the `semantic-rag` optional
+dependency group, which is not installed in the dev environment or CI — the
+uncovered lines are an unlocked extra, not a gap in the retrieval tests that
+do run (`retriever.py` is at 88%).
+
+**Left uncovered, but not on purpose:** `agents/meal_recommendation_agent.py`
+sits at 72% — 42 of its 152 statements are untested (lines 96-97, 100-111,
+166-169, 177-183, 204, 213, 302-322, 355, 392-403), the largest remaining gap
+in the backend. Unlike `embedding_index.py` above, there is no
+optional-dependency excuse: this is core business logic that ships in every
+install. It is a real gap, tracked in `docs/4_next_steps.md` §7.14, not
+addressed by this task — writing tests for it is future work.
+
+**Verified by running:** `uv run pytest` → 214 passed, coverage 89.98%,
+floor 89 enforced; `npm test` → 5 passed; `uv run ruff check .` and `uv run
+ruff format --check .` clean. No production code changed — this task touched
+only `pyproject.toml`, `.github/workflows/ci.yml`, and this log.

@@ -8,8 +8,9 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
-Status as of 2026-09-10: Phase 0 (tooling, CI, standards) is landing now. Phases
-1–4 are specified but unplanned. 19 tests pass; the meal corpus holds 34 templates.
+Status as of 2026-09-11: Phases 0–3 (tooling, CI, standards, backend architecture,
+storage, tests and CI) are done. Phase 4 is specified but unplanned. 214 backend
+tests and 5 frontend tests pass; the meal corpus holds 34 templates.
 
 Sections §1–§4 are committed work with a written design. §5 tracks structural moves
 those phases do not cover. §6 is product backlog with no phase yet. §7 is the
@@ -64,12 +65,12 @@ Phase 0, 57 now. The items below are kept for traceability.
 11. **Google-style docstrings** on every public class and function in each module
     this phase touches.
 
-## 2. Phase 2 — Storage
+## 2. Phase 2 — Storage — **DONE 2026-09-11**
 
 [Spec §7](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Second because the current single-file JSON store loads everything and filters in
 Python, and because the Protocol boundary is what makes Postgres a later config
-change rather than a rewrite (DEC-4).
+change rather than a rewrite (DEC-4). The items below are kept for traceability.
 
 1. **`repositories/base.py`** — a `Protocol` per repository: `UserProfileRepository`,
    `MealPlanRepository`, `MealFeedbackRepository`.
@@ -90,11 +91,14 @@ change rather than a rewrite (DEC-4).
    rather than adding a dependency.
 5. Schema creation via `create_all`. **Alembic is out of scope** — see §7.1.
 
-## 3. Phase 3 — Tests and CI
+## 3. Phase 3 — Tests and CI — **DONE 2026-09-11**
 
 [Spec §8](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Third because it depends on Phase 1's DI container and Phase 2's Protocol boundary;
-running it earlier would test code about to be replaced.
+running it earlier would test code about to be replaced. Raised backend coverage
+82% → 89.98% (214 tests), added the network guard, and added the first frontend
+tests (5, `vitest` plus React Testing Library). The items below are kept for
+traceability.
 
 - **Endpoint tests** for all 8 routes, happy and error path, via `TestClient` with DI
   overrides supplying fake agents. No network access in CI.
@@ -227,3 +231,20 @@ From spec §12.
 12. **Retraining or improving the calorie model.** The shipped artifact and its
     `scikit-learn==1.6.1` pin stay as they are; §1.1 is about *using* the model, not
     improving it.
+13. **`kidney_disease` has no substitution path.** It is the only constraint group
+    with block-list entries but no `SUBSTITUTION_RULES` match, so a meal containing
+    kidney beans, lentils, chickpeas, tofu or soy sauce is rejected outright for
+    those users rather than adapted. This may well be the right conservative
+    default — the vegan pattern would swap egg for tofu, and tofu is itself
+    kidney-blocked — but it was never written down as intentional. The current
+    behaviour is pinned by
+    `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
+    so changing it will break a test and force a deliberate decision.
+14. **`meal_recommendation_agent.py` is at 72% coverage.** Unlike
+    `rag/embedding_index.py` (32%, excused because its sentence-transformers/FAISS
+    path sits behind the uninstalled `semantic-rag` optional dependency group), this
+    is core business logic with no optional-dependency excuse: 42 statements go
+    untested, the largest remaining gap in the backend —
+    `agents/meal_recommendation_agent.py:96-97, 100-111, 166-169, 177-183, 204, 213,
+    302-322, 355, 392-403`. This is a real remaining gap, not an intentional
+    exclusion, and is unassigned to any phase.
