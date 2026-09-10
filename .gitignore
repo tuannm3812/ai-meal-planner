@@ -22,6 +22,7 @@ database/*.db
 .coverage
 .coverage.*
 htmlcov/
+frontend/coverage/
 data/raw/
 data/processed/
 data/external/
