@@ -1,6 +1,6 @@
 """Builds the application's agents and repositories once, for injection."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -95,3 +95,41 @@ def get_container(request: Request) -> Container:
 
 ContainerDep = Annotated[Container, Depends(get_container)]
 """Injects the request-scoped view of the application's built container."""
+
+
+def with_repositories(
+    container: Container,
+    user_profiles: UserProfileStore,
+    meal_history: MealPlanStore,
+    meal_feedback: MealFeedbackStore,
+) -> Container:
+    """Return a copy of the container using different repositories.
+
+    Use this instead of ``dataclasses.replace`` directly. ``replace`` only
+    rewrites the Container's own fields, leaving ``meal_planning_service`` holding
+    the profile repository it captured when it was built - so an override intended
+    to isolate a test would silently keep talking to the real store. This rebuilds
+    the service too.
+
+    Args:
+        container: The container to derive from.
+        user_profiles: Replacement profile store.
+        meal_history: Replacement meal-plan store.
+        meal_feedback: Replacement feedback store.
+
+    Returns:
+        A new Container whose service also uses ``user_profiles``.
+    """
+    return replace(
+        container,
+        user_profiles=user_profiles,
+        meal_history=meal_history,
+        meal_feedback=meal_feedback,
+        meal_planning_service=MealPlanningService(
+            meal_agent=container.meal_agent,
+            nutrition_agent=container.nutrition_agent,
+            supermarket_agent=container.supermarket_agent,
+            calorie_agent=container.calorie_agent,
+            profile_repo=user_profiles,
+        ),
+    )

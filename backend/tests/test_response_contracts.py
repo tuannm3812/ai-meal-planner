@@ -1,20 +1,18 @@
 """Every route must document a response schema and honour it."""
 
 from collections.abc import Iterator
-from dataclasses import replace
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
-from backend.app.core.container import get_container
+from backend.app.core.container import get_container, with_repositories
 from backend.app.main import app
 from backend.app.repositories.json_store import (
     MealFeedbackRepository,
     MealPlanRepository,
     UserProfileRepository,
 )
-from backend.app.services.meal_planning_service import MealPlanningService
 
 
 @pytest.fixture(name="client")
@@ -27,20 +25,11 @@ def _client(tmp_path: Path) -> Iterator[TestClient]:
     same real-data-store problem fixed for ``test_api_endpoints.py``.
     """
     with TestClient(app) as test_client:
-        real = test_client.app.state.container
-        user_profiles = UserProfileRepository(tmp_path)
-        isolated = replace(
-            real,
-            user_profiles=user_profiles,
-            meal_history=MealPlanRepository(tmp_path),
-            meal_feedback=MealFeedbackRepository(tmp_path),
-            meal_planning_service=MealPlanningService(
-                meal_agent=real.meal_agent,
-                nutrition_agent=real.nutrition_agent,
-                supermarket_agent=real.supermarket_agent,
-                calorie_agent=real.calorie_agent,
-                profile_repo=user_profiles,
-            ),
+        isolated = with_repositories(
+            test_client.app.state.container,
+            UserProfileRepository(tmp_path),
+            MealPlanRepository(tmp_path),
+            MealFeedbackRepository(tmp_path),
         )
         app.dependency_overrides[get_container] = lambda: isolated
         yield test_client
