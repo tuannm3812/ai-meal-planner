@@ -3,6 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
@@ -21,13 +22,6 @@ class ShoppingListItem(BaseModel):
     estimated_price: float
     data_source: str
     confidence: float = Field(ge=0, le=1)
-
-
-class AgentMetadata(BaseModel):
-    agent_name: str
-    source: str
-    confidence: float = Field(ge=0, le=1)
-    warnings: list[str] = Field(default_factory=list)
 
 
 class SupermarketPayload(BaseModel):
@@ -69,7 +63,7 @@ class SupermarketAgent:
             shopping_list_items.append(list_item)
             total_cost += inventory_data["price"]
 
-        confidence = self._average_confidence(shopping_list_items)
+        confidence = average_confidence(shopping_list_items)
         return SupermarketPayload(
             store_details=store,
             shopping_list=shopping_list_items,
@@ -212,9 +206,3 @@ class SupermarketAgent:
         if any(token in name for token in ["spinach", "greens", "lettuce", "tomato", "broccoli"]):
             return "Produce", 2.80
         return "Grocery", 3.50
-
-    @staticmethod
-    def _average_confidence(items: list[ShoppingListItem]) -> float:
-        if not items:
-            return 0.0
-        return round(sum(item.confidence for item in items) / len(items), 2)

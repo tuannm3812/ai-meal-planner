@@ -5,6 +5,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
+from ..schemas.common import MealAgentMetadata as AgentMetadata
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
@@ -19,14 +20,6 @@ class MealDefinition(BaseModel):
 class UserContext(BaseModel):
     caloric_target: int
     dietary_restrictions: list[str]
-
-
-class AgentMetadata(BaseModel):
-    agent_name: str
-    source: str
-    confidence: float = Field(ge=0, le=1)
-    warnings: list[str] = Field(default_factory=list)
-    explanation: str | None = None
 
 
 class RetrievalCandidate(BaseModel):

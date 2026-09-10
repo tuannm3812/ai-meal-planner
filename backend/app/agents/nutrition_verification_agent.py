@@ -8,6 +8,7 @@ from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
+from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
@@ -22,13 +23,6 @@ class IngredientMacro(BaseModel):
     fat_g: float
     data_source: str
     confidence: float = Field(ge=0, le=1)
-
-
-class AgentMetadata(BaseModel):
-    agent_name: str
-    source: str
-    confidence: float = Field(ge=0, le=1)
-    warnings: list[str] = Field(default_factory=list)
 
 
 class MealNutrition(BaseModel):
@@ -96,7 +90,7 @@ class NutritionVerificationAgent:
             totals["carbs"] += item_macros.carbs_g
             totals["fat"] += item_macros.fat_g
 
-        confidence = self._average_confidence(processed_ingredients)
+        confidence = average_confidence(processed_ingredients)
         return MealNutrition(
             ingredients_macros=processed_ingredients,
             total_calories=round(totals["calories"], 1),
@@ -442,9 +436,3 @@ class NutritionVerificationAgent:
         if not macros:
             return False
         return any(float(macros.get(key, 0)) > 0 for key in ["calories", "protein", "carbs", "fat"])
-
-    @staticmethod
-    def _average_confidence(items: list[IngredientMacro]) -> float:
-        if not items:
-            return 0.0
-        return round(sum(item.confidence for item in items) / len(items), 2)
