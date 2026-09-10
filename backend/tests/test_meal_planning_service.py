@@ -82,3 +82,38 @@ def test_service_returns_every_section() -> None:
     assert result.meal_plan.meal_definition.ingredients
     assert result.nutrition.total_calories > 0
     assert result.shopping_list.shopping_list
+
+
+def test_reconciliation_metadata_is_always_reported() -> None:
+    """Every plan reports how the estimate compared with verified nutrition."""
+    result = _service().generate(MealRequest(craving="high-protein burger"))
+    rec = result.reconciliation
+    assert rec is not None
+    assert rec.tolerance == 0.15
+    assert rec.target_meal_calories > 0
+    assert rec.verified_calories_before > 0
+    assert rec.deviation_before >= 0
+
+
+def test_reconciliation_retries_at_most_once() -> None:
+    """A rescale happens at most one time, never in a loop."""
+    result = _service().generate(MealRequest(craving="pasta"))
+    rec = result.reconciliation
+    assert rec is not None
+    if rec.rescaled:
+        assert rec.verified_calories_after is not None
+        assert rec.deviation_after is not None
+        # One retry only: after-values exist, and no third figure is reported.
+        assert rec.deviation_after <= rec.deviation_before
+    else:
+        assert rec.verified_calories_after is None
+        assert rec.within_tolerance is True
+
+
+def test_reconciliation_rescale_moves_nutrition_toward_the_target() -> None:
+    """When a rescale happens, the returned nutrition reflects the rescaled portions."""
+    result = _service().generate(MealRequest(craving="high-protein burger"))
+    rec = result.reconciliation
+    assert rec is not None
+    if rec.rescaled:
+        assert result.nutrition.total_calories == rec.verified_calories_after

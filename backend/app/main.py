@@ -169,6 +169,9 @@ async def generate_meal_plan(
             "meal_plan": result.meal_plan.model_dump(),
             "nutrition": result.nutrition.model_dump(),
             "shopping_list": result.shopping_list.model_dump(),
+            "reconciliation": (
+                result.reconciliation.model_dump() if result.reconciliation else None
+            ),
         }
         await run_in_threadpool(meal_history.save, response)
         return response
