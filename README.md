@@ -58,6 +58,8 @@ User profile + craving
 -> Streamlit renders the response for testing and demos
 ```
 
+As of 2026-09-10 the calorie prediction step runs only via `/calorie-expenditure/predict`; `/generate-meal-plan` does not yet consume its budget — see [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/4_next_steps.md`](docs/4_next_steps.md) §1.1.
+
 The meal path is retrieval-first so common cravings continue to work when external AI services are rate limited or disabled.
 
 ## 5. Project Structure
@@ -70,9 +72,11 @@ ai-meal-planner/
 |   |-- app/
 |   |   |-- agents/
 |   |   |-- core/
+|   |   |-- ml/            (empty scaffolding)
 |   |   |-- rag/
 |   |   |-- repositories/
 |   |   |-- schemas/
+|   |   |-- services/      (empty scaffolding)
 |   |   `-- main.py
 |   |-- tests/
 |   `-- requirements.txt
@@ -196,7 +200,7 @@ http://localhost:5173
 
 ## 7. Configuration
 
-Create `backend/.env` from `.env.example` and adjust values as needed:
+Create `backend/.env` from `backend/.env.example` and adjust values as needed:
 
 ```env
 APP_ENV=development
@@ -310,7 +314,7 @@ Semantic retrieval is prepared but conservative by default. In production, `RAG_
 The full prioritised backlog, including the deliberate gaps, is in
 [`docs/4_next_steps.md`](docs/4_next_steps.md). Highlights:
 
-- Connect `/generate-meal-plan` more tightly with the latest `/calorie-expenditure/predict` result
+- Consume the budget from `/calorie-expenditure/predict` in `/generate-meal-plan`
 - Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
 - Use saved meals, likes, dislikes, and ratings as ranking features in retrieval
 - Move local JSON stores for history, feedback, and profiles to a managed database

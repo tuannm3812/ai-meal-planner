@@ -33,8 +33,9 @@ endpoint consumes, which is a story-level flaw rather than a style one (DEC-3).
    configurable tolerance (default 15%), reporting `reconciliation` metadata.
    Exactly one retry. This is Workflow steps 5–6 of [`1_brief.md`](1_brief.md),
    currently unimplemented.
-3. **Package the backend properly** so `from backend.app...` always resolves, then
-   delete the dual-import block in `main.py` — it exists only because it does not.
+3. **Delete the dual-import block** in `main.py:11-40` — Phase 0 packaged
+   `backend` with hatchling, so `from backend.app...` now always resolves and the
+   fallback is dead weight.
 4. **DI container** (`core/container.py`), built in a FastAPI `lifespan` handler and
    injected via `Depends()`. This is the change that makes endpoint testing possible
    at all, so it gates Phase 3.

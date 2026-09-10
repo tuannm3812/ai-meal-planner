@@ -1259,17 +1259,17 @@ Per spec §5, Phase 0 is done when a clean clone runs `uv sync && uv run pytest`
 successfully on macOS, and CI fails on a deliberately introduced lint error, a
 frontend build error, and a stale requirements export.
 
-- [ ] `uv sync --all-groups && uv run pytest` → `19 passed`, from a fresh clone
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` → both clean
-- [ ] `(cd frontend && npm ci && npm run lint && npm run build)` → succeeds
-- [ ] Lint gate verified to fail on a deliberate unused import, then reverted (Task 3 Steps 4–5)
-- [ ] Drift gate verified to fail on a hand-edited export, then reverted (Task 3 Steps 6–7)
-- [ ] Frontend build gate: confirm CI fails on a deliberate syntax error in `frontend/src/App.jsx`, then revert — the one gate Task 3 does not itself prove
-- [ ] `AGENTS.md`, `CLAUDE.md` and `docs/0_coding_standards.md` through `docs/5_agent_log.md` all exist
-- [ ] No dangling doc links outside `docs/superpowers/` (Task 4 Step 9)
-- [ ] Repo agrees on port 8000 (Task 6 Step 3)
-- [ ] All seven commits follow §9, one coherent change each
-- [ ] `git status --short` is clean; no `.env`, `.venv`, `node_modules` or `dist` staged
-- [ ] Append the Phase 0 completion entry to `docs/5_agent_log.md`
+- [x] `uv sync --all-groups && uv run pytest` → `19 passed`, from a fresh clone
+- [x] `uv run ruff check .` and `uv run ruff format --check .` → both clean
+- [x] `(cd frontend && npm ci && npm run lint && npm run build)` → succeeds
+- [x] Lint gate verified to fail on a deliberate unused import, then reverted (Task 3 Steps 4–5)
+- [x] Drift gate verified to fail on a hand-edited export, then reverted (Task 3 Steps 6–7)
+- [x] Frontend build gate: confirm CI fails on a deliberate syntax error in `frontend/src/App.jsx`, then revert — the one gate Task 3 does not itself prove
+- [x] `AGENTS.md`, `CLAUDE.md` and `docs/0_coding_standards.md` through `docs/5_agent_log.md` all exist
+- [x] No dangling doc links outside `docs/superpowers/` (Task 4 Step 9)
+- [x] Repo agrees on port 8000 (Task 6 Step 3)
+- [x] All seven commits follow §9, one coherent change each
+- [x] `git status --short` is clean; no `.env`, `.venv`, `node_modules` or `dist` staged
+- [x] Append the Phase 0 completion entry to `docs/5_agent_log.md`
 
 Then write the Phase 1 plan from spec §6.

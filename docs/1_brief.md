@@ -27,17 +27,17 @@ The MVP is done when all of the following hold. Each is checkable, not aspiratio
 
 - [ ] The FastAPI backend serves every endpoint with a typed request **and** a typed
       response schema, so `/docs` shows full contracts rather than free-form JSON.
-- [ ] The Streamlit app drives the full flow — profile in, verified meal plan out —
+- [x] The Streamlit app drives the full flow — profile in, verified meal plan out —
       without a developer needing to read the code first.
 - [ ] File-backed local storage persists profiles, plans and feedback across restarts
       and is swappable behind an interface, so the prototype store is not load-bearing.
 - [ ] `/generate-meal-plan` demonstrably consumes the offline calorie model's budget:
       the shipped artifact is loaded at startup and its
       `meal_calorie_budget_kcal` reaches the recommendation step.
-- [ ] Nutrition verification calls USDA FoodData Central and, when the provider is
+- [x] Nutrition verification calls USDA FoodData Central and, when the provider is
       unavailable, falls back to local estimates with the degradation reported in
       `warnings` rather than hidden.
-- [ ] RAG retrieval runs over the curated local meal corpus (34 templates as of
+- [x] RAG retrieval runs over the curated local meal corpus (34 templates as of
       2026-09-10) with no large recipe database required to get a plan.
 
 As of 2026-09-10 items 1, 3 and 4 are open. The FastAPI backend has no

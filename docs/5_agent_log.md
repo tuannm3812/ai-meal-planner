@@ -93,3 +93,67 @@ and `README.md`.
 
 **Open:** all items in `4_next_steps.md` §5, including the new supermarket-agent
 doc item, remain unimplemented.
+
+## 2026-09-10 — Claude Opus 5 — Phase 0 completion
+
+**Scope:** all seven Phase 0 tasks landed on `refactor/phase-0-foundation`, zero
+application behaviour change:
+
+- `e8e7a75` — consolidate dependencies under uv, add hatchling packaging
+  (`backend` importable without path hacks)
+- `b68d34c` — resolve all ruff findings (94 → 0) and apply `ruff format`
+- `951b4fa` — add CI gates: ruff, both Python versions, requirements drift,
+  frontend lint/build
+- `6fa8e6e` — reshape `docs/` to Shape B
+- `bfbc86b` — add `AGENTS.md` and `CLAUDE.md` per master standard §13
+- `4616576` — unify the API port on 8000, complete `backend/.env.example` and
+  add `frontend/.env.example`
+- `7f2a5fc` — rewrite the README quick start for `uv` and non-Windows shells
+
+**Verified by running, not asserted:** `uv run pytest` = 19 passed; `uv run ruff
+check .` and `uv run ruff format --check .` = clean, 48 files formatted;
+`npm run lint` and `npm run build` (frontend) = clean, build produces
+`dist/assets/index-*.js` (252.64 kB) and `dist/assets/index-*.css` (12.56 kB);
+`uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o
+backend/requirements.txt` followed by `git diff --exit-code -- backend/requirements.txt`
+= no drift.
+
+**Three gate-failure proofs**, recorded because a gate that has never failed is
+not known to work — all reverted after confirming failure:
+
+- The ruff lint gate failed with `F401 \`os\` imported but unused` after a
+  deliberately appended `import os` in `backend/app/rag/rules.py` (Task 3, now
+  in `951b4fa`).
+- The requirements-drift check failed (`git diff --exit-code`, exit 1) after a
+  hand-edited line was appended to `backend/requirements.txt` (Task 3, now in
+  `951b4fa`).
+- The frontend `lint` and `build` scripts both failed with exit 1 after a
+  deliberate unclosed-brace syntax error was appended to `frontend/src/App.jsx`
+  (`npm run lint` → `Parsing error: Unexpected token`; `npm run build` →
+  `Expected \`}\` but found \`EOF\``) — reproduced during this final review,
+  since Task 3 proves the backend gates but not the frontend build gate.
+
+**Four plan defects found and corrected during execution**, each its own
+commit against `docs/superpowers/plans/2026-09-10-phase-0-foundation.md`:
+
+- `807c6f3` — `uv run pytest -q` stacked with the project's `addopts = "-q"`
+  into pytest's `-qq` mode, suppressing the `19 passed` summary line that every
+  verification step depended on.
+- `437d228` — two pre-written commit subjects (Task 3's `ci:`, Task 4's `docs:`)
+  omitted the mandatory `(scope)` that the plan's own Global Constraints
+  required.
+- `1f72e13` — the Task 7 fresh-clone verification used a bare `git clone`,
+  which checks out `main` — none of Phase 0's work — so the check would have
+  passed against the wrong code and proven nothing about the README it was
+  validating. Fixed to `git clone --branch refactor/phase-0-foundation`.
+- `6ce13dd` — Tasks 2 and 4 instructed `git add -A`, contradicting master
+  standard §10.1 (review every path before staging). Fixed to `git status
+  --short` followed by explicit `git add -u` / named paths.
+
+**What remains unverified:** no GitHub Actions workflow has ever run, because
+nothing on this branch has been pushed — every gate above was reproduced
+locally, not observed in CI. `astral-sh/setup-uv@v10` was confirmed as the
+current major version via the GitHub API (Task 3 Step 1) but is unexercised in
+an actual Actions run.
+
+**What stays open:** Phase 1 onward, per `docs/4_next_steps.md`.
