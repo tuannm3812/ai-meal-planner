@@ -1,6 +1,5 @@
 """Orchestrates the multi-agent meal planning workflow."""
 
-import logging
 from typing import Any
 
 from pydantic import BaseModel
@@ -14,8 +13,6 @@ from ..agents.meal_recommendation_agent import MealPlanPayload, MealRecommendati
 from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
 from ..schemas.requests import MealRequest
-
-logger = logging.getLogger(__name__)
 
 
 class MealPlanResult(BaseModel):
