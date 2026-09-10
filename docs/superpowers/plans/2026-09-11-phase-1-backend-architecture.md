@@ -888,7 +888,9 @@ def test_meal_agent_metadata_adds_explanation() -> None:
 
 
 def test_average_confidence_rounds_to_two_places() -> None:
-    assert average_confidence([_Scored(confidence=0.5), _Scored(confidence=0.75)]) == 0.63
+    # round(0.625, 2) is 0.62, not 0.63 - Python rounds halves to even. Both original
+    # _average_confidence implementations produced 0.62, so this preserves behaviour.
+    assert average_confidence([_Scored(confidence=0.5), _Scored(confidence=0.75)]) == 0.62
 
 
 def test_average_confidence_of_nothing_is_zero() -> None:
