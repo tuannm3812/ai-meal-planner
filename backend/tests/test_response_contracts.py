@@ -13,15 +13,23 @@ def _client() -> TestClient:
 
 
 def test_every_route_declares_a_response_model(client: TestClient) -> None:
-    """No endpoint may fall back to an undocumented dict."""
+    """Every application route must document a response schema in OpenAPI.
+
+    This walks the OpenAPI document rather than ``app.routes``. This FastAPI
+    version wraps included routers in ``_IncludedRouter`` objects that expose
+    neither ``.path`` nor ``.methods``, so scanning ``app.routes`` sees only
+    FastAPI's own four built-ins - and a test written that way passes even when
+    no endpoint declares a model at all.
+    """
+    spec = client.get("/openapi.json").json()
     undocumented = [
-        route.path
-        for route in app.routes
-        if hasattr(route, "methods")
-        and getattr(route, "response_model", None) is None
-        and route.path not in {"/openapi.json", "/docs", "/docs/oauth2-redirect", "/redoc"}
+        f"{verb.upper()} {path}"
+        for path, operations in spec["paths"].items()
+        for verb, operation in operations.items()
+        if "$ref" not in operation["responses"]["200"]["content"]["application/json"]["schema"]
     ]
-    assert undocumented == []
+    assert undocumented == [], f"routes without a response schema: {undocumented}"
+    assert len(spec["paths"]) == 8, f"expected 8 documented paths, got {len(spec['paths'])}"
 
 
 def test_openapi_documents_the_meal_plan_response(client: TestClient) -> None:
