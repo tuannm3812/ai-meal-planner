@@ -8,8 +8,13 @@ from backend.app.core.config import AppSettings
 
 
 def test_defaults_are_unchanged() -> None:
-    """The values the app relied on before pydantic-settings still hold."""
-    settings = AppSettings()
+    """The values the app relied on before pydantic-settings still hold.
+
+    ``_env_file=None`` keeps a developer's real backend/.env from being read
+    here: AppSettings() would otherwise assert whatever that file happens to
+    contain rather than the library's actual defaults.
+    """
+    settings = AppSettings(_env_file=None)
     assert settings.app_name == "Multi-Agent Meal Planner API"
     assert settings.environment == "development"
     assert settings.rag_backend == "auto"
@@ -18,7 +23,8 @@ def test_defaults_are_unchanged() -> None:
 
 
 def test_storage_backend_defaults_to_sqlite() -> None:
-    assert AppSettings().storage_backend == "sqlite"
+    """``_env_file=None`` isolates the default from a developer's backend/.env."""
+    assert AppSettings(_env_file=None).storage_backend == "sqlite"
 
 
 @pytest.mark.parametrize("value", ["json", "sqlite"])
@@ -53,7 +59,8 @@ def test_from_env_still_works() -> None:
 
 
 def test_sqlite_path_defaults_under_the_data_dir() -> None:
-    settings = AppSettings()
+    """``_env_file=None`` isolates the default from a developer's backend/.env."""
+    settings = AppSettings(_env_file=None)
     assert settings.sqlite_path == settings.data_dir / "ai_meal_planner.db"
     assert isinstance(settings.sqlite_path, Path)
 
