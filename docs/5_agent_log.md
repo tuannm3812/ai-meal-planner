@@ -157,3 +157,39 @@ current major version via the GitHub API (Task 3 Step 1) but is unexercised in
 an actual Actions run.
 
 **What stays open:** Phase 1 onward, per `docs/4_next_steps.md`.
+
+## 2026-09-10 — Claude Opus 5 — first real CI run, and an action pin that did not resolve
+
+**Corrects the previous entry.** It recorded that no GitHub Actions workflow had
+ever run and that `astral-sh/setup-uv@v10` was "confirmed current via the GitHub
+API but unexercised". Both statements are now superseded, and the second was
+built on a bad check.
+
+**What the first run found.** Opening PR #1 triggered CI for the first time. The
+`frontend` job passed; all three uv-dependent jobs failed immediately with
+`Unable to resolve action astral-sh/setup-uv@v10, unable to find version v10`.
+
+**Why the earlier verification missed it.** The check used
+`gh api repos/astral-sh/setup-uv/releases/latest`, which returned `v10.0.1`. That
+confirms a *release* exists; it does not confirm a bare `v10` *git ref* exists.
+`astral-sh/setup-uv` stopped publishing bare major moving tags after v7 — `v8`,
+`v9` and `v10` are not refs at all. The right query is the git-ref API
+(`/git/ref/tags/<tag>`), not the release API. No amount of local verification
+could have caught this: the failure is in how GitHub resolves an action ref, and
+only a push exercises it.
+
+**Fixed in `450e910`:**
+- `astral-sh/setup-uv@v10` → `@v10.0.1`, an exact ref, consistent with this repo
+  already pinning uv to `0.11.29` and ruff to `0.16.4` exactly.
+- `actions/checkout@v4` → `@v7` and `actions/setup-node@v4` → `@v7`, clearing the
+  "Node.js 20 is deprecated … forced to run on Node.js 24" warnings the same run
+  reported. Both do publish bare major tags; both verified against the git-ref API.
+
+**Verified by running:** CI run `34483924426` on `450e910` — all four jobs green.
+`requirements-drift` passing is the meaningful one: it proves `uv export` on
+`ubuntu-latest` is byte-identical to the committed `backend/requirements.txt`,
+which the final branch review had explicitly flagged as unverifiable without a
+push.
+
+**Lesson worth keeping:** "verified via the API" is not one thing. Check the
+artifact the consumer actually resolves.
