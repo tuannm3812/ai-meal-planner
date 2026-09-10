@@ -21,6 +21,11 @@
 - Commit messages follow §9: `<type>(<scope>): <imperative summary>`, one coherent change per commit, material detail in the body.
 - Root `requirements.txt` stays the one-line `-r backend/requirements.txt`. Only `backend/requirements.txt` is generated.
 - API port is **8000** everywhere after Task 6.
+- **Never `git add -A`.** Master standard §10.1 requires reviewing every path
+  before staging. Run `git status --short` first, then stage explicitly — `git add -u`
+  for tracked-only modifications, or named paths. This ruling overrides any
+  `git add -A` that survives elsewhere in this plan.
+- All work lands on the branch `refactor/phase-0-foundation`, never on `main`.
 
 ---
 
@@ -322,10 +327,27 @@ uv run ruff check . && uv run ruff format --check . && uv run pytest -q
 
 Expected: no lint output, `50 files already formatted` (or similar with zero to reformat), `19 passed`.
 
-- [ ] **Step 8: Commit**
+- [ ] **Step 8: Review every path, then stage only tracked modifications**
+
+Per master standard §10.1, review the paths before staging — never blind
+`git add -A`. Ruff modifies existing tracked files only, so `-u` is both
+sufficient and safer than `-A`:
 
 ```bash
-git add -A
+git status --short
+```
+
+Expected: only ` M` entries, no `??` untracked entries. If anything untracked
+appears, stop and investigate — ruff should not have created files.
+
+```bash
+git add -u
+git diff --cached --stat
+```
+
+- [ ] **Step 9: Commit**
+
+```bash
 git commit -F - <<'MSG'
 style(lint): resolve all ruff findings and apply ruff format
 
@@ -767,10 +789,30 @@ uv run ruff check . && uv run pytest -q
 
 Expected: no lint output, `19 passed`. Docs-only changes must not affect either, but confirm rather than assume.
 
-- [ ] **Step 11: Commit**
+- [ ] **Step 11: Review every path, then stage the docs and README explicitly**
+
+Per master standard §10.1, review the paths before staging — never blind
+`git add -A`. This task adds, moves and deletes files, so name the paths:
 
 ```bash
-git add -A
+git status --short
+```
+
+Expected: renames/deletions under `docs/engineering/`, `docs/product/` and
+`docs/architecture/system_architecture.md`, new `docs/[0-5]_*.md` files, and a
+modified `README.md`. Nothing outside `docs/` and `README.md`.
+
+```bash
+git add docs/ README.md
+git status --short
+```
+
+Expected: no remaining unstaged or untracked entries. If any appear, they are
+outside this task's scope — do not stage them.
+
+- [ ] **Step 12: Commit**
+
+```bash
 git commit -F - <<'MSG'
 docs: reshape documentation to Shape B
 
