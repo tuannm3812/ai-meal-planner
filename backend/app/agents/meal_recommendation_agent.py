@@ -4,7 +4,9 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
+from ..schemas.common import MealAgentMetadata as AgentMetadata
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
@@ -19,14 +21,6 @@ class MealDefinition(BaseModel):
 class UserContext(BaseModel):
     caloric_target: int
     dietary_restrictions: list[str]
-
-
-class AgentMetadata(BaseModel):
-    agent_name: str
-    source: str
-    confidence: float = Field(ge=0, le=1)
-    warnings: list[str] = Field(default_factory=list)
-    explanation: str | None = None
 
 
 class RetrievalCandidate(BaseModel):
@@ -119,36 +113,30 @@ class MealRecommendationAgent:
                     "deterministic fallbacks."
                 )
 
-    def calculate_bmr(
-        self,
-        age: int,
-        gender: str,
-        weight_kg: float,
-        height_cm: float,
-        activity_multiplier: float,
-    ) -> int:
-        if gender.lower() == "m":
-            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
-        else:
-            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
-
-        return int(bmr * activity_multiplier)
-
     def generate_meal_payload(
         self,
         craving: str,
         user_id: str,
+        daily_calorie_target: int,
         health_conditions: list[str] | None = None,
         dietary_preferences: list[str] | None = None,
     ) -> MealPlanPayload:
+        """Retrieve and adapt a meal for the given craving and calorie target.
+
+        Args:
+            craving: Free-text craving from the user.
+            user_id: Profile key used to look up dietary restrictions.
+            daily_calorie_target: Daily kcal target from CalorieExpenditureAgent.
+                This is a DAILY figure; portion scaling derives the per-meal
+                target from it.
+            health_conditions: Conditions that hard-filter the corpus.
+            dietary_preferences: Soft preferences that bias ranking.
+
+        Returns:
+            A populated MealPlanPayload.
+        """
         user_biometrics = self.db.fetch_user_profile(user_id)
-        target_calories = self.calculate_bmr(
-            age=user_biometrics["age"],
-            gender=user_biometrics["gender"],
-            weight_kg=user_biometrics["weight"],
-            height_cm=user_biometrics["height"],
-            activity_multiplier=user_biometrics["workout_level"],
-        )
+        target_calories = daily_calorie_target
         health_conditions = health_conditions or []
         dietary_preferences = dietary_preferences or []
         dietary_restrictions = user_biometrics["dietary_restrictions"]
@@ -177,12 +165,6 @@ class MealRecommendationAgent:
         if self.model and not self.enable_llm_adaptation:
             warning += " Gemini base meal generation is disabled by design."
         return self._fallback_payload(craving, user_biometrics, target_calories, warning)
-
-    def predict_user_preferences(self, historical_meals: Any) -> Any:
-        train_df = historical_meals.extract_to_dataframe()
-        log_reg_clf = self._initialize_preference_classifier()
-        log_reg_clf.fit(train_df[["protein_ratio", "carb_ratio"]], train_df["user_rating"])
-        return log_reg_clf
 
     def _build_adaptation_prompt(
         self,
@@ -390,53 +372,7 @@ class MealRecommendationAgent:
 
     @staticmethod
     def _estimate_ingredient_calories(ingredients: list[Ingredient]) -> float:
-        calories_per_100g = {
-            "avocado": 160,
-            "baby spinach": 23,
-            "banana": 89,
-            "black beans": 132,
-            "broccoli": 35,
-            "brown rice": 123,
-            "chicken breast": 165,
-            "chickpeas": 164,
-            "coconut aminos": 60,
-            "corn tortilla": 218,
-            "cottage cheese": 98,
-            "cucumber": 15,
-            "firm tofu": 144,
-            "gluten-free bread": 247,
-            "gluten-free bun": 260,
-            "gluten-free pasta": 350,
-            "greek yogurt": 59,
-            "lean beef mince": 176,
-            "lean beef steak": 170,
-            "lean turkey mince": 150,
-            "low sodium chicken broth": 7,
-            "low sodium soy sauce": 53,
-            "mixed salad greens": 15,
-            "mixed vegetables": 65,
-            "oat milk": 43,
-            "olive oil": 884,
-            "peanut butter": 588,
-            "rice noodles": 364,
-            "rolled oats": 389,
-            "salmon fillet": 208,
-            "sesame oil": 884,
-            "shrimp": 85,
-            "soy milk": 33,
-            "soy sauce": 53,
-            "soy yogurt": 54,
-            "sunflower seed butter": 617,
-            "sweet potato": 86,
-            "tomato": 18,
-            "tomato passata": 33,
-            "tuna": 116,
-            "whole egg": 143,
-            "whole wheat bread": 247,
-            "whole wheat hamburger bun": 260,
-            "whole wheat tortilla": 310,
-            "wholemeal pasta": 348,
-        }
+        calories_per_100g = load_reference("ingredient_calories")
         return sum(
             calories_per_100g.get(ingredient.item_name.strip().lower(), 120)
             * ingredient.base_quantity_grams
@@ -453,46 +389,14 @@ class MealRecommendationAgent:
     ) -> MealPlanPayload:
         craving_lower = craving.lower()
 
-        if "noodle" in craving_lower or "asian" in craving_lower:
-            meal_name = "High-Protein Asian Tofu Noodle Bowl"
-            ingredients = [
-                {"item_name": "firm tofu", "base_quantity_grams": 180},
-                {"item_name": "rice noodles", "base_quantity_grams": 90},
-                {"item_name": "broccoli", "base_quantity_grams": 120},
-                {"item_name": "soy sauce", "base_quantity_grams": 20},
-            ]
-        elif "pasta" in craving_lower:
-            meal_name = "High-Protein Tomato Turkey Pasta"
-            ingredients = [
-                {"item_name": "lean turkey mince", "base_quantity_grams": 160},
-                {"item_name": "wholemeal pasta", "base_quantity_grams": 90},
-                {"item_name": "tomato passata", "base_quantity_grams": 160},
-                {"item_name": "baby spinach", "base_quantity_grams": 60},
-            ]
-        elif "salad" in craving_lower:
-            meal_name = "Chicken Avocado Power Salad"
-            ingredients = [
-                {"item_name": "chicken breast", "base_quantity_grams": 170},
-                {"item_name": "mixed salad greens", "base_quantity_grams": 120},
-                {"item_name": "avocado", "base_quantity_grams": 70},
-                {"item_name": "brown rice", "base_quantity_grams": 80},
-            ]
-        elif "tofu" in craving_lower or "vegan" in craving_lower:
-            meal_name = "Tofu Rice Bowl"
-            ingredients = [
-                {"item_name": "firm tofu", "base_quantity_grams": 180},
-                {"item_name": "brown rice", "base_quantity_grams": 90},
-                {"item_name": "broccoli", "base_quantity_grams": 120},
-                {"item_name": "soy sauce", "base_quantity_grams": 20},
-            ]
-        else:
-            meal_name = "High-Protein Turkey Burger Bowl"
-            ingredients = [
-                {"item_name": "lean turkey mince", "base_quantity_grams": 160},
-                {"item_name": "whole wheat hamburger bun", "base_quantity_grams": 60},
-                {"item_name": "mixed salad greens", "base_quantity_grams": 100},
-                {"item_name": "tomato", "base_quantity_grams": 80},
-            ]
+        fallback_meals = load_reference("fallback_meals")
+        selected = fallback_meals[-1]
+        for candidate in fallback_meals:
+            if any(keyword in craving_lower for keyword in candidate["keywords"]):
+                selected = candidate
+                break
+        meal_name = selected["meal_name"]
+        ingredients = selected["ingredients"]
 
         return MealPlanPayload(
             user_context=UserContext(
@@ -511,6 +415,3 @@ class MealRecommendationAgent:
                 warnings=[warning],
             ),
         )
-
-    def _initialize_preference_classifier(self) -> Any:
-        raise NotImplementedError("Preference modelling is planned but not enabled yet.")

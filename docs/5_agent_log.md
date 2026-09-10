@@ -325,3 +325,75 @@ and all prior log entries. Codex's own entry was committed as written (`f1b9668`
 `ruff format --check` clean over 47 files (48 before, the notebook now excluded);
 ruff reports nothing under `notebooks/` even when named explicitly; every
 relative link in `README.md`, `AGENTS.md` and `docs/0_`–`5_` resolves.
+
+## 2026-09-11 — Claude Opus 5 — Phase 1 backend architecture
+
+**Delivered** on `refactor/phase-1-backend-architecture`, nine tasks, each
+independently reviewed for spec compliance and code quality before the next began.
+
+**The headline fix:** `/generate-meal-plan` now uses the trained calorie model.
+`services/meal_planning_service.py` orchestrates the four agents; the meal agent's
+own `calculate_bmr` is gone. Verified live, not asserted: a real POST returns
+`model_version: hist_gradient_boosting_deep_v0.1.0`, and the plan's
+`caloric_target` (2889) equals the agent's `meal_calorie_budget_kcal` (2889.4).
+
+**Also landed:** the reconciliation loop (workflow steps 5-6, never previously
+built); the dual-import block and dead preference code deleted; `AgentMetadata`
+and the confidence helper deduplicated; five reference tables moved to
+`data/reference/*.json`; typed domain exceptions; the DI container and lifespan;
+the router split; and response models on all eight endpoints.
+
+**Measured, not asserted:** 19 tests at the start of Phase 0 → **57** now. The
+agents shrank: meal 514→417, nutrition 451→362, supermarket 219→133 lines.
+`main.py` 240→46 lines with no endpoint in it. Reconciliation genuinely fires —
+"high-protein burger" deviated 16.33%, rescaled ×1.195, landed at 0.48%.
+
+**Proofs worth recording:**
+
+- *Reference extraction changed no value.* Every table's output was snapshotted
+  before the move and diffed after: `IDENTICAL`. All 130 entries across the five
+  tables were verified present with identical values and types, not just the nine
+  sampled ingredients.
+- *The information leak is closed.* A forced failure carrying
+  `postgres://admin:hunter2@db.internal/prod` returned 502 with only a safe
+  message; the credential appeared in logs, never in the body. An unexpected
+  `RuntimeError` behaved the same way at 500.
+- *The router split changed no contract.* The OpenAPI parameter map was built at
+  the parent commit in an isolated git worktree and diffed against HEAD:
+  byte-identical. All eight endpoint bodies were verified verbatim line-for-line.
+- *The DI container is built once*, confirmed by instrumenting `build_container`
+  across startup plus seven requests.
+
+**Three tests I wrote were vacuous, and were rewritten after review caught them:**
+
+1. `test_container_override_is_honoured` proxied every attribute back to the real
+   container, so it passed whether or not the override applied. Now swaps in a
+   model-less calorie agent and asserts `/health` reports the difference; proved
+   to fail when the override is removed.
+2. `test_every_route_declares_a_response_model` scanned `app.routes`. **This
+   FastAPI version wraps included routers in `_IncludedRouter` objects exposing
+   neither `.path` nor `.methods`**, so after the router split it saw only
+   FastAPI's four built-ins and would have passed with no endpoint declaring a
+   model. It now walks `/openapi.json`; proved to fail by mutation.
+3. The plan's `average_confidence` case asserted `0.63` where Python's
+   round-half-to-even gives `0.62`. The implementer correctly fixed the test
+   rather than changing rounding in three production response paths.
+
+**Plan defects found and corrected during execution**, recorded because the trail
+matters more than the outcome: `pytest -q` stacking into `-qq`; two commit
+subjects missing the mandatory scope; a fresh-clone check that would have
+verified `main` instead of the working branch; `git add -A` against master
+standard §10.1; a caller grep scoped to `backend/` that missed
+`streamlit_app/app.py` and left demo mode raising `TypeError`; and a test ladder
+counting test functions rather than collected cases, twice.
+
+**Controller defect:** pushing the Phase 1 plan turned PR #1 red. Ruff 0.16
+formats Python inside Markdown and treats each block as a standalone module, so
+it tried to dedent a method out of its class. Fixed by excluding `*.md`; PR #1
+green again. I had pushed without re-checking CI.
+
+**Still open:** §4 step 8 embedding persistence, claimed by no phase. Phase 2
+(storage) next — note `pydantic-settings` is not yet a dependency and must be
+added and locked. `meal_calorie_budget_kcal` remains a daily figure with a
+misleading name; renaming it is API-breaking for both clients and is still
+tracked, not done.

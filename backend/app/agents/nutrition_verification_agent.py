@@ -8,6 +8,8 @@ from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
+from ..rag.reference_data import load_reference
+from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
@@ -22,13 +24,6 @@ class IngredientMacro(BaseModel):
     fat_g: float
     data_source: str
     confidence: float = Field(ge=0, le=1)
-
-
-class AgentMetadata(BaseModel):
-    agent_name: str
-    source: str
-    confidence: float = Field(ge=0, le=1)
-    warnings: list[str] = Field(default_factory=list)
 
 
 class MealNutrition(BaseModel):
@@ -96,7 +91,7 @@ class NutritionVerificationAgent:
             totals["carbs"] += item_macros.carbs_g
             totals["fat"] += item_macros.fat_g
 
-        confidence = self._average_confidence(processed_ingredients)
+        confidence = average_confidence(processed_ingredients)
         return MealNutrition(
             ingredients_macros=processed_ingredients,
             total_calories=round(totals["calories"], 1),
@@ -175,38 +170,7 @@ class NutritionVerificationAgent:
 
     @staticmethod
     def _trusted_local_override(item_name: str) -> dict[str, Any] | None:
-        lookup = {
-            "whole egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
-            "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
-            "mixed vegetables": {"calories": 65, "protein": 3.3, "carbs": 13, "fat": 0.2},
-            "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
-            "cooked quinoa": {"calories": 120, "protein": 4.4, "carbs": 21.3, "fat": 1.9},
-            "chickpeas": {"calories": 164, "protein": 8.9, "carbs": 27.4, "fat": 2.6},
-            "lentils": {"calories": 116, "protein": 9.0, "carbs": 20.1, "fat": 0.4},
-            "kidney beans": {"calories": 127, "protein": 8.7, "carbs": 22.8, "fat": 0.5},
-            "black beans": {"calories": 132, "protein": 8.9, "carbs": 23.7, "fat": 0.5},
-            "rolled oats": {"calories": 389, "protein": 16.9, "carbs": 66.3, "fat": 6.9},
-            "banana": {"calories": 89, "protein": 1.1, "carbs": 22.8, "fat": 0.3},
-            "chia seeds": {"calories": 486, "protein": 16.5, "carbs": 42.1, "fat": 30.7},
-            "soy milk": {"calories": 33, "protein": 2.9, "carbs": 1.7, "fat": 1.8},
-            "sweet potato": {"calories": 86, "protein": 1.6, "carbs": 20.1, "fat": 0.1},
-            "cucumber": {"calories": 15, "protein": 0.7, "carbs": 3.6, "fat": 0.1},
-            "peanut butter": {"calories": 588, "protein": 25.1, "carbs": 20.0, "fat": 50.0},
-            "coconut aminos": {"calories": 60, "protein": 0, "carbs": 12.0, "fat": 0},
-            "corn tortilla": {"calories": 218, "protein": 5.7, "carbs": 44.6, "fat": 2.9},
-            "gluten-free bread": {"calories": 247, "protein": 4.3, "carbs": 50.0, "fat": 4.3},
-            "gluten-free bun": {"calories": 260, "protein": 5.0, "carbs": 49.0, "fat": 5.0},
-            "gluten-free pasta": {"calories": 350, "protein": 6.0, "carbs": 77.0, "fat": 1.5},
-            "oat milk": {"calories": 43, "protein": 0.8, "carbs": 6.7, "fat": 1.5},
-            "olive oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
-            "soy yogurt": {"calories": 54, "protein": 3.5, "carbs": 5.7, "fat": 1.8},
-            "sunflower seed butter": {
-                "calories": 617,
-                "protein": 17.3,
-                "carbs": 23.0,
-                "fat": 55.0,
-            },
-        }
+        lookup = load_reference("trusted_overrides")
         macros = lookup.get(item_name.strip().lower())
         if not macros:
             return None
@@ -362,53 +326,7 @@ class NutritionVerificationAgent:
 
     def _estimate_macros_per_100g(self, item_name: str) -> dict[str, Any]:
         name = item_name.lower()
-        lookup = {
-            "lean turkey mince": {"calories": 150, "protein": 22, "carbs": 0, "fat": 7},
-            "ground turkey (93% lean)": {"calories": 150, "protein": 20, "carbs": 0, "fat": 8},
-            "chicken breast": {"calories": 165, "protein": 31, "carbs": 0, "fat": 3.6},
-            "firm tofu": {"calories": 144, "protein": 17, "carbs": 3, "fat": 9},
-            "whole wheat hamburger bun": {"calories": 260, "protein": 10, "carbs": 44, "fat": 4},
-            "wholemeal pasta": {"calories": 348, "protein": 14, "carbs": 70, "fat": 2.5},
-            "rice noodles": {"calories": 364, "protein": 6, "carbs": 80, "fat": 0.6},
-            "brown rice": {"calories": 123, "protein": 2.7, "carbs": 25.6, "fat": 1},
-            "mixed salad greens": {"calories": 15, "protein": 1.5, "carbs": 3, "fat": 0.2},
-            "baby spinach": {"calories": 23, "protein": 2.9, "carbs": 3.6, "fat": 0.4},
-            "broccoli": {"calories": 35, "protein": 2.4, "carbs": 7.2, "fat": 0.4},
-            "tomato": {"calories": 18, "protein": 0.9, "carbs": 3.9, "fat": 0.2},
-            "tomato passata": {"calories": 33, "protein": 1.6, "carbs": 5.5, "fat": 0.2},
-            "avocado": {"calories": 160, "protein": 2, "carbs": 8.5, "fat": 14.7},
-            "soy sauce": {"calories": 53, "protein": 8, "carbs": 4.9, "fat": 0.6},
-            "low sodium soy sauce": {"calories": 53, "protein": 8, "carbs": 4.9, "fat": 0.6},
-            "whole egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
-            "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
-            "cooked white rice": {"calories": 130, "protein": 2.7, "carbs": 28.2, "fat": 0.3},
-            "mixed vegetables": {"calories": 65, "protein": 3.3, "carbs": 13, "fat": 0.2},
-            "sesame oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
-            "whole wheat tortilla": {"calories": 310, "protein": 9, "carbs": 50, "fat": 8},
-            "tuna": {"calories": 116, "protein": 25.5, "carbs": 0, "fat": 0.8},
-            "salmon fillet": {"calories": 208, "protein": 20.4, "carbs": 0, "fat": 13.4},
-            "shrimp": {"calories": 85, "protein": 20.1, "carbs": 0.2, "fat": 0.5},
-            "lean beef steak": {"calories": 170, "protein": 26, "carbs": 0, "fat": 7},
-            "lean beef mince": {"calories": 176, "protein": 20, "carbs": 0, "fat": 10},
-            "greek yogurt": {"calories": 59, "protein": 10.3, "carbs": 3.6, "fat": 0.4},
-            "cottage cheese": {"calories": 98, "protein": 11.1, "carbs": 3.4, "fat": 4.3},
-            "whole wheat bread": {"calories": 247, "protein": 13, "carbs": 41, "fat": 4.2},
-            "low sodium chicken broth": {"calories": 7, "protein": 1, "carbs": 0.4, "fat": 0.2},
-            "coconut aminos": {"calories": 60, "protein": 0, "carbs": 12.0, "fat": 0},
-            "corn tortilla": {"calories": 218, "protein": 5.7, "carbs": 44.6, "fat": 2.9},
-            "gluten-free bread": {"calories": 247, "protein": 4.3, "carbs": 50.0, "fat": 4.3},
-            "gluten-free bun": {"calories": 260, "protein": 5.0, "carbs": 49.0, "fat": 5.0},
-            "gluten-free pasta": {"calories": 350, "protein": 6.0, "carbs": 77.0, "fat": 1.5},
-            "oat milk": {"calories": 43, "protein": 0.8, "carbs": 6.7, "fat": 1.5},
-            "olive oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
-            "soy yogurt": {"calories": 54, "protein": 3.5, "carbs": 5.7, "fat": 1.8},
-            "sunflower seed butter": {
-                "calories": 617,
-                "protein": 17.3,
-                "carbs": 23.0,
-                "fat": 55.0,
-            },
-        }
+        lookup = load_reference("macro_fallbacks")
 
         if name in lookup:
             return {**lookup[name], "source": "local_reference_table", "confidence": 0.78}
@@ -442,9 +360,3 @@ class NutritionVerificationAgent:
         if not macros:
             return False
         return any(float(macros.get(key, 0)) > 0 for key in ["calories", "protein", "carbs", "fat"])
-
-    @staticmethod
-    def _average_confidence(items: list[IngredientMacro]) -> float:
-        if not items:
-            return 0.0
-        return round(sum(item.confidence for item in items) / len(items), 2)
