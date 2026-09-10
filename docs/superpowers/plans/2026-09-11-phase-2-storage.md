@@ -1661,18 +1661,18 @@ MSG
 Per spec §7: done when both backends pass the same contract test suite, and
 switching `STORAGE_BACKEND` changes no API behaviour.
 
-- [ ] `uv run pytest` → all green, no test deleted, skipped or weakened. Report the real count.
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` → clean
-- [ ] `uv run pytest backend/tests/test_repository_contract.py -v` → every case passes for **both** `json` and `sqlite`, **none skipped**
-- [ ] `uv lock --check` passes and `uv export ... && git diff --exit-code -- backend/requirements.txt` is clean
-- [ ] `scikit-learn` still exactly `1.6.1` and `pydantic` still 2.x in `uv.lock`
-- [ ] Indexes exist: `ix_meal_plans_user_id`, `ix_meal_feedback_user_id`, `ix_meal_feedback_saved`
-- [ ] A live server under `STORAGE_BACKEND=json` and under `=sqlite` returns identical response sections and the same history behaviour
-- [ ] `AppSettings` resolves every value identically to the pre-migration snapshot
-- [ ] A malformed `STORAGE_BACKEND` raises at startup rather than silently choosing
-- [ ] `git status --short` clean; no `.env`, `database/*.json` or `database/*.db` staged
-- [ ] `.gitignore` gained exactly one line, `database/*.db`; `git diff` on it shows nothing else
-- [ ] `docs/4_next_steps.md` lists the six gaps, Alembic first
-- [ ] Append a Phase 2 entry to `docs/5_agent_log.md`; tick this checklist
+- [x] `uv run pytest` → all green, no test deleted, skipped or weakened. Report the real count.
+- [x] `uv run ruff check .` and `uv run ruff format --check .` → clean
+- [x] `uv run pytest backend/tests/test_repository_contract.py -v` → every case passes for **both** `json` and `sqlite`, **none skipped**
+- [x] `uv lock --check` passes and `uv export ... && git diff --exit-code -- backend/requirements.txt` is clean
+- [x] `scikit-learn` still exactly `1.6.1` and `pydantic` still 2.x in `uv.lock`
+- [x] Indexes exist: `ix_meal_plans_user_id`, `ix_meal_feedback_user_id`, `ix_meal_feedback_saved`
+- [x] A live server under `STORAGE_BACKEND=json` and under `=sqlite` returns identical response sections and the same history behaviour
+- [x] `AppSettings` resolves every value identically to the pre-migration snapshot
+- [x] A malformed `STORAGE_BACKEND` raises at startup rather than silently choosing
+- [x] `git status --short` clean; no `.env`, `database/*.json` or `database/*.db` staged
+- [x] `.gitignore` gained exactly one line, `database/*.db`; `git diff` on it shows nothing else
+- [x] `docs/4_next_steps.md` lists the six gaps, Alembic first
+- [x] Append a Phase 2 entry to `docs/5_agent_log.md`; tick this checklist
 
 Then write the Phase 3 plan from spec §8.
