@@ -67,6 +67,15 @@ i.e. **newest first**, capped at `limit`. The SQL implementation must match that
 ordering exactly, or the history tab silently reorders. Note the JSON version
 slices *before* reversing, so it returns the last `limit` records in reverse order.
 
+### `saved_only` filters BEFORE the limit slice
+
+`MealFeedbackRepository.list_for_user` filters to saved records and *then* takes
+`[-limit:]`. With records `n=0..4` where `saved = (n % 2 == 0)`,
+`list_for_user("u", limit=2, saved_only=True)` returns `[4, 2]` — **not** `[4]`,
+which is what slicing-then-filtering would give. SQL's natural `WHERE ... ORDER BY
+... LIMIT` produces the same order, so the two match, but assert it rather than
+assuming.
+
 ### `MealPlanRepository.save` returns `None`; `MealFeedbackRepository.save` returns the record
 
 They differ. Preserve both signatures.
