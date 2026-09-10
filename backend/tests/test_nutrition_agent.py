@@ -122,9 +122,9 @@ def test_three_failures_open_the_cooldown(monkeypatch: pytest.MonkeyPatch) -> No
     monkeypatch.setattr(module, "urlopen", _boom)
     agent = NutritionVerificationAgent(usda_api_key="test-key")
     assert agent._usda_cooldown_until == 0.0
-    for index in range(NutritionVerificationAgent._FAILURE_THRESHOLD):
+    for index in range(3):
         agent._query_macros_per_100g(f"ingredient {index}")
-    assert agent._usda_consecutive_failures >= NutritionVerificationAgent._FAILURE_THRESHOLD
+    assert agent._usda_consecutive_failures >= 3
     assert agent._usda_cooldown_until > 0.0
 
 
@@ -363,9 +363,9 @@ def test_three_fatsecret_failures_open_its_cooldown(monkeypatch: pytest.MonkeyPa
     monkeypatch.setattr(module, "urlopen", _boom)
     agent = NutritionVerificationAgent(fatsecret_client_id="id", fatsecret_client_secret="secret")
     assert agent._fatsecret_cooldown_until == 0.0
-    for index in range(NutritionVerificationAgent._FAILURE_THRESHOLD):
+    for index in range(3):
         agent._query_macros_per_100g(f"ingredient {index}")
-    assert agent._fatsecret_consecutive_failures >= NutritionVerificationAgent._FAILURE_THRESHOLD
+    assert agent._fatsecret_consecutive_failures >= 3
     assert agent._fatsecret_cooldown_until > 0.0
 
 
@@ -476,3 +476,15 @@ def test_parse_fatsecret_description_rejects_a_partial_match() -> None:
         "Per 100g - Calories: 165kcal | Fat: 3.60g | Protein: 31.00g"
     )
     assert macros is None
+
+
+def test_the_cooldown_constants_are_what_the_docs_claim() -> None:
+    """Pin the threshold and cooldown values, not just their existence.
+
+    The cooldown tests previously looped `range(_FAILURE_THRESHOLD)` and asserted
+    against the same constant, so they passed whatever its value was - mutating
+    it from 3 to 99 changed nothing. The README and the agent's own warning
+    message both promise three failures and a 120-second pause; this asserts it.
+    """
+    assert NutritionVerificationAgent._FAILURE_THRESHOLD == 3
+    assert NutritionVerificationAgent._COOLDOWN_SECONDS == 120
