@@ -17,6 +17,11 @@ database/meal_history.json
 database/meal_feedback.json
 database/user_profiles.json
 database/*.db
+
+# Coverage artifacts (pytest-cov, added in Phase 3)
+.coverage
+.coverage.*
+htmlcov/
 data/raw/
 data/processed/
 data/external/
