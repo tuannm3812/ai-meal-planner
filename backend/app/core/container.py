@@ -9,7 +9,7 @@ from ..agents.calorie_expenditure_agent import CalorieExpenditureAgent
 from ..agents.meal_recommendation_agent import MealRecommendationAgent
 from ..agents.nutrition_verification_agent import NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent
-from ..repositories.storage import (
+from ..repositories.json_store import (
     MealFeedbackRepository,
     MealPlanRepository,
     UserProfileRepository,

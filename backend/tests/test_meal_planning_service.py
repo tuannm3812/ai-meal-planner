@@ -14,7 +14,7 @@ from backend.app.agents.nutrition_verification_agent import (
 )
 from backend.app.agents.supermarket_agent import SupermarketAgent
 from backend.app.core.config import AppSettings
-from backend.app.repositories.storage import UserProfileRepository
+from backend.app.repositories.json_store import UserProfileRepository
 from backend.app.schemas.common import AgentMetadata, MealAgentMetadata
 from backend.app.schemas.requests import Ingredient, MealRequest
 from backend.app.services.meal_planning_service import MealPlanningService

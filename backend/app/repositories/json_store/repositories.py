@@ -1,8 +1,41 @@
+"""JSON file-backed implementations of the storage protocols."""
+
 import json
+import os
 from datetime import UTC, datetime
 from pathlib import Path
+from tempfile import NamedTemporaryFile
 from threading import Lock
 from typing import Any
+
+
+def _write_json_atomically(path: Path, records: list[dict[str, Any]]) -> None:
+    """Write records to path so a crash cannot leave a truncated file.
+
+    Writes to a temporary file in the same directory, then renames it over the
+    target. ``os.replace`` is atomic on POSIX and Windows, so a reader either
+    sees the old file or the new one, never a partial write.
+
+    Args:
+        path: Destination file.
+        records: Records to serialise.
+    """
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with NamedTemporaryFile(
+        "w",
+        encoding="utf-8",
+        dir=path.parent,
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        delete=False,
+    ) as handle:
+        json.dump(records, handle, indent=2)
+        temp_name = handle.name
+    try:
+        os.replace(temp_name, path)
+    except OSError:
+        Path(temp_name).unlink(missing_ok=True)
+        raise
 
 
 class UserProfileRepository:
@@ -53,8 +86,7 @@ class MealPlanRepository:
         with self._lock:
             records = self._load_records()
             records.append(record)
-            with self.history_path.open("w", encoding="utf-8") as history_file:
-                json.dump(records[-200:], history_file, indent=2)
+            _write_json_atomically(self.history_path, records)
 
     def list_for_user(self, user_id: str, limit: int = 20) -> list[dict[str, Any]]:
         records = self._load_records()
@@ -87,8 +119,7 @@ class MealFeedbackRepository:
         with self._lock:
             records = self._load_records()
             records.append(record)
-            with self.feedback_path.open("w", encoding="utf-8") as feedback_file:
-                json.dump(records[-500:], feedback_file, indent=2)
+            _write_json_atomically(self.feedback_path, records)
         return record
 
     def list_for_user(

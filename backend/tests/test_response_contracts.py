@@ -9,7 +9,7 @@ from fastapi.testclient import TestClient
 
 from backend.app.core.container import get_container
 from backend.app.main import app
-from backend.app.repositories.storage import (
+from backend.app.repositories.json_store import (
     MealFeedbackRepository,
     MealPlanRepository,
     UserProfileRepository,
