@@ -1,27 +1,20 @@
 import logging
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
 from datetime import UTC, datetime
-from typing import Any
+from typing import Annotated, Any
 from uuid import uuid4
 
 import uvicorn
-from fastapi import FastAPI, Header, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 
-from backend.app.agents.calorie_expenditure_agent import (
-    CalorieExpenditureAgent,
-    CalorieExpenditureRequest,
-)
+from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureRequest
 from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
-from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
-from backend.app.agents.supermarket_agent import SupermarketAgent
 from backend.app.core.config import AppSettings
+from backend.app.core.container import Container, build_container, get_container
 from backend.app.core.exceptions import register_exception_handlers
-from backend.app.repositories.storage import (
-    MealFeedbackRepository,
-    MealPlanRepository,
-    UserProfileRepository,
-)
 from backend.app.schemas.requests import MealFeedbackRequest, MealRequest
 from backend.app.services.meal_planning_service import MealPlanningService
 
@@ -30,7 +23,16 @@ logger = logging.getLogger(__name__)
 
 
 settings = AppSettings.from_env()
-app = FastAPI(title=settings.app_name)
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Build the container once at startup and expose it on app state."""
+    app.state.container = build_container(settings)
+    yield
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,38 +44,8 @@ app.add_middleware(
 
 register_exception_handlers(app)
 
-user_profiles = UserProfileRepository(settings.data_dir)
-meal_history = MealPlanRepository(settings.data_dir)
-meal_feedback = MealFeedbackRepository(settings.data_dir)
-meal_recommendation_agent = MealRecommendationAgent(
-    db_connection=user_profiles,
-    gemini_api_key=settings.gemini_api_key,
-    meal_corpus_path=settings.meal_corpus_path,
-    enable_llm_adaptation=settings.enable_gemini_adaptation,
-    rag_backend=settings.rag_backend,
-    rag_embedding_cache_dir=settings.rag_embedding_cache_dir,
-    rag_embedding_activation_size=settings.rag_embedding_activation_size,
-)
-nutrition_verification_agent = NutritionVerificationAgent(
-    usda_api_key=settings.usda_api_key,
-    fatsecret_client_id=settings.fatsecret_client_id,
-    fatsecret_client_secret=settings.fatsecret_client_secret,
-)
-supermarket_agent = SupermarketAgent(
-    maps_api_key=settings.maps_api_key,
-    inventory_api_key=settings.inventory_api_key,
-)
-calorie_expenditure_agent = CalorieExpenditureAgent(
-    model_path=settings.calorie_model_path,
-    model_version=settings.calorie_model_version,
-)
-meal_planning_service = MealPlanningService(
-    meal_agent=meal_recommendation_agent,
-    nutrition_agent=nutrition_verification_agent,
-    supermarket_agent=supermarket_agent,
-    calorie_agent=calorie_expenditure_agent,
-    profile_repo=user_profiles,
-)
+ContainerDep = Annotated[Container, Depends(get_container)]
+"""Injects the request-scoped view of the application's built container."""
 
 
 @app.get("/")
@@ -95,7 +67,7 @@ async def root() -> dict[str, Any]:
 
 
 @app.get("/health")
-async def health_check() -> dict[str, Any]:
+async def health_check(container: ContainerDep) -> dict[str, Any]:
     return {
         "status": "ok",
         "environment": settings.environment,
@@ -105,13 +77,13 @@ async def health_check() -> dict[str, Any]:
             "fatsecret_configured": bool(
                 settings.fatsecret_client_id and settings.fatsecret_client_secret
             ),
-            "history_store": str(meal_history.history_path),
-            "feedback_store": str(meal_feedback.feedback_path),
-            "calorie_model_configured": bool(calorie_expenditure_agent.model),
+            "history_store": str(container.meal_history.history_path),
+            "feedback_store": str(container.meal_feedback.feedback_path),
+            "calorie_model_configured": bool(container.calorie_agent.model),
             "calorie_model_path": str(settings.calorie_model_path),
-            "calorie_model_warning": calorie_expenditure_agent.model_warning,
-            "rag_backend": meal_recommendation_agent.meal_retriever.active_backend
-            if meal_recommendation_agent.meal_retriever
+            "calorie_model_warning": container.calorie_agent.model_warning,
+            "rag_backend": container.meal_agent.meal_retriever.active_backend
+            if container.meal_agent.meal_retriever
             else "unavailable",
             "gemini_adaptation_enabled": settings.enable_gemini_adaptation,
         },
@@ -121,25 +93,26 @@ async def health_check() -> dict[str, Any]:
 @app.post("/generate-meal-plan")
 async def generate_meal_plan(
     request: MealRequest,
+    container: ContainerDep,
     x_gemini_api_key: str | None = Header(default=None),
 ) -> dict[str, Any]:
     request_id = str(uuid4())
     generated_at = datetime.now(UTC).isoformat()
 
-    service = meal_planning_service
+    service = container.meal_planning_service
     if x_gemini_api_key and not settings.gemini_api_key:
         # Reuse the already-built retriever instead of re-embedding the corpus.
         service = MealPlanningService(
             meal_agent=MealRecommendationAgent(
-                db_connection=user_profiles,
+                db_connection=container.user_profiles,
                 gemini_api_key=x_gemini_api_key,
-                meal_retriever=meal_recommendation_agent.meal_retriever,
+                meal_retriever=container.meal_agent.meal_retriever,
                 enable_llm_adaptation=settings.enable_gemini_adaptation,
             ),
-            nutrition_agent=nutrition_verification_agent,
-            supermarket_agent=supermarket_agent,
-            calorie_agent=calorie_expenditure_agent,
-            profile_repo=user_profiles,
+            nutrition_agent=container.nutrition_agent,
+            supermarket_agent=container.supermarket_agent,
+            calorie_agent=container.calorie_agent,
+            profile_repo=container.user_profiles,
         )
 
     result = await run_in_threadpool(service.generate, request)
@@ -155,20 +128,29 @@ async def generate_meal_plan(
         "shopping_list": result.shopping_list.model_dump(),
         "reconciliation": (result.reconciliation.model_dump() if result.reconciliation else None),
     }
-    await run_in_threadpool(meal_history.save, response)
+    await run_in_threadpool(container.meal_history.save, response)
     return response
 
 
 @app.post("/calorie-expenditure/predict")
-async def predict_calorie_expenditure(request: CalorieExpenditureRequest) -> dict[str, Any]:
-    response = await run_in_threadpool(calorie_expenditure_agent.predict, request)
+async def predict_calorie_expenditure(
+    request: CalorieExpenditureRequest,
+    container: ContainerDep,
+) -> dict[str, Any]:
+    response = await run_in_threadpool(container.calorie_agent.predict, request)
     return response.model_dump()
 
 
 @app.get("/meal-plans/{user_id}")
-async def list_meal_plans(user_id: str, limit: int = 20) -> dict[str, Any]:
+async def list_meal_plans(
+    user_id: str,
+    container: ContainerDep,
+    limit: int = 20,
+) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 50))
-    items = await run_in_threadpool(meal_history.list_for_user, user_id=user_id, limit=safe_limit)
+    items = await run_in_threadpool(
+        container.meal_history.list_for_user, user_id=user_id, limit=safe_limit
+    )
     return {
         "user_id": user_id,
         "limit": safe_limit,
@@ -177,14 +159,17 @@ async def list_meal_plans(user_id: str, limit: int = 20) -> dict[str, Any]:
 
 
 @app.post("/meal-feedback")
-async def save_meal_feedback(request: MealFeedbackRequest) -> dict[str, Any]:
+async def save_meal_feedback(
+    request: MealFeedbackRequest,
+    container: ContainerDep,
+) -> dict[str, Any]:
     if request.liked is None and request.rating is None and not request.saved:
         raise HTTPException(
             status_code=400,
             detail="Provide at least one feedback signal: liked, rating, or saved.",
         )
 
-    record = await run_in_threadpool(meal_feedback.save, request.model_dump())
+    record = await run_in_threadpool(container.meal_feedback.save, request.model_dump())
     return {
         "status": "success",
         "item": record,
@@ -192,9 +177,15 @@ async def save_meal_feedback(request: MealFeedbackRequest) -> dict[str, Any]:
 
 
 @app.get("/meal-feedback/{user_id}")
-async def list_meal_feedback(user_id: str, limit: int = 20) -> dict[str, Any]:
+async def list_meal_feedback(
+    user_id: str,
+    container: ContainerDep,
+    limit: int = 20,
+) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
-    items = await run_in_threadpool(meal_feedback.list_for_user, user_id=user_id, limit=safe_limit)
+    items = await run_in_threadpool(
+        container.meal_feedback.list_for_user, user_id=user_id, limit=safe_limit
+    )
     return {
         "user_id": user_id,
         "limit": safe_limit,
@@ -203,10 +194,14 @@ async def list_meal_feedback(user_id: str, limit: int = 20) -> dict[str, Any]:
 
 
 @app.get("/saved-meals/{user_id}")
-async def list_saved_meals(user_id: str, limit: int = 20) -> dict[str, Any]:
+async def list_saved_meals(
+    user_id: str,
+    container: ContainerDep,
+    limit: int = 20,
+) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(
-        meal_feedback.list_for_user,
+        container.meal_feedback.list_for_user,
         user_id=user_id,
         limit=safe_limit,
         saved_only=True,
