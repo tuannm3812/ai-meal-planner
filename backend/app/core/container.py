@@ -9,11 +9,8 @@ from ..agents.calorie_expenditure_agent import CalorieExpenditureAgent
 from ..agents.meal_recommendation_agent import MealRecommendationAgent
 from ..agents.nutrition_verification_agent import NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent
-from ..repositories.json_store import (
-    MealFeedbackRepository,
-    MealPlanRepository,
-    UserProfileRepository,
-)
+from ..repositories.base import MealFeedbackStore, MealPlanStore, UserProfileStore
+from ..repositories.factory import build_repositories
 from ..services.meal_planning_service import MealPlanningService
 from .config import AppSettings
 
@@ -23,9 +20,9 @@ class Container:
     """The application's constructed collaborators."""
 
     settings: AppSettings
-    user_profiles: UserProfileRepository
-    meal_history: MealPlanRepository
-    meal_feedback: MealFeedbackRepository
+    user_profiles: UserProfileStore
+    meal_history: MealPlanStore
+    meal_feedback: MealFeedbackStore
     meal_agent: MealRecommendationAgent
     nutrition_agent: NutritionVerificationAgent
     supermarket_agent: SupermarketAgent
@@ -42,7 +39,7 @@ def build_container(settings: AppSettings) -> Container:
     Returns:
         A Container holding the built agents, repositories and service.
     """
-    user_profiles = UserProfileRepository(settings.data_dir)
+    user_profiles, meal_history, meal_feedback = build_repositories(settings)
     meal_agent = MealRecommendationAgent(
         db_connection=user_profiles,
         gemini_api_key=settings.gemini_api_key,
@@ -68,8 +65,8 @@ def build_container(settings: AppSettings) -> Container:
     return Container(
         settings=settings,
         user_profiles=user_profiles,
-        meal_history=MealPlanRepository(settings.data_dir),
-        meal_feedback=MealFeedbackRepository(settings.data_dir),
+        meal_history=meal_history,
+        meal_feedback=meal_feedback,
         meal_agent=meal_agent,
         nutrition_agent=nutrition_agent,
         supermarket_agent=supermarket_agent,
