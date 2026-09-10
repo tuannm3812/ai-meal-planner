@@ -61,7 +61,7 @@ def _block_network(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReque
     patch it themselves; anything that slips through hits this guard instead of
     silently becoming an integration test.
 
-    Patching ``socket.socket.connect`` alone is not enough: a host like
+    ``socket.socket.connect`` is patched too, but is not sufficient alone: a host like
     ``example.invalid`` fails DNS resolution in ``socket.getaddrinfo`` before a
     socket is ever created, so ``connect`` is never reached. Blocking
     ``urllib.request.urlopen`` (the entry point stdlib HTTP calls go through)
@@ -83,3 +83,5 @@ def _block_network(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureReque
 
     monkeypatch.setattr("urllib.request.urlopen", _blocked)
     monkeypatch.setattr(socket, "create_connection", _blocked)
+    monkeypatch.setattr(socket.socket, "connect", _blocked)
+    monkeypatch.setattr(socket.socket, "connect_ex", _blocked)
