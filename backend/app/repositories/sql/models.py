@@ -6,6 +6,9 @@ from sqlalchemy import JSON, Column
 from sqlmodel import Field, SQLModel
 
 
+# Both tables order by descending id rather than saved_at: two records written in the
+# same ISO-8601 microsecond would otherwise order arbitrarily, and neither table ever
+# deletes rows, so SQLite's rowid is monotonic.
 class MealPlanRow(SQLModel, table=True):
     """One stored meal-plan response.
 

@@ -164,3 +164,19 @@ def test_limit_defaults_to_twenty(plan_store: Any) -> None:
     for i in range(25):
         plan_store.save({"request": {"user_id": "u1"}, "n": i})
     assert len(plan_store.list_for_user("u1")) == 20
+
+
+@pytest.mark.parametrize("bad_request", [None, "not-a-dict", 42, [], {"no_user_id": True}], ids=str)
+def test_a_malformed_request_field_never_poisons_reads(plan_store: Any, bad_request: Any) -> None:
+    """A payload with an unusable `request` must not break other users' history.
+
+    The JSON backend used to accept such a record and then raise on every
+    subsequent list_for_user - for every user, not just the affected one. The SQL
+    backend raised at write time instead. Both must now degrade the same way:
+    store it, attribute it to no one, and leave good records readable.
+    """
+    plan_store.save({"request": {"user_id": "u1"}, "n": 1})
+    plan_store.save({"request": bad_request, "n": 2})
+    assert [item["n"] for item in plan_store.list_for_user("u1")] == [1]
+    # The malformed record is attributed to no one rather than to some real user.
+    assert [item["n"] for item in plan_store.list_for_user("")] == [2]

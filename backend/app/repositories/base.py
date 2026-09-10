@@ -75,3 +75,25 @@ class MealFeedbackStore(Protocol):
             Up to ``limit`` records, newest first.
         """
         ...
+
+
+def owner_of_meal_plan(payload: dict[str, Any]) -> str:
+    """Extract the owning user id from a meal-plan payload.
+
+    Tolerates a missing, null or non-dict ``request`` field. Both backends use
+    this so they agree on malformed input: previously the SQL backend raised
+    AttributeError at write time while the JSON backend accepted the record and
+    then raised on every subsequent read - for every user, not just the one whose
+    record was malformed.
+
+    Args:
+        payload: A stored or about-to-be-stored meal-plan response.
+
+    Returns:
+        The user id, or an empty string when the payload does not carry one.
+    """
+    request = payload.get("request")
+    if not isinstance(request, dict):
+        return ""
+    user_id = request.get("user_id")
+    return str(user_id) if user_id is not None else ""
