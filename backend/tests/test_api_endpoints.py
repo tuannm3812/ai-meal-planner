@@ -1,5 +1,7 @@
 """TestClient coverage for every route, using dependency overrides."""
 
+from dataclasses import replace
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -85,13 +87,29 @@ def test_list_meal_plans_clamps_the_limit(client: TestClient) -> None:
 
 
 def test_container_override_is_honoured(client: TestClient) -> None:
-    """Proves endpoints are injectable, which is the point of the container."""
+    """The override must actually change the response, not merely be accepted.
+
+    An earlier version of this test proxied every attribute back to the real
+    container, so it passed identically whether the override was installed or
+    ignored. This version swaps in a stub whose calorie agent has no model, and
+    asserts /health reports that difference.
+    """
     real = client.app.state.container
+    baseline = client.get("/health").json()["services"]["calorie_model_configured"]
+    assert baseline is True, "precondition: the real container has a loaded model"
 
-    class _Stub:
-        def __getattr__(self, name: str) -> object:
-            return getattr(real, name)
+    class _NoModelAgent:
+        model = None
+        model_warning = "stubbed out"
 
-    app.dependency_overrides[get_container] = lambda: _Stub()
-    assert client.get("/health").status_code == 200
-    app.dependency_overrides.clear()
+    stub = replace(real, calorie_agent=_NoModelAgent())
+    app.dependency_overrides[get_container] = lambda: stub
+    try:
+        overridden = client.get("/health").json()["services"]
+        assert overridden["calorie_model_configured"] is False
+        assert overridden["calorie_model_warning"] == "stubbed out"
+    finally:
+        app.dependency_overrides.clear()
+
+    # And the override is genuinely undone afterwards.
+    assert client.get("/health").json()["services"]["calorie_model_configured"] is True
