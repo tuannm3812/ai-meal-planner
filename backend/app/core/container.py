@@ -1,8 +1,9 @@
 """Builds the application's agents and repositories once, for injection."""
 
 from dataclasses import dataclass
+from typing import Annotated
 
-from fastapi import Request
+from fastapi import Depends, Request
 
 from ..agents.calorie_expenditure_agent import CalorieExpenditureAgent
 from ..agents.meal_recommendation_agent import MealRecommendationAgent
@@ -93,3 +94,7 @@ def get_container(request: Request) -> Container:
         The application's Container.
     """
     return request.app.state.container
+
+
+ContainerDep = Annotated[Container, Depends(get_container)]
+"""Injects the request-scoped view of the application's built container."""
