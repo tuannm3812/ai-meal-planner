@@ -1,22 +1,29 @@
 """Health and root informational endpoints."""
 
-from typing import Any
-
 from fastapi import APIRouter
 
 from backend.app.core.container import ContainerDep
+from backend.app.schemas.responses import HealthResponse, RootResponse
 
 router = APIRouter()
 
 
-@router.get("/")
-async def root(container: ContainerDep) -> dict[str, Any]:
+@router.get("/", response_model=RootResponse)
+async def root(container: ContainerDep) -> RootResponse:
+    """Report the service banner and the endpoints it exposes.
+
+    Args:
+        container: The application's dependency container.
+
+    Returns:
+        The service name, status, welcome message, and endpoint links.
+    """
     settings = container.settings
-    return {
-        "name": settings.app_name,
-        "status": "ok",
-        "message": "AI Meal Planner API is running. Open /docs for interactive API docs.",
-        "links": {
+    return RootResponse(
+        name=settings.app_name,
+        status="ok",
+        message="AI Meal Planner API is running. Open /docs for interactive API docs.",
+        links={
             "health": "/health",
             "docs": "/docs",
             "meal_plan": "/generate-meal-plan",
@@ -25,16 +32,25 @@ async def root(container: ContainerDep) -> dict[str, Any]:
             "meal_feedback": "/meal-feedback",
             "saved_meals": "/saved-meals/{user_id}",
         },
-    }
+    )
 
 
-@router.get("/health")
-async def health_check(container: ContainerDep) -> dict[str, Any]:
+@router.get("/health", response_model=HealthResponse)
+async def health_check(container: ContainerDep) -> HealthResponse:
+    """Report service health and external provider configuration.
+
+    Args:
+        container: The application's dependency container.
+
+    Returns:
+        The service status, environment, and a dict of provider/service
+        configuration details (booleans, paths, and warnings).
+    """
     settings = container.settings
-    return {
-        "status": "ok",
-        "environment": settings.environment,
-        "services": {
+    return HealthResponse(
+        status="ok",
+        environment=settings.environment,
+        services={
             "gemini_configured": bool(settings.gemini_api_key),
             "usda_configured": bool(settings.usda_api_key),
             "fatsecret_configured": bool(
@@ -50,4 +66,4 @@ async def health_check(container: ContainerDep) -> dict[str, Any]:
             else "unavailable",
             "gemini_adaptation_enabled": settings.enable_gemini_adaptation,
         },
-    }
+    )
