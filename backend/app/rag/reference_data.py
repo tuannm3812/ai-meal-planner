@@ -9,14 +9,15 @@ REFERENCE_DIR = Path(__file__).resolve().parents[3] / "data" / "reference"
 
 
 @cache
-def load_reference(name: str) -> dict[str, Any]:
+def load_reference(name: str) -> dict[str, Any] | list[Any]:
     """Load and cache one reference table.
 
     Args:
         name: File stem under ``data/reference``, e.g. ``ingredient_calories``.
 
     Returns:
-        The parsed JSON object.
+        The parsed JSON: an object for most tables, but a list for
+        ``fallback_meals``.
 
     Raises:
         FileNotFoundError: If the table is missing, which is a packaging error

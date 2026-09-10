@@ -158,6 +158,7 @@ class MealPlanningService:
             for ingredient in meal_plan.meal_definition.ingredients
         ]
         meal_plan.meal_definition.ingredients = rescaled_ingredients
+        meal_plan.portion_scaling.scale_factor = round(scaling.scale_factor * factor, 2)
 
         # Exactly one retry. Whatever this produces is what ships.
         nutrition = self.nutrition_agent.calculate_meal_macros(ingredients=rescaled_ingredients)

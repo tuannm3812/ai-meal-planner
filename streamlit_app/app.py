@@ -243,6 +243,9 @@ def local_demo_request(
             "meal_plan": result.meal_plan.model_dump(),
             "nutrition": result.nutrition.model_dump(),
             "shopping_list": result.shopping_list.model_dump(),
+            "reconciliation": (
+                result.reconciliation.model_dump() if result.reconciliation else None
+            ),
         }
         MealPlanRepository(DEMO_DATA_DIR).save(response)
         return response
