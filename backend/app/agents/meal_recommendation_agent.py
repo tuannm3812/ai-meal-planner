@@ -119,36 +119,30 @@ class MealRecommendationAgent:
                     "deterministic fallbacks."
                 )
 
-    def calculate_bmr(
-        self,
-        age: int,
-        gender: str,
-        weight_kg: float,
-        height_cm: float,
-        activity_multiplier: float,
-    ) -> int:
-        if gender.lower() == "m":
-            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) + 5
-        else:
-            bmr = (10 * weight_kg) + (6.25 * height_cm) - (5 * age) - 161
-
-        return int(bmr * activity_multiplier)
-
     def generate_meal_payload(
         self,
         craving: str,
         user_id: str,
+        daily_calorie_target: int,
         health_conditions: list[str] | None = None,
         dietary_preferences: list[str] | None = None,
     ) -> MealPlanPayload:
+        """Retrieve and adapt a meal for the given craving and calorie target.
+
+        Args:
+            craving: Free-text craving from the user.
+            user_id: Profile key used to look up dietary restrictions.
+            daily_calorie_target: Daily kcal target from CalorieExpenditureAgent.
+                This is a DAILY figure; portion scaling derives the per-meal
+                target from it.
+            health_conditions: Conditions that hard-filter the corpus.
+            dietary_preferences: Soft preferences that bias ranking.
+
+        Returns:
+            A populated MealPlanPayload.
+        """
         user_biometrics = self.db.fetch_user_profile(user_id)
-        target_calories = self.calculate_bmr(
-            age=user_biometrics["age"],
-            gender=user_biometrics["gender"],
-            weight_kg=user_biometrics["weight"],
-            height_cm=user_biometrics["height"],
-            activity_multiplier=user_biometrics["workout_level"],
-        )
+        target_calories = daily_calorie_target
         health_conditions = health_conditions or []
         dietary_preferences = dietary_preferences or []
         dietary_restrictions = user_biometrics["dietary_restrictions"]

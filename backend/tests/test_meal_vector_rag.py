@@ -43,6 +43,7 @@ def test_meal_agent_uses_vector_rag_before_gemini() -> None:
     payload = agent.generate_meal_payload(
         craving="fried rice",
         user_id="user_123",
+        daily_calorie_target=2200,
         dietary_preferences=["high protein"],
     )
 
@@ -113,6 +114,7 @@ def test_meal_agent_substitutes_gluten_ingredient_before_returning_payload() -> 
     payload = agent.generate_meal_payload(
         craving="burger",
         user_id="user_123",
+        daily_calorie_target=2200,
         dietary_preferences=["gluten free", "high protein"],
     )
 
