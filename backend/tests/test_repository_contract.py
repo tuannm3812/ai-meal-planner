@@ -14,46 +14,34 @@ from backend.app.repositories.json_store import (
     MealPlanRepository,
     UserProfileRepository,
 )
+from backend.app.repositories.sql import (
+    SqlMealFeedbackRepository,
+    SqlMealPlanRepository,
+    SqlUserProfileRepository,
+    build_engine,
+)
 
 BACKENDS = ["json", "sqlite"]
 
 
-def _skip_until_implemented(backend: str) -> None:
-    """Skip the SQLite branch until Task 4 lands it."""
-    if backend == "sqlite":
-        try:
-            import backend.app.repositories.sql
-        except ImportError:
-            pytest.skip("SQLite backend not implemented yet (Task 4)")
-
-
 @pytest.fixture(params=BACKENDS)
 def profile_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
-    _skip_until_implemented(request.param)
     if request.param == "json":
         return UserProfileRepository(tmp_path)
-    from backend.app.repositories.sql import SqlUserProfileRepository, build_engine
-
     return SqlUserProfileRepository(build_engine(tmp_path / "t.db"))
 
 
 @pytest.fixture(params=BACKENDS)
 def plan_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
-    _skip_until_implemented(request.param)
     if request.param == "json":
         return MealPlanRepository(tmp_path)
-    from backend.app.repositories.sql import SqlMealPlanRepository, build_engine
-
     return SqlMealPlanRepository(build_engine(tmp_path / "t.db"))
 
 
 @pytest.fixture(params=BACKENDS)
 def feedback_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
-    _skip_until_implemented(request.param)
     if request.param == "json":
         return MealFeedbackRepository(tmp_path)
-    from backend.app.repositories.sql import SqlMealFeedbackRepository, build_engine
-
     return SqlMealFeedbackRepository(build_engine(tmp_path / "t.db"))
 
 
@@ -131,7 +119,7 @@ def test_feedback_saved_only_filters(feedback_store: Any) -> None:
 def test_feedback_respects_the_limit(feedback_store: Any) -> None:
     for i in range(5):
         feedback_store.save({"user_id": "u1", "n": i})
-    assert len(feedback_store.list_for_user("u1", limit=2)) == 2
+    assert [item["n"] for item in feedback_store.list_for_user("u1", limit=2)] == [4, 3]
 
 
 def test_feedback_is_isolated_per_user(feedback_store: Any) -> None:
@@ -164,6 +152,13 @@ def test_limit_defaults_to_twenty(plan_store: Any) -> None:
     for i in range(25):
         plan_store.save({"request": {"user_id": "u1"}, "n": i})
     assert len(plan_store.list_for_user("u1")) == 20
+
+
+def test_feedback_limit_defaults_to_twenty(feedback_store: Any) -> None:
+    """The plan-store default is covered above; feedback must match it too."""
+    for i in range(25):
+        feedback_store.save({"user_id": "u1", "n": i})
+    assert len(feedback_store.list_for_user("u1")) == 20
 
 
 @pytest.mark.parametrize("bad_request", [None, "not-a-dict", 42, [], {"no_user_id": True}], ids=str)
