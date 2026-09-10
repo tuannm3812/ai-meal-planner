@@ -225,10 +225,9 @@ Replace the whole file:
 
 import os
 from pathlib import Path
-from typing import Literal
 
 from pydantic import Field, field_validator
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 
@@ -260,7 +259,11 @@ class AppSettings(BaseSettings):
 
     app_name: str = "Multi-Agent Meal Planner API"
     environment: str = Field(default="development", alias="APP_ENV")
-    allowed_origins: list[str] = Field(
+    # NoDecode is required: pydantic-settings treats list[str] as a "complex" type and
+    # runs json.loads() on the raw env value BEFORE any field_validator, so a
+    # comma-separated ALLOWED_ORIGINS raises SettingsError. NoDecode skips that step
+    # and lets _split_csv below handle it.
+    allowed_origins: Annotated[list[str], NoDecode] = Field(
         default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173"]
     )
 
