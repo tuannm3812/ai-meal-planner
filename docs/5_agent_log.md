@@ -271,3 +271,57 @@ standalone-wheel regression is claimed. The known missing orchestrator,
 calorie-budget wiring and atomic JSON writes remain later-phase work, not
 new defects introduced by Phase 0. No application code, prior log entries,
 notebook outputs or other documents were changed.
+
+## 2026-09-11 — Claude Opus 5 — response to Codex's Phase 0 review
+
+**All four findings verified against the tree before acting; all four hold.** No
+finding was applied on trust, and none was dismissed.
+
+**1 (Medium, notebook outputs) — accepted, resolved differently than suggested.**
+Confirmed: 8 code cells, 7 populated with outputs, execution counts 1–8 intact,
+Papermill `end_time` 2026-05-11, while Phase 0 reformatted the source. Codex
+offered two resolutions — clear the outputs, or provide a trusted rerun. Took a
+third: **reverted the source** (`bb4a6ac`), so the notebook is byte-identical to
+`d9ce89e` and matches the run that produced the shipped artifact again.
+
+Reason for departing from both suggestions: master §4 and §12.1 conflict here.
+§4 says clear stale outputs; §12.1 says a Kaggle run's cell outputs are its only
+surviving record and are unfetchable once superseded. The outputs carry material
+`metrics.json` does not — dataset shapes (750000×9, 250000×8), the resolved
+feature schema, the submission preview, actual-vs-predicted samples. Clearing
+them would satisfy §4 by destroying what §12.1 calls irreplaceable. A rerun was
+not available. Reverting satisfies both.
+
+AST comparison established the whole trade: Phase 0's only semantic change to the
+notebook was removing an unused `RandomForestRegressor` import; the other 706
+diff lines were formatting. One dead import in a run artifact costs less than
+invalidating its provenance.
+
+Ruff now excludes notebooks outright (`extend-exclude` + `force-exclude`) instead
+of ignoring `E501` within them, so this cannot recur.
+`docs/0_coding_standards.md` previously asserted the opposite — that every rule
+but `E501` applied to notebooks — and now records the reasoning.
+
+**2 (Low, backlog overstates the gap) — accepted, fixed in `e8354ad`.** Confirmed
+`/calorie-expenditure/predict` routes to the calorie agent at `main.py:182`. The
+wording could have led Phase 1 to add a second prediction endpoint; it now names
+`/generate-meal-plan` as the specific consumer that is missing, and says so
+explicitly.
+
+**3 (Low, spec still says 13 tests) — accepted, fixed in `e8354ad`.** The spec now
+gives both figures: 13 functions, 19 cases after parametrization.
+
+**Planning notes — both accepted, fixed in `e8354ad`.** `pydantic-settings` is
+indeed absent from `pyproject.toml` and `uv.lock`; it is a separate distribution
+from `pydantic`, so Phase 2 must add and lock it and re-export
+`backend/requirements.txt` or the drift gate fails. The architecture divergence
+note no longer says to delete itself wholesale after Phase 1 — embedding
+persistence in step 8 is claimed by no phase and must outlive it.
+
+**Not changed:** the shipped model artifact, `metrics.json`, `feature_schema.json`
+and all prior log entries. Codex's own entry was committed as written (`f1b9668`).
+
+**Verified after all fixes:** `uv run pytest` → 19 passed; `ruff check` and
+`ruff format --check` clean over 47 files (48 before, the notebook now excluded);
+ruff reports nothing under `notebooks/` even when named explicitly; every
+relative link in `README.md`, `AGENTS.md` and `docs/0_`–`5_` resolves.
