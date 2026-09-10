@@ -36,6 +36,7 @@ packages = ["backend"]
 [dependency-groups]
 dev = [
   "pytest>=8",
+  "pytest-cov>=7.1.0",
   "ruff==0.16.4",
 ]
 
@@ -65,3 +66,4 @@ python_files = ["test_*.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
 addopts = "-q"
+markers = ["allow_network: test may open real network connections"]
