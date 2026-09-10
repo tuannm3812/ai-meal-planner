@@ -17,7 +17,7 @@
 - Ruff config: `line-length = 100`, `target-version = "py311"`, `select = ["E", "F", "I", "B", "UP"]`.
 - uv pinned to `0.11.29` in CI — `uv export` output is deterministic per uv version, so an unpinned version would make the requirements-drift check fail on version skew.
 - **Do not modify `.gitignore`.** It already implements the §8 blanket-rule-plus-negation pattern for the model artifact, and the master standard cites this repo as a correct example.
-- **Baseline to preserve: 19 passing tests.** Every task must end with `uv run pytest -q` reporting 19 passed. No test may be deleted, skipped, or weakened in this phase.
+- **Baseline to preserve: 19 passing tests.** Every task must end with `uv run pytest` reporting 19 passed. No test may be deleted, skipped, or weakened in this phase.
 - Commit messages follow §9: `<type>(<scope>): <imperative summary>`, one coherent change per commit, material detail in the body.
 - Root `requirements.txt` stays the one-line `-r backend/requirements.txt`. Only `backend/requirements.txt` is generated.
 - API port is **8000** everywhere after Task 6.
@@ -26,6 +26,11 @@
   for tracked-only modifications, or named paths. This ruling overrides any
   `git add -A` that survives elsewhere in this plan.
 - All work lands on the branch `refactor/phase-0-foundation`, never on `main`.
+- **Run `uv run pytest`, never `uv run pytest -q`.** `pyproject.toml` sets
+  `addopts = "-q"`, so an explicit `-q` stacks into pytest's `-qq` mode and
+  suppresses the `19 passed` summary line entirely — leaving you unable to verify
+  the count, and any CI grep for `passed` matching nothing. Confirmed by running
+  both forms on 2026-09-10.
 
 ---
 
@@ -35,7 +40,7 @@ Measured on 2026-09-10 at commit `aedcea0`, macOS, Python 3.11:
 
 | Check | Result |
 | --- | --- |
-| `pytest -q` | **19 passed** (13 test functions; parametrization expands them) |
+| `uv run pytest` | **19 passed** (13 test functions; parametrization expands them) |
 | `ruff check .` | **94 errors** — 48 `UP006`, 22 `E501`, 14 `I001`, 9 `UP035`, 1 `F401`. 63 auto-fixable |
 | `ruff format --check .` | **10 files would be reformatted**, 34 already formatted |
 | `npm run lint` | **clean** |
@@ -88,7 +93,7 @@ The missing `python` is why the README's documented setup cannot run on macOS as
 ```bash
 uv venv --python 3.11
 uv pip install -r backend/requirements.txt
-uv run --no-project python -m pytest -q
+uv run --no-project python -m pytest
 ```
 
 Expected: `19 passed`. Write the number down — it is the invariant for every later step.
@@ -179,7 +184,7 @@ Expected: `high protein`. This proves the `from backend.app...` import path reso
 - [ ] **Step 5: Verify the test baseline is unchanged**
 
 ```bash
-uv run pytest -q
+uv run pytest
 ```
 
 Expected: `19 passed`. If the count differs, stop and investigate before continuing — do not proceed with a changed baseline.
@@ -290,7 +295,7 @@ This resolves `UP006` (`typing.Dict`/`List` → `dict`/`list`), `UP035` (depreca
 - [ ] **Step 3: Verify the baseline survived the autofix**
 
 ```bash
-uv run pytest -q
+uv run pytest
 ```
 
 Expected: `19 passed`. `UP006` rewrites type annotations only, so behaviour must be identical. If any test fails, revert with `git checkout -- .` and fix the offending file by hand.
@@ -306,7 +311,7 @@ Expected: `10 files reformatted, 34 files left unchanged`. This also wraps most 
 - [ ] **Step 5: Verify the baseline again**
 
 ```bash
-uv run pytest -q
+uv run pytest
 ```
 
 Expected: `19 passed`.
@@ -322,7 +327,7 @@ Expected: no output. Any survivor is a long line that the formatter could not sp
 - [ ] **Step 7: Verify both gates are clean and the baseline holds**
 
 ```bash
-uv run ruff check . && uv run ruff format --check . && uv run pytest -q
+uv run ruff check . && uv run ruff format --check . && uv run pytest
 ```
 
 Expected: no lint output, `50 files already formatted` (or similar with zero to reformat), `19 passed`.
@@ -427,7 +432,7 @@ jobs:
         run: uv run ruff format --check .
 
       - name: Run tests
-        run: uv run pytest -q
+        run: uv run pytest
 
   requirements-drift:
     runs-on: ubuntu-latest
@@ -479,7 +484,7 @@ The `compileall` step is dropped — `ruff check` and `pytest` both subsume it.
 - [ ] **Step 3: Reproduce every gate locally before pushing**
 
 ```bash
-uv run ruff check . && uv run ruff format --check . && uv run pytest -q
+uv run ruff check . && uv run ruff format --check . && uv run pytest
 uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o backend/requirements.txt && git diff --exit-code -- backend/requirements.txt
 (cd frontend && npm ci && npm run lint && npm run build)
 ```
@@ -736,7 +741,7 @@ standard at `~/Documents/GitHub/coding-standards/`.
 **Produced:** `docs/superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md`
 and `docs/superpowers/plans/2026-09-10-phase-0-foundation.md`.
 
-**Verified by running, not asserted:** baseline `pytest -q` = 19 passed on
+**Verified by running, not asserted:** baseline `uv run pytest` = 19 passed on
 Python 3.11; `ruff check .` = 94 findings (48 UP006, 22 E501, 14 I001, 9 UP035,
 1 F401); `ruff format --check` = 10 files would be reformatted; `npm run lint`
 clean; `npm run build` succeeds. All spec line citations were checked against the
@@ -784,7 +789,7 @@ Expected: no output.
 - [ ] **Step 10: Verify nothing else broke**
 
 ```bash
-uv run ruff check . && uv run pytest -q
+uv run ruff check . && uv run pytest
 ```
 
 Expected: no lint output, `19 passed`. Docs-only changes must not affect either, but confirm rather than assume.
@@ -1047,7 +1052,7 @@ Expected: no output — `.env` is gitignored. If it appears, stop and do not com
 - [ ] **Step 8: Verify nothing else broke, then commit**
 
 ```bash
-uv run ruff check . && uv run pytest -q
+uv run ruff check . && uv run pytest
 git add README.md frontend/.env.example backend/.env.example
 git commit -F - <<'MSG'
 fix(config): unify the API port on 8000 and complete the env examples
@@ -1149,7 +1154,7 @@ Run the backend checks — the same gates CI enforces:
 ```bash
 uv run ruff check .
 uv run ruff format --check .
-uv run pytest -q
+uv run pytest
 ```
 
 Build and lint the React dashboard:
@@ -1193,7 +1198,7 @@ git clone "/Users/tuannm3812/Documents/GitHub/1. Study/ai-meal-planner" fresh
 cd fresh
 uv sync --all-groups
 cp backend/.env.example backend/.env
-uv run pytest -q
+uv run pytest
 uv run ruff check .
 ```
 
@@ -1243,7 +1248,7 @@ Per spec §5, Phase 0 is done when a clean clone runs `uv sync && uv run pytest`
 successfully on macOS, and CI fails on a deliberately introduced lint error, a
 frontend build error, and a stale requirements export.
 
-- [ ] `uv sync --all-groups && uv run pytest -q` → `19 passed`, from a fresh clone
+- [ ] `uv sync --all-groups && uv run pytest` → `19 passed`, from a fresh clone
 - [ ] `uv run ruff check .` and `uv run ruff format --check .` → both clean
 - [ ] `(cd frontend && npm ci && npm run lint && npm run build)` → succeeds
 - [ ] Lint gate verified to fail on a deliberate unused import, then reverted (Task 3 Steps 4–5)
