@@ -35,7 +35,7 @@ jobs:
         run: uv run ruff format --check .
 
       - name: Run tests
-        run: uv run pytest
+        run: uv run pytest --cov-fail-under=89
 
   requirements-drift:
     runs-on: ubuntu-latest
