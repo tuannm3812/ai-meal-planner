@@ -13,6 +13,9 @@
 
 ## Global Constraints
 
+- **Test counts in this plan are collected-case counts, and parametrized tests expand.**
+  Where a stated number disagrees with what pytest reports, trust pytest and report the real
+  figure — the ladder has already been re-based twice for this reason.
 - **Baseline: 19 passing tests must never drop.** Run `uv run pytest` — **never** `uv run pytest -q`; `pyproject.toml` sets `addopts = "-q"` and a second `-q` becomes `-qq`, hiding the summary. New tests add to the count; report the new number each task.
 - **Never `git add -A`.** Run `git status --short`, review every path, stage explicitly. Master standard §10.1.
 - Commit format `<type>(<scope>): <imperative summary>`. **The `(scope)` is mandatory.** Every body ends with `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`.
@@ -1208,7 +1211,7 @@ def test_macro_fallbacks_still_produce_usable_macros() -> None:
 - [ ] **Step 5: Run the tests**
 
 Run: `uv run pytest`
-Expected: **38 passed**.
+Expected: **40 passed**.
 
 - [ ] **Step 6: Diff against the pre-change snapshot — the real proof**
 
@@ -1273,7 +1276,7 @@ No output value changed. Proved by snapshotting every table's output for nine
 ingredients before the extraction and diffing after: identical. The unknown
 ingredient default of 120 kcal is preserved and now has its own test.
 
-Verified: 38 tests pass, including the retrieval regression suite, ruff clean.
+Verified: 40 tests pass, including the retrieval regression suite, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -1434,7 +1437,7 @@ that is a deliberate validation response, not an internal leak.
 ```bash
 uv run pytest
 ```
-Expected: **43 passed** (38 + 5 new).
+Expected: **45 passed** (40 + 5 new).
 
 ```bash
 uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 &
@@ -1471,7 +1474,7 @@ safe message. A catch-all handler covers anything unexpected.
 The bare try/except in generate_meal_plan is removed; the deliberate 400 in
 save_meal_feedback stays, being a validation response rather than a leak.
 
-Verified: 43 tests pass, including one asserting a credential-shaped internal
+Verified: 45 tests pass, including one asserting a credential-shaped internal
 string never reaches client_message. Live checks return 200 for a valid request
 and 422 for a validation failure.
 
@@ -1730,7 +1733,7 @@ def test_container_override_is_honoured(client: TestClient) -> None:
 ```bash
 uv run pytest
 ```
-Expected: **52 passed**. `test_meal_feedback_roundtrips` writes to the real feedback store —
+Expected: **54 passed**. `test_meal_feedback_roundtrips` writes to the real feedback store —
 that is acceptable here because the repository appends and the file is gitignored. Confirm with
 `git status --short` that `database/meal_feedback.json` is **not** shown as modified-and-tracked.
 
@@ -1754,7 +1757,7 @@ can override the whole graph.
 Adds the first endpoint tests in the repository: all 8 routes, happy and error
 paths, including one that overrides the container to prove injection works.
 
-Verified: 52 tests pass, ruff clean.
+Verified: 54 tests pass, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -1886,7 +1889,7 @@ Bodies were copied without modification, so this commit is a pure move. The
 route table was dumped before and after and is identical: same eight paths, same
 methods.
 
-Verified: 52 tests pass, ruff clean.
+Verified: 54 tests pass, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -2054,7 +2057,7 @@ handler currently builds a dict. For `/calorie-expenditure/predict`, return the
 ```bash
 uv run pytest
 ```
-Expected: **55 passed**.
+Expected: **57 passed**.
 
 - [ ] **Step 6: Confirm `/docs` now documents responses**
 
@@ -2090,7 +2093,7 @@ response_model. History and feedback items stay dict[str, Any] on purpose:
 stored records are whole responses from earlier versions, and typing them
 strictly would make old rows unreadable. The module docstring says so.
 
-Verified: 55 tests pass, including one that fails if any route ever ships
+Verified: 57 tests pass, including one that fails if any route ever ships
 without a response_model again, and an OpenAPI dump showing all eight routes
 naming a schema.
 
@@ -2106,7 +2109,7 @@ Per spec §6: done when `/generate-meal-plan` demonstrably uses the model's calo
 response includes reconciliation metadata, `/docs` shows full response schemas, and a provider
 failure returns a non-500 status with no internal detail in the body.
 
-- [ ] `uv run pytest` → **55 passed**, no test deleted or weakened
+- [ ] `uv run pytest` → **57 passed**, no test deleted or weakened
 - [ ] `uv run ruff check .` and `uv run ruff format --check .` → clean
 - [ ] A live `POST /generate-meal-plan` returns `calorie_budget.model_version` =
       `hist_gradient_boosting_deep_v0.1.0`, and `meal_plan.user_context.caloric_target`
