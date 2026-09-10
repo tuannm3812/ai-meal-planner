@@ -1,81 +1,112 @@
-import os
-from dataclasses import dataclass
-from pathlib import Path
+"""Application settings, resolved from the environment."""
 
-from dotenv import load_dotenv
+import os
+from pathlib import Path
+from typing import Annotated, Literal
+
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings, NoDecode, SettingsConfigDict
 
 BASE_DIR = Path(__file__).resolve().parents[3]
-if os.getenv("SKIP_DOTENV") != "1":
-    load_dotenv(BASE_DIR / "backend" / ".env")
 
 
-def _csv_env(name: str, default: str) -> list[str]:
-    raw_value = os.getenv(name, default)
-    return [value.strip() for value in raw_value.split(",") if value.strip()]
+def _resolve_repo_path(path_value: Path | str) -> Path:
+    """Resolve a possibly-relative path against the repository root.
+
+    Args:
+        path_value: An absolute path, or one relative to the repo root.
+
+    Returns:
+        An absolute path. Resolving against the repo root rather than the
+        process's working directory means the API behaves the same however it
+        is started.
+    """
+    path = Path(path_value)
+    return path if path.is_absolute() else BASE_DIR / path
 
 
-@dataclass(frozen=True)
-class AppSettings:
-    app_name: str
-    environment: str
-    allowed_origins: list[str]
-    gemini_api_key: str | None
-    usda_api_key: str | None
-    fatsecret_client_id: str | None
-    fatsecret_client_secret: str | None
-    maps_api_key: str | None
-    inventory_api_key: str | None
-    data_dir: Path
-    calorie_model_path: Path
-    calorie_model_version: str
-    meal_corpus_path: Path
-    rag_backend: str
-    rag_embedding_cache_dir: Path
-    rag_embedding_activation_size: int
-    enable_gemini_adaptation: bool
+class AppSettings(BaseSettings):
+    """Every setting the application reads, with its default."""
+
+    model_config = SettingsConfigDict(
+        env_file=None if os.getenv("SKIP_DOTENV") == "1" else BASE_DIR / "backend" / ".env",
+        env_file_encoding="utf-8",
+        extra="ignore",
+        case_sensitive=False,
+    )
+
+    app_name: str = "Multi-Agent Meal Planner API"
+    environment: str = Field(default="development", alias="APP_ENV")
+    allowed_origins: Annotated[list[str], NoDecode] = Field(
+        default_factory=lambda: ["http://localhost:5173", "http://127.0.0.1:5173"]
+    )
+
+    gemini_api_key: str | None = None
+    usda_api_key: str | None = None
+    fatsecret_client_id: str | None = None
+    fatsecret_client_secret: str | None = None
+    maps_api_key: str | None = None
+    inventory_api_key: str | None = None
+
+    calorie_model_path: Path = (
+        BASE_DIR / "models" / "calorie_expenditure" / "calorie_expenditure_model.joblib"
+    )
+    calorie_model_version: str = "hist_gradient_boosting_deep_v0.1.0"
+    meal_corpus_path: Path = BASE_DIR / "data" / "meal_corpus" / "meals.json"
+    rag_backend: str = "auto"
+    rag_embedding_cache_dir: Path = BASE_DIR / "data" / "vector_index"
+    rag_embedding_activation_size: int = 50
+    enable_gemini_adaptation: bool = False
+
+    storage_backend: Literal["json", "sqlite"] = "sqlite"
+
+    @property
+    def data_dir(self) -> Path:
+        """Directory holding the JSON stores and the SQLite database."""
+        return BASE_DIR / "database"
+
+    @property
+    def sqlite_path(self) -> Path:
+        """Filesystem location of the SQLite database."""
+        return self.data_dir / "ai_meal_planner.db"
+
+    @field_validator("allowed_origins", mode="before")
+    @classmethod
+    def _split_csv(cls, value: object) -> object:
+        """Accept ALLOWED_ORIGINS as a comma-separated string.
+
+        Args:
+            value: The raw environment value, or an already-parsed list.
+
+        Returns:
+            A list of origins with blanks removed, or the value unchanged when
+            it is not a string.
+        """
+        if isinstance(value, str):
+            return [item.strip() for item in value.split(",") if item.strip()]
+        return value
+
+    @field_validator("calorie_model_path", "meal_corpus_path", "rag_embedding_cache_dir")
+    @classmethod
+    def _resolve(cls, value: Path) -> Path:
+        """Resolve configured paths against the repository root.
+
+        Args:
+            value: The configured path, absolute or repo-relative.
+
+        Returns:
+            An absolute path.
+        """
+        return _resolve_repo_path(value)
 
     @classmethod
     def from_env(cls) -> "AppSettings":
-        raw_model_path = os.getenv("CALORIE_MODEL_PATH")
-        calorie_model_path = (
-            _resolve_repo_path(raw_model_path)
-            if raw_model_path
-            else BASE_DIR / "models" / "calorie_expenditure" / "calorie_expenditure_model.joblib"
-        )
-        return cls(
-            app_name=os.getenv("APP_NAME", "Multi-Agent Meal Planner API"),
-            environment=os.getenv("APP_ENV", "development"),
-            allowed_origins=_csv_env(
-                "ALLOWED_ORIGINS",
-                "http://localhost:5173,http://127.0.0.1:5173",
-            ),
-            gemini_api_key=os.getenv("GEMINI_API_KEY"),
-            usda_api_key=os.getenv("USDA_API_KEY"),
-            fatsecret_client_id=os.getenv("FATSECRET_CLIENT_ID"),
-            fatsecret_client_secret=os.getenv("FATSECRET_CLIENT_SECRET"),
-            maps_api_key=os.getenv("MAPS_API_KEY"),
-            inventory_api_key=os.getenv("INVENTORY_API_KEY"),
-            data_dir=BASE_DIR / "database",
-            calorie_model_path=calorie_model_path,
-            calorie_model_version=os.getenv(
-                "CALORIE_MODEL_VERSION",
-                "hist_gradient_boosting_deep_v0.1.0",
-            ),
-            meal_corpus_path=_resolve_repo_path(
-                os.getenv("MEAL_CORPUS_PATH", "data/meal_corpus/meals.json")
-            ),
-            rag_backend=os.getenv("RAG_BACKEND", "auto"),
-            rag_embedding_cache_dir=_resolve_repo_path(
-                os.getenv("RAG_EMBEDDING_CACHE_DIR", "data/vector_index")
-            ),
-            rag_embedding_activation_size=int(os.getenv("RAG_EMBEDDING_ACTIVATION_SIZE", "50")),
-            enable_gemini_adaptation=os.getenv("ENABLE_GEMINI_ADAPTATION", "0").lower()
-            in {"1", "true", "yes"},
-        )
+        """Build settings from the environment.
 
+        Retained so existing call sites keep working after the migration to
+        pydantic-settings.
 
-def _resolve_repo_path(path_value: str) -> Path:
-    path = Path(path_value)
-    if path.is_absolute():
-        return path
-    return BASE_DIR / path
+        Returns:
+            A populated AppSettings.
+        """
+        return cls()
