@@ -2,14 +2,13 @@ import json
 import logging
 import re
 import time
-from typing import Any, Dict, List
+from typing import Any
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
 from ..schemas.requests import Ingredient
-
 
 logger = logging.getLogger(__name__)
 
@@ -29,11 +28,11 @@ class AgentMetadata(BaseModel):
     agent_name: str
     source: str
     confidence: float = Field(ge=0, le=1)
-    warnings: List[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
 class MealNutrition(BaseModel):
-    ingredients_macros: List[IngredientMacro]
+    ingredients_macros: list[IngredientMacro]
     total_calories: float
     total_protein: float
     total_carbs: float
@@ -60,13 +59,13 @@ class NutritionVerificationAgent:
 
         # Successful API lookups are cached per normalized ingredient name for the
         # process lifetime; estimates/local-table results are cheap and not cached.
-        self._macro_cache: Dict[str, Dict[str, Any]] = {}
+        self._macro_cache: dict[str, dict[str, Any]] = {}
         self._usda_consecutive_failures = 0
         self._usda_cooldown_until = 0.0
         self._fatsecret_consecutive_failures = 0
         self._fatsecret_cooldown_until = 0.0
 
-    def calculate_meal_macros(self, ingredients: List[Ingredient]) -> MealNutrition:
+    def calculate_meal_macros(self, ingredients: list[Ingredient]) -> MealNutrition:
         processed_ingredients = []
         totals = {"calories": 0.0, "protein": 0.0, "carbs": 0.0, "fat": 0.0}
         warnings = []
@@ -112,7 +111,7 @@ class NutritionVerificationAgent:
             ),
         )
 
-    def _query_macros_per_100g(self, item_name: str) -> Dict[str, Any]:
+    def _query_macros_per_100g(self, item_name: str) -> dict[str, Any]:
         local_override = self._trusted_local_override(item_name)
         if local_override:
             return local_override
@@ -175,7 +174,7 @@ class NutritionVerificationAgent:
                 )
 
     @staticmethod
-    def _trusted_local_override(item_name: str) -> Dict[str, Any] | None:
+    def _trusted_local_override(item_name: str) -> dict[str, Any] | None:
         lookup = {
             "whole egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
             "egg": {"calories": 143, "protein": 12.6, "carbs": 0.7, "fat": 9.5},
@@ -248,7 +247,7 @@ class NutritionVerificationAgent:
         }
         return lookup.get(item_name.strip().lower(), item_name)
 
-    def _query_usda_database(self, item_name: str) -> Dict[str, Any] | None:
+    def _query_usda_database(self, item_name: str) -> dict[str, Any] | None:
         query = urlencode({"api_key": self.api_key, "query": item_name, "pageSize": 1})
         with urlopen(f"{self.base_url}?{query}", timeout=6) as response:
             payload = json.loads(response.read().decode("utf-8"))
@@ -269,7 +268,7 @@ class NutritionVerificationAgent:
             "confidence": 0.9,
         }
 
-    def _query_fatsecret_database(self, item_name: str) -> Dict[str, Any] | None:
+    def _query_fatsecret_database(self, item_name: str) -> dict[str, Any] | None:
         token = self._get_fatsecret_token()
         request_body = urlencode(
             {
@@ -342,7 +341,7 @@ class NutritionVerificationAgent:
         self.fatsecret_token_expires_at = time.time() + int(payload.get("expires_in", 3600)) - 60
         return self.fatsecret_token
 
-    def _parse_fatsecret_description(self, description: str) -> Dict[str, float] | None:
+    def _parse_fatsecret_description(self, description: str) -> dict[str, float] | None:
         if "per 100g" not in description.lower():
             return None
 
@@ -361,7 +360,7 @@ class NutritionVerificationAgent:
 
         return values
 
-    def _estimate_macros_per_100g(self, item_name: str) -> Dict[str, Any]:
+    def _estimate_macros_per_100g(self, item_name: str) -> dict[str, Any]:
         name = item_name.lower()
         lookup = {
             "lean turkey mince": {"calories": 150, "protein": 22, "carbs": 0, "fat": 7},
@@ -426,7 +425,7 @@ class NutritionVerificationAgent:
         return {**estimate, "source": "category_estimate", "confidence": 0.45}
 
     @staticmethod
-    def _nutrient_value(by_name: Dict[str, Any], partial_key: str, fallback_key: str) -> float:
+    def _nutrient_value(by_name: dict[str, Any], partial_key: str, fallback_key: str) -> float:
         for nutrient_name, nutrient in by_name.items():
             if partial_key in nutrient_name:
                 return float(nutrient.get("value", 0))
@@ -439,13 +438,13 @@ class NutritionVerificationAgent:
         return base64.b64encode(credentials.encode("utf-8")).decode("utf-8")
 
     @staticmethod
-    def _has_usable_macros(macros: Dict[str, Any] | None) -> bool:
+    def _has_usable_macros(macros: dict[str, Any] | None) -> bool:
         if not macros:
             return False
         return any(float(macros.get(key, 0)) > 0 for key in ["calories", "protein", "carbs", "fat"])
 
     @staticmethod
-    def _average_confidence(items: List[IngredientMacro]) -> float:
+    def _average_confidence(items: list[IngredientMacro]) -> float:
         if not items:
             return 0.0
         return round(sum(item.confidence for item in items) / len(items), 2)

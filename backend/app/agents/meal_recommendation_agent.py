@@ -1,12 +1,11 @@
 import logging
 from pathlib import Path
-from typing import Any, List
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
 from ..schemas.requests import Ingredient
-
 
 logger = logging.getLogger(__name__)
 
@@ -14,19 +13,19 @@ logger = logging.getLogger(__name__)
 class MealDefinition(BaseModel):
     craving_input: str
     structured_meal_name: str
-    ingredients: List[Ingredient]
+    ingredients: list[Ingredient]
 
 
 class UserContext(BaseModel):
     caloric_target: int
-    dietary_restrictions: List[str]
+    dietary_restrictions: list[str]
 
 
 class AgentMetadata(BaseModel):
     agent_name: str
     source: str
     confidence: float = Field(ge=0, le=1)
-    warnings: List[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
     explanation: str | None = None
 
 
@@ -112,9 +111,12 @@ class MealRecommendationAgent:
                 self.types = types
                 self.model_unavailable_reason = ""
             except ImportError:
-                self.model_unavailable_reason = "google-genai is not installed in the active Python environment"
+                self.model_unavailable_reason = (
+                    "google-genai is not installed in the active Python environment"
+                )
                 logger.warning(
-                    "google-genai is not installed; meal generation will use deterministic fallbacks."
+                    "google-genai is not installed; meal generation will use "
+                    "deterministic fallbacks."
                 )
 
     def calculate_bmr(

@@ -193,7 +193,10 @@ def constraint_groups(labels: list[str]) -> set[str]:
         groups.update({"dairy", "egg"})
     if "vegetarian" in normalized_labels:
         groups.add("vegetarian")
-    if any(label in {"hypertension", "high blood pressure", "low sodium"} for label in normalized_labels):
+    if any(
+        label in {"hypertension", "high blood pressure", "low sodium"}
+        for label in normalized_labels
+    ):
         groups.add("sodium_sensitive")
 
     return groups
