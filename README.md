@@ -79,6 +79,15 @@ ai-meal-planner/
 |-- database/
 |   `-- user_profiles.example.json
 |-- docs/
+|   |-- 0_coding_standards.md
+|   |-- 1_brief.md
+|   |-- 2_architecture.md
+|   |-- 3_decisions.md
+|   |-- 4_next_steps.md
+|   |-- 5_agent_log.md
+|   |-- agents/
+|   |-- architecture/
+|   `-- superpowers/
 |-- frontend/
 |-- models/
 |-- notebooks/
@@ -91,7 +100,7 @@ ai-meal-planner/
 `-- README.md
 ```
 
-See `docs/architecture/system_architecture.md` and `docs/engineering/repo_structure_conventions.md` for deeper design notes.
+See [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/0_coding_standards.md`](docs/0_coding_standards.md) for deeper design notes.
 
 ## 6. Quick Start
 
@@ -270,6 +279,9 @@ The current seed corpus contains 34 curated meal templates. The recommendation f
 Semantic retrieval is prepared but conservative by default. In production, `RAG_BACKEND=auto` keeps TF-IDF for small corpora and moves to sentence embeddings plus FAISS when the corpus reaches the configured activation size.
 
 ## 11. Roadmap
+
+The full prioritised backlog, including the deliberate gaps, is in
+[`docs/4_next_steps.md`](docs/4_next_steps.md). Highlights:
 
 - Connect `/generate-meal-plan` more tightly with the latest `/calorie-expenditure/predict` result
 - Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
