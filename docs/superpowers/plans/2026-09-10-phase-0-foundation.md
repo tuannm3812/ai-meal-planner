@@ -18,7 +18,11 @@
 - uv pinned to `0.11.29` in CI — `uv export` output is deterministic per uv version, so an unpinned version would make the requirements-drift check fail on version skew.
 - **Do not modify `.gitignore`.** It already implements the §8 blanket-rule-plus-negation pattern for the model artifact, and the master standard cites this repo as a correct example.
 - **Baseline to preserve: 19 passing tests.** Every task must end with `uv run pytest` reporting 19 passed. No test may be deleted, skipped, or weakened in this phase.
-- Commit messages follow §9: `<type>(<scope>): <imperative summary>`, one coherent change per commit, material detail in the body.
+- Commit messages follow §9: `<type>(<scope>): <imperative summary>`, one coherent
+  change per commit, material detail in the body. **The `(scope)` is mandatory.**
+  If a task's pre-written commit message in this plan omits it, the pre-written text
+  is wrong and this constraint governs — add a scope. Every commit body ends with
+  `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`.
 - Root `requirements.txt` stays the one-line `-r backend/requirements.txt`. Only `backend/requirements.txt` is generated.
 - API port is **8000** everywhere after Task 6.
 - **Never `git add -A`.** Master standard §10.1 requires reviewing every path
@@ -534,7 +538,7 @@ Expected: no output, exit code 0.
 ```bash
 git add .github/workflows/ci.yml
 git commit -F - <<'MSG'
-ci: gate on ruff, both Python versions, requirements drift and the frontend
+ci(workflows): gate on ruff, both Python versions, drift and the frontend
 
 CI previously ran compileall plus pytest on Python 3.11 only. Ruff was
 configured and never executed; the frontend lint and build scripts existed
@@ -819,7 +823,7 @@ outside this task's scope — do not stage them.
 
 ```bash
 git commit -F - <<'MSG'
-docs: reshape documentation to Shape B
+docs(structure): reshape documentation to Shape B
 
 Master standard section 2 defines Shape B for app and product repos and
 permits reshaping repos that are being substantially reworked anyway, which
