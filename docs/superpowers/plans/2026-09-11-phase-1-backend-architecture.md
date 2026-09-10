@@ -26,6 +26,13 @@
   `backend/`.** `streamlit_app/app.py` calls the agents directly and has no test coverage, so a
   missed caller there breaks local demo mode silently while the suite stays green. This already
   happened once in Task 1. Use `grep -rn "<name>" --include="*.py" . | grep -v node_modules`.
+- **`kill %1` does not stop uvicorn.** `uv run` spawns a child, so killing the job leaves the
+  server bound to port 8000 and the next task's live check fails confusingly. After any live
+  check run:
+  ```bash
+  kill %1 2>/dev/null; pkill -f "uvicorn backend.app.main:app" 2>/dev/null
+  lsof -i :8000 || echo "port 8000 free"
+  ```
 
 ## Critical Domain Facts
 
