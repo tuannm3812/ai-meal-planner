@@ -194,3 +194,19 @@ def test_reconciliation_reports_the_compounded_scale_factor() -> None:
     # PortionScalingMetadata.scale_factor has gt=0 validation; confirm the
     # compounded value still satisfies it.
     assert updated_plan.portion_scaling.scale_factor > 0
+
+
+def test_the_profile_is_read_once_per_request() -> None:
+    """Two full file reads per request was a Phase 1 finding."""
+    service = _service()
+    calls: list[str] = []
+    original = service.profile_repo.fetch_user_profile
+
+    def _counted(user_id: str) -> dict:
+        calls.append(user_id)
+        return original(user_id)
+
+    service.profile_repo.fetch_user_profile = _counted  # type: ignore[method-assign]
+    service.meal_agent.db = service.profile_repo
+    service.generate(MealRequest(craving="pasta"))
+    assert len(calls) == 1, f"profile fetched {len(calls)} times"
