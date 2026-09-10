@@ -5,7 +5,6 @@ from typing import Any
 import pandas as pd
 from pydantic import BaseModel, Field
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -42,8 +41,9 @@ class CalorieExpenditureAgent:
 
         if model_path and model_path.exists():
             try:
-                import joblib
                 import warnings
+
+                import joblib
 
                 with warnings.catch_warnings(record=True) as caught_warnings:
                     warnings.simplefilter("always")
@@ -122,7 +122,9 @@ class CalorieExpenditureAgent:
             f"{sorted(cls._TRAINED_SEX_CATEGORIES)} and may return a degraded prediction."
         )
 
-    def _predict_exercise_calories(self, request: CalorieExpenditureRequest, normalized_sex: str) -> float:
+    def _predict_exercise_calories(
+        self, request: CalorieExpenditureRequest, normalized_sex: str
+    ) -> float:
         row = {
             "Sex": normalized_sex,
             "Age": request.age,
@@ -158,5 +160,6 @@ class CalorieExpenditureAgent:
         if not health_conditions:
             return []
         return [
-            "Health conditions are used as recommendation constraints only; this is not medical advice."
+            "Health conditions are used as recommendation constraints only; "
+            "this is not medical advice."
         ]

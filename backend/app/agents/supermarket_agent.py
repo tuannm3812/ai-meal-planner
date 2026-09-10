@@ -1,10 +1,9 @@
 import logging
-from typing import Any, Dict, List
+from typing import Any
 
 from pydantic import BaseModel, Field
 
 from ..schemas.requests import Ingredient
-
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +27,12 @@ class AgentMetadata(BaseModel):
     agent_name: str
     source: str
     confidence: float = Field(ge=0, le=1)
-    warnings: List[str] = Field(default_factory=list)
+    warnings: list[str] = Field(default_factory=list)
 
 
 class SupermarketPayload(BaseModel):
     store_details: StoreDetails
-    shopping_list: List[ShoppingListItem]
+    shopping_list: list[ShoppingListItem]
     total_estimated_cost: float
     metadata: AgentMetadata
 
@@ -43,7 +42,9 @@ class SupermarketAgent:
         self.maps_api_key = maps_api_key
         self.inventory_api_key = inventory_api_key
 
-    def generate_shopping_list(self, ingredients: List[Ingredient], user_location: str) -> SupermarketPayload:
+    def generate_shopping_list(
+        self, ingredients: list[Ingredient], user_location: str
+    ) -> SupermarketPayload:
         store = self._locate_nearest_store(user_location)
         shopping_list_items = []
         warnings = []
@@ -105,7 +106,7 @@ class SupermarketAgent:
             location_source="generic_estimate",
         )
 
-    def _map_inventory_and_price(self, item_name: str) -> Dict[str, Any]:
+    def _map_inventory_and_price(self, item_name: str) -> dict[str, Any]:
         inventory = {
             "lean turkey mince": {
                 "sku": "Coles Turkey Mince 500g",
@@ -213,7 +214,7 @@ class SupermarketAgent:
         return "Grocery", 3.50
 
     @staticmethod
-    def _average_confidence(items: List[ShoppingListItem]) -> float:
+    def _average_confidence(items: list[ShoppingListItem]) -> float:
         if not items:
             return 0.0
         return round(sum(item.confidence for item in items) / len(items), 2)
