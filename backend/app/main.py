@@ -8,39 +8,21 @@ from fastapi import FastAPI, Header, HTTPException
 from fastapi.concurrency import run_in_threadpool
 from fastapi.middleware.cors import CORSMiddleware
 
-try:
-    from .agents.calorie_expenditure_agent import (
-        CalorieExpenditureAgent,
-        CalorieExpenditureRequest,
-    )
-    from .agents.meal_recommendation_agent import MealRecommendationAgent
-    from .agents.nutrition_verification_agent import NutritionVerificationAgent
-    from .agents.supermarket_agent import SupermarketAgent
-    from .core.config import AppSettings
-    from .repositories.storage import (
-        MealFeedbackRepository,
-        MealPlanRepository,
-        UserProfileRepository,
-    )
-    from .schemas.requests import MealFeedbackRequest, MealRequest
-    from .services.meal_planning_service import MealPlanningService
-except ImportError:
-    from backend.app.agents.calorie_expenditure_agent import (
-        CalorieExpenditureAgent,
-        CalorieExpenditureRequest,
-    )
-    from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
-    from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
-    from backend.app.agents.supermarket_agent import SupermarketAgent
-    from backend.app.core.config import AppSettings
-    from backend.app.repositories.storage import (
-        MealFeedbackRepository,
-        MealPlanRepository,
-        UserProfileRepository,
-    )
-    from backend.app.schemas.requests import MealFeedbackRequest, MealRequest
-    from backend.app.services.meal_planning_service import MealPlanningService
-
+from backend.app.agents.calorie_expenditure_agent import (
+    CalorieExpenditureAgent,
+    CalorieExpenditureRequest,
+)
+from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
+from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
+from backend.app.agents.supermarket_agent import SupermarketAgent
+from backend.app.core.config import AppSettings
+from backend.app.repositories.storage import (
+    MealFeedbackRepository,
+    MealPlanRepository,
+    UserProfileRepository,
+)
+from backend.app.schemas.requests import MealFeedbackRequest, MealRequest
+from backend.app.services.meal_planning_service import MealPlanningService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

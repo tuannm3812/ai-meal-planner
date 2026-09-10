@@ -172,12 +172,6 @@ class MealRecommendationAgent:
             warning += " Gemini base meal generation is disabled by design."
         return self._fallback_payload(craving, user_biometrics, target_calories, warning)
 
-    def predict_user_preferences(self, historical_meals: Any) -> Any:
-        train_df = historical_meals.extract_to_dataframe()
-        log_reg_clf = self._initialize_preference_classifier()
-        log_reg_clf.fit(train_df[["protein_ratio", "carb_ratio"]], train_df["user_rating"])
-        return log_reg_clf
-
     def _build_adaptation_prompt(
         self,
         payload: MealPlanPayload,
@@ -505,6 +499,3 @@ class MealRecommendationAgent:
                 warnings=[warning],
             ),
         )
-
-    def _initialize_preference_classifier(self) -> Any:
-        raise NotImplementedError("Preference modelling is planned but not enabled yet.")
