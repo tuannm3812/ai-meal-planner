@@ -1198,13 +1198,20 @@ temporary directory:
 
 ```bash
 cd "$(mktemp -d)"
-git clone "/Users/tuannm3812/Documents/GitHub/1. Study/ai-meal-planner" fresh
+git clone --branch refactor/phase-0-foundation \
+  "/Users/tuannm3812/Documents/GitHub/1. Study/ai-meal-planner" fresh
 cd fresh
+git branch --show-current   # must print refactor/phase-0-foundation
 uv sync --all-groups
 cp backend/.env.example backend/.env
 uv run pytest
 uv run ruff check .
 ```
+
+**`--branch` is essential.** A bare `git clone` checks out the default branch,
+`main`, which carries none of Phase 0's work — the verification would then pass
+against the wrong code and prove nothing. Confirm the branch before running
+anything else.
 
 Expected: `uv sync` succeeds without a preinstalled Python, `19 passed`, and no
 lint output. Then confirm the server starts:
