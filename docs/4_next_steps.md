@@ -18,8 +18,12 @@ deliberate gaps — known and accepted, not overlooked.
 ## 1. Phase 1 — Backend architecture
 
 [Spec §6](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
-Highest priority: the repository ships a trained calorie model that no user-facing
-endpoint consumes, which is a story-level flaw rather than a style one (DEC-3).
+Highest priority: `/generate-meal-plan` does not consume the trained calorie model.
+`/calorie-expenditure/predict` already routes to `CalorieExpenditureAgent`
+(`backend/app/main.py:182`), so the gap is specifically that meal planning ignores
+its `meal_calorie_budget_kcal` and recomputes BMR itself — a story-level flaw
+rather than a style one (DEC-3). Phase 1 must wire the two together, **not** add a
+second prediction endpoint.
 
 1. **Wire the calorie model into meal planning.** `/generate-meal-plan` calls
    `CalorieExpenditureAgent` through a new `services/meal_planning_service.py` and
@@ -71,6 +75,10 @@ change rather than a rewrite (DEC-4).
    extent SQLite satisfies them; Postgres itself stays in §7.*
 4. **`core/config.py` migrated to `pydantic-settings`**, replacing the hand-rolled
    `from_env` dataclass. Pydantic is already a dependency, so this removes code
+   **`pydantic-settings` is a new dependency** — it is a separate
+   distribution from `pydantic` and is in neither `pyproject.toml` nor
+   `uv.lock` today. Phase 2 must add and lock it, then re-export
+   `backend/requirements.txt`, or the drift gate fails.
    rather than adding a dependency.
 5. Schema creation via `create_all`. **Alembic is out of scope** — see §7.1.
 

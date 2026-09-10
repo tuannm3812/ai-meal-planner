@@ -52,7 +52,8 @@ Line references are to the pre-refactor `main` at commit `d9ce89e`.
 
 ### 2.3 Tests and CI
 
-- 13 tests, all unit-level against the retriever and two agents.
+- 13 test functions — **19 cases once parametrization expands them** — all
+  unit-level against the retriever and two agents.
 - **Zero endpoint tests** — `TestClient` appears nowhere in the repository.
 - No coverage at all for the nutrition agent, supermarket agent, or `rag/rules.py`;
   storage has one test covering one method.
@@ -234,6 +235,10 @@ in the body.
    Selected by a `STORAGE_BACKEND=json|sqlite` setting, defaulting to `sqlite`.
 4. **`core/config.py` migrated to `pydantic-settings`**, replacing the hand-rolled
    `from_env` dataclass. Pydantic is already a dependency.
+   **`pydantic-settings` is a new dependency** — it is a separate
+   distribution from `pydantic` and is in neither `pyproject.toml` nor
+   `uv.lock` today. Phase 2 must add and lock it, then re-export
+   `backend/requirements.txt`, or the drift gate fails.
 5. Schema creation via `create_all`. **Alembic is explicitly out of scope** and is
    recorded in `4_next_steps.md` — migrations are a real gap and will be stated as
    one rather than implied to be handled.

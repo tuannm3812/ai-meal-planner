@@ -9,7 +9,11 @@
 > embeddings. Phase 1 lands the orchestrator, the calorie wiring and the
 > reconciliation loop — see [`4_next_steps.md`](4_next_steps.md) §1 and
 > [the design spec §6](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
-> **Remove this note when Phase 1 lands.**
+> **Retire these claims one at a time, as each is implemented — do not delete the
+> whole note when Phase 1 lands.** Phase 1 covers the orchestrator, the DI
+> container, the calorie wiring (step 3) and the revision loop (step 6). It does
+> *not* cover embedding persistence in step 8, which no phase currently claims;
+> that line must survive until something actually delivers it.
 
 ## 1. High-Level Overview
 
