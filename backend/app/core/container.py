@@ -111,6 +111,13 @@ def with_repositories(
     to isolate a test would silently keep talking to the real store. This rebuilds
     the service too.
 
+    It also rebuilds ``meal_agent`` bound to the new profile store. The
+    service always passes ``profile=profile`` into ``generate_meal_payload``,
+    so ``meal_agent.db`` pointing at the old store is inert today - but that
+    parameter is optional, falling back to ``self.db.fetch_user_profile``, so
+    an omitted keyword would silently leak reads back to the real store. The
+    existing retriever is reused so the corpus is not re-embedded.
+
     Args:
         container: The container to derive from.
         user_profiles: Replacement profile store.
@@ -118,15 +125,22 @@ def with_repositories(
         meal_feedback: Replacement feedback store.
 
     Returns:
-        A new Container whose service also uses ``user_profiles``.
+        A new Container whose service and meal agent both use
+        ``user_profiles``.
     """
+    meal_agent = MealRecommendationAgent(
+        db_connection=user_profiles,
+        meal_retriever=container.meal_agent.meal_retriever,
+        enable_llm_adaptation=container.meal_agent.enable_llm_adaptation,
+    )
     return replace(
         container,
         user_profiles=user_profiles,
         meal_history=meal_history,
         meal_feedback=meal_feedback,
+        meal_agent=meal_agent,
         meal_planning_service=MealPlanningService(
-            meal_agent=container.meal_agent,
+            meal_agent=meal_agent,
             nutrition_agent=container.nutrition_agent,
             supermarket_agent=container.supermarket_agent,
             calorie_agent=container.calorie_agent,

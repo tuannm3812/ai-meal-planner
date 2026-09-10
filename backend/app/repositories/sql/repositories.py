@@ -7,7 +7,7 @@ from typing import Any
 from sqlalchemy import Engine
 from sqlmodel import Session, SQLModel, col, create_engine, desc, select
 
-from ..base import owner_of_meal_plan
+from ..base import owner_of_feedback, owner_of_meal_plan
 from .models import MealFeedbackRow, MealPlanRow
 
 DEFAULT_PROFILE: dict[str, Any] = {
@@ -147,7 +147,7 @@ class SqlMealFeedbackRepository:
         with Session(self.engine) as session:
             session.add(
                 MealFeedbackRow(
-                    user_id=str(payload.get("user_id", "")),
+                    user_id=owner_of_feedback(payload),
                     saved=bool(payload.get("saved", False)),
                     saved_at=record["saved_at"],
                     payload=record,

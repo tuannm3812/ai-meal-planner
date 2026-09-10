@@ -97,3 +97,25 @@ def owner_of_meal_plan(payload: dict[str, Any]) -> str:
         return ""
     user_id = request.get("user_id")
     return str(user_id) if user_id is not None else ""
+
+
+def owner_of_feedback(payload: dict[str, Any]) -> str:
+    """Extract the owning user id from a feedback payload.
+
+    Tolerates a missing or null ``user_id`` field, and coerces any other
+    value to ``str``, so both backends agree on malformed input. Previously
+    the SQL backend always coerced with ``str(payload.get("user_id", ""))``
+    while the JSON backend compared the raw stored value, so a non-string id
+    (or a missing one) could be attributed to a different owner depending on
+    the backend - unreachable through the HTTP API, but reachable through
+    ``scripts/migrate_json_to_sqlite.py``, which feeds legacy records
+    straight into ``save()``.
+
+    Args:
+        payload: A stored or about-to-be-stored feedback record.
+
+    Returns:
+        The user id, or an empty string when the payload does not carry one.
+    """
+    user_id = payload.get("user_id")
+    return str(user_id) if user_id is not None else ""

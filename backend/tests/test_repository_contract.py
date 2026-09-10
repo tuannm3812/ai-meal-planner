@@ -175,3 +175,29 @@ def test_a_malformed_request_field_never_poisons_reads(plan_store: Any, bad_requ
     assert [item["n"] for item in plan_store.list_for_user("u1")] == [1]
     # The malformed record is attributed to no one rather than to some real user.
     assert [item["n"] for item in plan_store.list_for_user("")] == [2]
+
+
+@pytest.mark.parametrize(
+    ("bad_payload", "expected_owner"),
+    [
+        ({"user_id": None, "n": 2}, ""),
+        ({"user_id": 42, "n": 2}, "42"),
+        ({"n": 2}, ""),
+    ],
+    ids=["none", "int", "missing_key"],
+)
+def test_a_malformed_feedback_user_id_never_poisons_reads(
+    feedback_store: Any, bad_payload: dict[str, Any], expected_owner: str
+) -> None:
+    """Both backends must attribute a malformed feedback user_id the same way.
+
+    Mirrors test_a_malformed_request_field_never_poisons_reads above. The SQL
+    backend always coerced user_id with str(...); the JSON backend compared
+    the raw stored value. A None or missing user_id must land on no one
+    (""), and a non-string id like an int must be attributed under its
+    string form - identically on both backends.
+    """
+    feedback_store.save({"user_id": "u1", "n": 1})
+    feedback_store.save(bad_payload)
+    assert [item["n"] for item in feedback_store.list_for_user("u1")] == [1]
+    assert [item["n"] for item in feedback_store.list_for_user(expected_owner)] == [2]

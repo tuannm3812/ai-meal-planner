@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 from threading import Lock
 from typing import Any
 
-from ..base import owner_of_meal_plan
+from ..base import owner_of_feedback, owner_of_meal_plan
 
 
 def _write_json_atomically(path: Path, records: list[dict[str, Any]]) -> None:
@@ -129,7 +129,7 @@ class MealFeedbackRepository:
         saved_only: bool = False,
     ) -> list[dict[str, Any]]:
         records = self._load_records()
-        user_records = [record for record in records if record.get("user_id") == user_id]
+        user_records = [record for record in records if owner_of_feedback(record) == user_id]
         if saved_only:
             user_records = [record for record in user_records if record.get("saved")]
         return list(reversed(user_records[-limit:]))
