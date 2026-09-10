@@ -4,6 +4,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
 from ..schemas.common import MealAgentMetadata as AgentMetadata
 from ..schemas.requests import Ingredient
@@ -371,53 +372,7 @@ class MealRecommendationAgent:
 
     @staticmethod
     def _estimate_ingredient_calories(ingredients: list[Ingredient]) -> float:
-        calories_per_100g = {
-            "avocado": 160,
-            "baby spinach": 23,
-            "banana": 89,
-            "black beans": 132,
-            "broccoli": 35,
-            "brown rice": 123,
-            "chicken breast": 165,
-            "chickpeas": 164,
-            "coconut aminos": 60,
-            "corn tortilla": 218,
-            "cottage cheese": 98,
-            "cucumber": 15,
-            "firm tofu": 144,
-            "gluten-free bread": 247,
-            "gluten-free bun": 260,
-            "gluten-free pasta": 350,
-            "greek yogurt": 59,
-            "lean beef mince": 176,
-            "lean beef steak": 170,
-            "lean turkey mince": 150,
-            "low sodium chicken broth": 7,
-            "low sodium soy sauce": 53,
-            "mixed salad greens": 15,
-            "mixed vegetables": 65,
-            "oat milk": 43,
-            "olive oil": 884,
-            "peanut butter": 588,
-            "rice noodles": 364,
-            "rolled oats": 389,
-            "salmon fillet": 208,
-            "sesame oil": 884,
-            "shrimp": 85,
-            "soy milk": 33,
-            "soy sauce": 53,
-            "soy yogurt": 54,
-            "sunflower seed butter": 617,
-            "sweet potato": 86,
-            "tomato": 18,
-            "tomato passata": 33,
-            "tuna": 116,
-            "whole egg": 143,
-            "whole wheat bread": 247,
-            "whole wheat hamburger bun": 260,
-            "whole wheat tortilla": 310,
-            "wholemeal pasta": 348,
-        }
+        calories_per_100g = load_reference("ingredient_calories")
         return sum(
             calories_per_100g.get(ingredient.item_name.strip().lower(), 120)
             * ingredient.base_quantity_grams
@@ -434,46 +389,14 @@ class MealRecommendationAgent:
     ) -> MealPlanPayload:
         craving_lower = craving.lower()
 
-        if "noodle" in craving_lower or "asian" in craving_lower:
-            meal_name = "High-Protein Asian Tofu Noodle Bowl"
-            ingredients = [
-                {"item_name": "firm tofu", "base_quantity_grams": 180},
-                {"item_name": "rice noodles", "base_quantity_grams": 90},
-                {"item_name": "broccoli", "base_quantity_grams": 120},
-                {"item_name": "soy sauce", "base_quantity_grams": 20},
-            ]
-        elif "pasta" in craving_lower:
-            meal_name = "High-Protein Tomato Turkey Pasta"
-            ingredients = [
-                {"item_name": "lean turkey mince", "base_quantity_grams": 160},
-                {"item_name": "wholemeal pasta", "base_quantity_grams": 90},
-                {"item_name": "tomato passata", "base_quantity_grams": 160},
-                {"item_name": "baby spinach", "base_quantity_grams": 60},
-            ]
-        elif "salad" in craving_lower:
-            meal_name = "Chicken Avocado Power Salad"
-            ingredients = [
-                {"item_name": "chicken breast", "base_quantity_grams": 170},
-                {"item_name": "mixed salad greens", "base_quantity_grams": 120},
-                {"item_name": "avocado", "base_quantity_grams": 70},
-                {"item_name": "brown rice", "base_quantity_grams": 80},
-            ]
-        elif "tofu" in craving_lower or "vegan" in craving_lower:
-            meal_name = "Tofu Rice Bowl"
-            ingredients = [
-                {"item_name": "firm tofu", "base_quantity_grams": 180},
-                {"item_name": "brown rice", "base_quantity_grams": 90},
-                {"item_name": "broccoli", "base_quantity_grams": 120},
-                {"item_name": "soy sauce", "base_quantity_grams": 20},
-            ]
-        else:
-            meal_name = "High-Protein Turkey Burger Bowl"
-            ingredients = [
-                {"item_name": "lean turkey mince", "base_quantity_grams": 160},
-                {"item_name": "whole wheat hamburger bun", "base_quantity_grams": 60},
-                {"item_name": "mixed salad greens", "base_quantity_grams": 100},
-                {"item_name": "tomato", "base_quantity_grams": 80},
-            ]
+        fallback_meals = load_reference("fallback_meals")
+        selected = fallback_meals[-1]
+        for candidate in fallback_meals:
+            if any(keyword in craving_lower for keyword in candidate["keywords"]):
+                selected = candidate
+                break
+        meal_name = selected["meal_name"]
+        ingredients = selected["ingredients"]
 
         return MealPlanPayload(
             user_context=UserContext(

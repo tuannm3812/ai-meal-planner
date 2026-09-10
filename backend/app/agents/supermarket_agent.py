@@ -3,6 +3,7 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..rag.reference_data import load_reference
 from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
 
@@ -101,83 +102,7 @@ class SupermarketAgent:
         )
 
     def _map_inventory_and_price(self, item_name: str) -> dict[str, Any]:
-        inventory = {
-            "lean turkey mince": {
-                "sku": "Coles Turkey Mince 500g",
-                "aisle": "Meat & Poultry",
-                "price": 6.50,
-            },
-            "ground turkey (93% lean)": {
-                "sku": "Coles Turkey Mince 500g",
-                "aisle": "Meat & Poultry",
-                "price": 6.50,
-            },
-            "chicken breast": {
-                "sku": "Chicken Breast Fillets 500g",
-                "aisle": "Meat & Poultry",
-                "price": 7.80,
-            },
-            "firm tofu": {
-                "sku": "Firm Tofu 450g",
-                "aisle": "Plant-Based Protein",
-                "price": 4.20,
-            },
-            "whole wheat hamburger bun": {
-                "sku": "Wholemeal Burger Buns 6pk",
-                "aisle": "Bakery",
-                "price": 4.00,
-            },
-            "wholemeal pasta": {
-                "sku": "Wholemeal Pasta 500g",
-                "aisle": "Pantry",
-                "price": 2.80,
-            },
-            "rice noodles": {
-                "sku": "Rice Noodles 375g",
-                "aisle": "Asian Foods",
-                "price": 2.70,
-            },
-            "brown rice": {
-                "sku": "Brown Rice 1kg",
-                "aisle": "Pantry",
-                "price": 3.20,
-            },
-            "mixed salad greens": {
-                "sku": "Fresh Salad Mix 150g",
-                "aisle": "Produce",
-                "price": 3.00,
-            },
-            "baby spinach": {
-                "sku": "Baby Spinach 120g",
-                "aisle": "Produce",
-                "price": 3.50,
-            },
-            "broccoli": {
-                "sku": "Fresh Broccoli",
-                "aisle": "Produce",
-                "price": 2.20,
-            },
-            "tomato": {
-                "sku": "Fresh Tomatoes",
-                "aisle": "Produce",
-                "price": 1.40,
-            },
-            "tomato passata": {
-                "sku": "Tomato Passata 700g",
-                "aisle": "Pantry",
-                "price": 2.30,
-            },
-            "avocado": {
-                "sku": "Fresh Avocado",
-                "aisle": "Produce",
-                "price": 2.00,
-            },
-            "soy sauce": {
-                "sku": "Soy Sauce 250ml",
-                "aisle": "Asian Foods",
-                "price": 3.00,
-            },
-        }
+        inventory = load_reference("supermarket_prices")
 
         matched_item = inventory.get(item_name.lower())
         if matched_item:
