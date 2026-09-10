@@ -15,15 +15,23 @@ Sections §1–§4 are committed work with a written design. §5 tracks structur
 those phases do not cover. §6 is product backlog with no phase yet. §7 is the
 deliberate gaps — known and accepted, not overlooked.
 
-## 1. Phase 1 — Backend architecture
+## 1. Phase 1 — Backend architecture — **DONE 2026-09-11**
+
+Delivered on `refactor/phase-1-backend-architecture`: the orchestrator and calorie
+wiring, the reconciliation loop, the dual-import and dead-code removal, the shared
+schema module, reference-data extraction, typed exceptions, the DI container, the
+router split, and response models on all eight endpoints. 19 tests at the start of
+Phase 0, 57 now. The items below are kept for traceability.
+
 
 [Spec §6](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
-Highest priority: `/generate-meal-plan` does not consume the trained calorie model.
-`/calorie-expenditure/predict` already routes to `CalorieExpenditureAgent`
-(`backend/app/main.py:182`), so the gap is specifically that meal planning ignores
-its `meal_calorie_budget_kcal` and recomputes BMR itself — a story-level flaw
-rather than a style one (DEC-3). Phase 1 must wire the two together, **not** add a
-second prediction endpoint.
+~~Highest priority: `/generate-meal-plan` does not consume the trained calorie model.~~
+**Resolved 2026-09-11.** `/generate-meal-plan` now routes through
+`MealPlanningService`, which calls `CalorieExpenditureAgent` and passes
+`meal_calorie_budget_kcal` to the recommendation agent; the meal agent's own
+`calculate_bmr` is deleted. Verified live: the response reports
+`model_version: hist_gradient_boosting_deep_v0.1.0` and the meal plan's
+`caloric_target` equals the agent's budget.
 
 1. **Wire the calorie model into meal planning.** `/generate-meal-plan` calls
    `CalorieExpenditureAgent` through a new `services/meal_planning_service.py` and

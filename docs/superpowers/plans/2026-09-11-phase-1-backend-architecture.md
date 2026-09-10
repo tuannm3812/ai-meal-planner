@@ -2109,18 +2109,18 @@ Per spec §6: done when `/generate-meal-plan` demonstrably uses the model's calo
 response includes reconciliation metadata, `/docs` shows full response schemas, and a provider
 failure returns a non-500 status with no internal detail in the body.
 
-- [ ] `uv run pytest` → **57 passed**, no test deleted or weakened
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` → clean
-- [ ] A live `POST /generate-meal-plan` returns `calorie_budget.model_version` =
+- [x] `uv run pytest` → **57 passed**, no test deleted or weakened
+- [x] `uv run ruff check .` and `uv run ruff format --check .` → clean
+- [x] A live `POST /generate-meal-plan` returns `calorie_budget.model_version` =
       `hist_gradient_boosting_deep_v0.1.0`, and `meal_plan.user_context.caloric_target`
       equals `calorie_budget.meal_calorie_budget_kcal`
-- [ ] That response carries a `reconciliation` object with `tolerance: 0.15`
-- [ ] `/openapi.json` names a response schema for all 8 routes
-- [ ] A validation failure returns 422; no response body contains a raw exception string
-- [ ] `backend/app/main.py` is under 60 lines and contains no endpoint
-- [ ] `grep -rn "calculate_bmr\|predict_user_preferences" backend/app/` → no output
-- [ ] `git status --short` clean; no `.env` or `database/*.json` staged
-- [ ] Update `docs/2_architecture.md`'s divergence note: retire the orchestrator, DI-container,
+- [x] That response carries a `reconciliation` object with `tolerance: 0.15`
+- [x] `/openapi.json` names a response schema for all 8 routes
+- [x] A validation failure returns 422; no response body contains a raw exception string
+- [x] `backend/app/main.py` is under 60 lines and contains no endpoint
+- [x] `grep -rn "calculate_bmr\|predict_user_preferences" backend/app/` → no output
+- [x] `git status --short` clean; no `.env` or `database/*.json` staged
+- [x] Update `docs/2_architecture.md`'s divergence note: retire the orchestrator, DI-container,
       step-3 and step-6 claims **individually**. The step-8 embeddings claim must **remain** —
       Phase 1 does not deliver it. (Codex review, 2026-09-11.)
-- [ ] Append a Phase 1 entry to `docs/5_agent_log.md`; tick this checklist
+- [x] Append a Phase 1 entry to `docs/5_agent_log.md`; tick this checklist
