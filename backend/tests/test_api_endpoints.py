@@ -1,18 +1,50 @@
 """TestClient coverage for every route, using dependency overrides."""
 
+from collections.abc import Iterator
 from dataclasses import replace
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
 from backend.app.core.container import get_container
 from backend.app.main import app
+from backend.app.repositories.storage import (
+    MealFeedbackRepository,
+    MealPlanRepository,
+    UserProfileRepository,
+)
+from backend.app.services.meal_planning_service import MealPlanningService
 
 
 @pytest.fixture(name="client")
-def _client() -> TestClient:
-    """A client whose app has a real container built at startup."""
+def _client(tmp_path: Path) -> Iterator[TestClient]:
+    """A client whose repositories write to a temporary directory.
+
+    The app is started with its real container (real agents, real model),
+    but the user-profile, meal-history and meal-feedback repositories are
+    swapped for ones rooted at ``tmp_path`` so tests never touch the real
+    ``database/*.json`` files. The orchestrator is rebuilt on top of the
+    isolated profile repository too, since ``Container.meal_planning_service``
+    otherwise keeps closing over the real one.
+    """
     with TestClient(app) as test_client:
+        real = test_client.app.state.container
+        user_profiles = UserProfileRepository(tmp_path)
+        isolated = replace(
+            real,
+            user_profiles=user_profiles,
+            meal_history=MealPlanRepository(tmp_path),
+            meal_feedback=MealFeedbackRepository(tmp_path),
+            meal_planning_service=MealPlanningService(
+                meal_agent=real.meal_agent,
+                nutrition_agent=real.nutrition_agent,
+                supermarket_agent=real.supermarket_agent,
+                calorie_agent=real.calorie_agent,
+                profile_repo=user_profiles,
+            ),
+        )
+        app.dependency_overrides[get_container] = lambda: isolated
         yield test_client
     app.dependency_overrides.clear()
 
