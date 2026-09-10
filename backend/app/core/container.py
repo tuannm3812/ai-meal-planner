@@ -1,6 +1,6 @@
 """Builds the application's agents and repositories once, for injection."""
 
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -9,11 +9,8 @@ from ..agents.calorie_expenditure_agent import CalorieExpenditureAgent
 from ..agents.meal_recommendation_agent import MealRecommendationAgent
 from ..agents.nutrition_verification_agent import NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent
-from ..repositories.storage import (
-    MealFeedbackRepository,
-    MealPlanRepository,
-    UserProfileRepository,
-)
+from ..repositories.base import MealFeedbackStore, MealPlanStore, UserProfileStore
+from ..repositories.factory import build_repositories
 from ..services.meal_planning_service import MealPlanningService
 from .config import AppSettings
 
@@ -23,9 +20,9 @@ class Container:
     """The application's constructed collaborators."""
 
     settings: AppSettings
-    user_profiles: UserProfileRepository
-    meal_history: MealPlanRepository
-    meal_feedback: MealFeedbackRepository
+    user_profiles: UserProfileStore
+    meal_history: MealPlanStore
+    meal_feedback: MealFeedbackStore
     meal_agent: MealRecommendationAgent
     nutrition_agent: NutritionVerificationAgent
     supermarket_agent: SupermarketAgent
@@ -42,7 +39,7 @@ def build_container(settings: AppSettings) -> Container:
     Returns:
         A Container holding the built agents, repositories and service.
     """
-    user_profiles = UserProfileRepository(settings.data_dir)
+    user_profiles, meal_history, meal_feedback = build_repositories(settings)
     meal_agent = MealRecommendationAgent(
         db_connection=user_profiles,
         gemini_api_key=settings.gemini_api_key,
@@ -68,8 +65,8 @@ def build_container(settings: AppSettings) -> Container:
     return Container(
         settings=settings,
         user_profiles=user_profiles,
-        meal_history=MealPlanRepository(settings.data_dir),
-        meal_feedback=MealFeedbackRepository(settings.data_dir),
+        meal_history=meal_history,
+        meal_feedback=meal_feedback,
         meal_agent=meal_agent,
         nutrition_agent=nutrition_agent,
         supermarket_agent=supermarket_agent,
@@ -98,3 +95,55 @@ def get_container(request: Request) -> Container:
 
 ContainerDep = Annotated[Container, Depends(get_container)]
 """Injects the request-scoped view of the application's built container."""
+
+
+def with_repositories(
+    container: Container,
+    user_profiles: UserProfileStore,
+    meal_history: MealPlanStore,
+    meal_feedback: MealFeedbackStore,
+) -> Container:
+    """Return a copy of the container using different repositories.
+
+    Use this instead of ``dataclasses.replace`` directly. ``replace`` only
+    rewrites the Container's own fields, leaving ``meal_planning_service`` holding
+    the profile repository it captured when it was built - so an override intended
+    to isolate a test would silently keep talking to the real store. This rebuilds
+    the service too.
+
+    It also rebuilds ``meal_agent`` bound to the new profile store. The
+    service always passes ``profile=profile`` into ``generate_meal_payload``,
+    so ``meal_agent.db`` pointing at the old store is inert today - but that
+    parameter is optional, falling back to ``self.db.fetch_user_profile``, so
+    an omitted keyword would silently leak reads back to the real store. The
+    existing retriever is reused so the corpus is not re-embedded.
+
+    Args:
+        container: The container to derive from.
+        user_profiles: Replacement profile store.
+        meal_history: Replacement meal-plan store.
+        meal_feedback: Replacement feedback store.
+
+    Returns:
+        A new Container whose service and meal agent both use
+        ``user_profiles``.
+    """
+    meal_agent = MealRecommendationAgent(
+        db_connection=user_profiles,
+        meal_retriever=container.meal_agent.meal_retriever,
+        enable_llm_adaptation=container.meal_agent.enable_llm_adaptation,
+    )
+    return replace(
+        container,
+        user_profiles=user_profiles,
+        meal_history=meal_history,
+        meal_feedback=meal_feedback,
+        meal_agent=meal_agent,
+        meal_planning_service=MealPlanningService(
+            meal_agent=meal_agent,
+            nutrition_agent=container.nutrition_agent,
+            supermarket_agent=container.supermarket_agent,
+            calorie_agent=container.calorie_agent,
+            profile_repo=user_profiles,
+        ),
+    )

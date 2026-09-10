@@ -195,21 +195,35 @@ From spec §12.
    after data exists has no supported route forward. Acceptable only while the data
    is disposable local development state. This must be closed before any deployment
    holds data worth keeping, and before Postgres (§7.3).
-2. **Authentication and user accounts.** The endpoints that take a `user_id` take it on trust.
+2. **Profiles are not stored in SQL.** Both backends return the same built-in
+   default; nothing writes profiles at runtime. Real profile storage needs a write
+   path and an endpoint, neither of which exists.
+3. **The typed domain exceptions are still never raised.** `ProfileNotFound`,
+   `RetrievalUnavailable` and `NutritionProviderError` are defined and wired to
+   handlers but no production code raises them, so every failure still lands on the
+   catch-all 500. Carried from Phase 1's final review.
+4. **`deviation_after` falls back to `deviation_before`** when a reconciliation
+   retry verifies to 0 kcal, understating the miss. `within_tolerance` stays
+   correct.
+5. **The 0.65/1.6 clamp and 5 g rounding are duplicated** between `_reconcile` and
+   `MealRecommendationAgent._scale_ingredients_to_meal_target`.
+6. **`backend/app/ml/` is an empty package.** Spec §6 item 10 said to use or remove
+   it; neither happened.
+7. **Authentication and user accounts.** The endpoints that take a `user_id` take it on trust.
    Also a README roadmap item; it blocks real multi-user use, which DEC-1 places
    after the portfolio milestone.
-3. **Postgres.** Phase 2's Protocol boundary reduces this to a config change plus one
+8. **Postgres.** Phase 2's Protocol boundary reduces this to a config change plus one
    class, which is exactly why it need not be done now — no current user justifies
    adding managed infrastructure to every dev setup and to CI (DEC-4).
-4. **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
+9. **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
    targets 75–100 curated templates. It is content work, not engineering, and it
    gates the vector-database item in §6.
-5. **Using feedback signals as retrieval ranking features.** README roadmap item:
-   saved meals, likes, dislikes and ratings are collected but do not influence
-   retrieval order.
-6. **Migrating `requests` to async `httpx`.** The current `run_in_threadpool`
-   wrapping is correct, just not idiomatic — so this is a tidiness change with no
-   behavioural payoff.
-7. **Retraining or improving the calorie model.** The shipped artifact and its
-   `scikit-learn==1.6.1` pin stay as they are; §1.1 is about *using* the model, not
-   improving it.
+10. **Using feedback signals as retrieval ranking features.** README roadmap item:
+    saved meals, likes, dislikes and ratings are collected but do not influence
+    retrieval order.
+11. **Migrating `requests` to async `httpx`.** The current `run_in_threadpool`
+    wrapping is correct, just not idiomatic — so this is a tidiness change with no
+    behavioural payoff.
+12. **Retraining or improving the calorie model.** The shipped artifact and its
+    `scikit-learn==1.6.1` pin stay as they are; §1.1 is about *using* the model, not
+    improving it.

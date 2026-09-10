@@ -14,7 +14,7 @@ from backend.app.agents.nutrition_verification_agent import (
 )
 from backend.app.agents.supermarket_agent import SupermarketAgent
 from backend.app.core.config import AppSettings
-from backend.app.repositories.storage import UserProfileRepository
+from backend.app.repositories.json_store import UserProfileRepository
 from backend.app.schemas.common import AgentMetadata, MealAgentMetadata
 from backend.app.schemas.requests import Ingredient, MealRequest
 from backend.app.services.meal_planning_service import MealPlanningService
@@ -22,9 +22,13 @@ from backend.app.services.meal_planning_service import MealPlanningService
 
 def _service() -> MealPlanningService:
     settings = AppSettings.from_env()
+    # A single shared profile repository, not two independent instances: the
+    # service and the meal agent must read from the same store, the same way
+    # Container.with_repositories now keeps them in sync (see container.py).
+    profile_repo = UserProfileRepository(settings.data_dir)
     return MealPlanningService(
         meal_agent=MealRecommendationAgent(
-            db_connection=UserProfileRepository(settings.data_dir),
+            db_connection=profile_repo,
             meal_corpus_path=settings.meal_corpus_path,
         ),
         nutrition_agent=NutritionVerificationAgent(),
@@ -33,7 +37,7 @@ def _service() -> MealPlanningService:
             model_path=settings.calorie_model_path,
             model_version=settings.calorie_model_version,
         ),
-        profile_repo=UserProfileRepository(settings.data_dir),
+        profile_repo=profile_repo,
     )
 
 
@@ -194,3 +198,18 @@ def test_reconciliation_reports_the_compounded_scale_factor() -> None:
     # PortionScalingMetadata.scale_factor has gt=0 validation; confirm the
     # compounded value still satisfies it.
     assert updated_plan.portion_scaling.scale_factor > 0
+
+
+def test_the_profile_is_read_once_per_request() -> None:
+    """Two full file reads per request was a Phase 1 finding."""
+    service = _service()
+    calls: list[str] = []
+    original = service.profile_repo.fetch_user_profile
+
+    def _counted(user_id: str) -> dict:
+        calls.append(user_id)
+        return original(user_id)
+
+    service.profile_repo.fetch_user_profile = _counted  # type: ignore[method-assign]
+    service.generate(MealRequest(craving="pasta"))
+    assert len(calls) == 1, f"profile fetched {len(calls)} times"
