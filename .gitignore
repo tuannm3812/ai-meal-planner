@@ -18,11 +18,6 @@ database/meal_feedback.json
 database/user_profiles.json
 database/*.db
 
-# Coverage artifacts (pytest-cov, added in Phase 3)
-.coverage
-.coverage.*
-htmlcov/
-frontend/coverage/
 data/raw/
 data/processed/
 data/external/
@@ -38,3 +33,9 @@ models/**/*.metrics.json
 .idea/
 .vscode/*
 !.vscode/extensions.json
+
+# Coverage artifacts (pytest-cov, added in Phase 3)
+.coverage
+.coverage.*
+htmlcov/
+frontend/coverage/

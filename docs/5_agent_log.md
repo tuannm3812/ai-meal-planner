@@ -531,6 +531,14 @@ dependency group, which is not installed in the dev environment or CI — the
 uncovered lines are an unlocked extra, not a gap in the retrieval tests that
 do run (`retriever.py` is at 88%).
 
+**Left uncovered, but not on purpose:** `agents/meal_recommendation_agent.py`
+sits at 72% — 42 of its 152 statements are untested (lines 96-97, 100-111,
+166-169, 177-183, 204, 213, 302-322, 355, 392-403), the largest remaining gap
+in the backend. Unlike `embedding_index.py` above, there is no
+optional-dependency excuse: this is core business logic that ships in every
+install. It is a real gap, tracked in `docs/4_next_steps.md` §7.14, not
+addressed by this task — writing tests for it is future work.
+
 **Verified by running:** `uv run pytest` → 214 passed, coverage 89.98%,
 floor 89 enforced; `npm test` → 5 passed; `uv run ruff check .` and `uv run
 ruff format --check .` clean. No production code changed — this task touched
