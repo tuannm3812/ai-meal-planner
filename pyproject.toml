@@ -45,8 +45,12 @@ target-version = "py311"
 # outputs are the only surviving record of a run (master standard §12.1), so the
 # source must keep matching what produced them (§4). Reformatting them breaks
 # that correspondence, so ruff does not touch them.
-extend-exclude = ["*.ipynb"]
-# force-exclude so an explicitly-named path cannot bypass the rule above.
+# Markdown is excluded because ruff formats Python code blocks inside it as if
+# each were a standalone module. Spec and plan documents quote *fragments* - a
+# method shown at its class indentation, a partial call site - so formatting them
+# that way is wrong, not just noisy: ruff dedents methods out of their class.
+extend-exclude = ["*.ipynb", "*.md"]
+# force-exclude so an explicitly-named path cannot bypass the rules above.
 force-exclude = true
 
 [tool.ruff.lint]
