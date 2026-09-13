@@ -8,8 +8,10 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
-Status as of 2026-09-10: Phase 0 (tooling, CI, standards) is landing now. Phases
-1–4 are specified but unplanned. 19 tests pass; the meal corpus holds 34 templates.
+Status as of 2026-09-14: Phases 0–3 (tooling, CI, standards, backend architecture,
+storage, tests and CI) are done. Phase 4 is specified but unplanned. 222 backend
+tests and 8 frontend tests pass; backend coverage is 91%, floor 89%; the meal
+corpus holds 34 templates.
 
 Sections §1–§4 are committed work with a written design. §5 tracks structural moves
 those phases do not cover. §6 is product backlog with no phase yet. §7 is the
@@ -40,11 +42,12 @@ Phase 0, 57 now. The items below are kept for traceability.
    moves into the calorie agent as the no-model fallback, where estimating
    expenditure belongs. *Supersedes the README roadmap item "connect
    `/generate-meal-plan` more tightly with `/calorie-expenditure/predict`".*
-2. **Reconciliation loop.** The orchestrator compares the portion-scaled estimate
-   against the verified total and rescales portions once if the deviation exceeds a
-   configurable tolerance (default 15%), reporting `reconciliation` metadata.
-   Exactly one retry. This is Workflow steps 5–6 of [`1_brief.md`](1_brief.md),
-   currently unimplemented.
+2. **Done (Phase 1).** **Reconciliation loop.** The orchestrator compares the
+   portion-scaled estimate against the verified total and rescales portions once
+   if the deviation exceeds a configurable tolerance (default 15%), reporting
+   `reconciliation` metadata. Exactly one retry. This was Workflow steps 5–6 of
+   [`1_brief.md`](1_brief.md); delivered as `_reconcile` in
+   `services/meal_planning_service.py`.
 3. **Delete the dual-import block** in `main.py:11-40` — Phase 0 packaged
    `backend` with hatchling, so `from backend.app...` now always resolves and the
    fallback is dead weight.
@@ -64,12 +67,12 @@ Phase 0, 57 now. The items below are kept for traceability.
 11. **Google-style docstrings** on every public class and function in each module
     this phase touches.
 
-## 2. Phase 2 — Storage
+## 2. Phase 2 — Storage — **DONE 2026-09-11**
 
 [Spec §7](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Second because the current single-file JSON store loads everything and filters in
 Python, and because the Protocol boundary is what makes Postgres a later config
-change rather than a rewrite (DEC-4).
+change rather than a rewrite (DEC-4). The items below are kept for traceability.
 
 1. **`repositories/base.py`** — a `Protocol` per repository: `UserProfileRepository`,
    `MealPlanRepository`, `MealFeedbackRepository`.
@@ -81,20 +84,21 @@ change rather than a rewrite (DEC-4).
    `sqlite`. *Supersedes the README roadmap item and Later Scope entry "move local
    JSON stores for history, feedback and profiles to a managed database", to the
    extent SQLite satisfies them; Postgres itself stays in §7.*
-4. **`core/config.py` migrated to `pydantic-settings`**, replacing the hand-rolled
-   `from_env` dataclass. Pydantic is already a dependency, so this removes code
-   **`pydantic-settings` is a new dependency** — it is a separate
-   distribution from `pydantic` and is in neither `pyproject.toml` nor
-   `uv.lock` today. Phase 2 must add and lock it, then re-export
-   `backend/requirements.txt`, or the drift gate fails.
-   rather than adding a dependency.
+4. **Done (Phase 2).** `core/config.py` migrated to `pydantic-settings`, replacing
+   the hand-rolled `from_env` dataclass. `pydantic-settings` is a separate
+   distribution from `pydantic`; Phase 2 added it to `pyproject.toml` and
+   `uv.lock` and re-exported `backend/requirements.txt` to match.
 5. Schema creation via `create_all`. **Alembic is out of scope** — see §7.1.
 
-## 3. Phase 3 — Tests and CI
+## 3. Phase 3 — Tests and CI — **DONE 2026-09-11**
 
 [Spec §8](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Third because it depends on Phase 1's DI container and Phase 2's Protocol boundary;
-running it earlier would test code about to be replaced.
+running it earlier would test code about to be replaced. Raised backend coverage
+82% → 89.98% (214 tests) at Phase 3 completion; a later Codex-review pass added
+four more endpoint error-path tests and three more frontend tests, bringing the
+current totals to 222 backend tests, 8 frontend tests, and 91% coverage. Also
+added the network guard. The items below are kept for traceability.
 
 - **Endpoint tests** for all 8 routes, happy and error path, via `TestClient` with DI
   overrides supplying fake agents. No network access in CI.
@@ -137,17 +141,25 @@ first would mean doing it twice.
 From the Current-to-Target Migration list, checked against the working tree on
 2026-09-10. The target layout is in [`2_architecture.md`](2_architecture.md) §5.
 
-- [ ] **Route handlers out of `main.py`** into `backend/app/api/routes/` — covered by
-      §1.5; `backend/app/api/` does not exist yet.
-- [ ] **Agent response models into `backend/app/schemas/`** — covered by §1.6–1.7.
-      `schemas/` currently holds `requests.py` only; response models still live
-      beside the agents that return them.
+- [x] **Done (Phase 1).** **Route handlers out of `main.py`** into
+      `backend/app/api/routes/` — covered by §1.5; delivered as
+      `api/routes/{health,meal_plans,calories,feedback}.py`.
+- [x] **Done (Phase 1).** **Agent response models into `backend/app/schemas/`** —
+      covered by §1.6–1.7. `schemas/responses.py` now sets `response_model=` on
+      all 8 routes. Per-agent payload types (`CalorieExpenditureResponse`,
+      `MealPlanPayload`, `MealNutrition`, `SupermarketPayload`) still live beside
+      the agents that return them and are composed into `schemas/responses.py`;
+      that split is intentional, not a leftover gap.
 - [ ] **Extract the USDA and FatSecret clients into `backend/app/services/`** — not
-      claimed by any phase, so it is tracked here. Both providers are called from
-      inside `agents/nutrition_verification_agent.py`; `services/` exists but holds
-      only `__init__.py`. Do this alongside §1 while that agent is already open.
-- [ ] **Split storage repositories by domain** — covered by §2.1–2.3.
-      `repositories/storage.py` is a single module today.
+      claimed by any phase, so it is tracked here. Both providers are still called
+      from inside `agents/nutrition_verification_agent.py`. `services/` now also
+      holds `meal_planning_service.py` (added in Phase 1 for the calorie-model
+      wiring), but that is unrelated to this item — no USDA/FatSecret extraction
+      has happened. Do this alongside §1 while that agent is already open.
+- [x] **Done (Phase 2).** **Split storage repositories by domain** — covered by
+      §2.1–2.3. `repositories/storage.py` no longer exists; it is
+      `repositories/json_store/repositories.py` (`UserProfileRepository`,
+      `MealPlanRepository`, `MealFeedbackRepository`) and `repositories/sql/`.
 - [ ] **Reusable calorie-model feature transforms under `backend/app/ml/`** — the
       package is empty. §1.10 decides its fate: populate it or delete it, not leave
       it as an empty promise.
@@ -227,3 +239,43 @@ From spec §12.
 12. **Retraining or improving the calorie model.** The shipped artifact and its
     `scikit-learn==1.6.1` pin stay as they are; §1.1 is about *using* the model, not
     improving it.
+13. **`kidney_disease` has no substitution path.** It is the only constraint group
+    with block-list entries but no `SUBSTITUTION_RULES` match, so a meal containing
+    kidney beans, lentils, chickpeas, tofu or soy sauce is rejected outright for
+    those users rather than adapted. This may well be the right conservative
+    default — the vegan pattern would swap egg for tofu, and tofu is itself
+    kidney-blocked — but it was never written down as intentional. The current
+    behaviour is pinned by
+    `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
+    so changing it will break a test and force a deliberate decision.
+14. **`meal_recommendation_agent.py` is at 72% coverage.** Unlike
+    `rag/embedding_index.py` (32%, excused because its sentence-transformers/FAISS
+    path sits behind the uninstalled `semantic-rag` optional dependency group), this
+    is core business logic with no optional-dependency excuse: 42 statements go
+    untested, the largest remaining gap in the backend —
+    `agents/meal_recommendation_agent.py:96-97, 100-111, 166-169, 177-183, 204, 213,
+    302-322, 355, 392-403`. This is a real remaining gap, not an intentional
+    exclusion, and is unassigned to any phase.
+15. **Three deliberate deviations from spec §8, found by a Codex review of
+    Phases 1–3 and recorded here rather than silently left as gaps:**
+    - §8 asks for happy- and error-path tests on all eight endpoints. `GET /`
+      and `GET /health` take no input at all, so there is no
+      input-validation error path to test for them; "all eight, happy and
+      error path" is satisfied for the six endpoints that take input
+      (`/generate-meal-plan`, `/calorie-expenditure/predict`,
+      `/meal-feedback`, `/meal-plans/{user_id}`, `/meal-feedback/{user_id}`,
+      `/saved-meals/{user_id}`).
+    - §8 asks for endpoint tests via "DI overrides supplying fake agents."
+      `backend/tests/test_api_endpoints.py` instead injects real agents
+      backed by temporary repositories (see its `client` fixture). This is a
+      deliberate choice, not an oversight: it exercises the real pipeline
+      end-to-end, and network isolation is guaranteed by the conftest
+      network guard rather than by faking, so it is stronger coverage than
+      the spec's letter asks for.
+    - §8 asks for frontend tests on "the API client and one test per tab
+      component." There is no extracted API client to test yet — that is
+      Phase 4's `api/client.js` split (§4). `App.test.jsx` instead covers
+      the request/response/error contract directly against `MealPlanTab` as
+      it exists today (a fired `axios.post`, a rendered error banner on
+      rejection, and a rendered plan on success), which is what is testable
+      before Phase 4 extracts a client.

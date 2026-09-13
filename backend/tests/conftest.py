@@ -4,6 +4,7 @@ Isolates the suite from the developer's real application data.
 """
 
 import os
+import socket
 
 import pytest
 
@@ -49,3 +50,38 @@ def pytest_sessionstart(session: pytest.Session) -> None:
             os.environ.pop("STORAGE_BACKEND", None)
         else:
             os.environ["STORAGE_BACKEND"] = original_storage_backend
+
+
+@pytest.fixture(autouse=True)
+def _block_network(monkeypatch: pytest.MonkeyPatch, request: pytest.FixtureRequest) -> None:
+    """Fail any test that opens a real network connection.
+
+    The spec requires no network access in CI. Agents reach the internet through
+    ``urllib.request.urlopen``, so tests that need to exercise a provider must
+    patch it themselves; anything that slips through hits this guard instead of
+    silently becoming an integration test.
+
+    ``socket.socket.connect`` is patched too, but is not sufficient alone: a host like
+    ``example.invalid`` fails DNS resolution in ``socket.getaddrinfo`` before a
+    socket is ever created, so ``connect`` is never reached. Blocking
+    ``urllib.request.urlopen`` (the entry point stdlib HTTP calls go through)
+    and ``socket.create_connection`` (the lower-level primitive ``requests`` and
+    other HTTP clients build on, which resolves and connects in one step) closes
+    that gap.
+
+    Mark a test ``@pytest.mark.allow_network`` to opt out.
+
+    Args:
+        monkeypatch: Pytest's patching fixture.
+        request: Used to read the opt-out marker.
+    """
+    if request.node.get_closest_marker("allow_network"):
+        return
+
+    def _blocked(*args: object, **kwargs: object) -> None:
+        raise RuntimeError("network access is blocked in tests; patch the caller instead")
+
+    monkeypatch.setattr("urllib.request.urlopen", _blocked)
+    monkeypatch.setattr(socket, "create_connection", _blocked)
+    monkeypatch.setattr(socket.socket, "connect", _blocked)
+    monkeypatch.setattr(socket.socket, "connect_ex", _blocked)

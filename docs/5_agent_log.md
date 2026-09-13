@@ -457,3 +457,162 @@ cannot alter an existing table, verified by adding a column and confirming a sec
 return the same built-in default. The typed domain exceptions defined in Phase 1
 are still never raised. SQLite runs in the default rollback-journal mode; WAL would
 help if writes ever contend.
+
+## 2026-09-11 — Claude Sonnet 5 — Phase 3 tests, CI, and the coverage gate
+
+**Delivered** on `refactor/phase-3-tests-and-ci`. Backend coverage of
+`backend/app` went **82% → 90%** (1337 statements, 134 missed), and the frontend
+got its first tests. Per-module: `nutrition_verification_agent.py` 51% → 97%,
+`supermarket_agent.py` 79% → 100%, `rag/rules.py` 90% → 100%. Test count 122 at
+the start of the phase → **214 backend + 5 frontend**, none skipped.
+
+**A network guard now enforces the spec's "no network access in CI."**
+`backend/tests/conftest.py` patches `urllib.request.urlopen`,
+`socket.socket.connect` and `socket.create_connection` to raise `RuntimeError`
+unless a test is marked `@pytest.mark.allow_network`; `test_network_guard.py`
+exercises all three vectors directly.
+
+**CI now enforces the coverage floor it measures, not an aspiration.**
+`uv run pytest --cov=backend/app --cov-report=term` reported `TOTAL 1337 134
+90%` (Step 1 of this task). Per the plan, the floor is that number rounded down
+minus one: **89**. `pyproject.toml`'s `addopts` is now
+`"-q --cov=backend/app --cov-report=term-missing --cov-fail-under=89"`, so
+every local `uv run pytest` — not just CI — now runs and enforces coverage; the
+wall-clock cost is a coverage-instrumentation overhead, roughly 5s → 7s for the
+full suite. The `frontend` job gained a `Test` step (`npm test`, i.e. `vitest
+run`) between Lint and Build, so a component that renders nothing can no
+longer pass CI. The backend job needed no workflow change: `uv run pytest`
+already picks the floor up from `addopts`.
+
+**Both gates were proved to fail, not just configured.** Raising
+`--cov-fail-under` to 99 made `uv run pytest` exit 1 with `FAIL Required test
+coverage of 99% not reached. Total coverage: 89.98%`; restoring 89 returned to
+exit 0 with `Required test coverage of 89% reached`. Inverting one assertion in
+`frontend/src/App.test.jsx` (`toBeInTheDocument` → `not.toBeInTheDocument`)
+made `npm test` exit 1 with the Vitest failure for that assertion, 4 of 5 tests
+otherwise still passing; reverting it returned 5/5 passing, exit 0. Both edits
+were reverted before commit — `git diff` shows no change to `App.test.jsx`.
+
+**Two test-quality defects were found by review during this phase, not by the
+tests themselves:**
+
+1. **A cooldown test read the constant it was supposed to pin.** The suite
+   looped `range(_FAILURE_THRESHOLD)` and asserted against that same constant,
+   so mutating `_FAILURE_THRESHOLD` from 3 to 99 produced no failure — the test
+   moved with the mutation instead of constraining it. Fixed by hardcoding the
+   literal `3` in the loops and adding a test that pins
+   `_FAILURE_THRESHOLD == 3` and `_COOLDOWN_SECONDS == 120` against the
+   values the agent's own warning message and the README promise. Verified:
+   the same mutation now fails three tests where it previously failed none.
+2. **The network guard itself initially left raw sockets open.** It patched
+   `urlopen`, `create_connection` and `httpx`, but not `socket.connect` to a
+   literal IP — no DNS lookup, no urllib, straight to the network. The gap
+   existed because the guard's own test used `example.invalid`, which fails in
+   `getaddrinfo` before a socket is ever created, so the missing patch looked
+   effective when it was not. Fixed by patching `socket.socket.connect` too and
+   testing it against a literal IP instead of a hostname.
+
+**An open product question, pinned by tests rather than resolved:**
+`kidney_disease` is the only constraint group with a block list in
+`blocked_groups_for_ingredient` (kidney beans, lentils, chickpeas, tofu, soy
+sauce) but no corresponding `SUBSTITUTION_RULES` entry. Every other blocked
+group — egg, dairy, gluten, soy, vegan, vegetarian — has at least one
+substitution that lets a meal survive; a meal containing a kidney-blocked
+ingredient is rejected outright instead. This may be the right conservative
+default: the vegan pattern would suggest swapping egg for tofu, but tofu is
+itself on the kidney_disease block list, so a naive substitution would
+recreate the problem it was meant to solve. It was never written down as
+intentional, though. The behaviour is now covered by tests, so a future change
+to it will be a deliberate decision, not an accidental regression.
+
+**Left uncovered on purpose:** `rag/embedding_index.py` sits at 32%. Its
+sentence-transformers/FAISS code path is behind the `semantic-rag` optional
+dependency group, which is not installed in the dev environment or CI — the
+uncovered lines are an unlocked extra, not a gap in the retrieval tests that
+do run (`retriever.py` is at 88%).
+
+**Left uncovered, but not on purpose:** `agents/meal_recommendation_agent.py`
+sits at 72% — 42 of its 152 statements are untested (lines 96-97, 100-111,
+166-169, 177-183, 204, 213, 302-322, 355, 392-403), the largest remaining gap
+in the backend. Unlike `embedding_index.py` above, there is no
+optional-dependency excuse: this is core business logic that ships in every
+install. It is a real gap, tracked in `docs/4_next_steps.md` §7.14, not
+addressed by this task — writing tests for it is future work.
+
+**Verified by running:** `uv run pytest` → 214 passed, coverage 89.98%,
+floor 89 enforced; `npm test` → 5 passed; `uv run ruff check .` and `uv run
+ruff format --check .` clean. No production code changed — this task touched
+only `pyproject.toml`, `.github/workflows/ci.yml`, and this log.
+
+## 2026-09-14 — Codex — independent review of Claude's Phases 1–3
+
+**Scope:** reviewed the work after the Phase 0 review through `6a0934a`, with
+particular attention to the Phase 3 test/CI claims and the repository handoff
+documents. Production code from Phases 1–2 was inspected and exercised by the
+full suite; no new application regression was identified in this pass. This
+entry is the only tracked change made by the review.
+
+**Assessment:** the implemented gates are healthy, but the repository currently
+describes Phase 3 and its own state more strongly than the evidence supports.
+The following are documentation and test-scope findings; the already-recorded
+product gaps in `docs/4_next_steps.md` are not repeated as new defects.
+
+1. **Medium — `AGENTS.md` is now an actively misleading handoff.** Its Current
+   state still says only Phase 0 exists with 19 tests. Its Open risks still say
+   the orchestrator does not exist, the trained model is not wired into meal
+   planning, and JSON is the sole non-atomic store. Phases 1–3 delivered the
+   orchestrator and model wiring, atomic JSON writes, default SQLite storage,
+   and 217 backend tests. Because every future agent is instructed to read this
+   file first, stale claims here are more consequential than ordinary README
+   drift. Update it to the current phase and retain only live risks.
+2. **Medium — Phase 3 is marked done without all of spec §8's stated test
+   scope.** The spec requires all eight endpoints on happy and error paths,
+   using DI overrides with fake agents. `test_api_endpoints.py` reaches every
+   route, but supplies the real model and agents with temporary repositories;
+   only `/generate-meal-plan` and `/meal-feedback` have explicit error cases.
+   The other routes have no error-path test. The same section asks the frontend
+   suite to cover the API client and one test per tab component. The five
+   `App.test.jsx` cases cover rendering, tab switching and absence of requests
+   on initial render; none triggers or asserts an Axios request, successful
+   response, provider error, or UI error state. There is no extracted API
+   client or tab component yet. Either narrow the approved spec to the smaller
+   exit gate that actually passed, or add the missing behavior tests. The
+   current `docs/4_next_steps.md` wording repeats the unfulfilled broader claim.
+3. **Medium — completed items in `docs/4_next_steps.md` remain written as open
+   current facts.** Section 2 says `pydantic-settings` is absent from
+   `pyproject.toml` and `uv.lock`, although Phase 2 added it. The surrounding
+   sentence now contradicts itself and is grammatically broken. Section 5 says
+   `backend/app/api/` does not exist, schemas contain only requests, services
+   contains only `__init__.py`, and storage is one module; all were changed by
+   Phases 1–2. Keeping the original plan for traceability is reasonable, but
+   completed checkboxes need completion notes or strike-throughs so this file
+   remains a usable prioritized backlog.
+4. **Low — current test counts lag the follow-up tests.** Phase 3 originally
+   ended at 214 cases, then `07fe83e` added three backend tests. The current
+   status in `docs/4_next_steps.md` was committed after that change but still
+   reports 214. Fresh collection and execution reports 217. The historical
+   Phase 3 log entry remains correct for the point in time when it was written;
+   only current-state documents should change.
+
+**Verified locally:**
+
+- `UV_CACHE_DIR=/private/tmp/meal-review-uv uv run --locked --offline pytest
+  --cov-fail-under=89` passed: **217 tests**, 3 warnings, **89.98%** coverage,
+  and the 89% floor was enforced on Python 3.11.15.
+- Locked/offline `ruff check .` passed; `ruff format --check .` reported
+  **61 files already formatted**; locked/offline `uv lock --check` resolved
+  **114 packages** without drift.
+- `npm test` passed **5/5**; `npm run lint` and `npm run build` passed using
+  the installed Node 24.18.0 runtime. The build produced JS 252.64 kB and CSS
+  12.56 kB.
+- The Phase 3 diff contains tests, CI/tooling and docs only; no production file
+  under `backend/app`, `streamlit_app`, or `frontend/src/App.jsx` changed during
+  that phase.
+
+**Limits and discussion:** Python 3.12, CI's Node 20 runtime, hosted services
+and external providers were not independently exercised. The requested second
+review pass could not complete because the reviewer agent hit its usage limit;
+the findings above come from Codex's direct inspection and fresh local gates.
+The previously documented 72% coverage of core meal recommendation logic,
+unused domain exceptions, reconciliation edge case, migration limitations and
+kidney-disease policy question remain open and are not reclassified here.
