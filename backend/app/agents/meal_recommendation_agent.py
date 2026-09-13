@@ -398,7 +398,24 @@ class MealRecommendationAgent:
                 selected = candidate
                 break
         meal_name = selected["meal_name"]
-        ingredients = selected["ingredients"]
+        ingredients = [Ingredient(**ingredient) for ingredient in selected["ingredients"]]
+
+        # Scale the fallback template to the calorie budget, exactly as the retrieval
+        # path does. Without this the budget reached only user_context.caloric_target,
+        # so two users whose targets differed fivefold got identical portions and
+        # identical verified nutrition - and reconciliation was skipped entirely,
+        # because its guard is `portion_scaling is None`.
+        scaled_ingredients, scaling_metadata = self._scale_ingredients_to_meal_target(
+            ingredients,
+            target_calories,
+        )
+        warnings = [warning]
+        if scaling_metadata:
+            warnings.append(
+                "Scaled fallback portions from "
+                f"{scaling_metadata.estimated_template_calories:.0f} kcal toward "
+                f"{scaling_metadata.target_meal_calories} kcal."
+            )
 
         return MealPlanPayload(
             user_context=UserContext(
@@ -408,12 +425,13 @@ class MealRecommendationAgent:
             meal_definition=MealDefinition(
                 craving_input=craving,
                 structured_meal_name=meal_name,
-                ingredients=[Ingredient(**ingredient) for ingredient in ingredients],
+                ingredients=scaled_ingredients,
             ),
             metadata=AgentMetadata(
                 agent_name="MealRecommendationAgent",
                 source="deterministic_fallback",
                 confidence=0.62,
-                warnings=[warning],
+                warnings=warnings,
             ),
+            portion_scaling=scaling_metadata,
         )
