@@ -849,16 +849,29 @@ MSG
 Spec §9's React half is done when `App.jsx` is a shell, no file in `frontend/src` exceeds
 ~200 lines, and the dashboard still covers meal plan, calorie prediction and history.
 
-- [ ] `npm test` passes; report the real count (8 harness tests plus the new unit tests)
-- [ ] **`frontend/src/App.test.jsx` is byte-identical to the phase start** —
+- [x] `npm test` passes; report the real count (8 harness tests plus the new unit tests) —
+      `npm test -- --run` reports **35 passed (35)** across 7 test files (App.test.jsx's 8
+      cases plus 27 unit tests in api/, lib/, hooks/, and the three feature dirs).
+- [x] **`frontend/src/App.test.jsx` is byte-identical to the phase start** —
       `git diff refactor/phase-3-tests-and-ci HEAD -- frontend/src/App.test.jsx` is empty
-- [ ] `npm run lint` and `npm run build` both pass
-- [ ] No file in `frontend/src` exceeds ~200 lines — report the largest
-- [ ] `App.jsx` contains no component other than `App`
-- [ ] No new runtime dependency: `git diff ... -- frontend/package.json` adds nothing to `dependencies`
-- [ ] Backend untouched: `git diff ... --stat -- backend streamlit_app pyproject.toml uv.lock` empty
-- [ ] All three tabs still render and switch — covered by the harness
-- [ ] `git status --short` clean
-- [ ] Append a Phase 4a entry to `docs/5_agent_log.md`; tick this checklist
+- [x] `npm run lint` and `npm run build` both pass — both ran clean from `frontend/`
+      (`eslint .` produced no output; `vite build` succeeded, `dist/assets/index-*.js`
+      253.21 kB, `dist/assets/index-*.css` 12.56 kB).
+- [x] No file in `frontend/src` exceeds ~200 lines — report the largest — after
+      extracting `MealPlanResult.jsx` and `CalorieResult.jsx`, the largest file is
+      `features/history/HistoryTab.jsx` at **167 lines**; `MealPlanTab.jsx` is 123,
+      `CaloriesTab.jsx` is 174, `MealPlanResult.jsx` is 114, `CalorieResult.jsx` is 45.
+- [x] `App.jsx` contains no component other than `App` — read the file: one `function App()`,
+      no other component declared.
+- [x] No new runtime dependency: `git diff ... -- frontend/package.json` adds nothing to
+      `dependencies` — `git diff refactor/phase-3-tests-and-ci HEAD -- frontend/package.json`
+      produced no output at all (the file is unchanged since the phase start).
+- [x] Backend untouched: `git diff ... --stat -- backend streamlit_app pyproject.toml uv.lock`
+      empty — confirmed, no output.
+- [x] All three tabs still render and switch — covered by the harness — `App.test.jsx`'s
+      "switches to the calories tab" and "switches to the history tab" cases exercise this
+      and pass.
+- [x] `git status --short` clean — confirmed after this task's three commits landed.
+- [x] Append a Phase 4a entry to `docs/5_agent_log.md`; tick this checklist
 
 Then write the Phase 4b plan for the Streamlit half of spec §9.
