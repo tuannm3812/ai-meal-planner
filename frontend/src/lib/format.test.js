@@ -4,7 +4,10 @@ import { formatCurrency, formatDateTime, formatMacro, macroCards, parseCommaList
 
 describe('formatCurrency', () => {
   it('formats a number as AUD', () => {
-    expect(formatCurrency(12.5)).toContain('12.50')
+    // Assert the rendered string exactly, not just that it contains "12.50":
+    // en-AU + USD renders "USD 12.50", which also contains it, so a substring
+    // check would pass if the currency code silently changed.
+    expect(formatCurrency(12.5)).toBe('$12.50')
   })
 
   it('treats null and undefined as zero rather than NaN', () => {
