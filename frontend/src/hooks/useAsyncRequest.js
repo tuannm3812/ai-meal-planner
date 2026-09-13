@@ -5,12 +5,14 @@ import { useCallback, useState } from 'react'
 // leave the UI in a usable state (error set, isLoading cleared) rather than
 // producing an unhandled rejection that the caller has to guard against.
 //
-// The error message mirrors the shape the tabs already use when talking to
-// the FastAPI backend via axios - prefer the backend's own detail message,
-// then the JS error's message, then a generic fallback - so callers that
-// adopt this hook keep a familiar, human-readable string instead of an
-// Error object.
-export function useAsyncRequest(requestFn) {
+// The error message mirrors the shape every tab already uses: prefer the
+// backend's own `detail`, otherwise the caller's own fallback sentence. That
+// second argument is what makes the hook adoptable at all - all four call
+// sites differ ONLY in that sentence ("Could not generate a meal plan...",
+// "Could not load saved meals...", and so on), so a hook with a hard-coded
+// generic message would have silently changed user-facing text and none of
+// them could have used it.
+export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wrong.') {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
@@ -23,16 +25,12 @@ export function useAsyncRequest(requestFn) {
         const result = await requestFn(...args)
         setData(result)
       } catch (requestError) {
-        const message =
-          requestError?.response?.data?.detail ||
-          requestError?.message ||
-          'Something went wrong.'
-        setError(message)
+        setError(requestError?.response?.data?.detail || fallbackMessage)
       } finally {
         setIsLoading(false)
       }
     },
-    [requestFn],
+    [requestFn, fallbackMessage],
   )
 
   const reset = useCallback(() => {

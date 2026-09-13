@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react'
 
 import { generateMealPlan } from '../../api/mealPlanner'
+import { useAsyncRequest } from '../../hooks/useAsyncRequest'
 import { formatCurrency, formatMacro, macroCards } from '../../lib/format'
 import EmptyState from '../../components/ui/EmptyState'
 import ErrorBanner from '../../components/ui/ErrorBanner'
@@ -14,9 +15,16 @@ function MealPlanTab() {
   const [craving, setCraving] = useState('')
   const [userId, setUserId] = useState('user_123')
   const [location, setLocation] = useState('Earlwood, NSW')
-  const [mealPlan, setMealPlan] = useState(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState('')
+  const {
+    data: mealPlan,
+    error,
+    isLoading,
+    run: requestMealPlan,
+    reset: clearMealPlan,
+  } = useAsyncRequest(
+    generateMealPlan,
+    'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
+  )
 
   const mealDefinition = mealPlan?.meal_plan?.meal_definition
   const nutrition = mealPlan?.nutrition
@@ -31,26 +39,12 @@ function MealPlanTab() {
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    setError('')
-    setMealPlan(null)
-    setIsLoading(true)
-
-    try {
-      const data = await generateMealPlan({
-        user_id: userId.trim(),
-        craving: craving.trim(),
-        location: location.trim(),
-      })
-
-      setMealPlan(data)
-    } catch (requestError) {
-      const message =
-        requestError.response?.data?.detail ||
-        'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.'
-      setError(message)
-    } finally {
-      setIsLoading(false)
-    }
+    clearMealPlan()
+    await requestMealPlan({
+      user_id: userId.trim(),
+      craving: craving.trim(),
+      location: location.trim(),
+    })
   }
 
   return (

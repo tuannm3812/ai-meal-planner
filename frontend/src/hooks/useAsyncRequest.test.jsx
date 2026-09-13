@@ -47,3 +47,27 @@ describe('useAsyncRequest', () => {
     expect(result.current.error).toBe('')
   })
 })
+
+
+describe('useAsyncRequest error messages', () => {
+  it("prefers the backend's detail over the fallback", async () => {
+    const request = vi.fn(() =>
+      Promise.reject({ response: { data: { detail: 'from the backend' } } }),
+    )
+    const { result } = renderHook(() => useAsyncRequest(request, 'my fallback'))
+    await act(async () => {
+      await result.current.run()
+    })
+    expect(result.current.error).toBe('from the backend')
+  })
+
+  it("uses the caller's fallback when there is no response", async () => {
+    const request = vi.fn(() => Promise.reject(new Error('Network Error')))
+    const { result } = renderHook(() => useAsyncRequest(request, 'my fallback'))
+    await act(async () => {
+      await result.current.run()
+    })
+    // Not error.message - each tab has its own sentence and must keep it.
+    expect(result.current.error).toBe('my fallback')
+  })
+})
