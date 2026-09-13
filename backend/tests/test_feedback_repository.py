@@ -1,4 +1,4 @@
-from backend.app.repositories.storage import MealFeedbackRepository
+from backend.app.repositories.json_store import MealFeedbackRepository
 
 
 def test_feedback_repository_lists_saved_meals(tmp_path) -> None:

@@ -16,6 +16,7 @@ dist-ssr/
 database/meal_history.json
 database/meal_feedback.json
 database/user_profiles.json
+database/*.db
 data/raw/
 data/processed/
 data/external/

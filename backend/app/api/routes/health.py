@@ -2,10 +2,32 @@
 
 from fastapi import APIRouter
 
+from backend.app.core.config import AppSettings
 from backend.app.core.container import ContainerDep
 from backend.app.schemas.responses import HealthResponse, RootResponse
 
 router = APIRouter()
+
+
+def _store_path(settings: AppSettings, json_filename: str) -> str:
+    """Describe where a store persists its records, for either backend.
+
+    Reads the location from settings rather than a repository instance, so
+    this works the same whether the configured backend is JSON or SQLite
+    without reaching into either concrete repository's internals.
+
+    Args:
+        settings: Resolved application settings.
+        json_filename: The JSON store's filename. Ignored under SQLite,
+            since both stores share one database file there.
+
+    Returns:
+        The JSON file path under the JSON backend, or the shared SQLite
+        database path under the SQLite backend.
+    """
+    if settings.storage_backend == "json":
+        return str(settings.data_dir / json_filename)
+    return str(settings.sqlite_path)
 
 
 @router.get("/", response_model=RootResponse)
@@ -56,8 +78,9 @@ async def health_check(container: ContainerDep) -> HealthResponse:
             "fatsecret_configured": bool(
                 settings.fatsecret_client_id and settings.fatsecret_client_secret
             ),
-            "history_store": str(container.meal_history.history_path),
-            "feedback_store": str(container.meal_feedback.feedback_path),
+            "storage_backend": settings.storage_backend,
+            "history_store": _store_path(settings, "meal_history.json"),
+            "feedback_store": _store_path(settings, "meal_feedback.json"),
             "calorie_model_configured": bool(container.calorie_agent.model),
             "calorie_model_path": str(settings.calorie_model_path),
             "calorie_model_warning": container.calorie_agent.model_warning,

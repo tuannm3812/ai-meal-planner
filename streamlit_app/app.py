@@ -178,7 +178,7 @@ def local_demo_request(
     try:
         from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
         from backend.app.agents.supermarket_agent import SupermarketAgent
-        from backend.app.repositories.storage import MealFeedbackRepository, MealPlanRepository
+        from backend.app.repositories.json_store import MealFeedbackRepository, MealPlanRepository
     except ImportError as exc:
         raise RuntimeError(f"Local demo mode cannot import backend storage modules: {exc}") from exc
 
