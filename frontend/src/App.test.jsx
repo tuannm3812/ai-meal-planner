@@ -56,4 +56,44 @@ describe('App', () => {
     expect(axios.get).not.toHaveBeenCalled()
     expect(axios.post).not.toHaveBeenCalled()
   })
+
+  it('fires axios.post to /generate-meal-plan when the meal plan form is submitted', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText(/Craving Input/i), 'High-protein burger')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(axios.post).toHaveBeenCalledWith(
+      expect.stringContaining('/generate-meal-plan'),
+      expect.objectContaining({ craving: 'High-protein burger' }),
+    )
+  })
+
+  it('renders the error banner when axios.post rejects', async () => {
+    axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Backend exploded' } } })
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText(/Craving Input/i), 'High-protein burger')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Backend exploded')).toBeInTheDocument()
+  })
+
+  it('renders part of the returned plan when axios.post resolves', async () => {
+    axios.post.mockResolvedValueOnce({
+      data: {
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Grilled Chicken Bowl', ingredients: [] },
+        },
+        nutrition: {},
+        shopping_list: {},
+      },
+    })
+    const user = userEvent.setup()
+    render(<App />)
+    await user.type(screen.getByLabelText(/Craving Input/i), 'High-protein burger')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
+  })
 })
