@@ -694,3 +694,55 @@ backend streamlit_app pyproject.toml uv.lock` → empty (backend and
 **What is left:** spec §9's target covers both the React dashboard and the
 Streamlit app; only the React half is done. The Streamlit half — noted in the
 spec as its own follow-on — is unstarted and is Phase 4b.
+
+## 2026-09-14 — Codex — independent review of Claude's Phase 4a
+
+**Scope:** reviewed `refactor/phase-4a-react` from its Phase 3 base at
+`0dd4a1c` through Claude's completion commit `0b82ef4`. The review covered the
+API extraction, shared async hook, UI primitives, three feature tabs, result
+panels, new unit/component tests, plan checklist, and Phase 4a log entry. No
+application or test code was changed; this append-only entry is the only
+tracked change made by the review.
+
+**Assessment:** no High- or Medium-severity implementation defect was found.
+The four Axios call contracts and response-body unwrapping are preserved. The
+two tabs that fit the shared request state use `useAsyncRequest`; retaining
+local state in `HistoryTab` is justified because its two independently loading
+requests intentionally share one error field. `App.jsx` is now a 43-line shell,
+the original eight behavior-level App tests are unchanged, and every non-asset
+file under `frontend/src` remains below the roughly 200-line target.
+
+**Findings and discussion:**
+
+1. **Medium — the primary handoff documents were not advanced with the phase.**
+   `AGENTS.md` and the status line in `docs/4_next_steps.md` still say Phase 4
+   is “specified but unplanned,” although Phase 4a is now implemented and its
+   plan is complete. `docs/4_next_steps.md` also still describes `api/client.js`
+   as a future extraction. This does not affect the React build, but it gives a
+   fresh agent the wrong current state; the next documentation pass should say
+   Phase 4a is done and Phase 4b is unplanned.
+2. **Low — two completion-report measurements are imprecise.** The Phase 4a
+   checklist and Claude's log call `HistoryTab.jsx` the largest file under
+   `frontend/src` at 167 lines, but `App.css` is 184 lines. The exit criterion
+   still passes. The log also calls the extracted UI set “nine presentational
+   pieces” while naming ten components; ten files were in fact created.
+3. **Low — the requested Phase 4b planning handoff is still absent.** The final
+   instruction in the Phase 4a plan is “Then write the Phase 4b plan.” No such
+   plan exists yet. Claude's log accurately calls Phase 4b unstarted, so this is
+   visible unfinished follow-on work rather than a hidden implementation gap.
+
+**Verified locally:**
+
+- `npm test` passed **35/35** across 7 files; `npm run lint` and
+  `npm run build` passed. The build produced JS 253.21 kB and CSS 12.56 kB.
+- `frontend/src/App.test.jsx` and `frontend/package.json` are unchanged from
+  `0dd4a1c`; the backend, Streamlit app, `pyproject.toml`, and `uv.lock` also
+  have no Phase 4a diff.
+- The largest non-asset file is `frontend/src/App.css` at 184 lines; the largest
+  JavaScript/JSX implementation file is `CaloriesTab.jsx` at 174 lines.
+- `git diff --check 0dd4a1c..0b82ef4` passed.
+
+**Limits:** no hosted CI exists for the unpushed local Phase 4a branch, and the
+dashboard was not exercised against a live backend or in a browser. The tests,
+lint, production build, and direct source comparison support the pure-refactor
+claim within those limits.
