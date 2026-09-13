@@ -1,0 +1,52 @@
+[
+  {
+    "keywords": ["noodle", "asian"],
+    "meal_name": "High-Protein Asian Tofu Noodle Bowl",
+    "ingredients": [
+      {"item_name": "firm tofu", "base_quantity_grams": 180},
+      {"item_name": "rice noodles", "base_quantity_grams": 90},
+      {"item_name": "broccoli", "base_quantity_grams": 120},
+      {"item_name": "soy sauce", "base_quantity_grams": 20}
+    ]
+  },
+  {
+    "keywords": ["pasta"],
+    "meal_name": "High-Protein Tomato Turkey Pasta",
+    "ingredients": [
+      {"item_name": "lean turkey mince", "base_quantity_grams": 160},
+      {"item_name": "wholemeal pasta", "base_quantity_grams": 90},
+      {"item_name": "tomato passata", "base_quantity_grams": 160},
+      {"item_name": "baby spinach", "base_quantity_grams": 60}
+    ]
+  },
+  {
+    "keywords": ["salad"],
+    "meal_name": "Chicken Avocado Power Salad",
+    "ingredients": [
+      {"item_name": "chicken breast", "base_quantity_grams": 170},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 120},
+      {"item_name": "avocado", "base_quantity_grams": 70},
+      {"item_name": "brown rice", "base_quantity_grams": 80}
+    ]
+  },
+  {
+    "keywords": ["tofu", "vegan"],
+    "meal_name": "Tofu Rice Bowl",
+    "ingredients": [
+      {"item_name": "firm tofu", "base_quantity_grams": 180},
+      {"item_name": "brown rice", "base_quantity_grams": 90},
+      {"item_name": "broccoli", "base_quantity_grams": 120},
+      {"item_name": "soy sauce", "base_quantity_grams": 20}
+    ]
+  },
+  {
+    "keywords": [],
+    "meal_name": "High-Protein Turkey Burger Bowl",
+    "ingredients": [
+      {"item_name": "lean turkey mince", "base_quantity_grams": 160},
+      {"item_name": "whole wheat hamburger bun", "base_quantity_grams": 60},
+      {"item_name": "mixed salad greens", "base_quantity_grams": 100},
+      {"item_name": "tomato", "base_quantity_grams": 80}
+    ]
+  }
+]

@@ -1,19 +1,13 @@
 # System Architecture & Data Flow
 
-> **Known divergence — as of 2026-09-10 this document describes the target, not the
-> current build.** The orchestrator coordinating the agents in §3 does not exist:
-> there is no `services/meal_planning_service.py` and no DI container, and each
-> agent is constructed directly in `backend/app/main.py`. In §4, step 3 (Calorie
-> Prediction) is not wired into meal planning, step 6 (Revision Loop) is not
-> implemented at all, and step 8 (Storage) persists the meal and feedback but no
-> embeddings. Phase 1 lands the orchestrator, the calorie wiring and the
-> reconciliation loop — see [`4_next_steps.md`](4_next_steps.md) §1 and
-> [the design spec §6](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
-> **Retire these claims one at a time, as each is implemented — do not delete the
-> whole note when Phase 1 lands.** Phase 1 covers the orchestrator, the DI
-> container, the calorie wiring (step 3) and the revision loop (step 6). It does
-> *not* cover embedding persistence in step 8, which no phase currently claims;
-> that line must survive until something actually delivers it.
+> **Known divergence — as of 2026-09-11, one claim remains.** Phase 1 landed the
+> orchestrator (`backend/app/services/meal_planning_service.py`), the DI container
+> (`backend/app/core/container.py`), the §4 step 3 calorie wiring, and the §4 step 6
+> revision loop; those claims have been retired from this note individually, as each
+> was implemented. **Still not built: §4 step 8 stores the meal and feedback but no
+> embeddings.** No phase currently claims embedding persistence, so this line must
+> outlive Phase 1 — see [`4_next_steps.md`](4_next_steps.md). Retire it only when
+> something actually delivers it, and do not delete this note wholesale.
 
 ## 1. High-Level Overview
 

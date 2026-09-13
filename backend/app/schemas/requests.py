@@ -12,6 +12,12 @@ class MealRequest(BaseModel):
     location: str = Field(default="Earlwood, NSW", min_length=2, max_length=160)
     health_conditions: list[str] = Field(default_factory=list)
     dietary_preferences: list[str] = Field(default_factory=list)
+    age: int | None = Field(default=None, gt=0, le=120)
+    sex: str | None = Field(default=None, min_length=1, max_length=16)
+    height_cm: float | None = Field(default=None, gt=80, le=260)
+    weight_kg: float | None = Field(default=None, gt=20, le=350)
+    activity_multiplier: float | None = Field(default=None, gt=1.0, le=2.5)
+    goal: str = Field(default="maintain", min_length=3, max_length=40)
 
 
 class MealFeedbackRequest(BaseModel):

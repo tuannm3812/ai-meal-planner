@@ -13,6 +13,9 @@
 
 ## Global Constraints
 
+- **Test counts in this plan are collected-case counts, and parametrized tests expand.**
+  Where a stated number disagrees with what pytest reports, trust pytest and report the real
+  figure — the ladder has already been re-based twice for this reason.
 - **Baseline: 19 passing tests must never drop.** Run `uv run pytest` — **never** `uv run pytest -q`; `pyproject.toml` sets `addopts = "-q"` and a second `-q` becomes `-qq`, hiding the summary. New tests add to the count; report the new number each task.
 - **Never `git add -A`.** Run `git status --short`, review every path, stage explicitly. Master standard §10.1.
 - Commit format `<type>(<scope>): <imperative summary>`. **The `(scope)` is mandatory.** Every body ends with `Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>`.
@@ -22,6 +25,17 @@
 - **Google-style docstrings** on every public class and function you add or substantially edit (master standard §3).
 - **No new dependencies.** `pydantic-settings` is NOT installed and is Phase 2's problem, not this phase's.
 - Work on branch `refactor/phase-1-backend-architecture`. Do not push or open PRs; the controller handles that.
+- **When you change a function's signature, grep the WHOLE repo for callers, not just
+  `backend/`.** `streamlit_app/app.py` calls the agents directly and has no test coverage, so a
+  missed caller there breaks local demo mode silently while the suite stays green. This already
+  happened once in Task 1. Use `grep -rn "<name>" --include="*.py" . | grep -v node_modules`.
+- **`kill %1` does not stop uvicorn.** `uv run` spawns a child, so killing the job leaves the
+  server bound to port 8000 and the next task's live check fails confusingly. After any live
+  check run:
+  ```bash
+  kill %1 2>/dev/null; pkill -f "uvicorn backend.app.main:app" 2>/dev/null
+  lsof -i :8000 || echo "port 8000 free"
+  ```
 
 ## Critical Domain Facts
 
@@ -877,7 +891,9 @@ def test_meal_agent_metadata_adds_explanation() -> None:
 
 
 def test_average_confidence_rounds_to_two_places() -> None:
-    assert average_confidence([_Scored(confidence=0.5), _Scored(confidence=0.75)]) == 0.63
+    # round(0.625, 2) is 0.62, not 0.63 - Python rounds halves to even. Both original
+    # _average_confidence implementations produced 0.62, so this preserves behaviour.
+    assert average_confidence([_Scored(confidence=0.5), _Scored(confidence=0.75)]) == 0.62
 
 
 def test_average_confidence_of_nothing_is_zero() -> None:
@@ -1195,7 +1211,7 @@ def test_macro_fallbacks_still_produce_usable_macros() -> None:
 - [ ] **Step 5: Run the tests**
 
 Run: `uv run pytest`
-Expected: **38 passed**.
+Expected: **40 passed**.
 
 - [ ] **Step 6: Diff against the pre-change snapshot — the real proof**
 
@@ -1260,7 +1276,7 @@ No output value changed. Proved by snapshotting every table's output for nine
 ingredients before the extraction and diffing after: identical. The unknown
 ingredient default of 120 kcal is preserved and now has its own test.
 
-Verified: 38 tests pass, including the retrieval regression suite, ruff clean.
+Verified: 40 tests pass, including the retrieval regression suite, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -1421,7 +1437,7 @@ that is a deliberate validation response, not an internal leak.
 ```bash
 uv run pytest
 ```
-Expected: **43 passed** (38 + 5 new).
+Expected: **45 passed** (40 + 5 new).
 
 ```bash
 uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 &
@@ -1458,7 +1474,7 @@ safe message. A catch-all handler covers anything unexpected.
 The bare try/except in generate_meal_plan is removed; the deliberate 400 in
 save_meal_feedback stays, being a validation response rather than a leak.
 
-Verified: 43 tests pass, including one asserting a credential-shaped internal
+Verified: 45 tests pass, including one asserting a credential-shaped internal
 string never reaches client_message. Live checks return 200 for a valid request
 and 422 for a validation failure.
 
@@ -1717,7 +1733,7 @@ def test_container_override_is_honoured(client: TestClient) -> None:
 ```bash
 uv run pytest
 ```
-Expected: **52 passed**. `test_meal_feedback_roundtrips` writes to the real feedback store —
+Expected: **54 passed**. `test_meal_feedback_roundtrips` writes to the real feedback store —
 that is acceptable here because the repository appends and the file is gitignored. Confirm with
 `git status --short` that `database/meal_feedback.json` is **not** shown as modified-and-tracked.
 
@@ -1741,7 +1757,7 @@ can override the whole graph.
 Adds the first endpoint tests in the repository: all 8 routes, happy and error
 paths, including one that overrides the container to prove injection works.
 
-Verified: 52 tests pass, ruff clean.
+Verified: 54 tests pass, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -1873,7 +1889,7 @@ Bodies were copied without modification, so this commit is a pure move. The
 route table was dumped before and after and is identical: same eight paths, same
 methods.
 
-Verified: 52 tests pass, ruff clean.
+Verified: 54 tests pass, ruff clean.
 
 Co-Authored-By: Claude Opus 5 (1M context) <noreply@anthropic.com>
 MSG
@@ -2041,7 +2057,7 @@ handler currently builds a dict. For `/calorie-expenditure/predict`, return the
 ```bash
 uv run pytest
 ```
-Expected: **55 passed**.
+Expected: **57 passed**.
 
 - [ ] **Step 6: Confirm `/docs` now documents responses**
 
@@ -2077,7 +2093,7 @@ response_model. History and feedback items stay dict[str, Any] on purpose:
 stored records are whole responses from earlier versions, and typing them
 strictly would make old rows unreadable. The module docstring says so.
 
-Verified: 55 tests pass, including one that fails if any route ever ships
+Verified: 57 tests pass, including one that fails if any route ever ships
 without a response_model again, and an OpenAPI dump showing all eight routes
 naming a schema.
 
@@ -2093,18 +2109,18 @@ Per spec §6: done when `/generate-meal-plan` demonstrably uses the model's calo
 response includes reconciliation metadata, `/docs` shows full response schemas, and a provider
 failure returns a non-500 status with no internal detail in the body.
 
-- [ ] `uv run pytest` → **55 passed**, no test deleted or weakened
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` → clean
-- [ ] A live `POST /generate-meal-plan` returns `calorie_budget.model_version` =
+- [x] `uv run pytest` → **57 passed**, no test deleted or weakened
+- [x] `uv run ruff check .` and `uv run ruff format --check .` → clean
+- [x] A live `POST /generate-meal-plan` returns `calorie_budget.model_version` =
       `hist_gradient_boosting_deep_v0.1.0`, and `meal_plan.user_context.caloric_target`
       equals `calorie_budget.meal_calorie_budget_kcal`
-- [ ] That response carries a `reconciliation` object with `tolerance: 0.15`
-- [ ] `/openapi.json` names a response schema for all 8 routes
-- [ ] A validation failure returns 422; no response body contains a raw exception string
-- [ ] `backend/app/main.py` is under 60 lines and contains no endpoint
-- [ ] `grep -rn "calculate_bmr\|predict_user_preferences" backend/app/` → no output
-- [ ] `git status --short` clean; no `.env` or `database/*.json` staged
-- [ ] Update `docs/2_architecture.md`'s divergence note: retire the orchestrator, DI-container,
+- [x] That response carries a `reconciliation` object with `tolerance: 0.15`
+- [x] `/openapi.json` names a response schema for all 8 routes
+- [x] A validation failure returns 422; no response body contains a raw exception string
+- [x] `backend/app/main.py` is under 60 lines and contains no endpoint
+- [x] `grep -rn "calculate_bmr\|predict_user_preferences" backend/app/` → no output
+- [x] `git status --short` clean; no `.env` or `database/*.json` staged
+- [x] Update `docs/2_architecture.md`'s divergence note: retire the orchestrator, DI-container,
       step-3 and step-6 claims **individually**. The step-8 embeddings claim must **remain** —
       Phase 1 does not deliver it. (Codex review, 2026-09-11.)
-- [ ] Append a Phase 1 entry to `docs/5_agent_log.md`; tick this checklist
+- [x] Append a Phase 1 entry to `docs/5_agent_log.md`; tick this checklist
