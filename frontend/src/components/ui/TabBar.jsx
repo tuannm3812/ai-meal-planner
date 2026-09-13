@@ -1,5 +1,6 @@
-// eslint-disable-next-line react-refresh/only-export-components -- TABS must live here to avoid a circular import with App.jsx
-export const TABS = [
+// Local to this file: TabBar is the only consumer, so it needs no export - which also
+// avoids the react-refresh/only-export-components lint that a shared export would trip.
+const TABS = [
   { id: 'meal', label: 'Meal Plan' },
   { id: 'calories', label: 'Calories' },
   { id: 'history', label: 'History' },
