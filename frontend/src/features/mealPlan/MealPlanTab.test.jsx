@@ -47,4 +47,32 @@ describe('MealPlanTab error text', () => {
 
     expect(await screen.findByText('Craving too short')).toBeInTheDocument()
   })
+
+  it('clears the previously rendered plan when a retry fails', async () => {
+    // Pins the reset()-before-run() contract: useAsyncRequest's `run` never
+    // clears `data` on its own, so MealPlanTab must call `clearMealPlan()`
+    // before firing a second request. Without that call, a failed retry
+    // would leave the first plan rendered next to the new error.
+    axios.post.mockResolvedValueOnce({
+      data: {
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Grilled Chicken Bowl', ingredients: [] },
+        },
+        nutrition: {},
+        shopping_list: {},
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'High-protein burger')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+    expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
+
+    axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Backend exploded again' } } })
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Backend exploded again')).toBeInTheDocument()
+    expect(screen.queryByText('Grilled Chicken Bowl')).not.toBeInTheDocument()
+  })
 })
