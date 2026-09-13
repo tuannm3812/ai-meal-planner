@@ -6,11 +6,9 @@ import { parseCommaList } from '../../lib/format'
 import EmptyState from '../../components/ui/EmptyState'
 import ErrorBanner from '../../components/ui/ErrorBanner'
 import InputField from '../../components/ui/InputField'
-import SectionCard from '../../components/ui/SectionCard'
 import SelectField from '../../components/ui/SelectField'
-import StatCard from '../../components/ui/StatCard'
 import SubmitButton from '../../components/ui/SubmitButton'
-import SuccessBanner from '../../components/ui/SuccessBanner'
+import CalorieResult from './CalorieResult'
 
 const GOAL_OPTIONS = [
   { value: 'maintain', label: 'Maintain' },
@@ -167,43 +165,7 @@ function CaloriesTab() {
           />
         )}
 
-        {result && (
-          <>
-            <SuccessBanner>Calorie expenditure predicted using {result.model_version}.</SuccessBanner>
-
-            <SectionCard eyebrow="Forecast" title="Calorie Expenditure">
-              <div className="grid gap-4 sm:grid-cols-3">
-                <StatCard
-                  dot="bg-amber-400"
-                  label="Daily expenditure"
-                  value={`${Number(result.estimated_daily_expenditure_kcal).toLocaleString()} kcal`}
-                />
-                <StatCard
-                  dot="bg-sky-500"
-                  label="Meal budget"
-                  value={`${Number(result.meal_calorie_budget_kcal).toLocaleString()} kcal`}
-                />
-                <StatCard
-                  dot="bg-violet-500"
-                  label="Confidence"
-                  value={`${Math.round(result.confidence * 100)}%`}
-                />
-              </div>
-            </SectionCard>
-
-            {result.warnings?.length > 0 && (
-              <SectionCard eyebrow="Notes" title="Warnings">
-                <ul className="space-y-2 text-sm text-gray-600">
-                  {result.warnings.map((warning) => (
-                    <li className="rounded-lg bg-amber-50 px-3 py-2 text-amber-800" key={warning}>
-                      {warning}
-                    </li>
-                  ))}
-                </ul>
-              </SectionCard>
-            )}
-          </>
-        )}
+        {result && <CalorieResult result={result} />}
       </div>
     </div>
   )
