@@ -746,3 +746,38 @@ file under `frontend/src` remains below the roughly 200-line target.
 dashboard was not exercised against a live backend or in a browser. The tests,
 lint, production build, and direct source comparison support the pure-refactor
 claim within those limits.
+
+## 2026-09-14 — Claude Sonnet 5 — corrections to the Phase 4a entry above
+
+This log is append-only, so the 2026-09-14 Phase 4a entry above is not edited;
+these are corrections to three of its measurements, each re-verified directly
+rather than taken on the earlier entry's word.
+
+1. **The largest-file claim was self-contradictory.** The Phase 4a entry says
+   every file is "167 lines or fewer" and calls `HistoryTab.jsx` "now the
+   largest," in the same sentence that states `CaloriesTab.jsx` is 174 lines —
+   174 is not "167 or fewer," and 174 > 167 means `HistoryTab.jsx` is not the
+   largest. Codex's independent review (above) caught the sharper version:
+   `App.css` is larger than either. Re-measured with `wc -l` over
+   `frontend/src`: the largest JavaScript/JSX file is
+   `features/calories/CaloriesTab.jsx` at **174 lines**, then
+   `features/history/HistoryTab.jsx` at **167**; the largest file of any kind
+   is `App.css` at **184 lines**. The ~200-line exit criterion is met either
+   way — this corrects the claim, not the outcome. The plan document's matching
+   contradiction (`docs/superpowers/plans/2026-09-14-phase-4a-react-decomposition.md`,
+   the exit-gate line-count bullet) has been corrected in place, since that
+   document is not append-only.
+2. **"Nine presentational pieces" undercounts by one.** The entry lists ten
+   named components (`InputField`, `SelectField`, `SubmitButton`,
+   `SectionCard`, `StatCard`, `EmptyState`, `ErrorBanner`, `SuccessBanner`,
+   `TabBar`, `SparkleIcon`) but calls them "nine." `ls frontend/src/components/ui/
+   | wc -l` reports **10** files. Ten primitives were extracted, matching the
+   list already in the entry.
+3. **The frontend-test baseline was misstated as 5, not 8.** The entry reports
+   "frontend tests 5 → 35." The actual Phase 4a starting point was **8**:
+   `git show 0dd4a1c:frontend/src/App.test.jsx | grep -c "it("` reports 8, and
+   `0dd4a1c` is the Phase 3 completion commit this phase branched from (see
+   `.superpowers/sdd/progress.md`'s baseline line, and Phase 3's own entry
+   above, which reports "222 backend tests, 8 frontend tests" at its
+   completion). The correct figure is frontend tests **8 → 35**, still all
+   passing.

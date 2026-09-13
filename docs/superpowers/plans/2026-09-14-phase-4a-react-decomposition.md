@@ -858,9 +858,15 @@ Spec §9's React half is done when `App.jsx` is a shell, no file in `frontend/sr
       (`eslint .` produced no output; `vite build` succeeded, `dist/assets/index-*.js`
       253.21 kB, `dist/assets/index-*.css` 12.56 kB).
 - [x] No file in `frontend/src` exceeds ~200 lines — report the largest — after
-      extracting `MealPlanResult.jsx` and `CalorieResult.jsx`, the largest file is
-      `features/history/HistoryTab.jsx` at **167 lines**; `MealPlanTab.jsx` is 123,
-      `CaloriesTab.jsx` is 174, `MealPlanResult.jsx` is 114, `CalorieResult.jsx` is 45.
+      extracting `MealPlanResult.jsx` and `CalorieResult.jsx`, the largest
+      JavaScript/JSX file is `features/calories/CaloriesTab.jsx` at **174
+      lines**, then `features/history/HistoryTab.jsx` at **167**;
+      `MealPlanTab.jsx` is 123, `MealPlanResult.jsx` is 114, `CalorieResult.jsx`
+      is 45. Counting every file under `frontend/src`, not just JS/JSX, the
+      largest is `App.css` at **184 lines** — still under the ~200-line target.
+      (Corrected 2026-09-14: an earlier version of this line called
+      `HistoryTab.jsx` the largest file while listing `CaloriesTab.jsx` at 174
+      in the same sentence — a contradiction, not a measurement.)
 - [x] `App.jsx` contains no component other than `App` — read the file: one `function App()`,
       no other component declared.
 - [x] No new runtime dependency: `git diff ... -- frontend/package.json` adds nothing to
