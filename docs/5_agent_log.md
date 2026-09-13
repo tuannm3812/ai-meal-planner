@@ -543,3 +543,76 @@ addressed by this task — writing tests for it is future work.
 floor 89 enforced; `npm test` → 5 passed; `uv run ruff check .` and `uv run
 ruff format --check .` clean. No production code changed — this task touched
 only `pyproject.toml`, `.github/workflows/ci.yml`, and this log.
+
+## 2026-09-14 — Codex — independent review of Claude's Phases 1–3
+
+**Scope:** reviewed the work after the Phase 0 review through `6a0934a`, with
+particular attention to the Phase 3 test/CI claims and the repository handoff
+documents. Production code from Phases 1–2 was inspected and exercised by the
+full suite; no new application regression was identified in this pass. This
+entry is the only tracked change made by the review.
+
+**Assessment:** the implemented gates are healthy, but the repository currently
+describes Phase 3 and its own state more strongly than the evidence supports.
+The following are documentation and test-scope findings; the already-recorded
+product gaps in `docs/4_next_steps.md` are not repeated as new defects.
+
+1. **Medium — `AGENTS.md` is now an actively misleading handoff.** Its Current
+   state still says only Phase 0 exists with 19 tests. Its Open risks still say
+   the orchestrator does not exist, the trained model is not wired into meal
+   planning, and JSON is the sole non-atomic store. Phases 1–3 delivered the
+   orchestrator and model wiring, atomic JSON writes, default SQLite storage,
+   and 217 backend tests. Because every future agent is instructed to read this
+   file first, stale claims here are more consequential than ordinary README
+   drift. Update it to the current phase and retain only live risks.
+2. **Medium — Phase 3 is marked done without all of spec §8's stated test
+   scope.** The spec requires all eight endpoints on happy and error paths,
+   using DI overrides with fake agents. `test_api_endpoints.py` reaches every
+   route, but supplies the real model and agents with temporary repositories;
+   only `/generate-meal-plan` and `/meal-feedback` have explicit error cases.
+   The other routes have no error-path test. The same section asks the frontend
+   suite to cover the API client and one test per tab component. The five
+   `App.test.jsx` cases cover rendering, tab switching and absence of requests
+   on initial render; none triggers or asserts an Axios request, successful
+   response, provider error, or UI error state. There is no extracted API
+   client or tab component yet. Either narrow the approved spec to the smaller
+   exit gate that actually passed, or add the missing behavior tests. The
+   current `docs/4_next_steps.md` wording repeats the unfulfilled broader claim.
+3. **Medium — completed items in `docs/4_next_steps.md` remain written as open
+   current facts.** Section 2 says `pydantic-settings` is absent from
+   `pyproject.toml` and `uv.lock`, although Phase 2 added it. The surrounding
+   sentence now contradicts itself and is grammatically broken. Section 5 says
+   `backend/app/api/` does not exist, schemas contain only requests, services
+   contains only `__init__.py`, and storage is one module; all were changed by
+   Phases 1–2. Keeping the original plan for traceability is reasonable, but
+   completed checkboxes need completion notes or strike-throughs so this file
+   remains a usable prioritized backlog.
+4. **Low — current test counts lag the follow-up tests.** Phase 3 originally
+   ended at 214 cases, then `07fe83e` added three backend tests. The current
+   status in `docs/4_next_steps.md` was committed after that change but still
+   reports 214. Fresh collection and execution reports 217. The historical
+   Phase 3 log entry remains correct for the point in time when it was written;
+   only current-state documents should change.
+
+**Verified locally:**
+
+- `UV_CACHE_DIR=/private/tmp/meal-review-uv uv run --locked --offline pytest
+  --cov-fail-under=89` passed: **217 tests**, 3 warnings, **89.98%** coverage,
+  and the 89% floor was enforced on Python 3.11.15.
+- Locked/offline `ruff check .` passed; `ruff format --check .` reported
+  **61 files already formatted**; locked/offline `uv lock --check` resolved
+  **114 packages** without drift.
+- `npm test` passed **5/5**; `npm run lint` and `npm run build` passed using
+  the installed Node 24.18.0 runtime. The build produced JS 252.64 kB and CSS
+  12.56 kB.
+- The Phase 3 diff contains tests, CI/tooling and docs only; no production file
+  under `backend/app`, `streamlit_app`, or `frontend/src/App.jsx` changed during
+  that phase.
+
+**Limits and discussion:** Python 3.12, CI's Node 20 runtime, hosted services
+and external providers were not independently exercised. The requested second
+review pass could not complete because the reviewer agent hit its usage limit;
+the findings above come from Codex's direct inspection and fresh local gates.
+The previously documented 72% coverage of core meal recommendation logic,
+unused domain exceptions, reconciliation edge case, migration limitations and
+kidney-disease policy question remain open and are not reclassified here.
