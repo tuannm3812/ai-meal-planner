@@ -455,8 +455,11 @@ Expected: FAIL — cannot resolve `./client`.
 ```bash
 sed -n '218,240p;438,460p;624,655p' src/App.jsx
 ```
-Note the **exact** third argument each `axios` call passes — the meal-plan POST sends a
-headers object when a Gemini key is present, and the GETs send `{ params: { limit } }`.
+Note the **exact** third argument each `axios` call passes. **Correction, verified
+2026-09-14:** the POSTs pass only **two** arguments — there is no Gemini-key header in
+the React client at all; that header belongs to the backend's `/generate-meal-plan`
+route, not this caller. The GETs pass `{ params: { limit } }`. Trust the code over this
+plan if they ever disagree.
 Your functions must reproduce those exactly. If a call site passes something this plan's
 signatures cannot express, **widen the signature and say so in your report** rather than
 dropping the argument.
