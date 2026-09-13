@@ -1,6 +1,12 @@
-import axios from 'axios'
 import { useMemo, useState } from 'react'
 
+import { API_BASE_URL } from './api/client'
+import {
+  fetchMealPlans,
+  fetchSavedMeals,
+  generateMealPlan,
+  predictCalorieExpenditure,
+} from './api/mealPlanner'
 import { formatCurrency, formatDateTime, formatMacro, macroCards, parseCommaList } from './lib/format'
 import EmptyState from './components/ui/EmptyState'
 import ErrorBanner from './components/ui/ErrorBanner'
@@ -11,8 +17,6 @@ import StatCard from './components/ui/StatCard'
 import SubmitButton from './components/ui/SubmitButton'
 import SuccessBanner from './components/ui/SuccessBanner'
 import TabBar from './components/ui/TabBar'
-
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 function MealPlanTab() {
   const [craving, setCraving] = useState('')
@@ -40,7 +44,7 @@ function MealPlanTab() {
     setIsLoading(true)
 
     try {
-      const { data } = await axios.post(`${API_BASE_URL}/generate-meal-plan`, {
+      const data = await generateMealPlan({
         user_id: userId.trim(),
         craving: craving.trim(),
         location: location.trim(),
@@ -260,7 +264,7 @@ function CaloriesTab() {
     setIsLoading(true)
 
     try {
-      const { data } = await axios.post(`${API_BASE_URL}/calorie-expenditure/predict`, {
+      const data = await predictCalorieExpenditure({
         age: Number(age),
         sex,
         height_cm: Number(heightCm),
@@ -443,9 +447,7 @@ function HistoryTab() {
     setError('')
     setIsLoadingHistory(true)
     try {
-      const { data } = await axios.get(`${API_BASE_URL}/meal-plans/${userId.trim()}`, {
-        params: { limit },
-      })
+      const data = await fetchMealPlans(userId.trim(), limit)
       setMealHistory(data)
     } catch (requestError) {
       setError(
@@ -461,9 +463,7 @@ function HistoryTab() {
     setError('')
     setIsLoadingSaved(true)
     try {
-      const { data } = await axios.get(`${API_BASE_URL}/saved-meals/${userId.trim()}`, {
-        params: { limit },
-      })
+      const data = await fetchSavedMeals(userId.trim(), limit)
       setSavedMeals(data)
     } catch (requestError) {
       setError(
