@@ -32,16 +32,23 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 
 ## Current state
 
-- 2026-09-10: Phase 0 of the refactor in
-  `docs/superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md`.
-  Baseline is 19 passing tests; ruff and the frontend build gate CI.
+- 2026-09-14: refactor Phases 0–3 (`docs/superpowers/specs/2026-09-10-refactor-
+  and-standards-alignment-design.md`) are done, open as PRs #1–#4 stacked on
+  each other. Phase 4 (frontend/Streamlit split) is specified but unplanned.
+  218 backend tests, 8 frontend tests, all green; backend coverage 91%, floor
+  89% enforced in CI.
 
 ## Open risks
 
-- `docs/2_architecture.md` describes an orchestrator that **does not exist yet**;
-  it carries a dated divergence note. Phase 1 builds it.
-- The trained calorie model is not yet used for meal planning — the meal agent
-  computes BMR itself. First task of Phase 1.
-- `backend/requirements.txt` is **generated** by `uv export`; edit `pyproject.toml`
-  and re-export instead. CI fails on drift.
-- Storage is file-backed JSON, rewritten whole and non-atomically. Phase 2.
+- Storage defaults to `STORAGE_BACKEND=sqlite` and starts empty; JSON history
+  is invisible until `scripts/migrate_json_to_sqlite.py` runs once, and that
+  script is **not idempotent** (a second run duplicates rows). Schema creation
+  is `create_all`, which cannot alter an existing table, so there is no
+  migration path once a deployment holds real data.
+- The typed exceptions in `core/exceptions.py` (`ProfileNotFound`,
+  `RetrievalUnavailable`, `NutritionProviderError`) are wired to handlers but
+  never raised; every failure still lands on the catch-all 500.
+- `agents/meal_recommendation_agent.py` sits at ~81% coverage, the largest
+  remaining gap in core business logic.
+- `backend/requirements.txt` is **generated** by `uv export`; edit
+  `pyproject.toml` and re-export instead. CI fails on drift.
