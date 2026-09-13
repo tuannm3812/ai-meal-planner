@@ -616,3 +616,168 @@ the findings above come from Codex's direct inspection and fresh local gates.
 The previously documented 72% coverage of core meal recommendation logic,
 unused domain exceptions, reconciliation edge case, migration limitations and
 kidney-disease policy question remain open and are not reclassified here.
+
+## 2026-09-14 — Claude Sonnet 5 — Phase 4a React decomposition
+
+**Delivered** on `refactor/phase-4a-react`. `frontend/src/App.jsx` went **811 →
+43 lines**, a shell holding only the tab state and the three `<TabX />`
+mounts. Everything else moved out: `api/client.js` and `api/mealPlanner.js`
+(the axios calls and base URL), `lib/format.js` (currency/macro/date
+formatting and `parseCommaList`), `hooks/useAsyncRequest.js` (the shared
+loading/error/data triple), nine presentational pieces under
+`components/ui/` (`InputField`, `SelectField`, `SubmitButton`, `SectionCard`,
+`StatCard`, `EmptyState`, `ErrorBanner`, `SuccessBanner`, `TabBar`,
+`SparkleIcon`), and the three tabs plus their now-separated results panels
+under `features/` (`mealPlan/MealPlanTab.jsx` + `MealPlanResult.jsx`,
+`calories/CaloriesTab.jsx` + `CalorieResult.jsx`, `history/HistoryTab.jsx`).
+This final task split the results-panel JSX (three `SectionCard`s for meal
+overview/nutrition/supermarket; forecast + warnings) out of the two tabs that
+were still over the spec §9 ~200-line target — `MealPlanTab.jsx` 220→123 and
+`CaloriesTab.jsx` 212→174 — leaving every file in `frontend/src` at 167 lines
+or fewer; `HistoryTab.jsx` is now the largest.
+
+**Measured, not asserted:** frontend tests **5 → 35**, all passing
+(`npm test -- --run`: 7 test files, 35 cases). The phase's regression harness,
+`frontend/src/App.test.jsx` (8 of those 35 cases), was never edited across the
+whole phase — `git diff refactor/phase-3-tests-and-ci HEAD --
+frontend/src/App.test.jsx` is empty from the first task to this one. That
+emptiness is the evidence the decomposition changed no observable behaviour:
+the same eight role/name queries against `render(<App />)` passed before and
+after every module extraction.
+
+**`useAsyncRequest` needed a signature change before any tab could adopt
+it.** Its first draft hard-coded a generic fallback error string, which made
+it unadoptable as-is: every tab already had its own fallback sentence
+("Could not generate a meal plan...", "Could not predict calorie
+expenditure...", etc.), and swapping in the hook's generic text would have
+been a user-facing string change the harness — and the per-tab tests below —
+would have caught. The hook now takes the fallback as a second argument
+(`useAsyncRequest(requestFn, fallbackMessage)`), so each call site keeps its
+own sentence. `MealPlanTab` and `CaloriesTab` use it. **`HistoryTab`
+deliberately does not.** It fires two independent fetches (meal history,
+saved meals) that share a single `error` field, and either fetch clears that
+field on its own next attempt. Two `useAsyncRequest` instances would each own
+a separate `error` state instead of one shared field, so a stale error from
+one fetch could sit on screen after an unrelated fetch on the other button
+succeeded — a regression the hook's shared-state design exists specifically
+to avoid. `HistoryTab.jsx` keeps its hand-rolled state for this reason, not
+from an oversight.
+
+**The harness's error coverage is narrower than it looks.** `App.test.jsx`
+only ever rejects with a `response.data.detail` payload, so it never actually
+exercises the fallback-sentence branch of `useAsyncRequest` or `HistoryTab`'s
+equivalent inline handlers. `MealPlanTab.test.jsx`, `CaloriesTab.test.jsx` and
+`HistoryTab.test.jsx` were added earlier in this phase specifically to pin
+each tab's fallback sentence (the text shown when the backend fails without a
+`detail`), and each was mutation-verified: deleting or altering the fallback
+string in the corresponding tab makes its test fail.
+
+**One planning-doc correction, made against the plan itself, not new to this
+task:** `docs/superpowers/plans/2026-09-14-phase-4a-react-decomposition.md`
+originally implied the meal-plan POST sends a Gemini-key header from the
+React client. Re-reading `frontend/src/api/mealPlanner.js`, `generateMealPlan`
+posts exactly two arguments (URL, payload) — no header. That header belongs
+to the backend's `/generate-meal-plan` route, not this client; the plan
+already carries a "Correction, verified 2026-09-14" note recording this, and
+this entry restates it here since it affects how the API module's contract
+should be read.
+
+**Verified by running:** `npm test -- --run` → 35 passed (7 files); `npm run
+lint` → clean; `npm run build` → succeeds, `dist/assets/index-*.js` 253.21 kB,
+`dist/assets/index-*.css` 12.56 kB; `git diff refactor/phase-3-tests-and-ci
+HEAD -- frontend/src/App.test.jsx` → empty; `git diff
+refactor/phase-3-tests-and-ci HEAD -- frontend/package.json` → empty (no new
+runtime dependency); `git diff refactor/phase-3-tests-and-ci HEAD --stat --
+backend streamlit_app pyproject.toml uv.lock` → empty (backend and
+`streamlit_app` untouched throughout the phase).
+
+**What is left:** spec §9's target covers both the React dashboard and the
+Streamlit app; only the React half is done. The Streamlit half — noted in the
+spec as its own follow-on — is unstarted and is Phase 4b.
+
+## 2026-09-14 — Codex — independent review of Claude's Phase 4a
+
+**Scope:** reviewed `refactor/phase-4a-react` from its Phase 3 base at
+`0dd4a1c` through Claude's completion commit `0b82ef4`. The review covered the
+API extraction, shared async hook, UI primitives, three feature tabs, result
+panels, new unit/component tests, plan checklist, and Phase 4a log entry. No
+application or test code was changed; this append-only entry is the only
+tracked change made by the review.
+
+**Assessment:** no High- or Medium-severity implementation defect was found.
+The four Axios call contracts and response-body unwrapping are preserved. The
+two tabs that fit the shared request state use `useAsyncRequest`; retaining
+local state in `HistoryTab` is justified because its two independently loading
+requests intentionally share one error field. `App.jsx` is now a 43-line shell,
+the original eight behavior-level App tests are unchanged, and every non-asset
+file under `frontend/src` remains below the roughly 200-line target.
+
+**Findings and discussion:**
+
+1. **Medium — the primary handoff documents were not advanced with the phase.**
+   `AGENTS.md` and the status line in `docs/4_next_steps.md` still say Phase 4
+   is “specified but unplanned,” although Phase 4a is now implemented and its
+   plan is complete. `docs/4_next_steps.md` also still describes `api/client.js`
+   as a future extraction. This does not affect the React build, but it gives a
+   fresh agent the wrong current state; the next documentation pass should say
+   Phase 4a is done and Phase 4b is unplanned.
+2. **Low — two completion-report measurements are imprecise.** The Phase 4a
+   checklist and Claude's log call `HistoryTab.jsx` the largest file under
+   `frontend/src` at 167 lines, but `App.css` is 184 lines. The exit criterion
+   still passes. The log also calls the extracted UI set “nine presentational
+   pieces” while naming ten components; ten files were in fact created.
+3. **Low — the requested Phase 4b planning handoff is still absent.** The final
+   instruction in the Phase 4a plan is “Then write the Phase 4b plan.” No such
+   plan exists yet. Claude's log accurately calls Phase 4b unstarted, so this is
+   visible unfinished follow-on work rather than a hidden implementation gap.
+
+**Verified locally:**
+
+- `npm test` passed **35/35** across 7 files; `npm run lint` and
+  `npm run build` passed. The build produced JS 253.21 kB and CSS 12.56 kB.
+- `frontend/src/App.test.jsx` and `frontend/package.json` are unchanged from
+  `0dd4a1c`; the backend, Streamlit app, `pyproject.toml`, and `uv.lock` also
+  have no Phase 4a diff.
+- The largest non-asset file is `frontend/src/App.css` at 184 lines; the largest
+  JavaScript/JSX implementation file is `CaloriesTab.jsx` at 174 lines.
+- `git diff --check 0dd4a1c..0b82ef4` passed.
+
+**Limits:** no hosted CI exists for the unpushed local Phase 4a branch, and the
+dashboard was not exercised against a live backend or in a browser. The tests,
+lint, production build, and direct source comparison support the pure-refactor
+claim within those limits.
+
+## 2026-09-14 — Claude Sonnet 5 — corrections to the Phase 4a entry above
+
+This log is append-only, so the 2026-09-14 Phase 4a entry above is not edited;
+these are corrections to three of its measurements, each re-verified directly
+rather than taken on the earlier entry's word.
+
+1. **The largest-file claim was self-contradictory.** The Phase 4a entry says
+   every file is "167 lines or fewer" and calls `HistoryTab.jsx` "now the
+   largest," in the same sentence that states `CaloriesTab.jsx` is 174 lines —
+   174 is not "167 or fewer," and 174 > 167 means `HistoryTab.jsx` is not the
+   largest. Codex's independent review (above) caught the sharper version:
+   `App.css` is larger than either. Re-measured with `wc -l` over
+   `frontend/src`: the largest JavaScript/JSX file is
+   `features/calories/CaloriesTab.jsx` at **174 lines**, then
+   `features/history/HistoryTab.jsx` at **167**; the largest file of any kind
+   is `App.css` at **184 lines**. The ~200-line exit criterion is met either
+   way — this corrects the claim, not the outcome. The plan document's matching
+   contradiction (`docs/superpowers/plans/2026-09-14-phase-4a-react-decomposition.md`,
+   the exit-gate line-count bullet) has been corrected in place, since that
+   document is not append-only.
+2. **"Nine presentational pieces" undercounts by one.** The entry lists ten
+   named components (`InputField`, `SelectField`, `SubmitButton`,
+   `SectionCard`, `StatCard`, `EmptyState`, `ErrorBanner`, `SuccessBanner`,
+   `TabBar`, `SparkleIcon`) but calls them "nine." `ls frontend/src/components/ui/
+   | wc -l` reports **10** files. Ten primitives were extracted, matching the
+   list already in the entry.
+3. **The frontend-test baseline was misstated as 5, not 8.** The entry reports
+   "frontend tests 5 → 35." The actual Phase 4a starting point was **8**:
+   `git show 0dd4a1c:frontend/src/App.test.jsx | grep -c "it("` reports 8, and
+   `0dd4a1c` is the Phase 3 completion commit this phase branched from (see
+   `.superpowers/sdd/progress.md`'s baseline line, and Phase 3's own entry
+   above, which reports "222 backend tests, 8 frontend tests" at its
+   completion). The correct figure is frontend tests **8 → 35**, still all
+   passing.

@@ -455,8 +455,11 @@ Expected: FAIL — cannot resolve `./client`.
 ```bash
 sed -n '218,240p;438,460p;624,655p' src/App.jsx
 ```
-Note the **exact** third argument each `axios` call passes — the meal-plan POST sends a
-headers object when a Gemini key is present, and the GETs send `{ params: { limit } }`.
+Note the **exact** third argument each `axios` call passes. **Correction, verified
+2026-09-14:** the POSTs pass only **two** arguments — there is no Gemini-key header in
+the React client at all; that header belongs to the backend's `/generate-meal-plan`
+route, not this caller. The GETs pass `{ params: { limit } }`. Trust the code over this
+plan if they ever disagree.
 Your functions must reproduce those exactly. If a call site passes something this plan's
 signatures cannot express, **widen the signature and say so in your report** rather than
 dropping the argument.
@@ -846,16 +849,35 @@ MSG
 Spec §9's React half is done when `App.jsx` is a shell, no file in `frontend/src` exceeds
 ~200 lines, and the dashboard still covers meal plan, calorie prediction and history.
 
-- [ ] `npm test` passes; report the real count (8 harness tests plus the new unit tests)
-- [ ] **`frontend/src/App.test.jsx` is byte-identical to the phase start** —
+- [x] `npm test` passes; report the real count (8 harness tests plus the new unit tests) —
+      `npm test -- --run` reports **35 passed (35)** across 7 test files (App.test.jsx's 8
+      cases plus 27 unit tests in api/, lib/, hooks/, and the three feature dirs).
+- [x] **`frontend/src/App.test.jsx` is byte-identical to the phase start** —
       `git diff refactor/phase-3-tests-and-ci HEAD -- frontend/src/App.test.jsx` is empty
-- [ ] `npm run lint` and `npm run build` both pass
-- [ ] No file in `frontend/src` exceeds ~200 lines — report the largest
-- [ ] `App.jsx` contains no component other than `App`
-- [ ] No new runtime dependency: `git diff ... -- frontend/package.json` adds nothing to `dependencies`
-- [ ] Backend untouched: `git diff ... --stat -- backend streamlit_app pyproject.toml uv.lock` empty
-- [ ] All three tabs still render and switch — covered by the harness
-- [ ] `git status --short` clean
-- [ ] Append a Phase 4a entry to `docs/5_agent_log.md`; tick this checklist
+- [x] `npm run lint` and `npm run build` both pass — both ran clean from `frontend/`
+      (`eslint .` produced no output; `vite build` succeeded, `dist/assets/index-*.js`
+      253.21 kB, `dist/assets/index-*.css` 12.56 kB).
+- [x] No file in `frontend/src` exceeds ~200 lines — report the largest — after
+      extracting `MealPlanResult.jsx` and `CalorieResult.jsx`, the largest
+      JavaScript/JSX file is `features/calories/CaloriesTab.jsx` at **174
+      lines**, then `features/history/HistoryTab.jsx` at **167**;
+      `MealPlanTab.jsx` is 123, `MealPlanResult.jsx` is 114, `CalorieResult.jsx`
+      is 45. Counting every file under `frontend/src`, not just JS/JSX, the
+      largest is `App.css` at **184 lines** — still under the ~200-line target.
+      (Corrected 2026-09-14: an earlier version of this line called
+      `HistoryTab.jsx` the largest file while listing `CaloriesTab.jsx` at 174
+      in the same sentence — a contradiction, not a measurement.)
+- [x] `App.jsx` contains no component other than `App` — read the file: one `function App()`,
+      no other component declared.
+- [x] No new runtime dependency: `git diff ... -- frontend/package.json` adds nothing to
+      `dependencies` — `git diff refactor/phase-3-tests-and-ci HEAD -- frontend/package.json`
+      produced no output at all (the file is unchanged since the phase start).
+- [x] Backend untouched: `git diff ... --stat -- backend streamlit_app pyproject.toml uv.lock`
+      empty — confirmed, no output.
+- [x] All three tabs still render and switch — covered by the harness — `App.test.jsx`'s
+      "switches to the calories tab" and "switches to the history tab" cases exercise this
+      and pass.
+- [x] `git status --short` clean — confirmed after this task's three commits landed.
+- [x] Append a Phase 4a entry to `docs/5_agent_log.md`; tick this checklist
 
 Then write the Phase 4b plan for the Streamlit half of spec §9.
