@@ -213,3 +213,60 @@ def test_the_profile_is_read_once_per_request() -> None:
     service.profile_repo.fetch_user_profile = _counted  # type: ignore[method-assign]
     service.generate(MealRequest(craving="pasta"))
     assert len(calls) == 1, f"profile fetched {len(calls)} times"
+
+
+def test_the_deterministic_fallback_also_scales_to_the_calorie_budget() -> None:
+    """The fallback path must honour the budget, not just display it.
+
+    When retrieval finds nothing, _fallback_payload used to return the raw
+    template grams with no portion_scaling. The calorie budget then changed only
+    user_context.caloric_target - a display field - while the portions and the
+    verified nutrition were identical for a 1100 kcal/day user and a 5400
+    kcal/day one. Reconciliation was skipped too, because its guard is
+    `portion_scaling is None`. Found by Codex on PR #2.
+    """
+    service = _service()
+    service.meal_agent.meal_retriever = None  # force the fallback path
+
+    small = service.generate(
+        MealRequest(
+            craving="zzzz nonsense craving",
+            age=25,
+            sex="female",
+            height_cm=155,
+            weight_kg=48,
+            activity_multiplier=1.2,
+            goal="cut",
+        )
+    )
+    large = service.generate(
+        MealRequest(
+            craving="zzzz nonsense craving",
+            age=30,
+            sex="male",
+            height_cm=200,
+            weight_kg=120,
+            activity_multiplier=2.2,
+            goal="bulk",
+        )
+    )
+
+    assert small.meal_plan.metadata.source == "deterministic_fallback"
+    assert large.meal_plan.metadata.source == "deterministic_fallback"
+
+    # The budget must reach the portions, not just user_context.
+    assert small.meal_plan.portion_scaling is not None
+    assert large.meal_plan.portion_scaling is not None
+    assert (
+        small.meal_plan.portion_scaling.target_meal_calories
+        < large.meal_plan.portion_scaling.target_meal_calories
+    )
+
+    small_grams = [i.base_quantity_grams for i in small.meal_plan.meal_definition.ingredients]
+    large_grams = [i.base_quantity_grams for i in large.meal_plan.meal_definition.ingredients]
+    assert small_grams != large_grams, "portions must differ with the budget"
+    assert sum(small_grams) < sum(large_grams)
+
+    # And reconciliation must run, since portion_scaling now exists.
+    assert small.reconciliation is not None
+    assert large.reconciliation is not None
