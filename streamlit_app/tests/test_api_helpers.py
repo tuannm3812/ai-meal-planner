@@ -34,3 +34,27 @@ def test_the_helper_modules_resolve_inside_streamlit_app() -> None:
     for module in (api, config, demo):
         assert module.__file__ is not None
         assert Path(module.__file__).parent.name == "streamlit_app", module.__file__
+
+
+@pytest.mark.parametrize(
+    "polite", ["thank you", "thanks", "hello", "hi", "hey", "ok", "okay", "test"]
+)
+def test_is_meal_like_input_rejects_polite_only_input(polite: str) -> None:
+    """These must not reach the API. Spec section 9 wrongly called this duplication."""
+    from views.meal_plan import is_meal_like_input
+
+    assert is_meal_like_input(polite) is False
+
+
+@pytest.mark.parametrize("value", ["ab", " a ", ""])
+def test_is_meal_like_input_rejects_anything_under_three_characters(value: str) -> None:
+    from views.meal_plan import is_meal_like_input
+
+    assert is_meal_like_input(value) is False
+
+
+@pytest.mark.parametrize("value", ["burger", "high-protein burger", "pasta"])
+def test_is_meal_like_input_accepts_a_real_craving(value: str) -> None:
+    from views.meal_plan import is_meal_like_input
+
+    assert is_meal_like_input(value) is True
