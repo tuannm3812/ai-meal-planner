@@ -100,14 +100,59 @@ def test_the_expected_text_inputs_exist(app: AppTest) -> None:
         assert expected in labels, f"missing text input: {expected}"
 
 
+def test_demo_mode_is_genuinely_active(app: AppTest) -> None:
+    """Pins that the fixture's STREAMLIT_DEMO_MODE env var actually flips the toggle.
+
+    Every other test in this module runs against the `app` fixture and only ever
+    observes symptoms of demo mode being on (no exception, no error box, a
+    successful generation) - none of them would notice if the sidebar's
+    `Run Mode` toggle silently stopped reading STREAMLIT_DEMO_MODE and defaulted
+    to off, because with a real FastAPI server absent the other tests would then
+    fail for an unrelated reason (a ConnectionError) or, worse, pass against a
+    server that happens to be running on the test machine. Asserting the toggle's
+    own value is the one check that is unambiguous either way.
+    """
+    demo_toggle = _by_label(app.toggle, "Self-contained Streamlit demo")
+    assert demo_toggle.value is True, "demo mode is not active; STREAMLIT_DEMO_MODE wiring broke"
+
+
 def test_generating_a_meal_in_demo_mode_produces_a_response(app: AppTest) -> None:
     """The end-to-end demo workflow, with no API server running.
 
     This is spec section 9's "done when" clause: the deployed Streamlit demo must
     still work with no backend. If the decomposition breaks the wiring between
     the sidebar's config and the views, this is the test that catches it.
+
+    Every interactive branch in app.py is wrapped in its own
+    `try: ... except Exception as exc: render_api_error(exc)`, so a bug inside
+    the click handler (a NameError, a dropped config field) never reaches
+    `app.exception` - it is swallowed into an `st.error(...)` box instead. So
+    the meaningful assertions here are on rendered *values*, not on the crash
+    signal: no error box, a success box that is new since the initial render
+    (the sidebar always renders its own success boxes, click or no click), and
+    the four nutrition metrics actually present with a non-zero calorie count.
+    The old "Response" subheader assertion is gone - `st.subheader("Response")`
+    renders unconditionally regardless of tab, click, or outcome, so it asserted
+    nothing.
     """
+    success_before_click = {str(item.value) for item in app.success}
+
     _by_label(app.text_input, "Craving or meal goal").set_value("high-protein burger")
     _by_label(app.button, "Generate meal").click().run(timeout=TIMEOUT)
+
     assert not app.exception, [str(item.value) for item in app.exception]
-    assert any("Response" == item.value for item in app.subheader)
+
+    errors = [str(item.value) for item in app.error]
+    assert not errors, f"an error box rendered instead of a meal plan: {errors}"
+
+    new_success_boxes = {str(item.value) for item in app.success} - success_before_click
+    assert new_success_boxes, (
+        "no success box appeared after clicking Generate meal (the sidebar's own "
+        "success boxes render on every run and don't count)"
+    )
+
+    metrics = {item.label: item.value for item in app.metric}
+    for expected in ("Calories", "Protein", "Carbs", "Fat"):
+        assert expected in metrics, f"missing nutrition metric: {expected}; saw {metrics}"
+    calories = metrics["Calories"]
+    assert float(calories) > 0, f"Calories metric was not positive: {calories}"
