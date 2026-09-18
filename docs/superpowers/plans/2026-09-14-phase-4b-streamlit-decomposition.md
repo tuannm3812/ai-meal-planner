@@ -937,19 +937,19 @@ MSG
 §9's Streamlit half is done when `app.py` is a shell, no file in `streamlit_app` exceeds
 ~200 lines, and the demo still works with no API server.
 
-- [ ] `uv run pytest` passes; report the real count (222 backend at the phase start, plus the new Streamlit tests)
-- [ ] **The Task 1 harness is byte-identical to when it was written** — `git diff <task-1-commit> HEAD -- streamlit_app/tests/test_app_harness.py` is empty
-- [ ] `uv run ruff check .` and `uv run ruff format --check .` clean
-- [ ] No file in `streamlit_app` exceeds ~200 lines — report the largest
-- [ ] `app.py` contains no view logic and no `with st.sidebar:` block
-- [ ] The demo runs with **no API server**: harness end-to-end test passes and the real server boots clean with port 8000 empty
-- [ ] `local_demo_request` still exists and still routes through `MealPlanningService`
-- [ ] The `latest_meal_result` session-state guard lives in `views/meal_plan.py`, and the meal tab renders clean before any meal is generated
-- [ ] `is_meal_like_input` still exists, still rejects the eight polite-only inputs, and has tests
-- [ ] `streamlit_app/__init__.py` was **not** created — flat sibling imports still resolve
-- [ ] No new dependency: `git diff <base> HEAD -- pyproject.toml` shows only the `testpaths` change
-- [ ] Backend and frontend untouched: `git diff <base> HEAD --stat -- backend frontend` empty
-- [ ] `git status --short` clean
-- [ ] Phase 4b entry appended to `docs/5_agent_log.md`; this checklist ticked
+- [x] `uv run pytest` passes; report the real count (222 backend at the phase start, plus the new Streamlit tests)
+- [x] **The Task 1 harness is byte-identical to when it was written** — `git diff <task-1-commit> HEAD -- streamlit_app/tests/test_app_harness.py` is empty
+- [x] `uv run ruff check .` and `uv run ruff format --check .` clean
+- [x] No file in `streamlit_app` exceeds ~200 lines — report the largest
+- [x] `app.py` contains no view logic and no `with st.sidebar:` block
+- [x] The demo runs with **no API server**: harness end-to-end test passes and the real server boots clean with port 8000 empty
+- [x] `local_demo_request` still exists and still routes through `MealPlanningService`
+- [x] The `latest_meal_result` session-state guard lives in `views/meal_plan.py`, and the meal tab renders clean before any meal is generated
+- [x] `is_meal_like_input` still exists, still rejects the eight polite-only inputs, and has tests
+- [x] `streamlit_app/__init__.py` was **not** created — flat sibling imports still resolve
+- [x] No new dependency: `git diff <base> HEAD -- pyproject.toml` shows only the `testpaths` change
+- [x] Backend and frontend untouched: `git diff <base> HEAD --stat -- backend frontend` empty
+- [x] `git status --short` clean
+- [x] Phase 4b entry appended to `docs/5_agent_log.md`; this checklist ticked
 
 That closes spec §9 and the refactor.

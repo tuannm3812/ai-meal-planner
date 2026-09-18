@@ -781,3 +781,107 @@ rather than taken on the earlier entry's word.
    above, which reports "222 backend tests, 8 frontend tests" at its
    completion). The correct figure is frontend tests **8 → 35**, still all
    passing.
+
+## 2026-09-18 — Claude Opus 5 — Phase 4b Streamlit decomposition
+
+**Delivered** on `refactor/phase-4b-streamlit` (no PR opened yet), in eight
+commits after the plan commit `90ad6c7`: `5a7409e`, `15e84cf`, `c672e6d`,
+`13ae29d`, `9475880`, `fb46d5f`, `78b5924`, and the commit that adds this
+entry. Every number below was re-measured on 2026-09-18 (`wc -l`,
+`git cat-file -p <sha>:streamlit_app/app.py | wc -l`, `uv run pytest`).
+
+`streamlit_app/app.py` went **685 → 61 lines** (685 at `90ad6c7`, 458 after
+`c672e6d`, 309 after `9475880`, 61 after `fb46d5f`). It now holds only the
+`REPO_ROOT` bootstrap, page config, title, the `make_request` factory, the
+`render_sidebar()` call, `st.tabs(...)` and the three `render(...)` calls; it
+has no `with st.sidebar:` block and no view logic. What lives where:
+
+| File | Lines | Contents |
+|---|---|---|
+| `demo.py` | 178 | `StreamlitUserProfileRepository`, `local_demo_request` |
+| `views/meal_plan.py` | 174 | the meal tab, `is_meal_like_input`, the `latest_meal_result` guard |
+| `views/sidebar.py` | 127 | Run Mode, API health, deployment settings, optional keys |
+| `views/profile.py` | 126 | the Profile section and its three option constants |
+| `views/calories.py` | 68 | the calorie tab |
+| `config.py` | 64 | `AppConfig`, `get_secret` |
+| `app.py` | 61 | the shell |
+| `views/history.py` | 52 | the history tab |
+| `api.py` | 41 | `request_json`, `render_api_error`, `parse_extra_items` |
+
+The largest file in `streamlit_app`, tests included, is `demo.py` at 178
+lines; the largest test file is `tests/test_app_harness.py` at 158. No file
+exceeds spec §9's ~200-line target. `views/sidebar.py` was 226 lines after
+Task 3, so in Task 5 (`78b5924`) the Profile section was moved verbatim into
+`views/profile.py` as `render_profile()`, called inside the same
+`with st.sidebar:` block after the same divider — following Phase 4a's
+precedent of splitting along a natural seam rather than only reporting the
+overshoot.
+
+**The harness was written first and passed unchanged throughout.**
+`tests/test_app_harness.py` (7 AppTest tests) landed in `5a7409e`, before any
+code moved. Review found that first version **vacuous**: every click handler
+swallows exceptions into `st.error` boxes, so `app.exception` never saw a
+handler bug. `15e84cf` rewrote it to assert on rendered values (no error box,
+a new success box, four nutrition metrics) and it was mutation-checked: a
+NameError in the handler, a disconnected button, a dropped profile and a
+removed demo env var are each caught. Emptying the Gemini key survives as an
+equivalent mutant, because no key is configured in tests. From `15e84cf` on,
+`git diff 15e84cf HEAD -- streamlit_app/tests/test_app_harness.py` is empty.
+
+**Review also caught database pollution.** The demo tests added in
+`c672e6d` appended synthetic records to the developer's real
+`database/meal_history.json`. `13ae29d` added an autouse conftest fixture
+redirecting `demo.DEMO_DATA_DIR` to `tmp_path` (2 writes per run → 0).
+
+**`AppConfig` replaced four module globals.** `use_demo_mode`,
+`api_base_url`, `gemini_api_key` and `streamlit_profile` were module
+globals set by the sidebar that `call_demo_or_api` closed over;
+`render_sidebar()` now returns an `AppConfig` and `make_request(config)`
+closes over that instead. The plan listed 7 fields; the real inventory was
+**16**, because the calorie tab reads nine more sidebar values.
+
+**Two places spec §9 was wrong, and both functions were kept:**
+
+- `local_demo_request` — §9 said to delete it as duplication (D4, DEC-2).
+  Phase 1 had already made it route through `MealPlanningService`, so it is
+  no longer duplicated backend logic; it is the demo-mode request router that
+  makes the zero-setup demo work with no API server, which DEC-2 preserves.
+  It moved to `demo.py` and gained tests in `tests/test_demo.py`.
+- `is_meal_like_input` — §9 grouped it with the duplication cleanup, but it
+  is a client-side guard that stops polite-only input ("thanks", "hello",
+  "ok", "test", …) from reaching the API. Deleting it would have changed
+  behaviour. It moved to `views/meal_plan.py` and gained its first tests
+  (the eight polite inputs, the under-three-characters case, and real
+  cravings).
+
+**Verified locally (2026-09-18):**
+
+- `uv run pytest`: **252 passed** (222 backend + 30 Streamlit: 7 harness,
+  19 `test_api_helpers.py`, 4 `test_demo.py`); coverage **91%**
+  (TOTAL 1341 statements, 122 missed) against the 89% floor.
+- `npx vitest run` in `frontend/`: 36 passed across 7 files — one more than
+  the 35 recorded for Phase 4a, from `71037a7`, which landed on
+  `refactor/phase-4a-react` after that count was taken.
+- `uv run ruff check .` and `uv run ruff format --check .` clean.
+- For every task, a throwaway checker clicked the four buttons the harness
+  does not (`Predict expenditure`, `Load history`, `Load saved meals`,
+  `Submit feedback`), and full-page element dumps in demo and API mode were
+  diffed before and after. All were identical apart from log timestamps,
+  including for the `78b5924` Profile split.
+- With nothing listening on port 8000,
+  `STREAMLIT_DEMO_MODE=1 uv run streamlit run streamlit_app/app.py` booted
+  and `/_stcore/health` returned 200; the server log had no traceback or
+  error, and the port was free after it was killed. That check proves the
+  server boots, not that a browser session renders — the harness's
+  end-to-end demo-mode generation test covers the script itself.
+- `git diff refactor/phase-4a-react HEAD --stat -- backend frontend notebooks
+  .github .gitignore` is empty; the only `pyproject.toml` change is adding
+  `streamlit_app/tests` to `testpaths`. No `streamlit_app/__init__.py`; the
+  flat sibling imports resolve.
+
+**Limits:** the throwaway checker and page dumps are not committed, so the
+four unharnessed buttons still have no permanent test. `demo.py` at 178 lines
+is the next file to watch against the ~200 target.
+
+This completes spec §9 and, with it, the whole refactor specified in
+`docs/superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md`.

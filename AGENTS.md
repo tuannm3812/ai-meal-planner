@@ -32,12 +32,15 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 
 ## Current state
 
-- 2026-09-14: refactor Phases 0–3 (`docs/superpowers/specs/2026-09-10-refactor-
-  and-standards-alignment-design.md`) are done, open as PRs #1–#4 stacked on
-  each other. Phase 4 split into 4a and 4b: **Phase 4a (React decomposition
-  of `frontend/src/App.jsx`) is done**; **Phase 4b (the matching Streamlit
-  split) is planned but unstarted**. 222 backend tests, 35 frontend tests,
-  all green; backend coverage 91%, floor 89% enforced in CI.
+- 2026-09-18: the refactor (`docs/superpowers/specs/2026-09-10-refactor-and-
+  standards-alignment-design.md`) is complete — Phases 0–3, 4a and 4b are all
+  done, on stacked branches awaiting the user's merge. Phases 0–4a are open as
+  PRs #1–#5; Phase 4b (the
+  Streamlit split of `streamlit_app/app.py` into `config.py`, `api.py`,
+  `demo.py` and `views/`) is on `refactor/phase-4b-streamlit`, with no PR
+  opened yet. `uv run pytest` runs 252 tests (222 backend, 30 Streamlit), all
+  green, coverage 91% against the 89% CI floor; the frontend has 36 tests,
+  all green.
 
 ## Open risks
 
