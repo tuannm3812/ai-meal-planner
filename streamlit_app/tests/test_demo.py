@@ -1,16 +1,16 @@
 """Unit tests for the Streamlit app's self-contained demo-mode request router.
 
 `/generate-meal-plan` runs the real MealPlanningService in-process (the same
-orchestrator FastAPI uses), so these tests force the env to the offline path
-before calling it: no Gemini key is passed, and USDA/FatSecret keys are
-unset, so NutritionVerificationAgent and MealRecommendationAgent never reach
-for the network (both are gated by `if self.api_key:` / `if gemini_api_key:`
-in backend/app/agents/*). No `allow_network` marker is needed.
+orchestrator FastAPI uses). conftest.py's autouse `_isolate_secrets` fixture
+forces the env to the offline path before calling it: no Gemini key is
+passed, and USDA/FatSecret keys are unset, so NutritionVerificationAgent and
+MealRecommendationAgent never reach for the network (both are gated by
+`if self.api_key:` / `if gemini_api_key:` in backend/app/agents/*). No
+`allow_network` marker is needed.
 """
 
 from typing import Any
 
-import pytest
 from demo import StreamlitUserProfileRepository, local_demo_request
 
 PROFILE = {
@@ -21,19 +21,6 @@ PROFILE = {
     "activity_multiplier": 1.55,
     "dietary_restrictions": ["dairy-free"],
 }
-
-
-@pytest.fixture(autouse=True)
-def _offline_demo_env(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Force local_demo_request onto its deterministic, no-network path."""
-    for name in (
-        "USDA_API_KEY",
-        "FATSECRET_CLIENT_ID",
-        "FATSECRET_CLIENT_SECRET",
-        "ENABLE_GEMINI_ADAPTATION",
-        "GEMINI_API_KEY",
-    ):
-        monkeypatch.delenv(name, raising=False)
 
 
 def test_health_reports_ok_status_and_services() -> None:
