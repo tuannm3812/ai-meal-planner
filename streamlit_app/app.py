@@ -1,13 +1,11 @@
-import os
 import sys
-import tomllib
-from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-from uuid import uuid4
 
-import requests
 import streamlit as st
+from api import parse_extra_items, render_api_error, request_json
+from config import get_secret
+from demo import local_demo_request
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -15,35 +13,7 @@ if str(REPO_ROOT) not in sys.path:
 
 st.set_page_config(page_title="AI Meal Planner", page_icon="A", layout="wide")
 
-
-def get_secret(name: str, default: str = "") -> str:
-    env_value = os.getenv(name)
-    if env_value:
-        return env_value
-
-    try:
-        value = st.secrets.get(name)
-        if value:
-            return str(value)
-    except Exception:
-        pass
-
-    local_secrets_path = Path(".streamlit") / "secrets.toml"
-    if local_secrets_path.exists():
-        try:
-            secrets = tomllib.loads(local_secrets_path.read_text(encoding="utf-8"))
-            value = secrets.get(name)
-            if value:
-                return str(value)
-        except tomllib.TOMLDecodeError:
-            return default
-
-    return default
-
-
 DEFAULT_API_BASE_URL = get_secret("API_BASE_URL", "http://localhost:8000")
-DEMO_DATA_DIR = Path("/tmp/ai_meal_planner") if os.getenv("STREAMLIT_SHARING") else Path("database")
-DEMO_DATA_DIR.mkdir(parents=True, exist_ok=True)
 COMMON_HEALTH_CONDITIONS = [
     "None",
     "Diabetes",
@@ -76,41 +46,6 @@ ACTIVITY_LEVELS = {
 }
 
 
-def request_json(
-    method: str,
-    base_url: str,
-    path: str,
-    payload: dict[str, Any] | None = None,
-    headers: dict[str, str] | None = None,
-) -> dict[str, Any]:
-    url = f"{base_url.rstrip('/')}{path}"
-    response = requests.request(method, url, json=payload, headers=headers, timeout=30)
-    response.raise_for_status()
-    return response.json()
-
-
-def render_api_error(exc: Exception) -> None:
-    if isinstance(exc, requests.HTTPError):
-        response = exc.response
-        try:
-            detail = response.json()
-        except ValueError:
-            detail = response.text
-        st.error(f"API request failed with status {response.status_code}.")
-        st.code(detail, language="json")
-        return
-
-    if isinstance(exc, requests.ConnectionError):
-        st.error("Could not connect to the API. Start FastAPI on http://localhost:8000 first.")
-        return
-
-    st.error(f"Unexpected API error: {exc}")
-
-
-def parse_extra_items(raw_value: str) -> list[str]:
-    return [item.strip() for item in raw_value.split(",") if item.strip()]
-
-
 def is_meal_like_input(value: str) -> bool:
     normalized_value = value.strip().lower()
     polite_only = {
@@ -126,168 +61,6 @@ def is_meal_like_input(value: str) -> bool:
     if normalized_value in polite_only:
         return False
     return len(normalized_value) >= 3
-
-
-class StreamlitUserProfileRepository:
-    def __init__(
-        self,
-        age: int,
-        sex: str,
-        height_cm: float,
-        weight_kg: float,
-        activity_multiplier: float,
-        dietary_restrictions: list[str],
-    ):
-        self.profile = {
-            "age": age,
-            "gender": "m" if sex.lower().startswith("male") else "f",
-            "height": height_cm,
-            "weight": weight_kg,
-            "workout_level": activity_multiplier,
-            "dietary_restrictions": dietary_restrictions,
-        }
-
-    def fetch_user_profile(self, user_id: str) -> dict[str, Any]:
-        return self.profile
-
-
-def local_demo_request(
-    path: str,
-    payload: dict[str, Any] | None,
-    profile: dict[str, Any],
-    api_key: str = "",
-) -> dict[str, Any]:
-    payload = payload or {}
-    if path == "/health":
-        return {
-            "status": "ok",
-            "environment": "streamlit_demo",
-            "services": {
-                "mode": "self_contained_streamlit",
-                "gemini_configured": bool(api_key),
-                "usda_configured": bool(get_secret("USDA_API_KEY")),
-                "fatsecret_configured": bool(get_secret("FATSECRET_CLIENT_ID"))
-                and bool(get_secret("FATSECRET_CLIENT_SECRET")),
-                "calorie_model_configured": Path(
-                    "models/calorie_expenditure/calorie_expenditure_model.joblib"
-                ).exists(),
-                "rag_backend": "lazy_loaded_local",
-            },
-        }
-
-    try:
-        from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
-        from backend.app.agents.supermarket_agent import SupermarketAgent
-        from backend.app.repositories.json_store import MealFeedbackRepository, MealPlanRepository
-    except ImportError as exc:
-        raise RuntimeError(f"Local demo mode cannot import backend storage modules: {exc}") from exc
-
-    user_repository = StreamlitUserProfileRepository(
-        age=int(profile["age"]),
-        sex=str(profile["sex"]),
-        height_cm=float(profile["height_cm"]),
-        weight_kg=float(profile["weight_kg"]),
-        activity_multiplier=float(profile["activity_multiplier"]),
-        dietary_restrictions=profile["dietary_restrictions"],
-    )
-
-    if path == "/generate-meal-plan":
-        try:
-            from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureAgent
-            from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
-            from backend.app.schemas.requests import MealRequest
-            from backend.app.services.meal_planning_service import MealPlanningService
-        except ImportError as exc:
-            raise RuntimeError(f"Local demo mode cannot import meal agent: {exc}") from exc
-
-        request_id = str(uuid4())
-        meal_agent = MealRecommendationAgent(
-            db_connection=user_repository,
-            gemini_api_key=api_key or None,
-            meal_corpus_path=Path("data/meal_corpus/meals.json"),
-            enable_llm_adaptation=get_secret("ENABLE_GEMINI_ADAPTATION", "0") == "1",
-        )
-        nutrition_agent = NutritionVerificationAgent(
-            usda_api_key=get_secret("USDA_API_KEY") or None,
-            fatsecret_client_id=get_secret("FATSECRET_CLIENT_ID") or None,
-            fatsecret_client_secret=get_secret("FATSECRET_CLIENT_SECRET") or None,
-        )
-        supermarket_agent = SupermarketAgent()
-        calorie_agent = CalorieExpenditureAgent(
-            model_path=Path("models/calorie_expenditure/calorie_expenditure_model.joblib"),
-            model_version=get_secret("CALORIE_MODEL_VERSION", "hist_gradient_boosting_deep_v0.1.0"),
-        )
-        # Demo mode runs the same orchestrator as the API, so the two cannot drift.
-        service = MealPlanningService(
-            meal_agent=meal_agent,
-            nutrition_agent=nutrition_agent,
-            supermarket_agent=supermarket_agent,
-            calorie_agent=calorie_agent,
-            profile_repo=user_repository,
-        )
-        result = service.generate(
-            MealRequest(
-                craving=payload["craving"],
-                user_id=payload.get("user_id", "user_123"),
-                location=payload.get("location", "Earlwood, NSW"),
-                health_conditions=payload.get("health_conditions", []),
-                dietary_preferences=payload.get("dietary_preferences", []),
-            )
-        )
-        response = {
-            "status": "success",
-            "request_id": request_id,
-            "generated_at": datetime.now(UTC).isoformat(),
-            "request": payload,
-            "calorie_budget": result.calorie_budget.model_dump(),
-            "meal_plan": result.meal_plan.model_dump(),
-            "nutrition": result.nutrition.model_dump(),
-            "shopping_list": result.shopping_list.model_dump(),
-            "reconciliation": (
-                result.reconciliation.model_dump() if result.reconciliation else None
-            ),
-        }
-        MealPlanRepository(DEMO_DATA_DIR).save(response)
-        return response
-
-    if path == "/calorie-expenditure/predict":
-        try:
-            from backend.app.agents.calorie_expenditure_agent import (
-                CalorieExpenditureAgent,
-                CalorieExpenditureRequest,
-            )
-        except ImportError as exc:
-            raise RuntimeError(f"Local demo mode cannot import calorie agent: {exc}") from exc
-
-        agent = CalorieExpenditureAgent(
-            model_path=Path("models/calorie_expenditure/calorie_expenditure_model.joblib"),
-            model_version="hist_gradient_boosting_deep_v0.1.0",
-        )
-        request = CalorieExpenditureRequest.model_validate(payload)
-        return agent.predict(request).model_dump()
-
-    if path == "/meal-feedback":
-        record = MealFeedbackRepository(DEMO_DATA_DIR).save(payload)
-        return {"status": "success", "item": record}
-
-    if path.startswith("/meal-plans/"):
-        user_id = path.split("/", 2)[2].split("?", 1)[0]
-        return {
-            "user_id": user_id,
-            "items": MealPlanRepository(DEMO_DATA_DIR).list_for_user(user_id=user_id),
-        }
-
-    if path.startswith("/saved-meals/"):
-        user_id = path.split("/", 2)[2].split("?", 1)[0]
-        return {
-            "user_id": user_id,
-            "items": MealFeedbackRepository(DEMO_DATA_DIR).list_for_user(
-                user_id=user_id,
-                saved_only=True,
-            ),
-        }
-
-    raise ValueError(f"Unsupported local demo path: {path}")
 
 
 st.title("AI Meal Planner")
