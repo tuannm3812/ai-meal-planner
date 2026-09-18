@@ -38,7 +38,7 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   PRs #1–#5; Phase 4b (the
   Streamlit split of `streamlit_app/app.py` into `config.py`, `api.py`,
   `demo.py` and `views/`) is on `refactor/phase-4b-streamlit`, with no PR
-  opened yet. `uv run pytest` runs 252 tests (222 backend, 30 Streamlit), all
+  opened yet. `uv run pytest` runs 255 tests (222 backend, 33 Streamlit), all
   green, coverage 91% against the 89% CI floor; the frontend has 36 tests,
   all green.
 

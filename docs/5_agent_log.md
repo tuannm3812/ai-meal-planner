@@ -885,3 +885,91 @@ is the next file to watch against the ~200 target.
 
 This completes spec §9 and, with it, the whole refactor specified in
 `docs/superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md`.
+
+## 2026-09-18 — Claude Sonnet 5 — final whole-branch review fixes for Phase 4b
+
+A final review of `refactor/phase-4b-streamlit` before merge found six issues, all
+fixed on the same branch, `test_app_harness.py` untouched throughout (`git diff
+15e84cf HEAD -- streamlit_app/tests/test_app_harness.py` stays empty):
+
+1. **The four workflows the frozen harness never clicks had no test.** Every click
+   handler wraps its body in `try/except Exception: render_api_error(exc)`, so a
+   broken `config.<field>` or a mistyped API path in "Predict expenditure", "Load
+   history", "Load saved meals" or "Submit feedback" was invisible to every CI
+   signal — it would render an `st.error` box, not raise. Added
+   `streamlit_app/tests/test_app_workflows.py` (3 tests), based on a throwaway
+   checker that clicked every button and printed rendered state. Mutation-proved:
+   - `views/calories.py`, `config.heart_rate_bpm` → `config.heart_rate`: caught by
+     **both** the new `test_predict_expenditure_renders_the_calorie_metrics` and,
+     because that dict is built outside the tab's `try` block, by the existing
+     `test_the_app_runs_without_raising` and two other harness tests too.
+   - `views/history.py`, `config.user_id` → `config.user_idx` (both call sites):
+     caught **only** by the new `test_history_and_saved_meals_load_empty_on_a_fresh_store`
+     and `test_generating_saving_and_reloading_a_meal_updates_history` — the frozen
+     harness stayed green.
+   - `views/meal_plan.py`, the feedback POST path `/meal-feedback` →
+     `/meal-feedback-broken`: caught **only** by the new
+     `test_generating_saving_and_reloading_a_meal_updates_history` — the frozen
+     harness stayed green (it never clicks Submit feedback).
+   Each mutation was applied, verified, and reverted; `git diff --stat` was clean
+   after each and after the final restore.
+
+2. **Real secrets could leak into the Streamlit tests.** `test_demo.py`'s autouse
+   fixture only cleared five env vars, and `config.py::get_secret` also falls
+   back to `st.secrets` and a `.streamlit/secrets.toml` read relative to the
+   process cwd — the same file a real deployment reads, and pytest's cwd from
+   the repo root matches it exactly. Verified experimentally: with the env vars
+   cleared but a real `.streamlit/secrets.toml` present, `get_secret` still
+   returned the file's value — both directly and via `st.secrets.get`, which
+   has its own file lookup independent of the plain path read. Moved the env
+   clearing into `conftest.py`'s autouse `_isolate_secrets` fixture (applies to
+   every Streamlit test, not just `test_demo.py`) and added two narrow
+   monkeypatches: `Secrets.get` always misses, and `Path.exists` fakes a miss
+   only for a path ending in `.streamlit/secrets.toml`. `monkeypatch.chdir` was
+   considered and rejected — it would also break the relative paths `demo.py`
+   depends on for the model artifact and the meal corpus. Re-verified with both
+   a real env var and a real `.streamlit/secrets.toml` present: all 33
+   Streamlit tests still pass with no leak. `get_secret`'s own code is
+   unchanged; this is test-side isolation only.
+
+3. **The shadowing-guard test didn't cover `views`.** `views` is a package, so
+   its `__file__` is one directory deeper (`streamlit_app/views/__init__.py`)
+   than the flat modules' — `test_the_helper_modules_resolve_inside_streamlit_app`
+   now also asserts `Path(views.__file__).parent.parent.name == "streamlit_app"`.
+
+4. **`demo.py`'s deferred backend imports had no comment explaining why.** Added
+   one at each of the three `from backend...` blocks: `app.py` adds the repo
+   root to `sys.path` only after importing `demo`, so a top-level import would
+   work under pytest and `uv run` but fail on Streamlit Cloud. Comment only, no
+   code change.
+
+5. **The plan's exit-gate checkbox named the wrong commit.** The
+   harness-byte-identical item said `<task-1-commit>`, which reads as `5a7409e`
+   (Task 1's commit) — but the harness was rewritten and frozen at `15e84cf`.
+   Corrected to name `15e84cf` and say why; added a ticked item for the new
+   workflow tests.
+
+**Correction to the Phase 4b entry above.** It attributes the
+`database/meal_history.json` pollution only to the demo tests added in
+`c672e6d`. That is incomplete: the `AppTest` harness itself (`5a7409e`, Task 1)
+already ran the full "Generate meal" click end to end, and `DEMO_DATA_DIR`
+defaulted to `database/` until `13ae29d` redirected it to `tmp_path` — so the
+harness had been writing real records there since `5a7409e`, before
+`c672e6d` existed. The polluted records already in `database/meal_history.json`
+and `database/meal_feedback.json` were left in place: that file is the
+developer's own gitignored local data, and deciding whether to clean it up is
+theirs, not this review's.
+
+**Verified locally (2026-09-18):**
+
+- `uv run pytest` (from the repo root, without `-q`): **255 passed** (222
+  backend, unchanged; 33 Streamlit — `test_api_helpers.py` 19,
+  `test_app_harness.py` 7, `test_app_workflows.py` 3 new, `test_demo.py` 4).
+  Coverage **91%** (TOTAL 1341 statements, 122 missed) against the 89% floor.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- Largest file in `streamlit_app`, tests included: `demo.py` at 184 lines
+  (178 + 3 one-line comments), still under the ~200 target.
+- `git status --short` clean after every mutation was reverted; no stray
+  `streamlit_app/database/` or `streamlit_app/.coverage`; `database/*.json`
+  mtimes unchanged by this session, confirming `_isolate_demo_storage` still
+  isolates every Streamlit test, old and new.

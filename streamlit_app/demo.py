@@ -63,6 +63,10 @@ def local_demo_request(
             },
         }
 
+    # Deferred, not module-top: app.py adds the repo root to sys.path only after
+    # importing this module, so a top-level `backend` import here could work under
+    # pytest and `uv run` (where the project is installed and already on
+    # sys.path) but fail on Streamlit Cloud, where app.py's bootstrap runs first.
     try:
         from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
         from backend.app.agents.supermarket_agent import SupermarketAgent
@@ -81,6 +85,7 @@ def local_demo_request(
 
     if path == "/generate-meal-plan":
         try:
+            # Deferred for the same sys.path reason as the block above.
             from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureAgent
             from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
             from backend.app.schemas.requests import MealRequest
@@ -140,6 +145,7 @@ def local_demo_request(
 
     if path == "/calorie-expenditure/predict":
         try:
+            # Deferred for the same sys.path reason as the block above.
             from backend.app.agents.calorie_expenditure_agent import (
                 CalorieExpenditureAgent,
                 CalorieExpenditureRequest,

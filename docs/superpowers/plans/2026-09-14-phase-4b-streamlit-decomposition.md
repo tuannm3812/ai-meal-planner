@@ -938,7 +938,8 @@ MSG
 ~200 lines, and the demo still works with no API server.
 
 - [x] `uv run pytest` passes; report the real count (222 backend at the phase start, plus the new Streamlit tests)
-- [x] **The Task 1 harness is byte-identical to when it was written** — `git diff <task-1-commit> HEAD -- streamlit_app/tests/test_app_harness.py` is empty
+- [x] **The Task 1 harness is byte-identical to when it was written** — `git diff 15e84cf HEAD -- streamlit_app/tests/test_app_harness.py` is empty (`15e84cf`, not the original Task 1 commit `5a7409e`, because `15e84cf` rewrote the harness to assert on rendered values and froze it there)
+- [x] The four workflows the frozen harness never clicks (`Predict expenditure`, `Load history`/`Load saved meals`, `Submit feedback`) are committed and mutation-checked in `streamlit_app/tests/test_app_workflows.py`
 - [x] `uv run ruff check .` and `uv run ruff format --check .` clean
 - [x] No file in `streamlit_app` exceeds ~200 lines — report the largest
 - [x] `app.py` contains no view logic and no `with st.sidebar:` block
