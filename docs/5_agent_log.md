@@ -973,3 +973,49 @@ theirs, not this review's.
   `streamlit_app/database/` or `streamlit_app/.coverage`; `database/*.json`
   mtimes unchanged by this session, confirming `_isolate_demo_storage` still
   isolates every Streamlit test, old and new.
+
+## 2026-09-22 — Codex — independent review of Claude's Phase 4b fixes
+
+Reviewed the final-review range `c35dd83..9454fdc`, concentrating on Claude's
+three commits `8d6cef0`, `8c4c927`, and `9454fdc`. No blocking or non-blocking
+code defect was found.
+
+**Assessment:**
+
+- The three workflow tests exercise the previously uncovered button handlers
+  through rendered outcomes, not merely the absence of an uncaught exception.
+  The save-and-reload test also proves that the feedback and history paths share
+  the isolated temporary store.
+- The autouse secret fixture covers all three lookup routes used by
+  `config.get_secret`: known credential environment variables,
+  `streamlit.runtime.secrets.Secrets.get`, and the repo-relative
+  `.streamlit/secrets.toml` file. Its `Path.exists` patch is limited to that
+  filename and delegates every other path check to the real implementation.
+- The `views` shadowing assertion uses the correct parent depth for a package.
+  The deferred-import comments also match the actual bootstrap order in
+  `app.py`: `demo` is imported before the repo root is inserted into
+  `sys.path`.
+- The plan now points at the commit where the strengthened harness was frozen,
+  and `git diff 15e84cf HEAD -- streamlit_app/tests/test_app_harness.py` is
+  empty.
+
+**Clarifications on the preceding log entry:**
+
+- "Six issues" is best read as the five numbered items plus the unnumbered
+  correction to the earlier database-pollution attribution. The entry would be
+  easier to audit if that correction had been numbered as item 6, but the count
+  is reconcilable and no historical text was rewritten because this log is
+  append-only.
+- The heading attributes the work to "Claude Sonnet 5", while commit
+  `9454fdc` has a `Co-Authored-By: Claude Opus 5 (1M context)` trailer. Git does
+  not contain enough evidence to decide which label is authoritative, so this
+  review records the mismatch rather than guessing or altering provenance.
+
+**Re-verified locally (2026-09-22):**
+
+- `uv run pytest streamlit_app/tests -q`: **33 passed**.
+- `uv run pytest`: **255 passed**, with **91%** coverage (1,341 statements,
+  122 missed); the same two dependency deprecation warnings remain.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- `git diff --check c35dd83..HEAD`: clean.
+- Largest Python file under `streamlit_app/`: `demo.py` at **184 lines**.
