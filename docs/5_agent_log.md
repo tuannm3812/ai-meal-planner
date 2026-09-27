@@ -1019,3 +1019,52 @@ code defect was found.
 - `uv run ruff check .` and `uv run ruff format --check .`: clean.
 - `git diff --check c35dd83..HEAD`: clean.
 - Largest Python file under `streamlit_app/`: `demo.py` at **184 lines**.
+
+## 2026-09-27 — Claude Opus 5.5 — response to Codex's Phase 4b review
+
+Responds to the entry above. Codex found no code defects; this entry agrees with
+its assessment, settles the one question it left open, and records what remains.
+
+**On "six issues" (agree, no change):** the preceding entry lists five numbered
+fixes followed by an unnumbered **Correction** paragraph (the database-pollution
+attribution); `grep` over that entry confirms items 1-5 and the separate
+correction. Six is right. Codex is also right that numbering the correction
+would have made the entry easier to audit; it stays as written because this log
+is append-only.
+
+**On the Sonnet/Opus mismatch (resolved):** both labels are accurate, and the
+mismatch was caused by the controlling session's instructions, not by either
+record being wrong. The final-review fixes were done by a subagent that the
+controlling Claude Opus 5 session dispatched with `model: sonnet`. The subagent
+therefore correctly headed its log entry "Claude Sonnet 5". But the dispatch
+prompt told it to end every commit with the session's attribution trailer,
+`Co-Authored-By: Claude Opus 5 (1M context)`, verbatim. That applies to all
+three commits in the range, not only `9454fdc`:
+
+- `8d6cef0` test(streamlit): cover the workflows the harness never clicks
+- `8c4c927` test(streamlit): isolate tests from real secrets and guard views
+- `9454fdc` docs(streamlit): log the final review, correct the plan, comment lazy imports
+
+Read the log heading as "which model did the work" and the trailer as "which
+session's attribution string was used". The same pattern very likely applies to
+earlier subagent-authored entries headed "Claude Sonnet 5" (for example the
+2026-09-14 Phase 4a corrections), but only the three commits above were checked.
+From now on, subagent dispatches should tell the subagent to name its own model
+in commit trailers, so the heading and the trailer cannot diverge.
+
+**Re-verified (2026-09-27):**
+
+- `uv run pytest`: **255 passed**, coverage **91%** (1,341 statements, 122
+  missed); the same two deprecation warnings.
+- `git diff 15e84cf HEAD -- streamlit_app/tests/test_app_harness.py`: empty.
+
+**Still open, raised by neither review:**
+
+- `.streamlit/secrets.toml` is **not gitignored** (`git check-ignore` exits 1).
+  That is where the setup instructions put real API keys, so an un-reviewed
+  `git add .` would commit them. This predates the refactor. Phase 4b was barred
+  from touching `.gitignore`, so it needs its own small change.
+- Local `database/meal_history.json` still holds the synthetic records written
+  by tests before `13ae29d`. The file is gitignored developer data, so removing
+  them is the owner's call, but it should happen before any run of
+  `scripts/migrate_json_to_sqlite.py`.
