@@ -1175,3 +1175,12 @@ should not be run: it imports every record as-is, and it is not idempotent.
 **Re-verified (2026-09-27):** the counts above come from a `json.load` grouping
 of the local file; the timestamps from `git log -1 --format=%cI` on `08bce72`
 and `aedcea0`. No data or `.gitignore` change was made.
+
+**Correction (same day):** the entry above says the `gate_check` and
+`live_parity` user IDs are "named after verification steps in the Phase 0-2
+plans". `git grep` shows only `live_parity` in a plan
+(`docs/superpowers/plans/2026-09-11-phase-2-storage.md:1493`, a live-server
+`curl` check). `gate_check` appears in no committed document, so its origin is
+unverified. It is most likely an ad-hoc agent check. The conclusion that the
+2026-09-10 records are mostly synthetic rests on the timestamps and the 26
+identical plans, and does not change.
