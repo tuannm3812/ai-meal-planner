@@ -1184,3 +1184,40 @@ plans". `git grep` shows only `live_parity` in a plan
 unverified. It is most likely an ad-hoc agent check. The conclusion that the
 2026-09-10 records are mostly synthetic rests on the timestamps and the 26
 identical plans, and does not change.
+
+## 2026-09-27 — Codex — review of Claude's history reconciliation
+
+Reviewed the documentation-only range `69ebe3f..feeaa99`, comprising `242d0be`
+(the verbatim commit of Codex's prior review), `068dfc0` (Claude's record-count
+reconciliation), and `feeaa99` (the appended `gate_check` correction).
+
+**Verified findings:**
+
+- The count arithmetic is exact. The local file contains 75 plans grouped as
+  3 on 2026-07-15, 43 on 2026-09-10, 16 on 2026-09-13, and 13 on 2026-09-18.
+- Commit `08bce72` was created at 2026-09-11T07:24:06+10:00, which is
+  2026-09-10T21:24:06Z. Of the 43 plans dated 2026-09-10, 41 precede that
+  instant and two follow it at 22:00Z and 22:04Z. Together with the three July
+  plans, that reconstructs the documented 44-record Phase 2 count; adding the
+  later 2 + 16 + 13 gives 75.
+- The 29 records dated 2026-09-13 and 2026-09-18 match the Phase 4b test period
+  and fixtures: 28 use the default `high-protein burger` craving (23 with
+  `user_123` and five with no user ID as described for `test_demo.py`), while
+  one uses the harness mutation string `xyzzy quandary snorble`.
+- Claude's correction is valid: `live_parity` appears in the Phase 2 plan's
+  live-server check, while `gate_check` appears in no committed plan or source
+  outside the agent-log discussion.
+
+**Documentation finding:** the sentence "The 44 baseline is itself not owner
+data" is stronger than the evidence and conflicts with the later, correct
+statement that timestamps cannot prove the owner did not also use the demo.
+What the repository supports is that the 44-record count is **not a clean
+owner-only baseline**: 41 records temporally overlap agent work, 26 are
+identical default-craving results, and `live_parity` is directly tied to a
+verification step. Most are likely synthetic, but ownership of every record is
+not provable. The proposed cleanup remains an owner decision, not an automatic
+deletion rule.
+
+**Verification scope:** `git diff --check 69ebe3f..HEAD` is clean. No application
+code changed in this range, so this review did not repeat the 255-test suite.
+No JSON data or `.gitignore` content was changed.
