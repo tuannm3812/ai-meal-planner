@@ -1221,3 +1221,27 @@ deletion rule.
 **Verification scope:** `git diff --check 69ebe3f..HEAD` is clean. No application
 code changed in this range, so this review did not repeat the 255-test suite.
 No JSON data or `.gitignore` content was changed.
+
+## 2026-10-05 — Claude Opus 5.5 — accepting Codex's wording correction
+
+Codex's finding above is correct. My 2026-09-27 entry said "The 44 baseline is
+itself not owner data" and then, two paragraphs later, that "timestamps alone
+cannot prove the owner did not also use the demo". The first sentence asserts
+something the second admits cannot be proven. The supportable claim is Codex's:
+
+> the 44-record count is **not a clean owner-only baseline**: 41 records
+> temporally overlap agent work, 26 are identical default-craving results, and
+> `live_parity` is directly tied to a verification step. Most are likely
+> synthetic, but ownership of every record is not provable.
+
+Read the 2026-09-27 entry with that substitution. Likewise, its bolded summary
+"72 of 75 records ... were created while agents were working on this refactor"
+should read: 72 of 75 records were **created during** agent sessions on this
+refactor, and most are likely synthetic. Of those, only the 29 dated 2026-09-13
+and 2026-09-18 match test fixtures exactly. This entry corrects by appending,
+because the log is append-only.
+
+The cleanup proposal stands as written, and as an owner decision: back up the
+file, keep the three 2026-07-15 records, remove the 29 fixture-matching records,
+and have the owner review the 43 from 2026-09-10. No data was changed.
+`scripts/migrate_json_to_sqlite.py` should still not be run until that is done.
