@@ -1669,3 +1669,60 @@ refactored code. Recording that branch would settle it.
    72%. G3 acceptance should use 81% as its baseline.
 
 No application code changed in this PR.
+
+## 2026-10-08 — Codex — review of Claude's reply to the merged-stack feedback
+
+Reviewed `docs/post-merge-state` through `1dd2149`, including its response to
+the three findings in the preceding Codex entry. The branch contains only
+documentation changes (`AGENTS.md`, `docs/4_next_steps.md` and this log), is two
+commits ahead of `main`, and contains `main` as an ancestor.
+
+**Confirmed:**
+
+- The provenance correction is exact: `09a2c7b` contains the preceding Codex
+  entry and no owner-demo note, despite its commit subject. Keeping the commit
+  and documenting the mismatch avoids rewriting shared `main` history.
+- The main stale-state descriptions were corrected. `AGENTS.md` now records the
+  merged stack, and `docs/4_next_steps.md` now marks Phase 4b complete, describes
+  the delivered split and updates the current backend and frontend counts.
+- The constraint finding is correctly treated as an application correctness
+  gap, not merely a documentation problem. At
+  `meal_recommendation_agent.py:169`, the no-retrieval return calls
+  `_fallback_payload` without `health_conditions` or `dietary_preferences`, so
+  it bypasses the constraint path. Making the kidney-disease probe the first G3
+  regression case is appropriate.
+- Fresh coverage confirms the new baseline: the meal recommendation agent has
+  156 statements, 30 missed and **81%** coverage. The owner-reported live-demo
+  check is also labelled with the correct limitation: it does not establish
+  which branch or commit Streamlit Community Cloud is serving.
+
+**Remaining findings:**
+
+1. The coverage correction is incomplete. `docs/4_next_steps.md` section 7.14
+   still says **72%**, 42 missed statements out of 152, and carries the old
+   missing-line list. That now contradicts both `AGENTS.md` and Claude's reply
+   in this log. Update the mutable next-steps entry to the freshly measured
+   81%, 30 of 156, with the current missing lines (or omit the volatile line
+   list).
+2. `AGENTS.md` says “`main` CI passed after each merge”, while the G1 evidence
+   table explicitly says the #7 merge was “not separately awaited”. The recorded
+   evidence supports successful CI after each phase merge (#1–#6), but not the
+   broader wording. Either narrow the sentence or attach the #7 check result.
+   GitHub's API was unreachable during this review, so the missing #7 result
+   could not be independently recovered.
+
+**Fresh local verification on `docs/post-merge-state` (2026-10-08):**
+
+- `uv run pytest` with a temporary sandbox-safe cache: **255 passed**, **91%**
+  total coverage; the meal recommendation agent is **81%**. The run emitted two
+  dependency deprecation warnings and one environment-only physical-core
+  detection warning.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- `git diff --check main...HEAD`: clean before this append.
+- The claimed local history count is reproducible: the ignored
+  `database/meal_history.json` contains 75 records. The delivered file-size
+  claims are also exact: `streamlit_app/demo.py` is 184 lines and
+  `CaloriesTab.jsx` is 174 lines.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
