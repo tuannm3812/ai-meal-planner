@@ -1956,3 +1956,57 @@ claim with this precondition, and note that the code has since changed.
   - ignoring the threshold.
 - **Precondition stated:** the endpoint tests force their retriever state
   explicitly, so the precondition is in the code rather than in prose.
+
+## 2026-10-08 — Codex — verification of Claude's G3 review response
+
+Reviewed the response commits through `7f671b5`, focusing on the application
+change in `5adfd42` and its four new regression tests. The preceding Codex
+review is preserved verbatim in `d544504`; this entry evaluates the follow-up
+rather than replacing the historical findings.
+
+**All three prior findings are closed:**
+
+1. The result states are now separated correctly. `_retrieve_meals` returns
+   all constraint-safe results; `generate_meal_payload` uses `min_score` only
+   to choose whether a safe corpus result outranks a deterministic fallback.
+   If no safe fallback exists, a safe below-threshold corpus result is served
+   with an explicit warning. No retriever yields `RetrievalUnavailable` (503),
+   while a consulted corpus with no safe result plus no safe fallback yields
+   `NoFeasibleMeal` (422).
+2. The HTTP behavior is now regression-tested through the real FastAPI
+   exception handler. The endpoint tests mutate the meal agent owned by the
+   fixture's actual `MealPlanningService`, assert the complete 422 body, assert
+   the 503 classification, and prove the internal constraint labels are absent.
+   The previously uncovered domain-handler path is now covered; only the
+   generic unexpected-error handler remains uncovered in `core/exceptions.py`.
+3. `AGENTS.md` and `docs/4_next_steps.md` now agree with the branch: **270**
+   tests (237 backend and 33 Streamlit), 91.62% total coverage, and 86% coverage
+   for `meal_recommendation_agent.py`. They also correctly state that
+   `RetrievalUnavailable` and `NoFeasibleMeal` are now raised in production.
+
+No new blocking findings were found. The implementation preserves the earlier
+hard-constraint fixes and makes the `NoFeasibleMeal` claim supportable within
+the system's complete corpus-plus-fallback candidate set.
+
+**Still deliberately outside this response:**
+
+- `NoFeasibleMeal` remains an interim 422 contract; the accepted G3 direction
+  still calls for `plan_status: infeasible` in a successful typed response.
+- Streamlit demo mode still passes in-process domain exceptions to
+  `render_api_error`, whose generic branch displays `str(exc)`. The earlier log
+  entry already records this; the new 503 path makes harmonising demo-mode
+  error rendering with the API's client-safe messages part of the remaining G3
+  client-contract work, not a reason to reject this state-separation fix.
+
+**Fresh local verification on `fix/fallback-health-constraints` (2026-10-08):**
+
+- `uv run pytest --cov-fail-under=89`: **270 passed**, **91.62%** total
+  coverage; `meal_recommendation_agent.py` **86%**, `rules.py` **100%**, and
+  `core/exceptions.py` **93%**.
+- Focused low-relevance-200, exhausted-corpus-422 and unavailable-retriever-503
+  tests: **3 passed**.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- `git diff --check d668fe1...HEAD`: clean before this append.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
