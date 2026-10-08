@@ -193,7 +193,10 @@ def local_demo_request(
 
     if path == "/generate-meal-plan":
         try:
+            from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureAgent
             from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
+            from backend.app.schemas.requests import MealRequest
+            from backend.app.services.meal_planning_service import MealPlanningService
         except ImportError as exc:
             raise RuntimeError(f"Local demo mode cannot import meal agent: {exc}") from exc
 
@@ -210,27 +213,39 @@ def local_demo_request(
             fatsecret_client_secret=get_secret("FATSECRET_CLIENT_SECRET") or None,
         )
         supermarket_agent = SupermarketAgent()
-        meal_payload = meal_agent.generate_meal_payload(
-            craving=payload["craving"],
-            user_id=payload.get("user_id", "user_123"),
-            health_conditions=payload.get("health_conditions", []),
-            dietary_preferences=payload.get("dietary_preferences", []),
+        calorie_agent = CalorieExpenditureAgent(
+            model_path=Path("models/calorie_expenditure/calorie_expenditure_model.joblib"),
+            model_version=get_secret("CALORIE_MODEL_VERSION", "hist_gradient_boosting_deep_v0.1.0"),
         )
-        nutrition_payload = nutrition_agent.calculate_meal_macros(
-            meal_payload.meal_definition.ingredients
+        # Demo mode runs the same orchestrator as the API, so the two cannot drift.
+        service = MealPlanningService(
+            meal_agent=meal_agent,
+            nutrition_agent=nutrition_agent,
+            supermarket_agent=supermarket_agent,
+            calorie_agent=calorie_agent,
+            profile_repo=user_repository,
         )
-        shopping_payload = supermarket_agent.generate_shopping_list(
-            meal_payload.meal_definition.ingredients,
-            payload.get("location", "Earlwood, NSW"),
+        result = service.generate(
+            MealRequest(
+                craving=payload["craving"],
+                user_id=payload.get("user_id", "user_123"),
+                location=payload.get("location", "Earlwood, NSW"),
+                health_conditions=payload.get("health_conditions", []),
+                dietary_preferences=payload.get("dietary_preferences", []),
+            )
         )
         response = {
             "status": "success",
             "request_id": request_id,
             "generated_at": datetime.now(UTC).isoformat(),
             "request": payload,
-            "meal_plan": meal_payload.model_dump(),
-            "nutrition": nutrition_payload.model_dump(),
-            "shopping_list": shopping_payload.model_dump(),
+            "calorie_budget": result.calorie_budget.model_dump(),
+            "meal_plan": result.meal_plan.model_dump(),
+            "nutrition": result.nutrition.model_dump(),
+            "shopping_list": result.shopping_list.model_dump(),
+            "reconciliation": (
+                result.reconciliation.model_dump() if result.reconciliation else None
+            ),
         }
         MealPlanRepository(DEMO_DATA_DIR).save(response)
         return response
