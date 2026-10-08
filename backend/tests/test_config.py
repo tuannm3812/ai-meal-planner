@@ -45,6 +45,21 @@ def test_allowed_origins_parses_a_comma_separated_list(monkeypatch: pytest.Monke
     assert AppSettings().allowed_origins == ["http://a.test", "http://b.test"]
 
 
+def test_allowed_origins_drops_blank_entries_from_doubled_or_trailing_commas(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """A doubled comma or a trailing comma must not produce an empty origin.
+
+    Without the ``if item.strip()`` filter in ``_split_csv``, either of these
+    would leave an empty string in ``allowed_origins``, which CORS middleware
+    would then treat as a real (and useless) allowed origin.
+    """
+    monkeypatch.setenv("ALLOWED_ORIGINS", "http://a.test,,http://b.test,")
+    origins = AppSettings().allowed_origins
+    assert origins == ["http://a.test", "http://b.test"]
+    assert "" not in origins
+
+
 def test_relative_paths_resolve_against_the_repo_root(monkeypatch: pytest.MonkeyPatch) -> None:
     """A relative MEAL_CORPUS_PATH must not depend on the process's cwd."""
     monkeypatch.setenv("MEAL_CORPUS_PATH", "data/meal_corpus/meals.json")

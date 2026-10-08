@@ -108,6 +108,51 @@ def test_list_meal_plans_clamps_the_limit(client: TestClient) -> None:
     assert client.get("/meal-plans/user_123?limit=9999").json()["limit"] == 50
 
 
+def test_predict_calorie_expenditure_rejects_an_invalid_body(client: TestClient) -> None:
+    """Catches a regression that would let malformed biometrics reach the agent.
+
+    ``age`` is typed as a positive int on ``CalorieExpenditureRequest``; a
+    non-numeric value must fail FastAPI's request validation with 422 before
+    ``CalorieExpenditureAgent.predict`` ever runs.
+    """
+    response = client.post(
+        "/calorie-expenditure/predict",
+        json={"age": "not-a-number", "sex": "male", "height_cm": 180, "weight_kg": 80},
+    )
+    assert response.status_code == 422
+
+
+def test_list_meal_plans_rejects_a_non_integer_limit(client: TestClient) -> None:
+    """Catches a regression that would let a non-integer ``limit`` reach the clamp.
+
+    ``limit`` is typed as ``int`` on the route; FastAPI must reject a
+    non-numeric query value with 422 before the ``max(1, min(limit, 50))``
+    clamp ever sees it.
+    """
+    response = client.get("/meal-plans/user_123?limit=not-a-number")
+    assert response.status_code == 422
+
+
+def test_list_meal_feedback_rejects_a_non_integer_limit(client: TestClient) -> None:
+    """Catches a regression that would let a non-integer ``limit`` reach the clamp.
+
+    Mirrors the meal-plans check for ``/meal-feedback/{user_id}``, whose
+    ``limit`` clamp is ``max(1, min(limit, 100))``.
+    """
+    response = client.get("/meal-feedback/user_123?limit=not-a-number")
+    assert response.status_code == 422
+
+
+def test_list_saved_meals_rejects_a_non_integer_limit(client: TestClient) -> None:
+    """Catches a regression that would let a non-integer ``limit`` reach the clamp.
+
+    Mirrors the meal-plans check for ``/saved-meals/{user_id}``, the third
+    route sharing the same ``limit: int = 20`` query parameter shape.
+    """
+    response = client.get("/saved-meals/user_123?limit=not-a-number")
+    assert response.status_code == 422
+
+
 def test_container_override_is_honoured(client: TestClient) -> None:
     """The override must actually change the response, not merely be accepted.
 
