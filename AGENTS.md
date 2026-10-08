@@ -36,8 +36,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 255 tests (222
-  backend, 33 Streamlit), coverage 91% against the 89% CI floor; the frontend
+  passed `main`'s older single-job workflow. `uv run pytest` runs 270 tests (237
+  backend, 33 Streamlit) since the G3 constraint fix, coverage 91% against the
+  89% CI floor; the frontend
   has 36 tests.
 - Next work follows the production-readiness direction in
   `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries): G3 typed
@@ -55,10 +56,13 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   script is **not idempotent** (a second run duplicates rows). Schema creation
   is `create_all`, which cannot alter an existing table, so there is no
   migration path once a deployment holds real data.
-- The typed exceptions in `core/exceptions.py` (`ProfileNotFound`,
-  `RetrievalUnavailable`, `NutritionProviderError`) are wired to handlers but
-  never raised; every failure still lands on the catch-all 500.
-- `agents/meal_recommendation_agent.py` sits at ~81% coverage, the largest
+- `ProfileNotFound` and `NutritionProviderError` in `core/exceptions.py` are
+  wired to handlers but never raised. The other two are raised:
+  - `RetrievalUnavailable` (503) when no fallback template is safe and the
+    retriever never loaded;
+  - `NoFeasibleMeal` (422) only when both the corpus and the fallback templates
+    are exhausted.
+- `agents/meal_recommendation_agent.py` sits at ~86% coverage, the largest
   remaining gap in core business logic.
 - `backend/requirements.txt` is **generated** by `uv export`; edit
   `pyproject.toml` and re-export instead. CI fails on drift.

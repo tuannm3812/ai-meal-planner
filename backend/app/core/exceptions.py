@@ -42,6 +42,22 @@ class NutritionProviderError(MealPlanningError):
     client_message = "Nutrition verification is temporarily unavailable."
 
 
+class NoFeasibleMeal(MealPlanningError):
+    """Raised when no meal can satisfy the request's hard constraints.
+
+    Serving a meal that breaks an allergy or a health condition is worse than
+    serving none, so the agent refuses instead. An interim contract: the G3
+    production-readiness work plans to report this as ``plan_status:
+    infeasible`` on a successful response.
+    """
+
+    status_code = 422
+    client_message = (
+        "No meal satisfies these dietary and health constraints. "
+        "Try relaxing a preference or changing the craving."
+    )
+
+
 def register_exception_handlers(app: FastAPI) -> None:
     """Attach the domain exception handlers to an app.
 

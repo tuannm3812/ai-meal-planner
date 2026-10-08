@@ -4,8 +4,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..core.exceptions import NoFeasibleMeal, RetrievalUnavailable
 from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
+from ..rag.rules import blocked_groups_for_ingredient, constraint_groups, safe_substitution
 from ..schemas.common import MealAgentMetadata as AgentMetadata
 from ..schemas.requests import Ingredient
 
@@ -143,30 +145,101 @@ class MealRecommendationAgent:
         dietary_preferences = dietary_preferences or []
         dietary_restrictions = user_biometrics["dietary_restrictions"]
 
-        retrieval_results = self._retrieve_meals(
+        # Every result here already passed the hard constraints; min_score only
+        # decides whether the corpus beats a fallback template on relevance.
+        safe_results = self._retrieve_meals(
             craving=craving,
             dietary_restrictions=dietary_restrictions,
             health_conditions=health_conditions,
             dietary_preferences=dietary_preferences,
         )
-        if retrieval_results:
-            payload = self._payload_from_retrieval(
-                craving=craving,
-                target_calories=target_calories,
-                dietary_restrictions=dietary_restrictions,
-                result=retrieval_results[0],
-                candidates=retrieval_results,
-            )
-            return self._adapt_final_payload(
-                payload=payload,
-                health_conditions=health_conditions,
-                dietary_preferences=dietary_preferences,
+        if safe_results and safe_results[0].score >= self.meal_retriever.min_score:
+            return self._corpus_payload(
+                craving,
+                target_calories,
+                dietary_restrictions,
+                safe_results,
+                health_conditions,
+                dietary_preferences,
             )
 
         warning = "No strong local RAG match found; using deterministic fallback."
         if self.model and not self.enable_llm_adaptation:
             warning += " Gemini base meal generation is disabled by design."
-        return self._fallback_payload(craving, user_biometrics, target_calories, warning)
+        fallback = self._fallback_payload(
+            craving,
+            user_biometrics,
+            target_calories,
+            warning,
+            constraint_labels=[*dietary_restrictions, *dietary_preferences, *health_conditions],
+        )
+        if fallback is not None:
+            return fallback
+
+        # No template is safe. Degrade before failing: a safe corpus meal that is
+        # merely low on relevance is still a valid answer (Codex, 2026-10-08).
+        if safe_results:
+            payload = self._corpus_payload(
+                craving,
+                target_calories,
+                dietary_restrictions,
+                safe_results,
+                health_conditions,
+                dietary_preferences,
+            )
+            payload.metadata.warnings.append(
+                f"No fallback template satisfies these constraints; served the closest "
+                f"safe corpus meal, which scored {safe_results[0].score:.2f}, below the "
+                f"relevance threshold of {self.meal_retriever.min_score:.2f}."
+            )
+            return payload
+
+        groups = sorted(
+            constraint_groups([*dietary_restrictions, *dietary_preferences, *health_conditions])
+        )
+        if self.meal_retriever is None:
+            # The corpus was never consulted, so infeasibility is unproven.
+            raise RetrievalUnavailable(
+                f"Meal retriever unavailable and no fallback template satisfies {groups}."
+            )
+        raise NoFeasibleMeal(
+            f"No corpus meal or fallback template satisfies {groups} for craving {craving!r}."
+        )
+
+    def _corpus_payload(
+        self,
+        craving: str,
+        target_calories: int,
+        dietary_restrictions: list[str],
+        results: list[MealRetrievalResult],
+        health_conditions: list[str],
+        dietary_preferences: list[str],
+    ) -> MealPlanPayload:
+        """Build and adapt a payload from the top corpus result.
+
+        Args:
+            craving: Free-text craving from the user.
+            target_calories: Daily kcal target.
+            dietary_restrictions: Restrictions from the user's profile.
+            results: Constraint-safe corpus results, best first.
+            health_conditions: Conditions passed to the adaptation step.
+            dietary_preferences: Preferences passed to the adaptation step.
+
+        Returns:
+            The adapted payload for ``results[0]``.
+        """
+        payload = self._payload_from_retrieval(
+            craving=craving,
+            target_calories=target_calories,
+            dietary_restrictions=dietary_restrictions,
+            result=results[0],
+            candidates=results,
+        )
+        return self._adapt_final_payload(
+            payload=payload,
+            health_conditions=health_conditions,
+            dietary_preferences=dietary_preferences,
+        )
 
     def _build_adaptation_prompt(
         self,
@@ -209,8 +282,6 @@ class MealRecommendationAgent:
             dietary_preferences=dietary_preferences,
             top_k=3,
         )
-        if not results or results[0].score < self.meal_retriever.min_score:
-            return []
         return results
 
     def _payload_from_retrieval(
@@ -382,23 +453,76 @@ class MealRecommendationAgent:
             for ingredient in ingredients
         )
 
+    @staticmethod
+    def _constrained_ingredients(
+        raw_ingredients: list[dict[str, Any]],
+        groups: set[str],
+    ) -> tuple[list[Ingredient], int] | None:
+        """Apply hard constraints to one fallback template.
+
+        Args:
+            raw_ingredients: The template's ingredients as stored in reference data.
+            groups: Constraint groups from ``constraint_groups``.
+
+        Returns:
+            The safe ingredient list and how many substitutions were applied, or
+            None when some blocked ingredient has no allowed substitution.
+        """
+        ingredients: list[Ingredient] = []
+        substitution_count = 0
+        for raw in raw_ingredients:
+            ingredient = Ingredient(**raw)
+            blocked = blocked_groups_for_ingredient(ingredient.item_name, groups)
+            if blocked:
+                substitution = safe_substitution(
+                    ingredient.item_name, ingredient.base_quantity_grams, groups
+                )
+                if substitution is None:
+                    return None
+                ingredient = Ingredient(
+                    item_name=substitution.replacement_name,
+                    base_quantity_grams=substitution.replacement_grams,
+                )
+                substitution_count += 1
+            ingredients.append(ingredient)
+        return ingredients, substitution_count
+
     def _fallback_payload(
         self,
         craving: str,
         user_biometrics: dict[str, Any],
         target_calories: int,
         warning: str,
-    ) -> MealPlanPayload:
-        craving_lower = craving.lower()
+        constraint_labels: list[str] | None = None,
+    ) -> MealPlanPayload | None:
+        """Serve the first fallback template that is safe under the constraints.
 
+        Returns:
+            The scaled payload, or None when no template can be made safe.
+        """
+        craving_lower = craving.lower()
+        groups = constraint_groups(constraint_labels or [])
+
+        # Keyword matches first, then the unconditional default, then the rest -
+        # the same preference as before, but a template is only served if every
+        # ingredient is allowed or has a substitution that is itself allowed.
         fallback_meals = load_reference("fallback_meals")
-        selected = fallback_meals[-1]
-        for candidate in fallback_meals:
-            if any(keyword in craving_lower for keyword in candidate["keywords"]):
-                selected = candidate
+        keyword_matches = [
+            candidate
+            for candidate in fallback_meals
+            if any(keyword in craving_lower for keyword in candidate["keywords"])
+        ]
+        ordered = [*keyword_matches, fallback_meals[-1]]
+        ordered += [candidate for candidate in fallback_meals if candidate not in ordered]
+
+        for candidate in ordered:
+            safe = self._constrained_ingredients(candidate["ingredients"], groups)
+            if safe is not None:
+                selected, (ingredients, substitution_count) = candidate, safe
                 break
+        else:
+            return None
         meal_name = selected["meal_name"]
-        ingredients = [Ingredient(**ingredient) for ingredient in selected["ingredients"]]
 
         # Scale the fallback template to the calorie budget, exactly as the retrieval
         # path does. Without this the budget reached only user_context.caloric_target,
@@ -410,6 +534,15 @@ class MealRecommendationAgent:
             target_calories,
         )
         warnings = [warning]
+        if selected is not ordered[0]:
+            warnings.append(
+                f"Fallback '{ordered[0]['meal_name']}' conflicts with the request's "
+                f"constraints; served '{meal_name}' instead."
+            )
+        if substitution_count:
+            warnings.append(
+                f"Applied {substitution_count} ingredient substitution(s) for constraints."
+            )
         if scaling_metadata:
             warnings.append(
                 "Scaled fallback portions from "

@@ -8,6 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.app.core.container import get_container, with_repositories
+from backend.app.core.exceptions import NoFeasibleMeal
 from backend.app.main import app
 from backend.app.repositories.json_store import (
     MealFeedbackRepository,
@@ -180,3 +181,58 @@ def test_container_override_is_honoured(client: TestClient) -> None:
 
     # And the override is genuinely undone afterwards.
     assert client.get("/health").json()["services"]["calorie_model_configured"] is True
+
+
+class _EmptyRetriever:
+    """A working retriever whose corpus admits no meal for the request."""
+
+    min_score = 0.16
+    active_backend = "stub"
+
+    def retrieve(self, **_: object) -> list[object]:
+        return []
+
+
+_INFEASIBLE_REQUEST = {
+    "craving": "tofu",
+    "health_conditions": ["kidney_disease"],
+    "dietary_preferences": ["vegan"],
+}
+
+
+def _meal_agent() -> object:
+    return app.dependency_overrides[get_container]().meal_planning_service.meal_agent
+
+
+def test_generate_meal_plan_returns_422_with_only_the_safe_message_when_infeasible(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """No safe template and a consulted corpus with no safe meal -> 422.
+
+    The body must carry the client message only: the internal detail names the
+    user's constraint groups, which must stay in the server log.
+    """
+    monkeypatch.setattr(_meal_agent(), "meal_retriever", _EmptyRetriever())
+
+    response = client.post("/generate-meal-plan", json=_INFEASIBLE_REQUEST)
+
+    assert response.status_code == 422
+    assert response.json() == {
+        "status": "error",
+        "error": "NoFeasibleMeal",
+        "detail": NoFeasibleMeal.client_message,
+    }
+    assert "kidney" not in response.text
+
+
+def test_generate_meal_plan_returns_503_when_retrieval_is_unavailable(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """With no retriever and no safe template, feasibility is unknown -> 503."""
+    monkeypatch.setattr(_meal_agent(), "meal_retriever", None)
+
+    response = client.post("/generate-meal-plan", json=_INFEASIBLE_REQUEST)
+
+    assert response.status_code == 503
+    assert response.json()["error"] == "RetrievalUnavailable"
+    assert "kidney" not in response.text

@@ -4,6 +4,7 @@ import pytest
 
 from backend.app.core.exceptions import (
     MealPlanningError,
+    NoFeasibleMeal,
     NutritionProviderError,
     ProfileNotFound,
     RetrievalUnavailable,
@@ -16,6 +17,7 @@ from backend.app.core.exceptions import (
         (ProfileNotFound("nope"), 404),
         (RetrievalUnavailable("index down"), 503),
         (NutritionProviderError("usda timeout"), 502),
+        (NoFeasibleMeal("vegan + kidney_disease"), 422),
         (MealPlanningError("generic"), 500),
     ],
 )
