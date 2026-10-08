@@ -1506,3 +1506,58 @@ amendment above; both are accepted and the current gate table lives in the
   the namespace, revocation is proven on every instance.
 
 Nothing was run in this session.
+
+## 2026-10-08 — Claude Opus 5.5 — G1: the stack is merged to `main`
+
+Executes item A / G1b of the production-readiness direction above, on the
+owner's instruction. The owner granted a project-local permission rule
+(`.claude/settings.local.json`, gitignored) after Claude Code's auto-mode
+classifier blocked the first `gh pr merge` call.
+
+**Preconditions checked before merging:**
+
+- **Stack integrity.** `git rev-list --count base..head` for every adjacent
+  pair (`main`←phase-0←…←phase-4b): 0 commits on the base side in every case,
+  and local branches matched their remotes. Head-side counts were 24, 22, 18,
+  23, 17 and 20.
+- **Mergeability.** All seven PRs reported MERGEABLE/CLEAN, and #6 had green CI
+  on its last commit (`61f4cb2`).
+- **Live-demo impact.** Who can see the Streamlit Community Cloud deploy branch
+  is outside the repository. In its place, both dependency paths Cloud may use
+  were simulated from a fresh clone of the stack tip:
+  - `uv sync --locked --no-dev` (the stack adds `uv.lock`, which Cloud may
+    prefer);
+  - `pip install -r requirements.txt` into a fresh Python 3.11 venv.
+
+  Both generated a meal through `AppTest` in demo mode with
+  `STREAMLIT_SHARING=1` and no API server: no errors, the calorie model
+  configured, 812.9 kcal.
+
+**Merge sequence:** merge commits only, never squash, so the stacked heads stay
+ancestors of `main`. Because the repo does not auto-delete head branches, each
+of #2–#6 was retargeted to `main` by hand. Before merging, the PR's commit count
+was checked against `git rev-list --count origin/main..head`. After each merge,
+the push run on `main` was awaited.
+
+| PR | Merge commit | Commits | `main` CI after merge |
+| --- | --- | --- | --- |
+| #7 gitignore | `c1f38b2` | 1 | not separately awaited |
+| #1 Phase 0 | `5a060cf` | 24 | success, 4/4 jobs |
+| #2 Phase 1 | `10af4cf` | 22 | success, 4/4 jobs |
+| #3 Phase 2 | `9ce0bfa` | 18 | success, 4/4 jobs |
+| #4 Phase 3 | `117a822` | 23 | success, 4/4 jobs |
+| #5 Phase 4a | `d1bf94f` | 17 | success, 4/4 jobs |
+| #6 Phase 4b | `cb2e6e9` | 20 | success, 4/4 jobs |
+
+**Result:** `git diff origin/refactor/phase-4b-streamlit origin/main` is exactly
+the one `.gitignore` line from #7. Nothing else differs. No PRs remain open.
+
+**Not verified:**
+
+- **Whether the live demo redeployed.**
+  `https://tuannm3812-ai-meal-planner.streamlit.app/` answers an unauthenticated
+  request with HTTP 303, which is what a sleeping app or a login wall returns.
+  The owner should open it once and generate a plan. The simulation above is
+  the evidence that it will work if Cloud deploys from `main`.
+- **Stale branches.** The merged `refactor/*` and `fix/*` branches still exist
+  locally and on the remote. Deleting them is left to the owner.
