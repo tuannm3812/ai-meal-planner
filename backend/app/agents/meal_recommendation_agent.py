@@ -120,6 +120,7 @@ class MealRecommendationAgent:
         daily_calorie_target: int,
         health_conditions: list[str] | None = None,
         dietary_preferences: list[str] | None = None,
+        profile: dict[str, Any] | None = None,
     ) -> MealPlanPayload:
         """Retrieve and adapt a meal for the given craving and calorie target.
 
@@ -131,11 +132,12 @@ class MealRecommendationAgent:
                 target from it.
             health_conditions: Conditions that hard-filter the corpus.
             dietary_preferences: Soft preferences that bias ranking.
+            profile: Pre-fetched profile; looked up when omitted.
 
         Returns:
             A populated MealPlanPayload.
         """
-        user_biometrics = self.db.fetch_user_profile(user_id)
+        user_biometrics = profile if profile is not None else self.db.fetch_user_profile(user_id)
         target_calories = daily_calorie_target
         health_conditions = health_conditions or []
         dietary_preferences = dietary_preferences or []

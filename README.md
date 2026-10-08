@@ -214,9 +214,12 @@ CALORIE_MODEL_VERSION=hist_gradient_boosting_deep_v0.1.0
 MEAL_CORPUS_PATH=data/meal_corpus/meals.json
 RAG_BACKEND=auto
 ENABLE_GEMINI_ADAPTATION=0
+STORAGE_BACKEND=sqlite
 ```
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
+
+`STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported once with `uv run python scripts/migrate_json_to_sqlite.py`. That script is not idempotent, so running it twice duplicates every record. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
 
 ## 8. API Overview
 

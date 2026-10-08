@@ -397,3 +397,63 @@ green again. I had pushed without re-checking CI.
 added and locked. `meal_calorie_budget_kcal` remains a daily figure with a
 misleading name; renaming it is API-breaking for both clients and is still
 tracked, not done.
+
+## 2026-09-11 — Claude Opus 5 — Phase 2 storage
+
+**Delivered** on `refactor/phase-2-storage`, six tasks, each independently reviewed
+before the next began.
+
+Storage now sits behind three `Protocol` interfaces with two implementations. The
+JSON store keeps working for demo mode; a SQLModel/SQLite backend is the default.
+`STORAGE_BACKEND` picks between them, and `AppSettings` is a `pydantic-settings`
+model rather than a hand-rolled dataclass.
+
+**Measured, not asserted:** 58 tests at the start of Phase 2 → **122**. The
+contract suite is 21 cases run against *both* backends, 42 in total, none skipped.
+
+**The exit criterion, proved live:** a real server under `STORAGE_BACKEND=json` and
+under `=sqlite` returned identical response sections, the same
+`caloric_target: 2889`, the same `model_version`, and the same history count.
+`/health` returned 200 under both and reported the correct store path for each.
+
+**Dependencies:** `pydantic-settings`, `sqlmodel`, `sqlalchemy`, `greenlet` — four
+packages, resolved without moving `pydantic` off 2.13.5 or `scikit-learn` off its
+1.6.1 pin, which the shipped model artifact depends on. Every resolved setting
+value was snapshotted before the config migration and diffed after: identical.
+
+**Three real bugs were found by review, not by the tests:**
+
+1. **A malformed `request` field poisoned the JSON store.** A payload whose
+   `request` was not a dict was accepted silently at write time, then raised on
+   *every* subsequent `list_for_user` — for every user, because the read path
+   iterates all records. One bad write permanently broke the history endpoint. The
+   SQL backend instead raised at save time, so the two also disagreed. Both now
+   share one defensive extraction, and a contract case covers five malformed shapes.
+2. **`/health` read a JSON-only attribute.** It reported
+   `container.meal_history.history_path`, which the SQL repositories do not have.
+   Since `STORAGE_BACKEND` defaults to `sqlite`, wiring the factory in made
+   `/health` crash for real. It now derives paths from settings and reports which
+   backend is active.
+3. **Container overrides did not rewire the orchestrator.**
+   `dataclasses.replace(container, user_profiles=...)` left
+   `MealPlanningService.profile_repo` holding the repository captured at build
+   time, so a test isolating storage still had a service talking to the real
+   store. `with_repositories()` rebuilds the service; three fixtures migrated to it.
+
+**Two of my own tests were weak, and mutation testing caught both.** The contract
+suite never exercised `saved_only` together with `limit` — the plan had flagged
+that exact hazard and said to assert it, and the test file did not carry the
+assertion. The parity suite saved a single feedback record, so a backend ignoring
+`saved_only` entirely still passed it. Both are fixed and both fixes were verified
+by mutating the implementation and watching the right test fail.
+
+**Also closed**, carried from Phase 1: the user profile was read from disk twice
+per request and is now read once; `profile_repo` is typed as its protocol rather
+than `Any`.
+
+**Still open**, recorded in `docs/4_next_steps.md` with Alembic first: `create_all`
+cannot alter an existing table, verified by adding a column and confirming a second
+`build_engine` left it untouched. Profiles are not stored in SQL — both backends
+return the same built-in default. The typed domain exceptions defined in Phase 1
+are still never raised. SQLite runs in the default rollback-journal mode; WAL would
+help if writes ever contend.

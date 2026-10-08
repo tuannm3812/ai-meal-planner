@@ -11,9 +11,11 @@ dependencies = [
   "numpy>=1.26,<3",
   "pandas>=2.2,<3",
   "pydantic",
+  "pydantic-settings>=2.15.0",
   "python-dotenv",
   "requests",
   "scikit-learn==1.6.1",
+  "sqlmodel>=0.0.42",
   "streamlit",
   "uvicorn",
 ]

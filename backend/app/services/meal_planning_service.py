@@ -12,6 +12,7 @@ from ..agents.calorie_expenditure_agent import (
 from ..agents.meal_recommendation_agent import MealPlanPayload, MealRecommendationAgent
 from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
+from ..repositories.base import UserProfileStore
 from ..schemas.requests import Ingredient, MealRequest
 
 DEFAULT_TOLERANCE = 0.15
@@ -54,7 +55,7 @@ class MealPlanningService:
         nutrition_agent: NutritionVerificationAgent,
         supermarket_agent: SupermarketAgent,
         calorie_agent: CalorieExpenditureAgent,
-        profile_repo: Any,
+        profile_repo: UserProfileStore,
         tolerance: float = DEFAULT_TOLERANCE,
     ) -> None:
         """Store the collaborating agents.
@@ -83,7 +84,8 @@ class MealPlanningService:
         Returns:
             A MealPlanResult carrying every agent payload.
         """
-        calorie_budget = self.calorie_agent.predict(self._calorie_request(request))
+        profile = self.profile_repo.fetch_user_profile(request.user_id.strip())
+        calorie_budget = self.calorie_agent.predict(self._calorie_request(request, profile))
 
         meal_plan = self.meal_agent.generate_meal_payload(
             craving=request.craving.strip(),
@@ -91,6 +93,7 @@ class MealPlanningService:
             daily_calorie_target=int(round(calorie_budget.meal_calorie_budget_kcal)),
             health_conditions=request.health_conditions,
             dietary_preferences=request.dietary_preferences,
+            profile=profile,
         )
         nutrition = self.nutrition_agent.calculate_meal_macros(
             ingredients=meal_plan.meal_definition.ingredients
@@ -184,16 +187,18 @@ class MealPlanningService:
             ),
         )
 
-    def _calorie_request(self, request: MealRequest) -> CalorieExpenditureRequest:
+    def _calorie_request(
+        self, request: MealRequest, profile: dict[str, Any]
+    ) -> CalorieExpenditureRequest:
         """Build a calorie request, preferring explicit biometrics over the profile.
 
         Args:
             request: The meal-plan request, whose biometric fields are optional.
+            profile: The pre-fetched profile, used to fill any field the request omits.
 
         Returns:
             A CalorieExpenditureRequest populated from the request or the profile.
         """
-        profile = self.profile_repo.fetch_user_profile(request.user_id.strip())
         return CalorieExpenditureRequest(
             age=request.age if request.age is not None else profile["age"],
             sex=request.sex if request.sex is not None else profile["gender"],
