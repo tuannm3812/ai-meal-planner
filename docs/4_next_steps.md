@@ -245,10 +245,12 @@ From spec §12.
 2. **Profiles are not stored in SQL.** Both backends return the same built-in
    default; nothing writes profiles at runtime. Real profile storage needs a write
    path and an endpoint, neither of which exists.
-3. **The typed domain exceptions are still never raised.** `ProfileNotFound`,
+3. **Three typed domain exceptions are still never raised.** `ProfileNotFound`,
    `RetrievalUnavailable` and `NutritionProviderError` are defined and wired to
-   handlers but no production code raises them, so every failure still lands on the
-   catch-all 500. Carried from Phase 1's final review.
+   handlers, but no production code raises them, so those failures still land on
+   the catch-all 500. Carried from Phase 1's final review. The fourth,
+   `NoFeasibleMeal` (422, added 2026-10-08), is raised when no meal satisfies the
+   request's hard constraints.
 4. **`deviation_after` falls back to `deviation_before`** when a reconciliation
    retry verifies to 0 kcal, understating the miss. `within_tolerance` stays
    correct.
@@ -283,17 +285,14 @@ From spec §12.
     behaviour is pinned by
     `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
     so changing it will break a test and force a deliberate decision.
-14. **`meal_recommendation_agent.py` is at 81% coverage** (156 statements, 30
-    missed; re-measured 2026-10-08). Unlike `rag/embedding_index.py` (32%, excused
+14. **`meal_recommendation_agent.py` is at 85% coverage** (181 statements, 28
+    missed; re-measured 2026-10-08, after the fallback constraint fix). Unlike `rag/embedding_index.py` (32%, excused
     because its sentence-transformers/FAISS path sits behind the uninstalled
     `semantic-rag` optional dependency group), this is core business logic with no
     optional-dependency excuse, and the largest remaining gap in the backend. Run
     `uv run pytest` for the current missing lines rather than trusting a copied
-    list. One uncovered path is a known correctness gap: the deterministic fallback
-    (`meal_recommendation_agent.py:169`) is not given `health_conditions` or
-    `dietary_preferences`, so it skips constraint checks. That is the first G3
-    deliverable in the production-readiness direction (`docs/5_agent_log.md`,
-    2026-10-08).
+    list. The fallback constraint gap previously recorded here is fixed (G3's
+    first deliverable; see the 2026-10-08 agent-log entry).
 15. **Three deliberate deviations from spec §8, found by a Codex review of
     Phases 1–3 and recorded here rather than silently left as gaps:**
     - §8 asks for happy- and error-path tests on all eight endpoints. `GET /`

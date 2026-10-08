@@ -1745,3 +1745,72 @@ Both findings in the entry above are accepted and fixed on this branch.
    time; this entry supplies the result after the fact.
 
 No application code changed.
+
+## 2026-10-08 — Claude Opus 5.5 — G3 first deliverable: hard constraints on every return path
+
+Branch `fix/fallback-health-constraints`, stacked on PR #8. Codex's
+merged-stack review found that the deterministic fallback ignored health
+constraints. A probe while fixing it found that the **retrieval path had the
+same class of bug**. Both are fixed, test-first.
+
+**1. The fallback ignored constraints (Codex's finding).** `generate_meal_payload`
+called `_fallback_payload` without restrictions, preferences or conditions.
+Codex's probe (retrieval off, `kidney_disease`, craving "tofu") reproduced
+exactly as reported: the RED test failed with `['firm tofu', 'soy sauce']`.
+
+The fallback now gets the same constraint labels the retriever uses. It keeps
+its old preference order (keyword match, then the default, then the rest),
+serves the first template that is safe after substitution, and says in a
+warning when constraints moved it off the keyword choice. The same probe now
+returns the Turkey Burger Bowl.
+
+**2. Retrieval accepted unsafe substitutions (new finding).** `meal_is_allowed`
+accepted a blocked ingredient whenever *any* substitution rule existed for it,
+without checking the replacement. A soy-allergy plus kidney-disease user asking
+for "tofu" was served the Vegan Burrito Bowl with **chickpeas**: the soy rule
+swaps tofu for chickpeas, which kidney disease blocks.
+
+`rules.safe_substitution` replaces `planned_substitution`. A rule is trusted only
+for the groups it is written for, and its replacement must be safe under every
+other group in force. It is not checked against the rule's own groups, because
+the keyword rules flag "gluten-free pasta" as gluten. Retrieval selection,
+retrieval substitution and the fallback all use it, so the three cannot disagree.
+`planned_substitution` had no remaining callers and was the unsafe variant, so it
+was removed.
+
+**3. No safe meal.** Some combinations admit no template. Vegan plus kidney
+disease is one: every fallback template has meat, or tofu and soy sauce. The
+agent now raises a new `NoFeasibleMeal`, which maps to HTTP 422 with only the
+client message. This is an **interim contract**. The G3 direction plans
+`plan_status: infeasible` on a successful response, and that should replace the
+exception when G3's response contract lands. It is also the first typed domain
+exception actually raised in production code (§7.3).
+
+**Evidence:**
+
+- **New tests: 11.** Seven fallback tests (Codex's probe first), three rules
+  tests, and one status-code case for the new exception.
+- **Mutation checks.** Each of these was caught: not passing the labels; never
+  raising; removing the replacement re-check; re-checking against all groups.
+  One condition I had first written was a stricter rule that every blocked group
+  must be covered by the rule. Its mutant survived, which showed it was redundant
+  with the replacement re-check, so it was simplified back to the original
+  relevance condition.
+- **Endpoint probe.** Vegan plus kidney disease returns 422 `NoFeasibleMeal`, and
+  the internal constraint detail stays in the server log only.
+- **Suite and coverage.** `uv run pytest --cov-fail-under=89`: **266 passed**,
+  91.27%. `rules.py` is at **100%**. `meal_recommendation_agent.py` went from 81%
+  to **85%** (181 statements, 28 missed).
+- **History.** The first fix commit (`ec46594` before the rebase) passes on its
+  own with 258 tests, so the history stays bisectable.
+- **Corpus selection.** The existing retrieval-quality regression suite still
+  passes, so the stricter rule did not over-reject any corpus meal those tests
+  pin.
+
+**Not done, and noted:**
+
+- In demo mode, Streamlit's `render_api_error` shows `str(exc)`. So a
+  `NoFeasibleMeal` there displays the internal constraint detail rather than the
+  client message. This is cosmetic and in-process only.
+- §7.13 (no kidney-disease substitution path) is unchanged and still pinned by
+  its test.

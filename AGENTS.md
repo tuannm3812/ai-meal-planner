@@ -55,10 +55,11 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   script is **not idempotent** (a second run duplicates rows). Schema creation
   is `create_all`, which cannot alter an existing table, so there is no
   migration path once a deployment holds real data.
-- The typed exceptions in `core/exceptions.py` (`ProfileNotFound`,
+- Three of the typed exceptions in `core/exceptions.py` (`ProfileNotFound`,
   `RetrievalUnavailable`, `NutritionProviderError`) are wired to handlers but
-  never raised; every failure still lands on the catch-all 500.
-- `agents/meal_recommendation_agent.py` sits at ~81% coverage, the largest
+  never raised. Only `NoFeasibleMeal` (422) is raised, when no meal can satisfy
+  the request's hard constraints.
+- `agents/meal_recommendation_agent.py` sits at ~85% coverage, the largest
   remaining gap in core business logic.
 - `backend/requirements.txt` is **generated** by `uv export`; edit
   `pyproject.toml` and re-export instead. CI fails on drift.
