@@ -34,9 +34,10 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 
 - 2026-09-14: refactor Phases 0–3 (`docs/superpowers/specs/2026-09-10-refactor-
   and-standards-alignment-design.md`) are done, open as PRs #1–#4 stacked on
-  each other. Phase 4 (frontend/Streamlit split) is specified but unplanned.
-  222 backend tests, 8 frontend tests, all green; backend coverage 91%, floor
-  89% enforced in CI.
+  each other. Phase 4 split into 4a and 4b: **Phase 4a (React decomposition
+  of `frontend/src/App.jsx`) is done**; **Phase 4b (the matching Streamlit
+  split) is planned but unstarted**. 222 backend tests, 35 frontend tests,
+  all green; backend coverage 91%, floor 89% enforced in CI.
 
 ## Open risks
 

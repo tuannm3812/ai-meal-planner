@@ -9,9 +9,10 @@ merged; each item appears exactly once, in the highest-priority section that cla
 it.
 
 Status as of 2026-09-14: Phases 0–3 (tooling, CI, standards, backend architecture,
-storage, tests and CI) are done. Phase 4 is specified but unplanned. 222 backend
-tests and 8 frontend tests pass; backend coverage is 91%, floor 89%; the meal
-corpus holds 34 templates.
+storage, tests and CI) are done. Phase 4 is split into 4a and 4b: **Phase 4a
+(the React decomposition) is done**; **Phase 4b (the matching Streamlit split)
+is planned but unstarted**. 222 backend tests and 35 frontend tests pass;
+backend coverage is 91%, floor 89%; the meal corpus holds 34 templates.
 
 Sections §1–§4 are committed work with a written design. §5 tracks structural moves
 those phases do not cover. §6 is product backlog with no phase yet. §7 is the
@@ -117,24 +118,46 @@ added the network guard. The items below are kept for traceability.
 - **Coverage floor** reported in CI, set from the actual post-phase number so the
   floor is honest rather than aspirational.
 
-## 4. Phase 4 — Frontend and Streamlit
+## 4. Phase 4 — Frontend and Streamlit — **4a DONE 2026-09-14 / 4b open**
 
 [Spec §9](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Last because both clients consume backend contracts that Phases 1–2 change; doing it
-first would mean doing it twice.
+first would mean doing it twice. Split into two sub-phases on `refactor/phase-4a-react`
+so the React half (which has no dependency on the Streamlit half) could land first.
 
-- **React** — decompose `App.jsx` into `api/client.js`, `api/mealPlanner.js`,
-  `hooks/useAsyncRequest.js`, `components/ui/` (eight primitives), three
-  `features/{mealPlan,calories,history}/` tabs and `lib/format.js`, leaving `App.jsx`
-  with shell, tab state and routing only. *This is the Later Scope entry "React
-  frontend refinement".*
-- **Streamlit** — delete `local_demo_request` and `is_meal_like_input`; demo mode
-  calls the same shared agent factory the DI container uses, so the demo cannot
-  diverge from the backend (DEC-2). `app.py` splits into `app.py`, `api.py`,
-  `demo.py` and `views/`.
+- **4a — React, DONE 2026-09-14.** `App.jsx` decomposed 811 → 43 lines into
+  `api/client.js`, `api/mealPlanner.js`, `hooks/useAsyncRequest.js`,
+  `components/ui/` (ten primitives), three `features/{mealPlan,calories,history}/`
+  tabs (with `MealPlanResult.jsx` and `CalorieResult.jsx` split out of the two tabs
+  that were still over ~200 lines), and `lib/format.js`, leaving `App.jsx` with
+  shell, tab state and routing only. *This is the Later Scope entry "React frontend
+  refinement".* Frontend tests 8 → 35; `App.test.jsx`, the phase's regression
+  harness, is byte-identical to the phase start. See
+  `docs/superpowers/plans/2026-09-14-phase-4a-react-decomposition.md` and the
+  2026-09-14 entries in `docs/5_agent_log.md`.
+- **4a deferral — no `axios.create()` instance or error interceptor yet.** Spec
+  §9 asks `api/client.js` to provide "a single axios instance, `baseURL` from
+  env, error interceptor." Only the `baseURL`-from-env half was delivered;
+  `api/client.js` exports `API_BASE_URL` and a comment, not an instance. This is
+  deliberate, not an oversight: `App.test.jsx` mocks the `axios` module as a bare
+  `{ default: { get, post } }` with no `create`, so an `axios.create()` instance
+  would bypass that mock and break the byte-identical regression harness that is
+  Phase 4a's entire warrant. The consequence is that the `response?.data?.detail`
+  extraction an interceptor would centralise is still duplicated once in
+  `hooks/useAsyncRequest.js` (serving `MealPlanTab` and `CaloriesTab`) and twice
+  inline in `features/history/HistoryTab.jsx`. **Revisit when** the harness's
+  axios mock is replaced with something that survives a real instance (for
+  example MSW) — at that point add the instance and interceptor, and collapse
+  `HistoryTab`'s two inline `detail` extractions into it too.
+- **4b — Streamlit, unstarted.** Delete `local_demo_request` and
+  `is_meal_like_input`; demo mode calls the same shared agent factory the DI
+  container uses, so the demo cannot diverge from the backend (DEC-2). `app.py`
+  splits into `app.py`, `api.py`, `demo.py` and `views/`.
 - **Done when** no file in `frontend/src` or `streamlit_app` exceeds ~200 lines, the
   deployed Streamlit demo still works with no API server running, and both clients
-  still cover meal plan, calorie prediction and history.
+  still cover meal plan, calorie prediction and history. (React side: met — the
+  largest JS/JSX file is `CaloriesTab.jsx` at 174 lines; the largest file of any
+  kind is `App.css` at 184 lines. Streamlit side: not yet attempted.)
 
 ## 5. Remaining structural moves
 
@@ -273,9 +296,14 @@ From spec §12.
       network guard rather than by faking, so it is stronger coverage than
       the spec's letter asks for.
     - §8 asks for frontend tests on "the API client and one test per tab
-      component." There is no extracted API client to test yet — that is
-      Phase 4's `api/client.js` split (§4). `App.test.jsx` instead covers
-      the request/response/error contract directly against `MealPlanTab` as
-      it exists today (a fired `axios.post`, a rendered error banner on
-      rejection, and a rendered plan on success), which is what is testable
-      before Phase 4 extracts a client.
+      component." That ask is now satisfied by Phase 4a (§4): the API layer
+      lives in `frontend/src/api/` (`client.js`, `mealPlanner.js`) and is
+      covered by `api/mealPlanner.test.js`, and each tab has its own test
+      file — `features/mealPlan/MealPlanTab.test.jsx`,
+      `features/calories/CaloriesTab.test.jsx`, and
+      `features/history/HistoryTab.test.jsx`. `App.test.jsx` still covers the
+      end-to-end request/response/error contract at the `App` level (a fired
+      `axios.post`, a rendered error banner on rejection, and a rendered plan
+      on success); it was the only such coverage before Phase 4a and remains
+      unedited as the regression harness now that the per-module tests exist
+      alongside it.
