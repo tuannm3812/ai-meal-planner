@@ -9,8 +9,8 @@ merged; each item appears exactly once, in the highest-priority section that cla
 it.
 
 Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). `uv run pytest` runs 255 tests (222 backend,
-33 Streamlit) and the frontend has 36, all passing; backend coverage is 91%,
+**merged to `main`** (PRs #1–#7). `uv run pytest` runs 270 tests (237 backend,
+33 Streamlit, after the G3 constraint fix) and the frontend has 36, all passing; backend coverage is 91%,
 floor 89%; the meal corpus holds 34 templates. The next phase is the
 production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
 2026-10-08 entries: G3 failure semantics, G4 auth, G5 containers, G6 hosted
@@ -245,12 +245,14 @@ From spec §12.
 2. **Profiles are not stored in SQL.** Both backends return the same built-in
    default; nothing writes profiles at runtime. Real profile storage needs a write
    path and an endpoint, neither of which exists.
-3. **Three typed domain exceptions are still never raised.** `ProfileNotFound`,
-   `RetrievalUnavailable` and `NutritionProviderError` are defined and wired to
-   handlers, but no production code raises them, so those failures still land on
-   the catch-all 500. Carried from Phase 1's final review. The fourth,
-   `NoFeasibleMeal` (422, added 2026-10-08), is raised when no meal satisfies the
-   request's hard constraints.
+3. **Two typed domain exceptions are still never raised.** `ProfileNotFound` and
+   `NutritionProviderError` are defined and wired to handlers, but no production
+   code raises them, so those failures still land on the catch-all 500. Carried
+   from Phase 1's final review. Since 2026-10-08 the other two are raised:
+   - `RetrievalUnavailable` (503), when no fallback template is safe and the
+     retriever never loaded;
+   - `NoFeasibleMeal` (422), when the corpus and the templates are both
+     exhausted.
 4. **`deviation_after` falls back to `deviation_before`** when a reconciliation
    retry verifies to 0 kcal, understating the miss. `within_tolerance` stays
    correct.
@@ -285,8 +287,8 @@ From spec §12.
     behaviour is pinned by
     `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
     so changing it will break a test and force a deliberate decision.
-14. **`meal_recommendation_agent.py` is at 85% coverage** (181 statements, 28
-    missed; re-measured 2026-10-08, after the fallback constraint fix). Unlike `rag/embedding_index.py` (32%, excused
+14. **`meal_recommendation_agent.py` is at 86% coverage** (191 statements, 27
+    missed; re-measured 2026-10-08, after the G3 constraint fixes). Unlike `rag/embedding_index.py` (32%, excused
     because its sentence-transformers/FAISS path sits behind the uninstalled
     `semantic-rag` optional dependency group), this is core business logic with no
     optional-dependency excuse, and the largest remaining gap in the backend. Run
