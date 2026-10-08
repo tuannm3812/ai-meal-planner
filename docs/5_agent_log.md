@@ -1506,3 +1506,65 @@ amendment above; both are accepted and the current gate table lives in the
   the namespace, revocation is proven on every instance.
 
 Nothing was run in this session.
+
+## 2026-10-08 — Codex — review of the merged stack and production-readiness direction
+
+Reviewed Claude's new work after `ef50b81`: `874964e` (ignore the real
+Streamlit secrets file), `61f4cb2` (commit the production-readiness direction
+and intervening review entries), and the resulting merges through `cb2e6e9` on
+`main`.
+
+**Confirmed:**
+
+- The prospective secrets risk is closed correctly. `.streamlit/secrets.toml`
+  now matches `.gitignore`; the tracked `.streamlit/secrets.example.toml` does
+  not match and remains tracked. No real secrets file exists in the working
+  tree.
+- PR #7 and the stacked refactor PRs #1–#6 are present in `main` as merge
+  commits. The October 7 statement that the public default branch was
+  pre-refactor was accurate historical context but is now superseded.
+- The production-readiness observations are otherwise grounded in the merged
+  source: there is no Docker/Compose artefact despite the Cloud Run wording in
+  `docs/2_architecture.md`; routes have no caller authentication or ownership
+  checks; `/generate-meal-plan` accepts the provider-key pass-through; the
+  three typed domain exceptions have no production raises; timeout-specific
+  nutrition tests are absent; and no tracing or metrics implementation is
+  present.
+- The amended G3 nutrition-source contract preserves the five real source
+  labels in the agent, and the G6 amendment correctly avoids calling
+  instance-local SQLite stateless shared storage. These are proposed contracts,
+  not implemented behavior.
+
+**Findings:**
+
+1. `AGENTS.md` and `docs/4_next_steps.md` are now stale. They still say the
+   stack is awaiting merge, Phase 4b is unstarted, and cite old frontend counts,
+   even though `main` contains every phase. Item A explicitly required these
+   handoff documents to be updated after landing the stack; that follow-through
+   remains open.
+2. The production-readiness entry's "Schema and constraint validation: Met"
+   statement is too broad. Pydantic route contracts and RAG-rule unit tests
+   exist, but the deterministic fallback path is not passed
+   `health_conditions` or `dietary_preferences` and does not run the constraint
+   rules. A direct read-only probe with retrieval unavailable and
+   `health_conditions=["kidney_disease"]`, craving `"tofu"`, returned the
+   deterministic fallback containing `firm tofu` and `soy sauce`. The later G3
+   requirement to enforce hard constraints on every return path correctly
+   identifies the missing behavior; until implemented, constraint validation is
+   only partial.
+3. The G3 coverage baseline is stale: fresh full-suite coverage reports
+   `meal_recommendation_agent.py` at **81%**, not 72%. The module is still the
+   largest core business-logic gap, but future acceptance criteria should use
+   the current baseline.
+
+**Fresh local verification on merged `main` (2026-10-08):**
+
+- `uv run pytest`: **255 passed**, **91%** total coverage, with the same two
+  dependency deprecation warnings.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- Frontend: **36 passed** across 7 files; ESLint clean; Vite production build
+  succeeded (with only the stale Browserslist-data notice).
+- `git diff --check`: clean before this append.
+
+No roadmap feature, local data, database, or configuration was changed by this
+review; only this append-only discussion was added.
