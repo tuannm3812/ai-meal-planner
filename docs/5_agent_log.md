@@ -1814,3 +1814,77 @@ exception actually raised in production code (§7.3).
   client message. This is cosmetic and in-process only.
 - §7.13 (no kidney-disease substitution path) is unchanged and still pinned by
   its test.
+
+## 2026-10-08 — Codex — review of the first G3 hard-constraint deliverable
+
+Reviewed `fix/fallback-health-constraints` through `d668fe1`, relative to its
+PR #8 base `d0ebc15`. The branch changes the shared substitution rules, the
+deterministic fallback, one domain exception, tests and handoff documentation.
+
+**Confirmed:**
+
+- The original fallback bug is fixed. With retrieval disabled, craving `"tofu"`
+  and `health_conditions=["kidney_disease"]`, the result is the Turkey Burger
+  Bowl and contains no ingredient blocked by the kidney-disease group.
+- The newly found cross-constraint substitution bug is also fixed. For soy
+  allergy plus kidney disease, retrieval no longer changes tofu to chickpeas.
+  A direct probe returned only candidates whose planned substitutions remain
+  safe under the other active group (for example soy milk to oat milk and soy
+  sauce to coconut aminos).
+- `safe_substitution` is consistently used for retrieval admission, retrieval
+  substitution and deterministic fallback substitution. The focused rule tests
+  cover the tofu/chickpea and egg/tofu cross-constraint failures and preserve
+  the deliberate gluten-keyword exception.
+- A forced-fallback request that has no safe deterministic template reaches the
+  FastAPI handler as 422 and returns only `NoFeasibleMeal.client_message`; the
+  internal constraint list stays out of the HTTP body.
+
+**Findings:**
+
+1. `NoFeasibleMeal` does not yet prove that no meal is feasible; it proves only
+   that no template in `fallback_meals.json` is feasible after `_retrieve_meals`
+   returned an empty list. That empty list conflates at least three states: no
+   retriever, no allowed corpus result, and an allowed result below `min_score`.
+   A direct probe with craving `"zzzz"`, vegan preference and kidney disease
+   found the safe Black Bean Burrito Bowl in the corpus at score 0.0936, below
+   the 0.16 threshold; `generate_meal_payload` discarded it, exhausted the five
+   fallback templates and raised `NoFeasibleMeal`. With the retriever disabled,
+   the same 422 can also mask retrieval unavailability. Do not treat this as the
+   final G3 infeasibility contract: distinguish unavailable retrieval (the
+   existing `RetrievalUnavailable`/503), low relevance, and a genuinely
+   exhausted safe candidate set, or rename and describe the interim outcome
+   narrowly.
+2. The HTTP contract is manually verified but not regression-tested. The new
+   tests assert that the agent raises and that the exception class carries 422;
+   none sends the forced-fallback case through `TestClient` and asserts the
+   response body. Coverage corroborates this: the domain-handler body at
+   `core/exceptions.py:71-72` remains uncovered. Add an endpoint test that
+   forces retrieval off, asserts 422 plus the safe client message, and proves
+   the internal constraint detail is absent.
+3. The handoff counts are stale on the proposed post-merge state. `AGENTS.md`
+   and the status paragraph in `docs/4_next_steps.md` still say 255 tests (222
+   backend plus 33 Streamlit), while this branch adds 11 backend tests and the
+   fresh suite collects **266** (233 backend plus 33 Streamlit). The nearby 85%
+   module-coverage updates already describe this branch, so the totals should
+   be updated in the same documentation commit.
+
+The default real endpoint does not return 422 for the documented `"tofu"`,
+vegan-plus-kidney example: retrieval finds a safe Black Bean Burrito Bowl and
+returns 200. The 422 probe is accurate only when retrieval is forced off (or no
+result clears the score threshold); future log and test wording should include
+that precondition.
+
+**Fresh local verification on `fix/fallback-health-constraints` (2026-10-08):**
+
+- `uv run pytest --cov-fail-under=89`: **266 passed**, **91.27%** total
+  coverage; `rules.py` **100%** and `meal_recommendation_agent.py` **85%**.
+  The run emitted two dependency deprecation warnings and one environment-only
+  physical-core detection warning.
+- `uv run ruff check .` and `uv run ruff format --check .`: clean.
+- `git diff --check d0ebc15...HEAD`: clean before this append.
+- Direct probes covered the original fallback case, the soy-plus-kidney
+  retrieval case, the forced-fallback 422 body, the default endpoint's safe 200
+  path, and the below-threshold safe-corpus case described above.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
