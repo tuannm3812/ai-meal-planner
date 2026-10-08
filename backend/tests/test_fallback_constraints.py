@@ -15,18 +15,33 @@ from backend.app.agents.meal_recommendation_agent import (
     MealRecommendationAgent,
 )
 from backend.app.core.config import AppSettings
-from backend.app.core.exceptions import NoFeasibleMeal
+from backend.app.core.exceptions import NoFeasibleMeal, RetrievalUnavailable
 from backend.app.rag.rules import blocked_groups_for_ingredient, constraint_groups
 from backend.app.repositories.json_store import UserProfileRepository
 
 
-def _fallback_agent() -> MealRecommendationAgent:
+class _EmptyRetriever:
+    """A working retriever whose corpus admits no meal for the request."""
+
+    min_score = 0.16
+    active_backend = "stub"
+
+    def retrieve(self, **_: Any) -> list[Any]:
+        return []
+
+
+_REAL = object()
+
+
+def _agent(retriever: Any = None) -> MealRecommendationAgent:
+    """Build an agent; ``retriever=None`` forces the deterministic fallback path."""
     settings = AppSettings.from_env()
     agent = MealRecommendationAgent(
         db_connection=UserProfileRepository(settings.data_dir),
         meal_corpus_path=settings.meal_corpus_path,
     )
-    agent.meal_retriever = None  # force the deterministic fallback path
+    if retriever is not _REAL:
+        agent.meal_retriever = retriever
     return agent
 
 
@@ -47,8 +62,9 @@ def _generate(
     health_conditions: list[str] | None = None,
     dietary_preferences: list[str] | None = None,
     dietary_restrictions: list[str] | None = None,
+    retriever: Any = None,
 ) -> MealPlanPayload:
-    return _fallback_agent().generate_meal_payload(
+    return _agent(retriever).generate_meal_payload(
         craving=craving,
         user_id="user_123",
         daily_calorie_target=2200,
@@ -105,19 +121,38 @@ def test_fallback_honours_profile_dietary_restrictions() -> None:
     assert _violations(payload, ["soy allergy"]) == [], _names(payload)
 
 
-def test_no_feasible_template_raises_instead_of_serving_blocked_food() -> None:
+_VEGAN_KIDNEY = {"health_conditions": ["kidney_disease"], "dietary_preferences": ["vegan"]}
+
+
+def test_no_safe_template_without_a_retriever_reports_retrieval_unavailable() -> None:
     """Vegan plus kidney disease rules out every fallback template.
 
-    Every template either carries meat (blocked for vegans, no substitution) or
-    tofu and soy sauce (blocked for kidney disease, no substitution). Serving
-    any of them would violate a hard constraint, so the agent must refuse.
+    With no retriever, the corpus was never consulted, so the agent cannot claim
+    that no meal is feasible - only that retrieval is unavailable (Codex,
+    2026-10-08: a 422 here would mask the outage).
     """
+    with pytest.raises(RetrievalUnavailable):
+        _generate("tofu", **_VEGAN_KIDNEY)
+
+
+def test_no_safe_template_and_no_safe_corpus_meal_raises_no_feasible_meal() -> None:
+    """Only a consulted, exhausted corpus plus exhausted templates is infeasible."""
     with pytest.raises(NoFeasibleMeal):
-        _generate(
-            "tofu",
-            health_conditions=["kidney_disease"],
-            dietary_preferences=["vegan"],
-        )
+        _generate("tofu", retriever=_EmptyRetriever(), **_VEGAN_KIDNEY)
+
+
+def test_a_safe_low_relevance_corpus_meal_beats_giving_up() -> None:
+    """Codex's probe: "zzzz", vegan plus kidney disease.
+
+    The corpus holds a safe meal scoring below min_score. The threshold decides
+    whether the corpus beats a fallback template; it must not turn "a safe meal
+    exists" into "no meal is feasible" when no template is safe.
+    """
+    payload = _generate("zzzz", retriever=_REAL, **_VEGAN_KIDNEY)
+
+    assert payload.metadata.source == "local_vector_rag_meal_corpus"
+    assert _violations(payload, ["kidney_disease", "vegan"]) == [], _names(payload)
+    assert any("below the relevance threshold" in w for w in payload.metadata.warnings)
 
 
 def test_soy_allergy_and_kidney_disease_reject_the_tofu_swap() -> None:
