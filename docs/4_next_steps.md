@@ -8,11 +8,13 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
-Status as of 2026-09-14: Phases 0–3 (tooling, CI, standards, backend architecture,
-storage, tests and CI) are done. Phase 4 is split into 4a and 4b: **Phase 4a
-(the React decomposition) is done**; **Phase 4b (the matching Streamlit split)
-is planned but unstarted**. 222 backend tests and 35 frontend tests pass;
-backend coverage is 91%, floor 89%; the meal corpus holds 34 templates.
+Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
+**merged to `main`** (PRs #1–#7). `uv run pytest` runs 255 tests (222 backend,
+33 Streamlit) and the frontend has 36, all passing; backend coverage is 91%,
+floor 89%; the meal corpus holds 34 templates. The next phase is the
+production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
+2026-10-08 entries: G3 failure semantics, G4 auth, G5 containers, G6 hosted
+mode, tracing), which is not yet broken into sections here.
 
 Sections §1–§4 are committed work with a written design. §5 tracks structural moves
 those phases do not cover. §6 is product backlog with no phase yet. §7 is the
@@ -98,7 +100,7 @@ Third because it depends on Phase 1's DI container and Phase 2's Protocol bounda
 running it earlier would test code about to be replaced. Raised backend coverage
 82% → 89.98% (214 tests) at Phase 3 completion; a later Codex-review pass added
 four more endpoint error-path tests and three more frontend tests, bringing the
-current totals to 222 backend tests, 8 frontend tests, and 91% coverage. Also
+totals at that point to 222 backend tests, 8 frontend tests, and 91% coverage. Also
 added the network guard. The items below are kept for traceability.
 
 - **Endpoint tests** for all 8 routes, happy and error path, via `TestClient` with DI
@@ -118,7 +120,7 @@ added the network guard. The items below are kept for traceability.
 - **Coverage floor** reported in CI, set from the actual post-phase number so the
   floor is honest rather than aspirational.
 
-## 4. Phase 4 — Frontend and Streamlit — **4a DONE 2026-09-14 / 4b open**
+## 4. Phase 4 — Frontend and Streamlit — **DONE (4a 2026-09-14, 4b 2026-09-18)**
 
 [Spec §9](superpowers/specs/2026-09-10-refactor-and-standards-alignment-design.md).
 Last because both clients consume backend contracts that Phases 1–2 change; doing it
@@ -149,15 +151,25 @@ so the React half (which has no dependency on the Streamlit half) could land fir
   axios mock is replaced with something that survives a real instance (for
   example MSW) — at that point add the instance and interceptor, and collapse
   `HistoryTab`'s two inline `detail` extractions into it too.
-- **4b — Streamlit, unstarted.** Delete `local_demo_request` and
-  `is_meal_like_input`; demo mode calls the same shared agent factory the DI
-  container uses, so the demo cannot diverge from the backend (DEC-2). `app.py`
-  splits into `app.py`, `api.py`, `demo.py` and `views/`.
+- **4b — Streamlit, DONE 2026-09-18.** `app.py` decomposed 685 → 61 lines into
+  `config.py` (`get_secret`, a frozen 16-field `AppConfig`), `api.py`, `demo.py`
+  and `views/{sidebar,profile,meal_plan,calories,history}.py`, behind an
+  `AppTest` harness written first and kept byte-identical from `15e84cf`, plus
+  workflow tests for the four buttons the harness does not click. Two of the
+  spec's instructions were deliberately not followed: `local_demo_request` was
+  kept, because Phase 1 had already removed its duplication and it is now the
+  router that lets the demo run with no API server (DEC-2); and
+  `is_meal_like_input` was kept, because it is a client-side guard rejecting
+  polite-only input, not duplicated backend logic. See
+  `docs/superpowers/plans/2026-09-14-phase-4b-streamlit-decomposition.md` and
+  the 2026-09-18 entries in `docs/5_agent_log.md`.
 - **Done when** no file in `frontend/src` or `streamlit_app` exceeds ~200 lines, the
   deployed Streamlit demo still works with no API server running, and both clients
   still cover meal plan, calorie prediction and history. (React side: met — the
   largest JS/JSX file is `CaloriesTab.jsx` at 174 lines; the largest file of any
-  kind is `App.css` at 184 lines. Streamlit side: not yet attempted.)
+  kind is `App.css` at 184 lines. Streamlit side: met — the largest file is
+  `demo.py` at 184 lines, and the demo was verified to generate a meal with no
+  API server from a fresh clone.)
 
 ## 5. Remaining structural moves
 
@@ -271,14 +283,17 @@ From spec §12.
     behaviour is pinned by
     `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
     so changing it will break a test and force a deliberate decision.
-14. **`meal_recommendation_agent.py` is at 72% coverage.** Unlike
-    `rag/embedding_index.py` (32%, excused because its sentence-transformers/FAISS
-    path sits behind the uninstalled `semantic-rag` optional dependency group), this
-    is core business logic with no optional-dependency excuse: 42 statements go
-    untested, the largest remaining gap in the backend —
-    `agents/meal_recommendation_agent.py:96-97, 100-111, 166-169, 177-183, 204, 213,
-    302-322, 355, 392-403`. This is a real remaining gap, not an intentional
-    exclusion, and is unassigned to any phase.
+14. **`meal_recommendation_agent.py` is at 81% coverage** (156 statements, 30
+    missed; re-measured 2026-10-08). Unlike `rag/embedding_index.py` (32%, excused
+    because its sentence-transformers/FAISS path sits behind the uninstalled
+    `semantic-rag` optional dependency group), this is core business logic with no
+    optional-dependency excuse, and the largest remaining gap in the backend. Run
+    `uv run pytest` for the current missing lines rather than trusting a copied
+    list. One uncovered path is a known correctness gap: the deterministic fallback
+    (`meal_recommendation_agent.py:169`) is not given `health_conditions` or
+    `dietary_preferences`, so it skips constraint checks. That is the first G3
+    deliverable in the production-readiness direction (`docs/5_agent_log.md`,
+    2026-10-08).
 15. **Three deliberate deviations from spec §8, found by a Codex review of
     Phases 1–3 and recorded here rather than silently left as gaps:**
     - §8 asks for happy- and error-path tests on all eight endpoints. `GET /`

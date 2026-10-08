@@ -32,18 +32,24 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 
 ## Current state
 
-- 2026-09-18: the refactor (`docs/superpowers/specs/2026-09-10-refactor-and-
-  standards-alignment-design.md`) is complete — Phases 0–3, 4a and 4b are all
-  done, on stacked branches awaiting the user's merge. Phases 0–4a are open as
-  PRs #1–#5; Phase 4b (the
-  Streamlit split of `streamlit_app/app.py` into `config.py`, `api.py`,
-  `demo.py` and `views/`) is on `refactor/phase-4b-streamlit`, with no PR
-  opened yet. `uv run pytest` runs 255 tests (222 backend, 33 Streamlit), all
-  green, coverage 91% against the 89% CI floor; the frontend has 36 tests,
-  all green.
+- 2026-10-08: the refactor (`docs/superpowers/specs/2026-09-10-refactor-and-
+  standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
+  PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
+  `main` CI passed all four jobs after each of #1–#6; #7 merged first and
+  passed `main`'s older single-job workflow. `uv run pytest` runs 255 tests (222
+  backend, 33 Streamlit), coverage 91% against the 89% CI floor; the frontend
+  has 36 tests.
+- Next work follows the production-readiness direction in
+  `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries): G3 typed
+  failure semantics, then G4 API-key auth, G5 containers, G6 hosted mode
+  with history disabled, and tracing after G5.
 
 ## Open risks
 
+- `.streamlit/secrets.toml` is now gitignored (PR #7). Local
+  `database/meal_history.json` still holds 75 records, most of them likely
+  synthetic (see the agent log); cleanup is an owner decision and must happen
+  before `scripts/migrate_json_to_sqlite.py` is ever run.
 - Storage defaults to `STORAGE_BACKEND=sqlite` and starts empty; JSON history
   is invisible until `scripts/migrate_json_to_sqlite.py` runs once, and that
   script is **not idempotent** (a second run duplicates rows). Schema creation
