@@ -283,14 +283,17 @@ From spec §12.
     behaviour is pinned by
     `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
     so changing it will break a test and force a deliberate decision.
-14. **`meal_recommendation_agent.py` is at 72% coverage.** Unlike
-    `rag/embedding_index.py` (32%, excused because its sentence-transformers/FAISS
-    path sits behind the uninstalled `semantic-rag` optional dependency group), this
-    is core business logic with no optional-dependency excuse: 42 statements go
-    untested, the largest remaining gap in the backend —
-    `agents/meal_recommendation_agent.py:96-97, 100-111, 166-169, 177-183, 204, 213,
-    302-322, 355, 392-403`. This is a real remaining gap, not an intentional
-    exclusion, and is unassigned to any phase.
+14. **`meal_recommendation_agent.py` is at 81% coverage** (156 statements, 30
+    missed; re-measured 2026-10-08). Unlike `rag/embedding_index.py` (32%, excused
+    because its sentence-transformers/FAISS path sits behind the uninstalled
+    `semantic-rag` optional dependency group), this is core business logic with no
+    optional-dependency excuse, and the largest remaining gap in the backend. Run
+    `uv run pytest` for the current missing lines rather than trusting a copied
+    list. One uncovered path is a known correctness gap: the deterministic fallback
+    (`meal_recommendation_agent.py:169`) is not given `health_conditions` or
+    `dietary_preferences`, so it skips constraint checks. That is the first G3
+    deliverable in the production-readiness direction (`docs/5_agent_log.md`,
+    2026-10-08).
 15. **Three deliberate deviations from spec §8, found by a Codex review of
     Phases 1–3 and recorded here rather than silently left as gaps:**
     - §8 asks for happy- and error-path tests on all eight endpoints. `GET /`

@@ -34,8 +34,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 
 - 2026-10-08: the refactor (`docs/superpowers/specs/2026-09-10-refactor-and-
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
-  PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits, and
-  `main` CI passed after each merge. `uv run pytest` runs 255 tests (222
+  PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
+  `main` CI passed all four jobs after each of #1–#6; #7 merged first and
+  passed `main`'s older single-job workflow. `uv run pytest` runs 255 tests (222
   backend, 33 Streamlit), coverage 91% against the 89% CI floor; the frontend
   has 36 tests.
 - Next work follows the production-readiness direction in
