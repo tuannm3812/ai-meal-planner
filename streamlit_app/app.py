@@ -1,14 +1,13 @@
 import os
-from pathlib import Path
 import sys
 import tomllib
-from typing import Any
 from datetime import UTC, datetime
+from pathlib import Path
+from typing import Any
 from uuid import uuid4
 
 import requests
 import streamlit as st
-
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
 if str(REPO_ROOT) not in sys.path:
@@ -400,8 +399,12 @@ with st.sidebar:
                 "1.725 very active, 1.9 extra active."
             ),
         )
-    duration_minutes = st.number_input("Exercise duration (min)", min_value=1.0, max_value=600.0, value=30.0)
-    heart_rate_bpm = st.number_input("Heart rate (bpm)", min_value=20.0, max_value=240.0, value=100.0)
+    duration_minutes = st.number_input(
+        "Exercise duration (min)", min_value=1.0, max_value=600.0, value=30.0
+    )
+    heart_rate_bpm = st.number_input(
+        "Heart rate (bpm)", min_value=20.0, max_value=240.0, value=100.0
+    )
     body_temp_c = st.number_input("Body temp (C)", min_value=30.0, max_value=45.0, value=40.0)
     goal = st.selectbox("Goal", options=["maintain", "weight_loss", "muscle_gain"], index=0)
     health_condition_options = st.multiselect(
@@ -445,6 +448,7 @@ def call_demo_or_api(
         )
     return request_json(method, api_base_url, path, payload, headers)
 
+
 meal_tab, calorie_tab, history_tab = st.tabs(["Meal Plan", "Calories", "History"])
 
 with meal_tab:
@@ -459,7 +463,10 @@ with meal_tab:
         st.subheader("Response")
         if generate_meal:
             if not is_meal_like_input(craving):
-                st.warning("Enter a meal craving or goal, for example `salmon bowl`, `fried rice`, or `high-protein burger`.")
+                st.warning(
+                    "Enter a meal craving or goal, for example `salmon bowl`, "
+                    "`fried rice`, or `high-protein burger`."
+                )
             else:
                 try:
                     with st.spinner("Planning meal..."):
@@ -497,7 +504,9 @@ with meal_tab:
                     metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
 
                     with st.expander("Ingredients", expanded=True):
-                        st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
+                        st.dataframe(
+                            meal_definition.get("ingredients", []), use_container_width=True
+                        )
                     if metadata.get("warnings"):
                         with st.expander("Retrieval and generation notes", expanded=True):
                             for warning in metadata["warnings"]:
@@ -556,7 +565,9 @@ with meal_tab:
                             "user_id": user_id,
                             "request_id": latest_meal_result.get("request_id", ""),
                             "meal_id": retrieval.get("selected_meal_id"),
-                            "meal_name": meal_definition.get("structured_meal_name", "Unknown meal"),
+                            "meal_name": meal_definition.get(
+                                "structured_meal_name", "Unknown meal"
+                            ),
                             "liked": liked,
                             "rating": rating if isinstance(rating, int) else None,
                             "saved": saved,
@@ -583,13 +594,19 @@ with calorie_tab:
         "health_conditions": selected_health_conditions,
     }
 
-    st.caption("This calls `/calorie-expenditure/predict` using the promoted Kaggle model artifact.")
+    st.caption(
+        "This calls `/calorie-expenditure/predict` using the promoted Kaggle model artifact."
+    )
     if selected_health_conditions:
         st.warning(
-            "Health conditions are passed as constraints only. This app does not provide medical advice."
+            "Health conditions are passed as constraints only. This app does "
+            "not provide medical advice."
         )
     if dietary_preferences:
-        st.info(f"Dietary preferences selected for upcoming recommendation work: {', '.join(dietary_preferences)}")
+        st.info(
+            "Dietary preferences selected for upcoming recommendation work: "
+            f"{', '.join(dietary_preferences)}"
+        )
     with st.expander("Request payload"):
         st.json(calorie_payload)
 

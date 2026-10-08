@@ -2,18 +2,18 @@ import json
 from datetime import UTC, datetime
 from pathlib import Path
 from threading import Lock
-from typing import Any, Dict, List
+from typing import Any
 
 
 class UserProfileRepository:
     def __init__(self, data_dir: Path):
         self.profile_path = data_dir / "user_profiles.json"
 
-    def fetch_user_profile(self, user_id: str) -> Dict[str, Any]:
+    def fetch_user_profile(self, user_id: str) -> dict[str, Any]:
         profiles = self._load_profiles()
         return profiles.get(user_id, profiles["default"])
 
-    def _load_profiles(self) -> Dict[str, Dict[str, Any]]:
+    def _load_profiles(self) -> dict[str, dict[str, Any]]:
         if not self.profile_path.exists():
             return self._default_profiles()
 
@@ -24,7 +24,7 @@ class UserProfileRepository:
         return profiles
 
     @staticmethod
-    def _default_profiles() -> Dict[str, Dict[str, Any]]:
+    def _default_profiles() -> dict[str, dict[str, Any]]:
         return {
             "default": {
                 "age": 28,
@@ -44,7 +44,7 @@ class MealPlanRepository:
         self._lock = Lock()
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, payload: Dict[str, Any]) -> None:
+    def save(self, payload: dict[str, Any]) -> None:
         record = {
             "saved_at": datetime.now(UTC).isoformat(),
             **payload,
@@ -56,14 +56,14 @@ class MealPlanRepository:
             with self.history_path.open("w", encoding="utf-8") as history_file:
                 json.dump(records[-200:], history_file, indent=2)
 
-    def list_for_user(self, user_id: str, limit: int = 20) -> List[Dict[str, Any]]:
+    def list_for_user(self, user_id: str, limit: int = 20) -> list[dict[str, Any]]:
         records = self._load_records()
         user_records = [
             record for record in records if record.get("request", {}).get("user_id") == user_id
         ]
         return list(reversed(user_records[-limit:]))
 
-    def _load_records(self) -> List[Dict[str, Any]]:
+    def _load_records(self) -> list[dict[str, Any]]:
         if not self.history_path.exists():
             return []
 
@@ -78,7 +78,7 @@ class MealFeedbackRepository:
         self._lock = Lock()
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+    def save(self, payload: dict[str, Any]) -> dict[str, Any]:
         record = {
             "saved_at": datetime.now(UTC).isoformat(),
             **payload,
@@ -96,16 +96,14 @@ class MealFeedbackRepository:
         user_id: str,
         limit: int = 20,
         saved_only: bool = False,
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         records = self._load_records()
-        user_records = [
-            record for record in records if record.get("user_id") == user_id
-        ]
+        user_records = [record for record in records if record.get("user_id") == user_id]
         if saved_only:
             user_records = [record for record in user_records if record.get("saved")]
         return list(reversed(user_records[-limit:]))
 
-    def _load_records(self) -> List[Dict[str, Any]]:
+    def _load_records(self) -> list[dict[str, Any]]:
         if not self.feedback_path.exists():
             return []
 

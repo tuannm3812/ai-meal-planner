@@ -3,7 +3,6 @@ from pathlib import Path
 from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
 from backend.app.rag.retriever import MealVectorRetriever
 
-
 CORPUS_PATH = Path("data/meal_corpus/meals.json")
 
 
@@ -118,8 +117,7 @@ def test_meal_agent_substitutes_gluten_ingredient_before_returning_payload() -> 
     )
 
     ingredient_names = {
-        ingredient.item_name.lower()
-        for ingredient in payload.meal_definition.ingredients
+        ingredient.item_name.lower() for ingredient in payload.meal_definition.ingredients
     }
     assert "whole wheat hamburger bun" not in ingredient_names
     assert "gluten-free bun" in ingredient_names

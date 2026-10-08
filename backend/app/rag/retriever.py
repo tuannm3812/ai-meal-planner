@@ -1,6 +1,6 @@
+import re
 from dataclasses import dataclass
 from pathlib import Path
-import re
 
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -174,7 +174,11 @@ class MealVectorRetriever:
 
     @staticmethod
     def _normalize_items(items: list[str]) -> list[str]:
-        return [item.strip().lower().replace("_", " ").replace("-", " ") for item in items if item.strip()]
+        return [
+            item.strip().lower().replace("_", " ").replace("-", " ")
+            for item in items
+            if item.strip()
+        ]
 
     @staticmethod
     def _preference_bonus(meal: MealCorpusItem, preferences: list[str]) -> float:
@@ -182,7 +186,9 @@ class MealVectorRetriever:
             return 0.0
         meal_flags = {flag.lower().replace("-", " ") for flag in meal.dietary_flags}
         meal_tags = {tag.lower().replace("-", " ") for tag in meal.tags}
-        matches = sum(1 for preference in preferences if preference in meal_flags or preference in meal_tags)
+        matches = sum(
+            1 for preference in preferences if preference in meal_flags or preference in meal_tags
+        )
         return min(matches * 0.08, 0.24)
 
     @staticmethod

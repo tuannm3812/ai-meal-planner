@@ -5,7 +5,6 @@ from backend.app.agents.calorie_expenditure_agent import (
     CalorieExpenditureRequest,
 )
 
-
 MODEL_PATH = Path("models/calorie_expenditure/calorie_expenditure_model.joblib")
 
 

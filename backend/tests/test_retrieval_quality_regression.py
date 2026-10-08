@@ -4,7 +4,6 @@ import pytest
 
 from backend.app.rag.retriever import MealVectorRetriever
 
-
 CORPUS_PATH = Path("data/meal_corpus/meals.json")
 
 
@@ -42,10 +41,7 @@ def test_retrieval_regression_shellfish_allergy_excludes_shrimp() -> None:
     )
 
     assert result is not None
-    assert "shrimp" not in {
-        ingredient.item_name.lower()
-        for ingredient in result.meal.ingredients
-    }
+    assert "shrimp" not in {ingredient.item_name.lower() for ingredient in result.meal.ingredients}
 
 
 def test_retrieval_regression_gluten_free_keeps_substitutable_burger() -> None:

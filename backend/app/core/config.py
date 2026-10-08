@@ -1,17 +1,15 @@
 import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List
 
 from dotenv import load_dotenv
-
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 if os.getenv("SKIP_DOTENV") != "1":
     load_dotenv(BASE_DIR / "backend" / ".env")
 
 
-def _csv_env(name: str, default: str) -> List[str]:
+def _csv_env(name: str, default: str) -> list[str]:
     raw_value = os.getenv(name, default)
     return [value.strip() for value in raw_value.split(",") if value.strip()]
 
@@ -20,7 +18,7 @@ def _csv_env(name: str, default: str) -> List[str]:
 class AppSettings:
     app_name: str
     environment: str
-    allowed_origins: List[str]
+    allowed_origins: list[str]
     gemini_api_key: str | None
     usda_api_key: str | None
     fatsecret_client_id: str | None

@@ -1,6 +1,6 @@
 import logging
 from datetime import UTC, datetime
-from typing import Any, Dict
+from typing import Any
 from uuid import uuid4
 
 import uvicorn
@@ -83,7 +83,7 @@ calorie_expenditure_agent = CalorieExpenditureAgent(
 
 
 @app.get("/")
-async def root() -> Dict[str, Any]:
+async def root() -> dict[str, Any]:
     return {
         "name": settings.app_name,
         "status": "ok",
@@ -101,7 +101,7 @@ async def root() -> Dict[str, Any]:
 
 
 @app.get("/health")
-async def health_check() -> Dict[str, Any]:
+async def health_check() -> dict[str, Any]:
     return {
         "status": "ok",
         "environment": settings.environment,
@@ -128,7 +128,7 @@ async def health_check() -> Dict[str, Any]:
 async def generate_meal_plan(
     request: MealRequest,
     x_gemini_api_key: str | None = Header(default=None),
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     request_id = str(uuid4())
     generated_at = datetime.now(UTC).isoformat()
 
@@ -178,13 +178,13 @@ async def generate_meal_plan(
 
 
 @app.post("/calorie-expenditure/predict")
-async def predict_calorie_expenditure(request: CalorieExpenditureRequest) -> Dict[str, Any]:
+async def predict_calorie_expenditure(request: CalorieExpenditureRequest) -> dict[str, Any]:
     response = await run_in_threadpool(calorie_expenditure_agent.predict, request)
     return response.model_dump()
 
 
 @app.get("/meal-plans/{user_id}")
-async def list_meal_plans(user_id: str, limit: int = 20) -> Dict[str, Any]:
+async def list_meal_plans(user_id: str, limit: int = 20) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 50))
     items = await run_in_threadpool(meal_history.list_for_user, user_id=user_id, limit=safe_limit)
     return {
@@ -195,7 +195,7 @@ async def list_meal_plans(user_id: str, limit: int = 20) -> Dict[str, Any]:
 
 
 @app.post("/meal-feedback")
-async def save_meal_feedback(request: MealFeedbackRequest) -> Dict[str, Any]:
+async def save_meal_feedback(request: MealFeedbackRequest) -> dict[str, Any]:
     if request.liked is None and request.rating is None and not request.saved:
         raise HTTPException(
             status_code=400,
@@ -210,7 +210,7 @@ async def save_meal_feedback(request: MealFeedbackRequest) -> Dict[str, Any]:
 
 
 @app.get("/meal-feedback/{user_id}")
-async def list_meal_feedback(user_id: str, limit: int = 20) -> Dict[str, Any]:
+async def list_meal_feedback(user_id: str, limit: int = 20) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(meal_feedback.list_for_user, user_id=user_id, limit=safe_limit)
     return {
@@ -221,7 +221,7 @@ async def list_meal_feedback(user_id: str, limit: int = 20) -> Dict[str, Any]:
 
 
 @app.get("/saved-meals/{user_id}")
-async def list_saved_meals(user_id: str, limit: int = 20) -> Dict[str, Any]:
+async def list_saved_meals(user_id: str, limit: int = 20) -> dict[str, Any]:
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(
         meal_feedback.list_for_user,

@@ -3,28 +3,80 @@ name: CI
 on:
   push:
     branches: [main]
+  # Every pull request, whatever its base. Restricting this to base `main` meant a
+  # stacked PR - one refactor phase targeting the previous phase's branch - got no
+  # CI run at all, silently, which defeats the point of the gate.
   pull_request:
-    branches: [main]
 
 jobs:
-  backend-tests:
+  backend:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.1
+        with:
+          version: "0.11.29"
+          enable-cache: true
+
+      - name: Sync dependencies
+        run: uv sync --locked --all-groups --python ${{ matrix.python-version }}
+
+      - name: Ruff lint
+        run: uv run ruff check .
+
+      - name: Ruff format check
+        run: uv run ruff format --check .
+
+      - name: Run tests
+        run: uv run pytest
+
+  requirements-drift:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v10.0.1
         with:
-          python-version: "3.11"
+          version: "0.11.29"
+
+      - name: Regenerate backend requirements from the lockfile
+        run: >-
+          uv export --no-dev --no-hashes --no-emit-project
+          --format requirements.txt -o backend/requirements.txt
+
+      - name: Fail if the committed export has drifted
+        run: git diff --exit-code -- backend/requirements.txt
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt
+        run: npm ci
 
-      - name: Compile Python
-        run: python -m compileall backend streamlit_app
+      - name: Lint
+        run: npm run lint
 
-      - name: Run tests
-        run: python -m pytest -q
+      - name: Build
+        run: npm run build

@@ -58,19 +58,25 @@ User profile + craving
 -> Streamlit renders the response for testing and demos
 ```
 
+As of 2026-09-10 the calorie prediction step runs only via `/calorie-expenditure/predict`; `/generate-meal-plan` does not yet consume its budget — see [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/4_next_steps.md`](docs/4_next_steps.md) §1.1.
+
 The meal path is retrieval-first so common cravings continue to work when external AI services are rate limited or disabled.
 
 ## 5. Project Structure
 
 ```text
 ai-meal-planner/
+|-- AGENTS.md
+|-- CLAUDE.md
 |-- backend/
 |   |-- app/
 |   |   |-- agents/
 |   |   |-- core/
+|   |   |-- ml/            (empty scaffolding)
 |   |   |-- rag/
 |   |   |-- repositories/
 |   |   |-- schemas/
+|   |   |-- services/      (empty scaffolding)
 |   |   `-- main.py
 |   |-- tests/
 |   `-- requirements.txt
@@ -79,6 +85,15 @@ ai-meal-planner/
 |-- database/
 |   `-- user_profiles.example.json
 |-- docs/
+|   |-- 0_coding_standards.md
+|   |-- 1_brief.md
+|   |-- 2_architecture.md
+|   |-- 3_decisions.md
+|   |-- 4_next_steps.md
+|   |-- 5_agent_log.md
+|   |-- agents/
+|   |-- architecture/
+|   `-- superpowers/
 |-- frontend/
 |-- models/
 |-- notebooks/
@@ -88,58 +103,68 @@ ai-meal-planner/
 |-- render.yaml
 |-- requirements.txt
 |-- runtime.txt
+|-- uv.lock
 `-- README.md
 ```
 
-See `docs/architecture/system_architecture.md` and `docs/engineering/repo_structure_conventions.md` for deeper design notes.
+See [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/0_coding_standards.md`](docs/0_coding_standards.md) for deeper design notes.
 
 ## 6. Quick Start
 
 ### 6.1 Prerequisites
 
-- Python 3.11+
+- [uv](https://docs.astral.sh/uv/) — manages the Python version and dependencies
 - Optional: Node.js 20+ and npm for the React dashboard
 - Optional: Gemini, USDA, and FatSecret API keys for live external integrations
 
+`uv` installs and pins Python 3.11 itself, so no system Python is required.
+
 ### 6.2 Backend API
 
-Run these commands from the project root:
+Run these commands from the project root. They work identically on macOS, Linux
+and Windows.
+
+```bash
+uv sync --all-groups
+cp backend/.env.example backend/.env
+uv run uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 --reload
+```
+
+On Windows PowerShell, substitute the copy step:
 
 ```powershell
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r backend/requirements.txt
-Copy-Item .env.example backend/.env
-uvicorn backend.app.main:app --host 127.0.0.1 --port 8010 --reload
+Copy-Item backend/.env.example backend/.env
 ```
 
-The API runs at:
-
-```text
-http://127.0.0.1:8010
-```
-
-Interactive API docs are available at:
-
-```text
-http://127.0.0.1:8010/docs
-```
+The API runs at `http://127.0.0.1:8000`, with interactive docs at
+`http://127.0.0.1:8000/docs`.
 
 ### 6.3 Streamlit Demo
 
 For a local self-contained demo:
 
+```bash
+STREAMLIT_DEMO_MODE=1 uv run streamlit run streamlit_app/app.py
+```
+
+On Windows PowerShell:
+
 ```powershell
 $env:STREAMLIT_DEMO_MODE="1"
-streamlit run streamlit_app/app.py
+uv run streamlit run streamlit_app/app.py
 ```
 
 For API-client mode with FastAPI running locally:
 
+```bash
+API_BASE_URL=http://127.0.0.1:8000 uv run streamlit run streamlit_app/app.py
+```
+
+On Windows PowerShell:
+
 ```powershell
-$env:API_BASE_URL="http://127.0.0.1:8010"
-streamlit run streamlit_app/app.py
+$env:API_BASE_URL="http://127.0.0.1:8000"
+uv run streamlit run streamlit_app/app.py
 ```
 
 The local Streamlit app runs at:
@@ -158,7 +183,10 @@ https://tuannm3812-ai-meal-planner.streamlit.app/
 
 The React dashboard covers the same three workflows as the Streamlit app: meal plan generation, calorie prediction, and meal/feedback history, with the FastAPI backend as its only dependency (no demo mode).
 
-```powershell
+If the backend is not reachable at `localhost:8000`, copy `frontend/.env.example`
+to `frontend/.env.local` and adjust it before starting the dev server.
+
+```bash
 cd frontend
 npm install
 npm run dev
@@ -172,7 +200,7 @@ http://localhost:5173
 
 ## 7. Configuration
 
-Create `backend/.env` from `.env.example` and adjust values as needed:
+Create `backend/.env` from `backend/.env.example` and adjust values as needed:
 
 ```env
 APP_ENV=development
@@ -234,25 +262,37 @@ Example calorie-prediction request:
 
 ## 9. Development
 
-Run backend tests:
+Run the backend checks — the same gates CI enforces:
 
-```powershell
-python -m pytest -q
-```
-
-Run a health smoke test:
-
-```powershell
-curl http://127.0.0.1:8010/health
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run pytest
 ```
 
 Build and lint the React dashboard:
 
-```powershell
+```bash
 cd frontend
+npm ci
 npm run lint
 npm run build
 ```
+
+Health smoke test, with the backend running:
+
+```bash
+curl http://127.0.0.1:8000/health
+```
+
+**Dependencies:** `pyproject.toml` is the only file to edit by hand. After
+changing it, run `uv lock` and regenerate the export that Render installs from:
+
+```bash
+uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o backend/requirements.txt
+```
+
+CI fails if `backend/requirements.txt` drifts from `uv.lock`.
 
 ## 10. Model and Retrieval Assets
 
@@ -271,7 +311,10 @@ Semantic retrieval is prepared but conservative by default. In production, `RAG_
 
 ## 11. Roadmap
 
-- Connect `/generate-meal-plan` more tightly with the latest `/calorie-expenditure/predict` result
+The full prioritised backlog, including the deliberate gaps, is in
+[`docs/4_next_steps.md`](docs/4_next_steps.md). Highlights:
+
+- Consume the budget from `/calorie-expenditure/predict` in `/generate-meal-plan`
 - Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
 - Use saved meals, likes, dislikes, and ratings as ranking features in retrieval
 - Move local JSON stores for history, feedback, and profiles to a managed database
