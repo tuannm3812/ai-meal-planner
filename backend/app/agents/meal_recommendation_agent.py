@@ -4,8 +4,10 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from ..core.exceptions import NoFeasibleMeal
 from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
+from ..rag.rules import blocked_groups_for_ingredient, constraint_groups, safe_substitution
 from ..schemas.common import MealAgentMetadata as AgentMetadata
 from ..schemas.requests import Ingredient
 
@@ -166,7 +168,13 @@ class MealRecommendationAgent:
         warning = "No strong local RAG match found; using deterministic fallback."
         if self.model and not self.enable_llm_adaptation:
             warning += " Gemini base meal generation is disabled by design."
-        return self._fallback_payload(craving, user_biometrics, target_calories, warning)
+        return self._fallback_payload(
+            craving,
+            user_biometrics,
+            target_calories,
+            warning,
+            constraint_labels=[*dietary_restrictions, *dietary_preferences, *health_conditions],
+        )
 
     def _build_adaptation_prompt(
         self,
@@ -382,23 +390,74 @@ class MealRecommendationAgent:
             for ingredient in ingredients
         )
 
+    @staticmethod
+    def _constrained_ingredients(
+        raw_ingredients: list[dict[str, Any]],
+        groups: set[str],
+    ) -> tuple[list[Ingredient], int] | None:
+        """Apply hard constraints to one fallback template.
+
+        Args:
+            raw_ingredients: The template's ingredients as stored in reference data.
+            groups: Constraint groups from ``constraint_groups``.
+
+        Returns:
+            The safe ingredient list and how many substitutions were applied, or
+            None when some blocked ingredient has no allowed substitution.
+        """
+        ingredients: list[Ingredient] = []
+        substitution_count = 0
+        for raw in raw_ingredients:
+            ingredient = Ingredient(**raw)
+            blocked = blocked_groups_for_ingredient(ingredient.item_name, groups)
+            if blocked:
+                substitution = safe_substitution(
+                    ingredient.item_name, ingredient.base_quantity_grams, groups
+                )
+                if substitution is None:
+                    return None
+                ingredient = Ingredient(
+                    item_name=substitution.replacement_name,
+                    base_quantity_grams=substitution.replacement_grams,
+                )
+                substitution_count += 1
+            ingredients.append(ingredient)
+        return ingredients, substitution_count
+
     def _fallback_payload(
         self,
         craving: str,
         user_biometrics: dict[str, Any],
         target_calories: int,
         warning: str,
+        constraint_labels: list[str] | None = None,
     ) -> MealPlanPayload:
         craving_lower = craving.lower()
+        groups = constraint_groups(constraint_labels or [])
 
+        # Keyword matches first, then the unconditional default, then the rest -
+        # the same preference as before, but a template is only served if every
+        # ingredient is allowed or has a substitution that is itself allowed.
         fallback_meals = load_reference("fallback_meals")
-        selected = fallback_meals[-1]
-        for candidate in fallback_meals:
-            if any(keyword in craving_lower for keyword in candidate["keywords"]):
-                selected = candidate
+        keyword_matches = [
+            candidate
+            for candidate in fallback_meals
+            if any(keyword in craving_lower for keyword in candidate["keywords"])
+        ]
+        ordered = [*keyword_matches, fallback_meals[-1]]
+        ordered += [candidate for candidate in fallback_meals if candidate not in ordered]
+
+        for candidate in ordered:
+            safe = self._constrained_ingredients(candidate["ingredients"], groups)
+            if safe is not None:
+                selected, (ingredients, substitution_count) = candidate, safe
                 break
+        else:
+            raise NoFeasibleMeal(
+                f"No fallback template satisfies constraint groups {sorted(groups)} "
+                f"for craving {craving!r}."
+            )
         meal_name = selected["meal_name"]
-        ingredients = [Ingredient(**ingredient) for ingredient in selected["ingredients"]]
 
         # Scale the fallback template to the calorie budget, exactly as the retrieval
         # path does. Without this the budget reached only user_context.caloric_target,
@@ -410,6 +469,15 @@ class MealRecommendationAgent:
             target_calories,
         )
         warnings = [warning]
+        if selected is not ordered[0]:
+            warnings.append(
+                f"Fallback '{ordered[0]['meal_name']}' conflicts with the request's "
+                f"constraints; served '{meal_name}' instead."
+            )
+        if substitution_count:
+            warnings.append(
+                f"Applied {substitution_count} ingredient substitution(s) for constraints."
+            )
         if scaling_metadata:
             warnings.append(
                 "Scaled fallback portions from "
