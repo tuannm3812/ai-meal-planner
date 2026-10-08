@@ -233,20 +233,40 @@ def blocked_groups_for_ingredient(item_name: str, groups: set[str]) -> set[str]:
     return blocked
 
 
-def planned_substitution(
+def safe_substitution(
     item_name: str,
     quantity_grams: int,
     groups: set[str],
 ) -> PlannedSubstitution | None:
+    """Find a substitution that leaves the ingredient safe under every constraint.
+
+    A rule is trusted only for the groups it is written for, so its replacement
+    must be safe under every other group in force: firm tofu -> chickpeas fixes a
+    soy allergy, but chickpeas are blocked for kidney disease. The replacement is
+    not checked against the rule's own groups, because the keyword rules would
+    wrongly flag "gluten-free pasta" as gluten.
+
+    Args:
+        item_name: The blocked ingredient.
+        quantity_grams: Its quantity, used when the rule keeps the same grams.
+        groups: Every constraint group in force for the request.
+
+    Returns:
+        A substitution that is safe for all groups, or None if there is none.
+    """
     normalized_name = normalize_label(item_name)
+    blocked = blocked_groups_for_ingredient(item_name, groups)
     for rule in SUBSTITUTION_RULES:
-        if rule.original_name == normalized_name and rule.blocked_groups & groups:
-            return PlannedSubstitution(
-                original_name=item_name,
-                replacement_name=rule.replacement_name,
-                replacement_grams=rule.replacement_grams or quantity_grams,
-                reason=rule.reason,
-            )
+        if rule.original_name != normalized_name or not rule.blocked_groups & blocked:
+            continue
+        if blocked_groups_for_ingredient(rule.replacement_name, groups - rule.blocked_groups):
+            continue
+        return PlannedSubstitution(
+            original_name=item_name,
+            replacement_name=rule.replacement_name,
+            replacement_grams=rule.replacement_grams or quantity_grams,
+            reason=rule.reason,
+        )
     return None
 
 
@@ -265,7 +285,9 @@ def substitution_plan_for_meal(
 ) -> list[PlannedSubstitution]:
     substitutions = []
     for ingredient in meal.ingredients:
-        substitution = planned_substitution(
+        if not blocked_groups_for_ingredient(ingredient.item_name, groups):
+            continue
+        substitution = safe_substitution(
             ingredient.item_name,
             ingredient.base_quantity_grams,
             groups,
@@ -287,6 +309,6 @@ def meal_is_allowed(
         blocked = blocked_groups_for_ingredient(ingredient.item_name, groups)
         if not blocked:
             continue
-        if not planned_substitution(ingredient.item_name, ingredient.base_quantity_grams, blocked):
+        if not safe_substitution(ingredient.item_name, ingredient.base_quantity_grams, groups):
             return False
     return True

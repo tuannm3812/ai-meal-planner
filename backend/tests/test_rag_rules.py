@@ -160,3 +160,33 @@ def test_substitution_plan_for_meal_empty_when_nothing_needs_substitution() -> N
     meal = _meal("brown rice")
     groups = constraint_groups(["vegan", "hypertension"])
     assert substitution_plan_for_meal(meal, groups) == []
+
+
+def test_meal_is_allowed_false_when_the_substitution_fixes_only_one_blocked_group() -> None:
+    """Firm tofu under soy allergy plus kidney disease must not be "fixed".
+
+    The soy rule swaps tofu for chickpeas, which resolves the allergy but is itself
+    blocked for kidney disease. Found by probing the retrieval path on 2026-10-08:
+    the corpus served chickpeas to exactly this user.
+    """
+    meal = _meal("firm tofu")
+    groups = constraint_groups(["soy allergy", "kidney disease"])
+    assert meal_is_allowed(meal, groups, []) is False
+    assert substitution_plan_for_meal(meal, groups) == []
+
+
+def test_meal_is_allowed_false_when_the_replacement_breaks_another_constraint() -> None:
+    """Egg allergy swaps whole egg for firm tofu, which kidney disease forbids."""
+    meal = _meal("whole egg")
+    groups = constraint_groups(["egg allergy", "kidney disease"])
+    assert meal_is_allowed(meal, groups, []) is False
+
+
+def test_a_replacement_is_not_judged_by_its_own_group() -> None:
+    """Keyword rules match "pasta" in "gluten-free pasta"; the gluten swap must still hold."""
+    meal = _meal("wholemeal pasta")
+    groups = constraint_groups(["gluten-free"])
+    assert meal_is_allowed(meal, groups, []) is True
+    assert [s.replacement_name for s in substitution_plan_for_meal(meal, groups)] == [
+        "gluten-free pasta"
+    ]
