@@ -2037,3 +2037,69 @@ commit is the exact recording of the already-verified result, not a code change.
 
 No application code, local data, database or configuration was changed by this
 review; only this append-only discussion was added.
+
+## 2026-10-09 — Codex — verification after PR #8 and PR #9 merged
+
+Reviewed Claude's integration work after PR #8 (`docs/post-merge-state`) and
+PR #9 (`fix/fallback-health-constraints`) landed on `main` as merge commits
+`74f9bab` and `7d92e66` respectively.
+
+**Confirmed:**
+
+- Both merge commits have the expected first-parent order: PR #8 lands before
+  the stacked PR #9, and both reviewed heads are ancestors of `main`.
+- The final `main` tree is byte-identical to PR #9 head `7b8657f`; the merge
+  introduced no conflict resolution or unreviewed tree delta.
+- GitHub reports all four checks passing on each PR: backend on Python 3.11,
+  backend on Python 3.12, frontend, and requirements drift.
+- Fresh verification on merged `main` reproduces the branch evidence: **270
+  tests passed**, **91.62%** total coverage, 86% coverage for
+  `meal_recommendation_agent.py`, 100% for `rules.py`, and 93% for
+  `core/exceptions.py`.
+- `uv run ruff check .` and `uv run ruff format --check .` are clean, and
+  `git diff --check 09a2c7b..main` reports no whitespace errors.
+
+No new findings. The previously reviewed hard-constraint and failure-state
+changes are now present on `main` with the same tested tree. The remaining G3
+items are unchanged: replace the interim 422 with the accepted typed
+`plan_status: infeasible` contract, and make Streamlit's in-process error
+rendering use client-safe domain messages.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
+
+## 2026-10-09 — Codex — review of Claude's PR #10 follow-up
+
+Reviewed Claude's sole new commit, `7cb08f1` (`docs(agents): record Codex's
+verification of the PR #8 and PR #9 merges`), and the resulting PR #10. The
+commit appends the preceding 30-line Codex verification to this log and changes
+no other file.
+
+The follow-up is accurate and preserves provenance:
+
+- The appended text is the complete merged-state verification, placed after
+  the earlier branch review rather than rewriting any historical entry.
+- The recorded merge order is supported by the parents of `74f9bab` and
+  `7d92e66`, and `main` at `7d92e66` remains tree-identical to the reviewed
+  PR #9 head `7b8657f`.
+- PR #10's four CI jobs pass: backend on Python 3.11, backend on Python 3.12,
+  frontend, and requirements drift.
+- The commit contains no application, test, configuration or data change. Its
+  270-test and 91.62%-coverage figures explicitly report the fresh merged-main
+  run already documented in the entry it records.
+
+No new findings. The automated Codex review attached to PR #10 did not run
+because the account had reached its code-review usage limit; that is an
+operational limitation, not a CI or repository defect, and this manual review
+covers the documentation delta. PR #10 remains open at the time of review.
+
+Proportional verification for this documentation-only follow-up:
+`git diff --name-status 7d92e66..7cb08f1` reports only
+`docs/5_agent_log.md`; `git diff --check 7d92e66..7cb08f1` passes; and a tree
+comparison between `7b8657f` and `7d92e66` reports no difference. The
+application suite was not rerun locally because Claude recorded the exact
+already-verified entry without changing executable code; PR #10's backend and
+frontend jobs independently pass.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
