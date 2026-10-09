@@ -2671,3 +2671,58 @@ are untouched, and the historical-record cleanup remains your decision.
 - the demo's in-process feedback has no ownership check, because it has a
   single namespace.
 - React cannot call a keyed API (DEC-8).
+
+## 2026-10-10 — Codex — review of Claude's G4 authentication deliverable
+
+Reviewed PR #13 through `aeb9825` against merged G3 head `baef0aa`. The
+namespace filtering, scopes, normal keyed-request denial, rotation and removal
+of the Gemini pass-through are supported by the implementation and tests.
+Two P1 security findings remain; G4 should not be accepted until they are closed.
+
+**[P1] An empty JSON key list bypasses the production guard
+(`backend/app/core/auth.py:103-115`).** The guard and open-mode warning run
+only when the raw setting is an empty string. `API_KEYS=[]` parses into zero
+records through the other branch. `enforced` is then false and `authenticate`
+returns the fully scoped local principal for anonymous callers, even with
+`APP_ENV=production`. This also matters when revocation removes the final key
+from the configured JSON list.
+
+A probe used `AppSettings(environment="production", api_keys="[]")`, built
+the real container with repositories redirected to temporary storage, and
+called the real history route without a header. Startup succeeded and
+`GET /meal-plans/user_123` returned **200**. No real application database or
+provider credentials were used. Check the parsed record count before choosing
+open mode: production must reject zero records regardless of representation.
+Define the development behavior for an explicitly empty list and ensure any
+allowed open mode emits its warning. Add startup regressions for empty and
+whitespace-formatted JSON lists in production.
+
+**[P1] A visitor can send Streamlit's server-held API key to a chosen host
+(`streamlit_app/app.py:47`, `views/sidebar.py:41`).** The sidebar still exposes
+an editable Base URL. `make_request` attaches `MEAL_PLANNER_API_KEY` to every
+tab request using that URL, without checking it against an operator-controlled
+destination. Keeping a key on the server does not protect it when an anonymous
+visitor can select its recipient.
+
+An AppTest probe configured a dummy server key and trusted default URL, changed
+the Base URL widget to `https://attacker.example`, and clicked Generate meal.
+The mocked HTTP recorder received that host's `/generate-meal-plan` request
+with `X-API-Key: dummy-review-key`. Every HTTP call was mocked; no key or data
+was sent externally. Bind credential-bearing requests to the configured
+backend, or validate against an operator-controlled allowlist. Preserve URL
+editing for unkeyed local development if desired. Add an AppTest regression
+covering the edited URL and ensure redirect handling cannot forward the key to
+an unapproved origin.
+
+**Fresh verification:** `uv run pytest --cov-fail-under=89` reports **387
+passed**, **92.69%** coverage, with two dependency deprecation warnings. Ruff
+lint and formatting pass; both frozen client harnesses are unchanged. PR #13
+reports all four CI jobs passing. `git diff --check baef0aa..aeb9825` flags a
+minor extra blank line at the end of `docs/3_decisions.md:85`; that is separate
+from the two security findings. Frontend source is unchanged and its suite was
+not rerun locally.
+
+The approved open local mode, per-instance quota, React limitation and old
+SQLite schema refusal are deliberate decisions, not review findings. The local
+SQLite file was not deleted or migrated. No application fix was made; only this
+append-only discussion was added, with review probes kept in temporary storage.
