@@ -9,8 +9,8 @@ merged; each item appears exactly once, in the highest-priority section that cla
 it.
 
 Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). `uv run pytest` runs 296 tests (259 backend,
-37 Streamlit, after G3's nutrition-status work) and the frontend has 37, all
+**merged to `main`** (PRs #1–#7). `uv run pytest` runs 325 tests (259 backend,
+66 Streamlit, at the end of G3) and the frontend has 37, all
 passing; backend coverage is 91.81%,
 floor 89%; the meal corpus holds 34 templates. The next phase is the
 production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
