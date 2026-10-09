@@ -101,18 +101,21 @@ class AuthConfig:
             RuntimeError: If no keys are configured in production.
         """
         raw = settings.api_keys.strip()
-        if not raw:
+        records = tuple(_parse_record(item) for item in _parse_list(raw)) if raw else ()
+        # Decide on the parsed record count, never on the raw string: "[]", or a
+        # list whose last key was just revoked, is as empty as "". Codex found
+        # the earlier string check let production start open (P1, 2026-10-10).
+        if not records:
             if settings.environment == "production":
                 raise RuntimeError(
-                    "API_KEYS is empty in production. Refusing to start an "
-                    "unauthenticated API; configure at least one key record."
+                    "API_KEYS has no key records in production. Refusing to start "
+                    "an unauthenticated API; configure at least one key record."
                 )
             logger.warning(
-                "API_KEYS is empty: running in open local mode. Every request is "
-                "served unauthenticated in the single 'local' namespace."
+                "API_KEYS has no key records: running in open local mode. Every "
+                "request is served unauthenticated in the single 'local' namespace."
             )
-            return cls()
-        return cls(records=tuple(_parse_record(item) for item in _parse_list(raw)))
+        return cls(records=records)
 
     def authenticate(self, presented: str | None) -> Principal | None:
         """Resolve a presented key to its principal.

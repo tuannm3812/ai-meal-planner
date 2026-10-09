@@ -145,3 +145,38 @@ def test_a_keyed_configuration_does_not_warn(caplog: pytest.LogCaptureFixture) -
         AuthConfig.from_settings(_settings(_records(("app-a", "key-a", ["plans:write"]))))
 
     assert not caplog.records
+
+
+# Codex P1 (2026-10-10): the production guard checked the raw string, so an
+# explicitly empty JSON list - or revoking the last key - started production open.
+EMPTY_LISTS = ["[]", " [ ] ", "\n[]\n"]
+
+
+@pytest.mark.parametrize("raw", EMPTY_LISTS, ids=["compact", "spaced", "newlines"])
+def test_production_refuses_an_empty_key_list_in_any_spelling(raw: str) -> None:
+    with pytest.raises(RuntimeError, match="API_KEYS"):
+        AuthConfig.from_settings(_settings(raw, environment="production"))
+
+
+@pytest.mark.parametrize("raw", EMPTY_LISTS, ids=["compact", "spaced", "newlines"])
+def test_an_empty_key_list_in_development_is_open_mode_and_warns(
+    raw: str, caplog: pytest.LogCaptureFixture
+) -> None:
+    with caplog.at_level("WARNING", logger="backend.app.core.auth"):
+        auth = AuthConfig.from_settings(_settings(raw))
+
+    assert auth.enforced is False
+    assert auth.authenticate(None) == LOCAL_PRINCIPAL
+    assert any("open local mode" in record.message for record in caplog.records)
+
+
+def test_the_real_container_refuses_production_with_an_empty_key_list() -> None:
+    """Codex's probe path: build_container must fail before serving anything."""
+    from backend.app.core.container import build_container
+
+    settings = AppSettings(
+        _env_file=None, environment="production", api_keys="[]", storage_backend="json"
+    )
+
+    with pytest.raises(RuntimeError, match="API_KEYS"):
+        build_container(settings)
