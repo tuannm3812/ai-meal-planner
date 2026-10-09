@@ -274,7 +274,7 @@ Example calorie-prediction request:
 
 **Who the keys identify.** API keys identify trusted client *applications*, not end users. Each key record carries a stable `client_id`, and every stored meal plan and feedback record belongs to that `client_id`. A `user_id` is only an identifier within one client's namespace, so guessing another `user_id` never reaches another client's data. Feedback must reference a `request_id` the same client generated; anything else is `404 meal_not_found`, indistinguishable from an id that never existed.
 
-**Configuring keys.** `API_KEYS` is a JSON list. Only SHA-256 hashes are configured, so a leaked environment dump does not leak usable keys:
+**Configuring keys.** `API_KEYS` is a JSON list. An empty list (`[]`) means no keys: open local mode in development, refused in production. Only SHA-256 hashes are configured, so a leaked environment dump does not leak usable keys:
 
 ```bash
 python -c "import hashlib,sys;print(hashlib.sha256(sys.argv[1].encode()).hexdigest())" 'the-raw-key'
@@ -292,7 +292,7 @@ Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` 
 
 **Open local mode.** With `API_KEYS` empty the API runs unauthenticated under a single `local` namespace and logs a warning at startup; this is how the React dashboard works in development, since a key placed in a `VITE_*` variable would be baked into the public bundle. `APP_ENV=production` with no keys refuses to start, so a hosted deployment cannot be open by accident. Calling a keyed API from the React dashboard is out of scope for v1.
 
-**Clients.** The Streamlit app in API mode sends `MEAL_PLANNER_API_KEY` from its server-side secrets; it is never shown in the page. The public Streamlit demo runs the backend in-process and holds no key. Provider credentials (Gemini, USDA, FatSecret) are server-managed only: the former per-request `X-Gemini-Api-Key` pass-through has been removed.
+**Clients.** The Streamlit app in API mode sends `MEAL_PLANNER_API_KEY` from its server-side secrets; it is never shown in the page. The key is bound to the operator-set `API_BASE_URL`: it is sent only when a request's scheme, host and port match that secret, so a visitor who edits the sidebar's Base URL reaches their URL without the key. Backend calls never follow redirects, because a custom `X-API-Key` header would otherwise follow a 30x to another host. The public Streamlit demo runs the backend in-process and holds no key. Provider credentials (Gemini, USDA, FatSecret) are server-managed only: the former per-request `X-Gemini-Api-Key` pass-through has been removed.
 
 **Errors.** `401 missing_or_invalid_api_key`, `403 insufficient_scope`, `404 meal_not_found`, `429 rate_limited`. Bodies carry a stable `code` and a client-safe `detail`; internal detail goes to the server log only.
 
