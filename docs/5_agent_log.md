@@ -2484,3 +2484,85 @@ after merging G3 is consistent with the recorded ordering. `ProfileNotFound`
 remains an acknowledged gap; no new profile behavior was promised by this fix.
 
 Only this append-only verification entry was added during the review.
+
+## 2026-10-11 — Claude Opus 5.5 — G3 merged; G4 design proposal (for owner and Codex)
+
+**G3 is on `main`.**
+
+- **Merges.** PR #11 merged as `89276ff` and PR #12 as `baef0aa`. #12 was
+  retargeted to `main` and carried exactly its own 6 commits. `main` CI passed
+  all four jobs after each merge.
+- **Merged-main verification**, which Codex noted was still missing.
+  `git diff origin/feat/g3-nutrition-status main` is empty.
+  `uv run pytest --cov-fail-under=89` gives **325 passed**, 91.81%, and the
+  frontend has **37 passed**.
+
+**G4: authentication and ownership.** The agreed contract (portfolio log,
+2026-10-07/08) fixes these points:
+
+- Principals are trusted-client API keys identifying an *application*, not an
+  end user.
+- A key record holds a stable `client_id`, and history namespaces bind to that
+  `client_id`, never to the key string.
+- Rotation issues a new key for the same `client_id`. Revocation removes the
+  key and redeploys, and is proven by a request to every instance.
+- Keys come from the environment or a secret manager.
+- Rate limiting is per key and per instance, and documented as such.
+- The `X-Gemini-Api-Key` pass-through is removed outright.
+- The public Streamlit demo stays in-process and never holds a key.
+- Acceptance: anonymous, wrong-scope, guessed-`user_id` and other-principal
+  meal-ID tests on every route that takes input.
+
+Proposed implementation, with the open forks marked.
+
+1. **Key records.** `API_KEYS` is a JSON list of
+   `{"client_id", "key_sha256", "scopes"}`. Only hashes live in configuration,
+   so a leaked environment dump does not leak usable keys. The header is
+   `X-API-Key`, compared in constant time.
+2. **Scopes.** `plans:write` covers `/generate-meal-plan` and
+   `/calorie-expenditure/predict`. `feedback:write` covers `/meal-feedback`.
+   `history:read` covers the three list routes. There is no `admin` scope,
+   because Codex asked not to invent one without a use case. `/` and `/health`
+   stay public, as G6 requires.
+3. **Ownership.** Every stored record carries `client_id`, and every list
+   filters on `client_id` *and* `user_id`, so a guessed `user_id` only ever
+   reaches the caller's own namespace. Feedback must reference a `request_id`
+   that exists in the caller's own namespace, or it returns 404. That 404 is
+   indistinguishable from "no such meal", so it leaks nothing.
+4. **Rate limit.** An in-memory fixed window per `client_id` (default 60/min,
+   configurable) returning 429 with `Retry-After`. It is per instance by
+   construction, and documented that way.
+5. **Errors.** 401 `missing_or_invalid_api_key`, 403 `insufficient_scope`,
+   429 `rate_limited`. These reuse G3's `error_code` mechanism.
+
+**Fork A: what happens when no keys are configured?** The React dashboard
+cannot hold a privileged key: Vite inlines `VITE_*` values into the public
+bundle, which Codex explicitly ruled out.
+
+- **(A1, recommended)** Auth is enforced whenever `API_KEYS` is set. With no
+  keys, the API runs in an explicit open local mode under one fixed
+  `client_id` `"local"`, and logs a startup warning. With `APP_ENV=production`
+  and no keys, the API **refuses to start**, so a hosted deployment cannot be
+  open by accident. React keeps working locally unchanged, and hosted React
+  access is out of scope for v1.
+- **(A2)** Auth is always enforced, and local development uses a dev key
+  injected into React through `VITE_API_KEY`. That is simpler to reason about,
+  but it normalises shipping a key in the bundle.
+
+**Fork B: how is `client_id` stored?** SQLite tables are created with
+`create_all`, which cannot add a column to an existing table, and there is no
+Alembic (§7.1). The local `database/ai_meal_planner.db` already holds 2
+meal-plan rows.
+
+- **(B1, recommended)** Add a real indexed `client_id` column, and handle
+  existing local databases explicitly: detect the old schema at startup and
+  fail with a clear message to delete or migrate the file. That fits stateless
+  v1 (G6: ephemeral SQLite, no migration in build), and the JSON store simply
+  gains the field. Legacy rows without `client_id` are attributed to
+  `"local"`.
+- **(B2)** Encode the namespace into the stored `user_id`
+  (`"<client_id>:<user_id>"`). It needs no schema change, but it overloads one
+  field with two meanings, and every reader has to know the convention.
+
+Nothing is implemented yet. These two forks change the trust model and the
+storage schema, so they are worth deciding before code.
