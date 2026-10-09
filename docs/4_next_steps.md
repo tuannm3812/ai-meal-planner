@@ -9,8 +9,9 @@ merged; each item appears exactly once, in the highest-priority section that cla
 it.
 
 Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). `uv run pytest` runs 270 tests (237 backend,
-33 Streamlit, after the G3 constraint fix) and the frontend has 36, all passing; backend coverage is 91%,
+**merged to `main`** (PRs #1–#7). `uv run pytest` runs 278 tests (241 backend,
+37 Streamlit, after G3's plan_status work) and the frontend has 37, all passing;
+backend coverage is 91.70%,
 floor 89%; the meal corpus holds 34 templates. The next phase is the
 production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
 2026-10-08 entries: G3 failure semantics, G4 auth, G5 containers, G6 hosted
@@ -251,8 +252,9 @@ From spec §12.
    from Phase 1's final review. Since 2026-10-08 the other two are raised:
    - `RetrievalUnavailable` (503), when no fallback template is safe and the
      retriever never loaded;
-   - `NoFeasibleMeal` (422), when the corpus and the templates are both
-     exhausted.
+   - `NoFeasibleMeal`, when the corpus and the templates are both exhausted.
+     It is internal only: the service turns it into a 200 response with
+     `plan_status: "infeasible"`.
 4. **`deviation_after` falls back to `deviation_before`** when a reconciliation
    retry verifies to 0 kcal, understating the miss. `within_tolerance` stays
    correct.

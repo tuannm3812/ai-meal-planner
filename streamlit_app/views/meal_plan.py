@@ -77,51 +77,13 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
                             else None,
                         )
 
-                    st.session_state.latest_meal_result = meal_result
-                    meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
-                    nutrition = meal_result.get("nutrition", {})
-                    shopping_list = meal_result.get("shopping_list", {})
-                    metadata = meal_result.get("meal_plan", {}).get("metadata", {})
-                    retrieval = meal_result.get("meal_plan", {}).get("retrieval")
-
-                    st.success(meal_definition.get("structured_meal_name", "Meal generated"))
-                    st.caption(
-                        f"Source: {metadata.get('source', 'unknown')} | "
-                        f"Confidence: {metadata.get('confidence', 0):.0%}"
-                    )
-                    if metadata.get("explanation"):
-                        st.info(metadata["explanation"])
-                    metric_cols = st.columns(4)
-                    metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
-                    metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
-                    metric_cols[2].metric("Carbs", f"{nutrition.get('total_carbs', 0)} g")
-                    metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
-
-                    with st.expander("Ingredients", expanded=True):
-                        st.dataframe(
-                            meal_definition.get("ingredients", []), use_container_width=True
-                        )
-                    if metadata.get("warnings"):
-                        with st.expander("Retrieval and generation notes", expanded=True):
-                            for warning in metadata["warnings"]:
-                                st.write(f"- {warning}")
-                    if retrieval:
-                        with st.expander("RAG retrieval contract", expanded=True):
-                            st.json(retrieval)
-                    with st.expander("Nutrition details"):
-                        st.json(nutrition)
-                    with st.expander("Shopping list", expanded=True):
-                        shopping_items = shopping_list.get("shopping_list", [])
-                        if shopping_items:
-                            st.dataframe(shopping_items, use_container_width=True)
-                            st.metric(
-                                "Estimated total",
-                                f"${shopping_list.get('total_estimated_cost', 0):,.2f}",
-                            )
-                        else:
-                            st.caption("No shopping list items returned.")
-                    with st.expander("Raw API response"):
-                        st.json(meal_result)
+                    if meal_result.get("plan_status") == "infeasible":
+                        # No meal to show or give feedback on: say why instead.
+                        st.session_state.latest_meal_result = None
+                        st.warning(meal_result.get("infeasible_reason") or "No meal fits.")
+                    else:
+                        st.session_state.latest_meal_result = meal_result
+                        _render_meal_result(meal_result)
                 except Exception as exc:
                     render_api_error(exc)
         else:
@@ -172,3 +134,53 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
                     st.json(feedback_result)
                 except Exception as exc:
                     render_api_error(exc)
+
+
+def _render_meal_result(meal_result: dict[str, Any]) -> None:
+    """Render a matched or fallback meal plan.
+
+    Args:
+        meal_result: The /generate-meal-plan response for a plan with a meal.
+    """
+    meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
+    nutrition = meal_result.get("nutrition", {})
+    shopping_list = meal_result.get("shopping_list", {})
+    metadata = meal_result.get("meal_plan", {}).get("metadata", {})
+    retrieval = meal_result.get("meal_plan", {}).get("retrieval")
+
+    st.success(meal_definition.get("structured_meal_name", "Meal generated"))
+    st.caption(
+        f"Source: {metadata.get('source', 'unknown')} | "
+        f"Confidence: {metadata.get('confidence', 0):.0%}"
+    )
+    if metadata.get("explanation"):
+        st.info(metadata["explanation"])
+    metric_cols = st.columns(4)
+    metric_cols[0].metric("Calories", nutrition.get("total_calories", 0))
+    metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
+    metric_cols[2].metric("Carbs", f"{nutrition.get('total_carbs', 0)} g")
+    metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
+
+    with st.expander("Ingredients", expanded=True):
+        st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
+    if metadata.get("warnings"):
+        with st.expander("Retrieval and generation notes", expanded=True):
+            for warning in metadata["warnings"]:
+                st.write(f"- {warning}")
+    if retrieval:
+        with st.expander("RAG retrieval contract", expanded=True):
+            st.json(retrieval)
+    with st.expander("Nutrition details"):
+        st.json(nutrition)
+    with st.expander("Shopping list", expanded=True):
+        shopping_items = shopping_list.get("shopping_list", [])
+        if shopping_items:
+            st.dataframe(shopping_items, use_container_width=True)
+            st.metric(
+                "Estimated total",
+                f"${shopping_list.get('total_estimated_cost', 0):,.2f}",
+            )
+        else:
+            st.caption("No shopping list items returned.")
+    with st.expander("Raw API response"):
+        st.json(meal_result)

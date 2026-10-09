@@ -204,25 +204,30 @@ def _meal_agent() -> object:
     return app.dependency_overrides[get_container]().meal_planning_service.meal_agent
 
 
-def test_generate_meal_plan_returns_422_with_only_the_safe_message_when_infeasible(
+def test_generate_meal_plan_reports_infeasible_as_a_typed_200(
     client: TestClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:
-    """No safe template and a consulted corpus with no safe meal -> 422.
+    """No safe template and a consulted corpus with no safe meal.
 
-    The body must carry the client message only: the internal detail names the
-    user's constraint groups, which must stay in the server log.
+    G3 replaces the interim 422 with a successful response carrying
+    plan_status "infeasible". The reason is the client-safe message: the
+    internal detail names the user's constraint groups and must stay in the
+    server log. Nothing is saved to history, because there is no meal.
     """
     monkeypatch.setattr(_meal_agent(), "meal_retriever", _EmptyRetriever())
 
     response = client.post("/generate-meal-plan", json=_INFEASIBLE_REQUEST)
 
-    assert response.status_code == 422
-    assert response.json() == {
-        "status": "error",
-        "error": "NoFeasibleMeal",
-        "detail": NoFeasibleMeal.client_message,
-    }
-    assert "kidney" not in response.text
+    assert response.status_code == 200
+    body = response.json()
+    assert body["status"] == "success"
+    assert body["plan_status"] == "infeasible"
+    assert body["infeasible_reason"] == NoFeasibleMeal.client_message
+    for section in ("meal_plan", "nutrition", "shopping_list", "reconciliation"):
+        assert body[section] is None, section
+    assert body["calorie_budget"]["meal_calorie_budget_kcal"] > 0
+    assert "kidney" not in response.text.replace('"health_conditions":["kidney_disease"]', "")
+    assert client.get("/meal-plans/user_123").json()["items"] == []
 
 
 def test_generate_meal_plan_returns_503_when_retrieval_is_unavailable(

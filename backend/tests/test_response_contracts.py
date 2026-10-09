@@ -75,5 +75,8 @@ def test_meal_plan_response_still_carries_every_section(client: TestClient) -> N
         "nutrition",
         "shopping_list",
         "reconciliation",
+        "plan_status",
+        "infeasible_reason",
     ):
         assert section in body
+    assert body["plan_status"] == "matched"

@@ -36,10 +36,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 270 tests (237
-  backend, 33 Streamlit) since the G3 constraint fix, coverage 91% against the
-  89% CI floor; the frontend
-  has 36 tests.
+  passed `main`'s older single-job workflow. `uv run pytest` runs 278 tests (241
+  backend, 37 Streamlit) after G3's plan_status work, coverage 91.70% against
+  the 89% CI floor; the frontend has 37 tests.
 - Next work follows the production-readiness direction in
   `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries): G3 typed
   failure semantics, then G4 API-key auth, G5 containers, G6 hosted mode
@@ -60,8 +59,10 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   wired to handlers but never raised. The other two are raised:
   - `RetrievalUnavailable` (503) when no fallback template is safe and the
     retriever never loaded;
-  - `NoFeasibleMeal` (422) only when both the corpus and the fallback templates
-    are exhausted.
+  - `NoFeasibleMeal`, only when the corpus and the fallback templates are both
+    exhausted. It is an internal signal: `MealPlanningService` turns it into a
+    successful response with `plan_status: "infeasible"`, so it never reaches
+    HTTP as a 422.
 - `agents/meal_recommendation_agent.py` sits at ~86% coverage, the largest
   remaining gap in core business logic.
 - `backend/requirements.txt` is **generated** by `uv export`; edit

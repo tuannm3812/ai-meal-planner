@@ -23,6 +23,8 @@ function MealPlanTab() {
     'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
   )
 
+  // G3: "infeasible" is a successful response with null meal sections.
+  const isInfeasible = mealPlan?.plan_status === 'infeasible'
   const mealDefinition = mealPlan?.meal_plan?.meal_definition
   const nutrition = mealPlan?.nutrition
   const shopping = mealPlan?.shopping_list
@@ -104,7 +106,15 @@ function MealPlanTab() {
           />
         )}
 
-        {mealPlan && (
+        {isInfeasible && (
+          <EmptyState
+            idleBody={mealPlan.infeasible_reason}
+            idleTitle="No meal fits these constraints"
+            isLoading={false}
+          />
+        )}
+
+        {mealPlan && !isInfeasible && (
           <MealPlanResult
             craving={craving.trim()}
             ingredients={ingredients}

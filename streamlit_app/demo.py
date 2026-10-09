@@ -127,20 +127,17 @@ def local_demo_request(
                 dietary_preferences=payload.get("dietary_preferences", []),
             )
         )
+        # Mirrors the API's MealPlanResponse, including plan_status; on
+        # "infeasible" the meal sections are None and nothing is saved.
         response = {
             "status": "success",
             "request_id": request_id,
             "generated_at": datetime.now(UTC).isoformat(),
             "request": payload,
-            "calorie_budget": result.calorie_budget.model_dump(),
-            "meal_plan": result.meal_plan.model_dump(),
-            "nutrition": result.nutrition.model_dump(),
-            "shopping_list": result.shopping_list.model_dump(),
-            "reconciliation": (
-                result.reconciliation.model_dump() if result.reconciliation else None
-            ),
+            **result.model_dump(),
         }
-        MealPlanRepository(DEMO_DATA_DIR).save(response)
+        if result.plan_status != "infeasible":
+            MealPlanRepository(DEMO_DATA_DIR).save(response)
         return response
 
     if path == "/calorie-expenditure/predict":

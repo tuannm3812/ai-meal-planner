@@ -1,6 +1,7 @@
 """Orchestrates the multi-agent meal planning workflow."""
 
-from typing import Any
+import logging
+from typing import Any, Literal
 
 from pydantic import BaseModel
 
@@ -12,12 +13,17 @@ from ..agents.calorie_expenditure_agent import (
 from ..agents.meal_recommendation_agent import MealPlanPayload, MealRecommendationAgent
 from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
+from ..core.exceptions import NoFeasibleMeal
 from ..repositories.base import UserProfileStore
 from ..schemas.requests import Ingredient, MealRequest
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_TOLERANCE = 0.15
 """Fractional deviation between the portion estimate and verified nutrition that
 is accepted without rescaling."""
+
+PlanStatus = Literal["matched", "fallback", "infeasible"]
 
 
 class ReconciliationMetadata(BaseModel):
@@ -34,13 +40,22 @@ class ReconciliationMetadata(BaseModel):
 
 
 class MealPlanResult(BaseModel):
-    """Everything the meal-plan endpoint needs, assembled by the orchestrator."""
+    """Everything the meal-plan endpoint needs, assembled by the orchestrator.
 
+    ``plan_status`` says how the meal was produced: ``matched`` for a corpus
+    meal, ``fallback`` for a deterministic template, and ``infeasible`` when no
+    meal satisfies the hard constraints. An infeasible result is an answer, not
+    an error, so it still carries the calorie budget; every meal-dependent
+    section is None and ``infeasible_reason`` holds a client-safe explanation.
+    """
+
+    plan_status: PlanStatus
     calorie_budget: CalorieExpenditureResponse
-    meal_plan: MealPlanPayload
-    nutrition: MealNutrition
-    shopping_list: SupermarketPayload
+    meal_plan: MealPlanPayload | None = None
+    nutrition: MealNutrition | None = None
+    shopping_list: SupermarketPayload | None = None
     reconciliation: ReconciliationMetadata | None = None
+    infeasible_reason: str | None = None
 
 
 class MealPlanningService:
@@ -87,14 +102,23 @@ class MealPlanningService:
         profile = self.profile_repo.fetch_user_profile(request.user_id.strip())
         calorie_budget = self.calorie_agent.predict(self._calorie_request(request, profile))
 
-        meal_plan = self.meal_agent.generate_meal_payload(
-            craving=request.craving.strip(),
-            user_id=request.user_id.strip(),
-            daily_calorie_target=int(round(calorie_budget.meal_calorie_budget_kcal)),
-            health_conditions=request.health_conditions,
-            dietary_preferences=request.dietary_preferences,
-            profile=profile,
-        )
+        try:
+            meal_plan = self.meal_agent.generate_meal_payload(
+                craving=request.craving.strip(),
+                user_id=request.user_id.strip(),
+                daily_calorie_target=int(round(calorie_budget.meal_calorie_budget_kcal)),
+                health_conditions=request.health_conditions,
+                dietary_preferences=request.dietary_preferences,
+                profile=profile,
+            )
+        except NoFeasibleMeal as exc:
+            # The internal detail names the user's constraints: log it, never return it.
+            logger.info("Infeasible meal request: %s", exc)
+            return MealPlanResult(
+                plan_status="infeasible",
+                calorie_budget=calorie_budget,
+                infeasible_reason=exc.client_message,
+            )
         nutrition = self.nutrition_agent.calculate_meal_macros(
             ingredients=meal_plan.meal_definition.ingredients
         )
@@ -105,6 +129,9 @@ class MealPlanningService:
             user_location=request.location.strip(),
         )
         return MealPlanResult(
+            plan_status=(
+                "fallback" if meal_plan.metadata.source == "deterministic_fallback" else "matched"
+            ),
             calorie_budget=calorie_budget,
             meal_plan=meal_plan,
             nutrition=nutrition,
