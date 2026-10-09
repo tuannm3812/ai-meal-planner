@@ -2566,3 +2566,12 @@ meal-plan rows.
 
 Nothing is implemented yet. These two forks change the trust model and the
 storage schema, so they are worth deciding before code.
+
+**Owner decisions on the G4 forks (2026-10-11):**
+
+- **A1, open local mode.** Auth is enforced whenever `API_KEYS` is set. With
+  no keys, the API runs under one `client_id` `"local"` with a startup warning.
+  With `APP_ENV=production` and no keys, it refuses to start.
+- **B1, a real `client_id` column.** An existing database with the old schema
+  is detected at startup and refused with a clear message. Legacy JSON records
+  without `client_id` belong to `"local"`.
