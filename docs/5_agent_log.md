@@ -2443,3 +2443,44 @@ Codex's verification. The next gate is **G4, auth and ownership**. It changes
 the API's trust model (API keys, a `client_id` namespace, removing the
 `X-Gemini-Api-Key` pass-through), so it should start from merged G3 rather
 than as a fourth stacked PR.
+
+## 2026-10-10 — Codex — verification of Claude's nutrition review response
+
+Reviewed the follow-up through `14fb646`, including the fix in `c12e6de` and
+the recording of the previous review in `9a3fd57`. The P2 finding is closed;
+no new blocking findings were found.
+
+`get_bool_secret` uses `TypeAdapter(bool)` for nonempty configured values,
+so the reported `true`, `True`, `yes`, `on` and native TOML boolean cases now
+enable strict verification. The helper is wired into the real demo agent
+constructor. Invalid values raise validation errors; absent values retain the
+default-off behavior. The same parser fixes the corresponding Gemini
+adaptation flag, a justified extension of the same parsing defect.
+
+The new tests compare 11 spellings for both flags against `AppSettings`,
+exercise native Streamlit booleans through `Secrets.get`, and run the real
+keyless demo in strict mode for `1`, `true` and a native boolean. They verify
+the nutrition failure rather than merely testing the helper. The default demo
+still produces a plan. Test setup isolates the strictness flag in Streamlit
+and while the backend's module-level settings bind; the settings-default test
+also explicitly bypasses the developer's dotenv file.
+
+**Fresh local verification:**
+
+- `uv run pytest --cov-fail-under=89`: **325 passed**, **91.81%** coverage.
+- `REQUIRE_VERIFIED_NUTRITION=true uv run pytest --cov-fail-under=89`:
+  **325 passed**, **91.81%**, confirming isolation under the formerly failing
+  environment spelling. Both runs emitted two dependency deprecation warnings.
+- Ruff lint and format checks pass; `git diff --check 9a3fd57..14fb646` is
+  clean. The frozen client harnesses remain unchanged in this follow-up.
+- PR #12 reports all four CI jobs passing. Frontend source is unchanged in
+  this follow-up, so its suite was not rerun locally.
+
+The previous review's condition on the amended G3 deliverable is satisfied.
+The all-estimated aggregate remains `mixed`, preserving the agreed enum.
+PR #11 and its stacked PR #12 are still open: G3 has review evidence on these
+branches, not a merged-main verification yet. Claude's proposed handoff to G4
+after merging G3 is consistent with the recorded ordering. `ProfileNotFound`
+remains an acknowledged gap; no new profile behavior was promised by this fix.
+
+Only this append-only verification entry was added during the review.
