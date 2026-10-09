@@ -36,8 +36,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 387 tests (318
-  backend, 69 Streamlit) after G4, coverage 92.69% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 407 tests (325
+  backend, 82 Streamlit) after G4 and its P1 fixes, coverage 92.69% against the 89% CI floor;
   the frontend has 37 tests.
 - 2026-10-11: G3 (failure semantics) is merged (#11, #12). G4 (trusted-client
   API keys, `client_id` namespaces, scopes, per-instance rate limit, Gemini
