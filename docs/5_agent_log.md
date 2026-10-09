@@ -2901,3 +2901,10 @@ five CI jobs pass on PR #14, including `container`.
 
 **Next:** G6, a hosted stateless deploy. It needs the owner to choose the
 target (Cloud Run as in the architecture doc, or Render).
+
+**Correction (same day).** The entry above says the smoke output came from "the
+run on `ce57b05`'s successor". `ce57b05` is not a commit in this repository; I
+wrote it without checking. The output is from GitHub Actions run `38002987627`,
+a `pull_request` run on head `6284e0c`
+(`test(docker): check Streamlit reaches the API from inside its container`).
+Verified with `gh run view 38002987627 --json headSha`.
