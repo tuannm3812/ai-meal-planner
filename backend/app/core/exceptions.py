@@ -19,6 +19,8 @@ class MealPlanningError(Exception):
 
     status_code = 500
     client_message = "Meal plan generation failed. Please try again."
+    # A stable, machine-readable code for clients, returned as "code" when set.
+    error_code: str | None = None
 
 
 class ProfileNotFound(MealPlanningError):
@@ -36,10 +38,16 @@ class RetrievalUnavailable(MealPlanningError):
 
 
 class NutritionProviderError(MealPlanningError):
-    """Raised when every nutrition provider fails for an ingredient."""
+    """Raised when verified nutrition is required but cannot be met.
+
+    This is G3's ``unverified_required`` outcome: ``REQUIRE_VERIFIED_NUTRITION``
+    is on and at least one ingredient could only be estimated, because no
+    provider is configured or every configured provider failed for it.
+    """
 
     status_code = 502
     client_message = "Nutrition verification is temporarily unavailable."
+    error_code = "unverified_required"
 
 
 class NoFeasibleMeal(MealPlanningError):
@@ -69,14 +77,11 @@ def register_exception_handlers(app: FastAPI) -> None:
     async def _handle_domain_error(request: Request, exc: MealPlanningError) -> JSONResponse:
         # The internal string goes to logs; the client gets the safe message only.
         logger.warning("%s on %s: %s", type(exc).__name__, request.url.path, exc)
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={
-                "status": "error",
-                "error": type(exc).__name__,
-                "detail": exc.client_message,
-            },
-        )
+        content = {"status": "error", "error": type(exc).__name__}
+        if exc.error_code:
+            content["code"] = exc.error_code
+        content["detail"] = exc.client_message
+        return JSONResponse(status_code=exc.status_code, content=content)
 
     @app.exception_handler(Exception)
     async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:

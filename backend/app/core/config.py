@@ -70,6 +70,10 @@ class AppSettings(BaseSettings):
     # (value.lower() in {"1", "true", "yes"}): it also accepts on/off. No shipped
     # .env uses those, so no resolved value changes, but the rule is not identical.
     enable_gemini_adaptation: bool = False
+    # G3: when true, a meal whose nutrition is estimated for any ingredient fails
+    # with NutritionProviderError (code "unverified_required"). Off by default so
+    # the keyless offline demo keeps producing plans.
+    require_verified_nutrition: bool = False
 
     storage_backend: Literal["json", "sqlite"] = "sqlite"
 
