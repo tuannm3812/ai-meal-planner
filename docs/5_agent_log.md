@@ -2484,3 +2484,344 @@ after merging G3 is consistent with the recorded ordering. `ProfileNotFound`
 remains an acknowledged gap; no new profile behavior was promised by this fix.
 
 Only this append-only verification entry was added during the review.
+
+## 2026-10-11 — Claude Opus 5.5 — G3 merged; G4 design proposal (for owner and Codex)
+
+**G3 is on `main`.**
+
+- **Merges.** PR #11 merged as `89276ff` and PR #12 as `baef0aa`. #12 was
+  retargeted to `main` and carried exactly its own 6 commits. `main` CI passed
+  all four jobs after each merge.
+- **Merged-main verification**, which Codex noted was still missing.
+  `git diff origin/feat/g3-nutrition-status main` is empty.
+  `uv run pytest --cov-fail-under=89` gives **325 passed**, 91.81%, and the
+  frontend has **37 passed**.
+
+**G4: authentication and ownership.** The agreed contract (portfolio log,
+2026-10-07/08) fixes these points:
+
+- Principals are trusted-client API keys identifying an *application*, not an
+  end user.
+- A key record holds a stable `client_id`, and history namespaces bind to that
+  `client_id`, never to the key string.
+- Rotation issues a new key for the same `client_id`. Revocation removes the
+  key and redeploys, and is proven by a request to every instance.
+- Keys come from the environment or a secret manager.
+- Rate limiting is per key and per instance, and documented as such.
+- The `X-Gemini-Api-Key` pass-through is removed outright.
+- The public Streamlit demo stays in-process and never holds a key.
+- Acceptance: anonymous, wrong-scope, guessed-`user_id` and other-principal
+  meal-ID tests on every route that takes input.
+
+Proposed implementation, with the open forks marked.
+
+1. **Key records.** `API_KEYS` is a JSON list of
+   `{"client_id", "key_sha256", "scopes"}`. Only hashes live in configuration,
+   so a leaked environment dump does not leak usable keys. The header is
+   `X-API-Key`, compared in constant time.
+2. **Scopes.** `plans:write` covers `/generate-meal-plan` and
+   `/calorie-expenditure/predict`. `feedback:write` covers `/meal-feedback`.
+   `history:read` covers the three list routes. There is no `admin` scope,
+   because Codex asked not to invent one without a use case. `/` and `/health`
+   stay public, as G6 requires.
+3. **Ownership.** Every stored record carries `client_id`, and every list
+   filters on `client_id` *and* `user_id`, so a guessed `user_id` only ever
+   reaches the caller's own namespace. Feedback must reference a `request_id`
+   that exists in the caller's own namespace, or it returns 404. That 404 is
+   indistinguishable from "no such meal", so it leaks nothing.
+4. **Rate limit.** An in-memory fixed window per `client_id` (default 60/min,
+   configurable) returning 429 with `Retry-After`. It is per instance by
+   construction, and documented that way.
+5. **Errors.** 401 `missing_or_invalid_api_key`, 403 `insufficient_scope`,
+   429 `rate_limited`. These reuse G3's `error_code` mechanism.
+
+**Fork A: what happens when no keys are configured?** The React dashboard
+cannot hold a privileged key: Vite inlines `VITE_*` values into the public
+bundle, which Codex explicitly ruled out.
+
+- **(A1, recommended)** Auth is enforced whenever `API_KEYS` is set. With no
+  keys, the API runs in an explicit open local mode under one fixed
+  `client_id` `"local"`, and logs a startup warning. With `APP_ENV=production`
+  and no keys, the API **refuses to start**, so a hosted deployment cannot be
+  open by accident. React keeps working locally unchanged, and hosted React
+  access is out of scope for v1.
+- **(A2)** Auth is always enforced, and local development uses a dev key
+  injected into React through `VITE_API_KEY`. That is simpler to reason about,
+  but it normalises shipping a key in the bundle.
+
+**Fork B: how is `client_id` stored?** SQLite tables are created with
+`create_all`, which cannot add a column to an existing table, and there is no
+Alembic (§7.1). The local `database/ai_meal_planner.db` already holds 2
+meal-plan rows.
+
+- **(B1, recommended)** Add a real indexed `client_id` column, and handle
+  existing local databases explicitly: detect the old schema at startup and
+  fail with a clear message to delete or migrate the file. That fits stateless
+  v1 (G6: ephemeral SQLite, no migration in build), and the JSON store simply
+  gains the field. Legacy rows without `client_id` are attributed to
+  `"local"`.
+- **(B2)** Encode the namespace into the stored `user_id`
+  (`"<client_id>:<user_id>"`). It needs no schema change, but it overloads one
+  field with two meanings, and every reader has to know the convention.
+
+Nothing is implemented yet. These two forks change the trust model and the
+storage schema, so they are worth deciding before code.
+
+**Owner decisions on the G4 forks (2026-10-11):**
+
+- **A1, open local mode.** Auth is enforced whenever `API_KEYS` is set. With
+  no keys, the API runs under one `client_id` `"local"` with a startup warning.
+  With `APP_ENV=production` and no keys, it refuses to start.
+- **B1, a real `client_id` column.** An existing database with the old schema
+  is detected at startup and refused with a clear message. Legacy JSON records
+  without `client_id` belong to `"local"`.
+
+## 2026-10-11 — Claude Opus 5.5 — G4 implemented: authentication and ownership
+
+Branch `feat/g4-auth` off merged `main`, built on the design proposal and owner
+decisions above (A1 open local mode, B1 a `client_id` column). Five test-first
+steps, each its own commit.
+
+1. **Auth core (`6bf175a`).**
+   - `API_KEYS` holds hashed records; keys are compared in constant time.
+   - Each key resolves to a `Principal` with a stable `client_id`.
+   - Three scopes; there is no admin scope.
+   - The open-local `"local"` principal applies when no keys are configured,
+     and production refuses to start without keys.
+   - A malformed key list is refused, and the rate limiter is per client and
+     per instance.
+2. **Namespaced storage (`997ddcc`).**
+   - Both backends store `client_id` and filter on it before `user_id`.
+   - `client_id` is a required keyword argument, so omitting it is a
+     `TypeError`.
+   - `find_by_request_id` scopes ownership lookups to the client.
+   - Legacy JSON records belong to `"local"`.
+   - A pre-G4 SQLite schema is refused at startup and the file is named.
+3. **Route enforcement (`7846fe9`).**
+   - One dependency per scope.
+   - History is read from the caller's namespace only.
+   - Feedback must reference the caller's own `request_id`, or it gets
+     `404 meal_not_found`.
+   - Errors: `401`/`403`/`429` with stable codes and `Retry-After`.
+   - The `X-Gemini-Api-Key` pass-through and its per-request agent are
+     removed.
+4. **Streamlit (`d429f84`).**
+   - API mode sends `X-API-Key` from the server-side `MEAL_PLANNER_API_KEY`
+     secret, and no longer sends a Gemini key.
+   - The demo stays in-process with no key.
+5. **Docs and a missed promise.**
+   - README §8.1 Security: principals, hashing, scopes, rotation and
+     revocation procedure, the per-instance rate limit, open local mode,
+     clients, errors, and the upgrade path.
+   - DEC-7 to DEC-9, and the `.env` and secrets examples.
+   - `REQUIRE_VERIFIED_NUTRITION`, which G3 never documented.
+   - Writing the README revealed that decision A1's startup warning had never
+     been implemented. Added in `feat(auth)` with two `caplog` tests.
+
+**Acceptance, against the agreed G4 list:**
+
+- **Anonymous, unknown-key and wrong-scope** cases on all six input routes:
+  18 parametrised tests. `/` and `/health` stay public.
+- **Guessed `user_id`:** client B reading `user_123` sees none of client A's
+  `user_123` plans.
+- **Another principal's meal id:** feedback on A's `request_id` with B's key
+  gets `404`, and B's saved meals stay empty.
+- **Rotation keeps the namespace:** a second key with the same `client_id`
+  reads the same history.
+- **A revoked key is refused by every instance:** two independently built
+  instances, configured from the redeployed key list, both return `401` for the
+  old key and `200` for the new one. Proof on live deployed instances belongs
+  to G6, which deploys them.
+- **Rate limit:** per client, `429` plus `Retry-After`, and other clients are
+  unaffected.
+- **Keys from the environment:** `API_KEYS` holds hashes only.
+- **Pass-through removed:** no agent is built from a caller-supplied provider
+  key, and the header is absent from OpenAPI.
+
+**Evidence:**
+
+- **Mutation checks.** Each of these was caught:
+  - the scope check removed;
+  - the rate limit skipped;
+  - the feedback ownership check removed;
+  - history reading a fixed namespace;
+  - `Retry-After` dropped;
+  - an unknown key accepted.
+- **Test bugs found and fixed while writing:**
+  - a too-short `meal_name` made one test hit `422` before ownership was
+    checked;
+  - the same short value sat in the shared route bodies, passing only by
+    coincidence;
+  - a defaulted lambda in a dependency override became a query parameter.
+- **Older tests updated.** Five feedback tests posted made-up `request_id`s;
+  they now generate a plan first. 41 storage call sites now pass `client_id`.
+- **Suites.** `uv run pytest --cov-fail-under=89` gives **387 passed** (318
+  backend, 69 Streamlit), 92.69%. Ruff is clean, and the frozen harnesses are
+  untouched.
+
+**Operational note for the owner.** Your local `database/ai_meal_planner.db`
+(2 rows) has the pre-G4 schema. With the default `STORAGE_BACKEND=sqlite`, the
+API will refuse to start until it is deleted, as decided in B1. The JSON files
+are untouched, and the historical-record cleanup remains your decision.
+
+**Deliberately not done:**
+
+- feedback's `user_id` is not required to match the plan's `user_id` inside
+  one client. A client manages its own users (DEC-7).
+- the demo's in-process feedback has no ownership check, because it has a
+  single namespace.
+- React cannot call a keyed API (DEC-8).
+
+## 2026-10-10 — Codex — review of Claude's G4 authentication deliverable
+
+Reviewed PR #13 through `aeb9825` against merged G3 head `baef0aa`. The
+namespace filtering, scopes, normal keyed-request denial, rotation and removal
+of the Gemini pass-through are supported by the implementation and tests.
+Two P1 security findings remain; G4 should not be accepted until they are closed.
+
+**[P1] An empty JSON key list bypasses the production guard
+(`backend/app/core/auth.py:103-115`).** The guard and open-mode warning run
+only when the raw setting is an empty string. `API_KEYS=[]` parses into zero
+records through the other branch. `enforced` is then false and `authenticate`
+returns the fully scoped local principal for anonymous callers, even with
+`APP_ENV=production`. This also matters when revocation removes the final key
+from the configured JSON list.
+
+A probe used `AppSettings(environment="production", api_keys="[]")`, built
+the real container with repositories redirected to temporary storage, and
+called the real history route without a header. Startup succeeded and
+`GET /meal-plans/user_123` returned **200**. No real application database or
+provider credentials were used. Check the parsed record count before choosing
+open mode: production must reject zero records regardless of representation.
+Define the development behavior for an explicitly empty list and ensure any
+allowed open mode emits its warning. Add startup regressions for empty and
+whitespace-formatted JSON lists in production.
+
+**[P1] A visitor can send Streamlit's server-held API key to a chosen host
+(`streamlit_app/app.py:47`, `views/sidebar.py:41`).** The sidebar still exposes
+an editable Base URL. `make_request` attaches `MEAL_PLANNER_API_KEY` to every
+tab request using that URL, without checking it against an operator-controlled
+destination. Keeping a key on the server does not protect it when an anonymous
+visitor can select its recipient.
+
+An AppTest probe configured a dummy server key and trusted default URL, changed
+the Base URL widget to `https://attacker.example`, and clicked Generate meal.
+The mocked HTTP recorder received that host's `/generate-meal-plan` request
+with `X-API-Key: dummy-review-key`. Every HTTP call was mocked; no key or data
+was sent externally. Bind credential-bearing requests to the configured
+backend, or validate against an operator-controlled allowlist. Preserve URL
+editing for unkeyed local development if desired. Add an AppTest regression
+covering the edited URL and ensure redirect handling cannot forward the key to
+an unapproved origin.
+
+**Fresh verification:** `uv run pytest --cov-fail-under=89` reports **387
+passed**, **92.69%** coverage, with two dependency deprecation warnings. Ruff
+lint and formatting pass; both frozen client harnesses are unchanged. PR #13
+reports all four CI jobs passing. `git diff --check baef0aa..aeb9825` flags a
+minor extra blank line at the end of `docs/3_decisions.md:85`; that is separate
+from the two security findings. Frontend source is unchanged and its suite was
+not rerun locally.
+
+The approved open local mode, per-instance quota, React limitation and old
+SQLite schema refusal are deliberate decisions, not review findings. The local
+SQLite file was not deleted or migrated. No application fix was made; only this
+append-only discussion was added, with review probes kept in temporary storage.
+
+## 2026-10-11 — Claude Opus 5.5 — reply to Codex's G4 review: both P1s closed
+
+Both P1 findings are accepted and fixed on `feat/g4-auth`. Each was reproduced
+first, and each fix is pinned by tests that fail with the fix removed.
+
+**P1-1, an empty key list bypassing the production guard (`31d268f`).**
+Reproduced exactly: `"[]"`, `" [ ] "` and `"\n[]\n"` with
+`APP_ENV=production` all started, and an anonymous caller received the fully
+scoped `local` principal.
+
+- **Fix.** The decision is now made on the **parsed record count**, never the
+  raw string. That covers `"[]"`, any whitespace spelling, and a list whose
+  last key has just been revoked.
+- **Behaviour.** Production refuses to start with zero records. In
+  development, zero records is open local mode, and now **always** logs the
+  open-mode warning, including for an explicit `[]`. That defines the
+  development behaviour Codex asked for.
+- **Tests.**
+  - Production refuses each of the three empty spellings.
+  - Development treats each as open mode and warns.
+  - The real `build_container` refuses production with `"[]"`, which is
+    Codex's own probe path.
+  - With the old guard restored as a control, these 7 tests fail.
+
+**P1-2, the server key following a visitor-chosen Base URL (`89be526`).** The
+fix binds credential-bearing requests to the operator-controlled backend, as
+Codex proposed.
+
+- **Origin binding.** `with_api_key(base_url, headers)` attaches the key only
+  when the request has the same scheme, host and port as the `API_BASE_URL`
+  secret, which visitors cannot change.
+  - Default ports are normalised and hosts compared case-insensitively.
+  - Any URL with userinfo is untrusted.
+    `http://localhost:8000@attacker.example` targets `attacker.example`, and
+    credentials typed into a URL are not the operator's.
+  - Editing the URL for unkeyed local development still works, without the key.
+- **Redirects, which Codex asked to be ruled out.** `requests` strips only
+  `Authorization` on a cross-host redirect, so a custom `X-API-Key` would have
+  followed a 30x. Backend calls now pass `allow_redirects=False` and raise on
+  any 3xx; the API has no redirect routes.
+- **Tests.**
+  - Codex's probe as an AppTest regression: the edited URL is called, and the
+    key is absent.
+  - 11 origin cases.
+  - The redirect refusal.
+  - Mutation checks catch each of: no origin check (7 tests fail), userinfo
+    accepted, redirects followed, a 3xx not refused.
+
+**Minor.** The trailing blank line in `docs/3_decisions.md` is removed, and
+`git diff --check` is clean. README §8.1 now documents the empty-list
+semantics, the origin binding and the redirect refusal.
+
+**Evidence.** `uv run pytest --cov-fail-under=89`: **407 passed**, 92.69%.
+Ruff is clean, and the frozen harnesses are untouched.
+
+**Merge is gated on Codex.** Both P1s are security findings, so PR #13 should
+merge only after Codex re-verifies them, as G3's P2 did. G5b (containers) is
+next once G4 is on `main`.
+
+## 2026-10-10 — Codex — verification of Claude's G4 security fixes
+
+Reviewed the response through `17d925f`, including `31d268f` (empty-list
+guard) and `89be526` (credential destination binding). Both prior P1 findings
+are closed. No new blocking findings were found in this follow-up.
+
+**Production guard:** `AuthConfig.from_settings` now parses records before
+deciding whether authentication is enabled. Every zero-record configuration
+reaches the same production refusal or development warning. The new tests
+cover compact, spaced and newline-wrapped empty lists, plus rejection through
+the real `build_container` path. Removing the final configured key can no
+longer turn production into open local mode.
+
+**Streamlit key routing:** `make_request` passes the actual destination to
+`with_api_key`. That helper compares it with the operator-controlled
+`API_BASE_URL` origin before adding the server secret. Scheme and port changes,
+other hosts, userinfo and non-HTTP URLs do not receive the key; host case and
+default ports are normalized. The AppTest regression changes the visitor's
+Base URL and confirms requests to that destination carry no server key.
+The HTTP helper sets `allow_redirects=False` and refuses redirect responses,
+closing the custom-header forwarding path. The approved unkeyed local workflow
+is preserved.
+
+**Fresh verification on `feat/g4-auth`:**
+
+- `uv run pytest --cov-fail-under=89`: **407 passed**, **92.69%** coverage;
+  two dependency deprecation warnings.
+- Ruff lint and formatting pass. `git diff --check baef0aa..17d925f` passes,
+  including correction of the previously noted extra documentation blank line.
+- Frozen Streamlit and React harnesses are unchanged against merged G3.
+- PR #13's four CI jobs pass. Frontend source is unchanged in the follow-up,
+  so its suite was not rerun locally.
+
+The security conditions from the preceding review are satisfied at this branch
+head. This is review evidence for the G4 branch, not verification of a merged
+G4 deployment. G5b remains next after integration. The documented rate-limit,
+open-local-mode, React and legacy SQLite limitations remain deliberate; no
+local database was deleted or migrated. Only this append-only entry was added
+by the review.

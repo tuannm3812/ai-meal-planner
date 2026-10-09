@@ -26,6 +26,7 @@ _SECRET_ENV_VARS = (
     "FATSECRET_CLIENT_SECRET",
     "ENABLE_GEMINI_ADAPTATION",
     "GEMINI_API_KEY",
+    "MEAL_PLANNER_API_KEY",
     # Not a secret, but a developer's strict-mode setting would make every test
     # that relies on the default offline demo fail with NutritionProviderError.
     "REQUIRE_VERIFIED_NUTRITION",

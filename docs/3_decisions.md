@@ -51,3 +51,34 @@ files.
 can be deleted: Streamlit Cloud reads the root one and Render's `buildCommand`
 reads `backend/requirements.txt`. The root file stays a one-line `-r` include;
 only the backend file is exported, and CI fails on drift.
+
+## 2026-10-11 — G4 authentication and ownership
+
+Source: the production-readiness direction and owner decisions in
+`docs/5_agent_log.md` (2026-10-07, 2026-10-08 and 2026-10-11 entries) and the
+portfolio collaboration log.
+
+### DEC-7 — Trusted-client API keys before OIDC
+
+Keys identify client applications, each with a stable `client_id` that owns a
+storage namespace. Chosen over OAuth/OIDC user tokens because v1 has no end
+users calling the API directly: the public demo runs in-process, and the API's
+callers are applications. Keys need no identity provider, no token
+validation, no account store, and fit stateless v1. It rules out per-user
+authorisation inside a client: a client is trusted to keep its own users'
+`user_id`s apart. Per-user tokens are the upgrade path if end users ever call
+the API directly.
+
+### DEC-8 — Open local mode without keys; production refuses it
+
+With `API_KEYS` empty the API runs unauthenticated in one `local` namespace, so
+the React dashboard works in development without a key baked into its public
+bundle. `APP_ENV=production` with no keys refuses to start. Rules out an
+always-on dev key in the React bundle (owner decision A1, 2026-10-11).
+
+### DEC-9 — A real `client_id` column, old SQLite schemas refused at startup
+
+Every stored record carries an indexed `client_id`. `create_all` cannot add a
+column and there are no migrations, so a pre-G4 database is refused at startup
+with a message naming the file, rather than failing on its first query. Rules
+out encoding the namespace into `user_id` (owner decision B1, 2026-10-11).

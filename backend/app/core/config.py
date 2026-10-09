@@ -75,6 +75,11 @@ class AppSettings(BaseSettings):
     # the keyless offline demo keeps producing plans.
     require_verified_nutrition: bool = False
 
+    # G4: a JSON list of {"client_id", "key_sha256", "scopes"} records. Empty means
+    # open local mode, which production refuses (see core/auth.py).
+    api_keys: str = ""
+    rate_limit_per_minute: int = 60
+
     storage_backend: Literal["json", "sqlite"] = "sqlite"
 
     @property

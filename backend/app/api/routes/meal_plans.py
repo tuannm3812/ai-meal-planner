@@ -3,14 +3,13 @@
 from datetime import UTC, datetime
 from uuid import uuid4
 
-from fastapi import APIRouter, Header
+from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
+from backend.app.api.auth import HistoryRead, PlansWrite
 from backend.app.core.container import ContainerDep
 from backend.app.schemas.requests import MealRequest
 from backend.app.schemas.responses import MealPlanListResponse, MealPlanResponse
-from backend.app.services.meal_planning_service import MealPlanningService
 
 router = APIRouter()
 
@@ -19,39 +18,25 @@ router = APIRouter()
 async def generate_meal_plan(
     request: MealRequest,
     container: ContainerDep,
-    x_gemini_api_key: str | None = Header(default=None),
+    principal: PlansWrite,
 ) -> MealPlanResponse:
     """Generate a meal plan, verify its nutrition, and price a shopping list.
+
+    Provider credentials are server-managed only: the former X-Gemini-Api-Key
+    pass-through was removed in G4.
 
     Args:
         request: The craving, dietary constraints, and optional biometrics.
         container: The application's dependency container.
-        x_gemini_api_key: An optional per-request Gemini key that overrides
-            the server's own configuration when the server has none.
+        principal: The authenticated client; its client_id namespaces history.
 
     Returns:
         The assembled meal plan response. It is persisted to history unless
         ``plan_status`` is ``infeasible``, which has no meal to keep.
     """
-    settings = container.settings
     request_id = str(uuid4())
     generated_at = datetime.now(UTC).isoformat()
-
     service = container.meal_planning_service
-    if x_gemini_api_key and not settings.gemini_api_key:
-        # Reuse the already-built retriever instead of re-embedding the corpus.
-        service = MealPlanningService(
-            meal_agent=MealRecommendationAgent(
-                db_connection=container.user_profiles,
-                gemini_api_key=x_gemini_api_key,
-                meal_retriever=container.meal_agent.meal_retriever,
-                enable_llm_adaptation=settings.enable_gemini_adaptation,
-            ),
-            nutrition_agent=container.nutrition_agent,
-            supermarket_agent=container.supermarket_agent,
-            calorie_agent=container.calorie_agent,
-            profile_repo=container.user_profiles,
-        )
 
     result = await run_in_threadpool(service.generate, request)
 
@@ -70,7 +55,9 @@ async def generate_meal_plan(
     )
     # An infeasible result has no meal to keep, and history views expect one.
     if result.plan_status != "infeasible":
-        await run_in_threadpool(container.meal_history.save, response.model_dump())
+        await run_in_threadpool(
+            container.meal_history.save, response.model_dump(), client_id=principal.client_id
+        )
     return response
 
 
@@ -78,13 +65,18 @@ async def generate_meal_plan(
 async def list_meal_plans(
     user_id: str,
     container: ContainerDep,
+    principal: HistoryRead,
     limit: int = 20,
 ) -> MealPlanListResponse:
     """List stored meal plans for one user, most recent first.
 
+    Only the caller's own namespace is searched, so a guessed ``user_id`` can
+    never reach another client's records.
+
     Args:
         user_id: The user whose meal-plan history to fetch.
         container: The application's dependency container.
+        principal: The authenticated client whose namespace is read.
         limit: Requested page size, clamped to the range [1, 50].
 
     Returns:
@@ -92,7 +84,10 @@ async def list_meal_plans(
     """
     safe_limit = max(1, min(limit, 50))
     items = await run_in_threadpool(
-        container.meal_history.list_for_user, user_id=user_id, limit=safe_limit
+        container.meal_history.list_for_user,
+        user_id=user_id,
+        limit=safe_limit,
+        client_id=principal.client_id,
     )
     return MealPlanListResponse(
         user_id=user_id,

@@ -88,11 +88,15 @@ def test_meal_feedback_requires_at_least_one_signal(client: TestClient) -> None:
 
 
 def test_meal_feedback_roundtrips(client: TestClient) -> None:
+    # G4: feedback must reference a plan this client actually generated.
+    request_id = client.post(
+        "/generate-meal-plan", json={"user_id": "pytest_user", "craving": "pasta"}
+    ).json()["request_id"]
     saved = client.post(
         "/meal-feedback",
         json={
             "user_id": "pytest_user",
-            "request_id": "abcdefgh",
+            "request_id": request_id,
             "meal_name": "Test Meal",
             "liked": True,
             "saved": True,

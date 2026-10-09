@@ -113,7 +113,10 @@ def render_sidebar() -> AppConfig:
                 "Gemini API key",
                 value=gemini_api_key,
                 type="password",
-                help="Optional. Gemini is only used for final explanation when enabled.",
+                help=(
+                    "Optional, demo mode only. Gemini is only used for the final "
+                    "explanation when enabled. In API mode the server uses its own key."
+                ),
             )
 
         st.divider()

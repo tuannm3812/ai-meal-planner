@@ -1,0 +1,50 @@
+"""G4 request authentication: one FastAPI dependency per scope.
+
+Each protected route declares the scope it needs, for example
+``principal: PlansWrite``. The dependency resolves ``X-API-Key`` to a
+Principal, checks the scope and applies the per-client rate limit. Routes then
+use ``principal.client_id`` as the storage namespace, never a value the caller
+can choose.
+"""
+
+from typing import Annotated
+
+from fastapi import Depends, Header
+
+from backend.app.core.auth import Principal
+from backend.app.core.container import ContainerDep
+from backend.app.core.exceptions import AuthenticationRequired, InsufficientScope, RateLimited
+
+
+def require_scope(scope: str):  # noqa: ANN201 - returns a FastAPI dependency
+    """Build the dependency that admits a request holding ``scope``.
+
+    Args:
+        scope: One of ``core.auth.SCOPES``.
+
+    Returns:
+        A dependency resolving to the authenticated Principal.
+    """
+
+    def _dependency(
+        container: ContainerDep,
+        x_api_key: Annotated[str | None, Header(alias="X-API-Key")] = None,
+    ) -> Principal:
+        principal = container.auth.authenticate(x_api_key)
+        if principal is None:
+            raise AuthenticationRequired("missing or unknown X-API-Key")
+        if scope not in principal.scopes:
+            raise InsufficientScope(f"client {principal.client_id!r} lacks scope {scope!r}")
+        # Open local mode is a single developer; only keyed clients are limited.
+        if container.auth.enforced:
+            retry_after = container.rate_limiter.retry_after(principal.client_id)
+            if retry_after is not None:
+                raise RateLimited(f"client {principal.client_id!r} over limit", retry_after)
+        return principal
+
+    return _dependency
+
+
+PlansWrite = Annotated[Principal, Depends(require_scope("plans:write"))]
+FeedbackWrite = Annotated[Principal, Depends(require_scope("feedback:write"))]
+HistoryRead = Annotated[Principal, Depends(require_scope("history:read"))]

@@ -8,10 +8,10 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
-Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). `uv run pytest` runs 325 tests (259 backend,
-66 Streamlit, at the end of G3) and the frontend has 37, all
-passing; backend coverage is 91.81%,
+Status as of 2026-10-11: the whole refactor (Phases 0–3, 4a and 4b) is done and
+**merged to `main`** (PRs #1–#7). G3 is merged too (#11, #12), and G4 is on
+`feat/g4-auth`. `uv run pytest` runs 407 tests (325 backend, 82 Streamlit,
+after G4 and its P1 fixes) and the frontend has 37, all passing; backend coverage is 92.69%,
 floor 89%; the meal corpus holds 34 templates. The next phase is the
 production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
 2026-10-08 entries: G3 failure semantics, G4 auth, G5 containers, G6 hosted

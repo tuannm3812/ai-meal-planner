@@ -72,9 +72,6 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
                                 "health_conditions": config.health_conditions,
                                 "dietary_preferences": config.dietary_preferences,
                             },
-                            {"X-Gemini-API-Key": config.gemini_api_key}
-                            if config.gemini_api_key
-                            else None,
                         )
 
                     if meal_result.get("plan_status") == "infeasible":

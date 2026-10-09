@@ -14,7 +14,8 @@ def test_feedback_repository_lists_saved_meals(tmp_path) -> None:
             "rating": 5,
             "saved": True,
             "notes": "Good lunch",
-        }
+        },
+        client_id="local",
     )
     repository.save(
         {
@@ -26,11 +27,12 @@ def test_feedback_repository_lists_saved_meals(tmp_path) -> None:
             "rating": 2,
             "saved": False,
             "notes": None,
-        }
+        },
+        client_id="local",
     )
 
-    all_feedback = repository.list_for_user("user_123")
-    saved_meals = repository.list_for_user("user_123", saved_only=True)
+    all_feedback = repository.list_for_user("user_123", client_id="local")
+    saved_meals = repository.list_for_user("user_123", saved_only=True, client_id="local")
 
     assert len(all_feedback) == 2
     assert len(saved_meals) == 1

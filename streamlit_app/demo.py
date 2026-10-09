@@ -70,6 +70,7 @@ def local_demo_request(
     try:
         from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
         from backend.app.agents.supermarket_agent import SupermarketAgent
+        from backend.app.repositories.base import LOCAL_CLIENT_ID
         from backend.app.repositories.json_store import MealFeedbackRepository, MealPlanRepository
     except ImportError as exc:
         raise RuntimeError(f"Local demo mode cannot import backend storage modules: {exc}") from exc
@@ -138,7 +139,7 @@ def local_demo_request(
             **result.model_dump(),
         }
         if result.plan_status != "infeasible":
-            MealPlanRepository(DEMO_DATA_DIR).save(response)
+            MealPlanRepository(DEMO_DATA_DIR).save(response, client_id=LOCAL_CLIENT_ID)
         return response
 
     if path == "/calorie-expenditure/predict":
@@ -159,14 +160,16 @@ def local_demo_request(
         return agent.predict(request).model_dump()
 
     if path == "/meal-feedback":
-        record = MealFeedbackRepository(DEMO_DATA_DIR).save(payload)
+        record = MealFeedbackRepository(DEMO_DATA_DIR).save(payload, client_id=LOCAL_CLIENT_ID)
         return {"status": "success", "item": record}
 
     if path.startswith("/meal-plans/"):
         user_id = path.split("/", 2)[2].split("?", 1)[0]
         return {
             "user_id": user_id,
-            "items": MealPlanRepository(DEMO_DATA_DIR).list_for_user(user_id=user_id),
+            "items": MealPlanRepository(DEMO_DATA_DIR).list_for_user(
+                user_id=user_id, client_id=LOCAL_CLIENT_ID
+            ),
         }
 
     if path.startswith("/saved-meals/"):
@@ -176,6 +179,7 @@ def local_demo_request(
             "items": MealFeedbackRepository(DEMO_DATA_DIR).list_for_user(
                 user_id=user_id,
                 saved_only=True,
+                client_id=LOCAL_CLIENT_ID,
             ),
         }
 
