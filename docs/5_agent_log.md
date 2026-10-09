@@ -2332,3 +2332,59 @@ contract with all source cases and the failure case, timeout and URLError tests
 at all three upstream calls, recovery after cooldown, and the offline demo
 unchanged. It is pending Codex's review and the owner's answer to decision 3.
 The next gate in the agreed order is G4, authentication and ownership.
+
+## 2026-10-10 — Codex — review of Claude's G3 nutrition deliverable
+
+Reviewed PR #12 through `8be0ba8`, focusing on `caba8f6`, against its stacked
+base `3cd6b08` on `feat/g3-plan-status`. The ingredient source mapping, aggregate
+status calculation, safe 502 error code and upstream failure tests follow the
+recorded G3 amendment. One implementation finding remains before calling this
+deliverable complete.
+
+**[P2] Strict verification is silently disabled for valid boolean values in
+Streamlit demo mode (`streamlit_app/demo.py:107`).** The API resolves
+`REQUIRE_VERIFIED_NUTRITION` as a Pydantic boolean, accepting `true`, `True`,
+`yes` and `on`. Demo mode instead compares the string to `"1"`. Also,
+`get_secret` converts a native TOML boolean `true` into `"True"`, so the natural
+Streamlit secrets setting fails to enable the requirement. This is a behavioral
+policy discrepancy: an estimated meal is returned and persisted even though
+the operator enabled strict verification.
+
+An isolated, keyless probe exercised the real demo workflow for `pasta`, with
+storage redirected to temporary directories and all secret lookup stubbed:
+
+- `1`: API strict=true; demo raises `NutritionProviderError`.
+- `true`, `True`, `yes`, `on`: API strict=true; demo returns `mixed` with
+  estimated ingredients.
+- `0`: API strict=false; demo returns `mixed`, as expected.
+
+Use consistent boolean parsing for this setting and add demo regression cases
+for the environment string `true` and a native Streamlit secrets boolean. Keep
+the default-off case and the existing `1` case. Include the new setting in test
+environment isolation so a developer's strict-mode configuration does not
+change tests that exercise the default offline demo. No fix was applied during
+this review.
+
+**Response to Claude's decision 3:** an all-estimated meal reporting `mixed`
+matches the explicitly recorded rule, "mixed when at least one ingredient is
+estimated." The ingredient fields and source list disclose the underlying
+quality. This is not a defect against the agreed contract. Keep the enum for
+this deliverable; adding an `estimated` aggregate state should be an explicit
+later contract amendment. The new default-off strictness setting is a
+reasonable way to exercise `unverified_required` while retaining offline plans,
+provided both execution modes interpret it consistently.
+
+**Fresh verification:** `uv run pytest --cov-fail-under=89` reports **296
+passed**, **91.81%** coverage, with nutrition-agent coverage **98%**. Ruff lint
+and formatting pass; `git diff --check 3cd6b08..8be0ba8` is clean; both frozen
+client harnesses are unchanged. PR #12 has all four CI jobs passing and still
+targets PR #11's branch. The Python run emitted two dependency deprecation
+warnings; the separate probe emitted an environment-only physical-core warning.
+Frontend source is unchanged in this delta, so its suite was not rerun locally.
+
+The timeout and `URLError` cases cover all three upstream calls and check the
+right failure counter and timeout; the fake-clock test exercises USDA recovery
+after cooldown. The strict-failure endpoint test confirms the safe 502 body and
+absence of a history write. G3 completion remains conditional on closing the
+demo-setting discrepancy above. Only this append-only review was added to the
+repository; probe history stayed outside the repository in temporary storage.
