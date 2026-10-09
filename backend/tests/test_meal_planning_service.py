@@ -154,6 +154,8 @@ def test_reconciliation_reports_the_compounded_scale_factor() -> None:
                 total_protein=60.0,
                 total_carbs=80.0,
                 total_fat=30.0,
+                nutrition_status="verified",
+                sources=["stub"],
                 metadata=AgentMetadata(agent_name="stub", source="stub", confidence=1.0),
             )
 
@@ -187,6 +189,8 @@ def test_reconciliation_reports_the_compounded_scale_factor() -> None:
         total_protein=50.0,
         total_carbs=70.0,
         total_fat=20.0,
+        nutrition_status="verified",
+        sources=["stub"],
         metadata=AgentMetadata(agent_name="nutrition", source="stub", confidence=1.0),
     )
 

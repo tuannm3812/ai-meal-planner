@@ -8,7 +8,7 @@ import pytest
 from fastapi.testclient import TestClient
 
 from backend.app.core.container import get_container, with_repositories
-from backend.app.core.exceptions import NoFeasibleMeal
+from backend.app.core.exceptions import NoFeasibleMeal, NutritionProviderError
 from backend.app.main import app
 from backend.app.repositories.json_store import (
     MealFeedbackRepository,
@@ -241,3 +241,28 @@ def test_generate_meal_plan_returns_503_when_retrieval_is_unavailable(
     assert response.status_code == 503
     assert response.json()["error"] == "RetrievalUnavailable"
     assert "kidney" not in response.text
+
+
+def test_generate_meal_plan_fails_with_a_stable_code_when_verification_is_required(
+    client: TestClient, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """G3: the one failing nutrition outcome, as the client sees it.
+
+    With no provider keys in tests, some ingredients can only be estimated, so
+    requiring verified nutrition cannot be met. The body carries the stable
+    code "unverified_required" and the client-safe message; the internal
+    detail, which lists the estimated ingredients, stays in the log.
+    """
+    service = app.dependency_overrides[get_container]().meal_planning_service
+    monkeypatch.setattr(service.nutrition_agent, "require_verified", True)
+
+    response = client.post("/generate-meal-plan", json={"craving": "pasta"})
+
+    assert response.status_code == 502
+    assert response.json() == {
+        "status": "error",
+        "error": "NutritionProviderError",
+        "code": "unverified_required",
+        "detail": NutritionProviderError.client_message,
+    }
+    assert client.get("/meal-plans/user_123").json()["items"] == []

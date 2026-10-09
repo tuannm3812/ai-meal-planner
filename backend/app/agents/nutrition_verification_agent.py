@@ -2,17 +2,30 @@ import json
 import logging
 import re
 import time
-from typing import Any
+from typing import Any, Literal
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 from pydantic import BaseModel, Field
 
+from ..core.exceptions import NutritionProviderError
 from ..rag.reference_data import load_reference
 from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
+
+Verification = Literal["verified_external", "trusted_local", "estimated"]
+
+# G3: each data source maps to one verification level. Any source not listed
+# here is treated as an estimate, the conservative reading.
+VERIFICATION_BY_SOURCE: dict[str, Verification] = {
+    "usda_fooddata_central": "verified_external",
+    "fatsecret_platform": "verified_external",
+    "trusted_local_reference": "trusted_local",
+    "local_reference_table": "estimated",
+    "category_estimate": "estimated",
+}
 
 
 class IngredientMacro(BaseModel):
@@ -23,15 +36,27 @@ class IngredientMacro(BaseModel):
     carbs_g: float
     fat_g: float
     data_source: str
+    verification: Verification
     confidence: float = Field(ge=0, le=1)
 
 
 class MealNutrition(BaseModel):
+    """Verified macros for one meal.
+
+    ``nutrition_status`` is ``verified`` when no ingredient is estimated and
+    ``mixed`` when at least one is. The contract's third value,
+    ``unverified_required``, is never serialised here: it is the failing case,
+    returned as a NutritionProviderError with that code. ``sources`` lists the
+    data sources actually used.
+    """
+
     ingredients_macros: list[IngredientMacro]
     total_calories: float
     total_protein: float
     total_carbs: float
     total_fat: float
+    nutrition_status: Literal["verified", "mixed"]
+    sources: list[str]
     metadata: AgentMetadata
 
 
@@ -44,8 +69,10 @@ class NutritionVerificationAgent:
         usda_api_key: str | None = None,
         fatsecret_client_id: str | None = None,
         fatsecret_client_secret: str | None = None,
+        require_verified: bool = False,
     ):
         self.api_key = usda_api_key
+        self.require_verified = require_verified
         self.base_url = "https://api.nal.usda.gov/fdc/v1/foods/search"
         self.fatsecret_client_id = fatsecret_client_id
         self.fatsecret_client_secret = fatsecret_client_secret
@@ -69,8 +96,9 @@ class NutritionVerificationAgent:
             name = ingredient.item_name
             grams = ingredient.base_quantity_grams
             base_macros = self._query_macros_per_100g(name)
+            verification = VERIFICATION_BY_SOURCE.get(base_macros["source"], "estimated")
 
-            if base_macros["source"] not in {"usda_fooddata_central", "fatsecret_platform"}:
+            if verification == "estimated":
                 warnings.append(f"Estimated nutrition for {name}")
 
             scale_factor = grams / 100.0
@@ -82,6 +110,7 @@ class NutritionVerificationAgent:
                 carbs_g=round(base_macros["carbs"] * scale_factor, 1),
                 fat_g=round(base_macros["fat"] * scale_factor, 1),
                 data_source=base_macros["source"],
+                verification=verification,
                 confidence=base_macros["confidence"],
             )
 
@@ -91,6 +120,13 @@ class NutritionVerificationAgent:
             totals["carbs"] += item_macros.carbs_g
             totals["fat"] += item_macros.fat_g
 
+        estimated = [i.item_name for i in processed_ingredients if i.verification == "estimated"]
+        if estimated and self.require_verified:
+            raise NutritionProviderError(
+                f"Verified nutrition required; estimated for: {', '.join(estimated)}"
+            )
+        sources = sorted({i.data_source for i in processed_ingredients})
+
         confidence = average_confidence(processed_ingredients)
         return MealNutrition(
             ingredients_macros=processed_ingredients,
@@ -98,9 +134,11 @@ class NutritionVerificationAgent:
             total_protein=round(totals["protein"], 1),
             total_carbs=round(totals["carbs"], 1),
             total_fat=round(totals["fat"], 1),
+            nutrition_status="mixed" if estimated else "verified",
+            sources=sources,
             metadata=AgentMetadata(
                 agent_name="NutritionVerificationAgent",
-                source="usda_fatsecret_or_estimated",
+                source="+".join(sources),
                 confidence=confidence,
                 warnings=warnings,
             ),

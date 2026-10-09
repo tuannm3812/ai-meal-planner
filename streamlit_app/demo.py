@@ -104,6 +104,7 @@ def local_demo_request(
             usda_api_key=get_secret("USDA_API_KEY") or None,
             fatsecret_client_id=get_secret("FATSECRET_CLIENT_ID") or None,
             fatsecret_client_secret=get_secret("FATSECRET_CLIENT_SECRET") or None,
+            require_verified=get_secret("REQUIRE_VERIFIED_NUTRITION", "0") == "1",
         )
         supermarket_agent = SupermarketAgent()
         calorie_agent = CalorieExpenditureAgent(

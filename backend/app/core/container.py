@@ -53,6 +53,7 @@ def build_container(settings: AppSettings) -> Container:
         usda_api_key=settings.usda_api_key,
         fatsecret_client_id=settings.fatsecret_client_id,
         fatsecret_client_secret=settings.fatsecret_client_secret,
+        require_verified=settings.require_verified_nutrition,
     )
     supermarket_agent = SupermarketAgent(
         maps_api_key=settings.maps_api_key,
