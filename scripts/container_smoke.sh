@@ -43,7 +43,13 @@ curl -fsS -X POST "$API/generate-meal-plan" -H 'Content-Type: application/json' 
 assert d["plan_status"] in {"matched", "fallback"}, d["plan_status"]
 print("   plan_status=%s" % d["plan_status"])'
 
-echo "5. the Streamlit client is up against the API"
+echo "5. the Streamlit client is up, and reaches the API at its configured URL"
 curl -fsS "$UI/_stcore/health" >/dev/null
+docker compose exec -T streamlit python -c '
+import json, os, urllib.request
+url = os.environ["API_BASE_URL"] + "/health"
+body = json.load(urllib.request.urlopen(url, timeout=5))
+assert body["status"] == "ok", body
+print("   streamlit -> %s: ok" % url)'
 
 echo "container smoke test passed"
