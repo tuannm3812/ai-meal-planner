@@ -30,7 +30,8 @@ async def generate_meal_plan(
             the server's own configuration when the server has none.
 
     Returns:
-        The assembled meal plan response, which is also persisted to history.
+        The assembled meal plan response. It is persisted to history unless
+        ``plan_status`` is ``infeasible``, which has no meal to keep.
     """
     settings = container.settings
     request_id = str(uuid4())
@@ -56,6 +57,7 @@ async def generate_meal_plan(
 
     response = MealPlanResponse(
         status="success",
+        plan_status=result.plan_status,
         request_id=request_id,
         generated_at=generated_at,
         request=request.model_dump(),
@@ -64,8 +66,11 @@ async def generate_meal_plan(
         nutrition=result.nutrition,
         shopping_list=result.shopping_list,
         reconciliation=result.reconciliation,
+        infeasible_reason=result.infeasible_reason,
     )
-    await run_in_threadpool(container.meal_history.save, response.model_dump())
+    # An infeasible result has no meal to keep, and history views expect one.
+    if result.plan_status != "infeasible":
+        await run_in_threadpool(container.meal_history.save, response.model_dump())
     return response
 
 

@@ -1,5 +1,7 @@
 """Tests for the meal planning orchestrator."""
 
+import pytest
+
 from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureAgent
 from backend.app.agents.meal_recommendation_agent import (
     MealDefinition,
@@ -14,6 +16,7 @@ from backend.app.agents.nutrition_verification_agent import (
 )
 from backend.app.agents.supermarket_agent import SupermarketAgent
 from backend.app.core.config import AppSettings
+from backend.app.core.exceptions import NoFeasibleMeal, RetrievalUnavailable
 from backend.app.repositories.json_store import UserProfileRepository
 from backend.app.schemas.common import AgentMetadata, MealAgentMetadata
 from backend.app.schemas.requests import Ingredient, MealRequest
@@ -270,3 +273,66 @@ def test_the_deterministic_fallback_also_scales_to_the_calorie_budget() -> None:
     # And reconciliation must run, since portion_scaling now exists.
     assert small.reconciliation is not None
     assert large.reconciliation is not None
+
+
+class _EmptyRetriever:
+    """A working retriever whose corpus admits no meal for the request."""
+
+    min_score = 0.16
+    active_backend = "stub"
+
+    def retrieve(self, **_: object) -> list[object]:
+        return []
+
+
+_VEGAN_KIDNEY = {
+    "craving": "tofu",
+    "health_conditions": ["kidney_disease"],
+    "dietary_preferences": ["vegan"],
+}
+
+
+def test_a_corpus_meal_reports_plan_status_matched() -> None:
+    result = _service().generate(MealRequest(craving="pasta"))
+
+    assert result.plan_status == "matched"
+    assert result.infeasible_reason is None
+
+
+def test_the_deterministic_fallback_reports_plan_status_fallback() -> None:
+    service = _service()
+    service.meal_agent.meal_retriever = None
+
+    result = service.generate(MealRequest(craving="zzzz nonsense craving"))
+
+    assert result.plan_status == "fallback"
+    assert result.meal_plan is not None
+
+
+def test_an_infeasible_request_is_a_typed_result_not_an_error() -> None:
+    """G3: no safe meal anywhere is an answer, reported as plan_status infeasible.
+
+    It replaces the interim 422. The calorie budget is still reported, because
+    it was computed before the search; every meal-dependent section is None.
+    """
+    service = _service()
+    service.meal_agent.meal_retriever = _EmptyRetriever()
+
+    result = service.generate(MealRequest(**_VEGAN_KIDNEY))
+
+    assert result.plan_status == "infeasible"
+    assert result.infeasible_reason == NoFeasibleMeal.client_message
+    assert result.calorie_budget.meal_calorie_budget_kcal > 0
+    assert result.meal_plan is None
+    assert result.nutrition is None
+    assert result.shopping_list is None
+    assert result.reconciliation is None
+
+
+def test_unavailable_retrieval_is_still_an_error_not_infeasible() -> None:
+    """Infeasibility is unproven when the corpus was never consulted."""
+    service = _service()
+    service.meal_agent.meal_retriever = None
+
+    with pytest.raises(RetrievalUnavailable):
+        service.generate(MealRequest(**_VEGAN_KIDNEY))
