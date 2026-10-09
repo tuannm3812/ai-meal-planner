@@ -2123,3 +2123,76 @@ the typed `plan_status: infeasible` response and client-safe domain error
 messages in Streamlit demo mode. The merge does not implement either item.
 
 Only this append-only review entry was added locally.
+
+## 2026-10-10 — Claude Opus 5.5 — G3: plan_status, and client-safe errors in Streamlit
+
+Branch `feat/g3-plan-status`. Codex's 2026-10-10 review of the #10 merge had no
+findings. It named the next G3 deliverable: the typed
+`plan_status: infeasible` response, and client-safe domain errors in Streamlit
+demo mode. Codex had raised the second item twice and the 2026-10-08 entries
+deferred it. Both are done here, test-first.
+
+**Contract.** `MealPlanResponse` and the service's `MealPlanResult` carry
+`plan_status`, one of `matched`, `fallback` or `infeasible`, as agreed in the
+2026-10-07/08 direction. Choices the direction left open, made here:
+
+- **`matched` vs `fallback`.** `deterministic_fallback` maps to `fallback`;
+  every corpus meal maps to `matched`. That includes the low-relevance corpus
+  meal served when no template is safe, whose warning already states its score
+  against the threshold. `plan_status` describes how the meal was produced, not
+  how good the match is.
+- **Infeasible shape.** HTTP 200, `status: "success"`, `plan_status:
+  "infeasible"`. `calorie_budget` is still returned, because it is computed
+  before the search. `meal_plan`, `nutrition`, `shopping_list` and
+  `reconciliation` are null, and `infeasible_reason` holds the exception's
+  client-safe message.
+- **Where the conversion happens.** The agent still raises `NoFeasibleMeal` as
+  its internal signal, and `MealPlanningService` converts it. The internal
+  detail, which names the user's constraint groups, goes only to the log. So
+  the interim 422 is gone from the API surface.
+- **History.** Infeasible results are not saved. There is no meal to keep, and
+  both history views assume one.
+- **503 stays an error.** `RetrievalUnavailable` is unchanged: when the corpus
+  was never consulted, infeasibility is unproven.
+
+**Clients.** Both would have mishandled the new response.
+
+- **Streamlit.** The meal view called `.get()` on a null `meal_plan` inside its
+  click handler, so it would have shown "Unexpected API error". It now branches
+  on `plan_status` and shows the reason as a warning. It also clears the
+  session's latest meal, so feedback cannot attach to an earlier plan. The
+  rendering moved into `_render_meal_result` unchanged. `demo.py` builds its
+  response from the service result, so demo mode returns the same fields and
+  skips saving.
+- **Streamlit errors.** `render_api_error` now shows a domain exception's
+  `client_message`. In demo mode the backend runs in-process, and `str(exc)`
+  could name the user's health conditions. This closes the item Codex flagged
+  twice.
+- **React.** `MealPlanTab` rendered `MealPlanResult` for any truthy response,
+  which would have shown a hollow plan with zeroed macros. It now shows the
+  existing `EmptyState` card with the reason. No new primitive was added.
+
+**Evidence:**
+
+- **New tests, each failing first:**
+  - backend, 4 service and 1 endpoint test, with the old 422 endpoint test
+    rewritten as the 200 contract;
+  - 4 Streamlit tests, one of them an AppTest run of the meal view;
+  - 1 React test.
+- **A test bug caught by mutation.** The React test's "absent" assertions first
+  targeted headings I had guessed ("Generated Meal", "Grocery List"), which
+  `MealPlanResult` never renders, so they were vacuous. They now target its
+  real section titles, and dropping the `!isInfeasible` guard fails the test.
+- **Other mutations caught:** always reporting `matched`; saving infeasible
+  results to history.
+- **Suites.** `uv run pytest --cov-fail-under=89` gives **278 passed** (241
+  backend, 37 Streamlit), 91.70%. `meal_planning_service.py` is at 99%. The
+  frontend has **37 passed** and ESLint is clean. Ruff is clean.
+- **Frozen harnesses.** `test_app_harness.py` and `App.test.jsx` are both
+  byte-identical.
+- **File sizes.** All Streamlit files are still under 200 lines; the largest is
+  `views/meal_plan.py` at 186.
+
+**Still open in G3:** the per-ingredient nutrition `verification` and per-meal
+`nutrition_status` contract, and timeout and `URLError` tests for the three
+`urlopen` calls. Both are from the 2026-10-08 G3 amendment.
