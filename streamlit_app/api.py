@@ -1,6 +1,7 @@
 """HTTP helpers for talking to the FastAPI backend from the Streamlit app."""
 
 from typing import Any
+from urllib.parse import urlsplit
 
 import requests
 import streamlit as st
@@ -15,26 +16,62 @@ def request_json(
     headers: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     url = f"{base_url.rstrip('/')}{path}"
-    response = requests.request(method, url, json=payload, headers=headers, timeout=30)
+    # Never follow redirects. requests strips only Authorization on a cross-host
+    # redirect, so an X-API-Key header would follow a 30x to another host. The
+    # API has no redirect routes, so any 3xx is treated as an error.
+    response = requests.request(
+        method, url, json=payload, headers=headers, timeout=30, allow_redirects=False
+    )
+    if response.is_redirect:
+        raise requests.HTTPError(
+            f"Refused to follow a {response.status_code} redirect from {url}.",
+            response=response,
+        )
     response.raise_for_status()
     return response.json()
 
 
-def with_api_key(headers: dict[str, str] | None) -> dict[str, str] | None:
-    """Add the server-side API key to a request bound for the FastAPI backend.
+_DEFAULT_PORTS = {"http": 80, "https": 443}
 
-    G4: a keyed API needs X-API-Key. Streamlit runs server-side, so it may hold
-    the key, read from the MEAL_PLANNER_API_KEY secret and never shown in the UI.
-    Without the secret, nothing is added, which suits an API in open local mode.
+
+def _origin(url: str) -> tuple[str, str, int] | None:
+    """Return (scheme, host, port) for an http(s) URL, or None if it cannot be trusted.
+
+    A URL carrying userinfo is never trusted: "http://localhost:8000@evil" is a
+    request to "evil", and even credentials for the right host are not ours to
+    accept from a visitor.
+    """
+    try:
+        parts = urlsplit(url.strip())
+        port = parts.port
+    except ValueError:
+        return None
+    scheme = parts.scheme.lower()
+    if scheme not in _DEFAULT_PORTS or not parts.hostname or "@" in parts.netloc:
+        return None
+    return scheme, parts.hostname.lower(), port or _DEFAULT_PORTS[scheme]
+
+
+def with_api_key(base_url: str, headers: dict[str, str] | None) -> dict[str, str] | None:
+    """Add the server-side API key, but only for the operator's own backend.
+
+    G4: a keyed API needs X-API-Key, read from the MEAL_PLANNER_API_KEY secret
+    and never shown in the UI. A visitor can edit the sidebar's Base URL, so
+    the key is bound to the operator-controlled API_BASE_URL secret: it is
+    attached only when ``base_url`` has the same scheme, host and port (Codex
+    P1, 2026-10-10). Any other URL still works, unauthenticated, which suits an
+    API in open local mode during development.
 
     Args:
+        base_url: Where this request is going.
         headers: Headers the caller already set, if any.
 
     Returns:
-        The headers with X-API-Key added when a key is configured.
+        The headers, with X-API-Key added only for the configured backend.
     """
     key = get_secret("MEAL_PLANNER_API_KEY")
-    if not key:
+    trusted = _origin(get_secret("API_BASE_URL", "http://localhost:8000"))
+    if not key or trusted is None or _origin(base_url) != trusted:
         return headers
     return {**(headers or {}), "X-API-Key": key}
 

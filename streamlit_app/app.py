@@ -44,7 +44,13 @@ def make_request(config: AppConfig) -> Callable[..., dict[str, Any]]:
                 profile=config.profile,
                 api_key=config.gemini_api_key,
             )
-        return request_json(method, config.api_base_url, path, payload, with_api_key(headers))
+        return request_json(
+            method,
+            config.api_base_url,
+            path,
+            payload,
+            with_api_key(config.api_base_url, headers),
+        )
 
     return call_demo_or_api
 
