@@ -18,6 +18,7 @@ production that is refused at startup (owner decision A1, 2026-10-11).
 import hashlib
 import hmac
 import json
+import logging
 import re
 import time
 from collections.abc import Callable
@@ -26,6 +27,8 @@ from threading import Lock
 from typing import Any
 
 from .config import AppSettings
+
+logger = logging.getLogger(__name__)
 
 SCOPES = ("plans:write", "feedback:write", "history:read")
 """Every scope a key may hold; there is deliberately no admin scope."""
@@ -104,6 +107,10 @@ class AuthConfig:
                     "API_KEYS is empty in production. Refusing to start an "
                     "unauthenticated API; configure at least one key record."
                 )
+            logger.warning(
+                "API_KEYS is empty: running in open local mode. Every request is "
+                "served unauthenticated in the single 'local' namespace."
+            )
             return cls()
         return cls(records=tuple(_parse_record(item) for item in _parse_list(raw)))
 

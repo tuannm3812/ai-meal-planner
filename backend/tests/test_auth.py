@@ -130,3 +130,18 @@ def test_the_rate_limit_is_a_per_client_fixed_window() -> None:
     # The window resets.
     clock[0] += 60
     assert limiter.retry_after("app-a") is None
+
+
+def test_open_local_mode_warns_at_startup(caplog: pytest.LogCaptureFixture) -> None:
+    """Owner decision A1: running unauthenticated must be visible in the logs."""
+    with caplog.at_level("WARNING", logger="backend.app.core.auth"):
+        AuthConfig.from_settings(_settings())
+
+    assert any("open local mode" in record.message for record in caplog.records)
+
+
+def test_a_keyed_configuration_does_not_warn(caplog: pytest.LogCaptureFixture) -> None:
+    with caplog.at_level("WARNING", logger="backend.app.core.auth"):
+        AuthConfig.from_settings(_settings(_records(("app-a", "key-a", ["plans:write"]))))
+
+    assert not caplog.records
