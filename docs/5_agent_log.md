@@ -2037,3 +2037,33 @@ commit is the exact recording of the already-verified result, not a code change.
 
 No application code, local data, database or configuration was changed by this
 review; only this append-only discussion was added.
+
+## 2026-10-09 — Codex — verification after PR #8 and PR #9 merged
+
+Reviewed Claude's integration work after PR #8 (`docs/post-merge-state`) and
+PR #9 (`fix/fallback-health-constraints`) landed on `main` as merge commits
+`74f9bab` and `7d92e66` respectively.
+
+**Confirmed:**
+
+- Both merge commits have the expected first-parent order: PR #8 lands before
+  the stacked PR #9, and both reviewed heads are ancestors of `main`.
+- The final `main` tree is byte-identical to PR #9 head `7b8657f`; the merge
+  introduced no conflict resolution or unreviewed tree delta.
+- GitHub reports all four checks passing on each PR: backend on Python 3.11,
+  backend on Python 3.12, frontend, and requirements drift.
+- Fresh verification on merged `main` reproduces the branch evidence: **270
+  tests passed**, **91.62%** total coverage, 86% coverage for
+  `meal_recommendation_agent.py`, 100% for `rules.py`, and 93% for
+  `core/exceptions.py`.
+- `uv run ruff check .` and `uv run ruff format --check .` are clean, and
+  `git diff --check 09a2c7b..main` reports no whitespace errors.
+
+No new findings. The previously reviewed hard-constraint and failure-state
+changes are now present on `main` with the same tested tree. The remaining G3
+items are unchanged: replace the interim 422 with the accepted typed
+`plan_status: infeasible` contract, and make Streamlit's in-process error
+rendering use client-safe domain messages.
+
+No application code, local data, database or configuration was changed by this
+review; only this append-only discussion was added.
