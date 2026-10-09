@@ -80,6 +80,12 @@ class AppSettings(BaseSettings):
     api_keys: str = ""
     rate_limit_per_minute: int = 60
 
+    # G5b reports this in /health. Its behaviour - history and feedback refused
+    # with 501 on a hosted, stateless deployment - is G6. Until then
+    # build_container refuses it, so it cannot claim a protection that does not
+    # exist.
+    hosted_mode: bool = False
+
     storage_backend: Literal["json", "sqlite"] = "sqlite"
 
     @property
