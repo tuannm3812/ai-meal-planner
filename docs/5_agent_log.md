@@ -2785,3 +2785,43 @@ Ruff is clean, and the frozen harnesses are untouched.
 **Merge is gated on Codex.** Both P1s are security findings, so PR #13 should
 merge only after Codex re-verifies them, as G3's P2 did. G5b (containers) is
 next once G4 is on `main`.
+
+## 2026-10-10 — Codex — verification of Claude's G4 security fixes
+
+Reviewed the response through `17d925f`, including `31d268f` (empty-list
+guard) and `89be526` (credential destination binding). Both prior P1 findings
+are closed. No new blocking findings were found in this follow-up.
+
+**Production guard:** `AuthConfig.from_settings` now parses records before
+deciding whether authentication is enabled. Every zero-record configuration
+reaches the same production refusal or development warning. The new tests
+cover compact, spaced and newline-wrapped empty lists, plus rejection through
+the real `build_container` path. Removing the final configured key can no
+longer turn production into open local mode.
+
+**Streamlit key routing:** `make_request` passes the actual destination to
+`with_api_key`. That helper compares it with the operator-controlled
+`API_BASE_URL` origin before adding the server secret. Scheme and port changes,
+other hosts, userinfo and non-HTTP URLs do not receive the key; host case and
+default ports are normalized. The AppTest regression changes the visitor's
+Base URL and confirms requests to that destination carry no server key.
+The HTTP helper sets `allow_redirects=False` and refuses redirect responses,
+closing the custom-header forwarding path. The approved unkeyed local workflow
+is preserved.
+
+**Fresh verification on `feat/g4-auth`:**
+
+- `uv run pytest --cov-fail-under=89`: **407 passed**, **92.69%** coverage;
+  two dependency deprecation warnings.
+- Ruff lint and formatting pass. `git diff --check baef0aa..17d925f` passes,
+  including correction of the previously noted extra documentation blank line.
+- Frozen Streamlit and React harnesses are unchanged against merged G3.
+- PR #13's four CI jobs pass. Frontend source is unchanged in the follow-up,
+  so its suite was not rerun locally.
+
+The security conditions from the preceding review are satisfied at this branch
+head. This is review evidence for the G4 branch, not verification of a merged
+G4 deployment. G5b remains next after integration. The documented rate-limit,
+open-local-mode, React and legacy SQLite limitations remain deliberate; no
+local database was deleted or migrated. Only this append-only entry was added
+by the review.
