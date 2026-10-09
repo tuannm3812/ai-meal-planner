@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 from threading import Lock
 from typing import Any
 
-from ..base import owner_of_feedback, owner_of_meal_plan
+from ..base import client_of, owner_of_feedback, owner_of_meal_plan
 
 
 def _write_json_atomically(path: Path, records: list[dict[str, Any]]) -> None:
@@ -79,10 +79,11 @@ class MealPlanRepository:
         self._lock = Lock()
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, payload: dict[str, Any]) -> None:
+    def save(self, payload: dict[str, Any], *, client_id: str) -> None:
         record = {
             "saved_at": datetime.now(UTC).isoformat(),
             **payload,
+            "client_id": client_id,
         }
 
         with self._lock:
@@ -90,10 +91,22 @@ class MealPlanRepository:
             records.append(record)
             _write_json_atomically(self.history_path, records)
 
-    def list_for_user(self, user_id: str, limit: int = 20) -> list[dict[str, Any]]:
+    def list_for_user(
+        self, user_id: str, limit: int = 20, *, client_id: str
+    ) -> list[dict[str, Any]]:
         records = self._load_records()
-        user_records = [record for record in records if owner_of_meal_plan(record) == user_id]
+        user_records = [
+            record
+            for record in records
+            if client_of(record) == client_id and owner_of_meal_plan(record) == user_id
+        ]
         return list(reversed(user_records[-limit:]))
+
+    def find_by_request_id(self, request_id: str, *, client_id: str) -> dict[str, Any] | None:
+        for record in reversed(self._load_records()):
+            if client_of(record) == client_id and record.get("request_id") == request_id:
+                return record
+        return None
 
     def _load_records(self) -> list[dict[str, Any]]:
         if not self.history_path.exists():
@@ -110,10 +123,11 @@ class MealFeedbackRepository:
         self._lock = Lock()
         self.data_dir.mkdir(parents=True, exist_ok=True)
 
-    def save(self, payload: dict[str, Any]) -> dict[str, Any]:
+    def save(self, payload: dict[str, Any], *, client_id: str) -> dict[str, Any]:
         record = {
             "saved_at": datetime.now(UTC).isoformat(),
             **payload,
+            "client_id": client_id,
         }
 
         with self._lock:
@@ -127,9 +141,15 @@ class MealFeedbackRepository:
         user_id: str,
         limit: int = 20,
         saved_only: bool = False,
+        *,
+        client_id: str,
     ) -> list[dict[str, Any]]:
         records = self._load_records()
-        user_records = [record for record in records if owner_of_feedback(record) == user_id]
+        user_records = [
+            record
+            for record in records
+            if client_of(record) == client_id and owner_of_feedback(record) == user_id
+        ]
         if saved_only:
             user_records = [record for record in user_records if record.get("saved")]
         return list(reversed(user_records[-limit:]))

@@ -13,6 +13,7 @@ import sys
 from pathlib import Path
 
 from backend.app.core.config import AppSettings
+from backend.app.repositories.base import client_of
 from backend.app.repositories.sql import (
     SqlMealFeedbackRepository,
     SqlMealPlanRepository,
@@ -49,10 +50,11 @@ def main() -> int:
 
     plan_repo = SqlMealPlanRepository(engine)
     feedback_repo = SqlMealFeedbackRepository(engine)
+    # Records written before G4 carry no client_id and keep the "local" namespace.
     for record in plans:
-        plan_repo.save(record)
+        plan_repo.save(record, client_id=client_of(record))
     for record in feedback:
-        feedback_repo.save(record)
+        feedback_repo.save(record, client_id=client_of(record))
 
     print(f"imported {len(plans)} meal plans and {len(feedback)} feedback records")
     print(f"into {settings.sqlite_path}")

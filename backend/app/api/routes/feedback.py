@@ -4,6 +4,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
 from backend.app.core.container import ContainerDep
+from backend.app.repositories.base import LOCAL_CLIENT_ID
 from backend.app.schemas.requests import MealFeedbackRequest
 from backend.app.schemas.responses import FeedbackListResponse, FeedbackResponse
 
@@ -33,7 +34,9 @@ async def save_meal_feedback(
             detail="Provide at least one feedback signal: liked, rating, or saved.",
         )
 
-    record = await run_in_threadpool(container.meal_feedback.save, request.model_dump())
+    record = await run_in_threadpool(
+        container.meal_feedback.save, request.model_dump(), client_id=LOCAL_CLIENT_ID
+    )
     return FeedbackResponse(
         status="success",
         item=record,
@@ -58,7 +61,10 @@ async def list_meal_feedback(
     """
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(
-        container.meal_feedback.list_for_user, user_id=user_id, limit=safe_limit
+        container.meal_feedback.list_for_user,
+        user_id=user_id,
+        limit=safe_limit,
+        client_id=LOCAL_CLIENT_ID,
     )
     return FeedbackListResponse(
         user_id=user_id,
@@ -89,6 +95,7 @@ async def list_saved_meals(
         user_id=user_id,
         limit=safe_limit,
         saved_only=True,
+        client_id=LOCAL_CLIENT_ID,
     )
     return FeedbackListResponse(
         user_id=user_id,

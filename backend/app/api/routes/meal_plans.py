@@ -8,6 +8,7 @@ from fastapi.concurrency import run_in_threadpool
 
 from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
 from backend.app.core.container import ContainerDep
+from backend.app.repositories.base import LOCAL_CLIENT_ID
 from backend.app.schemas.requests import MealRequest
 from backend.app.schemas.responses import MealPlanListResponse, MealPlanResponse
 from backend.app.services.meal_planning_service import MealPlanningService
@@ -70,7 +71,9 @@ async def generate_meal_plan(
     )
     # An infeasible result has no meal to keep, and history views expect one.
     if result.plan_status != "infeasible":
-        await run_in_threadpool(container.meal_history.save, response.model_dump())
+        await run_in_threadpool(
+            container.meal_history.save, response.model_dump(), client_id=LOCAL_CLIENT_ID
+        )
     return response
 
 
@@ -92,7 +95,10 @@ async def list_meal_plans(
     """
     safe_limit = max(1, min(limit, 50))
     items = await run_in_threadpool(
-        container.meal_history.list_for_user, user_id=user_id, limit=safe_limit
+        container.meal_history.list_for_user,
+        user_id=user_id,
+        limit=safe_limit,
+        client_id=LOCAL_CLIENT_ID,
     )
     return MealPlanListResponse(
         user_id=user_id,
