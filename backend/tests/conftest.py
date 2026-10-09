@@ -41,15 +41,21 @@ def pytest_sessionstart(session: pytest.Session) -> None:
     Args:
         session: The pytest session about to collect tests.
     """
-    original_storage_backend = os.environ.get("STORAGE_BACKEND")
-    os.environ["STORAGE_BACKEND"] = "json"
+    # REQUIRE_VERIFIED_NUTRITION is pinned off the same way: the keyless tests
+    # expect estimated nutrition to produce a plan, and a developer's strict-mode
+    # shell or backend/.env must not turn every API test into a 502. Environment
+    # variables outrank the .env file in pydantic-settings, so "0" wins here.
+    pinned = {"STORAGE_BACKEND": "json", "REQUIRE_VERIFIED_NUTRITION": "0"}
+    originals = {name: os.environ.get(name) for name in pinned}
+    os.environ.update(pinned)
     try:
         import backend.app.main  # noqa: F401  (binds `main.settings` to json)
     finally:
-        if original_storage_backend is None:
-            os.environ.pop("STORAGE_BACKEND", None)
-        else:
-            os.environ["STORAGE_BACKEND"] = original_storage_backend
+        for name, original in originals.items():
+            if original is None:
+                os.environ.pop(name, None)
+            else:
+                os.environ[name] = original
 
 
 @pytest.fixture(autouse=True)

@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import streamlit as st
+from pydantic import TypeAdapter
 
 
 def get_secret(name: str, default: str = "") -> str:
@@ -32,6 +33,31 @@ def get_secret(name: str, default: str = "") -> str:
             return default
 
     return default
+
+
+def get_bool_secret(name: str, default: bool = False) -> bool:
+    """Read a boolean setting exactly as the API's pydantic settings do.
+
+    Demo mode used to compare these flags to "1". The API parses a pydantic
+    boolean, so "true", "yes", "on", and a native TOML `true` (stringified to
+    "True" by get_secret) enabled a setting in the API but not in the demo.
+    Reusing pydantic's parser keeps the two modes identical, including refusing
+    an unparseable value, which the API also refuses at startup.
+
+    Args:
+        name: The environment variable or secrets key.
+        default: The value when the setting is absent or empty.
+
+    Returns:
+        The parsed boolean.
+
+    Raises:
+        pydantic.ValidationError: If the value is not a recognised boolean.
+    """
+    raw = get_secret(name)
+    if not raw:
+        return default
+    return TypeAdapter(bool).validate_python(raw)
 
 
 @dataclass(frozen=True)

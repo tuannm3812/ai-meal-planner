@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from uuid import uuid4
 
-from config import get_secret
+from config import get_bool_secret, get_secret
 
 DEMO_DATA_DIR = Path("/tmp/ai_meal_planner") if os.getenv("STREAMLIT_SHARING") else Path("database")
 DEMO_DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -98,13 +98,13 @@ def local_demo_request(
             db_connection=user_repository,
             gemini_api_key=api_key or None,
             meal_corpus_path=Path("data/meal_corpus/meals.json"),
-            enable_llm_adaptation=get_secret("ENABLE_GEMINI_ADAPTATION", "0") == "1",
+            enable_llm_adaptation=get_bool_secret("ENABLE_GEMINI_ADAPTATION"),
         )
         nutrition_agent = NutritionVerificationAgent(
             usda_api_key=get_secret("USDA_API_KEY") or None,
             fatsecret_client_id=get_secret("FATSECRET_CLIENT_ID") or None,
             fatsecret_client_secret=get_secret("FATSECRET_CLIENT_SECRET") or None,
-            require_verified=get_secret("REQUIRE_VERIFIED_NUTRITION", "0") == "1",
+            require_verified=get_bool_secret("REQUIRE_VERIFIED_NUTRITION"),
         )
         supermarket_agent = SupermarketAgent()
         calorie_agent = CalorieExpenditureAgent(

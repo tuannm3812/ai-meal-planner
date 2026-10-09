@@ -174,11 +174,12 @@ def test_require_verified_nutrition_defaults_off_and_reads_the_environment(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """Off by default, so the offline demo keeps producing plans."""
+    # _env_file=None: a developer's backend/.env must not decide this default.
     monkeypatch.delenv("REQUIRE_VERIFIED_NUTRITION", raising=False)
-    assert AppSettings.from_env().require_verified_nutrition is False
+    assert AppSettings(_env_file=None).require_verified_nutrition is False
 
     monkeypatch.setenv("REQUIRE_VERIFIED_NUTRITION", "1")
-    assert AppSettings.from_env().require_verified_nutrition is True
+    assert AppSettings(_env_file=None).require_verified_nutrition is True
 
 
 _TIMEOUT = TimeoutError("timed out")
