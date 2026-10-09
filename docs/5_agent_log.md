@@ -2825,3 +2825,79 @@ G4 deployment. G5b remains next after integration. The documented rate-limit,
 open-local-mode, React and legacy SQLite limitations remain deliberate; no
 local database was deleted or migrated. Only this append-only entry was added
 by the review.
+
+## 2026-10-11 — Claude Opus 5.5 — G4 merged; G5b containers
+
+**G4 is on `main`.** After Codex's verification above, PR #13 merged as
+`71b7d41` (14 commits), and `main` CI passed all four jobs.
+`git diff origin/feat/g4-auth main` is empty. On merged `main`,
+`uv run pytest --cov-fail-under=89` gives 407 passed at 92.69%, and the
+frontend gives 37 passed.
+
+**G5b, on `feat/g5b-containers` (PR #14).** Gate: compose up from a clean
+clone; CI builds the image; the generated-requirements rule stays intact; and
+`/health` reports hosted mode and storage backend. Direction item B adds the
+Streamlit client in compose and correcting architecture §2.
+
+- **Image (`Dockerfile`).**
+  - Multi-stage, with pinned `python:3.11-slim-bookworm` and uv `0.11.29`.
+  - Dependencies come from `uv sync --locked --no-dev`, so DEC-6 is unchanged:
+    `uv.lock` stays the single source and `backend/requirements.txt` stays
+    generated.
+  - Non-root user, and a Python-only `HEALTHCHECK` on `/health`.
+- **`.dockerignore` is an allowlist.** Only the backend, the Streamlit app, the
+  three shipped model files and the corpus and reference JSON enter the
+  context. Historical `database/*.json`, any `.db`, `.env` files and secrets
+  cannot leak into an image.
+- **`compose.yaml`.** The API, plus the same image run as the Streamlit client
+  in API mode at `http://api:8000`. `API_BASE_URL` matches, so G4's key binding
+  holds. No volume is mounted (stateless v1), and nothing is migrated or
+  imported.
+- **`/health`.** It already reported `storage_backend`. It now also reports
+  `hosted_mode`, from a new `HOSTED_MODE` setting.
+  - **Decision for owner and Codex:** hosted mode's *behaviour* (history and
+    feedback refused with 501) is G6's. Until G6 implements it,
+    `build_container` **refuses `HOSTED_MODE=true`**, so the switch cannot
+    claim a protection that does not exist.
+  - G6 replaces the refusal with the real behaviour.
+- **CI `container` job.** It runs `scripts/container_smoke.sh` from a clean
+  checkout. The run on `ce57b05`'s successor reported:
+
+  ```text
+  1. /health answers 200 and reports the deployment facts
+     storage_backend=sqlite hosted_mode=False
+  2. history starts empty: no data was imported at build or start
+     database/: ['ai_meal_planner.db']
+  3. the image carries no local secrets
+  4. a meal plan is generated offline
+     plan_status=matched
+  5. the Streamlit client is up, and reaches the API at its configured URL
+     streamlit -> http://api:8000/health: ok
+  container smoke test passed
+  ```
+
+  Check 5 originally proved only that Streamlit was healthy. It now calls the
+  API from inside the Streamlit container through compose's network.
+- **Docs.** Architecture §2 no longer claims a container that did not exist.
+  README §6.5 covers Docker, and §7 covers `HOSTED_MODE`.
+
+**Local verification limit.** The local Docker VM is out of disk: about 19 GB
+of the owner's other images, 70% of it reclaimable. The local build failed
+writing scipy. I did not prune: those images are not this project's. The
+clean-checkout CI run is the evidence instead, and it is a stronger match for
+"compose up from a clean clone" than a developer machine. Once space is freed,
+`scripts/container_smoke.sh` reproduces it locally.
+
+**Finding for the owner: `render.yaml` cannot start since G4.** It sets
+`APP_ENV=production` with no `API_KEYS`, and since G4 production refuses that
+at startup, by design (DEC-8). If Render auto-deploys `main`, its API is down.
+Either set `API_KEYS` in the Render dashboard, or retire Render when G6 picks
+the hosted target. I did not change deployment configuration. Recorded under
+Open risks in `AGENTS.md`.
+
+**Evidence.** `uv run pytest --cov-fail-under=89`: 410 passed (328 backend,
+82 Streamlit). That is G4's 407 plus 3 `/health` and `HOSTED_MODE` tests. All
+five CI jobs pass on PR #14, including `container`.
+
+**Next:** G6, a hosted stateless deploy. It needs the owner to choose the
+target (Cloud Run as in the architecture doc, or Render).

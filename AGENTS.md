@@ -36,14 +36,15 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 407 tests (325
-  backend, 82 Streamlit) after G4 and its P1 fixes, coverage 92.69% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 410 tests (328
+  backend, 82 Streamlit) after G5b, coverage 92.70% against the 89% CI floor;
   the frontend has 37 tests.
-- 2026-10-11: G3 (failure semantics) is merged (#11, #12). G4 (trusted-client
-  API keys, `client_id` namespaces, scopes, per-instance rate limit, Gemini
-  pass-through removed) is on `feat/g4-auth`; see README §8.1 and DEC-7 to
-  DEC-9. Next in the agreed order: G5b containers, G6 hosted mode with history
-  disabled, then tracing.
+- 2026-10-11: G3 (failure semantics, #11/#12) and G4 (trusted-client API keys,
+  `client_id` namespaces, scopes, per-instance rate limit, Gemini pass-through
+  removed, #13) are merged; see README §8.1 and DEC-7 to DEC-9. G5b (container
+  image, compose stack, CI `container` smoke job) is on `feat/g5b-containers`
+  (PR #14). Next: G6 hosted stateless deploy (it replaces the HOSTED_MODE
+  startup refusal with the 501 behaviour), then G10b tracing.
 
 ## Open risks
 
@@ -67,6 +68,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
+- **`render.yaml` will not start since G4.** It sets `APP_ENV=production` with no
+  `API_KEYS`, and production refuses that by design. Set `API_KEYS` in the Render
+  dashboard, or retire Render as part of G6's deployment decision.
 - **G4 limits, by design.**
   - The rate limit is per instance, so N instances allow N times the limit.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production
