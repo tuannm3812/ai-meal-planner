@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Any
 
 import streamlit as st
-from api import request_json
+from api import request_json, with_api_key
 from config import AppConfig
 from demo import local_demo_request
 from views import calories, history, meal_plan
@@ -44,7 +44,7 @@ def make_request(config: AppConfig) -> Callable[..., dict[str, Any]]:
                 profile=config.profile,
                 api_key=config.gemini_api_key,
             )
-        return request_json(method, config.api_base_url, path, payload, headers)
+        return request_json(method, config.api_base_url, path, payload, with_api_key(headers))
 
     return call_demo_or_api
 

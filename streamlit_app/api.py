@@ -4,6 +4,7 @@ from typing import Any
 
 import requests
 import streamlit as st
+from config import get_secret
 
 
 def request_json(
@@ -17,6 +18,25 @@ def request_json(
     response = requests.request(method, url, json=payload, headers=headers, timeout=30)
     response.raise_for_status()
     return response.json()
+
+
+def with_api_key(headers: dict[str, str] | None) -> dict[str, str] | None:
+    """Add the server-side API key to a request bound for the FastAPI backend.
+
+    G4: a keyed API needs X-API-Key. Streamlit runs server-side, so it may hold
+    the key, read from the MEAL_PLANNER_API_KEY secret and never shown in the UI.
+    Without the secret, nothing is added, which suits an API in open local mode.
+
+    Args:
+        headers: Headers the caller already set, if any.
+
+    Returns:
+        The headers with X-API-Key added when a key is configured.
+    """
+    key = get_secret("MEAL_PLANNER_API_KEY")
+    if not key:
+        return headers
+    return {**(headers or {}), "X-API-Key": key}
 
 
 def render_api_error(exc: Exception) -> None:
