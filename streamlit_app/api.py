@@ -34,6 +34,14 @@ def render_api_error(exc: Exception) -> None:
         st.error("Could not connect to the API. Start FastAPI on http://localhost:8000 first.")
         return
 
+    # Demo mode runs the backend in-process, so its domain exceptions arrive here
+    # directly. Show their client-safe message: str(exc) is the internal detail,
+    # which can name the user's health constraints.
+    client_message = getattr(exc, "client_message", None)
+    if client_message:
+        st.error(client_message)
+        return
+
     st.error(f"Unexpected API error: {exc}")
 
 
