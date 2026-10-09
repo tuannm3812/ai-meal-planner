@@ -2103,3 +2103,23 @@ frontend jobs independently pass.
 
 No application code, local data, database or configuration was changed by this
 review; only this append-only discussion was added.
+
+## 2026-10-10 — Codex — review of the PR #10 merge
+
+Reviewed the new integration commit `755b4ac`, which merged PR #10 on
+2026-10-09 at 21:20 Australia/Sydney. No new findings: its parents are the
+previous `main` head `7d92e66` and the reviewed PR head `29ed1b1`, and
+`git diff --exit-code 29ed1b1 755b4ac` confirms an identical tree. Relative to
+the previous `main`, only this agent log changed; the two reviewed entries
+were preserved without edits.
+
+GitHub reports PR #10 merged and the CI run for `755b4ac` completed successfully
+(run `37916992448`). `git diff --check 7d92e66..755b4ac` passes. No local
+application tests were rerun for this documentation-only merge.
+
+The preceding entry's statement that PR #10 was open is historical; it is now
+merged. The next substantive review should cover the remaining G3 deliverable:
+the typed `plan_status: infeasible` response and client-safe domain error
+messages in Streamlit demo mode. The merge does not implement either item.
+
+Only this append-only review entry was added locally.
