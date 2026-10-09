@@ -215,7 +215,14 @@ MEAL_CORPUS_PATH=data/meal_corpus/meals.json
 RAG_BACKEND=auto
 ENABLE_GEMINI_ADAPTATION=0
 STORAGE_BACKEND=sqlite
+REQUIRE_VERIFIED_NUTRITION=0
+API_KEYS=
+RATE_LIMIT_PER_MINUTE=60
 ```
+
+`REQUIRE_VERIFIED_NUTRITION=1` makes a meal fail with `502` (code `unverified_required`) when any ingredient's nutrition could only be estimated. It is off by default so the keyless demo keeps producing plans. `API_KEYS` and `RATE_LIMIT_PER_MINUTE` are described in [8.1 Security](#81-security).
+
+**Existing SQLite databases.** A database created before G4 has no `client_id` column, and there are no migrations, so the API refuses to start against one and names the file. Under stateless v1, delete `database/ai_meal_planner.db` and restart; it is recreated empty.
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
 
@@ -223,16 +230,16 @@ STORAGE_BACKEND=sqlite
 
 ## 8. API Overview
 
-| Method | Endpoint | Purpose |
-| --- | --- | --- |
-| `GET` | `/` | Basic API status and endpoint links |
-| `GET` | `/health` | Service health and external provider configuration status |
-| `POST` | `/generate-meal-plan` | Generate a meal plan from craving, location, profile, and dietary constraints |
-| `GET` | `/meal-plans/{user_id}` | Return recent meal plans for a user |
-| `POST` | `/meal-feedback` | Save likes, ratings, saved-meal state, and notes |
-| `GET` | `/meal-feedback/{user_id}` | Return feedback history for a user |
-| `GET` | `/saved-meals/{user_id}` | Return saved meals for a user |
-| `POST` | `/calorie-expenditure/predict` | Predict daily calorie expenditure and meal calorie budget |
+| Method | Endpoint | Scope | Purpose |
+| --- | --- | --- | --- |
+| `GET` | `/` | public | Basic API status and endpoint links |
+| `GET` | `/health` | public | Service health and external provider configuration status |
+| `POST` | `/generate-meal-plan` | `plans:write` | Generate a meal plan from craving, location, profile, and dietary constraints |
+| `GET` | `/meal-plans/{user_id}` | `history:read` | Return recent meal plans for a user |
+| `POST` | `/meal-feedback` | `feedback:write` | Save likes, ratings, saved-meal state, and notes for a plan you generated |
+| `GET` | `/meal-feedback/{user_id}` | `history:read` | Return feedback history for a user |
+| `GET` | `/saved-meals/{user_id}` | `history:read` | Return saved meals for a user |
+| `POST` | `/calorie-expenditure/predict` | `plans:write` | Predict daily calorie expenditure and meal calorie budget |
 
 Example meal-generation request:
 
@@ -262,6 +269,34 @@ Example calorie-prediction request:
   "health_conditions": ["hypertension"]
 }
 ```
+
+### 8.1 Security
+
+**Who the keys identify.** API keys identify trusted client *applications*, not end users. Each key record carries a stable `client_id`, and every stored meal plan and feedback record belongs to that `client_id`. A `user_id` is only an identifier within one client's namespace, so guessing another `user_id` never reaches another client's data. Feedback must reference a `request_id` the same client generated; anything else is `404 meal_not_found`, indistinguishable from an id that never existed.
+
+**Configuring keys.** `API_KEYS` is a JSON list. Only SHA-256 hashes are configured, so a leaked environment dump does not leak usable keys:
+
+```bash
+python -c "import hashlib,sys;print(hashlib.sha256(sys.argv[1].encode()).hexdigest())" 'the-raw-key'
+```
+
+```env
+API_KEYS=[{"client_id": "partner-app", "key_sha256": "<hex digest>", "scopes": ["plans:write", "feedback:write", "history:read"]}]
+```
+
+Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` and `history:read`; there is deliberately no admin scope. A malformed `API_KEYS` stops the API at startup rather than running half-configured.
+
+**Rotation and revocation.** To rotate, add a record with a new key hash and the **same** `client_id`, deploy, move the client to the new key, then remove the old record and deploy again. The namespace is unchanged throughout. To revoke, remove the record and redeploy: every instance reads `API_KEYS` at startup, so after rollout no instance accepts the old key.
+
+**Rate limit.** `RATE_LIMIT_PER_MINUTE` (default 60) is a fixed one-minute window per `client_id`, held **in each instance's memory**. With N instances a client can make up to N times the limit. It is a per-instance safeguard, not an account-wide quota. Exceeding it returns `429 rate_limited` with `Retry-After`.
+
+**Open local mode.** With `API_KEYS` empty the API runs unauthenticated under a single `local` namespace and logs a warning at startup; this is how the React dashboard works in development, since a key placed in a `VITE_*` variable would be baked into the public bundle. `APP_ENV=production` with no keys refuses to start, so a hosted deployment cannot be open by accident. Calling a keyed API from the React dashboard is out of scope for v1.
+
+**Clients.** The Streamlit app in API mode sends `MEAL_PLANNER_API_KEY` from its server-side secrets; it is never shown in the page. The public Streamlit demo runs the backend in-process and holds no key. Provider credentials (Gemini, USDA, FatSecret) are server-managed only: the former per-request `X-Gemini-Api-Key` pass-through has been removed.
+
+**Errors.** `401 missing_or_invalid_api_key`, `403 insufficient_scope`, `404 meal_not_found`, `429 rate_limited`. Bodies carry a stable `code` and a client-safe `detail`; internal detail goes to the server log only.
+
+**Upgrade path.** Per-user identity (OAuth/OIDC tokens) is the documented next step if end users ever call the API directly; see `docs/3_decisions.md` DEC-7.
 
 ## 9. Development
 

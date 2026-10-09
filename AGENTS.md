@@ -36,13 +36,14 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 325 tests (259
-  backend, 66 Streamlit) at the end of G3, coverage 91.81% against
-  the 89% CI floor; the frontend has 37 tests.
-- Next work follows the production-readiness direction in
-  `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries): G3 typed
-  failure semantics, then G4 API-key auth, G5 containers, G6 hosted mode
-  with history disabled, and tracing after G5.
+  passed `main`'s older single-job workflow. `uv run pytest` runs 387 tests (318
+  backend, 69 Streamlit) after G4, coverage 92.69% against the 89% CI floor;
+  the frontend has 37 tests.
+- 2026-10-11: G3 (failure semantics) is merged (#11, #12). G4 (trusted-client
+  API keys, `client_id` namespaces, scopes, per-instance rate limit, Gemini
+  pass-through removed) is on `feat/g4-auth`; see README §8.1 and DEC-7 to
+  DEC-9. Next in the agreed order: G5b containers, G6 hosted mode with history
+  disabled, then tracing.
 
 ## Open risks
 
@@ -66,6 +67,13 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
+- **G4 limits, by design.**
+  - The rate limit is per instance, so N instances allow N times the limit.
+  - Open local mode (no `API_KEYS`) is unauthenticated, though production
+    refuses to start in it.
+  - The React dashboard cannot call a keyed API in v1.
+  - A pre-G4 `database/ai_meal_planner.db` is refused at startup. Delete it
+    (stateless v1).
 - `agents/meal_recommendation_agent.py` sits at ~86% coverage, the largest
   remaining gap in core business logic.
 - `backend/requirements.txt` is **generated** by `uv export`; edit

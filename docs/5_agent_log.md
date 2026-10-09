@@ -2575,3 +2575,99 @@ storage schema, so they are worth deciding before code.
 - **B1, a real `client_id` column.** An existing database with the old schema
   is detected at startup and refused with a clear message. Legacy JSON records
   without `client_id` belong to `"local"`.
+
+## 2026-10-11 — Claude Opus 5.5 — G4 implemented: authentication and ownership
+
+Branch `feat/g4-auth` off merged `main`, built on the design proposal and owner
+decisions above (A1 open local mode, B1 a `client_id` column). Five test-first
+steps, each its own commit.
+
+1. **Auth core (`6bf175a`).**
+   - `API_KEYS` holds hashed records; keys are compared in constant time.
+   - Each key resolves to a `Principal` with a stable `client_id`.
+   - Three scopes; there is no admin scope.
+   - The open-local `"local"` principal applies when no keys are configured,
+     and production refuses to start without keys.
+   - A malformed key list is refused, and the rate limiter is per client and
+     per instance.
+2. **Namespaced storage (`997ddcc`).**
+   - Both backends store `client_id` and filter on it before `user_id`.
+   - `client_id` is a required keyword argument, so omitting it is a
+     `TypeError`.
+   - `find_by_request_id` scopes ownership lookups to the client.
+   - Legacy JSON records belong to `"local"`.
+   - A pre-G4 SQLite schema is refused at startup and the file is named.
+3. **Route enforcement (`7846fe9`).**
+   - One dependency per scope.
+   - History is read from the caller's namespace only.
+   - Feedback must reference the caller's own `request_id`, or it gets
+     `404 meal_not_found`.
+   - Errors: `401`/`403`/`429` with stable codes and `Retry-After`.
+   - The `X-Gemini-Api-Key` pass-through and its per-request agent are
+     removed.
+4. **Streamlit (`d429f84`).**
+   - API mode sends `X-API-Key` from the server-side `MEAL_PLANNER_API_KEY`
+     secret, and no longer sends a Gemini key.
+   - The demo stays in-process with no key.
+5. **Docs and a missed promise.**
+   - README §8.1 Security: principals, hashing, scopes, rotation and
+     revocation procedure, the per-instance rate limit, open local mode,
+     clients, errors, and the upgrade path.
+   - DEC-7 to DEC-9, and the `.env` and secrets examples.
+   - `REQUIRE_VERIFIED_NUTRITION`, which G3 never documented.
+   - Writing the README revealed that decision A1's startup warning had never
+     been implemented. Added in `feat(auth)` with two `caplog` tests.
+
+**Acceptance, against the agreed G4 list:**
+
+- **Anonymous, unknown-key and wrong-scope** cases on all six input routes:
+  18 parametrised tests. `/` and `/health` stay public.
+- **Guessed `user_id`:** client B reading `user_123` sees none of client A's
+  `user_123` plans.
+- **Another principal's meal id:** feedback on A's `request_id` with B's key
+  gets `404`, and B's saved meals stay empty.
+- **Rotation keeps the namespace:** a second key with the same `client_id`
+  reads the same history.
+- **A revoked key is refused by every instance:** two independently built
+  instances, configured from the redeployed key list, both return `401` for the
+  old key and `200` for the new one. Proof on live deployed instances belongs
+  to G6, which deploys them.
+- **Rate limit:** per client, `429` plus `Retry-After`, and other clients are
+  unaffected.
+- **Keys from the environment:** `API_KEYS` holds hashes only.
+- **Pass-through removed:** no agent is built from a caller-supplied provider
+  key, and the header is absent from OpenAPI.
+
+**Evidence:**
+
+- **Mutation checks.** Each of these was caught:
+  - the scope check removed;
+  - the rate limit skipped;
+  - the feedback ownership check removed;
+  - history reading a fixed namespace;
+  - `Retry-After` dropped;
+  - an unknown key accepted.
+- **Test bugs found and fixed while writing:**
+  - a too-short `meal_name` made one test hit `422` before ownership was
+    checked;
+  - the same short value sat in the shared route bodies, passing only by
+    coincidence;
+  - a defaulted lambda in a dependency override became a query parameter.
+- **Older tests updated.** Five feedback tests posted made-up `request_id`s;
+  they now generate a plan first. 41 storage call sites now pass `client_id`.
+- **Suites.** `uv run pytest --cov-fail-under=89` gives **387 passed** (318
+  backend, 69 Streamlit), 92.69%. Ruff is clean, and the frozen harnesses are
+  untouched.
+
+**Operational note for the owner.** Your local `database/ai_meal_planner.db`
+(2 rows) has the pre-G4 schema. With the default `STORAGE_BACKEND=sqlite`, the
+API will refuse to start until it is deleted, as decided in B1. The JSON files
+are untouched, and the historical-record cleanup remains your decision.
+
+**Deliberately not done:**
+
+- feedback's `user_id` is not required to match the plan's `user_id` inside
+  one client. A client manages its own users (DEC-7).
+- the demo's in-process feedback has no ownership check, because it has a
+  single namespace.
+- React cannot call a keyed API (DEC-8).
