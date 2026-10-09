@@ -9,9 +9,9 @@ merged; each item appears exactly once, in the highest-priority section that cla
 it.
 
 Status as of 2026-10-08: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). `uv run pytest` runs 278 tests (241 backend,
-37 Streamlit, after G3's plan_status work) and the frontend has 37, all passing;
-backend coverage is 91.70%,
+**merged to `main`** (PRs #1–#7). `uv run pytest` runs 296 tests (259 backend,
+37 Streamlit, after G3's nutrition-status work) and the frontend has 37, all
+passing; backend coverage is 91.81%,
 floor 89%; the meal corpus holds 34 templates. The next phase is the
 production-readiness direction in `docs/5_agent_log.md` (2026-10-07 and
 2026-10-08 entries: G3 failure semantics, G4 auth, G5 containers, G6 hosted
@@ -246,10 +246,13 @@ From spec §12.
 2. **Profiles are not stored in SQL.** Both backends return the same built-in
    default; nothing writes profiles at runtime. Real profile storage needs a write
    path and an endpoint, neither of which exists.
-3. **Two typed domain exceptions are still never raised.** `ProfileNotFound` and
-   `NutritionProviderError` are defined and wired to handlers, but no production
-   code raises them, so those failures still land on the catch-all 500. Carried
-   from Phase 1's final review. Since 2026-10-08 the other two are raised:
+3. **One typed domain exception is still never raised.** `ProfileNotFound` is
+   defined and wired to a handler, but no production code raises it: an unknown
+   `user_id` silently gets the default profile. Carried from Phase 1's final
+   review. Since 2026-10-08 the other three are raised:
+   - `NutritionProviderError` (502, code `unverified_required`), when
+     `REQUIRE_VERIFIED_NUTRITION` is on and an ingredient can only be
+     estimated;
    - `RetrievalUnavailable` (503), when no fallback template is safe and the
      retriever never loaded;
    - `NoFeasibleMeal`, when the corpus and the templates are both exhausted.

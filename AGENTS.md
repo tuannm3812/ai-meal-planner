@@ -36,8 +36,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 278 tests (241
-  backend, 37 Streamlit) after G3's plan_status work, coverage 91.70% against
+  passed `main`'s older single-job workflow. `uv run pytest` runs 296 tests (259
+  backend, 37 Streamlit) after G3's nutrition-status work, coverage 91.81% against
   the 89% CI floor; the frontend has 37 tests.
 - Next work follows the production-readiness direction in
   `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries): G3 typed
@@ -55,8 +55,11 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   script is **not idempotent** (a second run duplicates rows). Schema creation
   is `create_all`, which cannot alter an existing table, so there is no
   migration path once a deployment holds real data.
-- `ProfileNotFound` and `NutritionProviderError` in `core/exceptions.py` are
-  wired to handlers but never raised. The other two are raised:
+- `ProfileNotFound` in `core/exceptions.py` is wired to a handler but never
+  raised. The other three are raised:
+  - `NutritionProviderError` (502, code `unverified_required`) only when
+    `REQUIRE_VERIFIED_NUTRITION` is on and an ingredient is estimated. It is off
+    by default;
   - `RetrievalUnavailable` (503) when no fallback template is safe and the
     retriever never loaded;
   - `NoFeasibleMeal`, only when the corpus and the fallback templates are both
