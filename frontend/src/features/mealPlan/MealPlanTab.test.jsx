@@ -75,4 +75,34 @@ describe('MealPlanTab error text', () => {
     expect(await screen.findByText('Backend exploded again')).toBeInTheDocument()
     expect(screen.queryByText('Grilled Chicken Bowl')).not.toBeInTheDocument()
   })
+
+  it('shows the reason instead of an empty plan when no meal is feasible', async () => {
+    // G3: an infeasible request is a 200 with plan_status "infeasible" and
+    // null meal sections. Rendering MealPlanResult for it would show a
+    // hollow "plan" with zeroed macros and no ingredients.
+    axios.post.mockResolvedValueOnce({
+      data: {
+        status: 'success',
+        plan_status: 'infeasible',
+        infeasible_reason: 'No meal satisfies these dietary and health constraints.',
+        meal_plan: null,
+        nutrition: null,
+        shopping_list: null,
+        reconciliation: null,
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'tofu')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('No meal fits these constraints')).toBeInTheDocument()
+    expect(
+      screen.getByText('No meal satisfies these dietary and health constraints.'),
+    ).toBeInTheDocument()
+    // MealPlanResult's own section titles must be absent.
+    expect(screen.queryByText('Meal Overview')).not.toBeInTheDocument()
+    expect(screen.queryByText('Supermarket')).not.toBeInTheDocument()
+  })
 })
