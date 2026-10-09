@@ -3,8 +3,9 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
+from backend.app.api.auth import FeedbackWrite, HistoryRead
 from backend.app.core.container import ContainerDep
-from backend.app.repositories.base import LOCAL_CLIENT_ID
+from backend.app.core.exceptions import MealPlanNotFound
 from backend.app.schemas.requests import MealFeedbackRequest
 from backend.app.schemas.responses import FeedbackListResponse, FeedbackResponse
 
@@ -15,15 +16,21 @@ router = APIRouter()
 async def save_meal_feedback(
     request: MealFeedbackRequest,
     container: ContainerDep,
+    principal: FeedbackWrite,
 ) -> FeedbackResponse:
     """Persist like/rating/save feedback for a previously generated meal.
+
+    The referenced ``request_id`` must belong to a plan in the caller's own
+    namespace, so one client cannot attach feedback to another client's meal.
 
     Args:
         request: The feedback signal(s) for one meal.
         container: The application's dependency container.
+        principal: The authenticated client whose namespace is written.
 
     Raises:
         HTTPException: 400 if none of liked, rating, or saved is provided.
+        MealPlanNotFound: 404 if the caller has no plan with that request_id.
 
     Returns:
         The persisted feedback record.
@@ -34,8 +41,16 @@ async def save_meal_feedback(
             detail="Provide at least one feedback signal: liked, rating, or saved.",
         )
 
+    plan = await run_in_threadpool(
+        container.meal_history.find_by_request_id,
+        request.request_id,
+        client_id=principal.client_id,
+    )
+    if plan is None:
+        raise MealPlanNotFound(f"client {principal.client_id!r} has no plan {request.request_id!r}")
+
     record = await run_in_threadpool(
-        container.meal_feedback.save, request.model_dump(), client_id=LOCAL_CLIENT_ID
+        container.meal_feedback.save, request.model_dump(), client_id=principal.client_id
     )
     return FeedbackResponse(
         status="success",
@@ -47,6 +62,7 @@ async def save_meal_feedback(
 async def list_meal_feedback(
     user_id: str,
     container: ContainerDep,
+    principal: HistoryRead,
     limit: int = 20,
 ) -> FeedbackListResponse:
     """List stored feedback records for one user, most recent first.
@@ -54,6 +70,7 @@ async def list_meal_feedback(
     Args:
         user_id: The user whose feedback history to fetch.
         container: The application's dependency container.
+        principal: The authenticated client whose namespace is read.
         limit: Requested page size, clamped to the range [1, 100].
 
     Returns:
@@ -64,7 +81,7 @@ async def list_meal_feedback(
         container.meal_feedback.list_for_user,
         user_id=user_id,
         limit=safe_limit,
-        client_id=LOCAL_CLIENT_ID,
+        client_id=principal.client_id,
     )
     return FeedbackListResponse(
         user_id=user_id,
@@ -77,6 +94,7 @@ async def list_meal_feedback(
 async def list_saved_meals(
     user_id: str,
     container: ContainerDep,
+    principal: HistoryRead,
     limit: int = 20,
 ) -> FeedbackListResponse:
     """List meals the user explicitly saved, most recent first.
@@ -84,6 +102,7 @@ async def list_saved_meals(
     Args:
         user_id: The user whose saved meals to fetch.
         container: The application's dependency container.
+        principal: The authenticated client whose namespace is read.
         limit: Requested page size, clamped to the range [1, 100].
 
     Returns:
@@ -95,7 +114,7 @@ async def list_saved_meals(
         user_id=user_id,
         limit=safe_limit,
         saved_only=True,
-        client_id=LOCAL_CLIENT_ID,
+        client_id=principal.client_id,
     )
     return FeedbackListResponse(
         user_id=user_id,

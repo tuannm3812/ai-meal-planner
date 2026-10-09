@@ -26,11 +26,15 @@ def _client_for(backend: str, tmp_path: Path) -> TestClient:
 def test_feedback_roundtrip_is_identical(backend: str, tmp_path: Path) -> None:
     client = _client_for(backend, tmp_path)
     try:
+        # G4: feedback must reference a plan this client actually generated.
+        request_id = client.post(
+            "/generate-meal-plan", json={"user_id": "parity_user", "craving": "pasta"}
+        ).json()["request_id"]
         saved = client.post(
             "/meal-feedback",
             json={
                 "user_id": "parity_user",
-                "request_id": "abcdefgh",
+                "request_id": request_id,
                 "meal_name": "Parity Meal",
                 "liked": True,
                 "saved": True,
@@ -72,12 +76,16 @@ def test_saved_meals_filtering_is_identical(backend: str, tmp_path: Path) -> Non
     """
     client = _client_for(backend, tmp_path)
     try:
+        # G4: feedback must reference a plan this client actually generated.
+        request_id = client.post(
+            "/generate-meal-plan", json={"user_id": "filter_user", "craving": "pasta"}
+        ).json()["request_id"]
         for index in range(4):
             posted = client.post(
                 "/meal-feedback",
                 json={
                     "user_id": "filter_user",
-                    "request_id": f"req-{index:04d}",
+                    "request_id": request_id,
                     "meal_name": f"Meal {index}",
                     "liked": True,
                     "saved": index % 2 == 0,

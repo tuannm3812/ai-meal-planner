@@ -21,6 +21,8 @@ class MealPlanningError(Exception):
     client_message = "Meal plan generation failed. Please try again."
     # A stable, machine-readable code for clients, returned as "code" when set.
     error_code: str | None = None
+    # Extra response headers, for example Retry-After on a rate-limited request.
+    headers: dict[str, str] = {}  # noqa: RUF012 - read-only class default
 
 
 class ProfileNotFound(MealPlanningError):
@@ -66,6 +68,52 @@ class NoFeasibleMeal(MealPlanningError):
     )
 
 
+class AuthenticationRequired(MealPlanningError):
+    """Raised when keys are configured and the request has no valid key (G4)."""
+
+    status_code = 401
+    client_message = "A valid X-API-Key header is required."
+    error_code = "missing_or_invalid_api_key"
+
+
+class InsufficientScope(MealPlanningError):
+    """Raised when the key is valid but lacks the route's scope (G4)."""
+
+    status_code = 403
+    client_message = "This API key is not allowed to perform this operation."
+    error_code = "insufficient_scope"
+
+
+class RateLimited(MealPlanningError):
+    """Raised when a client exceeds its per-instance request limit (G4)."""
+
+    status_code = 429
+    client_message = "Too many requests. Retry after the time in the Retry-After header."
+    error_code = "rate_limited"
+
+    def __init__(self, detail: str, retry_after: float) -> None:
+        """Record when the client may retry.
+
+        Args:
+            detail: Internal detail for the log.
+            retry_after: Seconds until the client's window resets.
+        """
+        super().__init__(detail)
+        self.headers = {"Retry-After": str(max(1, round(retry_after)))}
+
+
+class MealPlanNotFound(MealPlanningError):
+    """Raised when feedback references a plan the caller does not own (G4).
+
+    Deliberately indistinguishable from a request_id that never existed, so it
+    reveals nothing about other clients' plans.
+    """
+
+    status_code = 404
+    client_message = "No meal plan with that request_id exists for this client."
+    error_code = "meal_not_found"
+
+
 def register_exception_handlers(app: FastAPI) -> None:
     """Attach the domain exception handlers to an app.
 
@@ -81,7 +129,7 @@ def register_exception_handlers(app: FastAPI) -> None:
         if exc.error_code:
             content["code"] = exc.error_code
         content["detail"] = exc.client_message
-        return JSONResponse(status_code=exc.status_code, content=content)
+        return JSONResponse(status_code=exc.status_code, content=content, headers=exc.headers)
 
     @app.exception_handler(Exception)
     async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:

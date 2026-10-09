@@ -1,6 +1,6 @@
 """Builds the application's agents and repositories once, for injection."""
 
-from dataclasses import dataclass, replace
+from dataclasses import dataclass, field, replace
 from typing import Annotated
 
 from fastapi import Depends, Request
@@ -12,6 +12,7 @@ from ..agents.supermarket_agent import SupermarketAgent
 from ..repositories.base import MealFeedbackStore, MealPlanStore, UserProfileStore
 from ..repositories.factory import build_repositories
 from ..services.meal_planning_service import MealPlanningService
+from .auth import AuthConfig, RateLimiter
 from .config import AppSettings
 
 
@@ -28,6 +29,10 @@ class Container:
     supermarket_agent: SupermarketAgent
     calorie_agent: CalorieExpenditureAgent
     meal_planning_service: MealPlanningService
+    # G4. The defaults are open local mode, and a limiter that open mode never
+    # consults.
+    auth: AuthConfig = field(default_factory=AuthConfig)
+    rate_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(60))
 
 
 def build_container(settings: AppSettings) -> Container:
@@ -39,6 +44,8 @@ def build_container(settings: AppSettings) -> Container:
     Returns:
         A Container holding the built agents, repositories and service.
     """
+    # First, so a production deployment with no keys fails before any work.
+    auth = AuthConfig.from_settings(settings)
     user_profiles, meal_history, meal_feedback = build_repositories(settings)
     meal_agent = MealRecommendationAgent(
         db_connection=user_profiles,
@@ -79,6 +86,8 @@ def build_container(settings: AppSettings) -> Container:
             calorie_agent=calorie_agent,
             profile_repo=user_profiles,
         ),
+        auth=auth,
+        rate_limiter=RateLimiter(settings.rate_limit_per_minute),
     )
 
 
