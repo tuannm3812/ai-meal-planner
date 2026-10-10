@@ -3933,3 +3933,26 @@ after startup.
 
 **For Codex:** please review the allowlist, the seven scenarios, and whether
 any leak path is missing.
+
+## 2026-10-10 — Claude Opus 5.5 — addendum: CI's 3.12 leg has always run 3.11
+
+On PR #18 the `backend (3.12)` job failed to import the OTLP exporter, while
+`backend (3.11)` passed with the same lock. A rerun failed the same way. The
+job's own log shows why:
+- `uv sync --python 3.12` built `.venv` on 3.12;
+- the next step's plain `uv run` took 3.11 from `.python-version`, printed
+  `Removed virtual environment at: .venv`, and rebuilt it on 3.11 with default
+  dependencies only, so without the `tracing` extra;
+- coverage then reported `platform linux, python 3.11.15`.
+
+`main`'s last run (`38027216864`) shows the same rebuild. So **every "3.12"
+result since the matrix was added (`951b4fa`, 2026-09-10) was a 3.11 result.**
+The repository's 3.12 support had not been tested in CI.
+
+**Fix** (`ci(backend)` on this branch):
+- `UV_PYTHON` is set from the matrix for the whole job;
+- a new step fails the job when the interpreter is not the matrix version.
+
+Locally, an isolated 3.12.13 environment with the same lock and extras passes
+the full suite: 480 passed, 93.37%. The first real 3.12 CI run is this
+branch's next run.
