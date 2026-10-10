@@ -87,7 +87,8 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
             st.info("Submit a craving to call `/generate-meal-plan`.")
 
         latest_meal_result = st.session_state.latest_meal_result
-        if latest_meal_result:
+        # G6: a hosted API refuses feedback, so the form is hidden there.
+        if latest_meal_result and not config.hosted_mode:
             meal_definition = latest_meal_result.get("meal_plan", {}).get("meal_definition", {})
             retrieval = latest_meal_result.get("meal_plan", {}).get("retrieval") or {}
             st.divider()

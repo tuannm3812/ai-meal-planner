@@ -126,5 +126,6 @@ def render_sidebar() -> AppConfig:
         use_demo_mode=use_demo_mode,
         api_base_url=api_base_url,
         gemini_api_key=gemini_api_key,
+        hosted_mode=bool(health_payload.get("services", {}).get("hosted_mode")),
         **profile_fields,
     )

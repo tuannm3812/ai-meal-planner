@@ -7,6 +7,15 @@ import streamlit as st
 from api import render_api_error
 from config import AppConfig
 
+HOSTED_NOTICE = (
+    "History and feedback are disabled on this hosted deployment, which keeps no "
+    "state between requests."
+)
+NOT_PERSISTED = (
+    "History is not persisted: it lives in the storage of the instance you are "
+    "connected to, and is lost when that instance is replaced or redeployed."
+)
+
 
 def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
     """Render the History tab.
@@ -15,6 +24,11 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
         config: The sidebar's resolved configuration.
         call_api: Request function bound to the config, demo or live.
     """
+    if config.hosted_mode:
+        # G6: the hosted API refuses these routes (501); hide them instead.
+        st.info(HOSTED_NOTICE)
+        return
+    st.caption(NOT_PERSISTED)
     st.subheader("Meal History")
     history_limit = st.slider("Limit", 1, 50, 10)
     if st.button("Load history"):
