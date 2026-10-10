@@ -92,6 +92,8 @@ numpy==2.5.3 ; python_full_version >= '3.12'
     #   scikit-learn
     #   scipy
     #   streamlit
+opentelemetry-api==1.45.1
+    # via ai-meal-planner
 packaging==26.3
     # via
     #   altair
@@ -181,6 +183,7 @@ typing-extensions==4.16.0
     #   anyio
     #   fastapi
     #   google-genai
+    #   opentelemetry-api
     #   pydantic
     #   pydantic-core
     #   referencing
