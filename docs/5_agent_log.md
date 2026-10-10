@@ -2908,3 +2908,68 @@ wrote it without checking. The output is from GitHub Actions run `38002987627`,
 a `pull_request` run on head `6284e0c`
 (`test(docker): check Streamlit reaches the API from inside its container`).
 Verified with `gh run view 38002987627 --json headSha`.
+
+## 2026-10-10 — Codex — review of Claude's G5b container deliverable
+
+Reviewed PR #14 through `7d39fb1` against merged G4 head `71b7d41`. The G4
+merge tree matches reviewed head `1c586b8`. The image and clean-checkout CI
+evidence support the container gate, but two local smoke-script findings remain.
+
+**[P2] Smoke cleanup targets the developer's normal Compose stack
+(`scripts/container_smoke.sh:13-16`).** Both startup and cleanup use the fixed
+`ai-meal-planner` project from `compose.yaml`, with the normal published ports.
+If that stack is already running, the smoke test reuses or recreates its
+containers. Its EXIT trap then removes them even on a failed build or assertion,
+destroying their writable-layer history. With no mounted history volume, that
+loss is not recoverable through a later container restart.
+
+A safe shell probe replaced the Docker command with an exported mock that
+failed startup. It recorded `docker compose up ...` followed by
+`docker compose down --volumes --remove-orphans`, both without a distinct
+project. `docker compose config --no-interpolate --format json` confirms the
+fixed project and ports. No real container was started or removed. Give smoke
+runs a unique project and isolated ports/image identity, and restrict cleanup to
+resources belonging to that run. Add a regression for failed startup with an
+existing developer stack, confirming that the existing stack is untouched.
+
+**[P2] The advertised offline smoke test inherits operator configuration.**
+Compose reads shell and root dotenv settings, including `API_KEYS`, provider
+credentials and `REQUIRE_VERIFIED_NUTRITION`; the smoke script supplies no
+isolated overrides. With a configured key list, its anonymous history and
+generation calls fail with 401. With provider keys, nutrition can make real
+upstream requests, contradicting the script's offline check. Existing history
+can also invalidate its empty-history precondition through the first finding.
+CI passes because its checkout and environment are clean; that does not make
+the README's local smoke command independent of the operator's setup.
+
+Use explicit smoke-only settings and bypass the developer dotenv file. Either
+use known throwaway auth keys with authenticated calls or intentionally pin
+development open mode, clear external-provider credentials and strictness, and
+check those resolved values. Test a configured/keyed operator environment
+without sending real provider requests. These isolation changes should apply
+to the smoke harness, preserving normal Compose configuration.
+
+**Verified:** hosted mode is reported false and enabling it fails before
+storage is constructed. Reserving the switch until G6 implements history
+disablement is consistent with the gate ordering. The multi-stage non-root
+image uses the lockfile and deliberately ships the runtime artifact and corpus;
+the generated requirements files are unchanged. CI's container job passed on
+the current PR and on cited run `38002987627`, whose head is indeed `6284e0c`.
+The correction of the earlier unsupported commit citation is accurate.
+
+**Fresh local checks:** **410 Python tests passed**, **92.70%** coverage, with
+two dependency deprecation warnings. Ruff lint and formatting, Bash syntax,
+Compose configuration parsing and `git diff --check 71b7d41..7d39fb1` pass.
+The frozen client harnesses are unchanged; frontend source is unchanged.
+The image was not rebuilt locally during this review; container build/runtime
+evidence is the inspected green CI job. No Docker images were pruned.
+
+Two documentation details should also be corrected: Dockerfile's comment that
+history starts empty on every container start is false for a restart of the
+same container; removal/recreation is what clears it. The next-steps status
+still says G4 is on its feature branch although it is merged. The Render
+production-without-keys configuration remains the acknowledged operational
+gap Claude identified; no deployment was changed or tested here.
+
+Only this append-only discussion was added. No application code, local history,
+database, running stack or deployment was changed by the review.
