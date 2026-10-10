@@ -211,6 +211,8 @@ This serves the API at `http://localhost:8000` (`/health`, `/docs`) and Streamli
 - **Dependencies.** The image installs from `uv.lock`, the single source behind the generated requirements files, so it resolves exactly the versions CI tests. Test tooling, the frontend, notebooks and all local data are left out. `.dockerignore` is an allowlist.
 - **No persisted history.** History lives inside the container and disappears when the container is removed. That is stateless v1; no volume is mounted, and no migration or data import runs.
 - **Configuration.** `API_KEYS`, provider keys and `MEAL_PLANNER_API_KEY` are read from your shell or a `.env` file next to `compose.yaml`. Without `API_KEYS` the API runs in open local mode (see [8.1](#81-security)).
+- **Restart versus redeploy.** Restarting the same container keeps its history, because its writable layer survives. A redeploy creates a new container, which starts empty. That is what "stateless v1" means here.
+- **Hosted rehearsal.** `compose.hosted.yaml` runs two `HOSTED_MODE` instances behind one nginx URL, and `scripts/hosted_smoke.sh` checks that both refuse history. It rehearses the multi-instance shape and is not a deployment.
 - **Smoke test.** `scripts/container_smoke.sh` builds the stack and checks it, the same way CI's `container` job does. It runs as its own compose project, on free ports and with its own image tag, so it never touches a stack you already have running. It also pins open, keyless, offline settings and ignores your `.env`. It checks `/health`, that history starts empty, that no secrets are baked in, that a meal plan generates offline, and that Streamlit is up.
 
 ## 7. Configuration
@@ -241,7 +243,7 @@ RATE_LIMIT_PER_MINUTE=60
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
 
-`HOSTED_MODE` is reported by `/health` and defaults off. It is reserved for G6, which will disable history on hosted deployments; until then, setting it to true stops the API at startup.
+`HOSTED_MODE=true` marks a hosted, multi-instance deployment. Each instance has its own SQLite file, so history written on one would be invisible on the others. Hosted mode therefore refuses the three history reads and `POST /meal-feedback` with `501 history_disabled_stateless`, and it stores no generated plans. Meal planning and calorie prediction keep working, `/health` stays public and reports `hosted_mode`, and both clients hide history and feedback when it is set. It is off by default.
 
 `STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported once with `uv run python scripts/migrate_json_to_sqlite.py`. That script is not idempotent, so running it twice duplicates every record. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
 
@@ -311,7 +313,7 @@ Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` 
 
 **Clients.** The Streamlit app in API mode sends `MEAL_PLANNER_API_KEY` from its server-side secrets; it is never shown in the page. The key is bound to the operator-set `API_BASE_URL`: it is sent only when a request's scheme, host and port match that secret, so a visitor who edits the sidebar's Base URL reaches their URL without the key. Backend calls never follow redirects, because a custom `X-API-Key` header would otherwise follow a 30x to another host. The public Streamlit demo runs the backend in-process and holds no key. Provider credentials (Gemini, USDA, FatSecret) are server-managed only: the former per-request `X-Gemini-Api-Key` pass-through has been removed.
 
-**Errors.** `401 missing_or_invalid_api_key`, `403 insufficient_scope`, `404 meal_not_found`, `429 rate_limited`. Bodies carry a stable `code` and a client-safe `detail`; internal detail goes to the server log only.
+**Errors.** `401 missing_or_invalid_api_key`, `403 insufficient_scope`, `404 meal_not_found`, `429 rate_limited`, and `501 history_disabled_stateless` in hosted mode. Bodies carry a stable `code` and a client-safe `detail`; internal detail goes to the server log only.
 
 **Upgrade path.** Per-user identity (OAuth/OIDC tokens) is the documented next step if end users ever call the API directly; see `docs/3_decisions.md` DEC-7.
 

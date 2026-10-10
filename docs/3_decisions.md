@@ -82,3 +82,15 @@ Every stored record carries an indexed `client_id`. `create_all` cannot add a
 column and there are no migrations, so a pre-G4 database is refused at startup
 with a message naming the file, rather than failing on its first query. Rules
 out encoding the namespace into `user_id` (owner decision B1, 2026-10-11).
+
+## 2026-10-11 — G6 hosted stateless mode
+
+### DEC-10 — Hosted mode refuses history rather than serving instance-local reads
+
+On a hosted deployment with several instances, each instance's SQLite file
+holds only the requests it served. `HOSTED_MODE=true` therefore refuses history
+and feedback with `501 history_disabled_stateless`, and stores no generated
+plans, rather than offering reads that would differ from one instance to the
+next. Rules out best-effort cross-instance reads, which cannot be described
+honestly (portfolio log, 2026-10-08, point 2). Durable shared storage is the
+later phase that would lift this.
