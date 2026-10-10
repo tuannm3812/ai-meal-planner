@@ -3205,3 +3205,91 @@ lived only inside long agent-log entries.
 **My recurring slip.** I added a trailing blank line to `docs/3_decisions.md`
 for the third time this phase. I caught it each time with `git diff --check`,
 which is now part of every docs commit.
+
+## 2026-10-11 — Claude Opus 5.5 — #14–#16 merged; G6 deployment half made turnkey
+
+**Merged, as approved by the owner.** Each was retargeted to `main` where
+needed, merged with a merge commit, and gated on `main` CI before the next:
+
+| PR | Merge commit | Commits |
+| --- | --- | --- |
+| #14 | `f7a6629` | 9 |
+| #15 | `58803cf` | 6 |
+| #16 | `eca9c51` | 3 |
+
+All five jobs passed after each merge. `main` matches #16's reviewed head. On
+merged `main`, `uv run pytest --cov-fail-under=89` gives 430 passed at 92.73%,
+and the frontend gives 39 passed. There was no new Codex entry before merging.
+Codex's review of #15 and #16 is still pending, at the owner's request.
+
+**Deploying needs the owner.** `gcloud` is installed but has no credentialed
+account ("No credentialed accounts"), and the project, billing and secrets are
+the owner's. So the deployment half is now turnkey rather than performed.
+Branch `feat/g6-cloud-run-deploy`, PR #17:
+
+- **`.github/workflows/deploy.yml`.** It runs on a `v*` tag or a manual run.
+  - It authenticates through Workload Identity Federation (`auth@v3`), then
+    builds and pushes the image.
+  - It deploys with `deploy-cloudrun@v3`. Action tags and inputs were verified
+    against the git refs API and the `v3` `action.yml` files.
+  - Settings: `--port=8000`; `--allow-unauthenticated`, because the API checks
+    keys itself (DEC-7); `HOSTED_MODE=true`; `APP_ENV=production`; `API_KEYS`
+    from Secret Manager; env and secrets set with the `overwrite` strategy.
+  - It then runs the live check against the new revision.
+  - It is skipped while the `GCP_PROJECT_ID` variable is unset, so merging it
+    deploys nothing.
+- **`docs/6_deployment.md`.** Every one-time command: APIs, the Artifact
+  Registry, least-privilege runtime and deployer service accounts, a federation
+  pool restricted to this repository, the key secret, and the GitHub variables.
+  It also covers the first deploy, the real two-instance and revocation
+  acceptance runs, rollback, logs and cost.
+- **`scripts/new_api_key.py`.** It prints a raw key, shown once, and its
+  hashed `API_KEYS` record. Four tests, including one proving the API
+  authenticates the generated key.
+- **`X-Instance-Id`.** A random per-process UUID on every response, error
+  responses included. Cloud Run, unlike the nginx rehearsal, does not say which
+  instance answered, and the two-instance acceptance needs that. Two tests:
+  stable within a process, and different across two processes.
+- **`scripts/live_check.sh`.** G6's acceptance against any hosted URL, using
+  parallel requests attributed by `X-Instance-Id`. With `OLD_KEY`, it also
+  proves the revoked key is refused by every instance.
+
+**The production check runs in every CI build.** `hosted_smoke.sh` is now a
+wrapper that runs `live_check.sh` twice against the nginx rehearsal:
+
+1. a deployment with key A;
+2. a rotation to key B, with every container recreated (nginx too, since it
+   resolves upstreams only at start), checking that key A is refused.
+
+CI run `38013750385` on head `b003e78`, from a clean checkout, reported:
+
+```text
+== deployment 1: key A ==
+   meal-plans -> 501 history_disabled_stateless x12 from 2 instance(s)
+   (meal-feedback, saved-meals, post-feedback: the same)
+   anonymous -> 401 missing_or_invalid_api_key x12 from 2 instance(s)
+   generate -> 200
+== deployment 2: key A revoked, key B issued, every instance replaced ==
+   (every check above passes again, from 2 instances)
+4. the revoked key is refused by every instance
+   revoked -> 401 missing_or_invalid_api_key x12 from 2 instance(s)
+hosted smoke test passed
+```
+
+That shows G4's "revoked key refused on every instance" at the container
+level. Repeating it against the real service is in the runbook (§3).
+
+**A bug of mine that CI caught.** The first drill failed on 2 of 12 parallel
+requests: their result lines had empty status and code beside a valid instance
+ID. The probes named temp files `"$label.$RANDOM$RANDOM"`, and parallel
+subshells can share a `RANDOM` sequence, so concurrent requests overwrote each
+other's files. Deployment 1 had passed by timing. The fix is `mktemp`. Before
+pushing, it was stress-tested locally with over 200 parallel requests against a
+real hosted-mode process, with no corruption.
+
+**Evidence.** `uv run pytest --cov-fail-under=89`: **436 passed** (352
+backend, 84 Streamlit), 92.77%. All five CI jobs pass.
+
+**Owner's remaining steps.** The one-time setup in `docs/6_deployment.md` §1,
+then `git tag v0.1.0 && git push origin v0.1.0`, then the two-instance and
+revocation runs in §3. G10b tracing is the next code gate.

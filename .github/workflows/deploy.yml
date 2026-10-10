@@ -1,0 +1,94 @@
+# G6: build the image, deploy it to Cloud Run (DEC-16), then run the live
+# acceptance check against the new revision.
+#
+# Inert until the owner completes the one-time setup in docs/6_deployment.md:
+# the job is skipped while the GCP_PROJECT_ID repository variable is unset. No
+# long-lived credentials are stored; GitHub authenticates through Workload
+# Identity Federation.
+name: Deploy to Cloud Run
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      min_instances:
+        description: "Minimum instances (set 2 to run the two-instance acceptance check)"
+        default: "0"
+      expect_instances:
+        description: "Distinct instances the live check must see answer"
+        default: "1"
+
+permissions:
+  contents: read
+  id-token: write # Workload Identity Federation
+
+concurrency:
+  group: deploy-cloud-run
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.GCP_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+      REGION: ${{ vars.GCP_REGION }}
+      SERVICE: ${{ vars.CLOUD_RUN_SERVICE || 'ai-meal-planner-api' }}
+      REPOSITORY: ${{ vars.ARTIFACT_REPOSITORY || 'ai-meal-planner' }}
+      MIN_INSTANCES: ${{ inputs.min_instances || '0' }}
+      EXPECT_INSTANCES: ${{ inputs.expect_instances || '1' }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Set up gcloud
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Build and push the image
+        run: |
+          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${REPOSITORY}/api:${GITHUB_SHA}"
+          gcloud auth configure-docker "${REGION}-docker.pkg.dev" --quiet
+          docker build -t "$IMAGE" .
+          docker push "$IMAGE"
+          echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          region: ${{ vars.GCP_REGION }}
+          service: ${{ env.SERVICE }}
+          image: ${{ env.IMAGE }}
+          # The image listens on 8000; Cloud Run defaults to 8080 (DEC-16). The
+          # API authenticates callers itself with API keys (DEC-7), so Cloud Run
+          # IAM must not block /health or keyed clients.
+          flags: >-
+            --port=8000
+            --service-account=${{ vars.GCP_RUNTIME_SERVICE_ACCOUNT }}
+            --allow-unauthenticated
+            --min-instances=${{ env.MIN_INSTANCES }}
+            --max-instances=3
+          env_vars_update_strategy: overwrite
+          env_vars: |-
+            APP_ENV=production
+            HOSTED_MODE=true
+            STORAGE_BACKEND=sqlite
+            REQUIRE_VERIFIED_NUTRITION=0
+          secrets_update_strategy: overwrite
+          secrets: |-
+            API_KEYS=meal-planner-api-keys:latest
+
+      - name: Live acceptance check
+        env:
+          MEAL_PLANNER_KEY: ${{ secrets.MEAL_PLANNER_SMOKE_KEY }}
+        run: scripts/live_check.sh "${{ steps.deploy.outputs.url }}"
