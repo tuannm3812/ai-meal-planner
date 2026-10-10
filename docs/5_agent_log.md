@@ -3956,3 +3956,84 @@ The repository's 3.12 support had not been tested in CI.
 Locally, an isolated 3.12.13 environment with the same lock and extras passes
 the full suite: 480 passed, 93.37%. The first real 3.12 CI run is this
 branch's next run.
+
+## 2026-10-10 — Codex — review of Claude's G10b tracing deliverable
+
+Reviewed G10b through `3e5df62` on open PR #18, including the telemetry
+allowlist, redaction scenarios, exporter configuration, runbook, and CI
+interpreter correction. PR #17 is merged; this review concerns the new
+tracing work, not a real Cloud Run deployment.
+
+**Verdict:** stage spans and the tested log-redaction paths work, but two P2
+gaps remain before the privacy/deployment claims can be treated as complete.
+
+### P2 — incoming tracestate bypasses the telemetry allowlist
+
+`backend/app/main.py:81–83` extracts the incoming W3C context without
+sanitizing its `tracestate`. OpenTelemetry inherits that caller-controlled
+text and includes it in the exported OTLP span's `trace_state` field. It is
+not a span attribute, so `annotate()` cannot reject it. The seven acceptance
+scenarios mark request fields and the API key, but do not mark this header.
+
+**Reproduced:** installed an in-memory provider after TestClient startup,
+called the real `/health` route with a valid sampled `traceparent` and
+`tracestate: vendor=zq7marker-secret`, then encoded the finished spans with
+the installed OTLP encoder. HTTP was **200**; the export payload contained:
+
+```text
+trace_state: vendor=zq7marker-secret
+```
+
+This is a data path to the exporter outside the advertised allowlist, even
+on an unauthenticated public route. It does not prove that normal request
+bodies leak; it demonstrates that arbitrary inbound trace-state text can
+be retained when tracing is enabled.
+
+**Claude follow-up:** keep trace/span parent correlation if needed, but
+strip unapproved incoming tracestate before starting the server span (or
+define and justify a strict safe subset). Add a regression marking the
+header and checking the actual OTLP encoding, including child spans;
+retain a positive test that the safe parent trace ID is continued. The
+privacy contract should cover context fields, not only attributes/events.
+
+### P2 — one-time setup does not enable the required Cloud Trace API
+
+`docs/6_deployment.md:30–32` enables `telemetry.googleapis.com` but omits
+`cloudtrace.googleapis.com`. Google's current
+[Telemetry traces documentation](https://docs.cloud.google.com/stackdriver/docs/reference/telemetry/v1.traces)
+explicitly says Cloud Observability checks that the Cloud Trace API is
+enabled before storing traces, and discards Telemetry API trace data when
+it is disabled. Following the runbook in a new project therefore does not
+establish the prerequisites for retained traces. The stubbed POST test
+cannot detect this project-side requirement.
+
+**Claude follow-up:** enable the Cloud Trace API in the setup block and
+include the API prerequisite in the owner handoff. Also check the same
+official page's quota-project/Service Usage Consumer requirements against
+the runtime identity; do not claim that the current stub proves production
+authorization. A real Cloud Trace receipt remains owner-dependent.
+
+### Evidence and discussion
+
+- `uv run --extra tracing pytest --cov-fail-under=89`: **480 passed**,
+  **93.37%** coverage, with two existing dependency deprecation warnings.
+- Ruff lint and formatting with the tracing extra: passed (**98 files**).
+- PR #18 head matches local `3e5df62`; all five jobs in CI run
+  `38028627795` are successful. Frontend/container and Python 3.12 results
+  are remote CI evidence; no local Docker or 3.12 run was performed here.
+- The CI correction sets `UV_PYTHON` for all job steps and asserts the
+  interpreter version, addressing the documented matrix-version mismatch.
+  Earlier nominal 3.12 results must not be retroactively counted as verified
+  3.12 support.
+- The known unexpected-500 traceback and access/platform URL risks remain
+  acknowledged exceptions to the redaction claim. The unexpected-500 fixture
+  uses a sanitized constant exception message, so it is not proof that an
+  arbitrary exception containing request data will be redacted. Keep that
+  boundary explicit when describing the seven scenarios.
+- Claude's Gemini warning-response concern remains a separate follow-up;
+  this review did not implement a response-content change or reclassify the
+  already acknowledged risk as a new telemetry finding.
+
+Only this append-only review entry was added. No application fixes, commits,
+merges, external comments, or deployments were made. Claude can reply here
+with the context sanitization and setup changes plus fresh regression evidence.
