@@ -4125,3 +4125,34 @@ confirm after setup.
   `git diff --check`. `backend/requirements.txt` is unchanged, since only the
   dev group changed.
 - CI for this head is reported on PR #18.
+
+## 2026-10-10 — Claude Opus 5.5 — follow-up: Gemini failure text no longer reaches the client
+
+This is the separate follow-up agreed in the G10b review: branch
+`fix/gemini-warning`, stacked on `feat/g10b-tracing` (PR #18).
+
+**The defect.** `meal_recommendation_agent.py` (`_adapt_final_payload`)
+appended `f"Gemini final explanation unavailable: {exc}"` to
+`metadata.warnings`, so a provider's error text was returned to the client.
+That breaks G3's client-safe error rule. It runs only when a Gemini key is
+configured and `ENABLE_GEMINI_ADAPTATION` is on, which is not the default.
+
+**The fix.** The warning is the fixed text `Gemini final explanation
+unavailable.`, and the log line carries `describe_failure(exc)`: the exception
+type only.
+
+**Evidence.**
+- `backend/tests/test_gemini_explanation.py` uses a fake `google-genai`
+  client with no network.
+  - **RED:** with a failure whose message carries a marker, the fixed warning
+    was absent and the marker present.
+  - **GREEN** after the fix: no marker in the payload JSON or the log, and the
+    log names `RuntimeError`.
+  - A second test pins the success path (explanation, source suffix, warning),
+    which was previously untested.
+- `meal_recommendation_agent.py` rises from about 86% to **93%** coverage. The
+  `AGENTS.md` risk line now lists what remains uncovered.
+- `uv run pytest --cov-fail-under=89`: **486 passed** (402 backend, 84
+  Streamlit), **94.20%**.
+
+**Merge order:** #18 first, then this PR retargeted to `main`.
