@@ -154,7 +154,7 @@ function CaloriesTab() {
         {error && <div className="mt-5"><ErrorBanner>{error}</ErrorBanner></div>}
       </aside>
 
-      <div className="grid gap-6">
+      <div className="grid content-start gap-6">
         {!result && (
           <EmptyState
             idleBody="Fill in the biometrics on the left to estimate daily calorie expenditure and a meal budget."

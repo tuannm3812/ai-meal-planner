@@ -95,7 +95,7 @@ function MealPlanTab() {
         {error && <div className="mt-5"><ErrorBanner>{error}</ErrorBanner></div>}
       </aside>
 
-      <div className="grid gap-6">
+      <div className="grid content-start gap-6">
         {!mealPlan && (
           <EmptyState
             idleBody="Enter a craving to generate your personalized meal plan, nutrition macros, and grocery list."
