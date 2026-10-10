@@ -4,7 +4,6 @@ import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from typing import Any
-from uuid import uuid4
 
 import uvicorn
 from fastapi import FastAPI, Request, Response
@@ -14,18 +13,12 @@ from backend.app.api.routes import calories, feedback, health, meal_plans
 from backend.app.core.config import AppSettings
 from backend.app.core.container import build_container
 from backend.app.core.exceptions import register_exception_handlers
+from backend.app.core.instance import INSTANCE_HEADER, INSTANCE_ID
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 settings = AppSettings.from_env()
-
-INSTANCE_ID = str(uuid4())
-"""Random per-process id, returned as X-Instance-Id (G6).
-
-Lets a client tell which instance answered when one URL is spread across
-several, as on Cloud Run. It is random, so it reveals no host name, IP or other
-environment detail."""
 
 
 @asynccontextmanager
@@ -50,6 +43,9 @@ register_exception_handlers(app)
 async def _instance_id_header(request: Request, call_next: Any) -> Response:
     """Stamp every response with this process's INSTANCE_ID.
 
+    Unexpected 500s never pass through here: Starlette builds them outside all
+    middleware, so the catch-all handler in core/exceptions.py stamps them.
+
     Args:
         request: The incoming request.
         call_next: The rest of the application.
@@ -58,7 +54,7 @@ async def _instance_id_header(request: Request, call_next: Any) -> Response:
         The response, with X-Instance-Id set.
     """
     response = await call_next(request)
-    response.headers["X-Instance-Id"] = INSTANCE_ID
+    response.headers[INSTANCE_HEADER] = INSTANCE_ID
     return response
 
 

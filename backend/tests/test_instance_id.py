@@ -14,6 +14,7 @@ import sys
 
 from fastapi.testclient import TestClient
 
+from backend.app.core.container import get_container
 from backend.app.main import app
 
 UUID = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$")
@@ -32,6 +33,31 @@ def test_every_response_carries_the_same_instance_id() -> None:
     assert len(ids) == 1
     (instance_id,) = ids
     assert instance_id is not None and UUID.match(instance_id), instance_id
+
+
+def _unexpected_failure() -> None:
+    raise RuntimeError("an unexpected internal failure")
+
+
+def test_an_unexpected_500_carries_the_same_instance_id() -> None:
+    """Codex P3 (2026-10-10): the catch-all 500 had no X-Instance-Id.
+
+    Starlette builds that response in ServerErrorMiddleware, which sits outside
+    every middleware the app adds, so a header stamped by middleware never
+    reaches it.
+    """
+    with TestClient(app, raise_server_exceptions=False) as client:
+        healthy = client.get("/health").headers.get("X-Instance-Id")
+        app.dependency_overrides[get_container] = _unexpected_failure
+        try:
+            failed = client.get("/health")
+        finally:
+            app.dependency_overrides.pop(get_container, None)
+
+    assert failed.status_code == 500
+    assert failed.json()["detail"] == "An unexpected error occurred."
+    assert healthy is not None
+    assert failed.headers.get("X-Instance-Id") == healthy
 
 
 def test_separate_processes_have_different_instance_ids() -> None:
