@@ -132,9 +132,13 @@ the check's parallel requests reach both:
 gh workflow run deploy.yml -f min_instances=2 -f expect_instances=2
 ```
 
-The live check requires the 501 refusals, and the 401 for anonymous calls, to
-come from at least two distinct `X-Instance-Id` values. Afterwards, redeploy
-normally (`min_instances` defaults to 0) so idle instances stop billing.
+Each check (each of the four history and feedback routes, and anonymous calls)
+must on its own be answered by at least two distinct `X-Instance-Id` values. A
+response without an id counts for none. Each request has 60 seconds
+(`REQUEST_TIMEOUT`), and a request that stalls or fails counts as a failure.
+This is a sample: it proves that the instances which answered behave correctly,
+not that no other instance or revision exists. Afterwards, redeploy normally
+(`min_instances` defaults to 0) so idle instances stop billing.
 
 **Revocation** (G4, "a revoked key is refused by every instance"):
 
@@ -145,7 +149,7 @@ normally (`min_instances` defaults to 0) so idle instances stop billing.
    `printf '%s' '<new list>' | gcloud secrets versions add meal-planner-api-keys --data-file=-`.
 3. Redeploy with two instances, as above. Every instance of the new revision
    reads the new list at startup.
-4. Prove the old key is refused everywhere:
+4. Prove the old key is refused by both warm instances:
 
    ```bash
    MEAL_PLANNER_KEY=<new key> OLD_KEY=<old key> EXPECT_INSTANCES=2 \
