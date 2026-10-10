@@ -8,12 +8,16 @@
 # .env file beside this one (see README section 8.1). No volume is mounted:
 # history lives inside the container and is lost when it is removed, which is
 # stateless v1.
+#
+# API_PORT, UI_PORT and MEAL_PLANNER_IMAGE default to 8000, 8501 and
+# ai-meal-planner:local; scripts/container_smoke.sh overrides all three, plus the
+# project name, so a smoke run never touches this stack.
 name: ai-meal-planner
 
 services:
   api:
     build: .
-    image: ai-meal-planner:local
+    image: ${MEAL_PLANNER_IMAGE:-ai-meal-planner:local}
     environment:
       APP_ENV: ${APP_ENV:-development}
       STORAGE_BACKEND: ${STORAGE_BACKEND:-sqlite}
@@ -26,10 +30,10 @@ services:
       FATSECRET_CLIENT_SECRET: ${FATSECRET_CLIENT_SECRET:-}
       ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:8501}
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
 
   streamlit:
-    image: ai-meal-planner:local
+    image: ${MEAL_PLANNER_IMAGE:-ai-meal-planner:local}
     command:
       - streamlit
       - run
@@ -43,7 +47,7 @@ services:
       API_BASE_URL: http://api:8000
       MEAL_PLANNER_API_KEY: ${MEAL_PLANNER_API_KEY:-}
     ports:
-      - "8501:8501"
+      - "${UI_PORT:-8501}:8501"
     depends_on:
       api:
         condition: service_healthy
