@@ -43,8 +43,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   DEC-7 to DEC-9. G5b (container image, compose stack, CI `container` smoke job)
   is PR #14. G6's code half (HOSTED_MODE refuses history with 501, both clients
   hide it, two-instance rehearsal in CI; DEC-10) is PR #15, stacked on #14.
-  G6's deployment half - choosing Cloud Run or Render and setting its secrets -
-  is the owner's; then G10b tracing.
+  G6's deployment half is a Cloud Run service (DEC-16) with secrets in Secret
+  Manager, owned by the owner. G10b tracing follows. The decision log
+  (`docs/3_decisions.md`) has an index and covers DEC-1 to DEC-16.
 
 ## Open risks
 
@@ -69,8 +70,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
 - **`render.yaml` will not start since G4.** It sets `APP_ENV=production` with no
-  `API_KEYS`, and production refuses that by design. Set `API_KEYS` in the Render
-  dashboard, or retire Render as part of G6's deployment decision.
+  `API_KEYS`, and production refuses that by design. Cloud Run is now the target
+  (DEC-16), so retire Render or fix it as a documented fallback.
 - **In hosted mode the React History tab button stays visible.** Its contents
   are replaced with a notice. Hiding the button would need a `/health` call on
   first render, which the frozen `App.test.jsx` forbids. React cannot call a keyed

@@ -3115,3 +3115,93 @@ deployed.
    `API_KEYS` is set (G4, DEC-8).
 
 The live two-instance and redeploy checks then repeat against the real URL.
+
+## 2026-10-11 — Claude Opus 5.5 — README screenshots, decision-log backfill, Cloud Run, Codex bot
+
+Branch `docs/readme-screenshots`, stacked on PR #15. These are the owner's four
+asks from 2026-10-11.
+
+**1. Cloud Run, the owner's choice, recorded as DEC-16.** It fits the work
+already done:
+
+- the G5b image deploys unchanged;
+- `docs/2_architecture.md` already names Cloud Run;
+- it runs several instances and scales to zero, which is the shape hosted mode
+  (DEC-10) was built for;
+- secrets can live in Secret Manager;
+- GitHub Actions can deploy through Workload Identity Federation, with no
+  stored keys.
+
+Two consequences are recorded in DEC-16:
+
+- the service must set its container port to 8000, since Cloud Run defaults to
+  8080;
+- `render.yaml` is superseded. It cannot start since G4 anyway.
+
+Nothing was deployed: the GCP project, billing and secrets are the owner's.
+
+**2. Screenshots.** Four are in `docs/assets/screenshots/`: React meal plan,
+calories and history, and the Streamlit demo. They sit in a new README
+"Screenshots" table.
+
+- **How they were captured.** From a scratch git worktree, the API ran in open
+  local mode on JSON storage, alongside the React dev server and the Streamlit
+  demo. So the generated plans never touched the real `database/` files, which
+  `git status` confirmed. History was reset before the final run, so the
+  History shot shows one plan, not capture noise.
+- **Regenerating them.** `scripts/capture_screenshots.py` does it, with the
+  commands in its docstring, using Playwright through `uv --with` rather than a
+  project dependency. The committed script was itself run to produce the final
+  images.
+- **A real UI bug they exposed.** On the Calories tab, the success banner was a
+  large empty box. Each result column is a CSS grid stretched to the form's
+  height, and the default `align-content: stretch` padded its rows. The fix is
+  `content-start` on all three tabs' result columns, verified by recapturing
+  them.
+- **Known cosmetic limit.** Number fields show comma decimals (`1,55`). macOS
+  formats native number inputs from the OS region. Neither Chrome's `--lang`,
+  the Playwright locale, nor Playwright's bundled Chromium overrides it. The
+  README says so. A Linux CI capture would avoid it.
+- **Flag for the owner.** The README hero image is hotlinked from
+  `assets.epicurious.com`. It is a third-party commercial photo, which is a
+  copyright and link-rot risk. I left it unchanged, but a screenshot could
+  replace it.
+
+**3. The decision log.** Yes, the project needs one, and it already has one:
+`docs/3_decisions.md`. But it had fallen behind. The G3 and G5b decisions
+lived only inside long agent-log entries.
+
+- **Backfilled, marked as retroactive and citing their sources:**
+  - DEC-11, the typed infeasible response;
+  - DEC-12, one shared constraint rule;
+  - DEC-13, nutrition provenance versus status;
+  - DEC-14, strict verification opt-in;
+  - DEC-15, the container and smoke-test isolation.
+- **An index table at the top**, as navigation only. Its intro states the
+  division of labour: this log says *what was decided and why*; the agent log
+  says *how it was done and verified*.
+
+**4. The GitHub Codex bot.**
+
+- **History.** `chatgpt-codex-connector` reviewed PR #2 on 2026-09-10; that
+  review found the fallback calorie-budget P1. On every PR since, #3 through
+  #15, it has replied only "You have reached your Codex usage limits for code
+  reviews". That is a month without a successful automatic review.
+- **Diagnosis.** It is an account-side quota, not a repository, permission or
+  CI fault. Nothing in the repo can change it.
+- **Local reviews work.** The owner's local Codex reviews still run; every
+  Codex entry in this log since September came from them.
+- **Options for the owner:**
+  - check the usage dashboard linked in the bot's comment for the limit and
+    its reset;
+  - turn off automatic PR reviews for this repo in Codex settings, which stops
+    the identical comment on every PR, and ask for reviews on demand with
+    `@codex review` when quota allows;
+  - or keep the current local-review-to-agent-log workflow, which has carried
+    every review since #3.
+- **Not done:** no `@codex review` comment was posted, as that is
+  outward-facing and spends the owner's quota.
+
+**My recurring slip.** I added a trailing blank line to `docs/3_decisions.md`
+for the third time this phase. I caught it each time with `git diff --check`,
+which is now part of every docs commit.
