@@ -8,8 +8,10 @@ from typing import Any
 import uvicorn
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
+from opentelemetry.trace import SpanKind
 
 from backend.app.api.routes import calories, feedback, health, meal_plans
+from backend.app.core import telemetry
 from backend.app.core.config import AppSettings
 from backend.app.core.container import build_container
 from backend.app.core.exceptions import register_exception_handlers
@@ -25,7 +27,9 @@ settings = AppSettings.from_env()
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     """Build the container once at startup and expose it on app state."""
     app.state.container = build_container(settings)
+    telemetry.configure(settings)
     yield
+    telemetry.shutdown()
 
 
 app = FastAPI(title=settings.app_name, lifespan=lifespan)
@@ -56,6 +60,44 @@ async def _instance_id_header(request: Request, call_next: Any) -> Response:
     response = await call_next(request)
     response.headers[INSTANCE_HEADER] = INSTANCE_ID
     return response
+
+
+@app.middleware("http")
+async def _request_span(request: Request, call_next: Any) -> Response:
+    """Trace each request as one server span, named by its route template (G10b).
+
+    The template (``/meal-plans/{user_id}``), never the path, names the span,
+    because the path carries ``user_id``. An incoming ``traceparent`` is
+    continued, so on Cloud Run the span joins the platform's request trace; the
+    caller's ``tracestate`` and ``baggage`` are not (see telemetry.inbound_context).
+
+    Args:
+        request: The incoming request.
+        call_next: The rest of the application.
+
+    Returns:
+        The response, unchanged.
+    """
+    with telemetry.stage(
+        request.method, context=telemetry.inbound_context(request.headers), kind=SpanKind.SERVER
+    ) as span:
+        telemetry.annotate({"http.request.method": request.method}, span)
+        try:
+            response = await call_next(request)
+        except Exception:
+            _name_by_route(span, request, status_code=500)
+            raise
+        _name_by_route(span, request, status_code=response.status_code)
+        return response
+
+
+def _name_by_route(span: Any, request: Request, *, status_code: int) -> None:
+    """Rename the span to ``METHOD /template`` once routing has matched one."""
+    template = telemetry.route_template(request.scope)
+    if template != "unmatched":
+        span.update_name(f"{request.method} {template}")
+        telemetry.annotate({"http.route": template}, span)
+    telemetry.annotate({"http.response.status_code": status_code}, span)
 
 
 app.include_router(health.router)

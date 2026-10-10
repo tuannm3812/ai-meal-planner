@@ -78,7 +78,6 @@ class SupermarketAgent:
         )
 
     def _locate_nearest_store(self, user_location: str) -> StoreDetails:
-        logger.info("Locating supermarkets near: %s", user_location)
         normalized_location = user_location.lower()
 
         if "earlwood" in normalized_location:

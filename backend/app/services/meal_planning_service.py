@@ -13,6 +13,7 @@ from ..agents.calorie_expenditure_agent import (
 from ..agents.meal_recommendation_agent import MealPlanPayload, MealRecommendationAgent
 from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerificationAgent
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
+from ..core import telemetry
 from ..core.exceptions import NoFeasibleMeal
 from ..repositories.base import UserProfileStore
 from ..schemas.requests import Ingredient, MealRequest
@@ -100,34 +101,61 @@ class MealPlanningService:
             A MealPlanResult carrying every agent payload.
         """
         profile = self.profile_repo.fetch_user_profile(request.user_id.strip())
-        calorie_budget = self.calorie_agent.predict(self._calorie_request(request, profile))
+        # One span per stage (G10b). Attributes are allowlisted metadata only:
+        # never the request's content or values derived from its biometrics.
+        with telemetry.stage("calorie.predict") as span:
+            calorie_budget = self.calorie_agent.predict(self._calorie_request(request, profile))
+            telemetry.annotate({"calorie.model_version": calorie_budget.model_version}, span)
 
-        try:
-            meal_plan = self.meal_agent.generate_meal_payload(
-                craving=request.craving.strip(),
-                user_id=request.user_id.strip(),
-                daily_calorie_target=int(round(calorie_budget.meal_calorie_budget_kcal)),
-                health_conditions=request.health_conditions,
-                dietary_preferences=request.dietary_preferences,
-                profile=profile,
+        with telemetry.stage("meal.retrieve") as span:
+            try:
+                meal_plan = self.meal_agent.generate_meal_payload(
+                    craving=request.craving.strip(),
+                    user_id=request.user_id.strip(),
+                    daily_calorie_target=int(round(calorie_budget.meal_calorie_budget_kcal)),
+                    health_conditions=request.health_conditions,
+                    dietary_preferences=request.dietary_preferences,
+                    profile=profile,
+                )
+            except NoFeasibleMeal as exc:
+                # The internal detail names the user's constraints and craving, so it is
+                # neither returned nor logged (G10b); the plan_status records the outcome.
+                logger.info("Meal request infeasible: no safe corpus meal or fallback template")
+                telemetry.annotate({"plan_status": "infeasible"}, span)
+                return MealPlanResult(
+                    plan_status="infeasible",
+                    calorie_budget=calorie_budget,
+                    infeasible_reason=exc.client_message,
+                )
+            telemetry.annotate(
+                {
+                    "meal.source": meal_plan.metadata.source,
+                    "meal.ingredient_count": len(meal_plan.meal_definition.ingredients),
+                },
+                span,
             )
-        except NoFeasibleMeal as exc:
-            # The internal detail names the user's constraints: log it, never return it.
-            logger.info("Infeasible meal request: %s", exc)
-            return MealPlanResult(
-                plan_status="infeasible",
-                calorie_budget=calorie_budget,
-                infeasible_reason=exc.client_message,
-            )
-        nutrition = self.nutrition_agent.calculate_meal_macros(
-            ingredients=meal_plan.meal_definition.ingredients
-        )
-        meal_plan, nutrition, reconciliation = self._reconcile(meal_plan, nutrition)
 
-        shopping_list = self.supermarket_agent.generate_shopping_list(
-            ingredients=meal_plan.meal_definition.ingredients,
-            user_location=request.location.strip(),
-        )
+        with telemetry.stage("nutrition.verify") as span:
+            nutrition = self.nutrition_agent.calculate_meal_macros(
+                ingredients=meal_plan.meal_definition.ingredients
+            )
+            telemetry.annotate(_nutrition_attributes(nutrition), span)
+
+        with telemetry.stage("plan.reconcile") as span:
+            meal_plan, nutrition, reconciliation = self._reconcile(meal_plan, nutrition)
+            telemetry.annotate(
+                {
+                    "reconciliation.rescaled": reconciliation.rescaled,
+                    "reconciliation.within_tolerance": reconciliation.within_tolerance,
+                },
+                span,
+            )
+
+        with telemetry.stage("supermarket.list"):
+            shopping_list = self.supermarket_agent.generate_shopping_list(
+                ingredients=meal_plan.meal_definition.ingredients,
+                user_location=request.location.strip(),
+            )
         return MealPlanResult(
             plan_status=(
                 "fallback" if meal_plan.metadata.source == "deterministic_fallback" else "matched"
@@ -239,3 +267,14 @@ class MealPlanningService:
             goal=request.goal,
             health_conditions=request.health_conditions,
         )
+
+
+def _nutrition_attributes(nutrition: MealNutrition) -> dict[str, object]:
+    """How the meal's nutrition was sourced: a status and per-level counts."""
+    levels = [ingredient.verification for ingredient in nutrition.ingredients_macros]
+    return {
+        "nutrition.status": nutrition.nutrition_status,
+        "nutrition.verified_external_count": levels.count("verified_external"),
+        "nutrition.trusted_local_count": levels.count("trusted_local"),
+        "nutrition.estimated_count": levels.count("estimated"),
+    }

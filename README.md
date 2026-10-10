@@ -250,7 +250,11 @@ STORAGE_BACKEND=sqlite
 REQUIRE_VERIFIED_NUTRITION=0
 API_KEYS=
 RATE_LIMIT_PER_MINUTE=60
+TRACING_EXPORTER=none
+TRACE_SAMPLE_RATIO=1.0
 ```
+
+`TRACING_EXPORTER` sends spans nowhere (`none`, the default, which never loads the OpenTelemetry SDK), to stdout (`console`), or to Cloud Trace (`cloud_trace`). Both of the active exporters need the `tracing` extra (`uv sync --extra tracing`). `TRACE_SAMPLE_RATIO` sets the share of new traces that are recorded. See [8.1 Security](#81-security) for what spans may contain.
 
 `REQUIRE_VERIFIED_NUTRITION=1` makes a meal fail with `502` (code `unverified_required`) when any ingredient's nutrition could only be estimated. It is off by default so the keyless demo keeps producing plans. `API_KEYS` and `RATE_LIMIT_PER_MINUTE` are described in [8.1 Security](#81-security).
 
@@ -325,6 +329,15 @@ Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` 
 **Rate limit.** `RATE_LIMIT_PER_MINUTE` (default 60) is a fixed one-minute window per `client_id`, held **in each instance's memory**. With N instances a client can make up to N times the limit. It is a per-instance safeguard, not an account-wide quota. Exceeding it returns `429 rate_limited` with `Retry-After`.
 
 **Open local mode.** With `API_KEYS` empty the API runs unauthenticated under a single `local` namespace and logs a warning at startup; this is how the React dashboard works in development, since a key placed in a `VITE_*` variable would be baked into the public bundle. `APP_ENV=production` with no keys refuses to start, so a hosted deployment cannot be open by accident. Calling a keyed API from the React dashboard is out of scope for v1.
+
+**Telemetry: allowlisted metadata only.** Traces and logs follow one rule: only allowlisted operational metadata leaves the process.
+- **Spans:** each request is traced as one span plus a child per workflow stage. Spans carry statuses, counts, ids and route templates from a fixed allowlist in `backend/app/core/telemetry.py`. They never carry the `user_id`, craving, health conditions, dietary preferences, location, biometrics or values derived from them, ingredient or meal names, or exception messages.
+- **Trace context:** an incoming `traceparent` is continued; its ids and flags are fixed-format hex. The caller's `tracestate` and `baggage` are free text and are never read, so they cannot ride on exported spans.
+- **Logs:** log lines name a request by its route template, error type and code. They never include its content or a provider URL, which for USDA would carry the API key.
+- **Proof:** `backend/tests/test_telemetry_redaction.py` puts a marker in every free-text and personal field. It drives the request down every path that logs or traces and asserts that no marker reaches a span or a log record.
+- **Retention:** 30 days for traces (Cloud Trace) and for logs (Cloud Logging's default bucket); see `docs/6_deployment.md` §4.
+
+**`user_id` must be an opaque id.** The history routes take `user_id` in the URL path (`/meal-plans/{user_id}`). Cloud Run's request log, and the server's access log, record full URLs whatever the app does. So use an opaque identifier, never an email address or a name.
 
 **Clients.** The Streamlit app in API mode sends `MEAL_PLANNER_API_KEY` from its server-side secrets; it is never shown in the page. The key is bound to the operator-set `API_BASE_URL`: it is sent only when a request's scheme, host and port match that secret, so a visitor who edits the sidebar's Base URL reaches their URL without the key. Backend calls never follow redirects, because a custom `X-API-Key` header would otherwise follow a 30x to another host. The public Streamlit demo runs the backend in-process and holds no key. Provider credentials (Gemini, USDA, FatSecret) are server-managed only: the former per-request `X-Gemini-Api-Key` pass-through has been removed.
 

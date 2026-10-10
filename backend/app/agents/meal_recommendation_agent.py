@@ -5,6 +5,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from ..core.exceptions import NoFeasibleMeal, RetrievalUnavailable
+from ..core.telemetry import describe_failure
 from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
 from ..rag.rules import blocked_groups_for_ingredient, constraint_groups, safe_substitution
@@ -388,7 +389,7 @@ class MealRecommendationAgent:
             payload.metadata.explanation = explanation
             payload.metadata.warnings.append("Gemini used only for final explanation.")
         except Exception as exc:
-            logger.warning("Gemini final explanation failed: %s", exc)
+            logger.warning("Gemini final explanation failed: %s", describe_failure(exc))
             payload.metadata.warnings.append(f"Gemini final explanation unavailable: {exc}")
         return payload
 

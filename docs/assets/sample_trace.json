@@ -1,0 +1,64 @@
+{
+  "captured_with": "scripts/capture_trace.py",
+  "request": {
+    "craving": "pasta"
+  },
+  "spans": [
+    {
+      "name": "POST /generate-meal-plan",
+      "parent": null,
+      "duration_ms": 180.1,
+      "attributes": {
+        "http.request.method": "POST",
+        "client_id": "local",
+        "request_id": "16e8b0a3-68ab-4051-9b42-4024da5ff377",
+        "plan_status": "matched",
+        "http.route": "/generate-meal-plan",
+        "http.response.status_code": 200
+      }
+    },
+    {
+      "name": "calorie.predict",
+      "parent": "POST /generate-meal-plan",
+      "duration_ms": 166.0,
+      "attributes": {
+        "calorie.model_version": "hist_gradient_boosting_deep_v0.1.0"
+      }
+    },
+    {
+      "name": "meal.retrieve",
+      "parent": "POST /generate-meal-plan",
+      "duration_ms": 3.2,
+      "attributes": {
+        "meal.source": "local_vector_rag_meal_corpus",
+        "meal.ingredient_count": 4
+      }
+    },
+    {
+      "name": "nutrition.verify",
+      "parent": "POST /generate-meal-plan",
+      "duration_ms": 0.5,
+      "attributes": {
+        "nutrition.status": "mixed",
+        "nutrition.verified_external_count": 0,
+        "nutrition.trusted_local_count": 0,
+        "nutrition.estimated_count": 4
+      }
+    },
+    {
+      "name": "plan.reconcile",
+      "parent": "POST /generate-meal-plan",
+      "duration_ms": 0.0,
+      "attributes": {
+        "reconciliation.rescaled": false,
+        "reconciliation.within_tolerance": true
+      }
+    },
+    {
+      "name": "supermarket.list",
+      "parent": "POST /generate-meal-plan",
+      "duration_ms": 0.2,
+      "attributes": {}
+    }
+  ]
+}
