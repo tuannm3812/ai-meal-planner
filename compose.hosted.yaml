@@ -20,6 +20,8 @@ services:
     build: .
   api-2:
     <<: *api
+    # Built locally by api-1; never look for it in a registry.
+    pull_policy: never
     depends_on:
       api-1:
         condition: service_healthy

@@ -34,6 +34,8 @@ services:
 
   streamlit:
     image: ${MEAL_PLANNER_IMAGE:-ai-meal-planner:local}
+    # Built locally by the api service; never look for it in a registry.
+    pull_policy: never
     command:
       - streamlit
       - run
