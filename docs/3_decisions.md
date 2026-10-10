@@ -27,6 +27,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 17 | Traces go to Cloud Trace over OTLP; traces and logs export allowlisted metadata only | 2026-10-10 |
 | 18 | `user_id` stays in history paths and must be opaque | 2026-10-10 |
 | 19 | Keep the 30-day trace and log retention defaults | 2026-10-10 |
+| 20 | Incoming trace context: `traceparent` only | 2026-10-10 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -251,3 +252,17 @@ checked against Google's documentation on 2026-10-10. Hosted mode stores no
 meal plans or feedback (DEC-10), so telemetry is the only retained request
 record, and it holds allowlisted metadata only. Rules out a custom retention
 period for v1. The command to shorten it is in `docs/6_deployment.md` §4.
+
+### DEC-20 — Incoming trace context: `traceparent` only
+
+This extends DEC-17, after Codex's review of PR #18. The server span continues
+a caller's trace from its `traceparent` header only. That header holds a
+fixed-format trace id, parent span id and flags, which are enough to join
+Cloud Run's request trace.
+
+`tracestate` and `baggage` are free text that the caller chooses. Before the
+fix, `tracestate` was inherited by every span's context and exported in the
+OTLP payload, outside the attribute allowlist, even on the public `/health`
+route. So neither is read. Rules out the global propagator's default
+`tracecontext,baggage` extraction, and any allowlist for vendor `tracestate`
+entries, which nothing here needs.

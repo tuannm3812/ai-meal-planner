@@ -332,6 +332,7 @@ Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` 
 
 **Telemetry: allowlisted metadata only.** Traces and logs follow one rule: only allowlisted operational metadata leaves the process.
 - **Spans:** each request is traced as one span plus a child per workflow stage. Spans carry statuses, counts, ids and route templates from a fixed allowlist in `backend/app/core/telemetry.py`. They never carry the `user_id`, craving, health conditions, dietary preferences, location, biometrics or values derived from them, ingredient or meal names, or exception messages.
+- **Trace context:** an incoming `traceparent` is continued; its ids and flags are fixed-format hex. The caller's `tracestate` and `baggage` are free text and are never read, so they cannot ride on exported spans.
 - **Logs:** log lines name a request by its route template, error type and code. They never include its content or a provider URL, which for USDA would carry the API key.
 - **Proof:** `backend/tests/test_telemetry_redaction.py` puts a marker in every free-text and personal field. It drives the request down every path that logs or traces and asserts that no marker reaches a span or a log record.
 - **Retention:** 30 days for traces (Cloud Trace) and for logs (Cloud Logging's default bucket); see `docs/6_deployment.md` §4.

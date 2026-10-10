@@ -16,7 +16,9 @@ from contextlib import contextmanager
 from typing import TYPE_CHECKING
 
 from opentelemetry import trace
+from opentelemetry.context import Context
 from opentelemetry.trace import Span, Status, StatusCode
+from opentelemetry.trace.propagation.tracecontext import TraceContextTextMapPropagator
 
 from backend.app.core.instance import INSTANCE_ID
 
@@ -50,6 +52,7 @@ ALLOWED_ATTRIBUTES: dict[str, type] = {
 """Every attribute a span may carry, with its type. Anything else is refused."""
 
 _provider: "TracerProvider | None" = None
+_TRACE_CONTEXT = TraceContextTextMapPropagator()
 
 
 def set_provider(provider: "TracerProvider | None") -> None:
@@ -136,6 +139,25 @@ def _cloud_trace_exporter() -> tuple[object, str]:
         endpoint=CLOUD_TRACE_ENDPOINT, session=AuthorizedSession(credentials)
     )
     return exporter, project_id
+
+
+def inbound_context(headers: Mapping[str, str]) -> Context:
+    """Continue a caller's trace from its ``traceparent`` header, and nothing else.
+
+    ``traceparent`` holds fixed-format hex ids and flags, which link this span
+    to the caller's trace (on Cloud Run, the platform's request trace). The
+    other context headers, ``tracestate`` and ``baggage``, carry free text the
+    caller chooses. ``tracestate`` would ride on every exported span's context,
+    outside the attribute allowlist (Codex, P2 on PR #18), so neither is read.
+
+    Args:
+        headers: The request headers.
+
+    Returns:
+        A context holding the remote parent, or an empty one.
+    """
+    traceparent = headers.get("traceparent")
+    return _TRACE_CONTEXT.extract({"traceparent": traceparent} if traceparent else {})
 
 
 def tracer() -> trace.Tracer:

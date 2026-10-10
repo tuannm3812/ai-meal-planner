@@ -41,6 +41,7 @@ tracing = [
 
 [package.dev-dependencies]
 dev = [
+    { name = "opentelemetry-exporter-otlp-proto-http" },
     { name = "opentelemetry-sdk" },
     { name = "pytest" },
     { name = "pytest-cov" },
@@ -73,6 +74,7 @@ provides-extras = ["semantic-rag", "tracing"]
 
 [package.metadata.requires-dev]
 dev = [
+    { name = "opentelemetry-exporter-otlp-proto-http", specifier = ">=1.45,<2" },
     { name = "opentelemetry-sdk", specifier = ">=1.45,<2" },
     { name = "pytest", specifier = ">=8" },
     { name = "pytest-cov", specifier = ">=7.1.0" },

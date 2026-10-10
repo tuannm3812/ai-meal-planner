@@ -10,6 +10,17 @@ strict verification, a hosted-mode refusal, and an unexpected 500. No marker,
 and no named health condition, may appear in any exported span (name,
 attribute, event, status or resource) or in any log record at DEBUG (message,
 arguments and traceback).
+
+Codex, 2026-10-10 (P2 on PR #18): an incoming `tracestate` header was carried
+into every exported span's context, outside the attribute allowlist. So every
+request here also carries a valid sampled `traceparent`, with markers in
+`tracestate` and `baggage`, and spans are checked in their actual OTLP
+encoding as well as their JSON.
+
+The unexpected-500 scenario raises a constant message. It proves the handler
+logs the route template rather than the path. It does not prove that an
+arbitrary exception's message is redacted: unexpected tracebacks are a
+documented exception to the rule.
 """
 
 import logging
@@ -19,6 +30,7 @@ from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
+from opentelemetry.exporter.otlp.proto.common.trace_encoder import encode_spans
 from opentelemetry.sdk.trace import ReadableSpan, TracerProvider
 from opentelemetry.sdk.trace.export import SimpleSpanProcessor
 from opentelemetry.sdk.trace.export.in_memory_span_exporter import InMemorySpanExporter
@@ -70,7 +82,15 @@ CONSTRAINED = {
     "health_conditions": ["kidney_disease", f"{MARK}-condition"],
     "dietary_preferences": ["vegan", f"{MARK}-preference"],
 }
-HEADERS = {"X-API-Key": f"{MARK}-api-key"}
+# A caller's trace context: valid ids to continue, and free text that must not be.
+TRACE_ID = "4bf92f3577b34da6a3ce929d0e0e4736"
+PARENT_SPAN_ID = "00f067aa0ba902b7"
+HEADERS = {
+    "X-API-Key": f"{MARK}-api-key",
+    "traceparent": f"00-{TRACE_ID}-{PARENT_SPAN_ID}-01",
+    "tracestate": f"vendor={MARK}-tracestate",
+    "baggage": f"note={MARK}-baggage",
+}
 
 
 class _EmptyRetriever:
@@ -182,7 +202,8 @@ SCENARIOS: dict[str, tuple[Callable[[Harness], tuple[int, str]], int]] = {
 
 
 def _exported(spans: tuple[ReadableSpan, ...]) -> str:
-    return "\n".join(span.to_json() for span in spans)
+    """The spans as JSON and as the OTLP payload an exporter would send."""
+    return "\n".join([*(span.to_json() for span in spans), str(encode_spans(spans))])
 
 
 def _logged(records: list[logging.LogRecord]) -> str:
@@ -255,3 +276,20 @@ def test_a_history_route_is_named_by_its_template(harness: Harness) -> None:
     assert request_span.name == "GET /meal-plans/{user_id}"
     assert request_span.attributes["http.route"] == "/meal-plans/{user_id}"
     assert request_span.attributes["http.response.status_code"] == 501
+
+
+def test_an_incoming_trace_is_continued_without_its_state(harness: Harness) -> None:
+    """The caller's trace and parent span ids are kept; its tracestate is not."""
+    response = harness.client.post("/generate-meal-plan", json=_request(), headers=HEADERS)
+    assert response.status_code == 200
+
+    spans = harness.spans.get_finished_spans()
+    (request_span,) = [span for span in spans if span.name == "POST /generate-meal-plan"]
+    assert f"{request_span.context.trace_id:032x}" == TRACE_ID
+    assert request_span.parent is not None and request_span.parent.is_remote
+    assert f"{request_span.parent.span_id:016x}" == PARENT_SPAN_ID
+    assert len(spans) == 1 + len(STAGES)
+    for span in spans:
+        assert span.context.trace_id == request_span.context.trace_id
+        assert len(span.context.trace_state) == 0, (span.name, span.context.trace_state)
+    assert MARK not in str(encode_spans(spans))

@@ -98,6 +98,24 @@ def test_a_failure_is_described_without_its_message(exc: Exception, described: s
     assert telemetry.describe_failure(exc) == described
 
 
+@pytest.mark.parametrize(
+    "headers",
+    [
+        {"tracestate": "vendor=free-text"},
+        {"baggage": "note=free-text"},
+        {"traceparent": "not-a-traceparent", "tracestate": "vendor=free-text"},
+    ],
+    ids=["tracestate-alone", "baggage-alone", "malformed-traceparent"],
+)
+def test_without_a_valid_traceparent_no_caller_context_is_kept(headers: dict[str, str]) -> None:
+    from opentelemetry import trace
+
+    parent = trace.get_current_span(telemetry.inbound_context(headers)).get_span_context()
+
+    assert not parent.is_valid
+    assert len(parent.trace_state) == 0
+
+
 def test_the_default_configuration_exports_nothing() -> None:
     telemetry.configure(_settings())
     try:

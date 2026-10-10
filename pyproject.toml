@@ -43,6 +43,9 @@ packages = ["backend"]
 
 [dependency-groups]
 dev = [
+  # The tracing extra's SDK and exporter, so tests capture and encode spans
+  # without needing --extra tracing.
+  "opentelemetry-exporter-otlp-proto-http>=1.45,<2",
   "opentelemetry-sdk>=1.45,<2",
   "pytest>=8",
   "pytest-cov>=7.1.0",

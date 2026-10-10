@@ -8,7 +8,6 @@ from typing import Any
 import uvicorn
 from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from opentelemetry import propagate
 from opentelemetry.trace import SpanKind
 
 from backend.app.api.routes import calories, feedback, health, meal_plans
@@ -68,8 +67,9 @@ async def _request_span(request: Request, call_next: Any) -> Response:
     """Trace each request as one server span, named by its route template (G10b).
 
     The template (``/meal-plans/{user_id}``), never the path, names the span,
-    because the path carries ``user_id``. An incoming W3C trace context is
-    continued, so on Cloud Run the span joins the platform's request trace.
+    because the path carries ``user_id``. An incoming ``traceparent`` is
+    continued, so on Cloud Run the span joins the platform's request trace; the
+    caller's ``tracestate`` and ``baggage`` are not (see telemetry.inbound_context).
 
     Args:
         request: The incoming request.
@@ -79,7 +79,7 @@ async def _request_span(request: Request, call_next: Any) -> Response:
         The response, unchanged.
     """
     with telemetry.stage(
-        request.method, context=propagate.extract(request.headers), kind=SpanKind.SERVER
+        request.method, context=telemetry.inbound_context(request.headers), kind=SpanKind.SERVER
     ) as span:
         telemetry.annotate({"http.request.method": request.method}, span)
         try:
