@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import { fetchMealPlans, fetchSavedMeals } from '../../api/mealPlanner'
+import { fetchHealth, fetchMealPlans, fetchSavedMeals } from '../../api/mealPlanner'
 import { formatDateTime, formatMacro } from '../../lib/format'
+import EmptyState from '../../components/ui/EmptyState'
 import ErrorBanner from '../../components/ui/ErrorBanner'
 import InputField from '../../components/ui/InputField'
 import SectionCard from '../../components/ui/SectionCard'
@@ -14,6 +15,21 @@ function HistoryTab() {
   const [isLoadingHistory, setIsLoadingHistory] = useState(false)
   const [isLoadingSaved, setIsLoadingSaved] = useState(false)
   const [error, setError] = useState('')
+  const [isHosted, setIsHosted] = useState(false)
+
+  // G6: a hosted API refuses history with 501, and /health says so. Checked when
+  // this tab mounts, not when the app does, so the first render stays offline.
+  useEffect(() => {
+    let active = true
+    fetchHealth()
+      .then((health) => {
+        if (active && health?.services?.hosted_mode) setIsHosted(true)
+      })
+      .catch(() => {})
+    return () => {
+      active = false
+    }
+  }, [])
 
   const loadHistory = async () => {
     setError('')
@@ -47,12 +63,26 @@ function HistoryTab() {
     }
   }
 
+  if (isHosted) {
+    return (
+      <EmptyState
+        idleBody="History and feedback are disabled on this hosted deployment, which keeps no state between requests."
+        idleTitle="History is disabled"
+        isLoading={false}
+      />
+    )
+  }
+
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
       <aside className="rounded-2xl border border-gray-100 bg-white p-6 shadow-md lg:sticky lg:top-6 lg:self-start">
         <h2 className="text-lg font-semibold text-gray-900">History</h2>
         <p className="mt-1 text-sm leading-6 text-gray-500">
           Look up meal plans and saved meals for a user.
+        </p>
+        <p className="mt-2 text-xs leading-5 text-gray-400">
+          History is not persisted: it lives in the storage of the API instance you are
+          connected to, and is lost when that instance is replaced or redeployed.
         </p>
 
         <div className="mt-6 space-y-5">

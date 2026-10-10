@@ -25,3 +25,8 @@ export async function fetchSavedMeals(userId, limit) {
   })
   return data
 }
+
+export async function fetchHealth() {
+  const { data } = await axios.get(`${API_BASE_URL}/health`)
+  return data
+}
