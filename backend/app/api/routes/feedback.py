@@ -3,7 +3,7 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.api.auth import FeedbackWrite, HistoryRead
+from backend.app.api.auth import FeedbackWrite, HistoryEnabled, HistoryRead
 from backend.app.core.container import ContainerDep
 from backend.app.core.exceptions import MealPlanNotFound
 from backend.app.schemas.requests import MealFeedbackRequest
@@ -17,6 +17,7 @@ async def save_meal_feedback(
     request: MealFeedbackRequest,
     container: ContainerDep,
     principal: FeedbackWrite,
+    _history: HistoryEnabled,
 ) -> FeedbackResponse:
     """Persist like/rating/save feedback for a previously generated meal.
 
@@ -63,6 +64,7 @@ async def list_meal_feedback(
     user_id: str,
     container: ContainerDep,
     principal: HistoryRead,
+    _history: HistoryEnabled,
     limit: int = 20,
 ) -> FeedbackListResponse:
     """List stored feedback records for one user, most recent first.
@@ -95,6 +97,7 @@ async def list_saved_meals(
     user_id: str,
     container: ContainerDep,
     principal: HistoryRead,
+    _history: HistoryEnabled,
     limit: int = 20,
 ) -> FeedbackListResponse:
     """List meals the user explicitly saved, most recent first.

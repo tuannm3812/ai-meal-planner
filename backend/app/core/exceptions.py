@@ -114,6 +114,22 @@ class MealPlanNotFound(MealPlanningError):
     error_code = "meal_not_found"
 
 
+class HistoryDisabled(MealPlanningError):
+    """Raised for history and feedback routes on a hosted deployment (G6).
+
+    A hosted deployment runs several instances, each with its own SQLite file,
+    so history written on one would be invisible on another. Rather than offer
+    reads that cannot be described honestly, hosted mode refuses them.
+    """
+
+    status_code = 501
+    client_message = (
+        "History and feedback are disabled on this hosted deployment, which keeps "
+        "no state between requests."
+    )
+    error_code = "history_disabled_stateless"
+
+
 def register_exception_handlers(app: FastAPI) -> None:
     """Attach the domain exception handlers to an app.
 

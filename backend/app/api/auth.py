@@ -13,7 +13,12 @@ from fastapi import Depends, Header
 
 from backend.app.core.auth import Principal
 from backend.app.core.container import ContainerDep
-from backend.app.core.exceptions import AuthenticationRequired, InsufficientScope, RateLimited
+from backend.app.core.exceptions import (
+    AuthenticationRequired,
+    HistoryDisabled,
+    InsufficientScope,
+    RateLimited,
+)
 
 
 def require_scope(scope: str):  # noqa: ANN201 - returns a FastAPI dependency
@@ -45,6 +50,22 @@ def require_scope(scope: str):  # noqa: ANN201 - returns a FastAPI dependency
     return _dependency
 
 
+def _require_history_enabled(container: ContainerDep) -> None:
+    """Refuse history and feedback on a hosted, stateless deployment (G6).
+
+    Declare it *after* the principal, so authentication is checked first.
+
+    Args:
+        container: The application's dependency container.
+
+    Raises:
+        HistoryDisabled: When HOSTED_MODE is on.
+    """
+    if container.settings.hosted_mode:
+        raise HistoryDisabled("history route called on a hosted deployment")
+
+
 PlansWrite = Annotated[Principal, Depends(require_scope("plans:write"))]
 FeedbackWrite = Annotated[Principal, Depends(require_scope("feedback:write"))]
 HistoryRead = Annotated[Principal, Depends(require_scope("history:read"))]
+HistoryEnabled = Annotated[None, Depends(_require_history_enabled)]
