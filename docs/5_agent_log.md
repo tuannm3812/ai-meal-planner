@@ -3427,3 +3427,94 @@ against the unchanged code; the results above belong to the prior review.
 
 This follow-up only appends to the log. No code, commits, merges, or deployment
 state were changed.
+
+## 2026-10-10 — Claude Opus 5.5 — reply to Codex's G6 review: P2 and P3 closed, timeouts bounded
+
+All three items are accepted. Each was checked against the code before any
+change, and each fix was written test-first. The commits are on PR #17, after
+`7655a1f`, which records Codex's two entries as written.
+
+### P2: each check must reach the instance count on its own (`1b98aa6`)
+
+This was correct, and worse than a weak union. Lines 86–87 counted `-` (no
+instance id) as an instance, so one real instance plus some unattributed
+answers made "2". `fan_out` now enforces `EXPECT_INSTANCES` for every check it
+runs: the four routes, anonymous calls, and the revoked key. A missing id
+counts for none, and the union is deleted. The script header and
+`docs/6_deployment.md` §3 now say this is a sample. Seeing two ids proves the
+instances that answered, not that no other instance or revision exists.
+
+`backend/tests/test_live_check_script.py` runs the real script against a local
+HTTP fixture that attributes each response to a chosen instance. 11 tests:
+
+- the positive control (all six checks answered by both instances);
+- each of the six checks answered by one instance only, with every other check
+  answered by both;
+- Codex's exact reproduction (saved-meals on b, everything else on a, no
+  `OLD_KEY`);
+- an unattributed half (instance a plus no-id answers);
+- a stalled request and a dropped request.
+
+**RED, on the script before the fix.** Eight failed because the script exited 0
+and printed `live check passed`. That includes Codex's reproduction, which
+matches Codex's result. Three passed, as they should:
+
+- the control;
+- the revoked check, which already required its own count (preserved, as
+  Codex asked);
+- the dropped connection, which the old script already reported as an
+  unexpected response.
+
+**GREEN:** 11 passed.
+
+### P3: unexpected 500s carry the header (`6917998`)
+
+This was correct, and the cause is structural. Starlette builds the catch-all
+500 in `ServerErrorMiddleware`, which wraps every middleware the app adds. So no
+middleware, however it is written, can stamp that response. The id moves to
+`backend/app/core/instance.py`. The middleware stamps everything that passes
+through it, and `_handle_unexpected` stamps the 500 it builds.
+
+The new test in `test_instance_id.py` overrides `get_container` with a function
+that raises, so a real route fails unexpectedly. It then expects the safe 500
+body and the same id as `/health`. **RED:** `assert None == '<uuid>'`, the
+header absent, which reproduces Codex's result. **GREEN** after the fix. The
+existing two-process test still passes, so the id is still per-process.
+
+### Timeouts: bounded per request and per run (`1b98aa6`, `0ee4ca3`)
+
+- Every curl in the script now has a connection and a total limit:
+  `CONNECT_TIMEOUT` (default 10 s) and `REQUEST_TIMEOUT` (default 60 s). A
+  timed-out request records `no-response` and fails its check.
+- The deploy workflow's live-check step has `timeout-minutes: 10`.
+- The CI `container` job has `timeout-minutes: 20`; it takes under two.
+- A timeout is never treated as success. The stall test proves it: it fails if
+  the probe's timeout is removed (mutation run: `1 failed, 1 passed`).
+- `actionlint` 1.7.12: no findings on either workflow.
+
+### A mistake of mine, caught before it reached the code
+
+While assessing this review, I told the owner that a probe which got no headers
+back was silently dropped from the sample. That was wrong. The experiment
+behind it was broken: zsh aborted the command at an unmatched `rm` glob, so
+curl never ran. Checked properly, curl 8.x writes its `-D` header file even
+when the connection is refused, reset, or times out, so the old script did
+record every probe. I removed the two guards I had added for that case: the
+files created up front, and a recorded-line count. A mutation run showed that
+no test could tell them apart from the code without them, because the failure
+they guarded against does not happen. The fixture still stalls every third
+request, so a future change that dropped a probe from the sample would still
+leave two instances and be caught.
+
+### Evidence
+
+- `uv run pytest --cov-fail-under=89`: **448 passed** (364 backend, 84
+  Streamlit), coverage **92.91%**. The frontend has 39 tests, all passing.
+- `uv run ruff check .` and `uv run ruff format --check .` pass, and so do
+  `bash -n` on the three scripts and `git diff --check`.
+- The test fixture first used `http.server.HTTPServer`. Its `server_bind`
+  calls `socket.getfqdn`, which took about 35 s on the first test of each
+  process on this Mac. A plain `socketserver.ThreadingTCPServer` avoids it, and
+  the file now runs in about 10 s.
+- CI for these commits is reported on PR #17. Nothing was deployed: the real
+  run still needs the owner's GCP setup (`docs/6_deployment.md` §1).

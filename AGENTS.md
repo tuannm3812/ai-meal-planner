@@ -36,15 +36,16 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 436 tests (352
-  backend, 84 Streamlit) after G6's code half, coverage 92.77% against the 89%
-  CI floor; the frontend has 39 tests.
+  passed `main`'s older single-job workflow. `uv run pytest` runs 448 tests (364
+  backend, 84 Streamlit) with PR #17, coverage 92.91% against the 89% CI floor;
+  the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15) and the
   README screenshots and decision-log index (#16) are merged. G6's deployment
   half is PR #17: `.github/workflows/deploy.yml` (Cloud Run, Workload Identity
   Federation, inert until configured), `docs/6_deployment.md`,
   `scripts/live_check.sh` and `X-Instance-Id`. CI rehearses a two-instance
-  deploy and a key revocation. The real deploy needs the owner's GCP project;
+  deploy and a key revocation, and each check must reach two instances on its
+  own (Codex's P2, closed). The real deploy needs the owner's GCP project;
   then G10b tracing.
 
 ## Open risks
