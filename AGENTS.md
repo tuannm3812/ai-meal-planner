@@ -36,17 +36,20 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 451 tests (367
-  backend, 84 Streamlit) with PR #17, coverage 92.91% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 480 tests (396
+  backend, 84 Streamlit) with G10b, coverage 93.37% against the 89% CI floor;
   the frontend has 39 tests.
-- 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15) and the
-  README screenshots and decision-log index (#16) are merged. G6's deployment
-  half is PR #17: `.github/workflows/deploy.yml` (Cloud Run, Workload Identity
-  Federation, inert until configured), `docs/6_deployment.md`,
+- 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
+  README screenshots and decision-log index (#16) and G6's deployment half
+  (#17) are merged. #17 is `.github/workflows/deploy.yml` (Cloud Run, Workload
+  Identity Federation, inert until configured), `docs/6_deployment.md`,
   `scripts/live_check.sh` and `X-Instance-Id`. CI rehearses a two-instance
-  deploy and a key revocation, and each check must reach two instances on its
-  own, with every transfer complete (Codex's two P2s, closed). The real deploy needs the owner's GCP project;
-  then G10b tracing.
+  deploy and a key revocation. The real deploy needs the owner's GCP project
+  (`docs/6_deployment.md` §1).
+- 2026-10-10: G10b tracing is on `feat/g10b-tracing`, in review. It has
+  OpenTelemetry stage spans exported to Cloud Trace over OTLP, and holds
+  traces and logs to one allowlist (DEC-17 to DEC-19). The proof is
+  `test_telemetry_redaction.py`.
 
 ## Open risks
 
@@ -84,6 +87,12 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   - The React dashboard cannot call a keyed API in v1.
   - A pre-G4 `database/ai_meal_planner.db` is refused at startup. Delete it
     (stateless v1).
+- **Telemetry limits (DEC-17, DEC-18).** Three things the allowlist does not
+  cover:
+  - unexpected 500s log a traceback, including that exception's message;
+  - Cloud Run's request log and the server's access log record full URLs, so
+    `user_id` must be opaque;
+  - Cloud Run limits CPU between requests, so batched spans can be sent late.
 - `agents/meal_recommendation_agent.py` sits at ~86% coverage, the largest
   remaining gap in core business logic.
 - `backend/requirements.txt` is **generated** by `uv export`; edit

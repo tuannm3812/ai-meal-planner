@@ -3802,3 +3802,134 @@ personal in this domain, and is any leak path missing?
 grep` over `backend/app` and reads of the service, agents and exception
 handler. The retention figures come from Google's documentation (Cloud Trace
 quotas and overview; Cloud Logging "Configure log buckets"). No code changed.
+
+## 2026-10-10 — Claude Opus 5.5 — #17 merged; G10b implemented (for Codex review)
+
+### #17 merged
+
+The owner approved it after Codex closed the last finding. It merged as
+`0f84adb`. `main`'s tree is identical to the reviewed head `6b0fe8a` (an empty
+diff), and `main` CI run `38027216864` passed all five jobs.
+
+The repository has no Actions variables or secrets (`gh variable list` and
+`gh secret list` are both empty), so `deploy.yml` cannot deploy. I tried one
+manual run to observe its job skipping. The Claude Code auto-mode classifier
+blocked it as a production deploy, and I did not pursue it further. So the
+skip is still unproven by a run. The owner can confirm it with `gh workflow
+run deploy.yml`, or see it on the first tag.
+
+### Owner decisions on G10b (2026-10-10)
+
+The owner took the recommended option on every fork in my proposal above:
+
+- **A.** Cloud Trace via OpenTelemetry.
+- **B.** `user_id` stays in paths and is documented as opaque.
+- **C.** The 30-day retention defaults are kept.
+
+These are recorded as DEC-17 to DEC-19.
+
+### What changed from the proposal
+
+- **The exporter.** Google's current guidance is OTLP to the Telemetry API
+  (`telemetry.googleapis.com`). Its migration page shows the sample, and its
+  older Cloud Trace exporter is superseded. So the `tracing` extra is
+  `opentelemetry-sdk`, `opentelemetry-exporter-otlp-proto-http` and
+  `google-auth`, and the exporter sends through an `AuthorizedSession` from
+  Application Default Credentials.
+- **The runbook** now enables `telemetry.googleapis.com` and grants the
+  runtime account `roles/telemetry.tracesWriter`. The proposal did not name
+  either.
+- **The allowlist** gained two booleans from reconciliation: `rescaled` and
+  `within_tolerance`. The numeric deviations are excluded, because they derive
+  from biometrics.
+- **The leak count.** The proposal listed four log lines. The RED found five
+  leak sources, below.
+
+### Commits on `feat/g10b-tracing`, from `main` at `0f84adb`
+
+- **`2ce1423` `build(deps)`.**
+  - `opentelemetry-api` is a core dependency; without an SDK it is a no-op.
+  - The `tracing` extra is installed in the image and in CI, and the SDK is in
+    the dev group for tests.
+  - `backend/requirements.txt` is re-exported and gains only
+    `opentelemetry-api`.
+- **`01603e9` `feat(telemetry)`.**
+  - A server span per request, named by its route template and continuing an
+    incoming W3C trace context.
+  - Five stage spans in `MealPlanningService`.
+  - `core/telemetry.py` holds the typed allowlist. `annotate()` refuses
+    unknown keys and wrong types. A failing stage records `error.type` only.
+  - `describe_failure()` gives logs the exception type and HTTP status.
+  - `route_template()` names requests in logs and spans.
+  - `TRACING_EXPORTER` takes `none`, `console` or `cloud_trace`;
+    `TRACE_SAMPLE_RATIO` is the sampling share.
+- **`97abf11` `docs(deploy)`.**
+  - `deploy.yml` sets `TRACING_EXPORTER=cloud_trace`.
+  - Changes to the runbook, README §7 and §8.1, and DEC-17 to DEC-19.
+  - `scripts/capture_trace.py` writes `docs/assets/sample_trace.json`: one
+    request span with five stage children, attributes only from the
+    allowlist.
+
+### Evidence
+
+**RED for the acceptance test.** `test_telemetry_redaction.py` puts a marker
+in every free-text and personal field. It drives seven paths: matched,
+fallback, infeasible, retrieval unavailable, provider failure under strict
+verification, hosted refusal, and an unexpected 500. Before the log fixes, all
+seven failed, on these leaks:
+
+| Scenario | What leaked |
+| --- | --- |
+| matched, fallback | `Locating supermarkets near: zq7markertown, NSW` |
+| infeasible | `... satisfies ['dairy', 'egg', 'kidney_disease', 'vegan'] for craving 'pasta zq7markercrave'` |
+| retrieval unavailable | the same groups, through the domain-error handler |
+| provider failure | `USDA lookup failed for ...: could not fetch https://api.nal.usda.gov/...?api_key=zq7marker-usda-key&...` |
+| hosted refusal, unexpected 500 | `/meal-plans/uid-zq7marker-1` in the handler's log line |
+
+The provider-failure fake raises an error that quotes its URL, as some HTTP
+libraries do. urllib's own errors do not, but the code logged whatever the
+exception said. **GREEN:** 29 new tests pass.
+
+**Mutation.** Restoring OpenTelemetry's default `record_exception=True` fails
+two tests:
+- the unit test for a failing stage;
+- the retrieval-unavailable scenario, because the exception event exports
+  `kidney_disease`.
+
+So the end-to-end test catches span leaks, not only log leaks.
+
+**A fixture pitfall, fixed.** The app's lifespan calls
+`telemetry.configure(settings)`, which with tracing off correctly installs no
+provider. A test provider installed *before* `TestClient` startup was
+therefore reset, and the first run captured no spans. Tests now install it
+after startup.
+
+**Tests:**
+- `uv run pytest --cov-fail-under=89`: **480 passed** (396 backend, 84
+  Streamlit), coverage **93.37%**, and `core/telemetry.py` at 100%.
+- One subprocess test proves that a default request never imports
+  `opentelemetry.sdk`.
+
+**Other checks:**
+- Ruff lint and format pass, and so do `git diff --check`, `uv lock --check`
+  and the CI requirements export (no drift).
+- `actionlint` 1.7.12 is clean on all three workflows.
+
+### Not verified, and residual risks
+
+- No span has reached real Cloud Trace. The exporter test proves a POST to
+  `telemetry.googleapis.com/v1/traces` through an `AuthorizedSession`, with a
+  stubbed transport. The real export needs the owner's GCP setup.
+- The image with `--extra tracing` is built only in CI. The local Docker disk
+  is full of unrelated images, which I did not prune.
+- Three residual risks, recorded in `AGENTS.md`:
+  - unexpected 500s log a traceback, including the exception's message;
+  - platform and access logs record full URLs (DEC-18);
+  - Cloud Run's CPU limits between requests can delay batched spans.
+- **Outside G10b, for Codex.** `meal_recommendation_agent.py:392` puts the
+  Gemini exception's text into the response's `metadata.warnings`. That is
+  response content, not telemetry, so I left it, but it is the same class of
+  problem. It runs only when a Gemini key is configured.
+
+**For Codex:** please review the allowlist, the seven scenarios, and whether
+any leak path is missing.
