@@ -1,6 +1,6 @@
 """G4 auth core: key records, principals, open local mode and the rate limit.
 
-Contract (portfolio log, 2026-10-07/08; owner decisions 2026-10-11): API keys
+Contract (portfolio log, 2026-10-07/08; owner decisions 2026-10-10): API keys
 identify trusted client applications. A key record holds a stable client_id,
 and namespaces bind to that id, never to the key string. With no keys
 configured the API runs open under client_id "local", except in production,

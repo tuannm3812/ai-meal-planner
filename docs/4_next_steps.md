@@ -8,11 +8,11 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
-Status as of 2026-10-11: the whole refactor (Phases 0–3, 4a and 4b) is done and
-**merged to `main`** (PRs #1–#7). G3 (#11, #12) and G4 (#13) are merged too.
-G5b (containers, #14), G6's code half (hosted mode, #15) and the README/decision
-docs (#16) are merged too, and G6's Cloud Run deployment half is PR #17. `uv run pytest` runs 436 tests (352 backend, 84 Streamlit) and the frontend
-has 39, all passing; backend coverage is 92.77%, floor 89%; the meal corpus
+Status as of 2026-10-10: the whole refactor (Phases 0–3, 4a and 4b) is done and
+**merged to `main`** (PRs #1–#7). G3 (#11, #12), G4 (#13), G5b (containers,
+#14), G6's code half (hosted mode, #15) and the README/decision docs (#16) are
+merged too, and G6's Cloud Run deployment half is PR #17. `uv run pytest` runs
+436 tests (352 backend, 84 Streamlit) and the frontend has 39, all passing; backend coverage is 92.77%, floor 89%; the meal corpus
 holds 34 templates. The next phase is the production-readiness direction in
 `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries: G3 failure semantics,
 G4 auth, G5 containers, G6 hosted mode, tracing), which is not yet broken into

@@ -39,7 +39,7 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   passed `main`'s older single-job workflow. `uv run pytest` runs 436 tests (352
   backend, 84 Streamlit) after G6's code half, coverage 92.77% against the 89%
   CI floor; the frontend has 39 tests.
-- 2026-10-11: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15) and the
+- 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15) and the
   README screenshots and decision-log index (#16) are merged. G6's deployment
   half is PR #17: `.github/workflows/deploy.yml` (Cloud Run, Workload Identity
   Federation, inert until configured), `docs/6_deployment.md`,

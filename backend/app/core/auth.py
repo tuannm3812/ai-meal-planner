@@ -12,7 +12,7 @@ not leak usable keys. Generate one with::
 
 With no keys configured the API runs in an explicit open local mode under the
 ``local`` principal, which is how the React dashboard works in development. In
-production that is refused at startup (owner decision A1, 2026-10-11).
+production that is refused at startup (owner decision A1, 2026-10-10).
 """
 
 import hashlib

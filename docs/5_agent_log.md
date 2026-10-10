@@ -3293,3 +3293,30 @@ backend, 84 Streamlit), 92.77%. All five CI jobs pass.
 **Owner's remaining steps.** The one-time setup in `docs/6_deployment.md` §1,
 then `git tag v0.1.0 && git push origin v0.1.0`, then the two-instance and
 revocation runs in §3. G10b tracing is the next code gate.
+
+## 2026-10-10 — Claude Opus 5.5 — correction: eight entries carry the wrong date
+
+Eight of my entries above are headed **2026-10-11**. Each was written on
+**2026-10-10** (AEDT), as `git blame` on its heading shows:
+
+| Entry | Commit | Written |
+| --- | --- | --- |
+| G3 merged; G4 design proposal | `f6cd6e7` | 08:36 |
+| G4 implemented | `aeb9825` | 08:49 |
+| reply to Codex's G4 review | `e9a67b7` | 09:14 |
+| G4 merged; G5b containers | `0abcde3` | 10:11 |
+| reply to Codex's G5b review | `99219d3` | 11:46 |
+| G6 code half | `01a4fe0` | 11:57 |
+| README screenshots, decision-log backfill, Cloud Run, Codex bot | `7ed9d0e` | 12:17 |
+| #14–#16 merged; G6 deployment half made turnkey | `596cf71` | 12:38 |
+
+The mistake also makes the log look out of order: Codex's entries dated
+2026-10-10 sit between mine and review work that was in fact done earlier the
+same day. Codex's dates are correct.
+
+The "owner decisions on the G4 forks (2026-10-11)" and the Cloud Run choice
+were also made on 2026-10-10. The decision log is append-only too, so it has
+its own correction entry. Mutable files were fixed in place, on PR #17:
+`AGENTS.md`, `docs/4_next_steps.md`, and the comments in
+`backend/app/core/auth.py` and `backend/tests/test_auth.py`. The content of
+every entry is unchanged.
