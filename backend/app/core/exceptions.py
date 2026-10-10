@@ -5,6 +5,8 @@ import logging
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
+from backend.app.core.instance import INSTANCE_HEADER, INSTANCE_ID
+
 logger = logging.getLogger(__name__)
 
 
@@ -150,6 +152,8 @@ def register_exception_handlers(app: FastAPI) -> None:
     @app.exception_handler(Exception)
     async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:
         logger.exception("Unhandled error on %s", request.url.path)
+        # Starlette sends this from outside every middleware, so the instance-id
+        # middleware never sees it; stamp it here.
         return JSONResponse(
             status_code=500,
             content={
@@ -157,4 +161,5 @@ def register_exception_handlers(app: FastAPI) -> None:
                 "error": "InternalServerError",
                 "detail": "An unexpected error occurred.",
             },
+            headers={INSTANCE_HEADER: INSTANCE_ID},
         )

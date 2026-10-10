@@ -89,6 +89,9 @@ jobs:
     # stack - /health facts, empty history, no baked-in secrets, an offline
     # meal plan, and the Streamlit client up against the API.
     runs-on: ubuntu-latest
+    # Two image builds and two hosted rehearsals take under two minutes; a hang
+    # fails the job instead of holding a runner for GitHub's six-hour default.
+    timeout-minutes: 20
     steps:
       - name: Check out repository
         uses: actions/checkout@v7

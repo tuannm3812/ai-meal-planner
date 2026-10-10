@@ -187,3 +187,13 @@ listens there, while Cloud Run defaults to 8080), and set `HOSTED_MODE=true`,
 cannot start since G4 without `API_KEYS`, so it is to be retired or fixed as a
 documented fallback. Rules out deploying without the container, and a
 single-instance host on which hosted mode would be untested.
+
+## 2026-10-10 — Correction: dates of DEC-7 to DEC-16
+
+The headings above for G4 (DEC-7 to DEC-9), G6 hosted mode (DEC-10), G5b
+(DEC-15) and the G6 deployment target (DEC-16), the "recorded" date on the G3
+group, and the index rows for DEC-7 to DEC-10, DEC-15 and DEC-16 say
+2026-10-11. All of those decisions were made, and recorded, on **2026-10-10**
+(AEDT), as the commits that added them show (`git log docs/3_decisions.md`).
+The owner's G4 choices (A1, B1) and the choice of Cloud Run were made that day
+too. The decisions themselves are unchanged.

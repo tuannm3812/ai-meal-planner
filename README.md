@@ -223,7 +223,12 @@ This serves the API at `http://localhost:8000` (`/health`, `/docs`) and Streamli
 - **Configuration.** `API_KEYS`, provider keys and `MEAL_PLANNER_API_KEY` are read from your shell or a `.env` file next to `compose.yaml`. Without `API_KEYS` the API runs in open local mode (see [8.1](#81-security)).
 - **Restart versus redeploy.** Restarting the same container keeps its history, because its writable layer survives. A redeploy creates a new container, which starts empty. That is what "stateless v1" means here.
 - **Hosted rehearsal.** `compose.hosted.yaml` runs two `HOSTED_MODE` instances behind one nginx URL, and `scripts/hosted_smoke.sh` checks that both refuse history. It rehearses the multi-instance shape and is not a deployment.
+- **Instance id.** Every response carries `X-Instance-Id`, a random per-process UUID, so a client can tell which instance answered.
 - **Smoke test.** `scripts/container_smoke.sh` builds the stack and checks it, the same way CI's `container` job does. It runs as its own compose project, on free ports and with its own image tag, so it never touches a stack you already have running. It also pins open, keyless, offline settings and ignores your `.env`. It checks `/health`, that history starts empty, that no secrets are baked in, that a meal plan generates offline, and that Streamlit is up.
+
+### 6.6 Deploy to Cloud Run
+
+Hosted deployments run on Cloud Run (DEC-16). `.github/workflows/deploy.yml` builds the image, deploys it with `HOSTED_MODE=true` and keys from Secret Manager, and then runs `scripts/live_check.sh` against the new revision. GitHub authenticates through Workload Identity Federation, so no long-lived keys are stored. The workflow does nothing until the one-time setup is done. [`docs/6_deployment.md`](docs/6_deployment.md) gives every command: project, service accounts, federation, secrets, the first deploy, the two-instance and revocation acceptance runs, and rollback. `scripts/new_api_key.py <client_id>` generates a key together with its `API_KEYS` record.
 
 ## 7. Configuration
 

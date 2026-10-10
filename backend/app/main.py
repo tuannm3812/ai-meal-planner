@@ -3,15 +3,17 @@
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
+from typing import Any
 
 import uvicorn
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 from backend.app.api.routes import calories, feedback, health, meal_plans
 from backend.app.core.config import AppSettings
 from backend.app.core.container import build_container
 from backend.app.core.exceptions import register_exception_handlers
+from backend.app.core.instance import INSTANCE_HEADER, INSTANCE_ID
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -35,6 +37,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 register_exception_handlers(app)
+
+
+@app.middleware("http")
+async def _instance_id_header(request: Request, call_next: Any) -> Response:
+    """Stamp every response with this process's INSTANCE_ID.
+
+    Unexpected 500s never pass through here: Starlette builds them outside all
+    middleware, so the catch-all handler in core/exceptions.py stamps them.
+
+    Args:
+        request: The incoming request.
+        call_next: The rest of the application.
+
+    Returns:
+        The response, with X-Instance-Id set.
+    """
+    response = await call_next(request)
+    response.headers[INSTANCE_HEADER] = INSTANCE_ID
+    return response
+
 
 app.include_router(health.router)
 app.include_router(meal_plans.router)
