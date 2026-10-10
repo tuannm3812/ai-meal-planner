@@ -11,6 +11,7 @@ from typing import Annotated
 
 from fastapi import Depends, Header
 
+from backend.app.core import telemetry
 from backend.app.core.auth import Principal
 from backend.app.core.container import ContainerDep
 from backend.app.core.exceptions import (
@@ -38,6 +39,7 @@ def require_scope(scope: str):  # noqa: ANN201 - returns a FastAPI dependency
         principal = container.auth.authenticate(x_api_key)
         if principal is None:
             raise AuthenticationRequired("missing or unknown X-API-Key")
+        telemetry.annotate({"client_id": principal.client_id})
         if scope not in principal.scopes:
             raise InsufficientScope(f"client {principal.client_id!r} lacks scope {scope!r}")
         # Open local mode is a single developer; only keyed clients are limited.
