@@ -21,7 +21,8 @@ from pathlib import Path
 import pytest
 
 REPO = Path(__file__).resolve().parents[2]
-SCRIPT = REPO / "scripts" / "container_smoke.sh"
+SCRIPTS = ["container_smoke.sh", "hosted_smoke.sh"]
+OPERATOR_KEYS = '[{"client_id": "real"}]'
 WATCHED = (
     "API_KEYS",
     "GEMINI_API_KEY",
@@ -46,9 +47,11 @@ exit 0
 """
 
 
-@pytest.fixture(name="run")
-def _run(tmp_path: Path) -> tuple[subprocess.CompletedProcess[str], list[str]]:
-    """Run the script with a hostile operator environment and a failing `up`."""
+@pytest.fixture(name="run", params=SCRIPTS)
+def _run(
+    request: pytest.FixtureRequest, tmp_path: Path
+) -> tuple[subprocess.CompletedProcess[str], list[str]]:
+    """Run each smoke script with a hostile operator environment and a failing `up`."""
     bin_dir = tmp_path / "bin"
     bin_dir.mkdir()
     fake = bin_dir / "docker"
@@ -62,7 +65,7 @@ def _run(tmp_path: Path) -> tuple[subprocess.CompletedProcess[str], list[str]]:
         "FAKE_DOCKER_LOG": str(log),
         # A developer's own configuration, which the smoke run must not inherit.
         "COMPOSE_PROJECT_NAME": "ai-meal-planner",
-        "API_KEYS": '[{"client_id": "real"}]',
+        "API_KEYS": OPERATOR_KEYS,
         "GEMINI_API_KEY": "real-gemini-key",
         "USDA_API_KEY": "real-usda-key",
         "FATSECRET_CLIENT_ID": "real-id",
@@ -71,10 +74,12 @@ def _run(tmp_path: Path) -> tuple[subprocess.CompletedProcess[str], list[str]]:
         "MEAL_PLANNER_API_KEY": "real-streamlit-key",
         "APP_ENV": "production",
     }
+    script = REPO / "scripts" / request.param
     result = subprocess.run(
-        ["bash", str(SCRIPT)], env=env, cwd=REPO, capture_output=True, text=True, timeout=60
+        ["bash", str(script)], env=env, cwd=REPO, capture_output=True, text=True, timeout=60
     )
-    return result, log.read_text().splitlines() if log.exists() else []
+    lines = log.read_text().splitlines() if log.exists() else []
+    return result, [f"SCRIPT {request.param}", *lines]
 
 
 def _compose_calls(lines: list[str]) -> list[str]:
@@ -139,15 +144,29 @@ def test_the_operators_keys_and_strictness_never_reach_compose(
 ) -> None:
     """What compose interpolates from: smoke-only values, not the operator's."""
     _, lines = run
-    seen = {}
+    script = lines[0].removeprefix("SCRIPT ")
+    seen: dict[str, set[str]] = {}
     for line in lines:
         if line.startswith("ENV "):
             name, _, value = line[4:].partition("=")
             seen.setdefault(name, set()).add(value)
 
-    for name in ("API_KEYS", "GEMINI_API_KEY", "USDA_API_KEY", "FATSECRET_CLIENT_ID"):
-        assert seen[name] == {""}, (name, seen[name])
-    assert seen["FATSECRET_CLIENT_SECRET"] == {""}
-    assert seen["MEAL_PLANNER_API_KEY"] == {""}
-    assert seen["REQUIRE_VERIFIED_NUTRITION"] == {"0"}
-    assert seen["APP_ENV"] == {"development"}
+    for name in (
+        "GEMINI_API_KEY",
+        "USDA_API_KEY",
+        "FATSECRET_CLIENT_ID",
+        "FATSECRET_CLIENT_SECRET",
+        "MEAL_PLANNER_API_KEY",
+    ):
+        assert seen[name] == {""}, (script, name, seen[name])
+    assert seen["REQUIRE_VERIFIED_NUTRITION"] == {"0"}, script
+    if script == "container_smoke.sh":
+        # Open, keyless local mode.
+        assert seen["API_KEYS"] == {""}
+        assert seen["APP_ENV"] == {"development"}
+    else:
+        # A throwaway key generated per run - never the operator's key list. (The
+        # hosted compose file pins APP_ENV=production itself.)
+        (keys,) = seen["API_KEYS"]
+        assert keys not in {"", OPERATOR_KEYS}
+        assert '"client_id": "smoke"' in keys

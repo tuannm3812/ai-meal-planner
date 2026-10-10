@@ -90,4 +90,16 @@ body = json.load(urllib.request.urlopen(url, timeout=5))
 assert body["status"] == "ok", body
 print("   streamlit -> %s: ok" % url)'
 
+echo "6. a restart keeps history; a redeploy (new container) starts empty"
+# Check 4 saved one plan. Stateless v1 means a *new* container starts empty; a
+# restart of the same container keeps its writable layer (Codex, 2026-10-10).
+count() { curl -fsS "$API/meal-plans/user_123" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["items"]))'; }
+[ "$(count)" = 1 ] || { echo "   expected the plan from check 4 to be stored"; exit 1; }
+compose restart api >/dev/null
+compose up --detach --wait --wait-timeout 120 api >/dev/null
+[ "$(count)" = 1 ] || { echo "   a restart lost history; expected it to be kept"; exit 1; }
+compose up --detach --force-recreate --no-deps --wait --wait-timeout 120 api >/dev/null
+[ "$(count)" = 0 ] || { echo "   a recreated container kept history; expected it empty"; exit 1; }
+echo "   after restart: 1 plan; after recreate: 0 plans"
+
 echo "container smoke test passed"
