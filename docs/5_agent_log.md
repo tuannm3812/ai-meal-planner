@@ -3669,3 +3669,136 @@ all revisions or instances. No merge or deployment was performed here.
 
 Only this append-only log entry was added, left uncommitted for Claude to
 record. No application changes or external review comments were made.
+
+## 2026-10-10 — Claude Opus 5.5 — PR #17 review closed; G10b tracing proposal (for owner and Codex)
+
+### PR #17: no open findings
+
+Codex's verification at `882349a` closes the last finding (`f409343` records
+it). In total, three rounds found four issues, and each is fixed with a
+regression test that failed first:
+
+- the union-of-instances P2 (`1b98aa6`);
+- the unexpected-500 header P3 (`6917998`);
+- unbounded requests and runs (`1b98aa6`, `0ee4ca3`);
+- discarded curl exit status and unwatched probes (`97ed125`).
+
+I agree with Codex's framing. Code review is closed, but G6 acceptance is not:
+the two-instance and revocation checks against the real Cloud Run service are
+the owner's, after the GCP setup. The live check proves the sampled instances,
+not an inventory of them. Merging #17 is the owner's call. It deploys nothing
+until `GCP_PROJECT_ID` is set.
+
+### G10b: proposal, no code yet
+
+**Source.** Direction item F (2026-10-07): OpenTelemetry spans around
+`MealPlanningService`'s stages, an optional dependency, and the app unchanged
+without it. The amendment (2026-10-07): "exports redacted metadata only, with
+a secret-marker test". The gate list adds that retention must be documented.
+
+**What the code does today.** On Cloud Run, stdout and stderr go to Cloud
+Logging, so these lines are already retained telemetry, and several carry
+request data:
+
+- `services/meal_planning_service.py:116` logs `NoFeasibleMeal`'s internal
+  message. That message names the constraint groups, which are derived from
+  `health_conditions` and `dietary_preferences`, and quotes the craving
+  (`agents/meal_recommendation_agent.py:205`).
+- `core/exceptions.py:145` logs every domain error's internal message. That
+  includes `RetrievalUnavailable`, which names the same constraint groups
+  (`meal_recommendation_agent.py:202`). It also logs `request.url.path`, which
+  carries `user_id` on the history routes.
+- `agents/supermarket_agent.py:81` logs the user's location.
+- `agents/nutrition_verification_agent.py:165/180` log ingredient names with
+  provider errors. That is low sensitivity, but the USDA key travels in that
+  call's query string (`:253`), so the failure path needs proof it never
+  reaches a log.
+
+Clean traces beside logs like these would not meet the gate. So the proposal
+puts traces and logs under **one rule: only allowlisted metadata leaves the
+process.**
+
+**Design.**
+
+1. **One module owns telemetry** (`core/telemetry.py`).
+   - Stage spans: `calorie.predict`, `meal.retrieve`, `nutrition.verify`,
+     `plan.reconcile` and `supermarket.list`, all under a request span.
+   - Allowlisted attributes, with typed values: `request_id`, `client_id`
+     (an application, not a person), `plan_status`, `nutrition_status`,
+     retrieval source, fallback used, ingredient count, per-provider outcome
+     (`ok`, `timeout`, `error`, `cooldown`, `skipped`), `model_version` and
+     `instance_id`.
+   - Never exported: `user_id`, the craving, health conditions, dietary
+     preferences, location, biometrics, values derived from them (the calorie
+     budget included), ingredient and meal names, and exception messages.
+   - A failing span records the exception *type* only. OpenTelemetry's default
+     `record_exception` would export the message and stack trace, including
+     `NoFeasibleMeal`'s detail.
+2. **No auto-instrumentation.** The FastAPI instrumentation records the raw
+   request path, and `/meal-plans/{user_id}` would export `user_id`. The
+   manual request span uses the route template instead.
+3. **Dependencies.**
+   - `opentelemetry-api` goes in the core dependencies. Without an SDK it is a
+     no-op, so "app unchanged without it" holds by construction.
+   - The SDK and a Google exporter go in an optional `tracing` extra, which the
+     image installs.
+   - `TRACING_EXPORTER` takes `none`, `console` or `cloud_trace`; the default
+     is `none`. `TRACE_SAMPLE_RATIO` defaults to 1.0, because traffic is small,
+     rate-limited and capped at three instances.
+   - At implementation I will pick between the Cloud Trace exporter and OTLP
+     to Google's Telemetry API, against Google's current guidance. Google
+     documents both ingestion paths.
+4. **Logs follow the same allowlist.**
+   - The infeasible, domain-error and supermarket lines log `request_id`, the
+     error type and code, and the route template, with no internal message or
+     location.
+   - Two things stay residual and documented: unexpected 500s still log a
+     traceback whose message the code does not control, and Cloud Run's own
+     request log records full URLs whatever the app does (decision B below).
+5. **Acceptance: the secret-marker test.**
+   - Every free-text and personal field of a keyed request carries a unique
+     marker: `user_id`, craving, health conditions, dietary preferences,
+     location, and distinctive biometric values. So do the API key and the
+     provider keys.
+   - The test runs the matched, fallback, infeasible, retrieval-unavailable
+     and provider-failure paths.
+   - It captures spans with the SDK's in-memory exporter, and every log record
+     from every logger at DEBUG.
+   - It asserts that no marker appears in a span name, attribute, event,
+     status description or formatted log message.
+   - It fails today on at least the four log lines above. That is the RED.
+6. **Retention**, checked against Google's documentation on 2026-10-10.
+   - Cloud Trace keeps spans 30 days by default.
+   - Cloud Logging's `_Default` bucket keeps logs 30 days by default,
+     configurable from 1 to 3,650 days, with a 7-day grace period when
+     shortened.
+   - Hosted mode stores no plans (G6).
+   - To be documented in `docs/6_deployment.md` and README §8.
+7. **Evidence.**
+   - The secret-marker test.
+   - One captured trace in `docs/`, from the console exporter on a local run.
+   - After the owner deploys, the same request viewed in Cloud Trace.
+
+**Owner decisions.**
+
+- **A. Export target.**
+  - Cloud Trace via OpenTelemetry (recommended).
+  - Structured logs only.
+  - Langfuse. Not recommended: a third-party processor for health-adjacent
+    data, and the direction tied it only to the optional Gemini step.
+- **B. `user_id` in URL paths.** Cloud Run logs request URLs at the platform.
+  - Document that `user_id` must be an opaque id, never an email or a name
+    (recommended: no API change).
+  - Move it out of the path. That is a breaking change for both clients.
+- **C. Retention.**
+  - Keep the 30-day defaults (recommended).
+  - Shorten log retention.
+
+**For Codex:** a review of the allowlist and of the secret-marker test's scope
+is welcome before implementation. In particular: is any allowlisted attribute
+personal in this domain, and is any leak path missing?
+
+**Verified / limits.** This entry is read-only analysis. It is based on `git
+grep` over `backend/app` and reads of the service, agents and exception
+handler. The retention figures come from Google's documentation (Cloud Trace
+quotas and overview; Cloud Logging "Configure log buckets"). No code changed.
