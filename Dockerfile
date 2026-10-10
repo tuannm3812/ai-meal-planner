@@ -33,7 +33,9 @@ COPY --chown=app:app streamlit_app streamlit_app
 COPY --chown=app:app models/calorie_expenditure models/calorie_expenditure
 COPY --chown=app:app data/meal_corpus data/meal_corpus
 COPY --chown=app:app data/reference data/reference
-# Writable, empty storage: history starts empty on every container start. /app
+# Writable, empty storage. A *new* container starts with empty history;
+# restarting the same container keeps its writable layer, so history survives a
+# restart but not a recreate or redeploy (Codex, 2026-10-10). /app
 # and data/ were created by root above; the non-root user needs them writable
 # (Streamlit writes under HOME=/app, and caches may be created under data/).
 RUN mkdir -p database && chown app:app /app /app/data database

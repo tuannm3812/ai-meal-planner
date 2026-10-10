@@ -211,7 +211,7 @@ This serves the API at `http://localhost:8000` (`/health`, `/docs`) and Streamli
 - **Dependencies.** The image installs from `uv.lock`, the single source behind the generated requirements files, so it resolves exactly the versions CI tests. Test tooling, the frontend, notebooks and all local data are left out. `.dockerignore` is an allowlist.
 - **No persisted history.** History lives inside the container and disappears when the container is removed. That is stateless v1; no volume is mounted, and no migration or data import runs.
 - **Configuration.** `API_KEYS`, provider keys and `MEAL_PLANNER_API_KEY` are read from your shell or a `.env` file next to `compose.yaml`. Without `API_KEYS` the API runs in open local mode (see [8.1](#81-security)).
-- **Smoke test.** `scripts/container_smoke.sh` builds the stack and checks it, the same way CI's `container` job does. It checks `/health`, that history starts empty, that no secrets are baked in, that a meal plan generates offline, and that Streamlit is up.
+- **Smoke test.** `scripts/container_smoke.sh` builds the stack and checks it, the same way CI's `container` job does. It runs as its own compose project, on free ports and with its own image tag, so it never touches a stack you already have running. It also pins open, keyless, offline settings and ignores your `.env`. It checks `/health`, that history starts empty, that no secrets are baked in, that a meal plan generates offline, and that Streamlit is up.
 
 ## 7. Configuration
 
