@@ -198,6 +198,21 @@ Local React development runs at:
 http://localhost:5173
 ```
 
+### 6.5 Docker
+
+One image runs the FastAPI backend. Compose runs the same image a second time as the Streamlit client in API mode, pointed at the backend:
+
+```bash
+docker compose up --build --wait
+```
+
+This serves the API at `http://localhost:8000` (`/health`, `/docs`) and Streamlit at `http://localhost:8501`.
+
+- **Dependencies.** The image installs from `uv.lock`, the single source behind the generated requirements files, so it resolves exactly the versions CI tests. Test tooling, the frontend, notebooks and all local data are left out. `.dockerignore` is an allowlist.
+- **No persisted history.** History lives inside the container and disappears when the container is removed. That is stateless v1; no volume is mounted, and no migration or data import runs.
+- **Configuration.** `API_KEYS`, provider keys and `MEAL_PLANNER_API_KEY` are read from your shell or a `.env` file next to `compose.yaml`. Without `API_KEYS` the API runs in open local mode (see [8.1](#81-security)).
+- **Smoke test.** `scripts/container_smoke.sh` builds the stack and checks it, the same way CI's `container` job does. It runs as its own compose project, on free ports and with its own image tag, so it never touches a stack you already have running. It also pins open, keyless, offline settings and ignores your `.env`. It checks `/health`, that history starts empty, that no secrets are baked in, that a meal plan generates offline, and that Streamlit is up.
+
 ## 7. Configuration
 
 Create `backend/.env` from `backend/.env.example` and adjust values as needed:
@@ -225,6 +240,8 @@ RATE_LIMIT_PER_MINUTE=60
 **Existing SQLite databases.** A database created before G4 has no `client_id` column, and there are no migrations, so the API refuses to start against one and names the file. Under stateless v1, delete `database/ai_meal_planner.db` and restart; it is recreated empty.
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
+
+`HOSTED_MODE` is reported by `/health` and defaults off. It is reserved for G6, which will disable history on hosted deployments; until then, setting it to true stops the API at startup.
 
 `STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported once with `uv run python scripts/migrate_json_to_sqlite.py`. That script is not idempotent, so running it twice duplicates every record. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
 

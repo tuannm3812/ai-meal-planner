@@ -79,6 +79,7 @@ async def health_check(container: ContainerDep) -> HealthResponse:
                 settings.fatsecret_client_id and settings.fatsecret_client_secret
             ),
             "storage_backend": settings.storage_backend,
+            "hosted_mode": settings.hosted_mode,
             "history_store": _store_path(settings, "meal_history.json"),
             "feedback_store": _store_path(settings, "meal_feedback.json"),
             "calorie_model_configured": bool(container.calorie_agent.model),

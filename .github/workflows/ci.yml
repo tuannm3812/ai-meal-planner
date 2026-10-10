@@ -83,3 +83,15 @@ jobs:
 
       - name: Build
         run: npm run build
+
+  container:
+    # G5b: build the image from a clean checkout and smoke-test the compose
+    # stack - /health facts, empty history, no baked-in secrets, an offline
+    # meal plan, and the Streamlit client up against the API.
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Build and smoke-test the compose stack
+        run: scripts/container_smoke.sh

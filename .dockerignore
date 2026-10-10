@@ -1,0 +1,20 @@
+# Allowlist: nothing enters the build context unless named below. This keeps
+# local data (database/*.json, *.db), secrets (.env, .streamlit/secrets.toml),
+# the venv, the frontend and notebooks out of the image by construction.
+*
+!pyproject.toml
+!uv.lock
+!backend/__init__.py
+!backend/app
+!streamlit_app
+!models/calorie_expenditure/calorie_expenditure_model.joblib
+!models/calorie_expenditure/metrics.json
+!models/calorie_expenditure/feature_schema.json
+!data/meal_corpus/meals.json
+!data/reference/*.json
+
+# Re-exclude inside the allowlisted trees.
+**/__pycache__
+**/*.pyc
+streamlit_app/tests
+streamlit_app/.streamlit/secrets.toml

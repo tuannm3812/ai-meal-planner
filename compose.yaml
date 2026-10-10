@@ -1,0 +1,63 @@
+# G5b: the API and the Streamlit client, from a clean clone:
+#
+#   docker compose up --build --wait
+#
+# then http://localhost:8000/health and http://localhost:8501.
+#
+# The API runs in open local mode unless API_KEYS is set in your shell or a
+# .env file beside this one (see README section 8.1). No volume is mounted:
+# history lives inside the container and is lost when it is removed, which is
+# stateless v1.
+#
+# API_PORT, UI_PORT and MEAL_PLANNER_IMAGE default to 8000, 8501 and
+# ai-meal-planner:local; scripts/container_smoke.sh overrides all three, plus the
+# project name, so a smoke run never touches this stack.
+name: ai-meal-planner
+
+services:
+  api:
+    build: .
+    image: ${MEAL_PLANNER_IMAGE:-ai-meal-planner:local}
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      STORAGE_BACKEND: ${STORAGE_BACKEND:-sqlite}
+      API_KEYS: ${API_KEYS:-}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-60}
+      REQUIRE_VERIFIED_NUTRITION: ${REQUIRE_VERIFIED_NUTRITION:-0}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      USDA_API_KEY: ${USDA_API_KEY:-}
+      FATSECRET_CLIENT_ID: ${FATSECRET_CLIENT_ID:-}
+      FATSECRET_CLIENT_SECRET: ${FATSECRET_CLIENT_SECRET:-}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-http://localhost:5173,http://localhost:8501}
+    ports:
+      - "${API_PORT:-8000}:8000"
+
+  streamlit:
+    image: ${MEAL_PLANNER_IMAGE:-ai-meal-planner:local}
+    command:
+      - streamlit
+      - run
+      - streamlit_app/app.py
+      - --server.address=0.0.0.0
+      - --server.port=8501
+      - --server.headless=true
+    environment:
+      # API mode against the api service; the key is bound to this URL.
+      STREAMLIT_DEMO_MODE: "0"
+      API_BASE_URL: http://api:8000
+      MEAL_PLANNER_API_KEY: ${MEAL_PLANNER_API_KEY:-}
+    ports:
+      - "${UI_PORT:-8501}:8501"
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD
+        - python
+        - -c
+        - "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 3s
+      start_period: 20s
+      retries: 5
