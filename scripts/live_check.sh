@@ -31,7 +31,10 @@ trap 'rm -rf "$WORK"' EXIT
 # One request; records "<status> <code> <instance>" on one line in $WORK/$label.
 probe() {
   local label="$1" method="$2" path="$3" key="$4" body="${5:-}"
-  local out="$WORK/$label.$RANDOM$RANDOM" headers=(-H 'Content-Type: application/json')
+  # mktemp, not $RANDOM: parallel subshells can share a RANDOM sequence, and two
+  # probes writing the same file corrupt each other's status lines (seen in CI).
+  local out headers=(-H 'Content-Type: application/json')
+  out="$(mktemp "$WORK/$label.XXXXXX")"
   [ -n "$key" ] && headers+=(-H "X-API-Key: $key")
   local data=()
   [ -n "$body" ] && data=(-d "$body")
