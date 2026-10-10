@@ -29,7 +29,7 @@ PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectN
 
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com \
   secretmanager.googleapis.com iam.googleapis.com iamcredentials.googleapis.com \
-  sts.googleapis.com telemetry.googleapis.com
+  sts.googleapis.com telemetry.googleapis.com cloudtrace.googleapis.com
 
 gcloud artifacts repositories create ai-meal-planner \
   --repository-format=docker --location="$REGION"
@@ -39,6 +39,13 @@ gcloud artifacts repositories create ai-meal-planner \
 
 The runtime identity reads the key secret and writes traces, nothing more. The
 deploy identity can push images and deploy, and nothing else.
+
+The trace roles are those in Google's Telemetry API trace reference:
+- `roles/telemetry.tracesWriter` holds only `telemetry.traces.write`, so it is
+  used in place of the broader `roles/telemetry.writer`, which also writes
+  logs and metrics.
+- `roles/serviceusage.serviceUsageConsumer` is needed on the quota project.
+  For a service account, that is the account's own project.
 
 ```bash
 gcloud iam service-accounts create meal-planner-runtime
@@ -55,7 +62,12 @@ gcloud iam service-accounts add-iam-policy-binding "$RUNTIME_SA" \
   --member="serviceAccount:$DEPLOYER_SA" --role=roles/iam.serviceAccountUser
 gcloud projects add-iam-policy-binding "$PROJECT_ID" \
   --member="serviceAccount:$RUNTIME_SA" --role=roles/telemetry.tracesWriter
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:$RUNTIME_SA" --role=roles/serviceusage.serviceUsageConsumer
 ```
+
+**The Cloud Trace API must stay enabled.** Google checks it before storing
+spans sent to the Telemetry API, and discards them if it is disabled.
 
 ### Workload Identity Federation (GitHub → Google, no stored keys)
 
@@ -174,7 +186,9 @@ This requires `min_instances=2` to still be in effect.
   Each request is one trace: a `METHOD /route-template` span with one child per
   stage (`calorie.predict`, `meal.retrieve`, `nutrition.verify`,
   `plan.reconcile`, `supermarket.list`). Spans carry only the allowlisted
-  attributes in `backend/app/core/telemetry.py`. Cloud Run limits CPU outside
+  attributes in `backend/app/core/telemetry.py`. An incoming `traceparent` is
+  continued, so the span joins Cloud Run's request trace. The caller's
+  `tracestate` and `baggage` headers are not read (DEC-20). Cloud Run limits CPU outside
   requests by default, so batched spans can wait for the next request or for
   shutdown before they are sent. That is acceptable at this traffic level.
 - **Retention**, from Google's documentation as of 2026-10-10:
