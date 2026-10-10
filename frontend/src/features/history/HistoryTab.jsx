@@ -125,7 +125,7 @@ function HistoryTab() {
         {error && <div className="mt-5"><ErrorBanner>{error}</ErrorBanner></div>}
       </aside>
 
-      <div className="grid gap-6">
+      <div className="grid content-start gap-6">
         <SectionCard eyebrow="Records" title="Meal History">
           {!mealHistory && (
             <p className="py-8 text-center text-sm text-gray-500">

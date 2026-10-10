@@ -35,6 +35,16 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 - Cached USDA/FatSecret nutrition lookups with automatic per-provider cooldown after repeated failures, so a slow or misconfigured provider degrades gracefully instead of stalling every request
 - Streamlit demo and React dashboard, both covering meal plan generation, calorie prediction, and meal/feedback history
 
+### Screenshots
+
+| React dashboard: meal plan | React dashboard: calorie prediction |
+| --- | --- |
+| ![React meal plan: structured meal, verified macros and a priced grocery list](docs/assets/screenshots/react-meal-plan.png) | ![React calorie prediction from the promoted Kaggle model](docs/assets/screenshots/react-calories.png) |
+| **React dashboard: history** | **Streamlit demo (backend in-process, no API server)** |
+| ![React history, labelled as not persisted](docs/assets/screenshots/react-history.png) | ![Streamlit demo with retrieval notes and the RAG retrieval contract](docs/assets/screenshots/streamlit-demo.png) |
+
+Captured from a local stack, keyless and offline, with `scripts/capture_screenshots.py`. Number fields follow the capture machine's region setting.
+
 ## 3. Tech Stack
 
 - Backend: Python, FastAPI, Pydantic, Uvicorn

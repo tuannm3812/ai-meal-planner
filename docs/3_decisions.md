@@ -1,7 +1,29 @@
 # Decision Log
 
 Dated, append-only. Each entry records what was chosen and what it ruled out.
-Correct an entry by adding a new one, never by rewriting it.
+Correct an entry by adding a new one, never by rewriting it. The index below is
+navigation only: add a row for each new entry. The agent log
+(`docs/5_agent_log.md`) records *how* work was done and verified; this file
+records *what was decided and why*, briefly enough to read in one sitting.
+
+| DEC | Decision | Date |
+| --- | --- | --- |
+| 1 | Portfolio-first, built for a later transition to real users | 2026-09-10 |
+| 2 | Streamlit demo imports the real backend in-process | 2026-09-10 |
+| 3 | Foundation-first sequencing, calorie wiring pulled forward | 2026-09-10 |
+| 4 | Repository Protocol plus a SQLite implementation | 2026-09-10 |
+| 5 | Docs reshaped to Shape B in one atomic commit | 2026-09-10 |
+| 6 | Both requirements files are generated from `uv.lock` | 2026-09-10 |
+| 7 | Trusted-client API keys before OIDC | 2026-10-11 |
+| 8 | Open local mode without keys; production refuses it | 2026-10-11 |
+| 9 | A real `client_id` column; old SQLite schemas refused | 2026-10-11 |
+| 10 | Hosted mode refuses history instead of instance-local reads | 2026-10-11 |
+| 11 | No safe meal is a typed 200 (`plan_status: infeasible`), not an error | 2026-10-10 |
+| 12 | Hard constraints on every return path, through one shared rule | 2026-10-08 |
+| 13 | Nutrition provenance is separate from verification status | 2026-10-10 |
+| 14 | Strict nutrition verification is opt-in | 2026-10-10 |
+| 15 | One image from `uv.lock`; smoke tests isolated from the operator | 2026-10-11 |
+| 16 | Cloud Run is the hosted target | 2026-10-11 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -94,3 +116,74 @@ plans, rather than offering reads that would differ from one instance to the
 next. Rules out best-effort cross-instance reads, which cannot be described
 honestly (portfolio log, 2026-10-08, point 2). Durable shared storage is the
 later phase that would lift this.
+
+## 2026-10-08 to 2026-10-10 — G3 failure semantics (recorded 2026-10-11)
+
+Recorded retroactively: these were agreed in the portfolio log and implemented
+in PRs #9, #11 and #12, but lived only in the agent log until now. Sources: the
+agent-log entries of those dates.
+
+### DEC-11 — No safe meal is a typed 200 (`plan_status: infeasible`), not an error
+
+Every meal response carries `plan_status` (`matched`, `fallback` or
+`infeasible`). "No meal satisfies these constraints" is an answer: HTTP 200,
+the calorie budget kept, the meal sections null, and a client-safe
+`infeasible_reason`. It is reported only once the corpus *and* the fallback
+templates are exhausted; a safe low-relevance corpus meal is served first.
+Unavailable retrieval stays an error (503), because infeasibility is unproven.
+Rules out the interim 422, and any status that conflates "no safe meal" with
+"could not look".
+
+### DEC-12 — Hard constraints on every return path, through one shared rule
+
+Retrieval selection, retrieval substitution and the deterministic fallback all
+use `rules.safe_substitution`. A substitution rule is trusted only for the
+groups it is written for; its replacement must be safe under every other
+constraint (tofu to chickpeas fixes a soy allergy, not kidney disease). Rules
+out per-path constraint logic, which is how the fallback once ignored health
+conditions entirely.
+
+### DEC-13 — Nutrition provenance is separate from verification status
+
+Each ingredient keeps its `data_source` and gains a derived `verification`
+(`verified_external`, `trusted_local`, `estimated`); each meal reports
+`nutrition_status` (`verified` or `mixed`) and the `sources` used. An
+all-estimated meal reports `mixed`, per the agreed rule; an `estimated`
+aggregate would be a later, explicit amendment. Rules out the vague aggregate
+string `usda_fatsecret_or_estimated`.
+
+### DEC-14 — Strict nutrition verification is opt-in
+
+`REQUIRE_VERIFIED_NUTRITION` (default off) makes any estimated ingredient fail
+the request: `502`, code `unverified_required`. Off by default so the keyless
+demo always produces plans. Both the API and the Streamlit demo parse it with
+the same pydantic boolean rules. Rules out silently serving estimates where an
+operator demanded verified data, and failing the keyless demo by default.
+
+## 2026-10-11 — G5b containers
+
+### DEC-15 — One image from `uv.lock`; smoke tests isolated from the operator
+
+A single multi-stage image, built from `uv.lock` (so DEC-6 holds), runs the
+API and, through compose, the Streamlit client. `.dockerignore` is an
+allowlist, so local history and secrets cannot enter an image. History lives
+inside the container and is lost on redeploy (stateless v1). The smoke tests
+run as their own compose project with pinned, keyless, offline settings, and
+are verified in CI from a clean checkout. Rules out a second dependency source
+for the image, and smoke tests that could reuse or delete a developer's stack.
+
+## 2026-10-11 — G6 deployment target
+
+### DEC-16 — Cloud Run is the hosted target
+
+Owner's choice, 2026-10-11. Chosen because the G5b image deploys unchanged; it
+is the target `docs/2_architecture.md` already names; it scales to zero and runs
+several instances, which is the shape hosted mode (DEC-10) was designed for;
+`API_KEYS` can come from Secret Manager; and deploys can run from GitHub Actions
+through Workload Identity Federation with no long-lived credentials.
+Consequences: the service must set its container port to 8000 (the image
+listens there, while Cloud Run defaults to 8080), and set `HOSTED_MODE=true`,
+`APP_ENV=production` and `API_KEYS`. Render (`render.yaml`) is superseded; it
+cannot start since G4 without `API_KEYS`, so it is to be retired or fixed as a
+documented fallback. Rules out deploying without the container, and a
+single-instance host on which hosted mode would be untested.
