@@ -135,7 +135,8 @@ gh workflow run deploy.yml -f min_instances=2 -f expect_instances=2
 Each check (each of the four history and feedback routes, and anonymous calls)
 must on its own be answered by at least two distinct `X-Instance-Id` values. A
 response without an id counts for none. Each request has 60 seconds
-(`REQUEST_TIMEOUT`), and a request that stalls or fails counts as a failure.
+(`REQUEST_TIMEOUT`) to complete. A request that stalls, fails or is cut short
+counts as a failure, even if its status and body looked right so far.
 This is a sample: it proves that the instances which answered behave correctly,
 not that no other instance or revision exists. Afterwards, redeploy normally
 (`min_instances` defaults to 0) so idle instances stop billing.

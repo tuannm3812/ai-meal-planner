@@ -20,8 +20,9 @@
 # - with OLD_KEY, the revoked key gets 401.
 # Every fanned-out check must, on its own, be answered by at least
 # EXPECT_INSTANCES distinct instances; a response without an instance id counts
-# for none. Every request must be answered within REQUEST_TIMEOUT: a stalled,
-# refused or dropped request fails the check. This is a sample, so it proves the instances
+# for none. Every request must be answered in full within REQUEST_TIMEOUT: a
+# stalled, refused, dropped or cut-short transfer fails the check, even if its
+# status and body looked right so far. This is a sample, so it proves the instances
 # that answered, not that no other instance or revision exists.
 set -euo pipefail
 
@@ -44,23 +45,31 @@ probe() {
   [ -n "$key" ] && headers+=(-H "X-API-Key: $key")
   local data=()
   [ -n "$body" ] && data=(-d "$body")
+  local rc=0
   curl -sS "${CURL_LIMITS[@]}" -o "$out.body" -D "$out.head" -X "$method" "$URL$path" \
-    "${headers[@]}" ${data[@]+"${data[@]}"} || true
+    "${headers[@]}" ${data[@]+"${data[@]}"} || rc=$?
   local status code instance
   status="$(head -1 "$out.head" | awk '{print $2}')"
   code="$(python3 -c 'import json,sys
 try: print(json.load(open(sys.argv[1])).get("code") or "-")
 except Exception: print("-")' "$out.body")"
   instance="$(tr -d '\r' < "$out.head" | awk -F': ' 'tolower($1)=="x-instance-id"{print $2}')"
+  # A failed transfer is a failed answer, however right its first bytes look:
+  # curl exits non-zero when it times out (28) or the body is cut short (18).
+  [ "$rc" -eq 0 ] || status="curl-exit-$rc"
   echo "${status:-no-response} $code ${instance:--}" >> "$WORK/$label"
 }
 
-# Send REQUESTS copies in parallel. Every one must match, and this check alone
-# must reach EXPECT_INSTANCES distinct instance ids.
+# Send REQUESTS copies in parallel. Every probe must finish, every transfer must
+# complete and match, and this check alone must reach EXPECT_INSTANCES ids.
 fan_out() {
   local label="$1" want_status="$2" want_code="$3"; shift 3
-  for _ in $(seq 1 "$REQUESTS"); do probe "$label" "$@" & done
-  wait
+  local pids=() pid died=0
+  for _ in $(seq 1 "$REQUESTS"); do probe "$label" "$@" & pids+=("$!"); done
+  # Each probe's own exit status: a bare `wait` ignores it, and a probe that died
+  # before recording its answer would silently shrink the sample.
+  for pid in "${pids[@]}"; do wait "$pid" || died=$((died + 1)); done
+  [ "$died" -eq 0 ] || { echo "   $label: $died probe(s) did not finish"; exit 1; }
   local bad distinct
   bad="$(awk -v s="$want_status" -v c="$want_code" '$1!=s || (c!="*" && $2!=c)' "$WORK/$label")"
   [ -z "$bad" ] || { echo "   $label: unexpected responses:"; echo "$bad" | sort | uniq -c; exit 1; }

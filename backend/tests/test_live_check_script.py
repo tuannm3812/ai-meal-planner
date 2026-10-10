@@ -5,7 +5,9 @@ Codex, 2026-10-10 (P2 on PR #17): `scripts/live_check.sh` required the
 EXPECT_INSTANCES, counted a missing id as an instance, and never required it
 of the anonymous sample. A deployment where one route was only ever seen on one
 instance still passed. Codex's follow-up: no request had a time limit, so a
-stalled response held the check open instead of failing it.
+stalled response held the check open instead of failing it. Its verification
+(P2 on 90164d6): curl's exit status was discarded, so a transfer that timed out
+or was cut short after a correct status, id and JSON code still counted.
 
 These tests run the real script against a local HTTP fixture that plays a
 hosted deployment and attributes each response to a chosen instance. No Docker
@@ -15,6 +17,7 @@ there are no others.
 
 import json
 import os
+import shutil
 import socketserver
 import subprocess
 import threading
@@ -66,7 +69,10 @@ def _deployment(behaviour: dict[str, str], default: str = "both") -> Iterator[st
     - only-a / only-b: always that instance;
     - missing: alternate instance a and no X-Instance-Id at all;
     - stall: alternate a and b, but every third answer takes 5 seconds;
-    - drop: alternate a and b, but every third request is closed unanswered.
+    - drop: alternate a and b, but every third request is closed unanswered;
+    - late-stall / truncate: alternate a and b, but every third answer sends its
+      status, id and complete JSON while promising ten more bytes, then stalls
+      (late-stall) or closes the connection (truncate).
 
     Stalling every third request leaves both instances among the rest, so a
     check that left the stalled ones out of its sample would still see two.
@@ -94,14 +100,20 @@ def _deployment(behaviour: dict[str, str], default: str = "both") -> Iterator[st
                 instance = None
             status, body = _answer(check)
             payload = json.dumps(body).encode()
+            short = mode in {"late-stall", "truncate"} and third
             try:
                 self.send_response(status)
                 self.send_header("Content-Type", "application/json")
-                self.send_header("Content-Length", str(len(payload)))
+                self.send_header("Content-Length", str(len(payload) + (10 if short else 0)))
                 if instance:
                     self.send_header("X-Instance-Id", f"instance-{instance}")
                 self.end_headers()
                 self.wfile.write(payload)
+                if short:
+                    self.wfile.flush()
+                    if mode == "late-stall":
+                        time.sleep(5)
+                    self.close_connection = True
             except (BrokenPipeError, ConnectionResetError):
                 pass  # the client gave up: that is what a stall test expects
 
@@ -123,7 +135,9 @@ def _deployment(behaviour: dict[str, str], default: str = "both") -> Iterator[st
         server.server_close()
 
 
-def _live_check(url: str, *, revocation: bool = True) -> subprocess.CompletedProcess[str]:
+def _live_check(
+    url: str, *, revocation: bool = True, **extra_env: str
+) -> subprocess.CompletedProcess[str]:
     env = {
         **os.environ,
         "MEAL_PLANNER_KEY": KEY,
@@ -131,6 +145,7 @@ def _live_check(url: str, *, revocation: bool = True) -> subprocess.CompletedPro
         "EXPECT_INSTANCES": "2",
         "REQUESTS": "4",
         "REQUEST_TIMEOUT": "2",
+        **extra_env,
     }
     return subprocess.run(
         ["bash", str(SCRIPT), url], env=env, capture_output=True, text=True, timeout=60
@@ -189,4 +204,57 @@ def test_an_unanswered_request_fails_the_check(mode: str) -> None:
 
     assert result.returncode != 0, result.stdout
     assert "meal-plans: unexpected responses" in result.stdout
+    assert "live check passed" not in result.stdout
+
+
+@pytest.mark.parametrize("mode", ["late-stall", "truncate"])
+def test_a_failed_transfer_fails_even_when_what_arrived_looks_right(mode: str) -> None:
+    """Codex's reproduction: 501, the instance id and complete JSON arrive, then
+    the transfer times out (curl exit 28) or is cut short (exit 18)."""
+    with _deployment({"meal-plans": mode}) as url:
+        result = _live_check(url)
+
+    assert result.returncode != 0, result.stdout
+    assert "meal-plans: unexpected responses" in result.stdout
+    assert "curl-exit-" in result.stdout
+    assert "live check passed" not in result.stdout
+
+
+# Stands in for python3 on PATH: the first meal-plans probe to parse its result
+# fails, as a probe can if anything in it errors under `set -e`.
+FAKE_PYTHON3 = """#!/usr/bin/env bash
+for arg in "$@"; do
+  case "$arg" in
+    */meal-plans.*) mkdir "$CRASH_ONCE" 2>/dev/null && exit 1 ;;
+  esac
+done
+exec "$REAL_PYTHON3" "$@"
+"""
+
+
+def test_a_probe_that_dies_fails_the_check(tmp_path: Path) -> None:
+    """A probe that exits without recording a line must not shrink the sample.
+
+    The other three meal-plans answers still come from both instances, so only
+    the probe's own exit status can reveal the loss.
+    """
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    fake = bin_dir / "python3"
+    fake.write_text(FAKE_PYTHON3)
+    fake.chmod(0o755)
+    real_python3 = shutil.which("python3")
+    assert real_python3 is not None
+
+    with _deployment({}) as url:
+        result = _live_check(
+            url,
+            PATH=f"{bin_dir}{os.pathsep}{os.environ['PATH']}",
+            REAL_PYTHON3=real_python3,
+            CRASH_ONCE=str(tmp_path / "crashed"),
+        )
+
+    assert (tmp_path / "crashed").is_dir(), "precondition: one probe was made to fail"
+    assert result.returncode != 0, result.stdout
+    assert "meal-plans: 1 probe(s) did not finish" in result.stdout
     assert "live check passed" not in result.stdout
