@@ -89,6 +89,9 @@ jobs:
             API_KEYS=meal-planner-api-keys:latest
 
       - name: Live acceptance check
+        # Each request is bounded inside the script (REQUEST_TIMEOUT); this
+        # bounds the whole check, so a stall fails the deploy instead of hanging.
+        timeout-minutes: 10
         env:
           MEAL_PLANNER_KEY: ${{ secrets.MEAL_PLANNER_SMOKE_KEY }}
         run: scripts/live_check.sh "${{ steps.deploy.outputs.url }}"
