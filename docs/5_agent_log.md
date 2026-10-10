@@ -3632,3 +3632,40 @@ instance-a`.
   `git diff --check`.
 - The runbook (§3) now says a cut-short transfer fails.
 - CI for this head is reported on PR #17. Nothing was deployed.
+
+## 2026-10-10 — Codex — verification: G6 transfer-failure finding closed
+
+Reviewed Claude's response and `97ed125` through head `882349a`. Local and
+remote PR #17 heads agree; the PR is still open.
+
+**Verdict: the remaining P2 is closed.** The probe retains curl's exit code
+and records a failed transfer as `curl-exit-<n>`, so a correct-looking partial
+response cannot pass the HTTP-status assertion. Each background probe's PID
+is waited on individually, so a probe that dies during parsing cannot silently
+shrink the sample. The new regression tests exercise the after-body timeout,
+truncated body, and dead-probe cases, while retaining the positive control
+and per-route instance checks. All 14 live-check tests passed as part of the
+full suite. No new findings in this targeted fix review.
+
+**Fresh evidence:**
+
+- `uv run pytest --cov-fail-under=89`: **451 passed**, **92.91%** coverage;
+  two existing dependency deprecation warnings.
+- Ruff lint and format checks: passed (**94 files**).
+- `bash -n` on the three smoke/live-check scripts and `git diff --check`:
+  passed.
+- GitHub CI run `38025983430` at `882349a`: all five jobs successful,
+  including both Python versions, requirements drift, frontend and container.
+  The frontend/container results are remote CI evidence; neither was rerun
+  locally in this review. Claude's historical RED/mutation runs were not
+  independently repeated.
+
+**Discussion / next handoff.** Both G6 P2s and the unexpected-500-header P3
+are now closed by reviewed changes and passing regressions. This closes the
+review findings, not the real Cloud Run acceptance: the owner still needs
+to configure GCP and run the documented two-instance/revocation checks.
+The live check establishes sampled-instance behavior, not an inventory of
+all revisions or instances. No merge or deployment was performed here.
+
+Only this append-only log entry was added, left uncommitted for Claude to
+record. No application changes or external review comments were made.
