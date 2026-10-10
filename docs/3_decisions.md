@@ -24,6 +24,9 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 14 | Strict nutrition verification is opt-in | 2026-10-10 |
 | 15 | One image from `uv.lock`; smoke tests isolated from the operator | 2026-10-11 |
 | 16 | Cloud Run is the hosted target | 2026-10-11 |
+| 17 | Traces go to Cloud Trace over OTLP; traces and logs export allowlisted metadata only | 2026-10-10 |
+| 18 | `user_id` stays in history paths and must be opaque | 2026-10-10 |
+| 19 | Keep the 30-day trace and log retention defaults | 2026-10-10 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -197,3 +200,54 @@ group, and the index rows for DEC-7 to DEC-10, DEC-15 and DEC-16 say
 (AEDT), as the commits that added them show (`git log docs/3_decisions.md`).
 The owner's G4 choices (A1, B1) and the choice of Cloud Run were made that day
 too. The decisions themselves are unchanged.
+
+## 2026-10-10 — G10b tracing and telemetry redaction
+
+Source: the 2026-10-07 production-readiness direction (item F and its
+amendment) and the G10b proposal in `docs/5_agent_log.md` (2026-10-10). The
+owner chose the recommended option on each fork the same day.
+
+### DEC-17 — Traces go to Cloud Trace over OTLP; traces and logs export allowlisted metadata only
+
+OpenTelemetry spans wrap each request and each `MealPlanningService` stage.
+They are exported, when `TRACING_EXPORTER=cloud_trace`, over OTLP/HTTP to
+Google's Telemetry API (`telemetry.googleapis.com`), authenticated with
+Application Default Credentials. Google documents this as the recommended
+ingestion path. Spans carry only attributes on a typed allowlist
+(`core/telemetry.py`), and a failing span records the exception type and never
+its message. Logs follow the same rule, because on Cloud Run they are retained
+telemetry too. Request log lines use route templates, error types and codes,
+and provider failures log their type and HTTP status only.
+
+Only `opentelemetry-api` is a core dependency. It is a no-op without an SDK,
+so with tracing off nothing is recorded and the SDK is never imported. The SDK
+and the exporter are the `tracing` extra, which the image installs.
+
+The secret-marker test is the evidence (`test_telemetry_redaction.py`).
+Before the change it found five leaks:
+- the location;
+- the constraint groups, `kidney_disease` included, and the craving;
+- the USDA key in a logged URL;
+- `user_id` in logged paths.
+
+Rules out: Langfuse (a third-party processor for health-adjacent data);
+FastAPI auto-instrumentation (it records the raw path, which carries
+`user_id`); exception events on spans; and Google's older Cloud Trace
+exporter.
+
+### DEC-18 — `user_id` stays in history paths and must be opaque
+
+The history routes keep `/{user_id}` in the path. Cloud Run's platform request
+log, and the server's access log, record full URLs, which the app cannot
+redact. So `user_id` is documented as an opaque identifier, never an email
+address or a name (README §8.1). Rules out moving it out of the path, a
+breaking change for both clients.
+
+### DEC-19 — Keep the 30-day trace and log retention defaults
+
+Cloud Trace keeps spans for 30 days. Cloud Logging's `_Default` bucket keeps
+logs for 30 days by default, configurable from 1 to 3,650 days. Both were
+checked against Google's documentation on 2026-10-10. Hosted mode stores no
+meal plans or feedback (DEC-10), so telemetry is the only retained request
+record, and it holds allowlisted metadata only. Rules out a custom retention
+period for v1. The command to shorten it is in `docs/6_deployment.md` §4.

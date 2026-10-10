@@ -11,6 +11,7 @@ What runs where:
 | API image | Artifact Registry | Built from `Dockerfile` by `.github/workflows/deploy.yml` |
 | API service | Cloud Run | `HOSTED_MODE=true`, `APP_ENV=production`, port 8000, 0–3 instances |
 | `API_KEYS` | Secret Manager | Hashed key records only (README §8.1) |
+| Traces | Cloud Trace | `TRACING_EXPORTER=cloud_trace`; allowlisted metadata only (DEC-17) |
 | Deploy identity | Workload Identity Federation | No long-lived keys in GitHub |
 | Acceptance | `scripts/live_check.sh` | Runs after every deploy; the same script CI runs against its nginx rehearsal |
 
@@ -28,7 +29,7 @@ PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format='value(projectN
 
 gcloud services enable run.googleapis.com artifactregistry.googleapis.com \
   secretmanager.googleapis.com iam.googleapis.com iamcredentials.googleapis.com \
-  sts.googleapis.com
+  sts.googleapis.com telemetry.googleapis.com
 
 gcloud artifacts repositories create ai-meal-planner \
   --repository-format=docker --location="$REGION"
@@ -36,8 +37,8 @@ gcloud artifacts repositories create ai-meal-planner \
 
 ### Service accounts
 
-The runtime identity only reads the key secret. The deploy identity can push
-images and deploy, and nothing else.
+The runtime identity reads the key secret and writes traces, nothing more. The
+deploy identity can push images and deploy, and nothing else.
 
 ```bash
 gcloud iam service-accounts create meal-planner-runtime
@@ -52,6 +53,8 @@ gcloud artifacts repositories add-iam-policy-binding ai-meal-planner \
   --role=roles/artifactregistry.writer
 gcloud iam service-accounts add-iam-policy-binding "$RUNTIME_SA" \
   --member="serviceAccount:$DEPLOYER_SA" --role=roles/iam.serviceAccountUser
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:$RUNTIME_SA" --role=roles/telemetry.tracesWriter
 ```
 
 ### Workload Identity Federation (GitHub → Google, no stored keys)
@@ -167,6 +170,26 @@ This requires `min_instances=2` to still be in effect.
 - **Logs:**
   `gcloud run services logs read ai-meal-planner-api --region "$REGION"`.
   Domain errors log their internal detail; responses never carry it.
+- **Traces:** in the console, Trace Explorer, service `ai-meal-planner-api`.
+  Each request is one trace: a `METHOD /route-template` span with one child per
+  stage (`calorie.predict`, `meal.retrieve`, `nutrition.verify`,
+  `plan.reconcile`, `supermarket.list`). Spans carry only the allowlisted
+  attributes in `backend/app/core/telemetry.py`. Cloud Run limits CPU outside
+  requests by default, so batched spans can wait for the next request or for
+  shutdown before they are sent. That is acceptable at this traffic level.
+- **Retention**, from Google's documentation as of 2026-10-10:
+  - Cloud Trace keeps spans for 30 days.
+  - Cloud Logging's `_Default` bucket keeps logs for 30 days by default
+    (DEC-19). To shorten that:
+    `gcloud logging buckets update _Default --location=global --retention-days=<1-3650>`.
+    Shortening has a 7-day grace period.
+  - Hosted mode stores no meal plans or feedback (DEC-10).
+- **What the logs hold.** App log lines name requests by route template, error
+  type and code. They never include the request's content, an internal error
+  message, or a provider URL. Two things the app does not control:
+  - unexpected 500s log a traceback, including that exception's message;
+  - Cloud Run's own request log records each full URL, so `user_id` must be
+    an opaque id (DEC-18).
 - **Rate limit:** `RATE_LIMIT_PER_MINUTE` applies per instance, so with up to
   three instances a client can reach up to three times the limit (README §8.1).
 - **Provider keys:** optional. Add `GEMINI_API_KEY`, `USDA_API_KEY` and so on as
