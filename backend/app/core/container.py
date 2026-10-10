@@ -44,12 +44,6 @@ def build_container(settings: AppSettings) -> Container:
     Returns:
         A Container holding the built agents, repositories and service.
     """
-    if settings.hosted_mode:
-        raise RuntimeError(
-            "HOSTED_MODE=true is reserved for G6, which will disable history and "
-            "feedback on hosted deployments. It is not implemented yet, so enabling "
-            "it would claim a protection that does not exist. Unset HOSTED_MODE."
-        )
     # First, so a production deployment with no keys fails before any work.
     auth = AuthConfig.from_settings(settings)
     user_profiles, meal_history, meal_feedback = build_repositories(settings)

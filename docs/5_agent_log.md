@@ -3024,3 +3024,94 @@ non-zero exit on failed startup, already held.
 **Process note.** I had already started G6 on a branch stacked on this one when
 this review arrived. G6's backend commit stays on `feat/g6-hosted-mode` and
 will be rebased onto this fix.
+
+## 2026-10-11 — Claude Opus 5.5 — G6 code half: hosted stateless mode
+
+Branch `feat/g6-hosted-mode`, PR #15, stacked on #14 (G5b). The owner asked me
+to continue while Codex reviews later. G6's gate is "point 2 two-instance
+checks; restart leaves history empty; public `/health`", and it is shared
+between owner and Claude. This entry is the code half. The deployment half
+(choosing Cloud Run or Render, and its secrets) is the owner's, and nothing was
+deployed.
+
+**Contract implemented** (portfolio log, 2026-10-08, point 2; DEC-10):
+
+- `HOSTED_MODE=true` refuses the three history reads and `POST /meal-feedback`
+  with `501 history_disabled_stateless`. It stores no generated plans.
+- Meal planning and calorie prediction keep working. `/health` stays public and
+  reports `hosted_mode`.
+- Authentication is still checked first, so an anonymous call gets `401`.
+- G5b's startup refusal of `HOSTED_MODE=true` is gone, because the behaviour
+  now exists.
+
+**Clients hide what the API refuses.**
+
+- **Streamlit** reads `hosted_mode` from `/health`. The History tab shows a
+  notice instead of its controls, and the meal view drops its feedback form.
+  Otherwise history is labelled non-persistent (owner decision E).
+- **React** `HistoryTab` checks `/health` on mount, shows a "History is
+  disabled" card in hosted mode, and otherwise carries the same label.
+- **One deviation, recorded deliberately:** the React History *tab button*
+  stays visible; only its contents are replaced. Hiding the button needs a
+  `/health` call on the app's first render, and the frozen `App.test.jsx`
+  asserts that the first render makes no network call. React cannot call a
+  keyed production API in v1 anyway (DEC-8).
+- Three existing `HistoryTab` tests queued a `get` rejection for the history
+  load. They now queue the mount-time `/health` response first.
+
+**Evidence.**
+
+- **Unit and endpoint tests:**
+  - backend: each history route is refused by two independently built hosted
+    instances; auth is checked first; meal planning works and saves nothing;
+    `/health` reports hosted mode; local mode still serves history;
+  - Streamlit: AppTest runs for hosted and for local (the control);
+  - React: hosted card, and the label in local mode.
+  - Mutation checks catch each of: no refusal, saving while hosted, ignoring
+    `hosted_mode` in React.
+- **Container rehearsal in CI** (run `38011021150` on head `e20f431`).
+  `compose.hosted.yaml` puts two `APP_ENV=production`, `HOSTED_MODE=true`
+  instances behind one nginx URL, with a throwaway per-run key.
+  `scripts/hosted_smoke.sh` reported:
+
+  ```text
+  1. /health is public through the shared URL, and reports hosted mode
+     environment=production hosted_mode=True
+  2. every history and feedback route is refused, by both instances
+     GET /meal-plans/user_123 -> 501 history_disabled_stateless
+     GET /meal-feedback/user_123 -> 501 history_disabled_stateless
+     GET /saved-meals/user_123 -> 501 history_disabled_stateless
+     POST /meal-feedback -> 501 history_disabled_stateless
+     refusals came from 2 distinct instances: 172.18.0.2:8000 172.18.0.3:8000
+  3. authentication still comes first, and meal planning still works
+     anonymous -> 401; generate -> 200 plan_status=matched
+  hosted smoke test passed
+  ```
+
+- **Restart gate.** In the same run, `container_smoke.sh` check 6 reported
+  "same container after restart: 1 plan; new container after recreate: 0
+  plans", with container IDs asserted unchanged and then changed. That is the
+  restart nuance Codex corrected in the Dockerfile comment. "Restart leaves
+  history empty" holds for a *redeploy*, which is a new container, and not for
+  a `docker restart` of the same one.
+- **A bug of mine that CI caught.** The first version of check 6 waited for
+  health with `compose up --wait api`, and that recreated the container. So
+  "a restart lost history" was the script's own doing. It now polls `/health`
+  and asserts the container ID.
+- **Isolation regressions.** These now cover both smoke scripts against a
+  hostile operator environment: 10 cases.
+- **Suites.** `uv run pytest --cov-fail-under=89`: **430 passed** (346
+  backend, 84 Streamlit), 92.73%. The frontend has **39 passed**; ESLint and
+  the Vite build are clean. Both frozen harnesses are unchanged.
+
+**For the owner (the deployment half).**
+
+1. **Choose the hosted target.** Cloud Run is the one the architecture doc
+   names; Render is current. The image, health check and hosted-mode settings
+   are ready for either.
+2. **Configure secrets.** A real deployment needs `API_KEYS` (hashes) and
+   `HOSTED_MODE=true`, set as host secrets.
+3. **Fix Render if you keep it.** `render.yaml` will not start until
+   `API_KEYS` is set (G4, DEC-8).
+
+The live two-instance and redeploy checks then repeat against the real URL.

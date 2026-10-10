@@ -90,4 +90,27 @@ body = json.load(urllib.request.urlopen(url, timeout=5))
 assert body["status"] == "ok", body
 print("   streamlit -> %s: ok" % url)'
 
+echo "6. a restart keeps history; a redeploy (new container) starts empty"
+# Check 4 saved one plan. Stateless v1 means a *new* container starts empty; a
+# restart of the same container keeps its writable layer (Codex, 2026-10-10).
+count() { curl -fsS "$API/meal-plans/user_123" | python3 -c 'import json,sys; print(len(json.load(sys.stdin)["items"]))'; }
+# Poll /health rather than `compose up --wait`: `up` may recreate the container,
+# which is exactly what the restart half of this check must not do.
+wait_healthy() {
+  for _ in $(seq 1 60); do curl -fsS "$API/health" >/dev/null 2>&1 && return 0; sleep 1; done
+  echo "   the API did not come back"; exit 1
+}
+[ "$(count)" = 1 ] || { echo "   expected the plan from check 4 to be stored"; exit 1; }
+before="$(compose ps -q api)"
+compose restart api >/dev/null
+wait_healthy
+[ "$(compose ps -q api)" = "$before" ] || { echo "   restart replaced the container"; exit 1; }
+after_restart="$(count)"
+[ "$after_restart" = 1 ] || { echo "   a restart lost history ($after_restart plans)"; exit 1; }
+compose up --detach --force-recreate --no-deps --wait --wait-timeout 120 api >/dev/null
+[ "$(compose ps -q api)" != "$before" ] || { echo "   recreate kept the same container"; exit 1; }
+after_recreate="$(count)"
+[ "$after_recreate" = 0 ] || { echo "   a recreated container kept history ($after_recreate plans)"; exit 1; }
+echo "   same container after restart: 1 plan; new container after recreate: 0 plans"
+
 echo "container smoke test passed"

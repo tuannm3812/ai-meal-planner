@@ -36,15 +36,15 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 410 tests (328
-  backend, 82 Streamlit) after G5b, coverage 92.70% against the 89% CI floor;
-  the frontend has 37 tests.
-- 2026-10-11: G3 (failure semantics, #11/#12) and G4 (trusted-client API keys,
-  `client_id` namespaces, scopes, per-instance rate limit, Gemini pass-through
-  removed, #13) are merged; see README §8.1 and DEC-7 to DEC-9. G5b (container
-  image, compose stack, CI `container` smoke job) is on `feat/g5b-containers`
-  (PR #14). Next: G6 hosted stateless deploy (it replaces the HOSTED_MODE
-  startup refusal with the 501 behaviour), then G10b tracing.
+  passed `main`'s older single-job workflow. `uv run pytest` runs 430 tests (346
+  backend, 84 Streamlit) after G6's code half, coverage 92.73% against the 89%
+  CI floor; the frontend has 39 tests.
+- 2026-10-11: G3 (#11/#12) and G4 (#13) are merged; see README §8.1 and
+  DEC-7 to DEC-9. G5b (container image, compose stack, CI `container` smoke job)
+  is PR #14. G6's code half (HOSTED_MODE refuses history with 501, both clients
+  hide it, two-instance rehearsal in CI; DEC-10) is PR #15, stacked on #14.
+  G6's deployment half - choosing Cloud Run or Render and setting its secrets -
+  is the owner's; then G10b tracing.
 
 ## Open risks
 
@@ -71,6 +71,10 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 - **`render.yaml` will not start since G4.** It sets `APP_ENV=production` with no
   `API_KEYS`, and production refuses that by design. Set `API_KEYS` in the Render
   dashboard, or retire Render as part of G6's deployment decision.
+- **In hosted mode the React History tab button stays visible.** Its contents
+  are replaced with a notice. Hiding the button would need a `/health` call on
+  first render, which the frozen `App.test.jsx` forbids. React cannot call a keyed
+  production API in v1 anyway (DEC-8).
 - **G4 limits, by design.**
   - The rate limit is per instance, so N instances allow N times the limit.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production

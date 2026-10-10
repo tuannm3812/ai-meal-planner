@@ -88,3 +88,6 @@ class AppConfig:
     heart_rate_bpm: float
     body_temp_c: float
     goal: str
+    # G6: true when the API's /health reports a hosted, stateless deployment,
+    # where history and feedback are refused. Demo mode is never hosted.
+    hosted_mode: bool = False

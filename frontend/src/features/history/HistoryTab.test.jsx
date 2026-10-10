@@ -22,6 +22,8 @@ describe('HistoryTab error text', () => {
     // The only branch App.test.jsx does not cover: a rejection with no
     // `response` at all. This sentence is not routed through useAsyncRequest,
     // so it stays exactly as it was before the move.
+    // G6: the tab reads /health on mount, so that call takes the first queued get.
+    axios.get.mockResolvedValueOnce({ data: { services: { hosted_mode: false } } })
     axios.get.mockRejectedValueOnce(new Error('Network Error'))
     const user = userEvent.setup()
     render(<HistoryTab />)
@@ -36,6 +38,8 @@ describe('HistoryTab error text', () => {
   })
 
   it('shows its own fallback sentence when saved meals fails with no response', async () => {
+    // G6: the tab reads /health on mount, so that call takes the first queued get.
+    axios.get.mockResolvedValueOnce({ data: { services: { hosted_mode: false } } })
     axios.get.mockRejectedValueOnce(new Error('Network Error'))
     const user = userEvent.setup()
     render(<HistoryTab />)
@@ -50,6 +54,8 @@ describe('HistoryTab error text', () => {
   })
 
   it("still prefers the backend's detail when there is one", async () => {
+    // G6: the tab reads /health on mount, so that call takes the first queued get.
+    axios.get.mockResolvedValueOnce({ data: { services: { hosted_mode: false } } })
     axios.get.mockRejectedValueOnce({ response: { data: { detail: 'User not found' } } })
     const user = userEvent.setup()
     render(<HistoryTab />)
@@ -57,5 +63,24 @@ describe('HistoryTab error text', () => {
     await user.click(screen.getByRole('button', { name: 'Load meal history' }))
 
     expect(await screen.findByText('User not found')).toBeInTheDocument()
+  })
+
+  it('hides the history views when /health reports a hosted deployment', async () => {
+    // G6: the hosted API refuses history with 501, so the tab must not offer it.
+    axios.get.mockResolvedValueOnce({ data: { services: { hosted_mode: true } } })
+    render(<HistoryTab />)
+
+    expect(await screen.findByText('History is disabled')).toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Meal History' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: 'Load meal history' })).not.toBeInTheDocument()
+  })
+
+  it('keeps history and labels it non-persistent when not hosted', async () => {
+    axios.get.mockResolvedValueOnce({ data: { services: { hosted_mode: false } } })
+    render(<HistoryTab />)
+
+    expect(screen.getByText(/History is not persisted/)).toBeInTheDocument()
+    expect(await screen.findByRole('heading', { name: 'Meal History' })).toBeInTheDocument()
+    expect(screen.queryByText('History is disabled')).not.toBeInTheDocument()
   })
 })
