@@ -1,14 +1,14 @@
 """Meal feedback and saved-meals endpoints."""
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
 from backend.app.api.auth import FeedbackWrite, HistoryEnabled, HistoryRead
 from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core.container import ContainerDep
-from backend.app.core.exceptions import HistoryDisabled, MealPlanNotFound
+from backend.app.core.exceptions import FeedbackSignalRequired, HistoryDisabled, MealPlanNotFound
 from backend.app.schemas.requests import MealFeedbackRequest
-from backend.app.schemas.responses import DetailResponse, FeedbackListResponse, FeedbackResponse
+from backend.app.schemas.responses import FeedbackListResponse, FeedbackResponse
 
 router = APIRouter()
 
@@ -16,10 +16,9 @@ router = APIRouter()
 @router.post(
     "/meal-feedback",
     response_model=FeedbackResponse,
-    responses={
-        **error_responses(*AUTH_ERRORS, MealPlanNotFound, HistoryDisabled),
-        400: {"model": DetailResponse, "description": "No feedback signal was given."},
-    },
+    responses=error_responses(
+        *AUTH_ERRORS, FeedbackSignalRequired, MealPlanNotFound, HistoryDisabled
+    ),
 )
 async def save_meal_feedback(
     request: MealFeedbackRequest,
@@ -38,17 +37,14 @@ async def save_meal_feedback(
         principal: The authenticated client whose namespace is written.
 
     Raises:
-        HTTPException: 400 if none of liked, rating, or saved is provided.
+        FeedbackSignalRequired: 400 if none of liked, rating, or saved is provided.
         MealPlanNotFound: 404 if the caller has no plan with that request_id.
 
     Returns:
         The persisted feedback record.
     """
     if request.liked is None and request.rating is None and not request.saved:
-        raise HTTPException(
-            status_code=400,
-            detail="Provide at least one feedback signal: liked, rating, or saved.",
-        )
+        raise FeedbackSignalRequired("feedback with no liked, rating or saved")
 
     plan = await run_in_threadpool(
         container.meal_history.find_by_request_id,

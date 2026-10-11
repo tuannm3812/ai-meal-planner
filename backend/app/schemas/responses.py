@@ -90,9 +90,3 @@ class ErrorResponse(BaseModel):
     error: str
     code: str | None = None
     detail: str
-
-
-class DetailResponse(BaseModel):
-    """FastAPI's own error body, used by the few routes that raise HTTPException."""
-
-    detail: str

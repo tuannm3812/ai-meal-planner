@@ -21,6 +21,7 @@ from fastapi.testclient import TestClient
 from backend.app.api.errors import error_responses
 from backend.app.core.exceptions import (
     AuthenticationRequired,
+    FeedbackSignalRequired,
     HistoryDisabled,
     InsufficientScope,
     MealPlanningError,
@@ -46,9 +47,6 @@ EXPECTED: dict[tuple[str, str], set[str]] = {
     ("get", "/saved-meals/{user_id}"): AUTH | {"501"},
 }
 PUBLIC = {("get", "/"), ("get", "/health")}
-# The one error not raised as a domain error: the route's own HTTPException,
-# whose body is FastAPI's {"detail": ...}.
-PLAIN_DETAIL = {("post", "/meal-feedback", "400")}
 
 
 @pytest.fixture(name="contract", scope="module")
@@ -81,8 +79,8 @@ def test_each_route_declares_its_security_and_error_responses(
         assert operation["security"] == [{SCHEME: []}]
     for status in errors:
         schema = operation["responses"][status]["content"]["application/json"]["schema"]
-        model = "DetailResponse" if (method, path, status) in PLAIN_DETAIL else "ErrorResponse"
-        assert schema == {"$ref": f"#/components/schemas/{model}"}, (path, status)
+        # Every error, the feedback 400 included (owner decision, 2026-10-12).
+        assert schema == {"$ref": "#/components/schemas/ErrorResponse"}, (path, status)
 
 
 def test_a_rate_limited_response_documents_retry_after(contract: dict) -> None:
@@ -106,6 +104,7 @@ def test_two_errors_with_one_status_are_refused() -> None:
 
 ERRORS = [
     AuthenticationRequired("internal"),
+    FeedbackSignalRequired("internal"),
     InsufficientScope("internal"),
     RateLimited("internal", 30),
     MealPlanNotFound("internal"),

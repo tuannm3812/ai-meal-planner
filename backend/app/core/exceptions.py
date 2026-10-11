@@ -117,6 +117,18 @@ class MealPlanNotFound(MealPlanningError):
     error_code = "meal_not_found"
 
 
+class FeedbackSignalRequired(MealPlanningError):
+    """Feedback carried no signal: no like or dislike, no rating, not saved.
+
+    A domain error, so its body has the same shape as every other error (owner
+    decision, 2026-10-12); it was a plain HTTPException with only ``detail``.
+    """
+
+    status_code = 400
+    client_message = "Provide at least one feedback signal: liked, rating, or saved."
+    error_code = "feedback_signal_required"
+
+
 class HistoryDisabled(MealPlanningError):
     """Raised for history and feedback routes on a hosted deployment (G6).
 

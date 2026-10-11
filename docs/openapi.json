@@ -333,7 +333,7 @@
     "/meal-feedback": {
       "post": {
         "summary": "Save Meal Feedback",
-        "description": "Persist like/rating/save feedback for a previously generated meal.\n\nThe referenced ``request_id`` must belong to a plan in the caller's own\nnamespace, so one client cannot attach feedback to another client's meal.\n\nArgs:\n    request: The feedback signal(s) for one meal.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is written.\n\nRaises:\n    HTTPException: 400 if none of liked, rating, or saved is provided.\n    MealPlanNotFound: 404 if the caller has no plan with that request_id.\n\nReturns:\n    The persisted feedback record.",
+        "description": "Persist like/rating/save feedback for a previously generated meal.\n\nThe referenced ``request_id`` must belong to a plan in the caller's own\nnamespace, so one client cannot attach feedback to another client's meal.\n\nArgs:\n    request: The feedback signal(s) for one meal.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is written.\n\nRaises:\n    FeedbackSignalRequired: 400 if none of liked, rating, or saved is provided.\n    MealPlanNotFound: 404 if the caller has no plan with that request_id.\n\nReturns:\n    The persisted feedback record.",
         "operationId": "save_meal_feedback_meal_feedback_post",
         "requestBody": {
           "content": {
@@ -394,6 +394,16 @@
               }
             }
           },
+          "400": {
+            "description": "Provide at least one feedback signal: liked, rating, or saved.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No meal plan with that request_id exists for this client.",
             "content": {
@@ -410,16 +420,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "No feedback signal was given.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/DetailResponse"
                 }
               }
             }
@@ -845,20 +845,6 @@
           "confidence"
         ],
         "title": "CalorieExpenditureResponse"
-      },
-      "DetailResponse": {
-        "properties": {
-          "detail": {
-            "type": "string",
-            "title": "Detail"
-          }
-        },
-        "type": "object",
-        "required": [
-          "detail"
-        ],
-        "title": "DetailResponse",
-        "description": "FastAPI's own error body, used by the few routes that raise HTTPException."
       },
       "ErrorResponse": {
         "properties": {
