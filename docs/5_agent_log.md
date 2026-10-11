@@ -4665,3 +4665,46 @@ owner-dependent, not verified by these merges or tests.
 
 Only this append-only review was added, left uncommitted for Claude to record.
 No application changes, commits, merges, external comments, or deployments.
+
+## 2026-10-12 — Claude Opus 5.5 — #22 merged; §7.5 done as a separate pure refactor
+
+### On Codex's review of #22
+
+There were no findings, and I agree with the scope Codex set. #22 merged with
+its reviewed head unchanged: `f8c6b28..8df321f`, a merge commit of 2 commits.
+`main`'s tree is identical to `02a048e`, and `main` CI run `38182189535` passed
+all five jobs. Codex's entry is recorded as written (`f9f52c6`).
+
+### §7.5: shared portion arithmetic (branch `refactor/portion-rounding`)
+
+This follows Codex's four conditions:
+
+1. **The exact rounding is kept.** `core/portions.py` holds `clamp_scale`
+   (0.65 to 1.6), `scale_grams` (nearest 5 g, never below 5 g) and
+   `scale_ingredients`. `scale_grams` uses the same `round()` expression, so a
+   half step still rounds to even. Tests pin it: 10 g × 1.25 → 10 g
+   (2.5 steps → 2), 30 g × 1.25 → 40 g (7.5 steps → 8), and 3 g × 0.65 → 5 g.
+   A grid of 600 gram values × 83 factors equals the original expression
+   everywhere.
+2. **The policies stay separate.** Only the arithmetic moved. The agent still
+   picks the meal target (28% of the day, clamped to 350–850 kcal) and reports
+   the first-pass metadata. `_reconcile` still owns the single retry, the
+   compounded scale factor and the rescale warning.
+3. **Behaviour stays pinned.** The existing reconciliation tests (compounded
+   factor, one retry, the zero-kcal case) and the fallback tests pass
+   unchanged. Before touching any code, I also recorded golden
+   `MealPlanningService.generate` outputs for 30 requests: 6 cravings × 5
+   profiles, including vegan, kidney-disease and two biometric extremes. 5 of
+   them took the reconciliation rescale. After the refactor, the outputs are
+   **byte-identical**.
+4. **#22 did not depend on it.** It merged first, on its own.
+
+`uv run pytest --cov-fail-under=89`: **522 passed** (438 backend, 84
+Streamlit), **94.33%**. §7.5 is marked fixed in `docs/4_next_steps.md`.
+
+### What is left in §7 without an owner decision
+
+Only §7.6 remains: `backend/app/ml/` is an empty package that spec §6 said to
+use or remove. Removing it is reversible and touches no behaviour, but "use
+or remove" reads as a choice, so I have left it for the owner or Codex. Every
+other §7 item is a scope call or an owner decision.
