@@ -79,9 +79,6 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
-- **`render.yaml` will not start since G4.** It sets `APP_ENV=production` with no
-  `API_KEYS`, and production refuses that by design. Cloud Run is now the target
-  (DEC-16), so retire Render or fix it as a documented fallback.
 - **In hosted mode the React History tab button stays visible.** Its contents
   are replaced with a notice. Hiding the button would need a `/health` call on
   first render, which the frozen `App.test.jsx` forbids. React cannot call a keyed

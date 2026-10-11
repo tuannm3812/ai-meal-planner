@@ -110,7 +110,6 @@ ai-meal-planner/
 |-- streamlit_app/
 |   `-- app.py
 |-- .env.example
-|-- render.yaml
 |-- requirements.txt
 |-- runtime.txt
 |-- uv.lock
@@ -373,7 +372,7 @@ curl http://127.0.0.1:8000/health
 ```
 
 **Dependencies:** `pyproject.toml` is the only file to edit by hand. After
-changing it, run `uv lock` and regenerate the export that Render installs from:
+changing it, run `uv lock` and regenerate the export that the Streamlit Community Cloud demo installs from (the root `requirements.txt` includes it):
 
 ```bash
 uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o backend/requirements.txt

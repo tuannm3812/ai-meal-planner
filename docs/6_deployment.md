@@ -210,6 +210,6 @@ This requires `min_instances=2` to still be in effect.
   further Secret Manager secrets, and list them under `secrets:` in the
   workflow. Without them, nutrition is estimated and labelled as such (DEC-13).
 - **Cost:** with `min-instances=0` the service scales to zero when idle.
-- **Render:** `render.yaml` is superseded by this (DEC-16). It also cannot
-  start since G4 without `API_KEYS`. Retire it, or fix it as a documented
-  fallback.
+- **Render:** retired on 2026-10-12 (DEC-22), and `render.yaml` is deleted.
+  Cloud Run is the only hosted API target. The Streamlit demo still runs on
+  Streamlit Community Cloud (DEC-2).
