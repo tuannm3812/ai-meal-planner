@@ -12,7 +12,7 @@ Status as of 2026-10-10: the whole refactor (Phases 0–3, 4a and 4b) is done an
 **merged to `main`** (PRs #1–#7). G3 (#11, #12), G4 (#13), G5b (containers,
 #14), G6's code half (hosted mode, #15) and the README/decision docs (#16) are
 merged too, as are G6's Cloud Run deployment half (#17) and G10b tracing
-(#18). `uv run pytest` runs 509 tests (425 backend, 84 Streamlit) and the
+(#18). `uv run pytest` runs 510 tests (426 backend, 84 Streamlit) and the
 frontend has 39, all passing; backend coverage is 94.30%, floor 89%; the meal
 corpus holds 34 templates. The next phase is the production-readiness direction in
 `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries: G3 failure semantics,
@@ -260,9 +260,10 @@ From spec §12.
    - `NoFeasibleMeal`, when the corpus and the templates are both exhausted.
      It is internal only: the service turns it into a 200 response with
      `plan_status: "infeasible"`.
-4. **`deviation_after` falls back to `deviation_before`** when a reconciliation
-   retry verifies to 0 kcal, understating the miss. `within_tolerance` stays
-   correct.
+4. **Fixed 2026-10-12.** `deviation_after` fell back to `deviation_before`
+   when a reconciliation retry verified to 0 kcal, understating the miss. It is
+   now always `|after - target| / target`, so a 0 kcal retry reports 1.0.
+   `test_a_retry_that_verifies_to_zero_reports_the_full_miss` pins this.
 5. **The 0.65/1.6 clamp and 5 g rounding are duplicated** between `_reconcile` and
    `MealRecommendationAgent._scale_ingredients_to_meal_target`.
 6. **`backend/app/ml/` is an empty package.** Spec §6 item 10 said to use or remove
@@ -294,11 +295,15 @@ From spec §12.
     behaviour is pinned by
     `backend/tests/test_rag_rules.py::test_meal_is_allowed_false_when_kidney_disease_blocked_ingredient_has_no_substitution`,
     so changing it will break a test and force a deliberate decision.
-14. **`meal_recommendation_agent.py` is at 86% coverage** (191 statements, 27
-    missed; re-measured 2026-10-08, after the G3 constraint fixes). Unlike `rag/embedding_index.py` (32%, excused
-    because its sentence-transformers/FAISS path sits behind the uninstalled
-    `semantic-rag` optional dependency group), this is core business logic with no
-    optional-dependency excuse, and the largest remaining gap in the backend. Run
+14. **`meal_recommendation_agent.py` is at 93% coverage** (192 statements, 13
+    missed; re-measured 2026-10-12). It was 86% on 2026-10-08. The Gemini
+    explanation tests (#19) closed most of the gap. What remains:
+    - the retriever's startup failure;
+    - the Gemini client setup, which runs only with a key;
+    - one warning branch and one defensive return.
+
+    `rag/embedding_index.py` stays excused (32%): its sentence-transformers and
+    FAISS path sits behind the uninstalled `semantic-rag` group. Run
     `uv run pytest` for the current missing lines rather than trusting a copied
     list. The fallback constraint gap previously recorded here is fixed (G3's
     first deliverable; see the 2026-10-08 agent-log entry).
