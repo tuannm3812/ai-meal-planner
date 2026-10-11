@@ -8,12 +8,17 @@ from backend.app.agents.calorie_expenditure_agent import (
     CalorieExpenditureResponse,
 )
 from backend.app.api.auth import PlansWrite
+from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core.container import ContainerDep
 
 router = APIRouter()
 
 
-@router.post("/calorie-expenditure/predict", response_model=CalorieExpenditureResponse)
+@router.post(
+    "/calorie-expenditure/predict",
+    response_model=CalorieExpenditureResponse,
+    responses=error_responses(*AUTH_ERRORS),
+)
 async def predict_calorie_expenditure(
     request: CalorieExpenditureRequest,
     container: ContainerDep,

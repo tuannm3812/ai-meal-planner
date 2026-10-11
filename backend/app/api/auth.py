@@ -9,7 +9,8 @@ can choose.
 
 from typing import Annotated
 
-from fastapi import Depends, Header
+from fastapi import Depends, Security
+from fastapi.security import APIKeyHeader
 
 from backend.app.core import telemetry
 from backend.app.core.auth import Principal
@@ -19,6 +20,16 @@ from backend.app.core.exceptions import (
     HistoryDisabled,
     InsufficientScope,
     RateLimited,
+)
+
+# auto_error=False: a missing key reaches the dependency as None, so the API's
+# own 401 (missing_or_invalid_api_key) is still the response. It also makes
+# X-API-Key a declared security scheme in the OpenAPI contract.
+_API_KEY = APIKeyHeader(
+    name="X-API-Key",
+    scheme_name="ApiKeyAuth",
+    description="A client application's API key (README §8.1).",
+    auto_error=False,
 )
 
 
@@ -34,7 +45,7 @@ def require_scope(scope: str):  # noqa: ANN201 - returns a FastAPI dependency
 
     def _dependency(
         container: ContainerDep,
-        x_api_key: Annotated[str | None, Header(alias="X-API-Key")] = None,
+        x_api_key: Annotated[str | None, Security(_API_KEY)] = None,
     ) -> Principal:
         principal = container.auth.authenticate(x_api_key)
         if principal is None:
