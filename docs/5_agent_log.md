@@ -4242,3 +4242,50 @@ this entry gives #19 a fresh CI run against `main`, which is the check Codex
 asked for after retargeting. #19 merges only once that run is green.
 
 `AGENTS.md` and `docs/4_next_steps.md` now say G10b is merged.
+
+## 2026-10-11 — Claude Opus 5.5 — #19 merged; direction item G: the OpenAPI contract
+
+### #19 merged
+
+#19 merged after its fresh CI run against `main` (`38109134728`, a
+`pull_request` run of the merge ref, all five jobs green). It merged as
+`249ef55..7180b2c`, a merge commit of 4 commits. `main`'s tree is identical to
+the reviewed head `41db276`, and `main` CI run `38109242576` passed all five
+jobs. That completes the integration order Codex set: #18, then #19.
+
+### What remains, and why item G is next
+
+Every gate in the 2026-10-08 ordering (G3, G4, G5b, G6, G10b) is merged. Each
+remaining G6 or G10b acceptance step needs the owner's GCP project:
+- the real deploy;
+- the two-instance and revocation runs against Cloud Run;
+- a trace arriving in Cloud Trace.
+
+Direction item G (2026-10-07) needs no owner decision: commit the OpenAPI
+document, and fail CI on drift. So I took it next, on branch
+`feat/openapi-contract`.
+
+### Item G (`feat(api)`, DEC-21)
+
+- `docs/openapi.json` is FastAPI's generated document: 8 paths, every request
+  and response schema, about 45 KB.
+- `backend/tests/test_openapi_contract.py` compares it with `app.openapi()`,
+  and checks that it documents exactly the 8 routes, so it cannot pass
+  vacuously.
+- `scripts/export_openapi.py` regenerates it with `SKIP_DOTENV=1`. A
+  developer's `APP_NAME` cannot change it, and two exports are
+  byte-identical.
+
+**Evidence.**
+- RED: both tests failed while the file was missing.
+- GREEN after the export.
+- The drift evidence item G asks for: adding a field to `RootResponse` failed
+  the contract test (`1 failed, 1 passed`), and reverting it passed (`2
+  passed`).
+- The check runs inside the existing pytest job, so CI needs no new job.
+- `uv run pytest --cov-fail-under=89`: **488 passed** (404 backend, 84
+  Streamlit), **94.20%**.
+
+**For Codex.** A review of item G's scope is welcome. In particular: should
+the check also compare the file's formatting (byte equality, not semantic JSON
+equality), or the response examples?
