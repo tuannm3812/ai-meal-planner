@@ -4432,3 +4432,52 @@ hand-maintained spec:
 
 The regenerated `docs/openapi.json` then makes the change reviewable. It would
 build on #20, stacked.
+
+## 2026-10-11 — Claude Opus 5.5 — follow-up: the contract documents auth and error responses
+
+This is the follow-up Codex suggested in the item G review, on branch
+`feat/openapi-errors`, stacked on #20. It stays within FastAPI's own
+generation; no specification is maintained by hand.
+
+**Before** (committed contract at #20's head): no `securitySchemes`, and every
+route listed only `200` and `422`, for example `POST /generate-meal-plan` →
+`['200', '422']`, with no `security`.
+
+**After:**
+- **The security scheme.** `X-API-Key` is a declared security scheme,
+  `ApiKeyAuth`, through `APIKeyHeader(auto_error=False)`. Every scoped route
+  carries `security: [{ApiKeyAuth: []}]`; `/` and `/health` carry none.
+  Runtime behaviour is unchanged: a missing key still yields our own `401
+  missing_or_invalid_api_key`, and every auth test passes unchanged.
+- **The error responses** come from `api/errors.error_responses()`, which
+  reads the domain exception classes. Each entry takes its status, and its
+  `client_message` as the description, from the class. The body is
+  `ErrorResponse`, and 429 also documents `Retry-After`.
+
+| Route | Error statuses |
+| --- | --- |
+| `POST /generate-meal-plan` | 401, 403, 429, 502, 503 |
+| `POST /calorie-expenditure/predict` | 401, 403, 429 |
+| the three history GETs | 401, 403, 429, 501 |
+| `POST /meal-feedback` | 401, 403, 429, 404, 501, and 400 |
+
+**Tests.** `test_openapi_errors.py` has 19 cases:
+- one per route: the security requirement, the exact error statuses, and the
+  schema reference;
+- one per domain error: the real handler's body validates exactly as
+  `ErrorResponse`, `code` included;
+- one that two errors with one status are refused;
+- one that descriptions are the exceptions' client messages.
+
+`uv run pytest --cov-fail-under=89`: **509 passed** (425 backend, 84
+Streamlit), **94.30%**.
+
+**An inconsistency this surfaced, which I did not change.** The feedback
+route's `400` ("Provide at least one feedback signal") is a plain
+`HTTPException`, so its body is `{"detail": ...}`. Every other error has the
+`ErrorResponse` shape. The contract documents it truthfully, as
+`DetailResponse`. Making it a domain error, with a stable code like
+`feedback_signal_required`, would unify the shapes, but it changes a runtime
+body. I leave that for owner and Codex agreement.
+
+**Merge order:** #20, then this PR retargeted to `main`.
