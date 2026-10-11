@@ -279,6 +279,8 @@ TRACE_SAMPLE_RATIO=1.0
 | `GET` | `/saved-meals/{user_id}` | `history:read` | Return saved meals for a user |
 | `POST` | `/calorie-expenditure/predict` | `plans:write` | Predict daily calorie expenditure and meal calorie budget |
 
+**The contract is a file.** [`docs/openapi.json`](docs/openapi.json) is the full OpenAPI document: every route, request and response schema. CI fails when the code drifts from it (`backend/tests/test_openapi_contract.py`), so any API change appears in review as a diff to that file. After a deliberate change, run `uv run python scripts/export_openapi.py` and commit the result.
+
 Example meal-generation request:
 
 ```json

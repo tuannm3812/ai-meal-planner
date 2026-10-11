@@ -28,6 +28,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 18 | `user_id` stays in history paths and must be opaque | 2026-10-10 |
 | 19 | Keep the 30-day trace and log retention defaults | 2026-10-10 |
 | 20 | Incoming trace context: `traceparent` only | 2026-10-10 |
+| 21 | The OpenAPI document is a committed, CI-checked contract | 2026-10-11 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -266,3 +267,20 @@ OTLP payload, outside the attribute allowlist, even on the public `/health`
 route. So neither is read. Rules out the global propagator's default
 `tracecontext,baggage` extraction, and any allowlist for vendor `tracestate`
 entries, which nothing here needs.
+
+## 2026-10-11 — API contract artefact
+
+### DEC-21 — The OpenAPI document is a committed, CI-checked contract
+
+Direction item G (2026-10-07). `docs/openapi.json` is FastAPI's generated
+document, committed beside the brief and the architecture.
+`test_openapi_contract.py` fails when the code's document differs from it, so
+an API change, whether deliberate or not, appears in review as a diff to a
+readable file. `scripts/export_openapi.py` regenerates it, ignoring
+`backend/.env` so the output depends on the code alone.
+
+The check runs inside the existing pytest job, so no new CI job is needed. It
+fails on a deliberate schema change and passes once that change is reverted.
+
+Rules out generating the document only at release time, and a separate
+hand-written API description that could disagree with the code.

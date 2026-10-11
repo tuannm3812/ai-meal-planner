@@ -29,6 +29,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 - `docs/5_agent_log.md` — append-only record of agent work and what was verified
 - `docs/4_next_steps.md` — prioritised remaining work and acknowledged gaps
 - `models/calorie_expenditure/metrics.json` — the shipped model's actual numbers
+- `docs/openapi.json` — the API contract; CI fails on drift, regenerate with
+  `scripts/export_openapi.py`
 
 ## Current state
 
