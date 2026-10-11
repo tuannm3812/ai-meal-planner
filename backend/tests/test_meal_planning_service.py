@@ -340,3 +340,62 @@ def test_unavailable_retrieval_is_still_an_error_not_infeasible() -> None:
 
     with pytest.raises(RetrievalUnavailable):
         service.generate(MealRequest(**_VEGAN_KIDNEY))
+
+
+def test_a_retry_that_verifies_to_zero_reports_the_full_miss() -> None:
+    """docs/4_next_steps.md §7.4: deviation_after fell back to deviation_before.
+
+    A rescale whose verified nutrition comes back as 0 kcal missed the target
+    entirely, so deviation_after must be 1.0, not the smaller first deviation.
+    """
+
+    class _ZeroAfterRescale:
+        def calculate_meal_macros(self, ingredients: list[Ingredient]) -> MealNutrition:
+            return MealNutrition(
+                ingredients_macros=[],
+                total_calories=0.0,
+                total_protein=0.0,
+                total_carbs=0.0,
+                total_fat=0.0,
+                nutrition_status="mixed",
+                sources=["stub"],
+                metadata=AgentMetadata(agent_name="stub", source="stub", confidence=0.0),
+            )
+
+    service = MealPlanningService(
+        meal_agent=None,
+        nutrition_agent=_ZeroAfterRescale(),
+        supermarket_agent=None,
+        calorie_agent=None,
+        profile_repo=None,
+    )
+    meal_plan = MealPlanPayload(
+        user_context=UserContext(caloric_target=2000, dietary_restrictions=[]),
+        meal_definition=MealDefinition(
+            craving_input="burger",
+            structured_meal_name="Burger",
+            ingredients=[Ingredient(item_name="beef patty", base_quantity_grams=200)],
+        ),
+        metadata=MealAgentMetadata(agent_name="meal", source="template", confidence=0.9),
+        portion_scaling=PortionScalingMetadata(
+            target_meal_calories=1200, estimated_template_calories=750.0, scale_factor=1.6
+        ),
+    )
+    nutrition_before = MealNutrition(
+        ingredients_macros=[],
+        total_calories=1000.0,
+        total_protein=50.0,
+        total_carbs=70.0,
+        total_fat=20.0,
+        nutrition_status="verified",
+        sources=["stub"],
+        metadata=AgentMetadata(agent_name="nutrition", source="stub", confidence=1.0),
+    )
+
+    _, _, rec = service._reconcile(meal_plan, nutrition_before)
+
+    assert rec is not None and rec.rescaled is True
+    assert rec.deviation_before == pytest.approx(200 / 1200, abs=1e-4)
+    assert rec.verified_calories_after == 0.0
+    assert rec.deviation_after == 1.0
+    assert rec.within_tolerance is False

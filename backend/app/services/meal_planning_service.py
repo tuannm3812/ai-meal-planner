@@ -221,7 +221,9 @@ class MealPlanningService:
         # Exactly one retry. Whatever this produces is what ships.
         nutrition = self.nutrition_agent.calculate_meal_macros(ingredients=rescaled_ingredients)
         after = nutrition.total_calories
-        deviation_after = abs(after - target) / target if after > 0 else deviation_before
+        # No fallback: a retry that verifies to 0 kcal missed the target entirely
+        # (deviation 1.0), and reporting deviation_before would understate it.
+        deviation_after = abs(after - target) / target
 
         meal_plan.metadata.warnings.append(
             f"Rescaled portions by {factor:.2f} after verified nutrition deviated "
