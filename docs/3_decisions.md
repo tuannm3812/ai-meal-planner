@@ -284,3 +284,17 @@ fails on a deliberate schema change and passes once that change is reverted.
 
 Rules out generating the document only at release time, and a separate
 hand-written API description that could disagree with the code.
+
+## 2026-10-11 — Correction: DEC-21's isolation claim
+
+DEC-21 says the exporter ignores `backend/.env`, "so the output depends on the
+code alone". That was not true. Settings read from the shell, such as
+`APP_NAME`, still changed the document's title. So the exporter wrote a
+different contract, and the drift test failed with no code change (Codex, P2
+on PR #20).
+
+The contract is now generated in a fresh process whose environment holds no
+settings and skips the dotenv file. The exporter and the drift test both use
+that one path, so every setting takes its default from the code. A running
+deployment's own `/openapi.json` still reflects its configuration. The
+decision itself is unchanged.
