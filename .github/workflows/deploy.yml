@@ -84,6 +84,7 @@ jobs:
             HOSTED_MODE=true
             STORAGE_BACKEND=sqlite
             REQUIRE_VERIFIED_NUTRITION=0
+            TRACING_EXPORTER=cloud_trace
           secrets_update_strategy: overwrite
           secrets: |-
             API_KEYS=meal-planner-api-keys:latest

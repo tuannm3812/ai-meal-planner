@@ -20,7 +20,9 @@ WORKDIR /app
 COPY pyproject.toml uv.lock ./
 # --no-dev: no test tooling in the image. --no-install-project: the code is
 # copied in below and imported from /app, so there is no wheel to build.
-RUN uv sync --locked --no-dev --no-install-project
+# --extra tracing: the OpenTelemetry SDK and exporter, idle unless
+# TRACING_EXPORTER is set (G10b).
+RUN uv sync --locked --no-dev --no-install-project --extra tracing
 
 # ---- runtime: the venv, the code and the shipped assets, as a non-root user --
 FROM ${PYTHON_IMAGE} AS runtime

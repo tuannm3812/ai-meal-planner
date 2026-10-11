@@ -7,6 +7,7 @@ from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
 from backend.app.api.auth import HistoryEnabled, HistoryRead, PlansWrite
+from backend.app.core import telemetry
 from backend.app.core.container import ContainerDep
 from backend.app.schemas.requests import MealRequest
 from backend.app.schemas.responses import MealPlanListResponse, MealPlanResponse
@@ -39,6 +40,7 @@ async def generate_meal_plan(
     service = container.meal_planning_service
 
     result = await run_in_threadpool(service.generate, request)
+    telemetry.annotate({"request_id": request_id, "plan_status": result.plan_status})
 
     response = MealPlanResponse(
         status="success",

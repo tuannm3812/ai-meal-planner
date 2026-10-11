@@ -6,6 +6,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 
 from backend.app.core.instance import INSTANCE_HEADER, INSTANCE_ID
+from backend.app.core.telemetry import route_template
 
 logger = logging.getLogger(__name__)
 
@@ -141,8 +142,15 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(MealPlanningError)
     async def _handle_domain_error(request: Request, exc: MealPlanningError) -> JSONResponse:
-        # The internal string goes to logs; the client gets the safe message only.
-        logger.warning("%s on %s: %s", type(exc).__name__, request.url.path, exc)
+        # Neither the internal message nor the path is logged: either can quote the
+        # request (constraints, ingredients, a caller's request_id, user_id). The
+        # type, code and route template are enough to act on (G10b).
+        logger.warning(
+            "%s (%s) on %s",
+            type(exc).__name__,
+            exc.error_code or exc.status_code,
+            route_template(request.scope),
+        )
         content = {"status": "error", "error": type(exc).__name__}
         if exc.error_code:
             content["code"] = exc.error_code
@@ -151,7 +159,7 @@ def register_exception_handlers(app: FastAPI) -> None:
 
     @app.exception_handler(Exception)
     async def _handle_unexpected(request: Request, exc: Exception) -> JSONResponse:
-        logger.exception("Unhandled error on %s", request.url.path)
+        logger.exception("Unhandled error on %s", route_template(request.scope))
         # Starlette sends this from outside every middleware, so the instance-id
         # middleware never sees it; stamp it here.
         return JSONResponse(

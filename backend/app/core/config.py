@@ -85,6 +85,11 @@ class AppSettings(BaseSettings):
     # Reported by /health so clients can hide those views.
     hosted_mode: bool = False
 
+    # G10b: where spans go. "none" records nothing and never imports the SDK;
+    # "console" prints them (local evidence); "cloud_trace" exports over OTLP.
+    tracing_exporter: Literal["none", "console", "cloud_trace"] = "none"
+    trace_sample_ratio: float = Field(default=1.0, ge=0.0, le=1.0)
+
     storage_backend: Literal["json", "sqlite"] = "sqlite"
 
     @property

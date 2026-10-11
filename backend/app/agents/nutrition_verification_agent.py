@@ -9,6 +9,7 @@ from urllib.request import Request, urlopen
 from pydantic import BaseModel, Field
 
 from ..core.exceptions import NutritionProviderError
+from ..core.telemetry import describe_failure
 from ..rag.reference_data import load_reference
 from ..schemas.common import AgentMetadata, average_confidence
 from ..schemas.requests import Ingredient
@@ -162,7 +163,9 @@ class NutritionVerificationAgent:
                     self._macro_cache[search_name] = usda_result
                     return usda_result
             except Exception as exc:
-                logger.warning("USDA lookup failed for %s: %s", item_name, exc)
+                # Type and status only: the message can quote the request URL, which
+                # carries the USDA key, and the item comes from the request (G10b).
+                logger.warning("USDA lookup failed: %s", describe_failure(exc))
                 self._register_failure("usda")
 
         if (
@@ -177,7 +180,7 @@ class NutritionVerificationAgent:
                     self._macro_cache[search_name] = fatsecret_result
                     return fatsecret_result
             except Exception as exc:
-                logger.warning("FatSecret lookup failed for %s: %s", item_name, exc)
+                logger.warning("FatSecret lookup failed: %s", describe_failure(exc))
                 self._register_failure("fatsecret")
 
         return self._estimate_macros_per_100g(item_name)
