@@ -77,3 +77,22 @@ class FeedbackListResponse(BaseModel):
     user_id: str
     limit: int
     items: list[dict[str, Any]]
+
+
+class ErrorResponse(BaseModel):
+    """The body of every domain error (``core/exceptions.py``).
+
+    ``code`` is a stable machine-readable code, sent only by errors that have
+    one. ``detail`` is the client-safe message; the internal one is never sent.
+    """
+
+    status: Literal["error"]
+    error: str
+    code: str | None = None
+    detail: str
+
+
+class DetailResponse(BaseModel):
+    """FastAPI's own error body, used by the few routes that raise HTTPException."""
+
+    detail: str

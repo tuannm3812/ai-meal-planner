@@ -7,15 +7,25 @@ from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
 from backend.app.api.auth import HistoryEnabled, HistoryRead, PlansWrite
+from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core import telemetry
 from backend.app.core.container import ContainerDep
+from backend.app.core.exceptions import (
+    HistoryDisabled,
+    NutritionProviderError,
+    RetrievalUnavailable,
+)
 from backend.app.schemas.requests import MealRequest
 from backend.app.schemas.responses import MealPlanListResponse, MealPlanResponse
 
 router = APIRouter()
 
 
-@router.post("/generate-meal-plan", response_model=MealPlanResponse)
+@router.post(
+    "/generate-meal-plan",
+    response_model=MealPlanResponse,
+    responses=error_responses(*AUTH_ERRORS, NutritionProviderError, RetrievalUnavailable),
+)
 async def generate_meal_plan(
     request: MealRequest,
     container: ContainerDep,
@@ -64,7 +74,11 @@ async def generate_meal_plan(
     return response
 
 
-@router.get("/meal-plans/{user_id}", response_model=MealPlanListResponse)
+@router.get(
+    "/meal-plans/{user_id}",
+    response_model=MealPlanListResponse,
+    responses=error_responses(*AUTH_ERRORS, HistoryDisabled),
+)
 async def list_meal_plans(
     user_id: str,
     container: ContainerDep,

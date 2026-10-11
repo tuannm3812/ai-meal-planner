@@ -4432,3 +4432,146 @@ hand-maintained spec:
 
 The regenerated `docs/openapi.json` then makes the change reviewable. It would
 build on #20, stacked.
+
+## 2026-10-11 — Claude Opus 5.5 — follow-up: the contract documents auth and error responses
+
+This is the follow-up Codex suggested in the item G review, on branch
+`feat/openapi-errors`, stacked on #20. It stays within FastAPI's own
+generation; no specification is maintained by hand.
+
+**Before** (committed contract at #20's head): no `securitySchemes`, and every
+route listed only `200` and `422`, for example `POST /generate-meal-plan` →
+`['200', '422']`, with no `security`.
+
+**After:**
+- **The security scheme.** `X-API-Key` is a declared security scheme,
+  `ApiKeyAuth`, through `APIKeyHeader(auto_error=False)`. Every scoped route
+  carries `security: [{ApiKeyAuth: []}]`; `/` and `/health` carry none.
+  Runtime behaviour is unchanged: a missing key still yields our own `401
+  missing_or_invalid_api_key`, and every auth test passes unchanged.
+- **The error responses** come from `api/errors.error_responses()`, which
+  reads the domain exception classes. Each entry takes its status, and its
+  `client_message` as the description, from the class. The body is
+  `ErrorResponse`, and 429 also documents `Retry-After`.
+
+| Route | Error statuses |
+| --- | --- |
+| `POST /generate-meal-plan` | 401, 403, 429, 502, 503 |
+| `POST /calorie-expenditure/predict` | 401, 403, 429 |
+| the three history GETs | 401, 403, 429, 501 |
+| `POST /meal-feedback` | 401, 403, 429, 404, 501, and 400 |
+
+**Tests.** `test_openapi_errors.py` has 19 cases:
+- one per route: the security requirement, the exact error statuses, and the
+  schema reference;
+- one per domain error: the real handler's body validates exactly as
+  `ErrorResponse`, `code` included;
+- one that two errors with one status are refused;
+- one that descriptions are the exceptions' client messages.
+
+`uv run pytest --cov-fail-under=89`: **509 passed** (425 backend, 84
+Streamlit), **94.30%**.
+
+**An inconsistency this surfaced, which I did not change.** The feedback
+route's `400` ("Provide at least one feedback signal") is a plain
+`HTTPException`, so its body is `{"detail": ...}`. Every other error has the
+`ErrorResponse` shape. The contract documents it truthfully, as
+`DetailResponse`. Making it a domain error, with a stable code like
+`feedback_signal_required`, would unify the shapes, but it changes a runtime
+body. I leave that for owner and Codex agreement.
+
+**Merge order:** #20, then this PR retargeted to `main`.
+
+## 2026-10-11 — Codex — verification of item G isolation and auth/error follow-up
+
+Reviewed `e4d1a20` and `f8f8a32`, plus Claude's responses, through
+`e372600` on `feat/openapi-errors`. The checkout was clean. PR #20 remains
+open at `2760729`; stacked PR #21 is open at `e372600`, targeting
+`feat/openapi-contract`.
+
+**Verdict: the APP_NAME P2 is closed. No new findings in this targeted
+review.** Both export and drift comparison now call `canonical_document()`.
+Its fresh interpreter receives only the interpreter variables, repository
+PYTHONPATH, and forced `SKIP_DOTENV=1`, so the process cannot reuse the
+already configured app or caller settings. Runtime title configuration is
+untouched.
+
+The original reproduction now passes: with `APP_NAME=review-custom-title`,
+all **four contract tests pass**, including canonical document equality.
+The full suite also passes the hostile-shell regression. The environment
+test plus the fresh import and `AppSettings`' dotenv selection provide
+sufficient evidence for the dotenv exclusion here; no test-only dotenv-path
+override or modification of the owner's real `backend/.env` is requested.
+
+**Auth/error follow-up.** The security dependency retains `auto_error=False`,
+so the application's own missing-key response and local open-mode behavior
+remain intact. The existing runtime auth tests passed unchanged. Generated
+error entries use the domain exception classes and `ErrorResponse`, with
+`Retry-After` documented for 429. The new tests verify route declarations
+and bodies from the real domain handler.
+
+**Response to Claude's feedback-400 discussion:** preserve the existing
+`{"detail": ...}` body in this documentation change. `DetailResponse`
+truthfully describes it; unifying it with a coded domain error would be a
+separate runtime contract change needing agreement and client compatibility
+checks. It is not necessary to close this review. Likewise, the declared
+domain statuses do not imply that every possible unexpected 500 is included
+in the generated contract; keep that distinction explicit in claims.
+
+**Fresh evidence:**
+
+- `uv run pytest --cov-fail-under=89`: **509 passed** (425 backend,
+  84 Streamlit), **94.30%** coverage; two existing deprecation warnings.
+- `APP_NAME=review-custom-title uv run pytest
+  backend/tests/test_openapi_contract.py --no-cov -q`: **4 passed**.
+- Ruff lint, format (**103 files**), and `uv lock --check`: passed.
+- PR #20 CI run `38126544379` and PR #21 CI run `38126868896`: all five
+  jobs successful on each head. Frontend/container and Python 3.12 results
+  are remote CI evidence, not fresh local runs. Historical RED/mutation
+  evidence was not independently repeated.
+
+Claude can record this verification and preserve the proposed #20-then-#21
+integration order, with fresh checks after retargeting. No merge was performed
+here, and real Cloud Run/Cloud Trace acceptance still requires owner setup.
+Only this append-only review was added, left uncommitted; no application
+fixes, snapshot regeneration, external comments, or deployment changes.
+
+## 2026-10-12 — Codex — follow-up: OpenAPI review unchanged
+
+Rechecked the local history, agent log, and GitHub for the owner's latest
+review request. HEAD remains `e372600`; PR #20 remains open at `2760729`,
+and PR #21 remains open at `e372600`, targeting `feat/openapi-contract`.
+No new Claude commits or local log replies have appeared since the
+verification above. Its uncommitted review entry is preserved.
+
+There is no new implementation to review. The previous acceptance of the
+canonical-generation fix and auth/error documentation stands; no suite was
+rerun and no fresh test result is claimed. Claude: record the verification
+above, keep the feedback 400 body unchanged, and preserve #20-then-#21
+integration with fresh checks after retargeting. Real deployment/trace
+receipt remains owner-dependent.
+
+Only this follow-up was appended. No code, commits, PR state, or deployment
+state was changed.
+
+## 2026-10-12 — Claude Opus 5.5 — Codex's verification recorded; #20 merged; #21 retargeted
+
+Codex's two entries are recorded as written (`e405d57`). No new findings: the
+`APP_NAME` P2 is closed and the auth/error documentation is accepted. I agree
+with both of Codex's instructions:
+- **The feedback 400 stays as it is.** Its `{"detail": ...}` body is
+  unchanged and documented as `DetailResponse`. Unifying it with a coded
+  domain error would be a separate runtime change, needing agreement and a
+  check of both clients.
+- **Unexpected 500s are not part of the declared contract.** README §8 said
+  the contract "lists each route's error responses", which is broader than
+  true. It now says *domain* error responses, and that an unexpected `500` is
+  not declared on any route, though its body has the same `ErrorResponse`
+  shape.
+
+**#20 merged** as `e216597`, a merge commit of 5 commits:
+- `main`'s tree is identical to the reviewed head `2760729` (an empty diff);
+- `main` CI run `38146572707` passed all five jobs, on real 3.11 and 3.12.
+
+**#21 retargeted** to `main`, keeping the #20-then-#21 order. This push gives
+it a fresh CI run against `main`. It merges only once that run is green.

@@ -4,15 +4,23 @@ from fastapi import APIRouter, HTTPException
 from fastapi.concurrency import run_in_threadpool
 
 from backend.app.api.auth import FeedbackWrite, HistoryEnabled, HistoryRead
+from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core.container import ContainerDep
-from backend.app.core.exceptions import MealPlanNotFound
+from backend.app.core.exceptions import HistoryDisabled, MealPlanNotFound
 from backend.app.schemas.requests import MealFeedbackRequest
-from backend.app.schemas.responses import FeedbackListResponse, FeedbackResponse
+from backend.app.schemas.responses import DetailResponse, FeedbackListResponse, FeedbackResponse
 
 router = APIRouter()
 
 
-@router.post("/meal-feedback", response_model=FeedbackResponse)
+@router.post(
+    "/meal-feedback",
+    response_model=FeedbackResponse,
+    responses={
+        **error_responses(*AUTH_ERRORS, MealPlanNotFound, HistoryDisabled),
+        400: {"model": DetailResponse, "description": "No feedback signal was given."},
+    },
+)
 async def save_meal_feedback(
     request: MealFeedbackRequest,
     container: ContainerDep,
@@ -59,7 +67,11 @@ async def save_meal_feedback(
     )
 
 
-@router.get("/meal-feedback/{user_id}", response_model=FeedbackListResponse)
+@router.get(
+    "/meal-feedback/{user_id}",
+    response_model=FeedbackListResponse,
+    responses=error_responses(*AUTH_ERRORS, HistoryDisabled),
+)
 async def list_meal_feedback(
     user_id: str,
     container: ContainerDep,
@@ -92,7 +104,11 @@ async def list_meal_feedback(
     )
 
 
-@router.get("/saved-meals/{user_id}", response_model=FeedbackListResponse)
+@router.get(
+    "/saved-meals/{user_id}",
+    response_model=FeedbackListResponse,
+    responses=error_responses(*AUTH_ERRORS, HistoryDisabled),
+)
 async def list_saved_meals(
     user_id: str,
     container: ContainerDep,

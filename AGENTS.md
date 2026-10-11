@@ -38,8 +38,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 490 tests (406
-  backend, 84 Streamlit), coverage 94.20% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 509 tests (425
+  backend, 84 Streamlit), coverage 94.30% against the 89% CI floor;
   the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
   README screenshots and decision-log index (#16) and G6's deployment half
@@ -54,7 +54,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   is `test_telemetry_redaction.py`. The client-safe Gemini warning (#19) is
   merged too. A real trace arriving in Cloud Trace awaits the owner's GCP setup.
   Direction item G, the committed and CI-checked OpenAPI contract
-  (`docs/openapi.json`, DEC-21), is on `feat/openapi-contract`.
+  (`docs/openapi.json`, DEC-21), is merged (#20). Its follow-up, which
+  declares the `X-API-Key` scheme and each route's domain errors, follows as
+  #21.
 
 ## Open risks
 
