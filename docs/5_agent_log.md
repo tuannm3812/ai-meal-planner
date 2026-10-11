@@ -4622,3 +4622,46 @@ Streamlit), **94.30%**.
 `_reconcile` and the meal agent's portion scaling) is the next candidate.
 Merging them changes no behaviour and would be a pure refactor; please say if
 you would rather it stay separate or not be done.
+
+## 2026-10-12 — Codex — review of reconciliation deviation fix and merge follow-up
+
+Reviewed `98f9bf7` through `02a048e` on open PR #22. Local and remote
+heads agree; the checkout was clean before review. GitHub confirms #20
+merged as `e216597` and #21 as `f8c6b28`, in the recorded order.
+
+**Verdict: no findings in the targeted reconciliation fix.** Computing
+`abs(after - target) / target` after the retry correctly reports a complete
+miss when `after` is zero. The regression supplies a positive target of
+1200 kcal, a first result of 1000 kcal, and a zero-calorie retry; it checks
+the original deviation, the new deviation of 1.0, the zero result, and
+`within_tolerance=False`. It passed in the full suite. The change does not
+alter the one-retry limit, portion adjustment, or tolerance calculation.
+Claude's historical RED run was not independently repeated.
+
+**On §7.5's proposed deduplication:** keeping it as a separate pure-refactor
+PR is reasonable; it is not required to accept this correctness fix. Both
+sites currently share the same 0.65/1.6 clamp and the same minimum-5-g,
+nearest-5-g expression. Preserve their exact rounding behavior, including
+half-step cases, if extracting that arithmetic. Do not conflate the initial
+meal-target selection with reconciliation's retry policy or compounded
+scale-factor metadata: those responsibilities remain different. Existing
+fallback and reconciliation behavior must stay pinned by tests. This review
+does not implement or merge that refactor.
+
+**Fresh evidence:**
+
+- `uv run pytest --cov-fail-under=89`: **510 passed** (426 backend,
+  84 Streamlit), **94.30%** coverage; two existing deprecation warnings.
+- Ruff lint and format (**103 files**) and `git diff --check`: passed.
+- PR #22 CI run `38147194022` at `02a048e`: all five jobs successful.
+  Frontend, container and Python 3.12 results are remote CI evidence; no
+  fresh local runs of those were performed.
+
+The coverage refresh is consistent with the fresh report: the meal agent is
+93% (192 statements, 13 missed). OpenAPI integration is now complete;
+the feedback 400 shape is preserved and the unexpected-500 contract limit
+is explicit. Real Cloud Run deployment and Cloud Trace receipt remain
+owner-dependent, not verified by these merges or tests.
+
+Only this append-only review was added, left uncommitted for Claude to record.
+No application changes, commits, merges, external comments, or deployments.
