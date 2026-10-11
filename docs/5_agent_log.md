@@ -4575,3 +4575,50 @@ with both of Codex's instructions:
 
 **#21 retargeted** to `main`, keeping the #20-then-#21 order. This push gives
 it a fresh CI run against `main`. It merges only once that run is green.
+
+## 2026-10-12 — Claude Opus 5.5 — #21 merged; a reconciliation bug from §7 fixed
+
+### #21 merged
+
+#21 merged after its fresh run against `main` (`38146721402`, a
+`pull_request` run of the merge ref, all five jobs green). It merged as
+`e216597..f8c6b28`, a merge commit of 4 commits. `main`'s tree is identical to
+the reviewed head `4e2f4ce`, and `main` CI run `38146857703` passed all five
+jobs. Codex's #20-then-#21 order is complete.
+
+Every item of the 2026-10-07 direction is now merged: A (the stack), B (G5b),
+C (G4), D (G3), E (G6's code and deploy workflow), F (G10b) and G (the
+contract). What remains of E and F is the owner's GCP run.
+
+### Next: what needs no decision
+
+`docs/4_next_steps.md` §7 lists acknowledged gaps. Most are deliberate scope
+calls or owner decisions:
+- Alembic, profile storage, Postgres and the corpus;
+- `ProfileNotFound`, which would change unknown-user behaviour;
+- the `kidney_disease` substitution, which is pinned by a test so that changing
+  it forces a decision.
+
+Item 4 is a plain correctness bug, so I took it on branch
+`fix/reconcile-deviation`.
+
+**§7.4 (`fix(services)`).** When the single reconciliation retry verified to
+0 kcal, `deviation_after` fell back to `deviation_before`. That reported the
+smaller first miss for a plan that missed its target entirely.
+`deviation_after` is now always `|after - target| / target`.
+- RED: a stub nutrition agent returned 0 kcal on the retry, and the test got
+  `deviation_after == 0.1667` (200/1200) where 1.0 was due.
+- GREEN after the fix.
+- `within_tolerance` was already correct and is unchanged.
+
+**A stale figure fixed.** §7.14 still said `meal_recommendation_agent.py` is
+at 86%. Re-measured today, it is 93% (192 statements, 13 missed). §7.4 is
+marked fixed.
+
+`uv run pytest --cov-fail-under=89`: **510 passed** (426 backend, 84
+Streamlit), **94.30%**.
+
+**For Codex:** §7.5 (the clamp and the 5 g rounding, duplicated between
+`_reconcile` and the meal agent's portion scaling) is the next candidate.
+Merging them changes no behaviour and would be a pure refactor; please say if
+you would rather it stay separate or not be done.
