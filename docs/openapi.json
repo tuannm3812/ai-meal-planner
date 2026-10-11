@@ -1,0 +1,1629 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Multi-Agent Meal Planner API",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root",
+        "description": "Report the service banner and the endpoints it exposes.\n\nArgs:\n    container: The application's dependency container.\n\nReturns:\n    The service name, status, welcome message, and endpoint links.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RootResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "summary": "Health Check",
+        "description": "Report service health and external provider configuration.\n\nArgs:\n    container: The application's dependency container.\n\nReturns:\n    The service status, environment, and a dict of provider/service\n    configuration details (booleans, paths, and warnings).",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/generate-meal-plan": {
+      "post": {
+        "summary": "Generate Meal Plan",
+        "description": "Generate a meal plan, verify its nutrition, and price a shopping list.\n\nProvider credentials are server-managed only: the former X-Gemini-Api-Key\npass-through was removed in G4.\n\nArgs:\n    request: The craving, dietary constraints, and optional biometrics.\n    container: The application's dependency container.\n    principal: The authenticated client; its client_id namespaces history.\n\nReturns:\n    The assembled meal plan response. It is persisted to history unless\n    ``plan_status`` is ``infeasible``, which has no meal to keep.",
+        "operationId": "generate_meal_plan_generate_meal_plan_post",
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MealRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealPlanResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meal-plans/{user_id}": {
+      "get": {
+        "summary": "List Meal Plans",
+        "description": "List stored meal plans for one user, most recent first.\n\nOnly the caller's own namespace is searched, so a guessed ``user_id`` can\nnever reach another client's records.\n\nArgs:\n    user_id: The user whose meal-plan history to fetch.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is read.\n    limit: Requested page size, clamped to the range [1, 50].\n\nReturns:\n    The clamped limit and the matching stored meal-plan records.",
+        "operationId": "list_meal_plans_meal_plans__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MealPlanListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calorie-expenditure/predict": {
+      "post": {
+        "summary": "Predict Calorie Expenditure",
+        "description": "Predict daily energy expenditure and the resulting meal calorie budget.\n\nArgs:\n    request: The user's biometrics and activity level.\n    container: The application's dependency container.\n    principal: The authenticated client; required for the plans:write scope.\n\nReturns:\n    The predicted expenditure, meal calorie budget, and model metadata.",
+        "operationId": "predict_calorie_expenditure_calorie_expenditure_predict_post",
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalorieExpenditureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalorieExpenditureResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meal-feedback": {
+      "post": {
+        "summary": "Save Meal Feedback",
+        "description": "Persist like/rating/save feedback for a previously generated meal.\n\nThe referenced ``request_id`` must belong to a plan in the caller's own\nnamespace, so one client cannot attach feedback to another client's meal.\n\nArgs:\n    request: The feedback signal(s) for one meal.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is written.\n\nRaises:\n    HTTPException: 400 if none of liked, rating, or saved is provided.\n    MealPlanNotFound: 404 if the caller has no plan with that request_id.\n\nReturns:\n    The persisted feedback record.",
+        "operationId": "save_meal_feedback_meal_feedback_post",
+        "parameters": [
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MealFeedbackRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/meal-feedback/{user_id}": {
+      "get": {
+        "summary": "List Meal Feedback",
+        "description": "List stored feedback records for one user, most recent first.\n\nArgs:\n    user_id: The user whose feedback history to fetch.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is read.\n    limit: Requested page size, clamped to the range [1, 100].\n\nReturns:\n    The clamped limit and the matching stored feedback records.",
+        "operationId": "list_meal_feedback_meal_feedback__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/saved-meals/{user_id}": {
+      "get": {
+        "summary": "List Saved Meals",
+        "description": "List meals the user explicitly saved, most recent first.\n\nArgs:\n    user_id: The user whose saved meals to fetch.\n    container: The application's dependency container.\n    principal: The authenticated client whose namespace is read.\n    limit: Requested page size, clamped to the range [1, 100].\n\nReturns:\n    The clamped limit and the matching saved-meal records.",
+        "operationId": "list_saved_meals_saved_meals__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "User Id"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 20,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "X-API-Key",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Api-Key"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackListResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AgentMetadata": {
+        "properties": {
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "agent_name",
+          "source",
+          "confidence"
+        ],
+        "title": "AgentMetadata",
+        "description": "Provenance and confidence reported by every agent."
+      },
+      "AppliedSubstitution": {
+        "properties": {
+          "original_name": {
+            "type": "string",
+            "title": "Original Name"
+          },
+          "replacement_name": {
+            "type": "string",
+            "title": "Replacement Name"
+          },
+          "replacement_grams": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Replacement Grams"
+          },
+          "reason": {
+            "type": "string",
+            "title": "Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "original_name",
+          "replacement_name",
+          "replacement_grams",
+          "reason"
+        ],
+        "title": "AppliedSubstitution"
+      },
+      "CalorieExpenditureRequest": {
+        "properties": {
+          "age": {
+            "type": "integer",
+            "maximum": 120.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Age"
+          },
+          "sex": {
+            "type": "string",
+            "maxLength": 16,
+            "minLength": 1,
+            "title": "Sex"
+          },
+          "height_cm": {
+            "type": "number",
+            "maximum": 260.0,
+            "exclusiveMinimum": 80.0,
+            "title": "Height Cm"
+          },
+          "weight_kg": {
+            "type": "number",
+            "maximum": 350.0,
+            "exclusiveMinimum": 20.0,
+            "title": "Weight Kg"
+          },
+          "activity_multiplier": {
+            "type": "number",
+            "maximum": 2.5,
+            "exclusiveMinimum": 1.0,
+            "title": "Activity Multiplier",
+            "default": 1.35
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 600.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "heart_rate_bpm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 240.0,
+                "exclusiveMinimum": 20.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heart Rate Bpm"
+          },
+          "body_temp_c": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 45.0,
+                "exclusiveMinimum": 30.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body Temp C"
+          },
+          "goal": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 3,
+            "title": "Goal",
+            "default": "maintain"
+          },
+          "health_conditions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Health Conditions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "age",
+          "sex",
+          "height_cm",
+          "weight_kg"
+        ],
+        "title": "CalorieExpenditureRequest"
+      },
+      "CalorieExpenditureResponse": {
+        "properties": {
+          "estimated_daily_expenditure_kcal": {
+            "type": "number",
+            "title": "Estimated Daily Expenditure Kcal"
+          },
+          "meal_calorie_budget_kcal": {
+            "type": "number",
+            "title": "Meal Calorie Budget Kcal"
+          },
+          "model_version": {
+            "type": "string",
+            "title": "Model Version"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          }
+        },
+        "type": "object",
+        "required": [
+          "estimated_daily_expenditure_kcal",
+          "meal_calorie_budget_kcal",
+          "model_version",
+          "confidence"
+        ],
+        "title": "CalorieExpenditureResponse"
+      },
+      "FeedbackListResponse": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "items": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "limit",
+          "items"
+        ],
+        "title": "FeedbackListResponse",
+        "description": "Feedback or saved meals for one user."
+      },
+      "FeedbackResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "item": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Item"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "item"
+        ],
+        "title": "FeedbackResponse",
+        "description": "The persisted feedback record."
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "environment": {
+            "type": "string",
+            "title": "Environment"
+          },
+          "services": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Services"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "environment",
+          "services"
+        ],
+        "title": "HealthResponse",
+        "description": "Service health and external provider configuration."
+      },
+      "Ingredient": {
+        "properties": {
+          "item_name": {
+            "type": "string",
+            "minLength": 2,
+            "title": "Item Name"
+          },
+          "base_quantity_grams": {
+            "type": "integer",
+            "maximum": 2000.0,
+            "exclusiveMinimum": 0.0,
+            "title": "Base Quantity Grams"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_name",
+          "base_quantity_grams"
+        ],
+        "title": "Ingredient"
+      },
+      "IngredientMacro": {
+        "properties": {
+          "item_name": {
+            "type": "string",
+            "title": "Item Name"
+          },
+          "base_quantity_grams": {
+            "type": "integer",
+            "title": "Base Quantity Grams"
+          },
+          "calories_kcal": {
+            "type": "number",
+            "title": "Calories Kcal"
+          },
+          "protein_g": {
+            "type": "number",
+            "title": "Protein G"
+          },
+          "carbs_g": {
+            "type": "number",
+            "title": "Carbs G"
+          },
+          "fat_g": {
+            "type": "number",
+            "title": "Fat G"
+          },
+          "data_source": {
+            "type": "string",
+            "title": "Data Source"
+          },
+          "verification": {
+            "type": "string",
+            "enum": [
+              "verified_external",
+              "trusted_local",
+              "estimated"
+            ],
+            "title": "Verification"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "item_name",
+          "base_quantity_grams",
+          "calories_kcal",
+          "protein_g",
+          "carbs_g",
+          "fat_g",
+          "data_source",
+          "verification",
+          "confidence"
+        ],
+        "title": "IngredientMacro"
+      },
+      "MealAgentMetadata": {
+        "properties": {
+          "agent_name": {
+            "type": "string",
+            "title": "Agent Name"
+          },
+          "source": {
+            "type": "string",
+            "title": "Source"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          },
+          "warnings": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Warnings"
+          },
+          "explanation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Explanation"
+          }
+        },
+        "type": "object",
+        "required": [
+          "agent_name",
+          "source",
+          "confidence"
+        ],
+        "title": "MealAgentMetadata",
+        "description": "Meal-agent metadata, which may carry an LLM-generated explanation."
+      },
+      "MealDefinition": {
+        "properties": {
+          "craving_input": {
+            "type": "string",
+            "title": "Craving Input"
+          },
+          "structured_meal_name": {
+            "type": "string",
+            "title": "Structured Meal Name"
+          },
+          "ingredients": {
+            "items": {
+              "$ref": "#/components/schemas/Ingredient"
+            },
+            "type": "array",
+            "title": "Ingredients"
+          }
+        },
+        "type": "object",
+        "required": [
+          "craving_input",
+          "structured_meal_name",
+          "ingredients"
+        ],
+        "title": "MealDefinition"
+      },
+      "MealFeedbackRequest": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 3,
+            "title": "User Id",
+            "default": "user_123"
+          },
+          "request_id": {
+            "type": "string",
+            "maxLength": 120,
+            "minLength": 8,
+            "title": "Request Id"
+          },
+          "meal_id": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 120
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Meal Id"
+          },
+          "meal_name": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 2,
+            "title": "Meal Name"
+          },
+          "liked": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Liked"
+          },
+          "rating": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 5.0,
+                "minimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rating"
+          },
+          "saved": {
+            "type": "boolean",
+            "title": "Saved",
+            "default": false
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 500
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "request_id",
+          "meal_name"
+        ],
+        "title": "MealFeedbackRequest"
+      },
+      "MealNutrition": {
+        "properties": {
+          "ingredients_macros": {
+            "items": {
+              "$ref": "#/components/schemas/IngredientMacro"
+            },
+            "type": "array",
+            "title": "Ingredients Macros"
+          },
+          "total_calories": {
+            "type": "number",
+            "title": "Total Calories"
+          },
+          "total_protein": {
+            "type": "number",
+            "title": "Total Protein"
+          },
+          "total_carbs": {
+            "type": "number",
+            "title": "Total Carbs"
+          },
+          "total_fat": {
+            "type": "number",
+            "title": "Total Fat"
+          },
+          "nutrition_status": {
+            "type": "string",
+            "enum": [
+              "verified",
+              "mixed"
+            ],
+            "title": "Nutrition Status"
+          },
+          "sources": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Sources"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/AgentMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "ingredients_macros",
+          "total_calories",
+          "total_protein",
+          "total_carbs",
+          "total_fat",
+          "nutrition_status",
+          "sources",
+          "metadata"
+        ],
+        "title": "MealNutrition",
+        "description": "Verified macros for one meal.\n\n``nutrition_status`` is ``verified`` when no ingredient is estimated and\n``mixed`` when at least one is. The contract's third value,\n``unverified_required``, is never serialised here: it is the failing case,\nreturned as a NutritionProviderError with that code. ``sources`` lists the\ndata sources actually used."
+      },
+      "MealPlanListResponse": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "title": "User Id"
+          },
+          "limit": {
+            "type": "integer",
+            "title": "Limit"
+          },
+          "items": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Items"
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_id",
+          "limit",
+          "items"
+        ],
+        "title": "MealPlanListResponse",
+        "description": "Stored meal plans for one user."
+      },
+      "MealPlanPayload": {
+        "properties": {
+          "user_context": {
+            "$ref": "#/components/schemas/UserContext"
+          },
+          "meal_definition": {
+            "$ref": "#/components/schemas/MealDefinition"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/MealAgentMetadata"
+          },
+          "retrieval": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/RetrievalMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "portion_scaling": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PortionScalingMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "user_context",
+          "meal_definition",
+          "metadata"
+        ],
+        "title": "MealPlanPayload"
+      },
+      "MealPlanResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "plan_status": {
+            "type": "string",
+            "enum": [
+              "matched",
+              "fallback",
+              "infeasible"
+            ],
+            "title": "Plan Status"
+          },
+          "request_id": {
+            "type": "string",
+            "title": "Request Id"
+          },
+          "generated_at": {
+            "type": "string",
+            "title": "Generated At"
+          },
+          "request": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Request"
+          },
+          "calorie_budget": {
+            "$ref": "#/components/schemas/CalorieExpenditureResponse"
+          },
+          "meal_plan": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MealPlanPayload"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "nutrition": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MealNutrition"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "shopping_list": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/SupermarketPayload"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "reconciliation": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ReconciliationMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "infeasible_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Infeasible Reason"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "plan_status",
+          "request_id",
+          "generated_at",
+          "request",
+          "calorie_budget"
+        ],
+        "title": "MealPlanResponse",
+        "description": "A generated meal plan with its verification and reconciliation metadata.\n\n``plan_status`` is ``matched``, ``fallback`` or ``infeasible``. On\n``infeasible`` the request still succeeds: the meal-dependent sections are\nnull and ``infeasible_reason`` explains why, in client-safe terms."
+      },
+      "MealRequest": {
+        "properties": {
+          "user_id": {
+            "type": "string",
+            "maxLength": 80,
+            "minLength": 3,
+            "title": "User Id",
+            "default": "user_123"
+          },
+          "craving": {
+            "type": "string",
+            "maxLength": 180,
+            "minLength": 2,
+            "title": "Craving"
+          },
+          "location": {
+            "type": "string",
+            "maxLength": 160,
+            "minLength": 2,
+            "title": "Location",
+            "default": "Earlwood, NSW"
+          },
+          "health_conditions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Health Conditions"
+          },
+          "dietary_preferences": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Dietary Preferences"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "integer",
+                "maximum": 120.0,
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16,
+                "minLength": 1
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sex"
+          },
+          "height_cm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 260.0,
+                "exclusiveMinimum": 80.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height Cm"
+          },
+          "weight_kg": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 350.0,
+                "exclusiveMinimum": 20.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight Kg"
+          },
+          "activity_multiplier": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 2.5,
+                "exclusiveMinimum": 1.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activity Multiplier"
+          },
+          "goal": {
+            "type": "string",
+            "maxLength": 40,
+            "minLength": 3,
+            "title": "Goal",
+            "default": "maintain"
+          }
+        },
+        "type": "object",
+        "required": [
+          "craving"
+        ],
+        "title": "MealRequest"
+      },
+      "PortionScalingMetadata": {
+        "properties": {
+          "target_meal_calories": {
+            "type": "integer",
+            "exclusiveMinimum": 0.0,
+            "title": "Target Meal Calories"
+          },
+          "estimated_template_calories": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Estimated Template Calories"
+          },
+          "scale_factor": {
+            "type": "number",
+            "exclusiveMinimum": 0.0,
+            "title": "Scale Factor"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_meal_calories",
+          "estimated_template_calories",
+          "scale_factor"
+        ],
+        "title": "PortionScalingMetadata"
+      },
+      "ReconciliationMetadata": {
+        "properties": {
+          "target_meal_calories": {
+            "type": "integer",
+            "title": "Target Meal Calories"
+          },
+          "verified_calories_before": {
+            "type": "number",
+            "title": "Verified Calories Before"
+          },
+          "deviation_before": {
+            "type": "number",
+            "title": "Deviation Before"
+          },
+          "rescaled": {
+            "type": "boolean",
+            "title": "Rescaled"
+          },
+          "verified_calories_after": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Verified Calories After"
+          },
+          "deviation_after": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Deviation After"
+          },
+          "within_tolerance": {
+            "type": "boolean",
+            "title": "Within Tolerance"
+          },
+          "tolerance": {
+            "type": "number",
+            "title": "Tolerance"
+          }
+        },
+        "type": "object",
+        "required": [
+          "target_meal_calories",
+          "verified_calories_before",
+          "deviation_before",
+          "rescaled",
+          "within_tolerance",
+          "tolerance"
+        ],
+        "title": "ReconciliationMetadata",
+        "description": "Records how the portion estimate compared with verified nutrition."
+      },
+      "RetrievalCandidate": {
+        "properties": {
+          "meal_id": {
+            "type": "string",
+            "title": "Meal Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "score": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Score"
+          },
+          "rank": {
+            "type": "integer",
+            "minimum": 1.0,
+            "title": "Rank"
+          },
+          "matched_terms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Matched Terms"
+          }
+        },
+        "type": "object",
+        "required": [
+          "meal_id",
+          "name",
+          "score",
+          "rank"
+        ],
+        "title": "RetrievalCandidate"
+      },
+      "RetrievalMetadata": {
+        "properties": {
+          "query": {
+            "type": "string",
+            "title": "Query"
+          },
+          "retriever": {
+            "type": "string",
+            "title": "Retriever"
+          },
+          "selected_meal_id": {
+            "type": "string",
+            "title": "Selected Meal Id"
+          },
+          "selected_score": {
+            "type": "number",
+            "minimum": 0.0,
+            "title": "Selected Score"
+          },
+          "matched_terms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Matched Terms"
+          },
+          "candidates": {
+            "items": {
+              "$ref": "#/components/schemas/RetrievalCandidate"
+            },
+            "type": "array",
+            "title": "Candidates"
+          },
+          "substitutions": {
+            "items": {
+              "$ref": "#/components/schemas/AppliedSubstitution"
+            },
+            "type": "array",
+            "title": "Substitutions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "query",
+          "retriever",
+          "selected_meal_id",
+          "selected_score"
+        ],
+        "title": "RetrievalMetadata"
+      },
+      "RootResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "links": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "type": "object",
+            "title": "Links"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "status",
+          "message",
+          "links"
+        ],
+        "title": "RootResponse",
+        "description": "Service banner and endpoint links."
+      },
+      "ShoppingListItem": {
+        "properties": {
+          "original_item_name": {
+            "type": "string",
+            "title": "Original Item Name"
+          },
+          "store_product_name": {
+            "type": "string",
+            "title": "Store Product Name"
+          },
+          "category_or_aisle": {
+            "type": "string",
+            "title": "Category Or Aisle"
+          },
+          "estimated_price": {
+            "type": "number",
+            "title": "Estimated Price"
+          },
+          "data_source": {
+            "type": "string",
+            "title": "Data Source"
+          },
+          "confidence": {
+            "type": "number",
+            "maximum": 1.0,
+            "minimum": 0.0,
+            "title": "Confidence"
+          }
+        },
+        "type": "object",
+        "required": [
+          "original_item_name",
+          "store_product_name",
+          "category_or_aisle",
+          "estimated_price",
+          "data_source",
+          "confidence"
+        ],
+        "title": "ShoppingListItem"
+      },
+      "StoreDetails": {
+        "properties": {
+          "store_name": {
+            "type": "string",
+            "title": "Store Name"
+          },
+          "address": {
+            "type": "string",
+            "title": "Address"
+          },
+          "location_source": {
+            "type": "string",
+            "title": "Location Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "store_name",
+          "address",
+          "location_source"
+        ],
+        "title": "StoreDetails"
+      },
+      "SupermarketPayload": {
+        "properties": {
+          "store_details": {
+            "$ref": "#/components/schemas/StoreDetails"
+          },
+          "shopping_list": {
+            "items": {
+              "$ref": "#/components/schemas/ShoppingListItem"
+            },
+            "type": "array",
+            "title": "Shopping List"
+          },
+          "total_estimated_cost": {
+            "type": "number",
+            "title": "Total Estimated Cost"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/AgentMetadata"
+          }
+        },
+        "type": "object",
+        "required": [
+          "store_details",
+          "shopping_list",
+          "total_estimated_cost",
+          "metadata"
+        ],
+        "title": "SupermarketPayload"
+      },
+      "UserContext": {
+        "properties": {
+          "caloric_target": {
+            "type": "integer",
+            "title": "Caloric Target"
+          },
+          "dietary_restrictions": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Dietary Restrictions"
+          }
+        },
+        "type": "object",
+        "required": [
+          "caloric_target",
+          "dietary_restrictions"
+        ],
+        "title": "UserContext"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
