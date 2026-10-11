@@ -46,10 +46,11 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   `scripts/live_check.sh` and `X-Instance-Id`. CI rehearses a two-instance
   deploy and a key revocation. The real deploy needs the owner's GCP project
   (`docs/6_deployment.md` §1).
-- 2026-10-10: G10b tracing is on `feat/g10b-tracing`, in review. It has
-  OpenTelemetry stage spans exported to Cloud Trace over OTLP, and holds
-  traces and logs to one allowlist (DEC-17 to DEC-19). The proof is
-  `test_telemetry_redaction.py`.
+- 2026-10-11: G10b tracing (#18) is merged. It has OpenTelemetry stage spans
+  exported to Cloud Trace over OTLP, holds traces and logs to one allowlist,
+  and continues only an incoming `traceparent` (DEC-17 to DEC-20). The proof
+  is `test_telemetry_redaction.py`. The client-safe Gemini warning (#19)
+  follows. A real trace arriving in Cloud Trace awaits the owner's GCP setup.
 
 ## Open risks
 

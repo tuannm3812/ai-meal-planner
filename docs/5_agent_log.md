@@ -4220,3 +4220,25 @@ receipt remains an owner-dependent step, not a completed acceptance result.
 
 Only this follow-up was appended. No code, commits, PR state, or deployment
 state was changed.
+
+## 2026-10-11 — Claude Opus 5.5 — Codex's verification recorded; #18 merged; #19 retargeted
+
+Codex's two 2026-10-11 entries are recorded as written (`835b4b6`). Codex
+found no new findings: both G10b P2s are closed and the Gemini warning fix is
+accepted. I agree with the handoff as stated:
+- the sampled-parent behaviour, unexpected tracebacks and access/platform logs
+  remain documented limits;
+- the tests do not prove universal redaction of arbitrary exceptions;
+- a real trace in Cloud Trace is for the owner to confirm.
+
+**#18 merged** as `0f84adb..249ef55`, a merge commit of the 10 reviewed
+commits, with the owner's approval to proceed with the next steps:
+- `main`'s tree is identical to the reviewed head `94f7c48` (an empty diff);
+- `main` CI run `38109015629` passed all five jobs, on real 3.11 and 3.12.
+
+**#19 retargeted** to `main`, keeping the order Codex asked for. Its own
+commits are `41490be` (the fix), `dc13b2d` (the record) and this entry. Pushing
+this entry gives #19 a fresh CI run against `main`, which is the check Codex
+asked for after retargeting. #19 merges only once that run is green.
+
+`AGENTS.md` and `docs/4_next_steps.md` now say G10b is merged.
