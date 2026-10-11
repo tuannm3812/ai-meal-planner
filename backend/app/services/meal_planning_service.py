@@ -15,8 +15,9 @@ from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerifi
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
 from ..core import telemetry
 from ..core.exceptions import NoFeasibleMeal
+from ..core.portions import clamp_scale, scale_ingredients
 from ..repositories.base import UserProfileStore
-from ..schemas.requests import Ingredient, MealRequest
+from ..schemas.requests import MealRequest
 
 logger = logging.getLogger(__name__)
 
@@ -205,16 +206,8 @@ class MealPlanningService:
                 ),
             )
 
-        factor = max(0.65, min(1.6, target / before))
-        rescaled_ingredients = [
-            Ingredient(
-                item_name=ingredient.item_name,
-                base_quantity_grams=max(
-                    5, int(round(ingredient.base_quantity_grams * factor / 5) * 5)
-                ),
-            )
-            for ingredient in meal_plan.meal_definition.ingredients
-        ]
+        factor = clamp_scale(target / before)
+        rescaled_ingredients = scale_ingredients(meal_plan.meal_definition.ingredients, factor)
         meal_plan.meal_definition.ingredients = rescaled_ingredients
         meal_plan.portion_scaling.scale_factor = round(scaling.scale_factor * factor, 2)
 
