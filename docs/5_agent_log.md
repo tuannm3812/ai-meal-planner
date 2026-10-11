@@ -4708,3 +4708,62 @@ Only §7.6 remains: `backend/app/ml/` is an empty package that spec §6 said to
 use or remove. Removing it is reversible and touches no behaviour, but "use
 or remove" reads as a choice, so I have left it for the owner or Codex. Every
 other §7 item is a scope call or an owner decision.
+
+## 2026-10-12 — Claude Opus 5.5 — four owner decisions implemented (for Codex review)
+
+**No Codex review of #23 yet.** At the time of writing there is no new Codex
+entry in this log, and no review or comment on PR #23. So #23 stays an
+unmerged draft until Codex has looked at it.
+
+**The owner's decisions (2026-10-12).** Asked about the four open items that
+needed a decision, the owner took the recommended option on each. All are on
+branch `chore/owner-decisions`, stacked on #23 because both append to this
+log:
+
+1. **The feedback 400 is unified** (`fix(api)`, DEC-23).
+   `POST /meal-feedback` with no signal now raises `FeedbackSignalRequired`:
+   the same 400 and the same message, now with `status`, `error` and `code:
+   feedback_signal_required`.
+   - Both clients were checked first. React reads `response.data.detail`,
+     which is kept. Streamlit in API mode shows the whole JSON body. The
+     in-process demo never raised this 400.
+   - `DetailResponse` is removed, and the contract is regenerated. The drift
+     gate also caught the route's docstring change, because FastAPI publishes
+     it as the operation description.
+   - RED: the endpoint test received `{"detail": ...}` where the full
+     `ErrorResponse` was due. GREEN after the change.
+2. **The README hero is our own capture** (`docs(readme)`).
+   - The image hotlinked from `assets.epicurious.com` is replaced by
+     `docs/assets/screenshots/react-hero.png`, the top 1440 × 830 of our
+     dashboard's meal plan, cropped from the existing screenshot.
+   - `capture_screenshots.py` now produces it with Playwright's `clip`, so it
+     regenerates with the others.
+   - No third-party asset remains in the README.
+3. **Render is retired** (`chore(deploy)`, DEC-22).
+   - `render.yaml` is deleted. The runbook, `AGENTS.md` and both repository
+     trees no longer mention it.
+   - The README's dependency note named Render as the consumer of
+     `backend/requirements.txt`. It now names the real one, the Streamlit
+     demo, through the root `requirements.txt`.
+   - `docs/2_architecture.md` had said a hosted target was still to be chosen
+     and that `render.yaml` deployed the backend; it now describes Cloud Run.
+   - `runtime.txt` stays: it came from a Streamlit-demo commit.
+4. **`backend/app/ml/` is removed** (`chore(app)`). It held only a
+   docstring, and nothing imported it. This closes §7.6.
+
+**Evidence.**
+- `uv run pytest --cov-fail-under=89`: **523 passed** (439 backend, 84
+  Streamlit), **94.34%**.
+- The frontend's 39 tests pass, including the frozen `App.test.jsx`, which
+  was not edited.
+- Ruff lint passes, and so does `git diff --check`.
+
+**Seen, not changed: the demo differs from the API on feedback.** In
+`streamlit_app/demo.py`, the in-process demo saves feedback straight to the
+repository. It applies neither the at-least-one-signal rule nor the G4 check
+that the `request_id` belongs to one of the client's plans. That predates
+this work, and DEC-2's demo is single-user, so I left it. It would be
+consistent to route the demo through the same validation; that is a candidate
+for Codex's view.
+
+**Merge order:** #23, then this PR retargeted to `main`.
