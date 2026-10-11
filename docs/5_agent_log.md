@@ -4156,3 +4156,67 @@ type only.
   Streamlit), **94.20%**.
 
 **Merge order:** #18 first, then this PR retargeted to `main`.
+
+## 2026-10-11 — Codex — verification of G10b fixes and Gemini warning follow-up
+
+Reviewed `f297109`, `053dade`, and `41490be`, plus Claude's responses,
+from the clean `fix/gemini-warning` checkout at `dc13b2d`. PR #18 remains
+open at `94f7c48`; stacked PR #19 remains open at `dc13b2d`, targeting
+`feat/g10b-tracing`.
+
+**Verdict: both G10b P2 findings are closed in the reviewed changes. No new
+findings in this targeted review.**
+
+- Context extraction now reads only `traceparent` through the dedicated W3C
+  propagator. The regression checks parent trace/span continuity, empty
+  tracestate on the request and all five stage spans, and absence of the
+  marked state/baggage in the actual OTLP encoding. The seven marked
+  scenarios and malformed/header-only cases passed in the full suite.
+- The setup block now enables both Telemetry and Cloud Trace APIs, grants
+  the runtime identity Service Usage Consumer, and explicitly says Cloud
+  Trace must stay enabled. This closes the missing setup prerequisite;
+  it is not a verification of live IAM authorization or trace receipt.
+- Gemini failures now append only the fixed client warning. The new fake-
+  provider tests verify that marked exception text reaches neither the
+  payload nor logs, and retain the successful explanation/source behavior.
+  The warning follow-up is supported by code and passing regression tests.
+
+**Fresh evidence:**
+
+- Local `uv run pytest --cov-fail-under=89`: **486 passed** (402 backend,
+  84 Streamlit), **94.20%** coverage; two existing dependency deprecation
+  warnings. `meal_recommendation_agent.py` reports **93%** coverage.
+- Ruff lint, formatting (**99 files**), `uv lock --check`, and
+  `git diff --check`: passed.
+- PR #18 CI run `38029547504` and PR #19 CI run `38029807836`: all five
+  jobs successful on each head. Frontend, container and Python 3.12 results
+  here are remote CI evidence, not fresh local runs. Claude's historical
+  RED/mutation runs were not independently repeated.
+
+**Discussion / handoff.** Keep the documented sampled-parent behavior and
+unexpected-traceback/access-log limitations explicit; the tests do not
+establish universal redaction of arbitrary exceptions. The safe traceparent
+continuity is intentional, while free-text context is excluded. Real Cloud
+Trace receipt and production authorization still need the owner's GCP setup.
+The stated integration order is #18 first, then retarget #19 to `main` and
+verify its resulting checks; neither PR was merged by this review.
+
+Only this append-only entry was added, left uncommitted for Claude to record.
+No application changes, external review comments, or deployments were made.
+
+## 2026-10-11 — Codex — follow-up: no new Claude changes since verification
+
+Rechecked the checkout, local agent log, and GitHub after the owner's latest
+request. Local HEAD remains `dc13b2d`; PR #18 is still open at `94f7c48`,
+and PR #19 is still open at `dc13b2d`, targeting `feat/g10b-tracing`.
+No new Claude commits or local log replies have appeared since the verified
+review above. Its uncommitted log entry is preserved.
+
+The reviewed G10b fixes and Gemini warning remain accepted; there is no new
+code to review, so the suite was not rerun and no new test results are claimed.
+Claude: please record the verification above, and preserve the #18-then-#19
+integration order with fresh checks after retargeting. Real Cloud Trace
+receipt remains an owner-dependent step, not a completed acceptance result.
+
+Only this follow-up was appended. No code, commits, PR state, or deployment
+state was changed.
