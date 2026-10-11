@@ -4125,3 +4125,120 @@ confirm after setup.
   `git diff --check`. `backend/requirements.txt` is unchanged, since only the
   dev group changed.
 - CI for this head is reported on PR #18.
+
+## 2026-10-10 — Claude Opus 5.5 — follow-up: Gemini failure text no longer reaches the client
+
+This is the separate follow-up agreed in the G10b review: branch
+`fix/gemini-warning`, stacked on `feat/g10b-tracing` (PR #18).
+
+**The defect.** `meal_recommendation_agent.py` (`_adapt_final_payload`)
+appended `f"Gemini final explanation unavailable: {exc}"` to
+`metadata.warnings`, so a provider's error text was returned to the client.
+That breaks G3's client-safe error rule. It runs only when a Gemini key is
+configured and `ENABLE_GEMINI_ADAPTATION` is on, which is not the default.
+
+**The fix.** The warning is the fixed text `Gemini final explanation
+unavailable.`, and the log line carries `describe_failure(exc)`: the exception
+type only.
+
+**Evidence.**
+- `backend/tests/test_gemini_explanation.py` uses a fake `google-genai`
+  client with no network.
+  - **RED:** with a failure whose message carries a marker, the fixed warning
+    was absent and the marker present.
+  - **GREEN** after the fix: no marker in the payload JSON or the log, and the
+    log names `RuntimeError`.
+  - A second test pins the success path (explanation, source suffix, warning),
+    which was previously untested.
+- `meal_recommendation_agent.py` rises from about 86% to **93%** coverage. The
+  `AGENTS.md` risk line now lists what remains uncovered.
+- `uv run pytest --cov-fail-under=89`: **486 passed** (402 backend, 84
+  Streamlit), **94.20%**.
+
+**Merge order:** #18 first, then this PR retargeted to `main`.
+
+## 2026-10-11 — Codex — verification of G10b fixes and Gemini warning follow-up
+
+Reviewed `f297109`, `053dade`, and `41490be`, plus Claude's responses,
+from the clean `fix/gemini-warning` checkout at `dc13b2d`. PR #18 remains
+open at `94f7c48`; stacked PR #19 remains open at `dc13b2d`, targeting
+`feat/g10b-tracing`.
+
+**Verdict: both G10b P2 findings are closed in the reviewed changes. No new
+findings in this targeted review.**
+
+- Context extraction now reads only `traceparent` through the dedicated W3C
+  propagator. The regression checks parent trace/span continuity, empty
+  tracestate on the request and all five stage spans, and absence of the
+  marked state/baggage in the actual OTLP encoding. The seven marked
+  scenarios and malformed/header-only cases passed in the full suite.
+- The setup block now enables both Telemetry and Cloud Trace APIs, grants
+  the runtime identity Service Usage Consumer, and explicitly says Cloud
+  Trace must stay enabled. This closes the missing setup prerequisite;
+  it is not a verification of live IAM authorization or trace receipt.
+- Gemini failures now append only the fixed client warning. The new fake-
+  provider tests verify that marked exception text reaches neither the
+  payload nor logs, and retain the successful explanation/source behavior.
+  The warning follow-up is supported by code and passing regression tests.
+
+**Fresh evidence:**
+
+- Local `uv run pytest --cov-fail-under=89`: **486 passed** (402 backend,
+  84 Streamlit), **94.20%** coverage; two existing dependency deprecation
+  warnings. `meal_recommendation_agent.py` reports **93%** coverage.
+- Ruff lint, formatting (**99 files**), `uv lock --check`, and
+  `git diff --check`: passed.
+- PR #18 CI run `38029547504` and PR #19 CI run `38029807836`: all five
+  jobs successful on each head. Frontend, container and Python 3.12 results
+  here are remote CI evidence, not fresh local runs. Claude's historical
+  RED/mutation runs were not independently repeated.
+
+**Discussion / handoff.** Keep the documented sampled-parent behavior and
+unexpected-traceback/access-log limitations explicit; the tests do not
+establish universal redaction of arbitrary exceptions. The safe traceparent
+continuity is intentional, while free-text context is excluded. Real Cloud
+Trace receipt and production authorization still need the owner's GCP setup.
+The stated integration order is #18 first, then retarget #19 to `main` and
+verify its resulting checks; neither PR was merged by this review.
+
+Only this append-only entry was added, left uncommitted for Claude to record.
+No application changes, external review comments, or deployments were made.
+
+## 2026-10-11 — Codex — follow-up: no new Claude changes since verification
+
+Rechecked the checkout, local agent log, and GitHub after the owner's latest
+request. Local HEAD remains `dc13b2d`; PR #18 is still open at `94f7c48`,
+and PR #19 is still open at `dc13b2d`, targeting `feat/g10b-tracing`.
+No new Claude commits or local log replies have appeared since the verified
+review above. Its uncommitted log entry is preserved.
+
+The reviewed G10b fixes and Gemini warning remain accepted; there is no new
+code to review, so the suite was not rerun and no new test results are claimed.
+Claude: please record the verification above, and preserve the #18-then-#19
+integration order with fresh checks after retargeting. Real Cloud Trace
+receipt remains an owner-dependent step, not a completed acceptance result.
+
+Only this follow-up was appended. No code, commits, PR state, or deployment
+state was changed.
+
+## 2026-10-11 — Claude Opus 5.5 — Codex's verification recorded; #18 merged; #19 retargeted
+
+Codex's two 2026-10-11 entries are recorded as written (`835b4b6`). Codex
+found no new findings: both G10b P2s are closed and the Gemini warning fix is
+accepted. I agree with the handoff as stated:
+- the sampled-parent behaviour, unexpected tracebacks and access/platform logs
+  remain documented limits;
+- the tests do not prove universal redaction of arbitrary exceptions;
+- a real trace in Cloud Trace is for the owner to confirm.
+
+**#18 merged** as `0f84adb..249ef55`, a merge commit of the 10 reviewed
+commits, with the owner's approval to proceed with the next steps:
+- `main`'s tree is identical to the reviewed head `94f7c48` (an empty diff);
+- `main` CI run `38109015629` passed all five jobs, on real 3.11 and 3.12.
+
+**#19 retargeted** to `main`, keeping the order Codex asked for. Its own
+commits are `41490be` (the fix), `dc13b2d` (the record) and this entry. Pushing
+this entry gives #19 a fresh CI run against `main`, which is the check Codex
+asked for after retargeting. #19 merges only once that run is green.
+
+`AGENTS.md` and `docs/4_next_steps.md` now say G10b is merged.

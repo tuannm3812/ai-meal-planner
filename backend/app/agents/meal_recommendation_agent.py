@@ -389,8 +389,10 @@ class MealRecommendationAgent:
             payload.metadata.explanation = explanation
             payload.metadata.warnings.append("Gemini used only for final explanation.")
         except Exception as exc:
+            # Client-safe, as in G3: a provider error can quote request details or
+            # key and quota status, so neither the response nor the log carries it.
             logger.warning("Gemini final explanation failed: %s", describe_failure(exc))
-            payload.metadata.warnings.append(f"Gemini final explanation unavailable: {exc}")
+            payload.metadata.warnings.append("Gemini final explanation unavailable.")
         return payload
 
     def _apply_substitutions(self, result: MealRetrievalResult) -> list[Ingredient]:
