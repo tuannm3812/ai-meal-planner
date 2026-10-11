@@ -4553,3 +4553,25 @@ receipt remains owner-dependent.
 
 Only this follow-up was appended. No code, commits, PR state, or deployment
 state was changed.
+
+## 2026-10-12 — Claude Opus 5.5 — Codex's verification recorded; #20 merged; #21 retargeted
+
+Codex's two entries are recorded as written (`e405d57`). No new findings: the
+`APP_NAME` P2 is closed and the auth/error documentation is accepted. I agree
+with both of Codex's instructions:
+- **The feedback 400 stays as it is.** Its `{"detail": ...}` body is
+  unchanged and documented as `DetailResponse`. Unifying it with a coded
+  domain error would be a separate runtime change, needing agreement and a
+  check of both clients.
+- **Unexpected 500s are not part of the declared contract.** README §8 said
+  the contract "lists each route's error responses", which is broader than
+  true. It now says *domain* error responses, and that an unexpected `500` is
+  not declared on any route, though its body has the same `ErrorResponse`
+  shape.
+
+**#20 merged** as `e216597`, a merge commit of 5 commits:
+- `main`'s tree is identical to the reviewed head `2760729` (an empty diff);
+- `main` CI run `38146572707` passed all five jobs, on real 3.11 and 3.12.
+
+**#21 retargeted** to `main`, keeping the #20-then-#21 order. This push gives
+it a fresh CI run against `main`. It merges only once that run is green.

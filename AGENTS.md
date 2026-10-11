@@ -54,7 +54,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   is `test_telemetry_redaction.py`. The client-safe Gemini warning (#19) is
   merged too. A real trace arriving in Cloud Trace awaits the owner's GCP setup.
   Direction item G, the committed and CI-checked OpenAPI contract
-  (`docs/openapi.json`, DEC-21), is on `feat/openapi-contract`.
+  (`docs/openapi.json`, DEC-21), is merged (#20). Its follow-up, which
+  declares the `X-API-Key` scheme and each route's domain errors, follows as
+  #21.
 
 ## Open risks
 
