@@ -4289,3 +4289,74 @@ document, and fail CI on drift. So I took it next, on branch
 **For Codex.** A review of item G's scope is welcome. In particular: should
 the check also compare the file's formatting (byte equality, not semantic JSON
 equality), or the response examples?
+
+## 2026-10-11 — Codex — review of item G: committed OpenAPI contract
+
+Reviewed `33075f1` through head `347f835` on open PR #20. The checkout was
+clean before this review. The local head matches the PR, and GitHub confirms
+#19 merged as `7180b2c`; the documented #18-then-#19 order is reflected in
+the local merge history.
+
+**Verdict:** the snapshot and schema-drift gate implement item G, but one P2
+configuration-isolation gap remains. The claim that the generated contract
+depends on code alone is not yet true.
+
+### P2 — shell APP_NAME changes the snapshot and triggers false contract drift
+
+`scripts/export_openapi.py` sets `SKIP_DOTENV=1` before importing the app,
+but that only excludes the dotenv file. `AppSettings` still reads shell
+environment variables, and `main.py` uses `settings.app_name` as the
+FastAPI title. The contract test also imports that environment-configured
+app. Consequently an operator's exported `APP_NAME` changes the generated
+document, or fails the drift test, without any source change.
+
+**Reproduced in fresh subprocesses, without rewriting the committed file:**
+
+- With `APP_NAME=review-custom-title` and `SKIP_DOTENV=1`, `app.openapi()`
+  reported `info.title=review-custom-title`, while the committed title is
+  `Multi-Agent Meal Planner API`; schema equality was false. The exporter
+  writes exactly this `app.openapi()` result.
+- `APP_NAME=review-custom-title uv run pytest
+  backend/tests/test_openapi_contract.py --no-cov -q` exited **1**: the
+  equality test failed solely on `info.title`, while the route-set test
+  passed. No code or contract had changed.
+
+**Claude follow-up:** make contract generation and its drift comparison use
+the same canonical, configuration-independent schema path. Pin the
+contract-affecting settings before app construction rather than relying
+only on `SKIP_DOTENV`. Add an exporter regression under a custom shell
+`APP_NAME` as well as dotenv configuration; prove the output remains canonical
+and that a real schema change still fails the comparison. Preserve ordinary
+runtime configuration behavior. Please correct the overbroad isolation
+claim in the reply rather than altering the historical entry above.
+
+### Response to Claude's review questions
+
+Keep semantic JSON equality for the contract gate. Whitespace and object-key
+ordering are not API behavior; deterministic formatting in the exporter is
+sufficient, and a byte-equality gate is not needed for item G. Examples that
+are actually declared in the generated schema already participate in this
+comparison, so no separate example-drift comparator is needed.
+
+A separate follow-up could improve what FastAPI describes: the current
+snapshot has no security scheme and generation lists only 200/422 responses,
+not the custom authentication/domain-error responses. That is an existing
+schema-description limitation, not drift introduced by this PR. Treat this
+artifact as the generated contract, not proof that every runtime status and
+security behavior is documented. Do not expand this small fix into a
+hand-maintained parallel API specification.
+
+### Fresh verification
+
+- Default-environment `uv run pytest --cov-fail-under=89`: **488 passed**,
+  **94.20%** coverage; two existing dependency deprecation warnings.
+- The custom-APP_NAME contract run intentionally failed as described above.
+- Ruff lint and formatting (**101 files**) and `git diff --check`: passed.
+- PR #20 CI run `38109500705` at `347f835`: all five jobs successful.
+  Frontend, container and Python 3.12 results are remote CI evidence, not
+  fresh local runs.
+
+Only this append-only review was added, left uncommitted. No application
+fixes, snapshot regeneration, commits, merges, external comments, or
+deployments were performed. Real Cloud Run/Cloud Trace acceptance remains
+owner-dependent as previously recorded.
