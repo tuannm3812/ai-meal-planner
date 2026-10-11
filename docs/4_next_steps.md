@@ -198,9 +198,9 @@ From the Current-to-Target Migration list, checked against the working tree on
       §2.1–2.3. `repositories/storage.py` no longer exists; it is
       `repositories/json_store/repositories.py` (`UserProfileRepository`,
       `MealPlanRepository`, `MealFeedbackRepository`) and `repositories/sql/`.
-- [ ] **Reusable calorie-model feature transforms under `backend/app/ml/`** — the
-      package is empty. §1.10 decides its fate: populate it or delete it, not leave
-      it as an empty promise.
+- [x] **Done 2026-10-12, removed.** The empty `backend/app/ml/` package is
+      deleted (owner decision). If the calorie-model feature transforms are ever
+      extracted, a package can be created for them then.
 - [x] **Supermarket agent** — the one Later Scope item already delivered;
       `agents/supermarket_agent.py` ships and `/generate-meal-plan` returns a
       shopping list.
@@ -268,8 +268,8 @@ From spec §12.
    duplicated between `_reconcile` and
    `MealRecommendationAgent._scale_ingredients_to_meal_target`. Both now call
    `core/portions.py`, with unchanged behaviour (`test_portions.py`).
-6. **`backend/app/ml/` is an empty package.** Spec §6 item 10 said to use or remove
-   it; neither happened.
+6. **Closed 2026-10-12.** `backend/app/ml/` was an empty package that spec §6
+   item 10 said to use or remove. It is removed (owner decision).
 7. **Authentication and user accounts.** The endpoints that take a `user_id` take it on trust.
    Also a README roadmap item; it blocks real multi-user use, which DEC-1 places
    after the portfolio milestone.

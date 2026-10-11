@@ -85,7 +85,6 @@ ai-meal-planner/
 |   |   |-- core/
 |   |   |   |-- config.py
 |   |   |   `-- logging.py
-|   |   |-- ml/
 |   |   |   |-- calorie_model.py
 |   |   |   |-- features.py
 |   |   |   `-- training.py

@@ -82,7 +82,6 @@ ai-meal-planner/
 |   |-- app/
 |   |   |-- agents/
 |   |   |-- core/
-|   |   |-- ml/            (empty scaffolding)
 |   |   |-- rag/
 |   |   |-- repositories/
 |   |   |-- schemas/
