@@ -9,6 +9,7 @@ from backend.app.core.container import ContainerDep
 from backend.app.core.exceptions import FeedbackSignalRequired, HistoryDisabled, MealPlanNotFound
 from backend.app.schemas.requests import MealFeedbackRequest
 from backend.app.schemas.responses import FeedbackListResponse, FeedbackResponse
+from backend.app.services.feedback import record_feedback
 
 router = APIRouter()
 
@@ -43,19 +44,13 @@ async def save_meal_feedback(
     Returns:
         The persisted feedback record.
     """
-    if request.liked is None and request.rating is None and not request.saved:
-        raise FeedbackSignalRequired("feedback with no liked, rating or saved")
-
-    plan = await run_in_threadpool(
-        container.meal_history.find_by_request_id,
-        request.request_id,
-        client_id=principal.client_id,
-    )
-    if plan is None:
-        raise MealPlanNotFound(f"client {principal.client_id!r} has no plan {request.request_id!r}")
-
+    # The same rules the in-process Streamlit demo applies (services/feedback.py).
     record = await run_in_threadpool(
-        container.meal_feedback.save, request.model_dump(), client_id=principal.client_id
+        record_feedback,
+        request,
+        meal_history=container.meal_history,
+        meal_feedback=container.meal_feedback,
+        client_id=principal.client_id,
     )
     return FeedbackResponse(
         status="success",

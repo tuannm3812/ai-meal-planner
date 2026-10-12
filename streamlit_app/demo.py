@@ -160,7 +160,17 @@ def local_demo_request(
         return agent.predict(request).model_dump()
 
     if path == "/meal-feedback":
-        record = MealFeedbackRepository(DEMO_DATA_DIR).save(payload, client_id=LOCAL_CLIENT_ID)
+        # The API's rules, not a direct save: a validated body, at least one
+        # signal, and a request_id from one of this demo's own plans.
+        from backend.app.schemas.requests import MealFeedbackRequest
+        from backend.app.services.feedback import record_feedback
+
+        record = record_feedback(
+            MealFeedbackRequest.model_validate(payload),
+            meal_history=MealPlanRepository(DEMO_DATA_DIR),
+            meal_feedback=MealFeedbackRepository(DEMO_DATA_DIR),
+            client_id=LOCAL_CLIENT_ID,
+        )
         return {"status": "success", "item": record}
 
     if path.startswith("/meal-plans/"):
