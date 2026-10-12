@@ -38,8 +38,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 522 tests (438
-  backend, 84 Streamlit), coverage 94.33% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 523 tests (439
+  backend, 84 Streamlit), coverage 94.34% against the 89% CI floor;
   the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
   README screenshots and decision-log index (#16) and G6's deployment half
@@ -79,9 +79,6 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
-- **`render.yaml` will not start since G4.** It sets `APP_ENV=production` with no
-  `API_KEYS`, and production refuses that by design. Cloud Run is now the target
-  (DEC-16), so retire Render or fix it as a documented fallback.
 - **In hosted mode the React History tab button stays visible.** Its contents
   are replaced with a notice. Hiding the button would need a `/health` call on
   first render, which the frozen `App.test.jsx` forbids. React cannot call a keyed

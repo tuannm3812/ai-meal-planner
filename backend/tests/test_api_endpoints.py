@@ -84,7 +84,14 @@ def test_meal_feedback_requires_at_least_one_signal(client: TestClient) -> None:
         "/meal-feedback",
         json={"user_id": "user_123", "request_id": "abcdefgh", "meal_name": "Test Meal"},
     )
+    # Owner decision, 2026-10-12: the same ErrorResponse body as every other error.
     assert response.status_code == 400
+    assert response.json() == {
+        "status": "error",
+        "error": "FeedbackSignalRequired",
+        "code": "feedback_signal_required",
+        "detail": "Provide at least one feedback signal: liked, rating, or saved.",
+    }
 
 
 def test_meal_feedback_roundtrips(client: TestClient) -> None:

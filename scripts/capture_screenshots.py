@@ -1,4 +1,4 @@
-"""Regenerate the README screenshots in docs/assets/screenshots/.
+"""Regenerate the README screenshots, and its hero image, in docs/assets/screenshots/.
 
 Not part of the app or its tests, so Playwright is not a project dependency.
 Start the three apps first, ideally from a scratch worktree so the generated
@@ -41,6 +41,10 @@ with sync_playwright() as p:
     page.get_by_text("Meal Overview").wait_for(timeout=60000)
     page.wait_for_timeout(800)
     page.screenshot(path=OUT / "react-meal-plan.png", full_page=True)
+    # The README hero: the dashboard's top, about 16:9, from the same meal plan.
+    page.screenshot(
+        path=OUT / "react-hero.png", clip={"x": 0, "y": 0, "width": 1440, "height": 830}
+    )
 
     page.get_by_role("button", name="Calories").click()
     page.get_by_role("button", name="Predict Expenditure").click()

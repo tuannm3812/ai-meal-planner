@@ -29,6 +29,8 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 19 | Keep the 30-day trace and log retention defaults | 2026-10-10 |
 | 20 | Incoming trace context: `traceparent` only | 2026-10-10 |
 | 21 | The OpenAPI document is a committed, CI-checked contract | 2026-10-11 |
+| 22 | Render is retired; Cloud Run is the only hosted API target | 2026-10-12 |
+| 23 | Every error response uses `ErrorResponse` | 2026-10-12 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -298,3 +300,30 @@ settings and skips the dotenv file. The exporter and the drift test both use
 that one path, so every setting takes its default from the code. A running
 deployment's own `/openapi.json` still reflects its configuration. The
 decision itself is unchanged.
+
+## 2026-10-12 — Owner decisions after the production-readiness gates
+
+The owner took the recommended option on each of four open questions. Two are
+architectural and recorded here. The other two, replacing the hotlinked README
+hero and removing the empty `backend/app/ml/` package, are recorded in
+`docs/4_next_steps.md` and the agent log.
+
+### DEC-22 — Render is retired; Cloud Run is the only hosted API target
+
+DEC-16 left `render.yaml` "to be retired or fixed as a documented fallback".
+It could not start since G4: it set `APP_ENV=production` with no `API_KEYS`. It
+is now deleted. Cloud Run, with the deploy workflow, the live check and the
+runbook, is the one hosted API path. The Streamlit Community Cloud demo is
+unaffected (DEC-2). `backend/requirements.txt` stays generated (DEC-6),
+because the demo installs it through the root `requirements.txt`. Rules out a
+second, unexercised hosting path, which would drift from the tested one.
+
+### DEC-23 — Every error response uses `ErrorResponse`
+
+The feedback route's 400 ("no feedback signal") was a plain `HTTPException`,
+with only `{"detail": ...}`. It is now the domain error
+`FeedbackSignalRequired`, with code `feedback_signal_required`. Every
+documented error therefore has one body: `status`, `error`, an optional
+`code`, and `detail`. `detail` and the 400 status are unchanged, so both
+clients, which read `detail`, keep working. Rules out a second error shape that
+clients would have to special-case.

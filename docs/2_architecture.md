@@ -24,7 +24,7 @@ The backend owns the product contracts. Streamlit is the recommended first live 
 * **AI/LLM**: Gemini or another model provider for controlled meal adaptation and explanation.
 * **RAG**: Local corpus first, then vector database for scalable meal retrieval.
 * **Nutrition Data**: USDA FoodData Central API, with optional fallback providers and local estimates.
-* **Infrastructure**: One container image (`Dockerfile`, built from `uv.lock`) runs the FastAPI backend. `compose.yaml` runs the same image as the Streamlit client against it, and CI's `container` job builds and smoke-tests that stack from a clean checkout (G5b). The image suits Cloud Run or another managed container runtime, but choosing and wiring a hosted target is G6. Today `render.yaml` still deploys the backend without the container.
+* **Infrastructure**: One container image (`Dockerfile`, built from `uv.lock`) runs the FastAPI backend. `compose.yaml` runs the same image as the Streamlit client against it, and CI's `container` job builds and smoke-tests that stack from a clean checkout (G5b). The hosted target is Cloud Run (DEC-16): `.github/workflows/deploy.yml` builds this image and deploys it with `HOSTED_MODE=true`, and `scripts/live_check.sh` verifies the result (`docs/6_deployment.md`). Render was retired (DEC-22).
 * **Database**: Start file-backed for local pilots; move to Postgres, Firestore, or another managed store when user state and auditability matter.
 
 ## 3. Multi-Agent Orchestration
@@ -85,7 +85,6 @@ ai-meal-planner/
 |   |   |-- core/
 |   |   |   |-- config.py
 |   |   |   `-- logging.py
-|   |   |-- ml/
 |   |   |   |-- calorie_model.py
 |   |   |   |-- features.py
 |   |   |   `-- training.py
@@ -108,7 +107,6 @@ ai-meal-planner/
 |   |-- tests/
 |   |-- requirements.txt
 |   `-- README.md
-|-- render.yaml
 |-- runtime.txt
 |-- data/
 |   |-- external/

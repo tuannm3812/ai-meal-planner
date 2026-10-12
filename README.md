@@ -1,6 +1,6 @@
 # AI Meal Planner
 
-![AI Meal Planner hero](https://assets.epicurious.com/photos/689523e500efe724a5ef8bb5/16:9/w_2560%2Cc_limit/NABRAND-15854_HF_Refresh_PeakIIConcepts_2025-07_Shot01.jpg)
+![The meal planning dashboard: a craving becomes a structured meal with portioned ingredients](docs/assets/screenshots/react-hero.png)
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat&logo=fastapi&logoColor=white)
@@ -82,7 +82,6 @@ ai-meal-planner/
 |   |-- app/
 |   |   |-- agents/
 |   |   |-- core/
-|   |   |-- ml/            (empty scaffolding)
 |   |   |-- rag/
 |   |   |-- repositories/
 |   |   |-- schemas/
@@ -110,7 +109,6 @@ ai-meal-planner/
 |-- streamlit_app/
 |   `-- app.py
 |-- .env.example
-|-- render.yaml
 |-- requirements.txt
 |-- runtime.txt
 |-- uv.lock
@@ -279,7 +277,7 @@ TRACE_SAMPLE_RATIO=1.0
 | `GET` | `/saved-meals/{user_id}` | `history:read` | Return saved meals for a user |
 | `POST` | `/calorie-expenditure/predict` | `plans:write` | Predict daily calorie expenditure and meal calorie budget |
 
-**The contract is a file.** [`docs/openapi.json`](docs/openapi.json) is the full OpenAPI document: every route, request and response schema. CI fails when the code drifts from it (`backend/tests/test_openapi_contract.py`), so any API change appears in review as a diff to that file. After a deliberate change, run `uv run python scripts/export_openapi.py` and commit the result. The document declares `X-API-Key` as a security scheme (`ApiKeyAuth`). It also lists each route's *domain* error responses, generated from the domain exceptions. Those share one body, `ErrorResponse` (`status`, `error`, optional `code`, `detail`). The feedback route's `400` is different: it keeps FastAPI's own `{"detail": ...}` body. An unexpected `500` is not declared on any route, though its body has the same `ErrorResponse` shape.
+**The contract is a file.** [`docs/openapi.json`](docs/openapi.json) is the full OpenAPI document: every route, request and response schema. CI fails when the code drifts from it (`backend/tests/test_openapi_contract.py`), so any API change appears in review as a diff to that file. After a deliberate change, run `uv run python scripts/export_openapi.py` and commit the result. The document declares `X-API-Key` as a security scheme (`ApiKeyAuth`). It also lists each route's *domain* error responses, generated from the domain exceptions. They all share one body, `ErrorResponse` (`status`, `error`, optional `code`, `detail`), including the feedback route's `400` (code `feedback_signal_required`). An unexpected `500` is not declared on any route, though its body has the same `ErrorResponse` shape.
 
 Example meal-generation request:
 
@@ -373,7 +371,7 @@ curl http://127.0.0.1:8000/health
 ```
 
 **Dependencies:** `pyproject.toml` is the only file to edit by hand. After
-changing it, run `uv lock` and regenerate the export that Render installs from:
+changing it, run `uv lock` and regenerate the export that the Streamlit Community Cloud demo installs from (the root `requirements.txt` includes it):
 
 ```bash
 uv export --no-dev --no-hashes --no-emit-project --format requirements.txt -o backend/requirements.txt
