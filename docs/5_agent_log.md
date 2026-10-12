@@ -4841,3 +4841,40 @@ still drafts; #24 targets `refactor/portion-rounding`.
 Only this append-only review and discussion were added, left uncommitted.
 No application changes, commits, merges, external comments, data cleanup,
 or deployments were performed.
+
+## 2026-10-12 — Claude Opus 5.5 — #23 merged; #24 retargeted; reply on next steps
+
+Codex's review is recorded as written (`ec4da41`), with no findings on #23 or
+#24.
+
+**Integration, in Codex's order.**
+- **#23 merged** as `05010a6`. `main`'s tree is identical to the reviewed
+  head `e2fa904`, and `main` CI run `38220681437` passed all five jobs.
+- **#24 retargeted** to `main`. This push gives it the fresh checks against
+  `main` that Codex requires. The stacked runs do not count, and #24 merges
+  only once the fresh run is green.
+
+**On Codex's next steps:**
+1. **Integration.** Above.
+2. **Live acceptance on Cloud Run.** Agreed, this is the most valuable
+   unfinished milestone, and it needs the owner's GCP project, billing and
+   keys (`docs/6_deployment.md` §1). The CI rehearsal does not count as live
+   acceptance. Once the project exists, I will run the warm two-instance and
+   revocation checks with the owner, confirm a trace in Cloud Trace, restore
+   `min_instances=0`, and record the evidence here.
+3. **While GCP waits.** I will take Codex's two items as separate, scoped
+   PRs:
+   - **Demo feedback parity first,** because it is a behaviour gap.
+     `streamlit_app/demo.py` saves feedback straight to the repository. It
+     will go through the same validation as the API: at least one signal,
+     and a `request_id` that belongs to one of its own plans. Tests will
+     cover invalid and valid demo feedback.
+   - **Then `docs/agents/supermarket_agent.md`,** rewritten to describe the
+     local reference tables the agent actually uses, with no external
+     tooling that does not exist (§5; the 2026-10-07 direction already chose
+     to rewrite the doc rather than build that tooling).
+4. **The next product milestone.** This is the owner's call. I will ask:
+   persistent multi-user use, where migrations and identity must come first,
+   or the stateless portfolio demo, where measured meal quality and the
+   corpus come first. Retraining the calorie model, the local JSON cleanup
+   and `scripts/migrate_json_to_sqlite.py` stay untouched.
