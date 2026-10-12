@@ -4767,3 +4767,77 @@ consistent to route the demo through the same validation; that is a candidate
 for Codex's view.
 
 **Merge order:** #23, then this PR retargeted to `main`.
+
+## 2026-10-12 — Codex — review of portion refactor and owner decisions; next steps
+
+Reviewed #23 (`3220604`, head `e2fa904`) and stacked #24 through
+`5d01ddf` on `chore/owner-decisions`. The checkout was clean. Both PRs are
+still drafts; #24 targets `refactor/portion-rounding`.
+
+**Verdict: no findings in these targeted changes.**
+
+- Portion extraction preserves the original clamp and rounding expressions.
+  The tests pin half-to-even rounding, the 5 g floor, clamp boundaries,
+  ingredient names/order, and 49,800 comparisons with the old expression.
+  Target selection, retry policy, warnings and compounded metadata remain
+  with their original callers. Existing fallback and reconciliation tests
+  passed. Claude's separate 30-request golden comparison was not rerun here.
+- The feedback 400 change is explicitly recorded as an owner decision,
+  superseding the earlier recommendation to preserve it in a documentation-
+  only change. The HTTP status and `detail` text are retained; the new coded
+  body is pinned by the endpoint test and the regenerated contract. React
+  still reads `response.data.detail`; Streamlit API mode displays the body.
+  The new error schema/handler tests passed.
+- The README now uses the repository's own hero image. I visually inspected
+  the 1440 × 830 capture: it shows the dashboard and generated meal legibly,
+  without the old third-party hero. The capture script includes the clip.
+  Screenshots were not regenerated during this review.
+- Render retirement and removal of the empty ML package are consistent with
+  the recorded decisions. No production code imports the removed package;
+  Cloud Run remains the documented target. Historical mentions in specs and
+  decision/log records are not active deployment configuration.
+
+**Fresh evidence:**
+
+- `uv run pytest --cov-fail-under=89`: **523 passed** (439 backend,
+  84 Streamlit), **94.34%** coverage; two existing deprecation warnings.
+- Frontend: **39 passed**; frontend lint passed.
+- Ruff lint and format (**104 files**) and `git diff --check`: passed.
+- #23 CI run `38182490097` and #24 CI run `38184863065`: all five jobs
+  successful at their respective heads. Docker and Python 3.12 evidence is
+  remote CI, not a new local run.
+
+### Recommended next steps for the owner and Claude
+
+1. **Finish integration first.** Record this review, then, with owner approval,
+   take #23 out of draft and merge it. Retarget #24 to `main`, obtain fresh
+   checks against that base, and integrate it separately. Passing stacked
+   checks are not a substitute for the retargeted checks. This review itself
+   does not authorize or perform either merge.
+2. **Complete the portfolio deployment acceptance.** The highest-value
+   unfinished milestone is the real Cloud Run deployment, two-instance and
+   key-revocation checks, and a trace visibly received in Cloud Trace. The
+   owner must supply the GCP project, billing approval and key setup from
+   `docs/6_deployment.md`; Claude can then help execute and record evidence.
+   Do not count the CI rehearsal as live acceptance. Restore the normal
+   zero-minimum-instance configuration after the warm-instance check.
+3. **If GCP is deferred, close documentation/parity gaps instead of more
+   cosmetic refactoring.** First align `docs/agents/supermarket_agent.md`
+   with its actual local reference-table behavior (§5), rather than implying
+   nonexistent external tooling. The demo feedback discrepancy is also real:
+   its `/meal-feedback` branch saves directly, without the API's no-signal
+   or plan-reference checks. It is a pre-existing single-user demo gap,
+   not a new #24 regression or a production tenant-isolation finding.
+   I favor shared validation as a separate scoped follow-up, with tests for
+   both invalid and valid demo feedback; do not silently change it in #24.
+4. **Choose the next product milestone before adding infrastructure.** If
+   persistent multi-user use is next, migrations and identity/ownership must
+   precede valuable stored data. If the stateless portfolio demo remains the
+   goal, prioritize measured meal quality/corpus improvements instead.
+   Neither path requires retraining the shipped calorie model now. Leave
+   local JSON cleanup to the owner; do not run the non-idempotent migration
+   before that decision.
+
+Only this append-only review and discussion were added, left uncommitted.
+No application changes, commits, merges, external comments, data cleanup,
+or deployments were performed.
