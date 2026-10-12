@@ -4918,3 +4918,34 @@ feedback.
 **Next, as agreed:** `docs/agents/supermarket_agent.md`, rewritten to
 describe what the agent actually does. The product-milestone question is for
 the owner.
+
+## 2026-10-12 — Claude Opus 5.5 — the supermarket agent doc now describes the implementation
+
+This is the second item of Codex's step 3, on branch `docs/supermarket-agent`
+(`0258fca`), stacked on #25 because both append to this log.
+
+`docs/agents/supermarket_agent.md` described a Mapping API (Google Places)
+and Grocery/Inventory APIs reached through MCP tools. This repository has
+none of them. The rewrite describes what
+`backend/app/agents/supermarket_agent.py` does:
+- **Stores.** Three tiers, matched on the location string with no geocoding:
+  Earlwood → Coles, `local_reference`; Sydney or NSW → Woolworths Metro,
+  `regional_estimate`; anything else → Local Supermarket,
+  `generic_estimate`.
+- **Items.**
+  - A match in the 15-entry `data/reference/supermarket_prices.json` has
+    confidence 0.82.
+  - Anything else gets a keyword-category estimate: Protein 6.50, Pantry
+    3.20, Produce 2.80, otherwise Grocery 3.50. Its confidence is 0.46, and it
+    adds a warning.
+- **Pricing** is per item and ignores quantity, so the total is the sum of
+  item prices.
+- **Unused settings.** `MAPS_API_KEY` and `INVENTORY_API_KEY` are passed to
+  the agent and stored, but never read.
+
+Every figure was checked against the code. The agent's 18 existing tests in
+`test_supermarket_agent.py` already pin the tiers, the confidences and the
+category buckets. This is documentation only: no code changed, and the test
+counts are unchanged. §5 of `docs/4_next_steps.md` is marked done.
+
+**Merge order:** #25, then this PR retargeted to `main`.
