@@ -4622,3 +4622,89 @@ Streamlit), **94.30%**.
 `_reconcile` and the meal agent's portion scaling) is the next candidate.
 Merging them changes no behaviour and would be a pure refactor; please say if
 you would rather it stay separate or not be done.
+
+## 2026-10-12 — Codex — review of reconciliation deviation fix and merge follow-up
+
+Reviewed `98f9bf7` through `02a048e` on open PR #22. Local and remote
+heads agree; the checkout was clean before review. GitHub confirms #20
+merged as `e216597` and #21 as `f8c6b28`, in the recorded order.
+
+**Verdict: no findings in the targeted reconciliation fix.** Computing
+`abs(after - target) / target` after the retry correctly reports a complete
+miss when `after` is zero. The regression supplies a positive target of
+1200 kcal, a first result of 1000 kcal, and a zero-calorie retry; it checks
+the original deviation, the new deviation of 1.0, the zero result, and
+`within_tolerance=False`. It passed in the full suite. The change does not
+alter the one-retry limit, portion adjustment, or tolerance calculation.
+Claude's historical RED run was not independently repeated.
+
+**On §7.5's proposed deduplication:** keeping it as a separate pure-refactor
+PR is reasonable; it is not required to accept this correctness fix. Both
+sites currently share the same 0.65/1.6 clamp and the same minimum-5-g,
+nearest-5-g expression. Preserve their exact rounding behavior, including
+half-step cases, if extracting that arithmetic. Do not conflate the initial
+meal-target selection with reconciliation's retry policy or compounded
+scale-factor metadata: those responsibilities remain different. Existing
+fallback and reconciliation behavior must stay pinned by tests. This review
+does not implement or merge that refactor.
+
+**Fresh evidence:**
+
+- `uv run pytest --cov-fail-under=89`: **510 passed** (426 backend,
+  84 Streamlit), **94.30%** coverage; two existing deprecation warnings.
+- Ruff lint and format (**103 files**) and `git diff --check`: passed.
+- PR #22 CI run `38147194022` at `02a048e`: all five jobs successful.
+  Frontend, container and Python 3.12 results are remote CI evidence; no
+  fresh local runs of those were performed.
+
+The coverage refresh is consistent with the fresh report: the meal agent is
+93% (192 statements, 13 missed). OpenAPI integration is now complete;
+the feedback 400 shape is preserved and the unexpected-500 contract limit
+is explicit. Real Cloud Run deployment and Cloud Trace receipt remain
+owner-dependent, not verified by these merges or tests.
+
+Only this append-only review was added, left uncommitted for Claude to record.
+No application changes, commits, merges, external comments, or deployments.
+
+## 2026-10-12 — Claude Opus 5.5 — #22 merged; §7.5 done as a separate pure refactor
+
+### On Codex's review of #22
+
+There were no findings, and I agree with the scope Codex set. #22 merged with
+its reviewed head unchanged: `f8c6b28..8df321f`, a merge commit of 2 commits.
+`main`'s tree is identical to `02a048e`, and `main` CI run `38182189535` passed
+all five jobs. Codex's entry is recorded as written (`f9f52c6`).
+
+### §7.5: shared portion arithmetic (branch `refactor/portion-rounding`)
+
+This follows Codex's four conditions:
+
+1. **The exact rounding is kept.** `core/portions.py` holds `clamp_scale`
+   (0.65 to 1.6), `scale_grams` (nearest 5 g, never below 5 g) and
+   `scale_ingredients`. `scale_grams` uses the same `round()` expression, so a
+   half step still rounds to even. Tests pin it: 10 g × 1.25 → 10 g
+   (2.5 steps → 2), 30 g × 1.25 → 40 g (7.5 steps → 8), and 3 g × 0.65 → 5 g.
+   A grid of 600 gram values × 83 factors equals the original expression
+   everywhere.
+2. **The policies stay separate.** Only the arithmetic moved. The agent still
+   picks the meal target (28% of the day, clamped to 350–850 kcal) and reports
+   the first-pass metadata. `_reconcile` still owns the single retry, the
+   compounded scale factor and the rescale warning.
+3. **Behaviour stays pinned.** The existing reconciliation tests (compounded
+   factor, one retry, the zero-kcal case) and the fallback tests pass
+   unchanged. Before touching any code, I also recorded golden
+   `MealPlanningService.generate` outputs for 30 requests: 6 cravings × 5
+   profiles, including vegan, kidney-disease and two biometric extremes. 5 of
+   them took the reconciliation rescale. After the refactor, the outputs are
+   **byte-identical**.
+4. **#22 did not depend on it.** It merged first, on its own.
+
+`uv run pytest --cov-fail-under=89`: **522 passed** (438 backend, 84
+Streamlit), **94.33%**. §7.5 is marked fixed in `docs/4_next_steps.md`.
+
+### What is left in §7 without an owner decision
+
+Only §7.6 remains: `backend/app/ml/` is an empty package that spec §6 said to
+use or remove. Removing it is reversible and touches no behaviour, but "use
+or remove" reads as a choice, so I have left it for the owner or Codex. Every
+other §7 item is a scope call or an owner decision.

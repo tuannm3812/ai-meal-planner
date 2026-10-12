@@ -5,6 +5,7 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 from ..core.exceptions import NoFeasibleMeal, RetrievalUnavailable
+from ..core.portions import clamp_scale, scale_ingredients
 from ..core.telemetry import describe_failure
 from ..rag.reference_data import load_reference
 from ..rag.retriever import MealRetrievalResult, MealVectorRetriever
@@ -429,17 +430,8 @@ class MealRecommendationAgent:
             return ingredients, None
 
         target_meal_calories = int(max(350, min(850, round(daily_calorie_target * 0.28))))
-        scale_factor = max(0.65, min(1.6, target_meal_calories / estimated_template_calories))
-        scaled_ingredients = [
-            Ingredient(
-                item_name=ingredient.item_name,
-                base_quantity_grams=max(
-                    5,
-                    int(round(ingredient.base_quantity_grams * scale_factor / 5) * 5),
-                ),
-            )
-            for ingredient in ingredients
-        ]
+        scale_factor = clamp_scale(target_meal_calories / estimated_template_calories)
+        scaled_ingredients = scale_ingredients(ingredients, scale_factor)
         return scaled_ingredients, PortionScalingMetadata(
             target_meal_calories=target_meal_calories,
             estimated_template_calories=round(estimated_template_calories, 1),

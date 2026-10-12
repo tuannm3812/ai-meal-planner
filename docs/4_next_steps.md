@@ -12,8 +12,8 @@ Status as of 2026-10-10: the whole refactor (Phases 0–3, 4a and 4b) is done an
 **merged to `main`** (PRs #1–#7). G3 (#11, #12), G4 (#13), G5b (containers,
 #14), G6's code half (hosted mode, #15) and the README/decision docs (#16) are
 merged too, as are G6's Cloud Run deployment half (#17) and G10b tracing
-(#18). `uv run pytest` runs 510 tests (426 backend, 84 Streamlit) and the
-frontend has 39, all passing; backend coverage is 94.30%, floor 89%; the meal
+(#18). `uv run pytest` runs 522 tests (438 backend, 84 Streamlit) and the
+frontend has 39, all passing; backend coverage is 94.33%, floor 89%; the meal
 corpus holds 34 templates. The next phase is the production-readiness direction in
 `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries: G3 failure semantics,
 G4 auth, G5 containers, G6 hosted mode, tracing), which is not yet broken into
@@ -264,8 +264,10 @@ From spec §12.
    when a reconciliation retry verified to 0 kcal, understating the miss. It is
    now always `|after - target| / target`, so a 0 kcal retry reports 1.0.
    `test_a_retry_that_verifies_to_zero_reports_the_full_miss` pins this.
-5. **The 0.65/1.6 clamp and 5 g rounding are duplicated** between `_reconcile` and
-   `MealRecommendationAgent._scale_ingredients_to_meal_target`.
+5. **Fixed 2026-10-12.** The 0.65/1.6 clamp and the 5 g rounding were
+   duplicated between `_reconcile` and
+   `MealRecommendationAgent._scale_ingredients_to_meal_target`. Both now call
+   `core/portions.py`, with unchanged behaviour (`test_portions.py`).
 6. **`backend/app/ml/` is an empty package.** Spec §6 item 10 said to use or remove
    it; neither happened.
 7. **Authentication and user accounts.** The endpoints that take a `user_id` take it on trust.
