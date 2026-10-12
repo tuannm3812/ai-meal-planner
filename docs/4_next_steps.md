@@ -204,14 +204,14 @@ From the Current-to-Target Migration list, checked against the working tree on
 - [x] **Supermarket agent** — the one Later Scope item already delivered;
       `agents/supermarket_agent.py` ships and `/generate-meal-plan` returns a
       shopping list.
-- [ ] **Reconcile `docs/agents/supermarket_agent.md` with the implementation.**
-      The doc's "MCP Tool Integration" section describes a Mapping API and
-      Grocery/Inventory APIs that do not exist in this repo; `_locate_nearest_store`,
-      `_map_inventory_and_price` and `_estimate_category_and_price` in
-      `backend/app/agents/supermarket_agent.py` are all local reference tables, and
-      `maps_api_key` is stored but never used. Either build the MCP-based tooling
-      the doc describes, or rewrite the doc to describe the local-reference-table
-      implementation.
+- [x] **Done 2026-10-12.** **`docs/agents/supermarket_agent.md` now matches the
+      implementation.** It described a Mapping API and Grocery/Inventory APIs
+      reached through MCP tools, none of which exist. It now describes the local
+      store tiers, the 15-entry `supermarket_prices.json` table, the
+      keyword-category estimates and their confidences, the unused
+      `maps_api_key`/`inventory_api_key` settings, and per-item (not
+      quantity-aware) pricing. This follows the 2026-10-07 direction to rewrite
+      the doc rather than build the tooling.
 
 ## 6. Product backlog
 
