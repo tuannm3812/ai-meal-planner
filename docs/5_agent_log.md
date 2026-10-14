@@ -4949,3 +4949,63 @@ category buckets. This is documentation only: no code changed, and the test
 counts are unchanged. §5 of `docs/4_next_steps.md` is marked done.
 
 **Merge order:** #25, then this PR retargeted to `main`.
+
+## 2026-10-15 — Codex — review of demo feedback parity and supermarket documentation
+
+Recording the read-only review requested earlier in this conversation, then
+rechecking status for the owner's request to discuss it in the log. Local
+HEAD remains `d0acdad`, with no changes since that review. PR #25 is still
+open at `a1ff5f6`; #26 is open at `d0acdad`, targeting
+`fix/demo-feedback-parity`.
+
+**Verdict: no findings in the reviewed changes.** The API and demo now call
+the same `record_feedback()` service. The API retains its validated request,
+authentication, hosted-mode gate and threadpool execution; the demo validates
+its payload before calling the shared service. No-signal and unknown-plan
+checks retain their order, use the client namespace, and run before saving.
+The four new demo tests cover missing signals, unknown plans, invalid ratings
+and a valid record with the API's default fields. Existing API/auth and demo
+UI workflows passed in the earlier run.
+
+The supermarket document matches the inspected implementation: local string-
+matched stores, reference/category prices, stated confidences, no live API
+calls, and quantity-independent costs. It correctly identifies the unused
+provider-key settings and does not present reference prices as live quotes.
+
+**Evidence from the earlier read-only review of this same head:**
+
+- `uv run pytest --cov-fail-under=89`: **527 passed**, **94.36%** coverage;
+  two existing dependency deprecation warnings.
+- Ruff lint and formatting: passed (**105 files**); `git diff --check` passed.
+- All five jobs succeeded in #25 CI run `38221617458` and #26 CI run
+  `38221734496`. Frontend/container and Python 3.12 were remote CI evidence,
+  not fresh local runs. Claude's historical RED evidence was not repeated.
+
+The status check in this follow-up found no new commits or local log replies.
+No test suite was rerun against unchanged code, and no new test result is
+claimed here.
+
+### Recommended next steps
+
+1. **Finish the reviewed integration.** With owner approval, integrate #25
+   first, then retarget #26 to `main` and obtain fresh checks before merging.
+   Record both resulting main-branch checks. Do not treat a green stacked
+   run as the retargeted result. Neither merge is performed by this review.
+2. **Finish the stateless portfolio acceptance before adding infrastructure.**
+   The highest-value outstanding work remains owner GCP setup, the real Cloud
+   Run deployment, two-instance and revoked-key checks, and a trace received
+   in Cloud Trace. Follow `docs/6_deployment.md`, record the evidence, and
+   restore the usual zero minimum instances after the warm-instance check.
+   CI rehearsal is not live acceptance.
+3. **Choose the next product milestone explicitly.** If GCP is deferred,
+   measured meal-quality/corpus work is more useful than further cosmetic
+   refactoring for the stateless demo. Persistent multi-user functionality
+   instead needs migrations and identity/ownership before valuable stored
+   data. Do not add Postgres, retrain the shipped model, or run the
+   non-idempotent JSON migration merely to keep work moving; local history
+   cleanup remains the owner's decision.
+
+Claude can record this verification and reply with integration evidence or
+the owner's chosen next milestone. Only this append-only entry was added,
+left uncommitted; no application changes, commits, merges, external comments,
+data cleanup, or deployments were performed.
