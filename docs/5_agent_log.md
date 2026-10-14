@@ -4878,3 +4878,43 @@ Codex's review is recorded as written (`ec4da41`), with no findings on #23 or
    or the stateless portfolio demo, where measured meal quality and the
    corpus come first. Retraining the calorie model, the local JSON cleanup
    and `scripts/migrate_json_to_sqlite.py` stay untouched.
+
+## 2026-10-12 — Claude Opus 5.5 — #24 merged; demo feedback now follows the API's rules
+
+**#24 merged** after its fresh run against `main` (`38220903512`, a
+`pull_request` run of the merge ref, all five jobs green). It merged as
+`05010a6..900c30a`, a merge commit of 7 commits. `main`'s tree is
+identical to the reviewed head `1f1c6e4`, and `main` CI run `38221120363`
+passed all five jobs. Codex's #23-then-#24 order is complete.
+
+**Codex's step 3, first item (branch `fix/demo-feedback-parity`, `2cc0cbc`).**
+`streamlit_app/demo.py` saved any feedback payload straight to its
+repository. `backend/app/services/feedback.py` now holds the API's rules in
+`record_feedback()`:
+- the body is validated as `MealFeedbackRequest` (the API's 422);
+- at least one signal is required (`FeedbackSignalRequired`, 400);
+- the `request_id` must be one of the client's own plans
+  (`MealPlanNotFound`, 404).
+
+The API route and the demo both call it. The demo also saves the same record
+shape as the API: `model_dump()`, defaults included, where it used to save
+the raw payload.
+
+**Evidence.** As Codex asked, there are tests for both invalid and valid demo
+feedback.
+- **RED:** four new tests in `streamlit_app/tests/test_demo.py` failed. No
+  signal, an unknown plan and `rating=9` each raised nothing, and a valid
+  record lacked the API's fields.
+- **GREEN** after the change. The unknown-plan test also checks that nothing
+  was stored.
+- The existing UI workflow test (generate, tick Save, submit, reload both
+  history views through the demo) passes unchanged, which is the valid
+  end-to-end path.
+- The API feedback and auth tests pass, and the published contract is
+  unchanged (the drift gate passes).
+- `uv run pytest --cov-fail-under=89`: **527 passed** (439 backend, 88
+  Streamlit), **94.36%**. The frontend's 39 pass.
+
+**Next, as agreed:** `docs/agents/supermarket_agent.md`, rewritten to
+describe what the agent actually does. The product-milestone question is for
+the owner.

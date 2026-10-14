@@ -84,3 +84,65 @@ def test_fetch_user_profile_maps_non_male_sex_to_f() -> None:
     )
 
     assert repository.fetch_user_profile("user_456")["gender"] == "f"
+
+
+# --- Codex, 2026-10-12: the demo saved feedback without the API's rules ---------
+# The API refuses feedback with no signal (400) and feedback for a plan the
+# client never generated (404), and validates the body (422). The demo saved any
+# payload straight to the repository. It now goes through the same shared
+# service, so the two cannot drift apart.
+
+
+def _feedback(request_id: str, **signal: Any) -> dict[str, Any]:
+    return {"user_id": "user_123", "request_id": request_id, "meal_name": "Pasta Bowl", **signal}
+
+
+def _saved_meals() -> list[dict[str, Any]]:
+    return local_demo_request("/saved-meals/user_123", None, PROFILE)["items"]
+
+
+def test_demo_feedback_without_a_signal_is_refused() -> None:
+    import pytest
+
+    from backend.app.core.exceptions import FeedbackSignalRequired
+
+    plan = local_demo_request("/generate-meal-plan", {"craving": "pasta"}, PROFILE)
+
+    with pytest.raises(FeedbackSignalRequired):
+        local_demo_request("/meal-feedback", _feedback(plan["request_id"]), PROFILE)
+
+
+def test_demo_feedback_for_a_plan_it_never_made_is_refused_and_not_stored() -> None:
+    import pytest
+
+    from backend.app.core.exceptions import MealPlanNotFound
+
+    with pytest.raises(MealPlanNotFound):
+        local_demo_request("/meal-feedback", _feedback("no-such-plan-id", saved=True), PROFILE)
+    assert _saved_meals() == []
+
+
+def test_demo_feedback_body_is_validated_like_the_api() -> None:
+    import pytest
+    from pydantic import ValidationError
+
+    plan = local_demo_request("/generate-meal-plan", {"craving": "pasta"}, PROFILE)
+
+    with pytest.raises(ValidationError):
+        local_demo_request("/meal-feedback", _feedback(plan["request_id"], rating=9), PROFILE)
+
+
+def test_valid_demo_feedback_is_saved_in_the_api_record_shape() -> None:
+    from backend.app.schemas.requests import MealFeedbackRequest
+
+    plan = local_demo_request("/generate-meal-plan", {"craving": "pasta"}, PROFILE)
+
+    result = local_demo_request(
+        "/meal-feedback", _feedback(plan["request_id"], saved=True, rating=4), PROFILE
+    )
+
+    item = result["item"]
+    assert result["status"] == "success"
+    assert (item["request_id"], item["rating"], item["saved"]) == (plan["request_id"], 4, True)
+    assert set(MealFeedbackRequest.model_fields) <= set(item), "every API field, defaults included"
+    assert [meal["request_id"] for meal in _saved_meals()] == [plan["request_id"]]

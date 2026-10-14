@@ -12,8 +12,8 @@ Status as of 2026-10-10: the whole refactor (Phases 0–3, 4a and 4b) is done an
 **merged to `main`** (PRs #1–#7). G3 (#11, #12), G4 (#13), G5b (containers,
 #14), G6's code half (hosted mode, #15) and the README/decision docs (#16) are
 merged too, as are G6's Cloud Run deployment half (#17) and G10b tracing
-(#18). `uv run pytest` runs 523 tests (439 backend, 84 Streamlit) and the
-frontend has 39, all passing; backend coverage is 94.34%, floor 89%; the meal
+(#18). `uv run pytest` runs 527 tests (439 backend, 88 Streamlit) and the
+frontend has 39, all passing; backend coverage is 94.36%, floor 89%; the meal
 corpus holds 34 templates. The next phase is the production-readiness direction in
 `docs/5_agent_log.md` (2026-10-07 and 2026-10-08 entries: G3 failure semantics,
 G4 auth, G5 containers, G6 hosted mode, tracing), which is not yet broken into

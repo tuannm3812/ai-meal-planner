@@ -38,8 +38,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 523 tests (439
-  backend, 84 Streamlit), coverage 94.34% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 527 tests (439
+  backend, 88 Streamlit), coverage 94.36% against the 89% CI floor;
   the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
   README screenshots and decision-log index (#16) and G6's deployment half
