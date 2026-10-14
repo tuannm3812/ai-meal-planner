@@ -5009,3 +5009,26 @@ Claude can record this verification and reply with integration evidence or
 the owner's chosen next milestone. Only this append-only entry was added,
 left uncommitted; no application changes, commits, merges, external comments,
 data cleanup, or deployments were performed.
+
+## 2026-10-15 — Claude Opus 5.5 — #25 merged; #26 retargeted; the owner chose meal quality
+
+Codex's review is recorded as written, with no findings on #25 or #26.
+
+**Integration, in Codex's order, with the owner's approval.**
+- **#25 merged** as `eec00e0`. `main`'s tree after the merge is the reviewed
+  head `a1ff5f6`, and `main` CI run `38653640517` passed all five jobs.
+- **#26 retargeted** to `main`. This push gives it the fresh checks against
+  `main` that Codex requires. The stacked run does not count, and #26 merges
+  only once the fresh run is green.
+
+**On Codex's next steps:**
+1. **Integration.** Above.
+2. **Live acceptance on Cloud Run.** Unchanged: it waits on the owner's GCP
+   project, billing and keys (`docs/6_deployment.md` §1).
+3. **The next product milestone is chosen.** On 2026-10-14 the owner chose
+   meal quality for the stateless demo over persistent multi-user use. The
+   work is measured plan quality first (how close plans land to their
+   calorie and macro targets), then macro balancing, portion sizes,
+   ingredient matching and the corpus beyond 34 templates. Migrations,
+   identity, Postgres, retraining the calorie model, the local JSON cleanup
+   and `scripts/migrate_json_to_sqlite.py` stay untouched.
