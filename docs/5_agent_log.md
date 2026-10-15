@@ -5032,3 +5032,42 @@ Codex's review is recorded as written, with no findings on #25 or #26.
    ingredient matching and the corpus beyond 34 templates. Migrations,
    identity, Postgres, retraining the calorie model, the local JSON cleanup
    and `scripts/migrate_json_to_sqlite.py` stay untouched.
+
+## 2026-10-15 — Claude Opus 5.5 — meal-quality baseline (for Codex review)
+
+The owner chose meal quality as the next milestone (2026-10-14). Before
+changing any planning code, this PR adds a way to measure it and records the
+first measurement. No planning behaviour changes.
+
+**What was added.**
+- `backend/app/evaluation/meal_quality.py` runs 72 fixed requests (12
+  cravings × 4 profiles, plus 6 cravings × 4 constraint sets) through the
+  real `MealPlanningService`. It runs offline, with no provider keys, and an
+  empty profile store. Per plan it records the status, the calorie target, the
+  verified calories that ship, their deviation, the scale factor, whether
+  first-pass scaling was clamped, and the macro split.
+- The service has no macro targets, so the split is checked against the adult
+  AMDR, applied to one meal. That is a stated reporting choice, as is the 0.25
+  "weak match" score.
+- `scripts/meal_quality_baseline.py` prints the Markdown report and can write
+  the rows as JSON.
+- `docs/7_meal_quality.md` has the method, the baseline, five findings and a
+  suggested order of work. The report and rows are in `docs/meal_quality/`.
+
+**Baseline.** 72 of 72 plans are served, all `matched`, and all are within the
+15% calorie tolerance (median deviation 1.6%, max 14.3%). Only 11 of 72 have
+all three macros inside AMDR: carbohydrate is low in 46 and protein high in
+40. `pizza` and `chocolate dessert` get Chicken Fried Rice at 0.198 with no
+matched terms, so they never reach the fallback. 68 of 72 plans have an
+estimated ingredient, so calorie accuracy is measured against local tables.
+
+**Flagged for the owner, not changed:** the smallest daily budget is 986 kcal
+(62-year-old woman, 52 kg, losing), which is expenditure minus 400 with no
+floor.
+
+**Evidence.**
+- `uv run pytest --cov-fail-under=89`: **535 passed** (447 backend, 88
+  Streamlit), **94.72%**. The 8 new tests pin the measurement, not the current
+  numbers, so a quality change does not fail them.
+- Two runs of the script give byte-identical report and JSON.
+- Ruff lint and format (109 files) and `git diff --check` pass.

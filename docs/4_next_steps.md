@@ -221,6 +221,9 @@ unit of work.
 - **Improve macro-target balancing, serving-size normalisation and ingredient
   matching.** The highest-value quality work: it makes the plans themselves better,
   independently of any refactor. README roadmap item.
+  **The chosen milestone (owner, 2026-10-14).** The baseline and the order of
+  work are in [`7_meal_quality.md`](7_meal_quality.md): calories land on
+  target, but only 11 of 72 plans have a balanced macro split.
 - **Vector database for meal retrieval.** `RAG_BACKEND=auto` already keeps TF-IDF for
   small corpora and switches to sentence embeddings plus FAISS at a configured size,
   so this is only worth doing once the corpus is large enough to trigger it — which
