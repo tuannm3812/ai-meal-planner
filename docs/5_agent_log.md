@@ -5363,3 +5363,73 @@ had been rounded twice.
 controlled fallback and infeasible scenarios to the matrix, as Codex asks.
 Craving relevance and hard constraints stay as regression guards, so the
 success rate cannot rise by serving unrelated meals.
+
+## 2026-10-18 — Codex — verification of PR #27's measurement fixes
+
+Reviewed Claude's response and fix `f360eda` on open PR #27. The original
+checkout remains `d0acdad`; reviewed a fresh isolated archive at
+`/tmp/meal-review-fixed-1Q3iUw`, preserving all local uncommitted log entries.
+
+**Verdict: both P2 findings are closed in this head. No new findings in
+this targeted fix review.**
+
+- Canonical benchmark configuration now reads code defaults directly,
+  rather than instantiating environment-configured settings. The same
+  hostile model/corpus/backend variables leave the average-man scenario at
+  **2889.4 kcal**, `matched`, with unchanged artifact provenance. Missing
+  required artifacts now raise `BenchmarkConfigurationError`; the new
+  missing-model/corpus tests passed. The report records artifact hashes,
+  model version, corpus size and active retriever.
+- Macro percentages and calorie deviations retain full precision. The
+  summary counts the per-plan calorie criterion instead of reclassifying
+  its rounded display value. Independently reran the previous cases:
+  **35.04 / 44.98 / 19.98%** fails all three macro bounds, and calorie
+  deviation **0.10004** yields `within_calorie_target=False` with aggregate
+  count **0**. Existing inclusive-boundary tests and new regressions passed.
+
+**Fresh evidence:**
+
+- Full suite from the archive using the existing project virtualenv, with
+  local sockets permitted: **547 passed**, **94.80%** coverage; two existing
+  dependency deprecation warnings. This is verification of `f360eda`, not
+  the older local checkout's application code.
+- Independently generated baseline JSON and Markdown exactly match the
+  committed artifacts, including provenance. The headline remains
+  **10 of 72** meeting the targets; the measurement fixes do not establish
+  an improvement in the generated meals.
+- Ruff lint and format passed (**109 files**). CI run `39070838078` passed
+  all five jobs at the fixed head. Frontend/container and Python 3.12 results
+  are remote CI evidence, not fresh local runs. Historical RED/mutation
+  claims were not independently repeated.
+
+**Recommended next steps:**
+
+1. Record this verification and, with owner approval, integrate #27 and
+   confirm main CI. The review findings are closed; no merge is performed
+   here. Safely reconcile the older local checkout and log with remote
+   history without losing or duplicating review entries.
+2. Follow through on Claude's proposed controlled fallback/infeasible
+   scenarios before macro-aware selection. Preserve the original 72-case
+   cohort for comparable before/after results; report added guardrail
+   scenarios separately rather than silently changing its denominator.
+3. Implement the approved macro-quality milestone in a separate reviewed
+   change, retaining craving relevance, hard constraints and calorie targets
+   as guards. Use the provenance-bearing baseline to show actual improvement,
+   while retaining the explicit estimated-nutrition limitation.
+4. Keep real Cloud Run/revocation/Cloud Trace acceptance owner-dependent and
+   separate. No persistence, retraining, or local JSON migration is needed
+   as incidental work on this milestone.
+
+Only this append-only verification was added to the original checkout, left
+uncommitted. No application fixes, commits, merges, external comments, data
+cleanup, or deployments were performed.
+
+## 2026-10-18 — Claude Opus 5.5 — Codex's verification recorded; #27 ready to merge
+
+Codex's verification of `f360eda` above is copied verbatim from the owner's
+local log. It closes both P2 findings with no new ones. This commit only
+adds the two log entries; no code or baseline changed, so the 547-test,
+10-of-72 evidence above still describes this head. Merging #27 waits on the
+owner. After the merge, the guardrail scenarios (fallback meal, no safe
+meal) come next as a separately reported set, so the 72-plan cohort stays
+comparable before and after macro-aware selection.
