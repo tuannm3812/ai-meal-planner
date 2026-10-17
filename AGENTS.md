@@ -38,8 +38,8 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 553 tests (465
-  backend, 88 Streamlit), coverage 94.92% against the 89% CI floor;
+  passed `main`'s older single-job workflow. `uv run pytest` runs 563 tests (475
+  backend, 88 Streamlit), coverage 94.98% against the 89% CI floor;
   the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
   README screenshots and decision-log index (#16) and G6's deployment half
@@ -65,7 +65,10 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   for women and 1,500 for men (DEC-24). 10 of the baseline's 72 plans meet the
   targets. That work (#27) is merged. The baseline also runs five guardrail
   cases (fallback and refusal) on a controlled corpus, reported apart from the
-  72 plans.
+  72 plans (#28, merged).
+- 2026-10-18: per-ingredient portion balancing toward AMDR (DEC-26) lifts the
+  baseline to 41 of 72 plans meeting the targets. It never changes the meal or
+  its ingredients. `scipy` is now a direct dependency.
 
 ## Open risks
 

@@ -1049,6 +1049,63 @@
         ],
         "title": "IngredientMacro"
       },
+      "MacroBalanceMetadata": {
+        "properties": {
+          "outcome": {
+            "type": "string",
+            "enum": [
+              "in_range",
+              "rebalanced",
+              "no_feasible_balance"
+            ],
+            "title": "Outcome"
+          },
+          "target_meal_calories": {
+            "type": "integer",
+            "title": "Target Meal Calories"
+          },
+          "macro_percent_before": {
+            "additionalProperties": {
+              "type": "number"
+            },
+            "type": "object",
+            "title": "Macro Percent Before"
+          },
+          "macro_percent_after": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "number"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macro Percent After"
+          },
+          "macros_in_range_after": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Macros In Range After"
+          }
+        },
+        "type": "object",
+        "required": [
+          "outcome",
+          "target_meal_calories",
+          "macro_percent_before"
+        ],
+        "title": "MacroBalanceMetadata",
+        "description": "Records whether portions were rebalanced toward the AMDR macro split (DEC-26).\n\n``outcome`` is ``in_range`` when the verified meal already met the targets,\n``rebalanced`` when per-ingredient portions were changed, and\n``no_feasible_balance`` when no portions within the bounds could meet them,\nin which case the meal ships as it was. Percentages are each macro's share\nof energy, rounded for display."
+      },
       "MealAgentMetadata": {
         "properties": {
           "agent_name": {
@@ -1398,6 +1455,16 @@
               }
             ]
           },
+          "macro_balance": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MacroBalanceMetadata"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
           "infeasible_reason": {
             "anyOf": [
               {
@@ -1420,7 +1487,7 @@
           "calorie_budget"
         ],
         "title": "MealPlanResponse",
-        "description": "A generated meal plan with its verification and reconciliation metadata.\n\n``plan_status`` is ``matched``, ``fallback`` or ``infeasible``. On\n``infeasible`` the request still succeeds: the meal-dependent sections are\nnull and ``infeasible_reason`` explains why, in client-safe terms."
+        "description": "A generated meal plan with its verification, macro-balance and reconciliation metadata.\n\n``plan_status`` is ``matched``, ``fallback`` or ``infeasible``. On\n``infeasible`` the request still succeeds: the meal-dependent sections are\nnull and ``infeasible_reason`` explains why, in client-safe terms."
       },
       "MealRequest": {
         "properties": {

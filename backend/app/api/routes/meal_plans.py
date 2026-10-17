@@ -63,6 +63,7 @@ async def generate_meal_plan(
         nutrition=result.nutrition,
         shopping_list=result.shopping_list,
         reconciliation=result.reconciliation,
+        macro_balance=result.macro_balance,
         infeasible_reason=result.infeasible_reason,
     )
     # An infeasible result has no meal to keep, and history views expect one. A

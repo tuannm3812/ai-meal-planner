@@ -5552,3 +5552,61 @@ unchanged 72 plans and on the guardrails. As Codex asks, it will add tests on
 the served ingredients' safety and on off-menu relevance. If an improved
 selection changes a pinned guardrail meal, the PR will justify the new
 expectation rather than loosen a refusal or constraint check.
+
+## 2026-10-18 — Claude Opus 5.5 — #28 merged; per-ingredient macro balancing (DEC-26)
+
+**#28 merged.** Mike approved the merge after Codex's review. Merge commit
+`5004200`; `main` CI passed all five jobs on it. Mike then asked to start
+macro-aware selection.
+
+**Scope.** This PR does the scaling half of `docs/7_meal_quality.md` §4 item 1
+only, per Codex: no corpus growth, no ranking change, no other policy change.
+Scaling first because it cannot change which meal is served, so relevance and
+hard constraints are untouched by construction.
+
+**Change.** `core/macro_balance.py` solves one small linear programme per plan
+for per-ingredient portion factors: calories within 5% of the meal target,
+each macro 1 point inside AMDR, factors within 0.5–2.0, and the least total
+change. `MealPlanningService._balance` runs it after the first verification,
+only when the plan misses the 10% calorie target or an AMDR range. It
+re-verifies once, then the existing uniform reconciliation runs. Responses gain
+a `macro_balance` record; `docs/openapi.json` is regenerated. The targets are
+now defined once in `core/macro_balance.py`, and the benchmark imports them.
+`scipy`, already installed through scikit-learn, is declared directly;
+`uv.lock` and `backend/requirements.txt` are regenerated.
+
+**Before and after, same 72 plans** (`docs/meal_quality/baseline.*`):
+
+| Measure | Before | After |
+|---|---|---|
+| Meeting the targets | 10 | **41** |
+| All three macros in AMDR | 11 | 41 |
+| Within the 10% calorie target | 68 | 70 |
+| Calorie deviation, median | 1.6% | 0.9% |
+| Rescaled by reconciliation | 12 | 4 |
+| Guardrails as expected | 5 of 5 | 5 of 5 |
+
+Of the 31 plans not balanced, the LP shows the cause per meal: Chicken Fried
+Rice (9), Lean Steak Rice Plate (7) and Chicken Vegetable Soup Bowl (5) reach
+every range except fat. Chickpea Curry Bowl (7) and Lentil Bolognese Pasta (1)
+are blocked on more than one macro; dropping any single range does not make
+them feasible. High-Protein Tomato Turkey Pasta (2) is blocked on carbohydrate
+and fat. Wider bounds (0.25–3.0) reach 50 of 72; recorded as an owner choice in
+DEC-26 and not taken.
+
+**Tests (10 new).**
+
+- The solver keeps an in-range meal's portions and balances a skewed one
+  inside every range and the calorie band.
+- The solver returns None when the ranges are unreachable, when there are no
+  ingredients or target, or when the bounds leave no room.
+- On all 72 scenarios, the service with balancing returns the same meal,
+  ingredient names, order and status as with it switched off. This is Codex's
+  safety and relevance check.
+- Every rebalanced plan ships inside AMDR with a warning. Unbalanced plans keep
+  their portions.
+- The guardrails still hold.
+- A rebalanced plan reports its split before and after.
+
+`uv run pytest`: 563 passed, coverage 94.98%. Ruff format and check are clean.
+The OpenAPI contract and requirements export match regenerated output.
