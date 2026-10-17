@@ -92,6 +92,9 @@ def test_measure_reads_the_shipped_plan() -> None:
     )
     assert sum(quality.macro_percent.values()) == pytest.approx(100, abs=0.2)
     assert set(quality.macros_in_range) == {"protein", "carbs", "fat"}
+    assert quality.meets_targets == (
+        quality.calorie_deviation <= 0.10 and all(quality.macros_in_range.values())
+    )
 
 
 def test_summary_counts_and_report() -> None:
@@ -105,6 +108,7 @@ def test_summary_counts_and_report() -> None:
             verified_kcal=560,
             calorie_deviation=0.0,
             within_tolerance=True,
+            meets_targets=True,
             rescaled=False,
             scale_factor=1.0,
             scale_clamped=False,
@@ -140,6 +144,7 @@ def test_summary_counts_and_report() -> None:
     assert summary.plans == 3
     assert summary.status_counts == {"matched": 2, "infeasible": 1}
     assert (summary.scaled_plans, summary.within_tolerance) == (2, 1)
+    assert (summary.within_calorie_target, summary.meets_targets) == (1, 1)
     assert summary.median_deviation == pytest.approx(0.1)
     assert summary.max_deviation == 0.2
     assert (summary.rescaled, summary.scale_clamped) == (1, 1)
@@ -151,6 +156,7 @@ def test_summary_counts_and_report() -> None:
 
     report = render_markdown(rows, summary)
     assert "- Plans: 3 (infeasible 1, matched 2)." in report
+    assert "**Meeting the targets** (calories within 10%, all macros in AMDR): 1 of 3." in report
     assert "all three 1 of 2." in report
     assert "| b | matched | B | 840 | 1008.0 | 20.0% | 1.6 | 40/40/20 | 0.9 |" in report
 

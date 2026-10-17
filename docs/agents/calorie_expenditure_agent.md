@@ -30,7 +30,7 @@ The model predicts exercise calories from:
 - `Heart_Rate`
 - `Body_Temp`
 
-The backend agent adds predicted exercise calories to a BMR-based daily estimate, then adjusts the meal calorie budget by goal.
+The backend agent adds predicted exercise calories to a BMR-based daily estimate, then adjusts the meal calorie budget by goal: minus 400 kcal to lose weight, plus 250 to gain. A weight-loss budget never drops below 1,200 kcal for women or 1,500 for men (or an unrecognised sex), and never rises above estimated expenditure; when the floor applies, a warning says so (DEC-24).
 
 ## Outputs
 

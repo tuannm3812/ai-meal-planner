@@ -5149,3 +5149,37 @@ Still open for the owner: the 986 kcal smallest daily budget (§3 item 4 of
 `docs/7_meal_quality.md`), which has no floor today.
 
 #27 awaits Codex's review.
+
+## 2026-10-17 — Claude Opus 5.5 — owner decisions: meal targets and a calorie floor
+
+The owner answered both open questions from the baseline. Both are recorded
+in `docs/3_decisions.md` and implemented on #27.
+
+1. **Targets (DEC-25).** A plan meets the targets when its shipped calories
+   are within 10% of the meal target and all three macros are inside AMDR.
+   `meal_quality.py` now reports this per plan (`meets_targets`) and in
+   aggregate. The service's 15% reconciliation tolerance is unchanged, as
+   Codex advised: it is the retry rule, not the acceptance target.
+2. **Weight-loss floor (DEC-24).** `CalorieExpenditureAgent._meal_budget`
+   now stops the 400 kcal deficit at 1,200 kcal for women and 1,500 for men,
+   with the higher floor for an unrecognised sex. The floor never lifts the
+   budget above estimated expenditure, and a warning says when it applied.
+   - RED: three of the five new tests failed against the old code; the two
+     that pin unchanged behaviour (a budget above the floor, and a
+     maintain goal) passed, as they should.
+   - GREEN after the change.
+
+**Baseline rerun.** **10 of 72** plans meet the targets; 68 of 72 are within
+10% on calories, and 11 of 72 have all macros in range. The floor raised the
+smallest daily budget from 985.6 to 1,200 kcal. No meal changed, because that
+profile's meal target stays at the 350 kcal minimum. The `docs/meal_quality/`
+diff shows only the budget and the new target fields.
+
+**Evidence.**
+- `uv run pytest --cov-fail-under=89`: **540 passed** (452 backend, 88
+  Streamlit), **94.76%**.
+- Ruff lint and format pass; `git diff --check` passes.
+- `docs/openapi.json` is unchanged: the response shape did not change.
+
+Next, after Codex's review of #27: macro-aware selection and scaling, the
+largest measured gap.

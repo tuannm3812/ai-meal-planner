@@ -28,17 +28,20 @@ Per plan it records the plan status, the meal, the calorie target, the
 verified calories that ship, their deviation from the target, the scale
 factor, and the macro split as each macro's share of the meal's energy.
 
-**The service has no macro targets**, so the split is checked against the
-adult AMDR (protein 10–35%, carbohydrate 45–65%, fat 20–35% of energy). They
-are a daily reference applied to one meal, so they answer "is this meal
-balanced", not "is this meal wrong".
+**The targets (owner, 2026-10-17, DEC-25).** A plan meets them when its
+shipped calories are within 10% of the meal target and each macro sits inside
+the adult AMDR: protein 10–35%, carbohydrate 45–65%, fat 20–35% of energy.
+AMDR is a daily reference applied to one meal. The planner does not yet aim
+for the macro ranges; that is the first item in §4. The service's own 15%
+reconciliation tolerance stays as it is: it decides when the service retries,
+not whether a plan is good.
 
 ```bash
 uv run python scripts/meal_quality_baseline.py                      # Markdown report
 uv run python scripts/meal_quality_baseline.py --json out.json      # plus rows as JSON
 ```
 
-## 2. Baseline, 2026-10-15
+## 2. Baseline, 2026-10-15 (rerun 2026-10-17 with the targets and the calorie floor)
 
 Full report: [`meal_quality/baseline.md`](meal_quality/baseline.md); rows:
 [`meal_quality/baseline.json`](meal_quality/baseline.json).
@@ -46,7 +49,9 @@ Full report: [`meal_quality/baseline.md`](meal_quality/baseline.md); rows:
 | Measure | Baseline |
 |---|---|
 | Plans served | 72 of 72, all `matched` (no fallback, none infeasible) |
-| Within the 15% calorie tolerance | 72 of 72 |
+| **Meeting the targets** | **10 of 72** |
+| Within the 10% calorie target | 68 of 72 |
+| Within the service's 15% retry tolerance | 72 of 72 |
 | Calorie deviation | median 1.6%, p90 8.5%, max 14.3% |
 | Rescaled by reconciliation | 12 |
 | First-pass scaling clamped (0.65–1.6) | 33 |
@@ -75,13 +80,14 @@ Full report: [`meal_quality/baseline.md`](meal_quality/baseline.md); rows:
    `spicy curry` gets a turkey burger bowl (scores 0.18–0.19).
 3. **The meal target ignores the extremes.** The target is 28% of the daily
    budget, clamped to 350–850 kcal. The large athlete's budget is 4,521 kcal,
-   so its meal is capped at 850 (19% of the day). The older woman's is 986
-   kcal, so her floor of 350 is 36% of the day.
-4. **The smallest daily budget looks too low.** 986 kcal for a 62-year-old,
-   52 kg woman losing weight is expenditure minus a fixed 400 kcal, with no
-   floor (`CalorieExpenditureAgent._meal_budget`). Common guidance puts a
-   floor near 1,200 kcal for women. This is a calorie-model question rather
-   than a meal-quality one, so it is recorded here and not changed.
+   so its meal is capped at 850 (19% of the day). The older woman's 350 kcal
+   floor was 36% of her day before the calorie floor below, and is 29% now.
+4. **The smallest daily budget was too low. Fixed 2026-10-17 (DEC-24).**
+   986 kcal for a 62-year-old, 52 kg woman losing weight was expenditure minus
+   a fixed 400 kcal, with no floor. A weight-loss budget now stops at 1,200
+   kcal for women and 1,500 for men, never above expenditure. Her budget is
+   1,200 kcal. Her meal target stays 350 kcal (28% of 1,200 is under the 350
+   floor), so no plan in the baseline changed.
 5. **Calorie accuracy is measured against local tables.** Offline, 68 of 72
    plans have at least one ingredient whose macros are estimated. So the
    tolerance result says the planner is consistent with its own tables, not
@@ -103,6 +109,3 @@ Each item is a separate PR that reruns the baseline and reports the change.
    match today.
 4. **Meal target at the extremes** (finding 3), once the owner decides how
    many meals a day the target assumes.
-
-Finding 4 needs an owner decision before any change, since it alters the
-calorie budget every client shows.

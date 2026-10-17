@@ -10,11 +10,12 @@ aggregate:
 - the macro split, as each macro's share of the meal's calories, against a
   reference range.
 
-The service has no macro targets of its own, so the split is checked against
-the Acceptable Macronutrient Distribution Ranges (AMDR) for adults: protein
-10-35%, carbohydrate 45-65% and fat 20-35% of energy. They are a daily
-reference applied to one meal, so they read as "is this meal balanced", not
-as a hard rule.
+The owner set the targets on 2026-10-17: shipped calories within 10% of the
+meal target, and each macro inside the Acceptable Macronutrient Distribution
+Ranges (AMDR) for adults: protein 10-35%, carbohydrate 45-65% and fat 20-35%
+of energy. AMDR is a daily reference applied here to one meal. A plan that
+meets both "meets the targets"; the planner itself does not yet aim for the
+macro ranges.
 
 Every run is offline and deterministic: no Gemini key, no USDA or FatSecret
 credentials, and an empty profile store, so a request's stored profile is the
@@ -47,6 +48,12 @@ AMDR_PERCENT = {"protein": (10.0, 35.0), "carbs": (45.0, 65.0), "fat": (20.0, 35
 """Adult AMDR, as a percentage of energy: macro -> (low, high)."""
 
 KCAL_PER_GRAM = {"protein": 4.0, "carbs": 4.0, "fat": 9.0}
+
+CALORIE_TARGET = 0.10
+"""The owner's acceptance target (2026-10-17): a plan meets the targets when its
+shipped calories are within 10% of the meal target and all three macros sit
+inside AMDR. Stricter than the service's 15% reconciliation tolerance, which
+is only the point at which it retries."""
 
 WEAK_MATCH_SCORE = 0.25
 """A corpus match scoring below this is reported as weak. The retriever's own
@@ -157,6 +164,7 @@ class PlanQuality(BaseModel):
     verified_kcal: float | None = None
     calorie_deviation: float | None = None
     within_tolerance: bool | None = None
+    meets_targets: bool | None = None
     rescaled: bool | None = None
     scale_factor: float | None = None
     scale_clamped: bool | None = None
@@ -243,6 +251,9 @@ def measure(scenario: Scenario, result: MealPlanResult) -> PlanQuality:
         deviation = abs(nutrition.total_calories - target) / target
         quality.calorie_deviation = round(deviation, 4)
         quality.within_tolerance = deviation <= DEFAULT_TOLERANCE
+        quality.meets_targets = deviation <= CALORIE_TARGET and all(
+            quality.macros_in_range.values()
+        )
     if result.reconciliation is not None:
         quality.rescaled = result.reconciliation.rescaled
     return quality
@@ -312,6 +323,8 @@ class Summary:
     status_counts: dict[str, int]
     scaled_plans: int
     within_tolerance: int
+    within_calorie_target: int
+    meets_targets: int
     median_deviation: float | None
     p90_deviation: float | None
     max_deviation: float | None
@@ -351,6 +364,8 @@ def summarise(rows: Sequence[PlanQuality]) -> Summary:
         status_counts=status_counts,
         scaled_plans=len(scaled),
         within_tolerance=sum(1 for row in scaled if row.within_tolerance),
+        within_calorie_target=sum(1 for row in scaled if row.calorie_deviation <= CALORIE_TARGET),
+        meets_targets=sum(1 for row in scaled if row.meets_targets),
         median_deviation=round(statistics.median(deviations), 4) if deviations else None,
         p90_deviation=_percentile(deviations, 0.9),
         max_deviation=deviations[-1] if deviations else None,
@@ -405,7 +420,11 @@ def render_markdown(rows: Sequence[PlanQuality], summary: Summary) -> str:
         "## Summary",
         "",
         f"- Plans: {summary.plans} ({statuses}).",
-        f"- Within the {DEFAULT_TOLERANCE:.0%} calorie tolerance: "
+        f"- **Meeting the targets** (calories within {CALORIE_TARGET:.0%}, all macros in "
+        f"AMDR): {summary.meets_targets} of {summary.plans}.",
+        f"- Within the {CALORIE_TARGET:.0%} calorie target: "
+        f"{summary.within_calorie_target} of {summary.scaled_plans} scaled plans.",
+        f"- Within the service's {DEFAULT_TOLERANCE:.0%} retry tolerance: "
         f"{summary.within_tolerance} of {summary.scaled_plans} scaled plans.",
         f"- Calorie deviation: median {_pct(summary.median_deviation)}, "
         f"90th percentile {_pct(summary.p90_deviation)}, max {_pct(summary.max_deviation)}.",

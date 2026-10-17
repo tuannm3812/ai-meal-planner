@@ -1,11 +1,13 @@
 ## Summary
 
 - Plans: 72 (matched 72).
-- Within the 15% calorie tolerance: 72 of 72 scaled plans.
+- **Meeting the targets** (calories within 10%, all macros in AMDR): 10 of 72.
+- Within the 10% calorie target: 68 of 72 scaled plans.
+- Within the service's 15% retry tolerance: 72 of 72 scaled plans.
 - Calorie deviation: median 1.6%, 90th percentile 8.5%, max 14.3%.
 - Rescaled by reconciliation: 12. First-pass scaling clamped: 33.
-- Meal target as a share of the daily budget: 18.8% to 35.5%.
-- Daily budget across profiles: 985.6 to 4521.1 kcal.
+- Meal target as a share of the daily budget: 18.8% to 29.2%.
+- Daily budget across profiles: 1200.0 to 4521.1 kcal.
 - Macro share inside AMDR: protein 32, carbs 18, fat 31; all three 11 of 72.
 - Plans with at least one estimated ingredient: 68 of 72.
 - Corpus matches scoring below 0.25: 11.
