@@ -19,14 +19,21 @@ macro ranges.
 
 Every run is offline and deterministic: no Gemini key, no USDA or FatSecret
 credentials, and an empty profile store, so a request's stored profile is the
-built-in default. Run it with ``scripts/meal_quality_baseline.py``.
+built-in default. The calorie model, the meal corpus and the retrieval backend
+are the code's defaults, never the caller's environment, and a run refuses to
+start when one of them is missing rather than measure a fallback (Codex,
+2026-10-18). Run it with ``scripts/meal_quality_baseline.py``.
+
+Classification uses full-precision values; rounding is for presentation only.
 """
 
+import hashlib
 import statistics
 import tempfile
 from collections.abc import Iterable, Sequence
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -164,6 +171,7 @@ class PlanQuality(BaseModel):
     verified_kcal: float | None = None
     calorie_deviation: float | None = None
     within_tolerance: bool | None = None
+    within_calorie_target: bool | None = None
     meets_targets: bool | None = None
     rescaled: bool | None = None
     scale_factor: float | None = None
@@ -184,8 +192,9 @@ def macro_percentages(protein_g: float, carbs_g: float, fat_g: float) -> dict[st
         fat_g: Grams of fat.
 
     Returns:
-        Percentages keyed by macro, rounded to one place; all zero when the
-        macros supply no energy.
+        Percentages keyed by macro, at full precision so a share just outside
+        a range is not rounded into it; all zero when the macros supply no
+        energy.
     """
     energy = {
         "protein": protein_g * KCAL_PER_GRAM["protein"],
@@ -195,7 +204,12 @@ def macro_percentages(protein_g: float, carbs_g: float, fat_g: float) -> dict[st
     total = sum(energy.values())
     if total <= 0:
         return {macro: 0.0 for macro in energy}
-    return {macro: round(100 * kcal / total, 1) for macro, kcal in energy.items()}
+    return {macro: 100 * kcal / total for macro, kcal in energy.items()}
+
+
+def calorie_deviation(verified_kcal: float, target_kcal: float) -> float:
+    """The fractional miss between shipped calories and the meal target, unrounded."""
+    return abs(verified_kcal - target_kcal) / target_kcal
 
 
 def in_amdr(percentages: dict[str, float]) -> dict[str, bool]:
@@ -248,10 +262,11 @@ def measure(scenario: Scenario, result: MealPlanResult) -> PlanQuality:
         quality.target_meal_kcal = target
         quality.scale_factor = scaling.scale_factor
         quality.scale_clamped = _first_pass_clamped(target, scaling.estimated_template_calories)
-        deviation = abs(nutrition.total_calories - target) / target
-        quality.calorie_deviation = round(deviation, 4)
+        deviation = calorie_deviation(nutrition.total_calories, target)
+        quality.calorie_deviation = deviation
         quality.within_tolerance = deviation <= DEFAULT_TOLERANCE
-        quality.meets_targets = deviation <= CALORIE_TARGET and all(
+        quality.within_calorie_target = deviation <= CALORIE_TARGET
+        quality.meets_targets = quality.within_calorie_target and all(
             quality.macros_in_range.values()
         )
     if result.reconciliation is not None:
@@ -270,49 +285,119 @@ def _first_pass_clamped(target: int, estimated_template_calories: float) -> bool
     return not MIN_SCALE <= target / estimated_template_calories <= MAX_SCALE
 
 
-def build_service(data_dir: Path) -> MealPlanningService:
+class BenchmarkConfigurationError(RuntimeError):
+    """A required benchmark artifact is missing, so the run would measure a fallback."""
+
+
+@dataclass(frozen=True)
+class BenchmarkConfig:
+    """The artifacts a run measures. The default is the canonical baseline."""
+
+    calorie_model_path: Path
+    calorie_model_version: str
+    meal_corpus_path: Path
+    rag_backend: str
+    rag_embedding_activation_size: int
+
+    @classmethod
+    def canonical(cls) -> "BenchmarkConfig":
+        """The code's own defaults, read from the settings class, not the environment.
+
+        ``AppSettings(_env_file=None)`` skips the dotenv file but still reads
+        shell variables, so a ``CALORIE_MODEL_PATH`` or ``MEAL_CORPUS_PATH`` in
+        the caller's shell would silently change what is measured.
+        """
+        fields = AppSettings.model_fields
+        return cls(
+            calorie_model_path=fields["calorie_model_path"].default,
+            calorie_model_version=fields["calorie_model_version"].default,
+            meal_corpus_path=fields["meal_corpus_path"].default,
+            rag_backend=fields["rag_backend"].default,
+            rag_embedding_activation_size=fields["rag_embedding_activation_size"].default,
+        )
+
+
+def build_service(
+    data_dir: Path, config: BenchmarkConfig | None = None
+) -> tuple[MealPlanningService, dict[str, Any]]:
     """Build the real service with every external provider switched off.
 
     Args:
         data_dir: An empty directory for the profile store, so every request
             reads the built-in default profile.
+        config: The artifacts to measure; the canonical baseline when omitted.
 
     Returns:
-        A MealPlanningService wired like production, minus API keys.
+        A MealPlanningService wired like production, minus API keys, and the
+        provenance of what it loaded.
+
+    Raises:
+        BenchmarkConfigurationError: The calorie model or the meal corpus did
+            not load. The service would fall back to a rule-based budget or
+            template meals, which is not what a baseline measures.
     """
-    settings = AppSettings(_env_file=None)
+    config = config or BenchmarkConfig.canonical()
     profile_repo = UserProfileRepository(data_dir)
-    return MealPlanningService(
-        meal_agent=MealRecommendationAgent(
-            db_connection=profile_repo,
-            meal_corpus_path=settings.meal_corpus_path,
-            rag_backend=settings.rag_backend,
-        ),
+    meal_agent = MealRecommendationAgent(
+        db_connection=profile_repo,
+        meal_corpus_path=config.meal_corpus_path,
+        rag_backend=config.rag_backend,
+        rag_embedding_activation_size=config.rag_embedding_activation_size,
+    )
+    calorie_agent = CalorieExpenditureAgent(
+        model_path=config.calorie_model_path,
+        model_version=config.calorie_model_version,
+    )
+    if calorie_agent.model is None or calorie_agent.model_warning:
+        raise BenchmarkConfigurationError(
+            f"Calorie model did not load cleanly from {config.calorie_model_path}: "
+            f"{calorie_agent.model_warning}"
+        )
+    if meal_agent.meal_retriever is None:
+        raise BenchmarkConfigurationError(
+            f"Meal corpus did not load from {config.meal_corpus_path}."
+        )
+    service = MealPlanningService(
+        meal_agent=meal_agent,
         nutrition_agent=NutritionVerificationAgent(),
         supermarket_agent=SupermarketAgent(),
-        calorie_agent=CalorieExpenditureAgent(
-            model_path=settings.calorie_model_path,
-            model_version=settings.calorie_model_version,
-        ),
+        calorie_agent=calorie_agent,
         profile_repo=profile_repo,
     )
+    provenance = {
+        "calorie_model_version": config.calorie_model_version,
+        "calorie_model_sha256": _sha256(config.calorie_model_path),
+        "meal_corpus_sha256": _sha256(config.meal_corpus_path),
+        "meal_count": len(meal_agent.meal_retriever.meals),
+        "retriever": meal_agent.meal_retriever.active_backend,
+    }
+    return service, provenance
 
 
-def run(scenarios: Iterable[Scenario] | None = None) -> list[PlanQuality]:
+def _sha256(path: Path) -> str:
+    """Hash a file, so a run records exactly which artifact it measured."""
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def run(
+    scenarios: Iterable[Scenario] | None = None, config: BenchmarkConfig | None = None
+) -> tuple[list[PlanQuality], dict[str, Any]]:
     """Run scenarios through a freshly built offline service.
 
     Args:
         scenarios: The scenarios to run; the fixed default set when omitted.
+        config: The artifacts to measure; the canonical baseline when omitted.
 
     Returns:
-        One PlanQuality per scenario, in order.
+        One PlanQuality per scenario, in order, and the run's provenance.
     """
     scenarios = list(scenarios) if scenarios is not None else default_scenarios()
     with tempfile.TemporaryDirectory() as data_dir:
-        service = build_service(Path(data_dir))
-        return [
+        service, provenance = build_service(Path(data_dir), config)
+        rows = [
             measure(scenario, service.generate(scenario.to_request())) for scenario in scenarios
         ]
+    return rows, provenance
 
 
 @dataclass
@@ -364,11 +449,11 @@ def summarise(rows: Sequence[PlanQuality]) -> Summary:
         status_counts=status_counts,
         scaled_plans=len(scaled),
         within_tolerance=sum(1 for row in scaled if row.within_tolerance),
-        within_calorie_target=sum(1 for row in scaled if row.calorie_deviation <= CALORIE_TARGET),
+        within_calorie_target=sum(1 for row in scaled if row.within_calorie_target),
         meets_targets=sum(1 for row in scaled if row.meets_targets),
         median_deviation=round(statistics.median(deviations), 4) if deviations else None,
-        p90_deviation=_percentile(deviations, 0.9),
-        max_deviation=deviations[-1] if deviations else None,
+        p90_deviation=_round(_percentile(deviations, 0.9)),
+        max_deviation=_round(deviations[-1] if deviations else None),
         rescaled=sum(1 for row in scaled if row.rescaled),
         scale_clamped=sum(1 for row in scaled if row.scale_clamped),
         target_share_of_budget={
@@ -394,6 +479,11 @@ def summarise(rows: Sequence[PlanQuality]) -> Summary:
     )
 
 
+def _round(value: float | None) -> float | None:
+    """Round a summary figure for display; counts never come from these."""
+    return None if value is None else round(value, 4)
+
+
 def _percentile(sorted_values: Sequence[float], fraction: float) -> float | None:
     """Nearest-rank percentile of already sorted values."""
     if not sorted_values:
@@ -402,12 +492,15 @@ def _percentile(sorted_values: Sequence[float], fraction: float) -> float | None
     return sorted_values[min(rank, len(sorted_values)) - 1]
 
 
-def render_markdown(rows: Sequence[PlanQuality], summary: Summary) -> str:
+def render_markdown(
+    rows: Sequence[PlanQuality], summary: Summary, provenance: dict[str, Any] | None = None
+) -> str:
     """Render the summary and the per-plan table as Markdown.
 
     Args:
         rows: Per-scenario results.
         summary: Their aggregate.
+        provenance: What the run loaded, printed above the summary when given.
 
     Returns:
         The report, ending in a newline.
@@ -416,7 +509,15 @@ def render_markdown(rows: Sequence[PlanQuality], summary: Summary) -> str:
     statuses = ", ".join(
         f"{status} {count}" for status, count in sorted(summary.status_counts.items())
     )
-    lines = [
+    lines = []
+    if provenance:
+        lines += [
+            "## Measured",
+            "",
+            *(f"- {key}: `{value}`" for key, value in provenance.items()),
+            "",
+        ]
+    lines += [
         "## Summary",
         "",
         f"- Plans: {summary.plans} ({statuses}).",

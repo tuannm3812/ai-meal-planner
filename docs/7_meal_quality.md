@@ -24,6 +24,14 @@ an empty profile store, so every request also carries the built-in default
 profile's restrictions (`dairy-free`, `high-protein`). Two runs produce
 byte-identical output.
 
+The calorie model, meal corpus and retrieval backend are always the code's
+defaults, never the caller's shell settings. A run stops with an error if the
+model or the corpus fails to load, instead of quietly measuring the rule-based
+budget or the template meals. Each report starts with what it measured: the
+model version, SHA-256 hashes of the model and corpus files, the meal count
+and the retriever. Pass/fail is decided on full-precision values, and only
+the displayed numbers are rounded (Codex, 2026-10-18).
+
 Per plan it records the plan status, the meal, the calorie target, the
 verified calories that ship, their deviation from the target, the scale
 factor, and the macro split as each macro's share of the meal's energy.

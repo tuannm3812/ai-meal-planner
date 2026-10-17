@@ -27,12 +27,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--json", type=Path, help="Also write the summary and rows here.")
     args = parser.parse_args(argv)
 
-    rows = run()
+    rows, provenance = run()
     summary = summarise(rows)
-    print(render_markdown(rows, summary), end="")
+    print(render_markdown(rows, summary, provenance), end="")
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         payload = {
+            "provenance": provenance,
             "summary": dataclasses.asdict(summary),
             "plans": [row.model_dump() for row in rows],
         }

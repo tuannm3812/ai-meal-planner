@@ -4,7 +4,9 @@ These pin the measurement, not the planner's current numbers: a meal-quality
 change is meant to move the baseline, so no test fails because it did.
 """
 
+import dataclasses
 import json
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -14,8 +16,12 @@ import pytest
 from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureResponse
 from backend.app.evaluation.meal_quality import (
     PROFILES,
+    BenchmarkConfig,
+    BenchmarkConfigurationError,
     PlanQuality,
     Scenario,
+    build_service,
+    calorie_deviation,
     default_scenarios,
     in_amdr,
     macro_percentages,
@@ -81,7 +87,10 @@ def test_an_infeasible_result_keeps_only_its_status_and_budget() -> None:
 
 def test_measure_reads_the_shipped_plan() -> None:
     """Deviation is measured on the verified total that ships, against the meal target."""
-    (quality,) = run([Scenario("chicken fried rice", PROFILES[1])])
+    (quality,), provenance = run([Scenario("chicken fried rice", PROFILES[1])])
+
+    assert provenance["retriever"] == "tfidf_vector_retriever_v0.1"
+    assert provenance["meal_count"] == 34
 
     assert quality.plan_status == "matched"
     assert quality.meal_name == "Chicken Fried Rice"
@@ -108,6 +117,7 @@ def test_summary_counts_and_report() -> None:
             verified_kcal=560,
             calorie_deviation=0.0,
             within_tolerance=True,
+            within_calorie_target=True,
             meets_targets=True,
             rescaled=False,
             scale_factor=1.0,
@@ -127,6 +137,7 @@ def test_summary_counts_and_report() -> None:
             verified_kcal=1008,
             calorie_deviation=0.2,
             within_tolerance=False,
+            within_calorie_target=False,
             rescaled=True,
             scale_factor=1.6,
             scale_clamped=True,
@@ -171,7 +182,94 @@ def test_script_prints_the_report_and_writes_json(tmp_path: Path) -> None:
         check=True,
     )
 
-    assert completed.stdout.startswith("## Summary\n")
+    assert completed.stdout.startswith("## Measured\n")
+    assert "\n## Summary\n" in completed.stdout
     payload = json.loads(output.read_text(encoding="utf-8"))
     assert payload["summary"]["plans"] == 72
+    assert payload["provenance"]["calorie_model_version"] == "hist_gradient_boosting_deep_v0.1.0"
     assert len(payload["plans"]) == 72
+
+
+# Codex, 2026-10-18: rounding must not decide pass or fail at a boundary.
+
+
+def test_macro_shares_just_outside_every_range_are_not_rounded_into_it() -> None:
+    # Energy 35.04 / 44.98 / 19.98 kcal: protein just over 35%, carbs and fat just under.
+    shares = macro_percentages(35.04 / 4, 44.98 / 4, 19.98 / 9)
+
+    assert shares["protein"] == pytest.approx(35.04)
+    assert in_amdr(shares) == {"protein": False, "carbs": False, "fat": False}
+
+
+def test_calorie_target_is_inclusive_and_unrounded() -> None:
+    assert calorie_deviation(549.9, 500) <= 0.10  # just inside
+    assert calorie_deviation(550, 500) <= 0.10  # exactly on the bound
+    assert calorie_deviation(500 * 1.10004, 500) > 0.10  # just outside, 0.1000 when rounded
+
+
+def test_summary_counts_the_per_plan_calorie_verdict() -> None:
+    """A plan just outside the calorie target counts as outside in the aggregate too."""
+    row = PlanQuality(
+        scenario="edge",
+        plan_status="matched",
+        daily_budget_kcal=2000,
+        target_meal_kcal=500,
+        calorie_deviation=calorie_deviation(500 * 1.10004, 500),
+        within_tolerance=True,
+        within_calorie_target=False,
+        meets_targets=False,
+        macro_percent={"protein": 20.0, "carbs": 50.0, "fat": 30.0},
+        macros_in_range={"protein": True, "carbs": True, "fat": True},
+    )
+
+    summary = summarise([row])
+
+    assert (summary.within_calorie_target, summary.meets_targets) == (0, 0)
+
+
+# Codex, 2026-10-18: the caller's shell must not change what the baseline measures.
+
+_HOSTILE_ENV = {
+    "CALORIE_MODEL_PATH": "/nonexistent/model.joblib",
+    "CALORIE_MODEL_VERSION": "not_the_shipped_model",
+    "MEAL_CORPUS_PATH": "/nonexistent/meals.json",
+    "RAG_BACKEND": "sentence-transformers",
+    "RAG_EMBEDDING_ACTIVATION_SIZE": "1",
+}
+
+
+def test_canonical_config_ignores_the_shell(monkeypatch: pytest.MonkeyPatch) -> None:
+    clean = BenchmarkConfig.canonical()
+    for name, value in _HOSTILE_ENV.items():
+        monkeypatch.setenv(name, value)
+
+    assert BenchmarkConfig.canonical() == clean
+    assert clean.calorie_model_path.exists() and clean.meal_corpus_path.exists()
+
+
+def test_script_output_is_unchanged_by_shell_settings(tmp_path: Path) -> None:
+    def run_script(env: dict[str, str]) -> str:
+        return subprocess.run(
+            [sys.executable, "scripts/meal_quality_baseline.py"],
+            cwd=REPO,
+            env=env,
+            capture_output=True,
+            text=True,
+            check=True,
+        ).stdout
+
+    base_env = {key: value for key, value in os.environ.items() if key not in _HOSTILE_ENV}
+
+    assert run_script({**base_env, **_HOSTILE_ENV}) == run_script(base_env)
+
+
+@pytest.mark.parametrize(
+    ("field", "message"),
+    [("calorie_model_path", "Calorie model"), ("meal_corpus_path", "Meal corpus")],
+)
+def test_a_missing_artifact_stops_the_run(tmp_path: Path, field: str, message: str) -> None:
+    """A missing artifact must not quietly become a rule-based budget or template meals."""
+    config = dataclasses.replace(BenchmarkConfig.canonical(), **{field: tmp_path / "missing"})
+
+    with pytest.raises(BenchmarkConfigurationError, match=message):
+        build_service(tmp_path, config)
