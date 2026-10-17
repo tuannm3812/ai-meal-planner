@@ -5433,3 +5433,122 @@ adds the two log entries; no code or baseline changed, so the 547-test,
 owner. After the merge, the guardrail scenarios (fallback meal, no safe
 meal) come next as a separately reported set, so the 72-plan cohort stays
 comparable before and after macro-aware selection.
+
+## 2026-10-18 — Claude Opus 5.5 — #27 merged; guardrail cases for the fallback and refusal paths
+
+**#27 merged.** Mike approved the merge after Codex's verification. Merge commit
+`d85c4f9`; `main` CI passed all five jobs on it.
+
+**Guardrails (Codex's second next step).** The default 72 plans are all
+`matched`, and on the shipped corpus that cannot change by choosing other
+requests. Probing showed why:
+
+- A meaningless craving (`xyzzy`) is served Chicken Fried Rice. The default
+  profile's `high-protein` restriction adds a preference bonus that lifts every
+  meal over the 0.16 threshold (`rag/retriever.py`), so the fallback is never
+  reached. This is finding 2 in `docs/7_meal_quality.md`.
+- No known constraint label blocks any ingredient of Black Bean Burrito Bowl
+  (black beans, brown rice, tomato, salad greens, avocado), and it has no
+  avoided conditions, so no request is refused. Vegan, soy allergy, gluten-free,
+  peanut, sesame and kidney disease together still leave it.
+
+So the five guardrails run through the real service against a controlled
+corpus, `backend/app/evaluation/guardrail_meals.json`. It holds three meat
+meals copied verbatim from the shipped corpus, so no vegan request has a safe
+corpus meal. The calorie model and settings stay canonical. Expected outcomes:
+
+| Case | Expected |
+|---|---|
+| steak and rice | matched, Lean Steak Rice Plate (control) |
+| tofu bowl, vegan | fallback, Tofu Rice Bowl |
+| pasta, vegan | fallback, High-Protein Asian Tofu Noodle Bowl (the turkey pasta template is skipped) |
+| tofu bowl, vegan + soy allergy + kidney disease | infeasible |
+| pasta, vegan + soy allergy + kidney disease | infeasible |
+
+They print in their own "## Guardrails" section and go under a `guardrails`
+key in the JSON, outside the 72-plan summary, as Codex asked. The script exits
+1 when one does not hold. The 72-plan part of `docs/meal_quality/baseline.*`
+is byte-identical to before; only the guardrail lines were added.
+
+**Verified.** All five hold. Six new tests:
+
+- the controlled corpus has no vegan-safe meal;
+- the guardrails cover all three statuses;
+- every guardrail holds;
+- the guardrails ignore the hostile shell settings;
+- a wrong expectation is reported and makes the script exit 1;
+- the guardrail section counts outcomes.
+
+`uv run pytest`: 553 passed, 94.92% coverage. Ruff format and check are clean.
+
+## 2026-10-18 — Codex — review of PR #28: separate fallback/refusal guardrails
+
+Reviewed open PR #28 at `e5e4e8f` in an isolated archive at
+`/tmp/meal-guardrails-zybnTt`. The original checkout remains `d0acdad`, with
+prior uncommitted log entries preserved. PR #27 is now merged as `d85c4f9`;
+post-merge main CI run `39074575280` passed all five jobs. The integration
+diff after the previously verified #27 implementation only added log entries.
+
+**Verdict: no findings in this targeted guardrail change.** The controlled
+three-meal corpus reaches otherwise unexercised fallback/refusal paths
+through the real service, while retaining the canonical calorie model and
+configuration. Its no-vegan-safe-meal premise is pinned by a test. Expected
+outcomes are separate from observed outcomes and compared for each case.
+The script returns failure when a guardrail disagrees; the wrong-expectation
+test passed, so the failure path is exercised rather than merely described.
+
+**Fresh evidence:**
+
+- Full suite from the archive, using the existing project virtualenv with
+  local sockets permitted: **553 passed**, **94.92%** coverage; two existing
+  dependency deprecation warnings.
+- All five guardrails independently reproduced: one matched control, two
+  named fallbacks, and two infeasible results; all five were as expected.
+- Independently generated JSON and Markdown exactly matched the committed
+  reports. Removing the new guardrail section/key leaves the original
+  provenance, summary and 72 plan rows unchanged from the verified #27
+  baseline. The quality headline remains **10 of 72**, not 10 of 77.
+- Ruff lint and formatting passed (**109 files**). #28 CI run `39075640148`
+  passed all five jobs. Frontend/container and Python 3.12 are remote CI
+  evidence, not fresh local runs. Historical RED/mutation runs were not
+  independently repeated.
+
+**Discussion and next steps:**
+
+1. Record this review and, with owner approval, integrate #28 and confirm
+   main CI. The reviewed guardrail work does not itself improve meal quality
+   or close the separate deployment acceptance gap.
+2. Proceed to a separately scoped macro-quality change with a before/after
+   report on the unchanged 72-case cohort and the separate guardrails.
+   Preserve the 10% calorie criterion, full-precision classification,
+   provenance and estimated-nutrition caveat. Avoid bundling corpus expansion
+   and unrelated policy changes into the first optimization.
+3. Keep craving relevance and hard constraints as explicit checks during
+   selection/scaling work. These new guardrails pin status and meal name;
+   that is useful path coverage, not a general proof of ingredient safety.
+   Tests of the resulting ingredients and off-menu relevance should accompany
+   future behavior changes. If a deliberately improved selection changes a
+   pinned name, justify that expectation change rather than weakening refusal
+   or constraint checks just to make the suite pass.
+4. Safely synchronize the older local checkout while preserving log history.
+   Real Cloud Run, key revocation and Cloud Trace receipt remain separate
+   owner-dependent acceptance work; persistence, model retraining and JSON
+   migration remain outside this step.
+
+Only this append-only review was added to the original checkout, left
+uncommitted. No application changes, commits, merges, external comments,
+data cleanup, or deployments were performed.
+
+## 2026-10-18 — Claude Opus 5.5 — Codex's #28 review recorded; ready to merge
+
+Codex's review of `e5e4e8f` above is copied verbatim from the owner's local
+log. It has no findings. This commit only adds the two log entries, so the
+553-test and 5-of-5 guardrail evidence still describes this head. Merging #28
+waits on the owner.
+
+Next is macro-aware selection and scaling, scoped alone, with no corpus growth
+or unrelated policy in the same PR. It will report before and after on the
+unchanged 72 plans and on the guardrails. As Codex asks, it will add tests on
+the served ingredients' safety and on off-menu relevance. If an improved
+selection changes a pinned guardrail meal, the PR will justify the new
+expectation rather than loosen a refusal or constraint check.

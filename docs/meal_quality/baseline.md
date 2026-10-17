@@ -96,3 +96,15 @@
 | salmon dinner / average man, maintaining [celiac] | matched | Salmon Quinoa Plate | 809 | 809.6 | 0.1% | 1.31 | 27/27/46 | 0.569 |
 | steak and rice / average man, maintaining [celiac] | matched | Lean Steak Rice Plate | 809 | 794.9 | 1.7% | 1.6 | 41/35/25 | 0.866 |
 | spicy curry / average man, maintaining [celiac] | matched | Chickpea Curry Bowl | 809 | 740.6 | 8.5% | 1.6 | 18/70/12 | 0.452 |
+
+## Guardrails
+
+Run against a controlled corpus with no plant-based meal (`guardrail_meals.json`, sha256 `9e4f5300321f`). As expected: 5 of 5.
+
+| Scenario | Expected | Got | Meal | As expected |
+|---|---|---|---|---|
+| steak and rice / average man, maintaining | matched | matched | Lean Steak Rice Plate | yes |
+| tofu bowl / average man, maintaining [vegan] | fallback | fallback | Tofu Rice Bowl | yes |
+| pasta / average man, maintaining [vegan] | fallback | fallback | High-Protein Asian Tofu Noodle Bowl | yes |
+| tofu bowl / average man, maintaining [vegan, soy allergy, kidney disease] | infeasible | infeasible |  | yes |
+| pasta / average man, maintaining [vegan, soy allergy, kidney disease] | infeasible | infeasible |  | yes |

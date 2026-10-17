@@ -1,0 +1,121 @@
+[
+  {
+    "meal_id": "chicken_fried_rice",
+    "name": "Chicken Fried Rice",
+    "description": "High-protein fried rice with chicken, egg, vegetables, and soy sauce.",
+    "tags": [
+      "fried rice",
+      "rice",
+      "asian",
+      "chicken",
+      "high protein",
+      "dairy free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "whole egg",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "soy sauce",
+        "base_quantity_grams": 15
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_stir_fry",
+    "name": "Chicken Vegetable Stir Fry",
+    "description": "Chicken and vegetable stir fry served with brown rice.",
+    "tags": [
+      "stir fry",
+      "asian",
+      "chicken",
+      "rice",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "high-protein",
+      "dairy-free"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "soy sauce",
+        "base_quantity_grams": 15
+      }
+    ]
+  },
+  {
+    "meal_id": "lean_steak_rice_plate",
+    "name": "Lean Steak Rice Plate",
+    "description": "Lean steak with brown rice, broccoli, and tomato for a high-protein meal.",
+    "tags": [
+      "steak",
+      "beef",
+      "rice",
+      "high protein",
+      "dinner"
+    ],
+    "dietary_flags": [
+      "high-protein",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "heart disease",
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lean beef steak",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 80
+      }
+    ]
+  }
+]

@@ -2054,5 +2054,47 @@
       "estimated_ingredients": 3,
       "retrieval_score": 0.452
     }
+  ],
+  "guardrails": [
+    {
+      "scenario": "steak and rice / average man, maintaining",
+      "expected_status": "matched",
+      "expected_meal": "Lean Steak Rice Plate",
+      "plan_status": "matched",
+      "meal_name": "Lean Steak Rice Plate",
+      "as_expected": true
+    },
+    {
+      "scenario": "tofu bowl / average man, maintaining [vegan]",
+      "expected_status": "fallback",
+      "expected_meal": "Tofu Rice Bowl",
+      "plan_status": "fallback",
+      "meal_name": "Tofu Rice Bowl",
+      "as_expected": true
+    },
+    {
+      "scenario": "pasta / average man, maintaining [vegan]",
+      "expected_status": "fallback",
+      "expected_meal": "High-Protein Asian Tofu Noodle Bowl",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Asian Tofu Noodle Bowl",
+      "as_expected": true
+    },
+    {
+      "scenario": "tofu bowl / average man, maintaining [vegan, soy allergy, kidney disease]",
+      "expected_status": "infeasible",
+      "expected_meal": null,
+      "plan_status": "infeasible",
+      "meal_name": null,
+      "as_expected": true
+    },
+    {
+      "scenario": "pasta / average man, maintaining [vegan, soy allergy, kidney disease]",
+      "expected_status": "infeasible",
+      "expected_meal": null,
+      "plan_status": "infeasible",
+      "meal_name": null,
+      "as_expected": true
+    }
   ]
 }

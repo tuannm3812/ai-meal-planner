@@ -5,6 +5,7 @@ change is meant to move the baseline, so no test fails because it did.
 """
 
 import dataclasses
+import importlib.util
 import json
 import os
 import subprocess
@@ -14,22 +15,31 @@ from pathlib import Path
 import pytest
 
 from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureResponse
+from backend.app.evaluation import meal_quality
 from backend.app.evaluation.meal_quality import (
+    GUARDRAIL_CORPUS,
     PROFILES,
     BenchmarkConfig,
     BenchmarkConfigurationError,
+    Guardrail,
+    GuardrailResult,
     PlanQuality,
     Scenario,
     build_service,
     calorie_deviation,
     default_scenarios,
+    guardrail_scenarios,
     in_amdr,
     macro_percentages,
     measure,
+    render_guardrails,
     render_markdown,
     run,
+    run_guardrails,
     summarise,
 )
+from backend.app.rag.meal_corpus import load_meal_corpus
+from backend.app.rag.rules import constraint_groups, meal_is_allowed
 from backend.app.services.meal_planning_service import MealPlanResult
 
 REPO = Path(__file__).resolve().parents[2]
@@ -188,6 +198,8 @@ def test_script_prints_the_report_and_writes_json(tmp_path: Path) -> None:
     assert payload["summary"]["plans"] == 72
     assert payload["provenance"]["calorie_model_version"] == "hist_gradient_boosting_deep_v0.1.0"
     assert len(payload["plans"]) == 72
+    assert [result["as_expected"] for result in payload["guardrails"]] == [True] * 5
+    assert "\n## Guardrails\n" in completed.stdout
 
 
 # Codex, 2026-10-18: rounding must not decide pass or fail at a boundary.
@@ -273,3 +285,85 @@ def test_a_missing_artifact_stops_the_run(tmp_path: Path, field: str, message: s
 
     with pytest.raises(BenchmarkConfigurationError, match=message):
         build_service(tmp_path, config)
+
+
+# Codex, 2026-10-18: exercise the fallback and refusal paths, reported apart
+# from the default set so its denominator stays comparable.
+
+
+def test_the_guardrail_corpus_has_no_meal_a_vegan_can_eat() -> None:
+    """The fallback and refusal guardrails rest on this, so it is pinned."""
+    groups = constraint_groups(["vegan"])
+
+    assert not [
+        meal for meal in load_meal_corpus(GUARDRAIL_CORPUS) if meal_is_allowed(meal, groups, [])
+    ]
+
+
+def test_guardrails_cover_every_plan_status() -> None:
+    guardrails = guardrail_scenarios()
+
+    assert {guardrail.expected_status for guardrail in guardrails} == {
+        "matched",
+        "fallback",
+        "infeasible",
+    }
+    assert len({guardrail.scenario.label for guardrail in guardrails}) == len(guardrails)
+
+
+def test_every_guardrail_holds() -> None:
+    results = run_guardrails()
+
+    assert [(r.plan_status, r.meal_name) for r in results] == [
+        (g.expected_status, g.expected_meal) for g in guardrail_scenarios()
+    ]
+    assert all(result.as_expected for result in results)
+
+
+def test_guardrails_ignore_the_shell(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The controlled corpus replaces whatever MEAL_CORPUS_PATH says."""
+    for name, value in _HOSTILE_ENV.items():
+        monkeypatch.setenv(name, value)
+
+    assert all(result.as_expected for result in run_guardrails())
+
+
+def test_a_broken_guardrail_is_reported_and_fails_the_script(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    wrong = Guardrail(Scenario("steak and rice", PROFILES[1]), "infeasible", None)
+    monkeypatch.setattr(meal_quality, "guardrail_scenarios", lambda: [wrong])
+    spec = importlib.util.spec_from_file_location(
+        "meal_quality_baseline", REPO / "scripts" / "meal_quality_baseline.py"
+    )
+    script = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(script)
+
+    assert script.main([]) == 1
+    captured = capsys.readouterr()
+    assert "| steak and rice / average man, maintaining | infeasible | matched " in captured.out
+    assert "| **no** |" in captured.out
+    assert "Guardrails not as expected: steak and rice" in captured.err
+
+
+def test_render_guardrails_counts_the_outcomes() -> None:
+    results = [
+        GuardrailResult(
+            scenario="a",
+            expected_status="fallback",
+            expected_meal="A",
+            plan_status="fallback",
+            meal_name="A",
+            as_expected=True,
+        ),
+        GuardrailResult(
+            scenario="b",
+            expected_status="infeasible",
+            expected_meal=None,
+            plan_status="matched",
+            meal_name="B",
+            as_expected=False,
+        ),
+    ]
+
+    assert "As expected: 1 of 2." in render_guardrails(results)
