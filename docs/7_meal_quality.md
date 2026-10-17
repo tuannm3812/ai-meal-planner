@@ -44,6 +44,18 @@ for the macro ranges; that is the first item in §4. The service's own 15%
 reconciliation tolerance stays as it is: it decides when the service retries,
 not whether a plan is good.
 
+**Guardrails** (Codex, 2026-10-18). All 72 default plans are `matched`, so
+the default set never exercises the fallback templates or a refusal. Five
+guardrail cases do, each with its outcome fixed in advance. They run through
+the same service against a controlled corpus,
+`backend/app/evaluation/guardrail_meals.json`: three meat meals copied from
+the shipped corpus, so a vegan request finds no safe corpus meal. One case is
+a matched control, two must fall back to a named template, and two (vegan,
+soy allergy and kidney disease) must be refused as infeasible. They are
+reported in their own section and never counted in the 72, so the default
+set's numbers stay comparable from one change to the next. The script exits
+1 when a guardrail does not hold.
+
 ```bash
 uv run python scripts/meal_quality_baseline.py                      # Markdown report
 uv run python scripts/meal_quality_baseline.py --json out.json      # plus rows as JSON
@@ -67,6 +79,7 @@ Full report: [`meal_quality/baseline.md`](meal_quality/baseline.md); rows:
 | Protein / carbs / fat inside AMDR | 32 / 18 / 31 |
 | Plans with an estimated ingredient | 68 of 72 |
 | Corpus matches scoring below 0.25 | 11 |
+| Guardrails as expected (separate, controlled corpus) | 5 of 5 |
 
 ## 3. What the baseline shows
 

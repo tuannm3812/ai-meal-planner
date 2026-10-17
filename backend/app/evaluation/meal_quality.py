@@ -31,7 +31,7 @@ import hashlib
 import statistics
 import tempfile
 from collections.abc import Iterable, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 from typing import Any
 
@@ -400,6 +400,96 @@ def run(
     return rows, provenance
 
 
+GUARDRAIL_CORPUS = Path(__file__).with_name("guardrail_meals.json")
+"""Three meat meals copied from the shipped corpus. Against the full corpus every
+default scenario is matched: the default profile's high-protein restriction lifts
+even an unrelated craving over the relevance threshold, and a plant-based meal
+survives every known constraint. A corpus with no plant-based meal is how the
+fallback and refusal paths are reached through the real service."""
+
+
+@dataclass(frozen=True)
+class Guardrail:
+    """A scenario whose outcome is fixed in advance, run against ``GUARDRAIL_CORPUS``."""
+
+    scenario: Scenario
+    expected_status: str
+    expected_meal: str | None
+
+
+def guardrail_scenarios() -> list[Guardrail]:
+    """Return the guardrails: one matched control, two fallbacks and two refusals.
+
+    They are reported apart from the default set, so its 72-plan denominator
+    stays comparable from one change to the next (Codex, 2026-10-18).
+    """
+    average = PROFILES[1]
+    return [
+        Guardrail(Scenario("steak and rice", average), "matched", "Lean Steak Rice Plate"),
+        Guardrail(
+            Scenario("tofu bowl", average, dietary_preferences=("vegan",)),
+            "fallback",
+            "Tofu Rice Bowl",
+        ),
+        # The pasta template holds turkey, which nothing substitutes for a vegan,
+        # so the planner must skip it rather than serve it.
+        Guardrail(
+            Scenario("pasta", average, dietary_preferences=("vegan",)),
+            "fallback",
+            "High-Protein Asian Tofu Noodle Bowl",
+        ),
+        # Tofu's substitute is chickpeas, which kidney disease blocks.
+        Guardrail(
+            Scenario("tofu bowl", average, ("kidney disease",), ("vegan", "soy allergy")),
+            "infeasible",
+            None,
+        ),
+        Guardrail(
+            Scenario("pasta", average, ("kidney disease",), ("vegan", "soy allergy")),
+            "infeasible",
+            None,
+        ),
+    ]
+
+
+class GuardrailResult(BaseModel):
+    """A guardrail's expected outcome next to what the service produced."""
+
+    scenario: str
+    expected_status: str
+    expected_meal: str | None
+    plan_status: str
+    meal_name: str | None
+    as_expected: bool
+
+
+def run_guardrails(config: BenchmarkConfig | None = None) -> list[GuardrailResult]:
+    """Run the guardrails against the controlled corpus, all else canonical.
+
+    Args:
+        config: The artifacts to measure; the canonical baseline when omitted.
+            Its corpus is always replaced by ``GUARDRAIL_CORPUS``.
+
+    Returns:
+        One GuardrailResult per guardrail, in order.
+    """
+    guardrails = guardrail_scenarios()
+    config = replace(config or BenchmarkConfig.canonical(), meal_corpus_path=GUARDRAIL_CORPUS)
+    rows, _ = run([guardrail.scenario for guardrail in guardrails], config)
+    return [
+        GuardrailResult(
+            scenario=row.scenario,
+            expected_status=guardrail.expected_status,
+            expected_meal=guardrail.expected_meal,
+            plan_status=row.plan_status,
+            meal_name=row.meal_name,
+            as_expected=(row.plan_status, row.meal_name)
+            == (guardrail.expected_status, guardrail.expected_meal),
+        )
+        for guardrail, row in zip(guardrails, rows, strict=True)
+    ]
+
+
 @dataclass
 class Summary:
     """Aggregate numbers for a set of PlanQuality rows."""
@@ -566,3 +656,32 @@ def render_markdown(
 def _pct(value: float | None) -> str:
     """Format a fraction as a percentage, or a dash when absent."""
     return "-" if value is None else f"{value:.1%}"
+
+
+def render_guardrails(results: Sequence[GuardrailResult]) -> str:
+    """Render the guardrails as a Markdown section, reported apart from the default set.
+
+    Args:
+        results: What ``run_guardrails`` returned.
+
+    Returns:
+        The section, ending in a newline.
+    """
+    passed = sum(1 for result in results if result.as_expected)
+    lines = [
+        "",
+        "## Guardrails",
+        "",
+        f"Run against a controlled corpus with no plant-based meal "
+        f"(`{GUARDRAIL_CORPUS.name}`, sha256 `{_sha256(GUARDRAIL_CORPUS)[:12]}`). "
+        f"As expected: {passed} of {len(results)}.",
+        "",
+        "| Scenario | Expected | Got | Meal | As expected |",
+        "|---|---|---|---|---|",
+    ]
+    for result in results:
+        lines.append(
+            f"| {result.scenario} | {result.expected_status} | {result.plan_status} "
+            f"| {result.meal_name or ''} | {'yes' if result.as_expected else '**no**'} |"
+        )
+    return "\n".join(lines) + "\n"
