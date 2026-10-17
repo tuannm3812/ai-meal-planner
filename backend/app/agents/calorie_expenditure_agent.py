@@ -7,6 +7,10 @@ from pydantic import BaseModel, Field
 
 logger = logging.getLogger(__name__)
 
+WEIGHT_LOSS_FLOOR_KCAL = {"female": 1200.0, "male": 1500.0}
+"""The lowest daily budget a weight-loss goal produces (owner decision, 2026-10-17).
+A sex outside the trained categories gets the higher floor."""
+
 
 class CalorieExpenditureRequest(BaseModel):
     age: int = Field(gt=0, le=120)
@@ -102,7 +106,9 @@ class CalorieExpenditureAgent:
             model_version = "mifflin_st_jeor_fallback_v0.1.0"
             warnings.append("Using rule-based fallback until trained model artifact is available.")
 
-        meal_budget = self._meal_budget(expenditure, request.goal)
+        meal_budget, floor_warning = self._meal_budget(expenditure, request.goal, request.sex)
+        if floor_warning:
+            warnings.append(floor_warning)
         return CalorieExpenditureResponse(
             estimated_daily_expenditure_kcal=round(expenditure, 1),
             meal_calorie_budget_kcal=round(meal_budget, 1),
@@ -146,14 +152,33 @@ class CalorieExpenditureAgent:
             bmr = (10 * request.weight_kg) + (6.25 * request.height_cm) - (5 * request.age) - 161
         return bmr * request.activity_multiplier
 
-    @staticmethod
-    def _meal_budget(expenditure: float, goal: str) -> float:
+    @classmethod
+    def _meal_budget(cls, expenditure: float, goal: str, sex: str) -> tuple[float, str | None]:
+        """Turn expenditure into the daily budget for a goal.
+
+        A weight-loss deficit of 400 kcal stops at a floor of 1,200 kcal for
+        women and 1,500 for men, and the floor never lifts the budget above
+        expenditure, which would turn the deficit into a surplus.
+
+        Returns:
+            The budget and, when the floor applied, a warning saying so.
+        """
         normalized_goal = goal.strip().lower()
         if normalized_goal in {"cut", "lose", "fat_loss", "weight_loss"}:
-            return expenditure - 400
+            deficit_budget = expenditure - 400
+            floor = WEIGHT_LOSS_FLOOR_KCAL.get(
+                cls._SEX_ALIASES.get(sex.strip().lower(), ""),
+                max(WEIGHT_LOSS_FLOOR_KCAL.values()),
+            )
+            if deficit_budget >= floor:
+                return deficit_budget, None
+            return min(floor, expenditure), (
+                f"The weight-loss budget was raised to the {floor:.0f} kcal minimum "
+                "(or to estimated expenditure, if lower)."
+            )
         if normalized_goal in {"bulk", "gain", "muscle_gain", "weight_gain"}:
-            return expenditure + 250
-        return expenditure
+            return expenditure + 250, None
+        return expenditure, None
 
     @staticmethod
     def _health_warnings(health_conditions: list[str]) -> list[str]:

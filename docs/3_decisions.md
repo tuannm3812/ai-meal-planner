@@ -31,6 +31,8 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 21 | The OpenAPI document is a committed, CI-checked contract | 2026-10-11 |
 | 22 | Render is retired; Cloud Run is the only hosted API target | 2026-10-12 |
 | 23 | Every error response uses `ErrorResponse` | 2026-10-12 |
+| 24 | A weight-loss budget has a floor of 1,200 kcal (women) or 1,500 (men) | 2026-10-17 |
+| 25 | Meal-quality targets: calories within 10%, macros inside AMDR | 2026-10-17 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -327,3 +329,26 @@ documented error therefore has one body: `status`, `error`, an optional
 `code`, and `detail`. `detail` and the 400 status are unchanged, so both
 clients, which read `detail`, keep working. Rules out a second error shape that
 clients would have to special-case.
+
+## 2026-10-17 — Meal quality
+
+Source: `docs/7_meal_quality.md`. Both are owner decisions.
+
+### DEC-24 — A weight-loss budget has a floor of 1,200 kcal (women) or 1,500 (men)
+
+The weight-loss budget was expenditure minus 400 kcal with no lower limit, so
+the baseline's 62-year-old, 52 kg woman got 986 kcal a day. The deficit now
+stops at 1,200 kcal for women and 1,500 for men; a sex outside the trained
+categories gets the higher floor. The floor never lifts the budget above
+estimated expenditure, which would turn a deficit into a surplus. A warning in
+the response says when it applied. Rules out a demo recommending a daily total
+below common guidance.
+
+### DEC-25 — Meal-quality targets: calories within 10%, macros inside AMDR
+
+A plan meets the targets when its shipped calories are within 10% of the meal
+target and protein, carbohydrate and fat each sit inside the adult AMDR (10-35%,
+45-65% and 20-35% of energy). Every meal-quality change is judged by how many of
+the baseline's 72 plans meet them. The service's 15% reconciliation tolerance is
+unchanged: it is when the service retries, not the product's target. Rules out
+judging changes on calories alone, and a looser high-protein range.

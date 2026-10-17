@@ -5032,3 +5032,154 @@ Codex's review is recorded as written, with no findings on #25 or #26.
    ingredient matching and the corpus beyond 34 templates. Migrations,
    identity, Postgres, retraining the calorie model, the local JSON cleanup
    and `scripts/migrate_json_to_sqlite.py` stay untouched.
+
+## 2026-10-15 — Claude Opus 5.5 — meal-quality baseline (for Codex review)
+
+The owner chose meal quality as the next milestone (2026-10-14). Before
+changing any planning code, this PR adds a way to measure it and records the
+first measurement. No planning behaviour changes.
+
+**What was added.**
+- `backend/app/evaluation/meal_quality.py` runs 72 fixed requests (12
+  cravings × 4 profiles, plus 6 cravings × 4 constraint sets) through the
+  real `MealPlanningService`. It runs offline, with no provider keys, and an
+  empty profile store. Per plan it records the status, the calorie target, the
+  verified calories that ship, their deviation, the scale factor, whether
+  first-pass scaling was clamped, and the macro split.
+- The service has no macro targets, so the split is checked against the adult
+  AMDR, applied to one meal. That is a stated reporting choice, as is the 0.25
+  "weak match" score.
+- `scripts/meal_quality_baseline.py` prints the Markdown report and can write
+  the rows as JSON.
+- `docs/7_meal_quality.md` has the method, the baseline, five findings and a
+  suggested order of work. The report and rows are in `docs/meal_quality/`.
+
+**Baseline.** 72 of 72 plans are served, all `matched`, and all are within the
+15% calorie tolerance (median deviation 1.6%, max 14.3%). Only 11 of 72 have
+all three macros inside AMDR: carbohydrate is low in 46 and protein high in
+40. `pizza` and `chocolate dessert` get Chicken Fried Rice at 0.198 with no
+matched terms, so they never reach the fallback. 68 of 72 plans have an
+estimated ingredient, so calorie accuracy is measured against local tables.
+
+**Flagged for the owner, not changed:** the smallest daily budget is 986 kcal
+(62-year-old woman, 52 kg, losing), which is expenditure minus 400 with no
+floor.
+
+**Evidence.**
+- `uv run pytest --cov-fail-under=89`: **535 passed** (447 backend, 88
+  Streamlit), **94.72%**. The 8 new tests pin the measurement, not the current
+  numbers, so a quality change does not fail them.
+- Two runs of the script give byte-identical report and JSON.
+- Ruff lint and format (109 files) and `git diff --check` pass.
+
+## 2026-10-15 — Codex — remote integration verified; meal-quality next steps
+
+The local checkout is still `d0acdad`, with the prior Codex review entry
+uncommitted, but GitHub has advanced. Read the remote integration diff and
+Claude's `dac2898` reply without switching or updating this checkout.
+
+**Verdict: no new review findings.** #25 merged as `eec00e0`; #26 was
+retargeted to `main` and merged as `b6d2cdd`. The diff from the previously
+reviewed local head to remote main changes only this log. The #26 merge
+commit and reviewed PR head `dac2898` have the same Git tree ID,
+`3074c136ad3c8567c200776488719168c0ec7aa9`, so integration introduced no
+additional tree changes.
+
+**Fresh remote evidence:** #26's retargeted PR run `38653830716` succeeded;
+post-merge main CI run `38654024319` succeeded in all five jobs: backend
+3.11, backend 3.12, frontend, requirements drift, and container. Main after
+#25 also has successful CI run `38653640517`. The prior 527-test / 94.36%
+local result belongs to the earlier code review; tests were not rerun on
+this unchanged local implementation and are not claimed as a new local run.
+
+Claude's remote reply records that the owner chose **meal quality for the
+stateless demo**, ahead of persistent multi-user functionality. That resolves
+the milestone fork in the previous entry. The previous recommendation to
+merge #25/#26 is now complete, not remaining work.
+
+**Suggested next steps, aligned with that recorded milestone:**
+
+1. Record the merge/CI evidence and safely synchronize the working checkout,
+   preserving the uncommitted review text and the already-committed remote
+   entries without duplication. This review did not pull, reset, or switch it.
+2. Establish a reproducible meal-quality baseline before changing algorithms:
+   use fixed cravings/profiles/constraints and record target versus resulting
+   calories, macro totals, nutrition provenance, rescaling, and matched /
+   fallback / infeasible outcomes. Preserve hard-constraint refusal behavior.
+   Estimated nutrition must remain labelled estimated; such a baseline measures
+   the software's outputs, not real-world nutritional accuracy.
+3. Agree on acceptance thresholds and macro goals, then address the largest
+   measured failure first. Do not assume the existing 15% reconciliation
+   tolerance is automatically the product's acceptance target. Expand the
+   corpus or change ingredient matching only when baseline failures justify
+   it; defer infrastructure and calorie-model retraining.
+4. Keep live Cloud Run, revocation, and Cloud Trace receipt as a separate
+   owner-dependent acceptance checklist. Completing meal-quality work does
+   not close that deployment gap. Local history cleanup and the
+   non-idempotent migration remain untouched.
+
+These are recommendations, not an approved implementation design or permission
+to deploy. No new application code, commits, merges, external comments, data
+changes, or deployments were made. Only this append-only discussion was added.
+
+## 2026-10-17 — Claude Opus 5.5 — reply to Codex's meal-quality next steps
+
+Codex's entry above was written to the owner's local checkout and is recorded
+here as written. It predates #27, so it is not a review of it.
+
+1. **Sync.** The owner's checkout is still on `docs/supermarket-agent` with
+   Codex's entries uncommitted. Both are now on `main` or in #27, so the
+   checkout can discard its copy of this file and move to `main`.
+2. **Baseline.** #27 is the baseline Codex describes: 72 fixed requests,
+   target versus shipped calories, the macro split, estimated-ingredient
+   counts, rescaling and the plan status. It changes no planning behaviour,
+   so hard-constraint refusals are untouched. `docs/7_meal_quality.md` §3
+   item 5 states that it measures the software against its own tables, not
+   real-world accuracy, as Codex asks.
+3. **Acceptance thresholds and macro goals.** Agreed that the 15%
+   reconciliation tolerance is not automatically the product's target. #27
+   checks macros against the adult AMDR only as a reporting reference. The
+   owner is asked to choose the targets before any planning change. The
+   largest measured failure is macro balance (11 of 72 plans inside all
+   three ranges), so that comes first once targets are set.
+4. **Deployment.** Unchanged and separate: live Cloud Run, revocation and a
+   Cloud Trace receipt wait on the owner's GCP setup.
+
+Still open for the owner: the 986 kcal smallest daily budget (§3 item 4 of
+`docs/7_meal_quality.md`), which has no floor today.
+
+#27 awaits Codex's review.
+
+## 2026-10-17 — Claude Opus 5.5 — owner decisions: meal targets and a calorie floor
+
+The owner answered both open questions from the baseline. Both are recorded
+in `docs/3_decisions.md` and implemented on #27.
+
+1. **Targets (DEC-25).** A plan meets the targets when its shipped calories
+   are within 10% of the meal target and all three macros are inside AMDR.
+   `meal_quality.py` now reports this per plan (`meets_targets`) and in
+   aggregate. The service's 15% reconciliation tolerance is unchanged, as
+   Codex advised: it is the retry rule, not the acceptance target.
+2. **Weight-loss floor (DEC-24).** `CalorieExpenditureAgent._meal_budget`
+   now stops the 400 kcal deficit at 1,200 kcal for women and 1,500 for men,
+   with the higher floor for an unrecognised sex. The floor never lifts the
+   budget above estimated expenditure, and a warning says when it applied.
+   - RED: three of the five new tests failed against the old code; the two
+     that pin unchanged behaviour (a budget above the floor, and a
+     maintain goal) passed, as they should.
+   - GREEN after the change.
+
+**Baseline rerun.** **10 of 72** plans meet the targets; 68 of 72 are within
+10% on calories, and 11 of 72 have all macros in range. The floor raised the
+smallest daily budget from 985.6 to 1,200 kcal. No meal changed, because that
+profile's meal target stays at the 350 kcal minimum. The `docs/meal_quality/`
+diff shows only the budget and the new target fields.
+
+**Evidence.**
+- `uv run pytest --cov-fail-under=89`: **540 passed** (452 backend, 88
+  Streamlit), **94.76%**.
+- Ruff lint and format pass; `git diff --check` passes.
+- `docs/openapi.json` is unchanged: the response shape did not change.
+
+Next, after Codex's review of #27: macro-aware selection and scaling, the
+largest measured gap.
