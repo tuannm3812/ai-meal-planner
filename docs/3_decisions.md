@@ -357,7 +357,8 @@ judging changes on calories alone, and a looser high-protein range.
 ### DEC-26 — Portions are rebalanced per ingredient toward AMDR, never the meal itself
 
 Uniform portion scaling hits a calorie target but keeps a template's macro
-split, so 62 of the baseline's 72 plans missed AMDR. After the first
+split, so 61 of the baseline's 72 plans missed AMDR (62 missed the combined
+calorie and macro targets). After the first
 verification, a plan that misses the 10% calorie target or any AMDR range now
 gets one factor per ingredient from a small linear programme
 (`core/macro_balance.py`, solved with `scipy.optimize.linprog`):
@@ -368,7 +369,8 @@ gets one factor per ingredient from a small linear programme
 - the sum of `|factor - 1|`, plus ten times the calorie deviation, is minimised.
 
 The plan is verified once more, and uniform reconciliation still runs after it.
-When no factors fit, the plan ships unchanged and says so. Every response
+When no factors fit, or the re-verified portions miss either target (rounding
+to 5 g, or a live provider's numbers), the plan ships unchanged and says so. Every response
 carries a `macro_balance` record: the outcome and the split before and after.
 The meal, its ingredients and their order never change, so retrieval, craving
 relevance and hard-constraint substitutions are untouched.

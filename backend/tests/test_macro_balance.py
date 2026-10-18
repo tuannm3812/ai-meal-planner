@@ -24,6 +24,7 @@ from backend.app.core.macro_balance import (
     macro_percentages,
 )
 from backend.app.evaluation.meal_quality import (
+    CRAVINGS,
     GUARDRAIL_CORPUS,
     PROFILES,
     BenchmarkConfig,
@@ -141,7 +142,8 @@ def test_every_rebalanced_plan_ships_inside_amdr(
                 "Rebalanced ingredient portions" in w for w in after.meal_plan.metadata.warnings
             )
         else:
-            assert record.macro_percent_after is None
+            if record.outcome != "reverted":
+                assert record.macro_percent_after is None
             assert portions == original
 
 
@@ -175,3 +177,64 @@ def test_the_bounds_are_read_when_solving(monkeypatch: pytest.MonkeyPatch) -> No
     monkeypatch.setattr(macro_balance, "MAX_FACTOR", 1.0)
 
     assert balance_factors([CHICKEN, RICE, AVOCADO], 700) is None
+
+
+# Codex, 2026-10-18: the solver's answer is unrounded and unverified, so test what
+# ships after rounding to 5 g and re-verification, including when it goes wrong.
+
+
+def test_portions_that_miss_on_re_verification_are_reverted() -> None:
+    """A provider that disagrees with the first verification must not ship a worse split."""
+    with tempfile.TemporaryDirectory() as data_dir:
+        service, _ = build_service(Path(data_dir))
+        real = service.nutrition_agent.calculate_meal_macros
+        calls = []
+
+        def adverse(ingredients):
+            nutrition = real(ingredients)
+            calls.append(nutrition)
+            if len(calls) == 2:  # the re-verification of balanced portions
+                return nutrition.model_copy(update={"total_fat": nutrition.total_fat * 3})
+            return nutrition
+
+        service.nutrition_agent.calculate_meal_macros = adverse
+        result = service.generate(Scenario("chicken fried rice", PROFILES[1]).to_request())
+
+    record = result.macro_balance
+    assert record.outcome == "reverted"
+    assert record.macros_in_range_after is False
+    assert record.macro_percent_after is not None
+    first = calls[0]
+    assert [i.base_quantity_grams for i in result.meal_plan.meal_definition.ingredients] == [
+        i.base_quantity_grams for i in first.ingredients_macros
+    ]
+    assert not any("Rebalanced" in w for w in result.meal_plan.metadata.warnings)
+
+
+@pytest.mark.parametrize("craving", CRAVINGS)
+def test_rounded_portions_hold_across_meal_targets(craving: str) -> None:
+    """From 350 to 850 kcal in 50 kcal steps, no solved plan is lost to 5 g rounding."""
+    with tempfile.TemporaryDirectory() as data_dir:
+        service, _ = build_service(Path(data_dir))
+        profile = service.profile_repo.fetch_user_profile("user_123")
+        solved = 0
+        for target in range(350, 851, 50):
+            plan = service.meal_agent.generate_meal_payload(
+                craving=craving,
+                user_id="user_123",
+                daily_calorie_target=round(target / 0.28),
+                profile=profile,
+            )
+            nutrition = service.nutrition_agent.calculate_meal_macros(
+                plan.meal_definition.ingredients
+            )
+            _, shipped, record = service._balance(plan, nutrition)
+            assert record.outcome != "reverted", (craving, target)
+            if record.outcome == "rebalanced":
+                solved += 1
+                shares = macro_percentages(
+                    shipped.total_protein, shipped.total_carbs, shipped.total_fat
+                )
+                assert all(in_amdr(shares).values())
+                meal_target = record.target_meal_calories
+                assert abs(shipped.total_calories - meal_target) / meal_target <= 0.10

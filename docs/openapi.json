@@ -1056,7 +1056,8 @@
             "enum": [
               "in_range",
               "rebalanced",
-              "no_feasible_balance"
+              "no_feasible_balance",
+              "reverted"
             ],
             "title": "Outcome"
           },
@@ -1104,7 +1105,7 @@
           "macro_percent_before"
         ],
         "title": "MacroBalanceMetadata",
-        "description": "Records whether portions were rebalanced toward the AMDR macro split (DEC-26).\n\n``outcome`` is ``in_range`` when the verified meal already met the targets,\n``rebalanced`` when per-ingredient portions were changed, and\n``no_feasible_balance`` when no portions within the bounds could meet them,\nin which case the meal ships as it was. Percentages are each macro's share\nof energy, rounded for display."
+        "description": "Records whether portions were rebalanced toward the AMDR macro split (DEC-26).\n\n``outcome`` is ``in_range`` when the verified meal already met the targets,\n``rebalanced`` when per-ingredient portions were changed, and\n``no_feasible_balance`` when no portions within the bounds could meet them,\nand ``reverted`` when the solver found portions but their re-verified\nnutrition missed the targets. In the last two cases the meal ships as it\nwas; ``macro_percent_after`` is set only when portions were re-verified.\nPercentages are each macro's share of energy, rounded for display."
       },
       "MealAgentMetadata": {
         "properties": {
