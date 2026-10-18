@@ -17,6 +17,8 @@ from ..core import telemetry
 from ..core.exceptions import NoFeasibleMeal
 from ..core.macro_balance import (
     CALORIE_TARGET,
+    RETRY_SHARE_MARGIN,
+    SHARE_MARGIN,
     IngredientEnergy,
     balance_factors,
     in_amdr,
@@ -236,45 +238,52 @@ class MealPlanningService:
         if len(nutrition.ingredients_macros) != len(meal_plan.meal_definition.ingredients):
             record.outcome = "no_feasible_balance"
             return meal_plan, nutrition, record
-        factors = balance_factors(
-            [
-                IngredientEnergy(
-                    calories=item.calories_kcal,
-                    protein_g=item.protein_g,
-                    carbs_g=item.carbs_g,
-                    fat_g=item.fat_g,
-                )
-                for item in nutrition.ingredients_macros
-            ],
-            target,
-        )
-        if factors is None:
-            record.outcome = "no_feasible_balance"
-            return meal_plan, nutrition, record
-
-        balanced = [
-            Ingredient(
-                item_name=ingredient.item_name,
-                base_quantity_grams=scale_grams(ingredient.base_quantity_grams, factor),
+        energies = [
+            IngredientEnergy(
+                calories=item.calories_kcal,
+                protein_g=item.protein_g,
+                carbs_g=item.carbs_g,
+                fat_g=item.fat_g,
             )
-            for ingredient, factor in zip(
-                meal_plan.meal_definition.ingredients, factors, strict=True
-            )
+            for item in nutrition.ingredients_macros
         ]
-        balanced_nutrition = self.nutrition_agent.calculate_meal_macros(ingredients=balanced)
-        after = macro_percentages(
-            balanced_nutrition.total_protein,
-            balanced_nutrition.total_carbs,
-            balanced_nutrition.total_fat,
-        )
-        record.macro_percent_after = {macro: round(share, 1) for macro, share in after.items()}
-        record.macros_in_range_after = all(in_amdr(after).values())
         # The solver works on unrounded portions; what ships is re-verified at 5 g
-        # steps, possibly by a live provider. Keep the result only if it meets the
-        # targets as verified (Codex, 2026-10-18).
-        deviation_after = abs(balanced_nutrition.total_calories - target) / target
-        if not (record.macros_in_range_after and deviation_after <= CALORIE_TARGET):
+        # steps, possibly by a live provider. Keep a result only if it meets the
+        # targets as verified (Codex, 2026-10-18). A miss is retried once with a
+        # wider margin, never required up front (Codex, 2026-10-19).
+        for margin in (SHARE_MARGIN, RETRY_SHARE_MARGIN):
+            factors = balance_factors(energies, target, margin)
+            if factors is None:
+                break
+            balanced = [
+                Ingredient(
+                    item_name=ingredient.item_name,
+                    base_quantity_grams=scale_grams(ingredient.base_quantity_grams, factor),
+                )
+                for ingredient, factor in zip(
+                    meal_plan.meal_definition.ingredients, factors, strict=True
+                )
+            ]
+            balanced_nutrition = self.nutrition_agent.calculate_meal_macros(ingredients=balanced)
+            after = macro_percentages(
+                balanced_nutrition.total_protein,
+                balanced_nutrition.total_carbs,
+                balanced_nutrition.total_fat,
+            )
+            record.macro_percent_after = {macro: round(share, 1) for macro, share in after.items()}
+            record.macros_in_range_after = all(in_amdr(after).values())
+            deviation_after = abs(balanced_nutrition.total_calories - target) / target
+            if record.macros_in_range_after and deviation_after <= CALORIE_TARGET:
+                break
+        else:
             record.outcome = "reverted"
+            return meal_plan, nutrition, record
+        if factors is None:
+            # No solution at all is infeasible; no solution only at the wider
+            # margin, after the narrower one missed, is still a revert.
+            record.outcome = (
+                "reverted" if record.macro_percent_after is not None else "no_feasible_balance"
+            )
             return meal_plan, nutrition, record
 
         record.outcome = "rebalanced"

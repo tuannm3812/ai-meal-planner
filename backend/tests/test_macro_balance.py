@@ -17,6 +17,7 @@ from backend.app.core.macro_balance import (
     CALORIE_BAND,
     MAX_FACTOR,
     MIN_FACTOR,
+    RETRY_SHARE_MARGIN,
     SHARE_MARGIN,
     IngredientEnergy,
     balance_factors,
@@ -194,7 +195,7 @@ def test_portions_that_miss_on_re_verification_are_reverted() -> None:
         def adverse(ingredients):
             nutrition = real(ingredients)
             calls.append(nutrition)
-            if len(calls) == 2:  # the re-verification of balanced portions
+            if len(calls) >= 2:  # every re-verification of balanced portions
                 return nutrition.model_copy(update={"total_fat": nutrition.total_fat * 3})
             return nutrition
 
@@ -259,3 +260,44 @@ def test_every_matched_default_plan_meets_the_targets(
         name = result.meal_plan.meal_definition.structured_meal_name
         assert all(in_amdr(shares).values()), name
         assert abs(nutrition.total_calories - target) / target <= 0.10, name
+
+
+@pytest.mark.parametrize(
+    ("craving", "profile"),
+    [
+        # Codex, 2026-10-19: requiring a 2-point margin of every meal left these
+        # unchanged recipes with no solution; they balance at 1 point.
+        ("turkey chili bowl", PROFILES[0]),
+        ("turkey chili bowl", PROFILES[1]),
+        ("beef taco salad", PROFILES[1]),
+        ("turkey sweet potato hash", PROFILES[0]),
+        ("turkey sweet potato hash", PROFILES[1]),
+    ],
+)
+def test_the_wider_margin_is_a_retry_not_a_requirement(craving: str, profile) -> None:
+    (result,) = _plans([Scenario(craving, profile)])
+    record = result.macro_balance
+    nutrition = result.nutrition
+    shares = macro_percentages(nutrition.total_protein, nutrition.total_carbs, nutrition.total_fat)
+
+    assert record.outcome in {"in_range", "rebalanced"}, record
+    assert all(in_amdr(shares).values()), shares
+    target = record.target_meal_calories
+    assert abs(nutrition.total_calories - target) / target <= 0.10
+
+
+def test_a_rounding_miss_is_retried_with_the_wider_margin(monkeypatch: pytest.MonkeyPatch) -> None:
+    """The 350 kcal Chicken Fried Rice misses after rounding at 1 point (DEC-28)."""
+    margins = []
+    real = meal_planning_service.balance_factors
+
+    def spy(ingredients, target, margin):
+        margins.append(margin)
+        return real(ingredients, target, margin)
+
+    monkeypatch.setattr(meal_planning_service, "balance_factors", spy)
+    (result,) = _plans([Scenario("chicken fried rice", PROFILES[0])])
+
+    assert margins == [SHARE_MARGIN, RETRY_SHARE_MARGIN]
+    assert result.macro_balance.outcome == "rebalanced"
+    assert result.macro_balance.macros_in_range_after is True

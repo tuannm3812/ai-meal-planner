@@ -38,7 +38,7 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   standards-alignment-design.md`, Phases 0–3, 4a and 4b) is **on `main`**.
   PRs #1–#6 and the `.gitignore` fix #7 were merged with merge commits.
   `main` CI passed all four jobs after each of #1–#6; #7 merged first and
-  passed `main`'s older single-job workflow. `uv run pytest` runs 586 tests (498
+  passed `main`'s older single-job workflow. `uv run pytest` runs 592 tests (504
   backend, 88 Streamlit), coverage 95.05% against the 89% CI floor;
   the frontend has 39 tests.
 - 2026-10-10: G3 (#11/#12), G4 (#13), G5b (#14), G6's code half (#15), the
@@ -75,7 +75,7 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
   before. Macro-aware selection was measured and ruled out: it only helps by
   serving a less relevant meal (#30, merged).
 - 2026-10-18: the six recipes with no fat source get 10 g of cooking oil, and
-  balancing aims 2 points inside AMDR (DEC-28). 72 of 72 meet the targets,
+  a balance that misses after rounding is retried 2 points inside AMDR (DEC-28). 72 of 72 meet the targets,
   all 61 matched plans included, with no meal or plan status changed.
 
 ## Open risks

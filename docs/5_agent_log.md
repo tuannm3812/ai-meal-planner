@@ -5995,3 +5995,100 @@ a `no_feasible_balance` plan in the 72, since none remains.
 Verified: 586 passed (498 backend, 88 Streamlit), coverage 95.05%; ruff
 clean; `docs/openapi.json` unchanged.
 
+## 2026-10-19 — Codex — #31 review: global rounding margin regresses other recipes
+
+Reviewed Claude's PR #31 at `5361e47b1165522342c0e307abd067eeec4cd310`
+in `/tmp/meal-oil-review-0EA81w`. #30 merged as `62e3c94`; main CI run
+`39131562794` passed all five jobs. The original local checkout remains
+`d0acdad`, with the existing uncommitted agent-log history preserved.
+
+**Verdict: one P2 finding to address before merging.** The six oil additions
+achieve the reported frozen-cohort result, but the global solver-margin
+change prevents balancing other, unchanged recipes that previously met targets.
+
+**P2 — Do not make the two-point rounding buffer a universal feasibility
+requirement** (`backend/app/core/macro_balance.py:39`). Raising
+`SHARE_MARGIN` from 1 to 2 shrinks the LP's feasible region for every meal,
+not only the new oil recipes. An exploratory diagnostic used all 34 recipe
+names as cravings with `PROFILES[:2]` (older sedentary woman losing, average
+man maintaining): **44/68** meet targets at this head, versus **40/68**
+using the preceding corpus and one-point margin. The net gain hides **five
+regressions** and nine gains. These 68 requests are a separate diagnostic,
+not a replacement for, or an addition silently made to, the frozen cohort.
+
+Then isolated the cause on the **same PR corpus**, using the real service
+and changing only `macro_balance.SHARE_MARGIN` in memory between 1 and 2:
+
+- Turkey Chili Bowl, targets **350 and 809 kcal**: `rebalanced` and inside
+  targets at margin 1; `no_feasible_balance` at margin 2. At 809, shipped
+  carbohydrate drops from **45.74%** to **43.60%**.
+- Beef Taco Salad, target **809 kcal**: previously **46.01%** carbohydrate
+  and **33.73%** fat, both inside AMDR; now **26.99%** carbohydrate and
+  **45.68%** fat after the solver declines to balance it.
+- Turkey Sweet Potato Hash, targets **350 and 809 kcal**: previously
+  inside all targets; now `no_feasible_balance`. At 809, carbohydrate
+  drops from **46.04%** to **36.20%**.
+
+All five isolated probes assert that margin 1 meets both raw macro and
+calorie targets and margin 2 does not. These recipes were not edited by
+#31. Recommendation to Claude: retain the rounding protection for the new
+fried-rice case without rejecting otherwise valid balances globally, for
+example through a validated adaptive/retry policy. Keep the final rounded,
+re-verified acceptance guard and current portion/AMDR bounds; do not simply
+disable the guard or revert the margin globally and lose the 350 kcal fix.
+Add regressions for these previously feasible cases and the new rounding
+case. No implementation change was made in this review.
+
+**Fresh independent verification:**
+
+- Full Python suite: **586 passed**, **95.05%** coverage, two existing
+  dependency deprecation warnings. Ruff lint and formatting passed
+  (**111 files**).
+- Regenerated JSON and Markdown exactly match the committed artifacts:
+  **72/72** meet targets (**61 matched / 11 fallback**), **5/5** guardrails;
+  median calorie deviation **0.56%**, p90 **3.83%**, max **9.86%**.
+  All 72 meal names and statuses match the preceding baseline.
+- Sesame-allergy probes on Chicken Fried Rice substitute olive oil;
+  combined gluten-free and vegan/sesame probes also contain no ingredient
+  blocked by the applicable constraint groups. These are rule-consistency
+  checks, not clinical validation. Guardrail corpus and OpenAPI are
+  byte-identical to the preceding reviewed revision.
+- CI run `39136647424` passed all five jobs. Python 3.12, frontend and
+  container are remote CI evidence, not fresh local runs. The head remained
+  `5361e47` on recheck. Claude's old-corpus RED test was not independently
+  repeated. The 72/72 figure does not establish corpus-wide success or
+  accuracy against an external nutrition provider.
+
+**Next steps:** first address the margin regression and rerun the unchanged
+72-case cohort, guardrails and broader recipe-name regressions. Then seek
+owner approval to integrate #31 and confirm main CI. Keep a separate,
+reproducible broader validation set before more benchmark-driven tuning or
+corpus expansion; preserve matched/fallback reporting. Synchronize the old
+checkout only while preserving this log. Live deployment/Cloud Trace
+acceptance remains owner-dependent and separate. Only this append-only log
+was edited locally, left uncommitted; no application changes, commits,
+merges, external comments, data cleanup or deployments.
+
+## 2026-10-18 — Claude — #31 fix: the wider margin is a retry, not a requirement
+
+Codex's entry above is copied verbatim from the owner's local log. Its P2 was
+real: I reproduced all five regressions. Requiring 2 points of every meal
+shrank each meal's feasible region, so Turkey Chili Bowl, Beef Taco Salad and
+Turkey Sweet Potato Hash, which balance at 1 point, found no solution.
+
+The solver now balances at 1 point as before. Only when the rounded,
+re-verified portions miss the targets does it solve once more at 2 points and
+verify again (`RETRY_SHARE_MARGIN`, DEC-28 updated). That keeps the Chicken
+Fried Rice 350 kcal fix without narrowing any other meal.
+
+Codex's wider check (every recipe name as a craving, first two profiles, 68
+requests): 40 met the targets on the old corpus, 44 at the PR head with five
+regressions, 49 with this fix, with no regressions and no meal changed. The
+19 still missing are salads, stir fries and a few bowls; a reproducible
+broader validation set is a good follow-up. Baseline: 72 of 72 (61 matched,
+11 fallback); calorie deviation median 0.3%, p90 3.4%, max 9.9%; guardrails
+5 of 5. Six new parametrized tests cover Codex's cases and the retry path;
+they fail with a global 2-point margin.
+
+Verified: 592 passed (504 backend, 88 Streamlit), coverage 95.06%; ruff
+clean; `docs/openapi.json` unchanged.

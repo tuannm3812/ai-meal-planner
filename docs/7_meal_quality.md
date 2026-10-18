@@ -40,7 +40,8 @@ factor, and the macro split as each macro's share of the meal's energy.
 shipped calories are within 10% of the meal target and each macro sits inside
 the adult AMDR: protein 10–35%, carbohydrate 45–65%, fat 20–35% of energy.
 AMDR is a daily reference applied to one meal. Since DEC-26 the planner
-resizes portions to aim for these ranges, 2 points inside each bound (DEC-28). The service's own 15%
+resizes portions to aim for these ranges, 1 point inside each bound, and 2
+points when rounding pushes a result out (DEC-28). The service's own 15%
 reconciliation tolerance stays as it is: it decides when the service retries,
 not whether a plan is good.
 
@@ -85,7 +86,7 @@ for every scenario. After balancing, the oil ships at 5 to 15 g.
 | **Meeting the targets** | **10 of 72** | **41 of 72** | **47 of 72** (36 of 61 matched) | **72 of 72** (61 of 61 matched) |
 | Within the 10% calorie target | 68 of 72 | 70 of 72 | 70 of 72 | 72 of 72 |
 | Within the service's 15% retry tolerance | 72 of 72 | 72 of 72 | 72 of 72 | 72 of 72 |
-| Calorie deviation | median 1.6%, p90 8.5%, max 14.3% | median 0.9%, p90 8.5%, max 12.9% | median 0.8%, p90 8.5%, max 12.9% | median 0.6%, p90 3.8%, max 9.9% |
+| Calorie deviation | median 1.6%, p90 8.5%, max 14.3% | median 0.9%, p90 8.5%, max 12.9% | median 0.8%, p90 8.5%, max 12.9% | median 0.3%, p90 3.4%, max 9.9% |
 | Rescaled by reconciliation | 12 | 4 | 2 | 0 |
 | First-pass scaling clamped (0.65–1.6) | 33 | 33 | 37 | 27 |
 | All three macros inside AMDR | **11 of 72** | **41 of 72** | **47 of 72** | **72 of 72** |
