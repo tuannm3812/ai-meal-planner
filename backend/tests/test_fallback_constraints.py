@@ -215,3 +215,26 @@ def test_an_off_menu_vegan_craving_gets_a_safe_fallback() -> None:
 
     assert payload.metadata.source == "deterministic_fallback"
     assert _violations(payload, ["vegan", "dairy-free"]) == [], _names(payload)
+
+
+@pytest.mark.parametrize(
+    ("craving", "preferences", "expected"),
+    [
+        # Codex, 2026-10-18: the match ranked second, under a profile-boosted meal.
+        ("curry", ["high-protein", "low-sodium"], "Chickpea Curry Bowl"),
+        # ...and outside the top three by score, so filtering those is not enough.
+        ("oats", ["dairy-free", "gluten-free"], "Banana Oat Protein Bowl"),
+    ],
+)
+def test_a_relevant_match_is_served_over_a_profile_boosted_one(
+    craving: str, preferences: list[str], expected: str
+) -> None:
+    payload = _generate(
+        craving,
+        retriever=_REAL,
+        dietary_preferences=preferences,
+        dietary_restrictions=["dairy-free", "high-protein"],
+    )
+
+    assert payload.metadata.source == "local_vector_rag_meal_corpus"
+    assert payload.meal_definition.structured_meal_name == expected

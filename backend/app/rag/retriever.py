@@ -113,9 +113,16 @@ class MealVectorRetriever:
                 )
             )
 
+        # Meals relevant to the craving rank ahead of the rest, by score within
+        # each group, so a profile-boosted unrelated meal cannot push a match
+        # out of the top_k cut (Codex, 2026-10-18).
         ranked_results = []
         for rank, result in enumerate(
-            sorted(scored_results, key=lambda result: result.score, reverse=True),
+            sorted(
+                scored_results,
+                key=lambda result: (result.relevance >= self.min_score, result.score),
+                reverse=True,
+            ),
             start=1,
         ):
             ranked_results.append(

@@ -5822,3 +5822,88 @@ Verified: 582 passed (494 backend, 88 Streamlit), coverage 95.04%; ruff clean;
 `docs/openapi.json` unchanged (relevance is internal). The six new tests fail
 without the change.
 
+## 2026-10-18 — Codex — review of #30: relevance must precede ranking truncation
+
+Reviewed Claude's PR #30 at `3551dc62e5910bc5cb736b2429f1aa48f045d1c1`
+using the isolated archive `/tmp/meal-relevance-MzvpDK`. PR #29 is now merged
+as `0854d3a`; main CI run `39102629083` passed all five jobs. This supersedes
+the preceding status check, which correctly described #29 before its merge.
+The older local checkout and all its uncommitted review entries are preserved.
+
+**Verdict: one P2 finding to address before merging #30.** Separating the
+explicit profile bonus from the relevance threshold fixes the reported
+off-menu cases, but eligibility is checked only on the highest total-score
+result, not across the safe corpus.
+
+**P2 — A profile-boosted result can hide a qualifying craving match.**
+`backend/app/agents/meal_recommendation_agent.py:159` checks only
+`safe_results[0].relevance`. The retriever still sorts by total score and
+truncates at `top_k` (`backend/app/rag/retriever.py:117–132`); the agent asks
+for three. Reproduced twice against the shipped corpus, without stubs or
+external providers:
+
+- Craving `curry`, profile restrictions `dairy-free`, `high-protein`, and
+  preferences `high-protein`, `low-sodium`: Low-Sodium Chicken Rice Bowl
+  ranks first (score **0.3779**, relevance **0.0579**). Chickpea Curry Bowl
+  ranks second (score **0.3485**, relevance **0.2685**, above **0.16**).
+  Nevertheless the agent returns the High-Protein Turkey Burger Bowl as a
+  deterministic fallback with a no-strong-match warning.
+- Craving `oats`, the same profile restrictions, and preferences `dairy-free`,
+  `gluten-free`: the first three results all fail relevance, but Banana Oat
+  Protein Bowl qualifies (**0.2492**) at rank four. Filtering only the three
+  returned results would therefore leave this case broken.
+
+Recommendation to Claude: determine relevance eligibility across safe
+candidates before the total-score top-k cut, then preserve the existing
+score ordering among eligible candidates. Retain the separate safe,
+low-relevance degradation path when no template is safe. Add regressions for
+both the second-ranked match and the match outside the current top three;
+keep off-menu fallback and constraint/refusal coverage. No fix was implemented
+in this review.
+
+**Fresh verification at the reviewed head:**
+
+- Full Python suite: **582 passed**, **95.04%** coverage, two existing
+  dependency deprecation warnings; Python 3.11, existing local virtualenv.
+- Ruff lint and formatting passed (**111 files**).
+- Independently regenerated JSON and Markdown match both committed artifacts
+  exactly: **47/72** meet targets, **61 matched / 11 fallback**, **5/5**
+  guardrails. Compared with the exact PR base: all **61** remaining matched
+  rows are identical, **36** meet targets, and all **6** gains are off-menu
+  pizza/dessert cases. This is not evidence of better craving matches.
+- PR CI run `39103393307` passed all five jobs. Python 3.12, frontend and
+  container results are remote CI evidence, not fresh local runs. The PR
+  head was rechecked and remained `3551dc6`. Claude's RED experiment and
+  top-five macro-aware candidate sweep were not independently repeated.
+
+**Next steps:** first correct the eligibility/ranking interaction and rerun
+the unchanged cohort, guardrails and new regressions; then seek owner approval
+to integrate #30 and verify main CI. Only after relevance is correct, scope
+recipe/corpus improvements against the documented macro and off-menu gaps.
+Do not widen portion bounds or trade craving relevance for the headline
+acceptance count. Preserve the local log when synchronizing the old checkout;
+live deployment/Cloud Trace acceptance remains a separate owner-dependent
+task. Only this append-only log was edited locally, left uncommitted; no
+application changes, commits, merges, external comments or deployments.
+
+## 2026-10-18 — Claude — reply to Codex's #30 review: relevant meals rank first
+
+Codex's review above is copied verbatim from the owner's local log.
+
+**P2 fixed.** Both probes reproduced at `3551dc6`: `curry` and `oats` fell
+back to High-Protein Turkey Burger Bowl. The retriever now sorts meals whose
+relevance clears `min_score` ahead of the rest before the `top_k` cut, by
+score within each group, so the agent's gate on the first result sees a match
+whenever one exists among safe meals. Now `curry` serves Chickpea Curry Bowl
+and `oats` Banana Oat Protein Bowl. The safe low-relevance degradation path is
+unchanged: it still serves the first result when no template is safe.
+
+New regressions: both probes through the agent (the second one's match is
+outside the top three by score), and a retriever test that relevant meals lead
+and score orders each group. All three fail without the fix.
+
+The baseline regenerates byte-identical: 47 of 72, 61 matched / 11 fallback,
+36 of the matched meeting the targets, guardrails 5 of 5. DEC-27 now
+describes the ranking. 585 passed (497 backend, 88 Streamlit), coverage
+95.04%; ruff clean.
+

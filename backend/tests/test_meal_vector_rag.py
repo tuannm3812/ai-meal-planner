@@ -154,3 +154,22 @@ def test_a_craving_with_no_content_terms_is_judged_on_the_profile() -> None:
     top = retriever.retrieve("high protein meal", dietary_restrictions=["high-protein"])[0]
 
     assert top.relevance == top.score >= retriever.min_score
+
+
+def test_relevant_meals_rank_ahead_of_profile_boosted_ones() -> None:
+    """Within each group the score still orders the meals."""
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    results = retriever.retrieve(
+        "oats",
+        dietary_restrictions=["dairy-free", "high-protein"],
+        dietary_preferences=["dairy-free", "gluten-free"],
+        top_k=34,
+    )
+
+    relevant = [r.relevance >= retriever.min_score for r in results]
+    assert relevant[0] and relevant == sorted(relevant, reverse=True)
+    for group in (True, False):
+        scores = [r.score for r, flag in zip(results, relevant, strict=True) if flag is group]
+        assert scores == sorted(scores, reverse=True)
+    assert max(r.score for r in results) > results[0].score  # a boosted meal was outranked

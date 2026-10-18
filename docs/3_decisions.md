@@ -395,7 +395,12 @@ applies). The corpus is used only when the top result's relevance clears the
 threshold; otherwise the request takes the fallback path, whose warning says no
 close match was found. A craving with no content terms, such as "high protein
 meal", says nothing the profile does not, so for it relevance is the score.
-Ranking is unchanged: the bonuses still order relevant meals.
+Meals that clear the threshold on relevance rank ahead of those that do
+not, before the top-3 cut, and the score, bonuses included, orders each group.
+So a profile-boosted unrelated meal cannot hide a match ranked below it or
+outside the top three (Codex, 2026-10-18: `curry` and `oats` under extra
+preferences fell back while Chickpea Curry Bowl and Banana Oat Protein Bowl
+qualified).
 
 Effect on the baseline: the 11 requests above now fall back (8 off-menu, 3
 constrained), and no other plan changes. 47 of 72 meet the targets, up from 41,
