@@ -35,6 +35,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 25 | Meal-quality targets: calories within 10%, macros inside AMDR | 2026-10-17 |
 | 26 | Portions are rebalanced per ingredient toward AMDR, never the meal itself | 2026-10-18 |
 | 27 | Only the craving decides whether the corpus has a match; the profile only ranks | 2026-10-18 |
+| 28 | Recipes with no fat source get a cooking oil; balancing aims 2 points inside AMDR | 2026-10-18 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -366,7 +367,8 @@ gets one factor per ingredient from a small linear programme
 
 - each factor stays within 0.5–2.0 of the scaled portion;
 - calories land within 5% of the meal target;
-- each macro sits 1 point inside its AMDR bound, so rounding to 5 g holds;
+- each macro sits 1 point inside its AMDR bound, so rounding to 5 g holds
+  (2 points since DEC-28);
 - the sum of `|factor - 1|`, plus ten times the calorie deviation, is minimised.
 
 The plan is verified once more, and uniform reconciliation still runs after it.
@@ -416,3 +418,28 @@ soup`. The one near-tie is `chicken fried rice` under kidney disease (0.38 for
 the served soup bowl against 0.37 for Low-Sodium Chicken Rice Bowl). Rules out
 trading relevance for the macro targets; the remaining gap is recipe and
 corpus work.
+
+### DEC-28 — Recipes with no fat source get a cooking oil; balancing aims 2 points inside AMDR
+
+After DEC-26 and DEC-27, the 25 matched plans still missing the targets were
+all six recipes with no fat source at all: Chicken Fried Rice, Lean Steak Rice
+Plate, Chicken Vegetable Soup Bowl, Chickpea Curry Bowl, High-Protein Tomato
+Turkey Pasta and Lentil Bolognese Pasta. Resizing their ingredients could not
+lift fat to 20% of energy. Each now lists 10 g of the oil it would be cooked
+in: sesame oil for the fried rice, as Tofu Fried Rice already has, and olive
+oil for the rest. Both oils are in the local nutrition tables, no constraint
+blocks olive oil, and a sesame allergy swaps sesame oil for olive oil through
+the existing substitution. After balancing, the oil ships at 5 to 15 g.
+
+With the oil, one plan was solved and then lost to rounding: Chicken Fried Rice
+at 350 kcal re-verified at 44.7% carbohydrate after 5 g rounding, so DEC-26's
+guard served the original portions. The solver now aims 2 points inside each
+AMDR bound instead of 1, and no plan in the 72 or in the 350–850 kcal rounding
+sweep is lost to rounding.
+
+Effect on the baseline: 72 of 72 meet the targets, and all 61 matched plans,
+up from 36. No scenario's meal or plan status changes. The 11 fallback plans
+already met them. Rules out adding ingredients a recipe would not plausibly
+contain, and changing meals to reach the targets. The guardrail corpus keeps
+its pre-DEC-28 copies, so the guardrails stay comparable.
+

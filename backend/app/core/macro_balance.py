@@ -36,7 +36,10 @@ target. A meal inside it, with every macro inside AMDR, is not rebalanced."""
 MIN_FACTOR = 0.5
 MAX_FACTOR = 2.0
 CALORIE_BAND = 0.05
-SHARE_MARGIN = 1.0
+SHARE_MARGIN = 2.0
+"""Points inside each AMDR bound the solver aims for. 1 point was not enough for
+a 350 kcal Chicken Fried Rice once it held 10 g of oil: rounding to 5 g put
+carbohydrate at 44.7% (DEC-28)."""
 CALORIE_WEIGHT = 10.0
 """A 10% calorie miss costs as much as changing one portion by its whole size."""
 

@@ -5969,3 +5969,29 @@ log entries. Merging #30 waits on the owner's word. After it: a small
 recipe/corpus PR against the documented gaps, with the 72-case cohort and
 guardrails unchanged and matched and fallback results reported apart.
 
+## 2026-10-18 — Claude — #30 merged; cooking fat for six recipes (DEC-28)
+
+#30 merged as `62e3c94` on the owner's word; `main` CI passed all five jobs.
+The owner said "go" to the recipe PR Codex suggested.
+
+All 25 matched plans still missing the targets came from six recipes with no
+fat source at all. Each now lists 10 g of the oil it would be cooked in
+(sesame for Chicken Fried Rice, olive for the other five). Before writing it
+I ran the change on a copy of the corpus: no scenario changes meal or status,
+and 71 of 72 met the targets. The 72nd, Chicken Fried Rice at 350 kcal, was
+solved and then reverted by the rounding guard (carbohydrate 44.7% after 5 g
+rounding), which also failed the 350–850 kcal sweep test. Raising the
+solver's margin from 1 to 2 points inside each AMDR bound fixed both; 1.5 did
+not.
+
+Result: 72 of 72 meet the targets, 61 of 61 matched and 11 of 11 fallback;
+calorie deviation median 0.6%, p90 3.8%, max 9.9%; guardrails 5 of 5 on the
+unchanged guardrail corpus. The oil ships at 5 to 15 g after balancing.
+Sesame allergy on Chicken Fried Rice serves olive oil through the existing
+substitution. A new test requires every matched default plan to meet the
+targets; it fails on the old corpus. The outcome-set test no longer requires
+a `no_feasible_balance` plan in the 72, since none remains.
+
+Verified: 586 passed (498 backend, 88 Streamlit), coverage 95.05%; ruff
+clean; `docs/openapi.json` unchanged.
+

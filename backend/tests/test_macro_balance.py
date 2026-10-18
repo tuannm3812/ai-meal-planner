@@ -124,7 +124,8 @@ def test_every_rebalanced_plan_ships_inside_amdr(
 ) -> None:
     balanced, unbalanced = balanced_and_unbalanced
     outcomes = {result.macro_balance.outcome for result in balanced}
-    assert outcomes == {"in_range", "rebalanced", "no_feasible_balance"}
+    assert "rebalanced" in outcomes
+    assert outcomes <= {"in_range", "rebalanced", "no_feasible_balance"}
 
     for after, before in zip(balanced, unbalanced, strict=True):
         record = after.macro_balance
@@ -238,3 +239,23 @@ def test_rounded_portions_hold_across_meal_targets(craving: str) -> None:
                 assert all(in_amdr(shares).values())
                 meal_target = record.target_meal_calories
                 assert abs(shipped.total_calories - meal_target) / meal_target <= 0.10
+
+
+def test_every_matched_default_plan_meets_the_targets(
+    balanced_and_unbalanced: tuple[list, list],
+) -> None:
+    """DEC-28: with a cooking fat in each recipe that had none, every corpus match
+    can be balanced, so none ships outside the targets."""
+    balanced, _ = balanced_and_unbalanced
+
+    for result in balanced:
+        if result.plan_status != "matched":
+            continue
+        nutrition = result.nutrition
+        shares = macro_percentages(
+            nutrition.total_protein, nutrition.total_carbs, nutrition.total_fat
+        )
+        target = result.macro_balance.target_meal_calories
+        name = result.meal_plan.meal_definition.structured_meal_name
+        assert all(in_amdr(shares).values()), name
+        assert abs(nutrition.total_calories - target) / target <= 0.10, name
