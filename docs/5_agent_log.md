@@ -5713,3 +5713,85 @@ reverted. `uv run pytest`: 576 passed, coverage 94.99%. Ruff is clean.
 its own PR without corpus growth. It will report on the same 72 plans and the
 guardrails, and keep craving relevance and hard constraints. The known
 off-menu-to-unrelated-meal behaviour is part of that work.
+
+## 2026-10-18 — Codex — verification of #29's correction and re-verification guard
+
+Reviewed Claude's response and `49388d6` on open PR #29 using the isolated
+archive `/tmp/meal-reverify-37Tr1V`. The original checkout remains `d0acdad`
+and its existing uncommitted log entries are preserved.
+
+**Verdict: the P3 count is corrected; no new findings in this targeted
+review.** DEC-26 now distinguishes 61 macro-range misses from 62 combined-
+target misses. The additional runtime guard is consistent with the prior
+review's recommendation to validate rounded, re-verified portions rather
+than trust the solver alone.
+
+The service delays changing the plan until the candidate's re-verified
+calories and macro shares pass. A rejected candidate returns the original
+plan/nutrition from `_balance`, reports `reverted`, and retains the rejected
+macro split as audit information without adding a rebalance-success warning.
+The existing uniform reconciliation policy still follows this stage; the
+rejected split is not the served nutrition. The new enum is reflected in
+the regenerated OpenAPI document.
+
+**Fresh evidence:**
+
+- Full suite from the archive using the existing virtualenv, with local
+  sockets permitted: **576 passed**, **94.99%** coverage; two existing
+  dependency deprecation warnings. The adverse-macro regression and all
+  12 parametrized quantization sweeps passed.
+- Independent calorie-only adverse probes, returning zero or excessive
+  calories on re-verification, both produced `reverted` and retained the
+  original portions and nutrition at the `_balance` boundary.
+- Regenerated JSON and Markdown exactly match the committed artifacts.
+  Baseline JSON is byte-identical to the previously reviewed #29 baseline:
+  **41 of 72** meet the targets and all **5 guardrails** hold.
+- Ruff lint and formatting passed (**111 files**). CI run `39085514604`
+  passed all five jobs at `49388d6`. Frontend/container and Python 3.12
+  results are remote CI evidence, not fresh local runs. Claude's historical
+  RED/mutation experiment was not independently repeated.
+
+**Next steps:** record the verification and, with owner approval, integrate
+#29 and confirm main CI. Then scope candidate relevance and macro-aware
+selection separately from corpus growth, reporting against the unchanged
+72-case cohort plus guardrails. Keep the current portion bounds; widening
+them remains an owner decision. Relevance and ingredient constraints must
+not be traded away to increase the acceptance count.
+
+Safely synchronize the older local checkout and preserve the append-only
+review history. Live Cloud Run/revocation/Cloud Trace acceptance remains
+separate and owner-dependent. Only this log entry was added locally, left
+uncommitted; no application changes, commits, merges, external comments,
+data cleanup, or deployments were performed.
+
+## 2026-10-18 — Codex — follow-up: #29 remains at the verified head
+
+Rechecked GitHub: PR #29 is still open at
+`49388d652a54e9f4d782c4d8d526ea360619e076`, last updated
+`2026-10-18T01:10:33Z`. There is no new code since the preceding review.
+Its corrected count and re-verification guard remain covered by that review;
+no additional findings are asserted from this status-only check.
+
+The preceding **576 passed / 94.99% coverage**, **41/72** baseline and
+**5 guardrails** are historical verification at this same head, not tests
+rerun for this follow-up. The local checkout still has only the agent log
+modified; existing review entries are preserved.
+
+Recommended next: obtain owner approval to integrate #29, confirm main CI,
+and safely synchronize this older checkout without losing the log. Then
+scope relevance and macro-aware candidate selection separately from corpus
+growth, retaining the current portion bounds and unchanged evaluation
+cohort. Live deployment and Cloud Trace acceptance remain owner-dependent.
+This follow-up only appends to the log and is left uncommitted.
+
+## 2026-10-18 — Claude Opus 5.5 — Codex's #29 verification recorded; merging on the owner's word
+
+Codex's verification of `49388d6` and its status follow-up above are copied
+verbatim from the owner's local log. Both confirm the P3 correction and the
+re-verification guard, with no new findings. Mike asked to "do the next step"
+after them; that step is merging #29. This commit only adds log entries.
+
+After the merge: macro-aware candidate selection and craving relevance, as one
+PR without corpus growth. Portion bounds stay at 0.5–2.0, and the 72-plan
+cohort and guardrails stay unchanged. Relevance and ingredient constraints are
+held as checks, so they are not traded for a higher count.
