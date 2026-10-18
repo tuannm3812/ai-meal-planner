@@ -34,6 +34,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 24 | A weight-loss budget has a floor of 1,200 kcal (women) or 1,500 (men) | 2026-10-17 |
 | 25 | Meal-quality targets: calories within 10%, macros inside AMDR | 2026-10-17 |
 | 26 | Portions are rebalanced per ingredient toward AMDR, never the meal itself | 2026-10-18 |
+| 27 | Only the craving decides whether the corpus has a match; the profile only ranks | 2026-10-18 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -380,3 +381,38 @@ Effect on the baseline: 41 of 72 plans meet the targets, up from 10. The other
 (0.25–3.0) reach 50 of 72 but triple some portions; that trade-off is the
 owner's to make. Rules out changing ingredients or meals to fix the split,
 which is corpus and selection work, and unbounded portion changes.
+
+### DEC-27 — Only the craving decides whether the corpus has a match; the profile only ranks
+
+A retrieval score adds a bonus of up to 0.24 each for meals that match the
+user's restrictions and preferences. The default profile's `dairy-free` and
+`high-protein` carried meals that share no term with the craving over the 0.16
+threshold, so `pizza` and `chocolate dessert` were served Chicken Fried Rice,
+and three constrained requests got a meal unrelated to what was asked
+(`docs/7_meal_quality.md`, finding 2). Each result now also carries a
+`relevance`: its score without those bonuses (the condition penalty still
+applies). The corpus is used only when the top result's relevance clears the
+threshold; otherwise the request takes the fallback path, whose warning says no
+close match was found. A craving with no content terms, such as "high protein
+meal", says nothing the profile does not, so for it relevance is the score.
+Meals that clear the threshold on relevance rank ahead of those that do
+not, before the top-3 cut, and the score, bonuses included, orders each group.
+So a profile-boosted unrelated meal cannot hide a match ranked below it or
+outside the top three (Codex, 2026-10-18: `curry` and `oats` under extra
+preferences fell back while Chickpea Curry Bowl and Banana Oat Protein Bowl
+qualified).
+
+Effect on the baseline: the 11 requests above now fall back (8 off-menu, 3
+constrained), and no other plan changes. 47 of 72 meet the targets, up from 41,
+but all 6 gained plans are off-menu ones that now get the fallback template
+instead of an equally unrelated corpus meal, so the count says nothing new
+about matched meals: 36 of the 61 matched plans meet the targets, as before.
+
+Macro-aware selection was measured and left out. For every one of the 25
+plans still missing the targets, the meals that would meet them are less
+relevant to the craving: Tofu Fried Rice for `chicken fried rice`, Tuna Brown
+Rice Bowl for `steak and rice`, unrelated meals for `spicy curry` and `light
+soup`. The one near-tie is `chicken fried rice` under kidney disease (0.38 for
+the served soup bowl against 0.37 for Low-Sodium Chicken Rice Bowl). Rules out
+trading relevance for the macro targets; the remaining gap is recipe and
+corpus work.

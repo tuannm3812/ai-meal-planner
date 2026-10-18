@@ -125,3 +125,51 @@ def test_meal_agent_substitutes_gluten_ingredient_before_returning_payload() -> 
     assert "gluten-free bun" in ingredient_names
     assert payload.retrieval is not None
     assert payload.retrieval.substitutions
+
+
+def test_the_profile_bonus_does_not_count_towards_relevance() -> None:
+    """An off-menu craving clears min_score on score alone, from the default profile's
+    dairy-free and high-protein bonus; its relevance to the craving does not."""
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    for craving in ("pizza", "chocolate dessert"):
+        top = retriever.retrieve(craving, dietary_restrictions=["dairy-free", "high-protein"])[0]
+        assert top.score >= retriever.min_score > top.relevance, (craving, top.meal.name)
+
+
+def test_a_menu_craving_stays_relevant_without_the_bonus() -> None:
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    top = retriever.retrieve("chicken fried rice", dietary_restrictions=["high-protein"])[0]
+
+    assert top.meal.name == "Chicken Fried Rice"
+    assert top.relevance >= retriever.min_score
+    assert top.relevance < top.score
+
+
+def test_a_craving_with_no_content_terms_is_judged_on_the_profile() -> None:
+    """ "High protein meal" names nothing the profile does not, so the bonus is its relevance."""
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    top = retriever.retrieve("high protein meal", dietary_restrictions=["high-protein"])[0]
+
+    assert top.relevance == top.score >= retriever.min_score
+
+
+def test_relevant_meals_rank_ahead_of_profile_boosted_ones() -> None:
+    """Within each group the score still orders the meals."""
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    results = retriever.retrieve(
+        "oats",
+        dietary_restrictions=["dairy-free", "high-protein"],
+        dietary_preferences=["dairy-free", "gluten-free"],
+        top_k=34,
+    )
+
+    relevant = [r.relevance >= retriever.min_score for r in results]
+    assert relevant[0] and relevant == sorted(relevant, reverse=True)
+    for group in (True, False):
+        scores = [r.score for r, flag in zip(results, relevant, strict=True) if flag is group]
+        assert scores == sorted(scores, reverse=True)
+    assert max(r.score for r in results) > results[0].score  # a boosted meal was outranked
