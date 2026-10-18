@@ -14,8 +14,8 @@ The owner set the targets on 2026-10-17: shipped calories within 10% of the
 meal target, and each macro inside the Acceptable Macronutrient Distribution
 Ranges (AMDR) for adults: protein 10-35%, carbohydrate 45-65% and fat 20-35%
 of energy. AMDR is a daily reference applied here to one meal. A plan that
-meets both "meets the targets"; the planner itself does not yet aim for the
-macro ranges.
+meets both "meets the targets". Since DEC-26 the service rebalances portions
+toward the same ranges, defined once in ``core/macro_balance.py``.
 
 Every run is offline and deterministic: no Gemini key, no USDA or FatSecret
 credentials, and an empty profile store, so a request's stored profile is the
@@ -42,6 +42,12 @@ from backend.app.agents.meal_recommendation_agent import MealRecommendationAgent
 from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
 from backend.app.agents.supermarket_agent import SupermarketAgent
 from backend.app.core.config import AppSettings
+from backend.app.core.macro_balance import (
+    AMDR_PERCENT,
+    CALORIE_TARGET,
+    in_amdr,
+    macro_percentages,
+)
 from backend.app.core.portions import MAX_SCALE, MIN_SCALE
 from backend.app.repositories.json_store import UserProfileRepository
 from backend.app.schemas.requests import MealRequest
@@ -51,16 +57,9 @@ from backend.app.services.meal_planning_service import (
     MealPlanResult,
 )
 
-AMDR_PERCENT = {"protein": (10.0, 35.0), "carbs": (45.0, 65.0), "fat": (20.0, 35.0)}
-"""Adult AMDR, as a percentage of energy: macro -> (low, high)."""
-
-KCAL_PER_GRAM = {"protein": 4.0, "carbs": 4.0, "fat": 9.0}
-
-CALORIE_TARGET = 0.10
-"""The owner's acceptance target (2026-10-17): a plan meets the targets when its
-shipped calories are within 10% of the meal target and all three macros sit
-inside AMDR. Stricter than the service's 15% reconciliation tolerance, which
-is only the point at which it retries."""
+# The targets (AMDR_PERCENT, CALORIE_TARGET) and the share arithmetic live in
+# core/macro_balance.py, which the service balances against, so the planner and
+# this measurement cannot disagree on them.
 
 WEAK_MATCH_SCORE = 0.25
 """A corpus match scoring below this is reported as weak. The retriever's own
@@ -183,41 +182,9 @@ class PlanQuality(BaseModel):
     retrieval_score: float | None = None
 
 
-def macro_percentages(protein_g: float, carbs_g: float, fat_g: float) -> dict[str, float]:
-    """Each macro's share of the calories the three macros supply.
-
-    Args:
-        protein_g: Grams of protein.
-        carbs_g: Grams of carbohydrate.
-        fat_g: Grams of fat.
-
-    Returns:
-        Percentages keyed by macro, at full precision so a share just outside
-        a range is not rounded into it; all zero when the macros supply no
-        energy.
-    """
-    energy = {
-        "protein": protein_g * KCAL_PER_GRAM["protein"],
-        "carbs": carbs_g * KCAL_PER_GRAM["carbs"],
-        "fat": fat_g * KCAL_PER_GRAM["fat"],
-    }
-    total = sum(energy.values())
-    if total <= 0:
-        return {macro: 0.0 for macro in energy}
-    return {macro: 100 * kcal / total for macro, kcal in energy.items()}
-
-
 def calorie_deviation(verified_kcal: float, target_kcal: float) -> float:
     """The fractional miss between shipped calories and the meal target, unrounded."""
     return abs(verified_kcal - target_kcal) / target_kcal
-
-
-def in_amdr(percentages: dict[str, float]) -> dict[str, bool]:
-    """Whether each macro's share falls inside its AMDR range, inclusive."""
-    return {
-        macro: AMDR_PERCENT[macro][0] <= percentages[macro] <= AMDR_PERCENT[macro][1]
-        for macro in AMDR_PERCENT
-    }
 
 
 def measure(scenario: Scenario, result: MealPlanResult) -> PlanQuality:

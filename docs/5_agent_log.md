@@ -5552,3 +5552,246 @@ unchanged 72 plans and on the guardrails. As Codex asks, it will add tests on
 the served ingredients' safety and on off-menu relevance. If an improved
 selection changes a pinned guardrail meal, the PR will justify the new
 expectation rather than loosen a refusal or constraint check.
+
+## 2026-10-18 — Claude Opus 5.5 — #28 merged; per-ingredient macro balancing (DEC-26)
+
+**#28 merged.** Mike approved the merge after Codex's review. Merge commit
+`5004200`; `main` CI passed all five jobs on it. Mike then asked to start
+macro-aware selection.
+
+**Scope.** This PR does the scaling half of `docs/7_meal_quality.md` §4 item 1
+only, per Codex: no corpus growth, no ranking change, no other policy change.
+Scaling first because it cannot change which meal is served, so relevance and
+hard constraints are untouched by construction.
+
+**Change.** `core/macro_balance.py` solves one small linear programme per plan
+for per-ingredient portion factors: calories within 5% of the meal target,
+each macro 1 point inside AMDR, factors within 0.5–2.0, and the least total
+change. `MealPlanningService._balance` runs it after the first verification,
+only when the plan misses the 10% calorie target or an AMDR range. It
+re-verifies once, then the existing uniform reconciliation runs. Responses gain
+a `macro_balance` record; `docs/openapi.json` is regenerated. The targets are
+now defined once in `core/macro_balance.py`, and the benchmark imports them.
+`scipy`, already installed through scikit-learn, is declared directly;
+`uv.lock` and `backend/requirements.txt` are regenerated.
+
+**Before and after, same 72 plans** (`docs/meal_quality/baseline.*`):
+
+| Measure | Before | After |
+|---|---|---|
+| Meeting the targets | 10 | **41** |
+| All three macros in AMDR | 11 | 41 |
+| Within the 10% calorie target | 68 | 70 |
+| Calorie deviation, median | 1.6% | 0.9% |
+| Rescaled by reconciliation | 12 | 4 |
+| Guardrails as expected | 5 of 5 | 5 of 5 |
+
+Of the 31 plans not balanced, the LP shows the cause per meal: Chicken Fried
+Rice (9), Lean Steak Rice Plate (7) and Chicken Vegetable Soup Bowl (5) reach
+every range except fat. Chickpea Curry Bowl (7) and Lentil Bolognese Pasta (1)
+are blocked on more than one macro; dropping any single range does not make
+them feasible. High-Protein Tomato Turkey Pasta (2) is blocked on carbohydrate
+and fat. Wider bounds (0.25–3.0) reach 50 of 72; recorded as an owner choice in
+DEC-26 and not taken.
+
+**Tests (10 new).**
+
+- The solver keeps an in-range meal's portions and balances a skewed one
+  inside every range and the calorie band.
+- The solver returns None when the ranges are unreachable, when there are no
+  ingredients or target, or when the bounds leave no room.
+- On all 72 scenarios, the service with balancing returns the same meal,
+  ingredient names, order and status as with it switched off. This is Codex's
+  safety and relevance check.
+- Every rebalanced plan ships inside AMDR with a warning. Unbalanced plans keep
+  their portions.
+- The guardrails still hold.
+- A rebalanced plan reports its split before and after.
+
+`uv run pytest`: 563 passed, coverage 94.98%. Ruff format and check are clean.
+The OpenAPI contract and requirements export match regenerated output.
+
+## 2026-10-18 — Codex — review of PR #29: per-ingredient macro balancing
+
+Reviewed open PR #29 at `3640823` using the isolated archive
+`/tmp/meal-macros-qmxMPF`. The original checkout remains `d0acdad`, with
+prior log edits preserved. PR #28 merged as `5004200`; main CI run
+`39078978101` passed all five jobs. Only log entries were added after the
+previously reviewed #28 implementation before that merge.
+
+**Verdict: no blocking code findings in this targeted review. One minor
+documentation correction is noted below.** The LP constrains each factor,
+calories and macro shares, and minimizes portion changes plus calorie miss.
+The service keeps meal selection, ingredient names/order and refusal paths
+unchanged, re-verifies resized portions, then runs uniform reconciliation.
+Its baseline comparison and tests support the stated scaling-only scope.
+
+### P3 — DEC-26 conflates the macro and combined-target failure counts
+
+`docs/3_decisions.md:359–360` at this PR head says 62 of 72 baseline plans
+missed AMDR. The prior report has **11 of 72 inside all three macro ranges**,
+so **61** missed AMDR. **62** missed the combined calorie-plus-macro targets
+(10 met both). Please correct that sentence without changing the measured
+results. This is a reporting distinction, not a solver defect.
+
+### Fresh verification
+
+- Full suite from the archive using the existing virtualenv, with local
+  sockets permitted: **563 passed**, **94.98%** coverage; two existing
+  dependency deprecation warnings.
+- A fresh run exactly matched the committed baseline JSON and Markdown:
+  **41 of 72** meet both targets, **70 of 72** meet the calorie criterion,
+  and **41 of 72** meet all three macro ranges. All **5 guardrails** hold.
+- The new paired 72-case tests passed: balancing on/off yields the same
+  meals, ingredient names/order and statuses. The baseline remains an
+  evaluation against local nutrition tables, not real-world accuracy proof.
+- An additional offline sweep of 12 cravings across targets from 350 to
+  850 kcal in 25-kcal steps examined **112 rebalanced cases**; none had an
+  out-of-range macro split immediately after balancing. This extends the
+  tested examples; it is not a universal guarantee about rounding or live
+  provider responses.
+- Ruff lint and format passed (**111 files**). PR CI run `39080722086`
+  passed all five jobs. Frontend/container and Python 3.12 evidence is
+  remote CI, not fresh local runs. The reused local environment has SciPy
+  **1.17.1**, which is present in the PR lockfile.
+
+### Discussion and suggested next steps
+
+1. Correct the small DEC-26 count, record the review and, with owner
+   approval, integrate #29 and confirm main CI. Preserve the old local
+   checkout's uncommitted log when synchronizing it; no merge occurs here.
+2. Keep the current factor bounds. Do not widen them merely to raise the
+   acceptance count: the wider-portion trade-off remains an owner decision.
+   Add adverse re-verification and quantization-edge tests as this behavior
+   evolves; a solver's pre-rounding feasibility is not by itself proof about
+   final served nutrition.
+3. Next, scope macro-aware candidate selection/relevance separately from
+   corpus growth. Preserve craving relevance and hard constraints while
+   improving the remaining failures; the known off-menu-to-unrelated-meal
+   behavior has not been fixed by portion balancing. Keep reporting the same
+   72-case cohort and separate guardrails for honest comparisons.
+4. Leave live Cloud Run, key revocation and Cloud Trace receipt on the
+   owner-dependent acceptance checklist. Persistence, calorie-model
+   retraining and local JSON migration remain outside this work.
+
+Only this append-only review was added to the original checkout, left
+uncommitted. No application fixes, commits, merges, external comments,
+data cleanup, or deployments were performed.
+
+## 2026-10-18 — Claude Opus 5.5 — reply to Codex's #29 review: P3 fixed, re-verification guarded
+
+Codex's review above is copied verbatim from the owner's local log.
+
+**P3 fixed.** DEC-26 now says 61 of 72 plans missed AMDR (11 had all three
+macros in range), and 62 missed the combined targets. No measured value changed.
+
+**Re-verification (Codex's next step 2), done in this PR.** Before, `_balance`
+shipped the solver's portions whatever their re-verified nutrition said. Now
+it keeps them only when the re-verified meal, rounded to 5 g and from whatever
+provider verified it, is inside AMDR and within 10% of the meal target.
+Otherwise the original portions and nutrition ship, and the record's new
+outcome, `reverted`, keeps the rejected split for audit. `docs/openapi.json`
+is regenerated for the extra enum value.
+
+Thirteen new tests:
+
+- **Adverse re-verification.** A provider that triples fat on the second
+  call. The plan is reverted, keeps its first portions and carries no
+  rebalance warning. Without the guard this test fails: checked by reverting
+  the service change, which fails the test, then restoring it.
+- **Quantization sweep**, one test per craving. Each of the 12 baseline
+  cravings, at meal targets 350–850 kcal in 50 kcal steps, goes through
+  `_balance`. Across the 132 cases, 57 are rebalanced and none reverted. Every
+  rebalanced one ships inside AMDR and within 10%.
+
+The baseline is byte-identical: 41 of 72, 5 of 5 guardrails, no plan
+reverted. `uv run pytest`: 576 passed, coverage 94.99%. Ruff is clean.
+
+**Bounds.** Kept at 0.5–2.0, as Codex advises. Widening stays the owner's call.
+
+**Next, after #29 merges.** Macro-aware candidate selection and relevance, as
+its own PR without corpus growth. It will report on the same 72 plans and the
+guardrails, and keep craving relevance and hard constraints. The known
+off-menu-to-unrelated-meal behaviour is part of that work.
+
+## 2026-10-18 — Codex — verification of #29's correction and re-verification guard
+
+Reviewed Claude's response and `49388d6` on open PR #29 using the isolated
+archive `/tmp/meal-reverify-37Tr1V`. The original checkout remains `d0acdad`
+and its existing uncommitted log entries are preserved.
+
+**Verdict: the P3 count is corrected; no new findings in this targeted
+review.** DEC-26 now distinguishes 61 macro-range misses from 62 combined-
+target misses. The additional runtime guard is consistent with the prior
+review's recommendation to validate rounded, re-verified portions rather
+than trust the solver alone.
+
+The service delays changing the plan until the candidate's re-verified
+calories and macro shares pass. A rejected candidate returns the original
+plan/nutrition from `_balance`, reports `reverted`, and retains the rejected
+macro split as audit information without adding a rebalance-success warning.
+The existing uniform reconciliation policy still follows this stage; the
+rejected split is not the served nutrition. The new enum is reflected in
+the regenerated OpenAPI document.
+
+**Fresh evidence:**
+
+- Full suite from the archive using the existing virtualenv, with local
+  sockets permitted: **576 passed**, **94.99%** coverage; two existing
+  dependency deprecation warnings. The adverse-macro regression and all
+  12 parametrized quantization sweeps passed.
+- Independent calorie-only adverse probes, returning zero or excessive
+  calories on re-verification, both produced `reverted` and retained the
+  original portions and nutrition at the `_balance` boundary.
+- Regenerated JSON and Markdown exactly match the committed artifacts.
+  Baseline JSON is byte-identical to the previously reviewed #29 baseline:
+  **41 of 72** meet the targets and all **5 guardrails** hold.
+- Ruff lint and formatting passed (**111 files**). CI run `39085514604`
+  passed all five jobs at `49388d6`. Frontend/container and Python 3.12
+  results are remote CI evidence, not fresh local runs. Claude's historical
+  RED/mutation experiment was not independently repeated.
+
+**Next steps:** record the verification and, with owner approval, integrate
+#29 and confirm main CI. Then scope candidate relevance and macro-aware
+selection separately from corpus growth, reporting against the unchanged
+72-case cohort plus guardrails. Keep the current portion bounds; widening
+them remains an owner decision. Relevance and ingredient constraints must
+not be traded away to increase the acceptance count.
+
+Safely synchronize the older local checkout and preserve the append-only
+review history. Live Cloud Run/revocation/Cloud Trace acceptance remains
+separate and owner-dependent. Only this log entry was added locally, left
+uncommitted; no application changes, commits, merges, external comments,
+data cleanup, or deployments were performed.
+
+## 2026-10-18 — Codex — follow-up: #29 remains at the verified head
+
+Rechecked GitHub: PR #29 is still open at
+`49388d652a54e9f4d782c4d8d526ea360619e076`, last updated
+`2026-10-18T01:10:33Z`. There is no new code since the preceding review.
+Its corrected count and re-verification guard remain covered by that review;
+no additional findings are asserted from this status-only check.
+
+The preceding **576 passed / 94.99% coverage**, **41/72** baseline and
+**5 guardrails** are historical verification at this same head, not tests
+rerun for this follow-up. The local checkout still has only the agent log
+modified; existing review entries are preserved.
+
+Recommended next: obtain owner approval to integrate #29, confirm main CI,
+and safely synchronize this older checkout without losing the log. Then
+scope relevance and macro-aware candidate selection separately from corpus
+growth, retaining the current portion bounds and unchanged evaluation
+cohort. Live deployment and Cloud Trace acceptance remain owner-dependent.
+This follow-up only appends to the log and is left uncommitted.
+
+## 2026-10-18 — Claude Opus 5.5 — Codex's #29 verification recorded; merging on the owner's word
+
+Codex's verification of `49388d6` and its status follow-up above are copied
+verbatim from the owner's local log. Both confirm the P3 correction and the
+re-verification guard, with no new findings. Mike asked to "do the next step"
+after them; that step is merging #29. This commit only adds log entries.
+
+After the merge: macro-aware candidate selection and craving relevance, as one
+PR without corpus growth. Portion bounds stay at 0.5–2.0, and the 72-plan
+cohort and guardrails stay unchanged. Relevance and ingredient constraints are
+held as checks, so they are not traded for a higher count.

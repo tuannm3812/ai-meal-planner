@@ -33,6 +33,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 23 | Every error response uses `ErrorResponse` | 2026-10-12 |
 | 24 | A weight-loss budget has a floor of 1,200 kcal (women) or 1,500 (men) | 2026-10-17 |
 | 25 | Meal-quality targets: calories within 10%, macros inside AMDR | 2026-10-17 |
+| 26 | Portions are rebalanced per ingredient toward AMDR, never the meal itself | 2026-10-18 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -352,3 +353,30 @@ target and protein, carbohydrate and fat each sit inside the adult AMDR (10-35%,
 the baseline's 72 plans meet them. The service's 15% reconciliation tolerance is
 unchanged: it is when the service retries, not the product's target. Rules out
 judging changes on calories alone, and a looser high-protein range.
+
+### DEC-26 — Portions are rebalanced per ingredient toward AMDR, never the meal itself
+
+Uniform portion scaling hits a calorie target but keeps a template's macro
+split, so 61 of the baseline's 72 plans missed AMDR (62 missed the combined
+calorie and macro targets). After the first
+verification, a plan that misses the 10% calorie target or any AMDR range now
+gets one factor per ingredient from a small linear programme
+(`core/macro_balance.py`, solved with `scipy.optimize.linprog`):
+
+- each factor stays within 0.5–2.0 of the scaled portion;
+- calories land within 5% of the meal target;
+- each macro sits 1 point inside its AMDR bound, so rounding to 5 g holds;
+- the sum of `|factor - 1|`, plus ten times the calorie deviation, is minimised.
+
+The plan is verified once more, and uniform reconciliation still runs after it.
+When no factors fit, or the re-verified portions miss either target (rounding
+to 5 g, or a live provider's numbers), the plan ships unchanged and says so. Every response
+carries a `macro_balance` record: the outcome and the split before and after.
+The meal, its ingredients and their order never change, so retrieval, craving
+relevance and hard-constraint substitutions are untouched.
+
+Effect on the baseline: 41 of 72 plans meet the targets, up from 10. The other
+31 cannot reach the fat range by resizing what they hold. Wider bounds
+(0.25–3.0) reach 50 of 72 but triple some portions; that trade-off is the
+owner's to make. Rules out changing ingredients or meals to fix the split,
+which is corpus and selection work, and unbounded portion changes.

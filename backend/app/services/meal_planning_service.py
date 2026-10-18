@@ -15,9 +15,16 @@ from ..agents.nutrition_verification_agent import MealNutrition, NutritionVerifi
 from ..agents.supermarket_agent import SupermarketAgent, SupermarketPayload
 from ..core import telemetry
 from ..core.exceptions import NoFeasibleMeal
-from ..core.portions import clamp_scale, scale_ingredients
+from ..core.macro_balance import (
+    CALORIE_TARGET,
+    IngredientEnergy,
+    balance_factors,
+    in_amdr,
+    macro_percentages,
+)
+from ..core.portions import clamp_scale, scale_grams, scale_ingredients
 from ..repositories.base import UserProfileStore
-from ..schemas.requests import MealRequest
+from ..schemas.requests import Ingredient, MealRequest
 
 logger = logging.getLogger(__name__)
 
@@ -41,6 +48,25 @@ class ReconciliationMetadata(BaseModel):
     tolerance: float
 
 
+class MacroBalanceMetadata(BaseModel):
+    """Records whether portions were rebalanced toward the AMDR macro split (DEC-26).
+
+    ``outcome`` is ``in_range`` when the verified meal already met the targets,
+    ``rebalanced`` when per-ingredient portions were changed, and
+    ``no_feasible_balance`` when no portions within the bounds could meet them,
+    and ``reverted`` when the solver found portions but their re-verified
+    nutrition missed the targets. In the last two cases the meal ships as it
+    was; ``macro_percent_after`` is set only when portions were re-verified.
+    Percentages are each macro's share of energy, rounded for display.
+    """
+
+    outcome: Literal["in_range", "rebalanced", "no_feasible_balance", "reverted"]
+    target_meal_calories: int
+    macro_percent_before: dict[str, float]
+    macro_percent_after: dict[str, float] | None = None
+    macros_in_range_after: bool | None = None
+
+
 class MealPlanResult(BaseModel):
     """Everything the meal-plan endpoint needs, assembled by the orchestrator.
 
@@ -57,6 +83,7 @@ class MealPlanResult(BaseModel):
     nutrition: MealNutrition | None = None
     shopping_list: SupermarketPayload | None = None
     reconciliation: ReconciliationMetadata | None = None
+    macro_balance: MacroBalanceMetadata | None = None
     infeasible_reason: str | None = None
 
 
@@ -143,6 +170,7 @@ class MealPlanningService:
             telemetry.annotate(_nutrition_attributes(nutrition), span)
 
         with telemetry.stage("plan.reconcile") as span:
+            meal_plan, nutrition, macro_balance = self._balance(meal_plan, nutrition)
             meal_plan, nutrition, reconciliation = self._reconcile(meal_plan, nutrition)
             telemetry.annotate(
                 {
@@ -166,7 +194,96 @@ class MealPlanningService:
             nutrition=nutrition,
             shopping_list=shopping_list,
             reconciliation=reconciliation,
+            macro_balance=macro_balance,
         )
+
+    def _balance(
+        self,
+        meal_plan: MealPlanPayload,
+        nutrition: MealNutrition,
+    ) -> tuple[MealPlanPayload, MealNutrition, MacroBalanceMetadata | None]:
+        """Rebalance portions per ingredient when the verified meal misses the targets.
+
+        Runs before reconciliation. A meal within the calorie target with every
+        macro inside AMDR is left alone; otherwise each ingredient gets its own
+        factor from ``balance_factors``, and the result is verified once more.
+
+        Args:
+            meal_plan: The plan whose portions were scaled to the meal target.
+            nutrition: Verified macros for those portions.
+
+        Returns:
+            The plan, the nutrition and the balance record; the record is None
+            when portion scaling did not run, as there is no target to meet.
+        """
+        scaling = meal_plan.portion_scaling
+        if scaling is None or nutrition.total_calories <= 0:
+            return meal_plan, nutrition, None
+
+        target = scaling.target_meal_calories
+        before = macro_percentages(
+            nutrition.total_protein, nutrition.total_carbs, nutrition.total_fat
+        )
+        record = MacroBalanceMetadata(
+            outcome="in_range",
+            target_meal_calories=target,
+            macro_percent_before={macro: round(share, 1) for macro, share in before.items()},
+        )
+        deviation = abs(nutrition.total_calories - target) / target
+        if deviation <= CALORIE_TARGET and all(in_amdr(before).values()):
+            return meal_plan, nutrition, record
+
+        if len(nutrition.ingredients_macros) != len(meal_plan.meal_definition.ingredients):
+            record.outcome = "no_feasible_balance"
+            return meal_plan, nutrition, record
+        factors = balance_factors(
+            [
+                IngredientEnergy(
+                    calories=item.calories_kcal,
+                    protein_g=item.protein_g,
+                    carbs_g=item.carbs_g,
+                    fat_g=item.fat_g,
+                )
+                for item in nutrition.ingredients_macros
+            ],
+            target,
+        )
+        if factors is None:
+            record.outcome = "no_feasible_balance"
+            return meal_plan, nutrition, record
+
+        balanced = [
+            Ingredient(
+                item_name=ingredient.item_name,
+                base_quantity_grams=scale_grams(ingredient.base_quantity_grams, factor),
+            )
+            for ingredient, factor in zip(
+                meal_plan.meal_definition.ingredients, factors, strict=True
+            )
+        ]
+        balanced_nutrition = self.nutrition_agent.calculate_meal_macros(ingredients=balanced)
+        after = macro_percentages(
+            balanced_nutrition.total_protein,
+            balanced_nutrition.total_carbs,
+            balanced_nutrition.total_fat,
+        )
+        record.macro_percent_after = {macro: round(share, 1) for macro, share in after.items()}
+        record.macros_in_range_after = all(in_amdr(after).values())
+        # The solver works on unrounded portions; what ships is re-verified at 5 g
+        # steps, possibly by a live provider. Keep the result only if it meets the
+        # targets as verified (Codex, 2026-10-18).
+        deviation_after = abs(balanced_nutrition.total_calories - target) / target
+        if not (record.macros_in_range_after and deviation_after <= CALORIE_TARGET):
+            record.outcome = "reverted"
+            return meal_plan, nutrition, record
+
+        record.outcome = "rebalanced"
+        meal_plan.meal_definition.ingredients = balanced
+        meal_plan.metadata.warnings.append(
+            "Rebalanced ingredient portions toward the recommended protein, carbohydrate "
+            "and fat split."
+        )
+        return meal_plan, balanced_nutrition, record
 
     def _reconcile(
         self,

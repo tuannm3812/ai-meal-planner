@@ -15,7 +15,7 @@ from ..agents.calorie_expenditure_agent import CalorieExpenditureResponse
 from ..agents.meal_recommendation_agent import MealPlanPayload
 from ..agents.nutrition_verification_agent import MealNutrition
 from ..agents.supermarket_agent import SupermarketPayload
-from ..services.meal_planning_service import ReconciliationMetadata
+from ..services.meal_planning_service import MacroBalanceMetadata, ReconciliationMetadata
 
 
 class RootResponse(BaseModel):
@@ -36,7 +36,7 @@ class HealthResponse(BaseModel):
 
 
 class MealPlanResponse(BaseModel):
-    """A generated meal plan with its verification and reconciliation metadata.
+    """A generated meal plan with its verification, macro-balance and reconciliation metadata.
 
     ``plan_status`` is ``matched``, ``fallback`` or ``infeasible``. On
     ``infeasible`` the request still succeeds: the meal-dependent sections are
@@ -53,6 +53,7 @@ class MealPlanResponse(BaseModel):
     nutrition: MealNutrition | None = None
     shopping_list: SupermarketPayload | None = None
     reconciliation: ReconciliationMetadata | None = None
+    macro_balance: MacroBalanceMetadata | None = None
     infeasible_reason: str | None = None
 
 

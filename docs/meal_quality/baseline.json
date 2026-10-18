@@ -13,23 +13,23 @@
     },
     "scaled_plans": 72,
     "within_tolerance": 72,
-    "within_calorie_target": 68,
-    "meets_targets": 10,
-    "median_deviation": 0.0163,
+    "within_calorie_target": 70,
+    "meets_targets": 41,
+    "median_deviation": 0.0086,
     "p90_deviation": 0.0845,
-    "max_deviation": 0.1426,
-    "rescaled": 12,
+    "max_deviation": 0.1287,
+    "rescaled": 4,
     "scale_clamped": 33,
     "target_share_of_budget": {
       "min": 0.188,
       "max": 0.292
     },
     "macros_in_range": {
-      "protein": 32,
-      "carbs": 18,
-      "fat": 31
+      "protein": 51,
+      "carbs": 43,
+      "fat": 48
     },
-    "all_macros_in_range": 11,
+    "all_macros_in_range": 41,
     "with_estimated_ingredients": 68,
     "weak_matches": 11,
     "daily_budget_kcal": {
@@ -72,23 +72,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 348.7,
-      "calorie_deviation": 0.0037142857142857468,
+      "verified_kcal": 351.7,
+      "calorie_deviation": 0.004857142857142825,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 0.82,
       "scale_clamped": false,
-      "protein_g": 35.4,
+      "protein_g": 27.4,
       "macro_percent": {
-        "protein": 40.25014212620807,
-        "carbs": 30.585559977259805,
-        "fat": 29.16429789653212
+        "protein": 31.145211707871557,
+        "carbs": 45.58113100312589,
+        "fat": 23.273657289002557
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -128,24 +128,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 399.9,
-      "calorie_deviation": 0.14257142857142852,
+      "verified_kcal": 345.5,
+      "calorie_deviation": 0.012857142857142857,
       "within_tolerance": true,
-      "within_calorie_target": false,
-      "meets_targets": false,
+      "within_calorie_target": true,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 0.65,
       "scale_clamped": true,
-      "protein_g": 27.9,
+      "protein_g": 19.5,
       "macro_percent": {
-        "protein": 27.589616810877626,
-        "carbs": 26.798516687268233,
-        "fat": 45.61186650185414
+        "protein": 22.22222222222222,
+        "carbs": 46.495726495726494,
+        "fat": 31.28205128205128
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -240,23 +240,23 @@
       "meal_name": "Shrimp Taco Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 348.7,
-      "calorie_deviation": 0.0037142857142857468,
+      "verified_kcal": 347.7,
+      "calorie_deviation": 0.006571428571428604,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 0.86,
       "scale_clamped": false,
-      "protein_g": 32.7,
+      "protein_g": 27.3,
       "macro_percent": {
-        "protein": 36.10267733922164,
-        "carbs": 40.29809550096605,
-        "fat": 23.59922715981231
+        "protein": 30.35019455252918,
+        "carbs": 46.13674263479711,
+        "fat": 23.513062812673706
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 5,
@@ -296,24 +296,24 @@
       "meal_name": "Tuna Sushi Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 364.8,
-      "calorie_deviation": 0.042285714285714315,
+      "verified_kcal": 346.7,
+      "calorie_deviation": 0.009428571428571461,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 0.73,
       "scale_clamped": false,
-      "protein_g": 31.0,
+      "protein_g": 28.2,
       "macro_percent": {
-        "protein": 34.178610804851154,
-        "carbs": 45.97574421168688,
-        "fat": 19.845644983461963
+        "protein": 32.68617791944364,
+        "carbs": 46.711098232396395,
+        "fat": 20.602723848159954
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
       "retrieval_score": 0.568
@@ -380,24 +380,24 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 838.3,
-      "calorie_deviation": 0.036217552533992524,
+      "verified_kcal": 771.3,
+      "calorie_deviation": 0.04660074165636594,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.27,
       "scale_clamped": false,
-      "protein_g": 84.4,
+      "protein_g": 61.8,
       "macro_percent": {
-        "protein": 41.49969268592501,
-        "carbs": 42.237246465888134,
-        "fat": 16.263060848186846
+        "protein": 32.986389111289036,
+        "carbs": 46.11689351481185,
+        "fat": 20.89671737389912
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 1.019
@@ -408,23 +408,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 812.9,
-      "calorie_deviation": 0.004820766378244718,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.91,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 82.8,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 40.40009758477678,
-        "carbs": 30.397657965357407,
-        "fat": 29.202244449865823
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -464,24 +464,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 809.6,
-      "calorie_deviation": 0.0007416563658838353,
+      "verified_kcal": 808.2,
+      "calorie_deviation": 0.0009888751545116866,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.31,
       "scale_clamped": false,
-      "protein_g": 56.0,
+      "protein_g": 43.5,
       "macro_percent": {
-        "protein": 27.370478983382206,
-        "carbs": 26.881720430107524,
-        "fat": 45.74780058651026
+        "protein": 21.014492753623188,
+        "carbs": 45.94202898550725,
+        "fat": 33.04347826086956
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -576,23 +576,23 @@
       "meal_name": "Shrimp Taco Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 808.3,
-      "calorie_deviation": 0.0008652657601978313,
+      "verified_kcal": 812.0,
+      "calorie_deviation": 0.003708281829419036,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.99,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 76.3,
+      "protein_g": 65.3,
       "macro_percent": {
-        "protein": 36.31603998096145,
-        "carbs": 39.69538315088053,
-        "fat": 23.98857686815802
+        "protein": 31.210419404946833,
+        "carbs": 47.6042537937627,
+        "fat": 21.18532680129048
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 5,
@@ -632,24 +632,24 @@
       "meal_name": "Tuna Sushi Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 796.7,
-      "calorie_deviation": 0.015203955500617991,
+      "verified_kcal": 809.8,
+      "calorie_deviation": 0.0009888751545116866,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 69.5,
+      "protein_g": 66.1,
       "macro_percent": {
-        "protein": 35.20770010131712,
-        "carbs": 45.64336372847011,
-        "fat": 19.148936170212767
+        "protein": 32.8161846841256,
+        "carbs": 46.0717388606181,
+        "fat": 21.1120764552563
       },
       "macros_in_range": {
-        "protein": false,
+        "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
       "retrieval_score": 0.568
@@ -660,24 +660,24 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 838.3,
-      "calorie_deviation": 0.036217552533992524,
+      "verified_kcal": 771.3,
+      "calorie_deviation": 0.04660074165636594,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.27,
       "scale_clamped": false,
-      "protein_g": 84.4,
+      "protein_g": 61.8,
       "macro_percent": {
-        "protein": 41.49969268592501,
-        "carbs": 42.237246465888134,
-        "fat": 16.263060848186846
+        "protein": 32.986389111289036,
+        "carbs": 46.11689351481185,
+        "fat": 20.89671737389912
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.198
@@ -688,24 +688,24 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 838.3,
-      "calorie_deviation": 0.036217552533992524,
+      "verified_kcal": 771.3,
+      "calorie_deviation": 0.04660074165636594,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.27,
       "scale_clamped": false,
-      "protein_g": 84.4,
+      "protein_g": 61.8,
       "macro_percent": {
-        "protein": 41.49969268592501,
-        "carbs": 42.237246465888134,
-        "fat": 16.263060848186846
+        "protein": 32.986389111289036,
+        "carbs": 46.11689351481185,
+        "fat": 20.89671737389912
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.198
@@ -744,23 +744,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 676.9,
-      "calorie_deviation": 0.020405209840810453,
+      "verified_kcal": 695.9,
+      "calorie_deviation": 0.007091172214182311,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 69.2,
+      "protein_g": 53.7,
       "macro_percent": {
-        "protein": 40.50336552531461,
-        "carbs": 30.26046239391279,
-        "fat": 29.236172080772608
+        "protein": 30.853203102556733,
+        "carbs": 46.13616776788279,
+        "fat": 23.01062912956047
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -800,24 +800,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 690.6,
-      "calorie_deviation": 0.0005788712011577095,
+      "verified_kcal": 688.7,
+      "calorie_deviation": 0.003328509406656953,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.12,
       "scale_clamped": false,
-      "protein_g": 47.9,
+      "protein_g": 37.2,
       "macro_percent": {
-        "protein": 27.402745995423338,
-        "carbs": 26.77345537757437,
-        "fat": 45.82379862700229
+        "protein": 21.121362668559264,
+        "carbs": 46.04684173172462,
+        "fat": 32.83179559971611
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -884,19 +884,19 @@
       "meal_name": "Banana Oat Protein Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 771.1,
-      "calorie_deviation": 0.11591895803183795,
+      "verified_kcal": 693.4,
+      "calorie_deviation": 0.0034732272069464215,
       "within_tolerance": true,
-      "within_calorie_target": false,
-      "meets_targets": false,
+      "within_calorie_target": true,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 30.9,
+      "protein_g": 27.5,
       "macro_percent": {
-        "protein": 15.523737754333082,
-        "carbs": 62.54709871891484,
-        "fat": 21.92916352675207
+        "protein": 15.345982142857144,
+        "carbs": 62.05357142857143,
+        "fat": 22.60044642857143
       },
       "macros_in_range": {
         "protein": true,
@@ -912,23 +912,23 @@
       "meal_name": "Shrimp Taco Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 650.3,
-      "calorie_deviation": 0.058900144717800355,
+      "verified_kcal": 690.2,
+      "calorie_deviation": 0.001157742402315419,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 61.8,
+      "protein_g": 55.4,
       "macro_percent": {
-        "protein": 36.557231588287486,
-        "carbs": 39.75155279503105,
-        "fat": 23.691215616681458
+        "protein": 30.975677942409842,
+        "carbs": 46.12804025719877,
+        "fat": 22.89628180039139
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 5,
@@ -968,24 +968,24 @@
       "meal_name": "Tuna Sushi Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 714.3,
-      "calorie_deviation": 0.03371924746743843,
+      "verified_kcal": 694.1,
+      "calorie_deviation": 0.004486251808972537,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.43,
       "scale_clamped": false,
-      "protein_g": 61.7,
+      "protein_g": 56.5,
       "macro_percent": {
-        "protein": 34.88832343794176,
-        "carbs": 46.02770709640939,
-        "fat": 19.083969465648853
+        "protein": 32.720428550745616,
+        "carbs": 46.04024902273056,
+        "fat": 21.239322426523817
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
       "retrieval_score": 0.568
@@ -1080,23 +1080,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 851.7,
-      "calorie_deviation": 0.0020000000000000534,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.04541176470588238,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 2.01,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 86.9,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 40.44211751018033,
-        "carbs": 30.343222803955783,
-        "fat": 29.21465968586387
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -1136,24 +1136,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 853.8,
-      "calorie_deviation": 0.004470588235294064,
+      "verified_kcal": 852.3,
+      "calorie_deviation": 0.002705882352941123,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.38,
       "scale_clamped": false,
-      "protein_g": 58.9,
+      "protein_g": 45.5,
       "macro_percent": {
-        "protein": 27.255900046274874,
-        "carbs": 26.931975937066174,
-        "fat": 45.812124016658956
+        "protein": 20.87874268670414,
+        "carbs": 45.979121257313295,
+        "fat": 33.14213605598257
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -1248,23 +1248,23 @@
       "meal_name": "Shrimp Taco Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 855.0,
-      "calorie_deviation": 0.0058823529411764705,
+      "verified_kcal": 849.0,
+      "calorie_deviation": 0.001176470588235294,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 2.09,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 81.1,
+      "protein_g": 66.1,
       "macro_percent": {
-        "protein": 36.50686473103758,
-        "carbs": 39.792932703128514,
-        "fat": 23.700202565833894
+        "protein": 30.234419668381932,
+        "carbs": 49.07947398513437,
+        "fat": 20.686106346483708
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 5,
@@ -1304,24 +1304,24 @@
       "meal_name": "Tuna Sushi Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 796.7,
-      "calorie_deviation": 0.06270588235294113,
+      "verified_kcal": 848.9,
+      "calorie_deviation": 0.0012941176470588503,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 69.5,
+      "protein_g": 69.1,
       "macro_percent": {
-        "protein": 35.20770010131712,
-        "carbs": 45.64336372847011,
-        "fat": 19.148936170212767
+        "protein": 32.725550556476435,
+        "carbs": 46.17570447549136,
+        "fat": 21.098744968032204
       },
       "macros_in_range": {
-        "protein": false,
+        "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
       "retrieval_score": 0.568
@@ -1388,23 +1388,23 @@
       "meal_name": "Tofu Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 826.7,
-      "calorie_deviation": 0.021878862793572366,
+      "verified_kcal": 809.5,
+      "calorie_deviation": 0.0006180469715698393,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.28,
       "scale_clamped": false,
-      "protein_g": 52.4,
+      "protein_g": 47.8,
       "macro_percent": {
-        "protein": 24.27611767431086,
-        "carbs": 42.57586286773222,
-        "fat": 33.14801945795691
+        "protein": 22.74024738344434,
+        "carbs": 46.00380589914368,
+        "fat": 31.25594671741199
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 3,
@@ -1556,24 +1556,24 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 839.7,
-      "calorie_deviation": 0.03794808405438819,
+      "verified_kcal": 762.9,
+      "calorie_deviation": 0.056983930778739214,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.27,
       "scale_clamped": false,
-      "protein_g": 82.8,
+      "protein_g": 61.0,
       "macro_percent": {
-        "protein": 40.79822616407982,
-        "carbs": 43.01552106430155,
-        "fat": 16.186252771618626
+        "protein": 32.96851776786921,
+        "carbs": 45.9937846236995,
+        "fat": 21.037697608431294
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 2,
       "retrieval_score": 1.019
@@ -1584,23 +1584,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 812.9,
-      "calorie_deviation": 0.004820766378244718,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.91,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 82.8,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 40.40009758477678,
-        "carbs": 30.397657965357407,
-        "fat": 29.202244449865823
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -1640,24 +1640,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 809.6,
-      "calorie_deviation": 0.0007416563658838353,
+      "verified_kcal": 808.2,
+      "calorie_deviation": 0.0009888751545116866,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.31,
       "scale_clamped": false,
-      "protein_g": 56.0,
+      "protein_g": 43.5,
       "macro_percent": {
-        "protein": 27.370478983382206,
-        "carbs": 26.881720430107524,
-        "fat": 45.74780058651026
+        "protein": 21.014492753623188,
+        "carbs": 45.94202898550725,
+        "fat": 33.04347826086956
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -1752,23 +1752,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 812.9,
-      "calorie_deviation": 0.004820766378244718,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.91,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 82.8,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 40.40009758477678,
-        "carbs": 30.397657965357407,
-        "fat": 29.202244449865823
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -1808,24 +1808,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 809.6,
-      "calorie_deviation": 0.0007416563658838353,
+      "verified_kcal": 808.2,
+      "calorie_deviation": 0.0009888751545116866,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.31,
       "scale_clamped": false,
-      "protein_g": 56.0,
+      "protein_g": 43.5,
       "macro_percent": {
-        "protein": 27.370478983382206,
-        "carbs": 26.881720430107524,
-        "fat": 45.74780058651026
+        "protein": 21.014492753623188,
+        "carbs": 45.94202898550725,
+        "fat": 33.04347826086956
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
@@ -1864,23 +1864,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 812.9,
-      "calorie_deviation": 0.004820766378244718,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.91,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 82.8,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 40.40009758477678,
-        "carbs": 30.397657965357407,
-        "fat": 29.202244449865823
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
@@ -1892,24 +1892,24 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 838.3,
-      "calorie_deviation": 0.036217552533992524,
+      "verified_kcal": 771.3,
+      "calorie_deviation": 0.04660074165636594,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.27,
       "scale_clamped": false,
-      "protein_g": 84.4,
+      "protein_g": 61.8,
       "macro_percent": {
-        "protein": 41.49969268592501,
-        "carbs": 42.237246465888134,
-        "fat": 16.263060848186846
+        "protein": 32.986389111289036,
+        "carbs": 46.11689351481185,
+        "fat": 20.89671737389912
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 1.019
@@ -1920,23 +1920,23 @@
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 812.9,
-      "calorie_deviation": 0.004820766378244718,
+      "verified_kcal": 809.9,
+      "calorie_deviation": 0.0011124845488256826,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 1.91,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
       "scale_clamped": true,
-      "protein_g": 77.1,
+      "protein_g": 57.5,
       "macro_percent": {
-        "protein": 37.12978569708644,
-        "carbs": 32.747411509751984,
-        "fat": 30.12280279316157
+        "protein": 27.841665657910667,
+        "carbs": 46.338215712383494,
+        "fat": 25.82011862970585
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 3,
@@ -1948,24 +1948,24 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 805.2,
-      "calorie_deviation": 0.0046971569839307226,
+      "verified_kcal": 807.7,
+      "calorie_deviation": 0.001606922126081526,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.3,
       "scale_clamped": false,
-      "protein_g": 58.8,
+      "protein_g": 63.7,
       "macro_percent": {
-        "protein": 29.359630508051428,
-        "carbs": 51.42928473349145,
-        "fat": 19.211084758457122
+        "protein": 31.663974151857833,
+        "carbs": 47.42139927923449,
+        "fat": 20.914626568907668
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.489
@@ -1976,24 +1976,24 @@
       "meal_name": "Salmon Quinoa Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 809.6,
-      "calorie_deviation": 0.0007416563658838353,
+      "verified_kcal": 808.2,
+      "calorie_deviation": 0.0009888751545116866,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.31,
       "scale_clamped": false,
-      "protein_g": 56.0,
+      "protein_g": 43.5,
       "macro_percent": {
-        "protein": 27.370478983382206,
-        "carbs": 26.881720430107524,
-        "fat": 45.74780058651026
+        "protein": 21.014492753623188,
+        "carbs": 45.94202898550725,
+        "fat": 33.04347826086956
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
       "retrieval_score": 0.569
