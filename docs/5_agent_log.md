@@ -5907,3 +5907,65 @@ The baseline regenerates byte-identical: 47 of 72, 61 matched / 11 fallback,
 describes the ranking. 585 passed (497 backend, 88 Streamlit), coverage
 95.04%; ruff clean.
 
+## 2026-10-18 — Codex — #30 re-review: eligibility precedes the top-k cut
+
+Reviewed Claude's reply and update at
+`774c771187edd73a9311cabc9a4cce74534295d0` on open PR #30, using the isolated
+archive `/tmp/meal-relevance-fix-UipByw`. Claude included the previous review
+in the remote agent log and added a response explaining the ranking correction.
+The original local checkout and its existing log entries remain preserved.
+
+**Verdict: the P2 finding is resolved; no new actionable findings in this
+targeted re-review.** The retriever now sorts all safe candidates by
+`(relevance >= min_score, score)` before applying `top_k`. Thus qualifying
+matches lead even when a higher total-score unrelated meal previously hid
+them, while score ordering remains intact within each group. Keeping the
+nonqualifying group also preserves safe low-relevance degradation when no
+fallback template is safe. This addresses the cause, not just the two examples.
+
+**Fresh independent verification:**
+
+- Full Python suite on Python 3.11: **585 passed**, **95.04%** coverage,
+  two existing dependency deprecation warnings. Ruff lint and formatting
+  passed (**111 files**).
+- Both reported probes now serve corpus matches: `curry` returns Chickpea
+  Curry Bowl; `oats` returns Banana Oat Protein Bowl. Checked retrieval
+  with `top_k` of **1, 3 and 40**, plus the real agent path.
+- All **three new regressions fail for the expected reasons** when the
+  preceding `3551dc6` retriever is loaded in memory into a separate test
+  process; they pass with the fix in the full suite. No source files were
+  changed for this RED check.
+- `pizza` and `chocolate dessert` still fall back. The vegan/kidney-disease
+  `zzzz` probe still returns a safe corpus meal with the below-threshold
+  warning when no fallback template is safe.
+- Independently regenerated JSON and Markdown exactly match the committed
+  artifacts and are byte-identical to the preceding PR revision: **47/72**
+  meet targets, **61 matched / 11 fallback**, **36** matched plans meet
+  targets, and **5/5** guardrails hold. The headline improvement remains
+  fallback nutrition, not improved matching of the off-menu cravings.
+- CI run `39113123914` passed all five jobs. Python 3.12, frontend and
+  container results are remote CI evidence, not fresh local runs. The PR
+  head was rechecked and remained `774c771`. The earlier macro-aware
+  candidate sweep was not independently repeated.
+
+**Next steps:** with owner approval, integrate #30 and confirm main CI.
+Then scope a small recipe/corpus PR against the documented gaps rather than
+grow immediately to 75–100 templates: improve recipes that cannot meet the
+macro targets within current portion bounds, or add coverage for an off-menu
+craving. Keep the 72-case cohort and five guardrails unchanged for comparison;
+report matched and fallback results separately, and preserve ingredient and
+health-constraint checks. Macro-aware selection's documented trade-off is
+not a reason to weaken relevance or widen bounds to inflate the headline.
+Safely synchronize the old local checkout while preserving this log. Live
+deployment and Cloud Trace acceptance remain separate and owner-dependent.
+Only this log entry was added locally, left uncommitted; no application
+changes, commits, merges, external comments, data cleanup or deployments.
+
+## 2026-10-18 — Claude — Codex's #30 re-review recorded
+
+Codex's re-review above is copied verbatim from the owner's local log. It
+confirms the P2 fix at `774c771` with no new findings. This commit only adds
+log entries. Merging #30 waits on the owner's word. After it: a small
+recipe/corpus PR against the documented gaps, with the 72-case cohort and
+guardrails unchanged and matched and fallback results reported apart.
+
