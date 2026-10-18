@@ -105,4 +105,97 @@ describe('MealPlanTab error text', () => {
     expect(screen.queryByText('Meal Overview')).not.toBeInTheDocument()
     expect(screen.queryByText('Supermarket')).not.toBeInTheDocument()
   })
+
+  it('shows the macro split and the target result the service reports', async () => {
+    axios.post.mockResolvedValueOnce({
+      data: {
+        plan_status: 'matched',
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Chicken Fried Rice', ingredients: [] },
+          metadata: {
+            warnings: ['Rebalanced ingredient portions toward the recommended split.'],
+          },
+        },
+        nutrition: {},
+        shopping_list: {},
+        macro_balance: {
+          outcome: 'rebalanced',
+          target_meal_calories: 700,
+          macro_percent_before: { protein: 41.2, carbs: 42.6, fat: 16.2 },
+          macro_percent_after: { protein: 29.6, carbs: 47.4, fat: 23.0 },
+        },
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'chicken fried rice')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Portions rebalanced')).toBeInTheDocument()
+    // The split after rebalancing is the one that ships, not the one before.
+    expect(screen.getByText('30%')).toBeInTheDocument()
+    expect(screen.getByText('47%')).toBeInTheDocument()
+    expect(screen.getByText('23%')).toBeInTheDocument()
+    expect(screen.queryByText('41%')).not.toBeInTheDocument()
+    expect(screen.getByText('Meal target: 700 kcal')).toBeInTheDocument()
+    expect(
+      screen.getByText('Rebalanced ingredient portions toward the recommended split.'),
+    ).toBeInTheDocument()
+    expect(screen.queryByText(/Nothing on the menu/)).not.toBeInTheDocument()
+  })
+
+  it('says when an off-menu craving got a standard meal instead', async () => {
+    axios.post.mockResolvedValueOnce({
+      data: {
+        plan_status: 'fallback',
+        meal_plan: {
+          meal_definition: {
+            structured_meal_name: 'High-Protein Turkey Burger Bowl',
+            ingredients: [],
+          },
+          metadata: { warnings: [] },
+        },
+        nutrition: {},
+        shopping_list: {},
+        macro_balance: {
+          outcome: 'in_range',
+          target_meal_calories: 650,
+          macro_percent_before: { protein: 31, carbs: 46, fat: 23 },
+        },
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'pizza')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(
+      await screen.findByText(/Nothing on the menu is a close match for/),
+    ).toBeInTheDocument()
+    expect(screen.getByText('On target')).toBeInTheDocument()
+  })
+
+  it('shows no quality section for a response without one', async () => {
+    // An older API, or the existing tests' minimal responses, carry no
+    // macro_balance, plan_status or warnings.
+    axios.post.mockResolvedValueOnce({
+      data: {
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Grilled Chicken Bowl', ingredients: [] },
+        },
+        nutrition: {},
+        shopping_list: {},
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'chicken')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
+    expect(screen.queryByText('Meal Quality')).not.toBeInTheDocument()
+  })
 })

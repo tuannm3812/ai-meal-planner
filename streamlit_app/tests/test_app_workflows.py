@@ -114,3 +114,31 @@ def test_generating_saving_and_reloading_a_meal_updates_history(app: AppTest) ->
     assert not _errors(app), f"Load saved meals raised: {_errors(app)}"
     saved = _by_label(app.metric, "Saved")
     assert saved.value == "1", f"expected the saved meal to show up, got {saved.value!r}"
+
+
+def _meal_quality(app: AppTest) -> list[str]:
+    return [str(item.value) for item in app.markdown if "Meal quality:" in str(item.value)]
+
+
+def test_a_menu_craving_reports_its_meal_quality(app: AppTest) -> None:
+    """The default craving matches a menu meal, so there is no no-match notice."""
+    _by_label(app.button, "Generate meal").click().run(timeout=TIMEOUT)
+    assert not _errors(app), f"Generate meal raised: {_errors(app)}"
+
+    (quality,) = _meal_quality(app)
+    assert "On target" in quality or "Portions rebalanced" in quality, quality
+    assert not [w for w in app.warning if "close match" in str(w.value)]
+    shares = {metric.label: metric.value for metric in app.metric}
+    assert {"Protein share", "Carbs share", "Fat share", "Meal target"} <= shares.keys()
+
+
+def test_an_off_menu_craving_says_it_got_a_standard_meal(app: AppTest) -> None:
+    _by_label(app.text_input, "Craving or meal goal").set_value("pizza").run(timeout=TIMEOUT)
+    _by_label(app.button, "Generate meal").click().run(timeout=TIMEOUT)
+    assert not _errors(app), f"Generate meal raised: {_errors(app)}"
+
+    notices = [str(w.value) for w in app.warning if "close match" in str(w.value)]
+    assert notices == [
+        "Nothing on the menu is a close match for “pizza”, so this is a standard meal instead."
+    ]
+    assert _meal_quality(app)

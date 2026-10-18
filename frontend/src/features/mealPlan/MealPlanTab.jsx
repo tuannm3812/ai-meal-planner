@@ -119,10 +119,13 @@ function MealPlanTab() {
             craving={craving.trim()}
             ingredients={ingredients}
             location={location}
+            macroBalance={mealPlan.macro_balance}
             mealDefinition={mealDefinition}
             nutrition={nutrition}
+            planStatus={mealPlan.plan_status}
             shopping={shopping}
             shoppingItems={shoppingItems}
+            warnings={mealPlan.meal_plan?.metadata?.warnings || []}
           />
         )}
       </div>

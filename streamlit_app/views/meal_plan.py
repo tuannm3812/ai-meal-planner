@@ -80,7 +80,7 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
                         st.warning(meal_result.get("infeasible_reason") or "No meal fits.")
                     else:
                         st.session_state.latest_meal_result = meal_result
-                        _render_meal_result(meal_result)
+                        _render_meal_result(meal_result, craving)
                 except Exception as exc:
                     render_api_error(exc)
         else:
@@ -134,11 +134,64 @@ def render(config: AppConfig, call_api: Callable[..., dict[str, Any]]) -> None:
                     render_api_error(exc)
 
 
-def _render_meal_result(meal_result: dict[str, Any]) -> None:
+# The service decides whether a plan meets the targets (DEC-25, DEC-26); the
+# demo only reports its macro_balance record, as the React dashboard does.
+BALANCE_OUTCOMES = {
+    "in_range": (
+        "On target",
+        "Calories and the protein, carb and fat split are inside the recommended ranges.",
+    ),
+    "rebalanced": (
+        "Portions rebalanced",
+        "Ingredient portions were resized so the meal fits the recommended ranges.",
+    ),
+    "no_feasible_balance": (
+        "Outside the ranges",
+        "This meal's ingredients cannot be resized into the recommended ranges.",
+    ),
+    "reverted": (
+        "Outside the ranges",
+        "Resized portions missed the ranges once checked, so the original portions are shown.",
+    ),
+}
+
+
+def _render_meal_quality(meal_result: dict[str, Any], craving: str) -> None:
+    """Say whether the plan is a close match and whether it meets the targets.
+
+    Args:
+        meal_result: The /generate-meal-plan response for a plan with a meal.
+        craving: What the user asked for.
+    """
+    if meal_result.get("plan_status") == "fallback":
+        st.warning(
+            f"Nothing on the menu is a close match for \u201c{craving}\u201d, "
+            "so this is a standard meal instead."
+        )
+    balance = meal_result.get("macro_balance")
+    if not balance or balance.get("outcome") not in BALANCE_OUTCOMES:
+        return
+    label, body = BALANCE_OUTCOMES[balance["outcome"]]
+    split = (
+        balance.get("macro_percent_after")
+        if balance["outcome"] == "rebalanced"
+        else balance.get("macro_percent_before")
+    ) or {}
+    st.markdown(f"**Meal quality: {label}.** {body}")
+    split_cols = st.columns(4)
+    for col, (key, name) in zip(
+        split_cols, (("protein", "Protein"), ("carbs", "Carbs"), ("fat", "Fat")), strict=False
+    ):
+        col.metric(f"{name} share", f"{round(split.get(key, 0))}%")
+    split_cols[3].metric("Meal target", f"{balance.get('target_meal_calories', 0)} kcal")
+
+
+def _render_meal_result(meal_result: dict[str, Any], craving: str = "") -> None:
     """Render a matched or fallback meal plan.
 
     Args:
         meal_result: The /generate-meal-plan response for a plan with a meal.
+        craving: What the user asked for, named in the no-match notice.
     """
     meal_definition = meal_result.get("meal_plan", {}).get("meal_definition", {})
     nutrition = meal_result.get("nutrition", {})
@@ -158,6 +211,7 @@ def _render_meal_result(meal_result: dict[str, Any]) -> None:
     metric_cols[1].metric("Protein", f"{nutrition.get('total_protein', 0)} g")
     metric_cols[2].metric("Carbs", f"{nutrition.get('total_carbs', 0)} g")
     metric_cols[3].metric("Fat", f"{nutrition.get('total_fat', 0)} g")
+    _render_meal_quality(meal_result, craving)
 
     with st.expander("Ingredients", expanded=True):
         st.dataframe(meal_definition.get("ingredients", []), use_container_width=True)
