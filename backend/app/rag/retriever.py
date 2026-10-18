@@ -24,6 +24,11 @@ class MealRetrievalResult:
     warnings: list[str]
     substitutions: list[PlannedSubstitution]
     rank: int = 0
+    relevance: float = 0.0
+    """How well the meal matches the craving itself: the score without the bonus
+    for matching the user's restrictions or preferences. Only this decides
+    whether the corpus has a match at all, so a profile cannot carry an
+    unrelated meal over the threshold."""
 
 
 class MealVectorRetriever:
@@ -88,10 +93,14 @@ class MealVectorRetriever:
             score = float(similarities[index])
             if query_terms and craving_overlap == 0:
                 score *= 0.15
-            score += self._preference_bonus(meal, dietary_preferences)
-            score += self._preference_bonus(meal, dietary_restrictions)
             score += min(craving_overlap * 0.1, 0.3)
             score -= self._condition_penalty(meal, health_conditions)
+            # A craving with no content terms ("healthy meal") says nothing the
+            # profile does not, so the profile's match is its relevance.
+            relevance = score if query_terms else None
+            score += self._preference_bonus(meal, dietary_preferences)
+            score += self._preference_bonus(meal, dietary_restrictions)
+            relevance = score if relevance is None else relevance
             warnings = self._warnings_for(meal, health_conditions)
             scored_results.append(
                 MealRetrievalResult(
@@ -100,6 +109,7 @@ class MealVectorRetriever:
                     matched_terms=self._matched_terms(meal, expanded_query),
                     warnings=warnings,
                     substitutions=substitution_plan_for_meal(meal, hard_constraint_groups),
+                    relevance=round(max(relevance, 0.0), 4),
                 )
             )
 
@@ -116,6 +126,7 @@ class MealVectorRetriever:
                     warnings=result.warnings,
                     substitutions=result.substitutions,
                     rank=rank,
+                    relevance=result.relevance,
                 )
             )
         return ranked_results[:top_k]

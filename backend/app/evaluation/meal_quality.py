@@ -368,11 +368,11 @@ def run(
 
 
 GUARDRAIL_CORPUS = Path(__file__).with_name("guardrail_meals.json")
-"""Three meat meals copied from the shipped corpus. Against the full corpus every
-default scenario is matched: the default profile's high-protein restriction lifts
-even an unrelated craving over the relevance threshold, and a plant-based meal
-survives every known constraint. A corpus with no plant-based meal is how the
-fallback and refusal paths are reached through the real service."""
+"""Three meat meals copied from the shipped corpus. Against the full corpus a
+plant-based meal survives every known constraint, so no default scenario is
+refused, and a craving the corpus matches is always matched. A corpus with no
+plant-based meal is how a matched craving reaches the fallback, and any request
+the refusal path, through the real service."""
 
 
 @dataclass(frozen=True)

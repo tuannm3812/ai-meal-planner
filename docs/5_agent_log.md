@@ -5795,3 +5795,30 @@ After the merge: macro-aware candidate selection and craving relevance, as one
 PR without corpus growth. Portion bounds stay at 0.5–2.0, and the 72-plan
 cohort and guardrails stay unchanged. Relevance and ingredient constraints are
 held as checks, so they are not traded for a higher count.
+
+## 2026-10-18 — Claude — #29 merged; craving relevance gate (DEC-27)
+
+#29 merged as `0854d3a`; `main` CI passed all five jobs on it. Codex's local
+log has no entry after its #29 follow-up.
+
+This PR is the relevance half of the next step. A retrieval result now carries
+`relevance`, its score without the restriction and preference bonuses, and
+only that decides whether the corpus has a match. `pizza` and `chocolate
+dessert` (8 plans) and three constrained requests now take the fallback path
+with its "no strong local RAG match" warning. No other plan changes: the
+same 61 matched plans, meals and ingredients, and 36 of them meet the targets.
+The headline moves 41 -> 47 of 72 only because the off-menu plans now get the
+fallback template, which happens to balance; that is not a better match.
+Guardrails 5 of 5.
+
+Macro-aware selection was measured, not built: for each of the 25 plans still
+missing the targets, each top-5 candidate was served in turn. Every candidate
+that would meet the targets is less relevant to the craving (Tofu Fried Rice
+for `chicken fried rice`, Tuna Brown Rice Bowl for `steak and rice`); the
+only near-tie is kidney-disease `chicken fried rice` (0.38 vs 0.37). DEC-27
+rules out that trade, so the remaining gap is recipe and corpus work.
+
+Verified: 582 passed (494 backend, 88 Streamlit), coverage 95.04%; ruff clean;
+`docs/openapi.json` unchanged (relevance is internal). The six new tests fail
+without the change.
+

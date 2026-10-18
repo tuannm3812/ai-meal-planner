@@ -148,14 +148,15 @@ class MealRecommendationAgent:
         dietary_restrictions = user_biometrics["dietary_restrictions"]
 
         # Every result here already passed the hard constraints; min_score only
-        # decides whether the corpus beats a fallback template on relevance.
+        # decides whether the corpus beats a fallback template on relevance to
+        # the craving, which the profile's bonus does not count towards.
         safe_results = self._retrieve_meals(
             craving=craving,
             dietary_restrictions=dietary_restrictions,
             health_conditions=health_conditions,
             dietary_preferences=dietary_preferences,
         )
-        if safe_results and safe_results[0].score >= self.meal_retriever.min_score:
+        if safe_results and safe_results[0].relevance >= self.meal_retriever.min_score:
             return self._corpus_payload(
                 craving,
                 target_calories,
@@ -191,8 +192,9 @@ class MealRecommendationAgent:
             )
             payload.metadata.warnings.append(
                 f"No fallback template satisfies these constraints; served the closest "
-                f"safe corpus meal, which scored {safe_results[0].score:.2f}, below the "
-                f"relevance threshold of {self.meal_retriever.min_score:.2f}."
+                f"safe corpus meal, whose relevance to the craving, "
+                f"{safe_results[0].relevance:.2f}, is below the relevance threshold of "
+                f"{self.meal_retriever.min_score:.2f}."
             )
             return payload
 

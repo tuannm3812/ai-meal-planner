@@ -9,29 +9,30 @@
   "summary": {
     "plans": 72,
     "status_counts": {
-      "matched": 72
+      "matched": 61,
+      "fallback": 11
     },
     "scaled_plans": 72,
     "within_tolerance": 72,
     "within_calorie_target": 70,
-    "meets_targets": 41,
-    "median_deviation": 0.0086,
+    "meets_targets": 47,
+    "median_deviation": 0.0075,
     "p90_deviation": 0.0845,
     "max_deviation": 0.1287,
-    "rescaled": 4,
-    "scale_clamped": 33,
+    "rescaled": 2,
+    "scale_clamped": 37,
     "target_share_of_budget": {
       "min": 0.188,
       "max": 0.292
     },
     "macros_in_range": {
-      "protein": 51,
-      "carbs": 43,
-      "fat": 48
+      "protein": 57,
+      "carbs": 49,
+      "fat": 54
     },
-    "all_macros_in_range": 41,
+    "all_macros_in_range": 47,
     "with_estimated_ingredients": 68,
-    "weak_matches": 11,
+    "weak_matches": 0,
     "daily_budget_kcal": {
       "min": 1200.0,
       "max": 4521.1
@@ -320,59 +321,59 @@
     },
     {
       "scenario": "pizza / older sedentary woman, losing",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 347.0,
-      "calorie_deviation": 0.008571428571428572,
+      "verified_kcal": 351.7,
+      "calorie_deviation": 0.004857142857142825,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 0.54,
-      "scale_clamped": true,
-      "protein_g": 34.9,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.82,
+      "scale_clamped": false,
+      "protein_g": 27.4,
       "macro_percent": {
-        "protein": 41.35071090047393,
-        "carbs": 42.654028436018955,
-        "fat": 15.995260663507107
+        "protein": 31.145211707871557,
+        "carbs": 45.58113100312589,
+        "fat": 23.273657289002557
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chocolate dessert / older sedentary woman, losing",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 347.0,
-      "calorie_deviation": 0.008571428571428572,
+      "verified_kcal": 351.7,
+      "calorie_deviation": 0.004857142857142825,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 0.54,
-      "scale_clamped": true,
-      "protein_g": 34.9,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.82,
+      "scale_clamped": false,
+      "protein_g": 27.4,
       "macro_percent": {
-        "protein": 41.35071090047393,
-        "carbs": 42.654028436018955,
-        "fat": 15.995260663507107
+        "protein": 31.145211707871557,
+        "carbs": 45.58113100312589,
+        "fat": 23.273657289002557
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chicken fried rice / average man, maintaining",
@@ -656,59 +657,59 @@
     },
     {
       "scenario": "pizza / average man, maintaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 771.3,
-      "calorie_deviation": 0.04660074165636594,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.27,
-      "scale_clamped": false,
-      "protein_g": 61.8,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 32.986389111289036,
-        "carbs": 46.11689351481185,
-        "fat": 20.89671737389912
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
         "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chocolate dessert / average man, maintaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 771.3,
-      "calorie_deviation": 0.04660074165636594,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.0029666254635352008,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.27,
-      "scale_clamped": false,
-      "protein_g": 61.8,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 32.986389111289036,
-        "carbs": 46.11689351481185,
-        "fat": 20.89671737389912
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
         "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chicken fried rice / active woman, maintaining",
@@ -992,59 +993,59 @@
     },
     {
       "scenario": "pizza / active woman, maintaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 713.4,
-      "calorie_deviation": 0.03241678726483354,
+      "verified_kcal": 695.9,
+      "calorie_deviation": 0.007091172214182311,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.08,
-      "scale_clamped": false,
-      "protein_g": 71.9,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 53.7,
       "macro_percent": {
-        "protein": 41.55468862881087,
-        "carbs": 42.19043490825025,
-        "fat": 16.25487646293888
+        "protein": 30.853203102556733,
+        "carbs": 46.13616776788279,
+        "fat": 23.01062912956047
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chocolate dessert / active woman, maintaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 713.4,
-      "calorie_deviation": 0.03241678726483354,
+      "verified_kcal": 695.9,
+      "calorie_deviation": 0.007091172214182311,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.08,
-      "scale_clamped": false,
-      "protein_g": 71.9,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 53.7,
       "macro_percent": {
-        "protein": 41.55468862881087,
-        "carbs": 42.19043490825025,
-        "fat": 16.25487646293888
+        "protein": 30.853203102556733,
+        "carbs": 46.13616776788279,
+        "fat": 23.01062912956047
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chicken fried rice / large athlete, gaining",
@@ -1328,59 +1329,59 @@
     },
     {
       "scenario": "pizza / large athlete, gaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 874.4,
-      "calorie_deviation": 0.02870588235294115,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.04541176470588238,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.33,
-      "scale_clamped": false,
-      "protein_g": 88.2,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 41.6135881104034,
-        "carbs": 42.462845010615716,
-        "fat": 15.923566878980893
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chocolate dessert / large athlete, gaining",
-      "plan_status": "matched",
-      "meal_name": "Chicken Fried Rice",
+      "plan_status": "fallback",
+      "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 874.4,
-      "calorie_deviation": 0.02870588235294115,
+      "verified_kcal": 811.4,
+      "calorie_deviation": 0.04541176470588238,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.33,
-      "scale_clamped": false,
-      "protein_g": 88.2,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 62.2,
       "macro_percent": {
-        "protein": 41.6135881104034,
-        "carbs": 42.462845010615716,
-        "fat": 15.923566878980893
+        "protein": 30.71604938271605,
+        "carbs": 46.17283950617284,
+        "fat": 23.11111111111111
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
-      "estimated_ingredients": 3,
-      "retrieval_score": 0.198
+      "estimated_ingredients": 4,
+      "retrieval_score": null
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [vegan]",
@@ -1412,7 +1413,7 @@
     },
     {
       "scenario": "high-protein burger / average man, maintaining [vegan]",
-      "plan_status": "matched",
+      "plan_status": "fallback",
       "meal_name": "High-Protein Asian Tofu Noodle Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
@@ -1436,7 +1437,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.184
+      "retrieval_score": null
     },
     {
       "scenario": "creamy pasta / average man, maintaining [vegan]",
@@ -1468,7 +1469,7 @@
     },
     {
       "scenario": "salmon dinner / average man, maintaining [vegan]",
-      "plan_status": "matched",
+      "plan_status": "fallback",
       "meal_name": "High-Protein Asian Tofu Noodle Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
@@ -1492,7 +1493,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.181
+      "retrieval_score": null
     },
     {
       "scenario": "steak and rice / average man, maintaining [vegan]",
@@ -1860,7 +1861,7 @@
     },
     {
       "scenario": "spicy curry / average man, maintaining [kidney disease]",
-      "plan_status": "matched",
+      "plan_status": "fallback",
       "meal_name": "High-Protein Turkey Burger Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
@@ -1884,7 +1885,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.186
+      "retrieval_score": null
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [celiac]",

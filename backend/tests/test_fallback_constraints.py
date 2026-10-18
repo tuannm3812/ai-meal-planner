@@ -192,3 +192,26 @@ def test_a_replacement_is_rechecked_against_the_other_constraints() -> None:
     )
     assert safe is not None
     assert [ingredient.item_name for ingredient in safe[0]] == ["firm tofu"]
+
+
+@pytest.mark.parametrize("craving", ["pizza", "chocolate dessert"])
+def test_an_off_menu_craving_reaches_the_fallback(craving: str) -> None:
+    """Before 2026-10-18 these got Chicken Fried Rice on the profile's bonus alone."""
+    payload = _generate(
+        craving, retriever=_REAL, dietary_restrictions=["dairy-free", "high-protein"]
+    )
+
+    assert payload.metadata.source == "deterministic_fallback"
+    assert any("No strong local RAG match" in w for w in payload.metadata.warnings)
+
+
+def test_an_off_menu_vegan_craving_gets_a_safe_fallback() -> None:
+    payload = _generate(
+        "pizza",
+        retriever=_REAL,
+        dietary_preferences=["vegan"],
+        dietary_restrictions=["dairy-free", "high-protein"],
+    )
+
+    assert payload.metadata.source == "deterministic_fallback"
+    assert _violations(payload, ["vegan", "dairy-free"]) == [], _names(payload)

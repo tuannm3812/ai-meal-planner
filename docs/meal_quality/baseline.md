@@ -8,17 +8,17 @@
 
 ## Summary
 
-- Plans: 72 (matched 72).
-- **Meeting the targets** (calories within 10%, all macros in AMDR): 41 of 72.
+- Plans: 72 (fallback 11, matched 61).
+- **Meeting the targets** (calories within 10%, all macros in AMDR): 47 of 72.
 - Within the 10% calorie target: 70 of 72 scaled plans.
 - Within the service's 15% retry tolerance: 72 of 72 scaled plans.
-- Calorie deviation: median 0.9%, 90th percentile 8.5%, max 12.9%.
-- Rescaled by reconciliation: 4. First-pass scaling clamped: 33.
+- Calorie deviation: median 0.8%, 90th percentile 8.5%, max 12.9%.
+- Rescaled by reconciliation: 2. First-pass scaling clamped: 37.
 - Meal target as a share of the daily budget: 18.8% to 29.2%.
 - Daily budget across profiles: 1200.0 to 4521.1 kcal.
-- Macro share inside AMDR: protein 51, carbs 43, fat 48; all three 41 of 72.
+- Macro share inside AMDR: protein 57, carbs 49, fat 54; all three 47 of 72.
 - Plans with at least one estimated ingredient: 68 of 72.
-- Corpus matches scoring below 0.25: 11.
+- Corpus matches scoring below 0.25: 0.
 
 ## Plans
 
@@ -34,8 +34,8 @@
 | taco bowl / older sedentary woman, losing | matched | Shrimp Taco Bowl | 350 | 347.7 | 0.7% | 0.86 | 30/46/24 | 0.689 |
 | light soup / older sedentary woman, losing | matched | Chicken Vegetable Soup Bowl | 350 | 346.3 | 1.1% | 0.75 | 49/37/14 | 0.78 |
 | sushi / older sedentary woman, losing | matched | Tuna Sushi Bowl | 350 | 346.7 | 0.9% | 0.73 | 33/47/21 | 0.568 |
-| pizza / older sedentary woman, losing | matched | Chicken Fried Rice | 350 | 347.0 | 0.9% | 0.54 | 41/43/16 | 0.198 |
-| chocolate dessert / older sedentary woman, losing | matched | Chicken Fried Rice | 350 | 347.0 | 0.9% | 0.54 | 41/43/16 | 0.198 |
+| pizza / older sedentary woman, losing | fallback | High-Protein Turkey Burger Bowl | 350 | 351.7 | 0.5% | 0.82 | 31/46/23 |  |
+| chocolate dessert / older sedentary woman, losing | fallback | High-Protein Turkey Burger Bowl | 350 | 351.7 | 0.5% | 0.82 | 31/46/23 |  |
 | chicken fried rice / average man, maintaining | matched | Chicken Fried Rice | 809 | 771.3 | 4.7% | 1.27 | 33/46/21 | 1.019 |
 | high-protein burger / average man, maintaining | matched | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 | 0.672 |
 | creamy pasta / average man, maintaining | matched | High-Protein Tomato Turkey Pasta | 809 | 802.9 | 0.8% | 1.31 | 33/47/20 | 0.489 |
@@ -46,8 +46,8 @@
 | taco bowl / average man, maintaining | matched | Shrimp Taco Bowl | 809 | 812.0 | 0.4% | 1.6 | 31/48/21 | 0.689 |
 | light soup / average man, maintaining | matched | Chicken Vegetable Soup Bowl | 809 | 749.7 | 7.3% | 1.6 | 49/37/14 | 0.78 |
 | sushi / average man, maintaining | matched | Tuna Sushi Bowl | 809 | 809.8 | 0.1% | 1.6 | 33/46/21 | 0.568 |
-| pizza / average man, maintaining | matched | Chicken Fried Rice | 809 | 771.3 | 4.7% | 1.27 | 33/46/21 | 0.198 |
-| chocolate dessert / average man, maintaining | matched | Chicken Fried Rice | 809 | 771.3 | 4.7% | 1.27 | 33/46/21 | 0.198 |
+| pizza / average man, maintaining | fallback | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 |  |
+| chocolate dessert / average man, maintaining | fallback | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 |  |
 | chicken fried rice / active woman, maintaining | matched | Chicken Fried Rice | 691 | 713.4 | 3.2% | 1.08 | 42/42/16 | 1.019 |
 | high-protein burger / active woman, maintaining | matched | High-Protein Turkey Burger Bowl | 691 | 695.9 | 0.7% | 1.6 | 31/46/23 | 0.672 |
 | creamy pasta / active woman, maintaining | matched | High-Protein Tomato Turkey Pasta | 691 | 692.4 | 0.2% | 1.11 | 33/47/20 | 0.489 |
@@ -58,8 +58,8 @@
 | taco bowl / active woman, maintaining | matched | Shrimp Taco Bowl | 691 | 690.2 | 0.1% | 1.6 | 31/46/23 | 0.689 |
 | light soup / active woman, maintaining | matched | Chicken Vegetable Soup Bowl | 691 | 689.3 | 0.2% | 1.48 | 49/37/14 | 0.78 |
 | sushi / active woman, maintaining | matched | Tuna Sushi Bowl | 691 | 694.1 | 0.4% | 1.43 | 33/46/21 | 0.568 |
-| pizza / active woman, maintaining | matched | Chicken Fried Rice | 691 | 713.4 | 3.2% | 1.08 | 42/42/16 | 0.198 |
-| chocolate dessert / active woman, maintaining | matched | Chicken Fried Rice | 691 | 713.4 | 3.2% | 1.08 | 42/42/16 | 0.198 |
+| pizza / active woman, maintaining | fallback | High-Protein Turkey Burger Bowl | 691 | 695.9 | 0.7% | 1.6 | 31/46/23 |  |
+| chocolate dessert / active woman, maintaining | fallback | High-Protein Turkey Burger Bowl | 691 | 695.9 | 0.7% | 1.6 | 31/46/23 |  |
 | chicken fried rice / large athlete, gaining | matched | Chicken Fried Rice | 850 | 874.4 | 2.9% | 1.33 | 42/42/16 | 1.019 |
 | high-protein burger / large athlete, gaining | matched | High-Protein Turkey Burger Bowl | 850 | 811.4 | 4.5% | 1.6 | 31/46/23 | 0.672 |
 | creamy pasta / large athlete, gaining | matched | High-Protein Tomato Turkey Pasta | 850 | 856.0 | 0.7% | 1.37 | 33/47/20 | 0.489 |
@@ -70,12 +70,12 @@
 | taco bowl / large athlete, gaining | matched | Shrimp Taco Bowl | 850 | 849.0 | 0.1% | 1.6 | 30/49/21 | 0.689 |
 | light soup / large athlete, gaining | matched | Chicken Vegetable Soup Bowl | 850 | 749.7 | 11.8% | 1.6 | 49/37/14 | 0.78 |
 | sushi / large athlete, gaining | matched | Tuna Sushi Bowl | 850 | 848.9 | 0.1% | 1.6 | 33/46/21 | 0.568 |
-| pizza / large athlete, gaining | matched | Chicken Fried Rice | 850 | 874.4 | 2.9% | 1.33 | 42/42/16 | 0.198 |
-| chocolate dessert / large athlete, gaining | matched | Chicken Fried Rice | 850 | 874.4 | 2.9% | 1.33 | 42/42/16 | 0.198 |
+| pizza / large athlete, gaining | fallback | High-Protein Turkey Burger Bowl | 850 | 811.4 | 4.5% | 1.6 | 31/46/23 |  |
+| chocolate dessert / large athlete, gaining | fallback | High-Protein Turkey Burger Bowl | 850 | 811.4 | 4.5% | 1.6 | 31/46/23 |  |
 | chicken fried rice / average man, maintaining [vegan] | matched | Tofu Fried Rice | 809 | 809.5 | 0.1% | 1.28 | 23/46/31 | 0.679 |
-| high-protein burger / average man, maintaining [vegan] | matched | High-Protein Asian Tofu Noodle Bowl | 809 | 815.5 | 0.8% | 1.27 | 24/52/23 | 0.184 |
+| high-protein burger / average man, maintaining [vegan] | fallback | High-Protein Asian Tofu Noodle Bowl | 809 | 815.5 | 0.8% | 1.27 | 24/52/23 |  |
 | creamy pasta / average man, maintaining [vegan] | matched | Lentil Bolognese Pasta | 809 | 794.8 | 1.8% | 1.41 | 22/73/5 | 0.423 |
-| salmon dinner / average man, maintaining [vegan] | matched | High-Protein Asian Tofu Noodle Bowl | 809 | 815.5 | 0.8% | 1.27 | 24/52/23 | 0.181 |
+| salmon dinner / average man, maintaining [vegan] | fallback | High-Protein Asian Tofu Noodle Bowl | 809 | 815.5 | 0.8% | 1.27 | 24/52/23 |  |
 | steak and rice / average man, maintaining [vegan] | matched | High-Protein Asian Tofu Noodle Bowl | 809 | 815.5 | 0.8% | 1.27 | 24/52/23 | 0.506 |
 | spicy curry / average man, maintaining [vegan] | matched | Chickpea Curry Bowl | 809 | 740.6 | 8.5% | 1.6 | 18/70/12 | 0.579 |
 | chicken fried rice / average man, maintaining [hypertension] | matched | Chicken Fried Rice | 809 | 762.9 | 5.7% | 1.27 | 33/46/21 | 1.019 |
@@ -89,7 +89,7 @@
 | creamy pasta / average man, maintaining [kidney disease] | matched | High-Protein Tomato Turkey Pasta | 809 | 802.9 | 0.8% | 1.31 | 33/47/20 | 0.489 |
 | salmon dinner / average man, maintaining [kidney disease] | matched | Salmon Quinoa Plate | 809 | 808.2 | 0.1% | 1.31 | 21/46/33 | 0.569 |
 | steak and rice / average man, maintaining [kidney disease] | matched | Lean Steak Rice Plate | 809 | 794.9 | 1.7% | 1.6 | 41/35/25 | 0.866 |
-| spicy curry / average man, maintaining [kidney disease] | matched | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 | 0.186 |
+| spicy curry / average man, maintaining [kidney disease] | fallback | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 |  |
 | chicken fried rice / average man, maintaining [celiac] | matched | Chicken Fried Rice | 809 | 771.3 | 4.7% | 1.27 | 33/46/21 | 1.019 |
 | high-protein burger / average man, maintaining [celiac] | matched | High-Protein Turkey Burger Bowl | 809 | 809.9 | 0.1% | 1.6 | 28/46/26 | 0.672 |
 | creamy pasta / average man, maintaining [celiac] | matched | High-Protein Tomato Turkey Pasta | 809 | 807.7 | 0.2% | 1.3 | 32/47/21 | 0.489 |
