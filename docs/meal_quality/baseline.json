@@ -2,7 +2,7 @@
   "provenance": {
     "calorie_model_version": "hist_gradient_boosting_deep_v0.1.0",
     "calorie_model_sha256": "33a154b3d5807af1e2dd53ee69dc250e3f9a4429bfed90260e27671eac168c95",
-    "meal_corpus_sha256": "685ae059a59cd5149f9d87dc9bab4ac9464c58ef51b371bbeefe41c4801e002f",
+    "meal_corpus_sha256": "5243924a0a8aab3557d68bff805f00d786dbe8ee30359b84d7e14b873c0c1ac2",
     "meal_count": 34,
     "retriever": "tfidf_vector_retriever_v0.1"
   },
@@ -14,23 +14,23 @@
     },
     "scaled_plans": 72,
     "within_tolerance": 72,
-    "within_calorie_target": 70,
-    "meets_targets": 47,
-    "median_deviation": 0.0075,
-    "p90_deviation": 0.0845,
-    "max_deviation": 0.1287,
-    "rescaled": 2,
-    "scale_clamped": 37,
+    "within_calorie_target": 72,
+    "meets_targets": 72,
+    "median_deviation": 0.0034,
+    "p90_deviation": 0.0343,
+    "max_deviation": 0.0986,
+    "rescaled": 0,
+    "scale_clamped": 27,
     "target_share_of_budget": {
       "min": 0.188,
       "max": 0.292
     },
     "macros_in_range": {
-      "protein": 57,
-      "carbs": 49,
-      "fat": 54
+      "protein": 72,
+      "carbs": 72,
+      "fat": 72
     },
-    "all_macros_in_range": 47,
+    "all_macros_in_range": 72,
     "with_estimated_ingredients": 68,
     "weak_matches": 0,
     "daily_budget_kcal": {
@@ -45,27 +45,27 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 347.0,
-      "calorie_deviation": 0.008571428571428572,
+      "verified_kcal": 363.4,
+      "calorie_deviation": 0.03828571428571422,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 0.54,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
       "scale_clamped": true,
-      "protein_g": 34.9,
+      "protein_g": 25.5,
       "macro_percent": {
-        "protein": 41.35071090047393,
-        "carbs": 42.654028436018955,
-        "fat": 15.995260663507107
+        "protein": 28.53146853146853,
+        "carbs": 45.53846153846154,
+        "fat": 25.93006993006993
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / older sedentary woman, losing",
@@ -101,27 +101,27 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 346.7,
-      "calorie_deviation": 0.009428571428571461,
+      "verified_kcal": 352.0,
+      "calorie_deviation": 0.005714285714285714,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
-      "rescaled": true,
-      "scale_factor": 0.55,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
       "scale_clamped": true,
-      "protein_g": 29.2,
+      "protein_g": 23.1,
       "macro_percent": {
-        "protein": 33.16297558205565,
-        "carbs": 46.90516751845542,
-        "fat": 19.931856899488928
+        "protein": 25.781249999999996,
+        "carbs": 47.098214285714285,
+        "fat": 27.12053571428571
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / older sedentary woman, losing",
@@ -157,27 +157,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 353.4,
-      "calorie_deviation": 0.00971428571428565,
+      "verified_kcal": 349.0,
+      "calorie_deviation": 0.002857142857142857,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 0.7,
-      "scale_clamped": false,
-      "protein_g": 36.4,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 23.0,
       "macro_percent": {
-        "protein": 40.75006996921354,
-        "carbs": 34.81668066050938,
-        "fat": 24.43324937027708
+        "protein": 25.959367945823928,
+        "carbs": 45.59819413092551,
+        "fat": 28.442437923250566
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / older sedentary woman, losing",
@@ -185,27 +185,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 353.9,
-      "calorie_deviation": 0.011142857142857078,
+      "verified_kcal": 348.9,
+      "calorie_deviation": 0.003142857142857208,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 0.75,
-      "scale_clamped": false,
-      "protein_g": 16.5,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 14.1,
       "macro_percent": {
-        "protein": 18.057455540355676,
-        "carbs": 70.36935704514364,
-        "fat": 11.573187414500683
+        "protein": 15.653621981681933,
+        "carbs": 61.615320566194846,
+        "fat": 22.73105745212323
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     },
     {
       "scenario": "breakfast oats / older sedentary woman, losing",
@@ -269,27 +269,27 @@
       "meal_name": "Chicken Vegetable Soup Bowl",
       "daily_budget_kcal": 1200.0,
       "target_meal_kcal": 350,
-      "verified_kcal": 346.3,
-      "calorie_deviation": 0.010571428571428539,
+      "verified_kcal": 349.1,
+      "calorie_deviation": 0.0025714285714285067,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 0.75,
-      "scale_clamped": false,
-      "protein_g": 41.6,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 28.4,
       "macro_percent": {
-        "protein": 48.94117647058823,
-        "carbs": 37.294117647058826,
-        "fat": 13.764705882352942
+        "protein": 32.531500572737684,
+        "carbs": 45.81901489117983,
+        "fat": 21.649484536082475
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.78
+      "retrieval_score": 0.769
     },
     {
       "scenario": "sushi / older sedentary woman, losing",
@@ -381,19 +381,19 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 771.3,
-      "calorie_deviation": 0.04660074165636594,
+      "verified_kcal": 808.8,
+      "calorie_deviation": 0.00024721878862799196,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.27,
+      "scale_factor": 1.11,
       "scale_clamped": false,
-      "protein_g": 61.8,
+      "protein_g": 59.8,
       "macro_percent": {
-        "protein": 32.986389111289036,
-        "carbs": 46.11689351481185,
-        "fat": 20.89671737389912
+        "protein": 30.221099178774484,
+        "carbs": 45.786481364497796,
+        "fat": 23.992419456727735
       },
       "macros_in_range": {
         "protein": true,
@@ -401,7 +401,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / average man, maintaining",
@@ -437,19 +437,19 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 802.9,
-      "calorie_deviation": 0.007540173053152068,
+      "verified_kcal": 798.3,
+      "calorie_deviation": 0.013226205191594618,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.31,
+      "scale_factor": 1.14,
       "scale_clamped": false,
-      "protein_g": 68.0,
+      "protein_g": 55.2,
       "macro_percent": {
-        "protein": 33.30476307089506,
-        "carbs": 46.528713113750456,
-        "fat": 20.166523815354473
+        "protein": 27.15199212985735,
+        "carbs": 45.84358091490408,
+        "fat": 27.00442695523856
       },
       "macros_in_range": {
         "protein": true,
@@ -457,7 +457,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / average man, maintaining",
@@ -493,27 +493,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 794.9,
-      "calorie_deviation": 0.017428924598269495,
+      "verified_kcal": 808.9,
+      "calorie_deviation": 0.00012360939431399598,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 81.9,
+      "scale_factor": 1.37,
+      "scale_clamped": false,
+      "protein_g": 47.5,
       "macro_percent": {
-        "protein": 40.685543964232494,
-        "carbs": 34.724292101341284,
-        "fat": 24.59016393442623
+        "protein": 23.111543607833596,
+        "carbs": 46.12577545310789,
+        "fat": 30.76268093905851
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / average man, maintaining",
@@ -521,27 +521,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 740.6,
-      "calorie_deviation": 0.08454882571075399,
+      "verified_kcal": 815.7,
+      "calorie_deviation": 0.008281829419035902,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 34.6,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 31.8,
       "macro_percent": {
-        "protein": 18.08204860203815,
-        "carbs": 70.39456493336817,
-        "fat": 11.523386464593678
+        "protein": 15.110477548111191,
+        "carbs": 59.016393442622956,
+        "fat": 25.87312900926586
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     },
     {
       "scenario": "breakfast oats / average man, maintaining",
@@ -605,27 +605,27 @@
       "meal_name": "Chicken Vegetable Soup Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 749.7,
-      "calorie_deviation": 0.07330037082818289,
+      "verified_kcal": 806.5,
+      "calorie_deviation": 0.0030902348578491965,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 90.3,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 56.7,
       "macro_percent": {
-        "protein": 49.20980926430518,
-        "carbs": 37.05722070844686,
-        "fat": 13.732970027247957
+        "protein": 28.244084682440846,
+        "carbs": 45.97758405977584,
+        "fat": 25.77833125778331
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.78
+      "retrieval_score": 0.769
     },
     {
       "scenario": "sushi / average man, maintaining",
@@ -717,27 +717,27 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 713.4,
-      "calorie_deviation": 0.03241678726483354,
+      "verified_kcal": 693.6,
+      "calorie_deviation": 0.0037626628075253586,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.08,
+      "scale_factor": 0.95,
       "scale_clamped": false,
-      "protein_g": 71.9,
+      "protein_g": 48.2,
       "macro_percent": {
-        "protein": 41.55468862881087,
-        "carbs": 42.19043490825025,
-        "fat": 16.25487646293888
+        "protein": 28.394698085419734,
+        "carbs": 45.89101620029456,
+        "fat": 25.714285714285715
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / active woman, maintaining",
@@ -773,19 +773,19 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 692.4,
-      "calorie_deviation": 0.0020260492040520654,
+      "verified_kcal": 688.8,
+      "calorie_deviation": 0.003183791606367649,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.11,
+      "scale_factor": 0.98,
       "scale_clamped": false,
-      "protein_g": 58.4,
+      "protein_g": 45.7,
       "macro_percent": {
-        "protein": 33.153562304853814,
-        "carbs": 46.66477434005109,
-        "fat": 20.18166335509509
+        "protein": 26.04730692504987,
+        "carbs": 45.99601025933314,
+        "fat": 27.956682815616983
       },
       "macros_in_range": {
         "protein": true,
@@ -793,7 +793,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / active woman, maintaining",
@@ -829,27 +829,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 690.4,
-      "calorie_deviation": 0.0008683068017366465,
+      "verified_kcal": 689.4,
+      "calorie_deviation": 0.0023154848046310025,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.38,
+      "scale_factor": 1.17,
       "scale_clamped": false,
-      "protein_g": 71.3,
+      "protein_g": 44.3,
       "macro_percent": {
-        "protein": 40.84789458607848,
-        "carbs": 34.66055571469493,
-        "fat": 24.49154969922658
+        "protein": 25.292606337425063,
+        "carbs": 46.18898087353697,
+        "fat": 28.518412789037967
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / active woman, maintaining",
@@ -857,27 +857,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 691.4,
-      "calorie_deviation": 0.0005788712011577095,
+      "verified_kcal": 667.3,
+      "calorie_deviation": 0.034298118668596306,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.48,
+      "scale_factor": 1.25,
       "scale_clamped": false,
-      "protein_g": 32.2,
+      "protein_g": 27.1,
       "macro_percent": {
-        "protein": 18.008948545861298,
-        "carbs": 70.41387024608501,
-        "fat": 11.577181208053691
+        "protein": 15.735230076934243,
+        "carbs": 61.140949339526784,
+        "fat": 23.123820583538972
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     },
     {
       "scenario": "breakfast oats / active woman, maintaining",
@@ -941,27 +941,27 @@
       "meal_name": "Chicken Vegetable Soup Bowl",
       "daily_budget_kcal": 2469.2,
       "target_meal_kcal": 691,
-      "verified_kcal": 689.3,
-      "calorie_deviation": 0.0024602026049204712,
+      "verified_kcal": 695.5,
+      "calorie_deviation": 0.006512301013024602,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.48,
+      "scale_factor": 1.24,
       "scale_clamped": false,
-      "protein_g": 82.9,
+      "protein_g": 54.1,
       "macro_percent": {
-        "protein": 49.08956328645448,
-        "carbs": 37.187268689859366,
-        "fat": 13.723168023686158
+        "protein": 31.366864763009133,
+        "carbs": 45.80373967241629,
+        "fat": 22.829395564574575
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.78
+      "retrieval_score": 0.769
     },
     {
       "scenario": "sushi / active woman, maintaining",
@@ -1053,27 +1053,27 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 874.4,
-      "calorie_deviation": 0.02870588235294115,
+      "verified_kcal": 849.6,
+      "calorie_deviation": 0.0004705882352940909,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.33,
+      "scale_factor": 1.17,
       "scale_clamped": false,
-      "protein_g": 88.2,
+      "protein_g": 63.0,
       "macro_percent": {
-        "protein": 41.6135881104034,
-        "carbs": 42.462845010615716,
-        "fat": 15.923566878980893
+        "protein": 30.32490974729242,
+        "carbs": 46.064981949458485,
+        "fat": 23.6101083032491
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / large athlete, gaining",
@@ -1109,27 +1109,27 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 856.0,
-      "calorie_deviation": 0.007058823529411765,
+      "verified_kcal": 857.2,
+      "calorie_deviation": 0.00847058823529417,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.37,
+      "scale_factor": 1.2,
       "scale_clamped": false,
-      "protein_g": 71.7,
+      "protein_g": 59.9,
       "macro_percent": {
-        "protein": 32.98068077276909,
-        "carbs": 47.148114075436986,
-        "fat": 19.87120515179393
+        "protein": 27.46131805157593,
+        "carbs": 46.02865329512894,
+        "fat": 26.51002865329513
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
-        "fat": false
+        "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / large athlete, gaining",
@@ -1165,27 +1165,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 794.9,
-      "calorie_deviation": 0.06482352941176474,
+      "verified_kcal": 848.7,
+      "calorie_deviation": 0.0015294117647058289,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 81.9,
+      "scale_factor": 1.44,
+      "scale_clamped": false,
+      "protein_g": 50.7,
       "macro_percent": {
-        "protein": 40.685543964232494,
-        "carbs": 34.724292101341284,
-        "fat": 24.59016393442623
+        "protein": 23.556742943431296,
+        "carbs": 46.230688814031836,
+        "fat": 30.212568242536882
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / large athlete, gaining",
@@ -1193,27 +1193,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 740.6,
-      "calorie_deviation": 0.12870588235294114,
+      "verified_kcal": 848.7,
+      "calorie_deviation": 0.0015294117647058289,
       "within_tolerance": true,
-      "within_calorie_target": false,
-      "meets_targets": false,
+      "within_calorie_target": true,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 34.6,
+      "scale_factor": 1.53,
+      "scale_clamped": false,
+      "protein_g": 33.4,
       "macro_percent": {
-        "protein": 18.08204860203815,
-        "carbs": 70.39456493336817,
-        "fat": 11.523386464593678
+        "protein": 15.247660351517917,
+        "carbs": 59.48413604199955,
+        "fat": 25.268203606482537
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     },
     {
       "scenario": "breakfast oats / large athlete, gaining",
@@ -1277,27 +1277,27 @@
       "meal_name": "Chicken Vegetable Soup Bowl",
       "daily_budget_kcal": 4521.1,
       "target_meal_kcal": 850,
-      "verified_kcal": 749.7,
-      "calorie_deviation": 0.11799999999999995,
+      "verified_kcal": 849.4,
+      "calorie_deviation": 0.0007058823529412032,
       "within_tolerance": true,
-      "within_calorie_target": false,
-      "meets_targets": false,
+      "within_calorie_target": true,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 90.3,
+      "scale_factor": 1.53,
+      "scale_clamped": false,
+      "protein_g": 60.9,
       "macro_percent": {
-        "protein": 49.20980926430518,
-        "carbs": 37.05722070844686,
-        "fat": 13.732970027247957
+        "protein": 28.821580690960722,
+        "carbs": 46.04827259820161,
+        "fat": 25.130146710837675
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.78
+      "retrieval_score": 0.769
     },
     {
       "scenario": "sushi / large athlete, gaining",
@@ -1409,7 +1409,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.679
+      "retrieval_score": 0.683
     },
     {
       "scenario": "high-protein burger / average man, maintaining [vegan]",
@@ -1445,27 +1445,27 @@
       "meal_name": "Lentil Bolognese Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 794.8,
-      "calorie_deviation": 0.017552533992583493,
+      "verified_kcal": 809.0,
+      "calorie_deviation": 0.0,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.41,
+      "scale_factor": 1.22,
       "scale_clamped": false,
-      "protein_g": 44.0,
+      "protein_g": 37.8,
       "macro_percent": {
-        "protein": 21.589793915603533,
-        "carbs": 73.11089303238468,
-        "fat": 5.299313052011776
+        "protein": 18.219062537655137,
+        "carbs": 61.06759850584408,
+        "fat": 20.713338956500785
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.423
+      "retrieval_score": 0.416
     },
     {
       "scenario": "salmon dinner / average man, maintaining [vegan]",
@@ -1529,27 +1529,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 740.6,
-      "calorie_deviation": 0.08454882571075399,
+      "verified_kcal": 815.7,
+      "calorie_deviation": 0.008281829419035902,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 34.6,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 31.8,
       "macro_percent": {
-        "protein": 18.08204860203815,
-        "carbs": 70.39456493336817,
-        "fat": 11.523386464593678
+        "protein": 15.110477548111191,
+        "carbs": 59.016393442622956,
+        "fat": 25.87312900926586
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.579
+      "retrieval_score": 0.571
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [hypertension]",
@@ -1557,19 +1557,19 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 762.9,
-      "calorie_deviation": 0.056983930778739214,
+      "verified_kcal": 803.4,
+      "calorie_deviation": 0.006922126081582229,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.27,
+      "scale_factor": 1.11,
       "scale_clamped": false,
-      "protein_g": 61.0,
+      "protein_g": 58.5,
       "macro_percent": {
-        "protein": 32.96851776786921,
-        "carbs": 45.9937846236995,
-        "fat": 21.037697608431294
+        "protein": 29.839326702371842,
+        "carbs": 46.05967865340474,
+        "fat": 24.100994644223412
       },
       "macros_in_range": {
         "protein": true,
@@ -1577,7 +1577,7 @@
         "fat": true
       },
       "estimated_ingredients": 2,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / average man, maintaining [hypertension]",
@@ -1613,19 +1613,19 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 802.9,
-      "calorie_deviation": 0.007540173053152068,
+      "verified_kcal": 798.3,
+      "calorie_deviation": 0.013226205191594618,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.31,
+      "scale_factor": 1.14,
       "scale_clamped": false,
-      "protein_g": 68.0,
+      "protein_g": 55.2,
       "macro_percent": {
-        "protein": 33.30476307089506,
-        "carbs": 46.528713113750456,
-        "fat": 20.166523815354473
+        "protein": 27.15199212985735,
+        "carbs": 45.84358091490408,
+        "fat": 27.00442695523856
       },
       "macros_in_range": {
         "protein": true,
@@ -1633,7 +1633,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / average man, maintaining [hypertension]",
@@ -1669,27 +1669,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 794.9,
-      "calorie_deviation": 0.017428924598269495,
+      "verified_kcal": 808.9,
+      "calorie_deviation": 0.00012360939431399598,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 81.9,
+      "scale_factor": 1.37,
+      "scale_clamped": false,
+      "protein_g": 47.5,
       "macro_percent": {
-        "protein": 40.685543964232494,
-        "carbs": 34.724292101341284,
-        "fat": 24.59016393442623
+        "protein": 23.111543607833596,
+        "carbs": 46.12577545310789,
+        "fat": 30.76268093905851
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / average man, maintaining [hypertension]",
@@ -1697,27 +1697,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 740.6,
-      "calorie_deviation": 0.08454882571075399,
+      "verified_kcal": 815.7,
+      "calorie_deviation": 0.008281829419035902,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 34.6,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 31.8,
       "macro_percent": {
-        "protein": 18.08204860203815,
-        "carbs": 70.39456493336817,
-        "fat": 11.523386464593678
+        "protein": 15.110477548111191,
+        "carbs": 59.016393442622956,
+        "fat": 25.87312900926586
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [kidney disease]",
@@ -1725,27 +1725,27 @@
       "meal_name": "Chicken Vegetable Soup Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 749.7,
-      "calorie_deviation": 0.07330037082818289,
+      "verified_kcal": 806.5,
+      "calorie_deviation": 0.0030902348578491965,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 90.3,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 56.7,
       "macro_percent": {
-        "protein": 49.20980926430518,
-        "carbs": 37.05722070844686,
-        "fat": 13.732970027247957
+        "protein": 28.244084682440846,
+        "carbs": 45.97758405977584,
+        "fat": 25.77833125778331
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
-        "fat": false
+        "protein": true,
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.54
+      "retrieval_score": 0.535
     },
     {
       "scenario": "high-protein burger / average man, maintaining [kidney disease]",
@@ -1781,19 +1781,19 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 802.9,
-      "calorie_deviation": 0.007540173053152068,
+      "verified_kcal": 798.3,
+      "calorie_deviation": 0.013226205191594618,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.31,
+      "scale_factor": 1.14,
       "scale_clamped": false,
-      "protein_g": 68.0,
+      "protein_g": 55.2,
       "macro_percent": {
-        "protein": 33.30476307089506,
-        "carbs": 46.528713113750456,
-        "fat": 20.166523815354473
+        "protein": 27.15199212985735,
+        "carbs": 45.84358091490408,
+        "fat": 27.00442695523856
       },
       "macros_in_range": {
         "protein": true,
@@ -1801,7 +1801,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / average man, maintaining [kidney disease]",
@@ -1837,27 +1837,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 794.9,
-      "calorie_deviation": 0.017428924598269495,
+      "verified_kcal": 808.9,
+      "calorie_deviation": 0.00012360939431399598,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 81.9,
+      "scale_factor": 1.37,
+      "scale_clamped": false,
+      "protein_g": 47.5,
       "macro_percent": {
-        "protein": 40.685543964232494,
-        "carbs": 34.724292101341284,
-        "fat": 24.59016393442623
+        "protein": 23.111543607833596,
+        "carbs": 46.12577545310789,
+        "fat": 30.76268093905851
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / average man, maintaining [kidney disease]",
@@ -1893,19 +1893,19 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 771.3,
-      "calorie_deviation": 0.04660074165636594,
+      "verified_kcal": 808.8,
+      "calorie_deviation": 0.00024721878862799196,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.27,
+      "scale_factor": 1.11,
       "scale_clamped": false,
-      "protein_g": 61.8,
+      "protein_g": 59.8,
       "macro_percent": {
-        "protein": 32.986389111289036,
-        "carbs": 46.11689351481185,
-        "fat": 20.89671737389912
+        "protein": 30.221099178774484,
+        "carbs": 45.786481364497796,
+        "fat": 23.992419456727735
       },
       "macros_in_range": {
         "protein": true,
@@ -1913,7 +1913,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.019
+      "retrieval_score": 1.001
     },
     {
       "scenario": "high-protein burger / average man, maintaining [celiac]",
@@ -1949,19 +1949,19 @@
       "meal_name": "High-Protein Tomato Turkey Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 807.7,
-      "calorie_deviation": 0.001606922126081526,
+      "verified_kcal": 801.4,
+      "calorie_deviation": 0.009394313967861586,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.3,
+      "scale_factor": 1.14,
       "scale_clamped": false,
-      "protein_g": 63.7,
+      "protein_g": 50.8,
       "macro_percent": {
-        "protein": 31.663974151857833,
-        "carbs": 47.42139927923449,
-        "fat": 20.914626568907668
+        "protein": 25.384134915677702,
+        "carbs": 46.6208619612742,
+        "fat": 27.995003123048097
       },
       "macros_in_range": {
         "protein": true,
@@ -1969,7 +1969,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.489
+      "retrieval_score": 0.48
     },
     {
       "scenario": "salmon dinner / average man, maintaining [celiac]",
@@ -2005,27 +2005,27 @@
       "meal_name": "Lean Steak Rice Plate",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 794.9,
-      "calorie_deviation": 0.017428924598269495,
+      "verified_kcal": 808.9,
+      "calorie_deviation": 0.00012360939431399598,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 81.9,
+      "scale_factor": 1.37,
+      "scale_clamped": false,
+      "protein_g": 47.5,
       "macro_percent": {
-        "protein": 40.685543964232494,
-        "carbs": 34.724292101341284,
-        "fat": 24.59016393442623
+        "protein": 23.111543607833596,
+        "carbs": 46.12577545310789,
+        "fat": 30.76268093905851
       },
       "macros_in_range": {
-        "protein": false,
-        "carbs": false,
+        "protein": true,
+        "carbs": true,
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.866
+      "retrieval_score": 0.853
     },
     {
       "scenario": "spicy curry / average man, maintaining [celiac]",
@@ -2033,27 +2033,27 @@
       "meal_name": "Chickpea Curry Bowl",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 740.6,
-      "calorie_deviation": 0.08454882571075399,
+      "verified_kcal": 815.7,
+      "calorie_deviation": 0.008281829419035902,
       "within_tolerance": true,
       "within_calorie_target": true,
-      "meets_targets": false,
+      "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.6,
-      "scale_clamped": true,
-      "protein_g": 34.6,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 31.8,
       "macro_percent": {
-        "protein": 18.08204860203815,
-        "carbs": 70.39456493336817,
-        "fat": 11.523386464593678
+        "protein": 15.110477548111191,
+        "carbs": 59.016393442622956,
+        "fat": 25.87312900926586
       },
       "macros_in_range": {
         "protein": true,
-        "carbs": false,
-        "fat": false
+        "carbs": true,
+        "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.452
+      "retrieval_score": 0.445
     }
   ],
   "guardrails": [

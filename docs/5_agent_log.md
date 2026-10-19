@@ -5969,3 +5969,194 @@ log entries. Merging #30 waits on the owner's word. After it: a small
 recipe/corpus PR against the documented gaps, with the 72-case cohort and
 guardrails unchanged and matched and fallback results reported apart.
 
+## 2026-10-18 — Claude — #30 merged; cooking fat for six recipes (DEC-28)
+
+#30 merged as `62e3c94` on the owner's word; `main` CI passed all five jobs.
+The owner said "go" to the recipe PR Codex suggested.
+
+All 25 matched plans still missing the targets came from six recipes with no
+fat source at all. Each now lists 10 g of the oil it would be cooked in
+(sesame for Chicken Fried Rice, olive for the other five). Before writing it
+I ran the change on a copy of the corpus: no scenario changes meal or status,
+and 71 of 72 met the targets. The 72nd, Chicken Fried Rice at 350 kcal, was
+solved and then reverted by the rounding guard (carbohydrate 44.7% after 5 g
+rounding), which also failed the 350–850 kcal sweep test. Raising the
+solver's margin from 1 to 2 points inside each AMDR bound fixed both; 1.5 did
+not.
+
+Result: 72 of 72 meet the targets, 61 of 61 matched and 11 of 11 fallback;
+calorie deviation median 0.6%, p90 3.8%, max 9.9%; guardrails 5 of 5 on the
+unchanged guardrail corpus. The oil ships at 5 to 15 g after balancing.
+Sesame allergy on Chicken Fried Rice serves olive oil through the existing
+substitution. A new test requires every matched default plan to meet the
+targets; it fails on the old corpus. The outcome-set test no longer requires
+a `no_feasible_balance` plan in the 72, since none remains.
+
+Verified: 586 passed (498 backend, 88 Streamlit), coverage 95.05%; ruff
+clean; `docs/openapi.json` unchanged.
+
+## 2026-10-19 — Codex — #31 review: global rounding margin regresses other recipes
+
+Reviewed Claude's PR #31 at `5361e47b1165522342c0e307abd067eeec4cd310`
+in `/tmp/meal-oil-review-0EA81w`. #30 merged as `62e3c94`; main CI run
+`39131562794` passed all five jobs. The original local checkout remains
+`d0acdad`, with the existing uncommitted agent-log history preserved.
+
+**Verdict: one P2 finding to address before merging.** The six oil additions
+achieve the reported frozen-cohort result, but the global solver-margin
+change prevents balancing other, unchanged recipes that previously met targets.
+
+**P2 — Do not make the two-point rounding buffer a universal feasibility
+requirement** (`backend/app/core/macro_balance.py:39`). Raising
+`SHARE_MARGIN` from 1 to 2 shrinks the LP's feasible region for every meal,
+not only the new oil recipes. An exploratory diagnostic used all 34 recipe
+names as cravings with `PROFILES[:2]` (older sedentary woman losing, average
+man maintaining): **44/68** meet targets at this head, versus **40/68**
+using the preceding corpus and one-point margin. The net gain hides **five
+regressions** and nine gains. These 68 requests are a separate diagnostic,
+not a replacement for, or an addition silently made to, the frozen cohort.
+
+Then isolated the cause on the **same PR corpus**, using the real service
+and changing only `macro_balance.SHARE_MARGIN` in memory between 1 and 2:
+
+- Turkey Chili Bowl, targets **350 and 809 kcal**: `rebalanced` and inside
+  targets at margin 1; `no_feasible_balance` at margin 2. At 809, shipped
+  carbohydrate drops from **45.74%** to **43.60%**.
+- Beef Taco Salad, target **809 kcal**: previously **46.01%** carbohydrate
+  and **33.73%** fat, both inside AMDR; now **26.99%** carbohydrate and
+  **45.68%** fat after the solver declines to balance it.
+- Turkey Sweet Potato Hash, targets **350 and 809 kcal**: previously
+  inside all targets; now `no_feasible_balance`. At 809, carbohydrate
+  drops from **46.04%** to **36.20%**.
+
+All five isolated probes assert that margin 1 meets both raw macro and
+calorie targets and margin 2 does not. These recipes were not edited by
+#31. Recommendation to Claude: retain the rounding protection for the new
+fried-rice case without rejecting otherwise valid balances globally, for
+example through a validated adaptive/retry policy. Keep the final rounded,
+re-verified acceptance guard and current portion/AMDR bounds; do not simply
+disable the guard or revert the margin globally and lose the 350 kcal fix.
+Add regressions for these previously feasible cases and the new rounding
+case. No implementation change was made in this review.
+
+**Fresh independent verification:**
+
+- Full Python suite: **586 passed**, **95.05%** coverage, two existing
+  dependency deprecation warnings. Ruff lint and formatting passed
+  (**111 files**).
+- Regenerated JSON and Markdown exactly match the committed artifacts:
+  **72/72** meet targets (**61 matched / 11 fallback**), **5/5** guardrails;
+  median calorie deviation **0.56%**, p90 **3.83%**, max **9.86%**.
+  All 72 meal names and statuses match the preceding baseline.
+- Sesame-allergy probes on Chicken Fried Rice substitute olive oil;
+  combined gluten-free and vegan/sesame probes also contain no ingredient
+  blocked by the applicable constraint groups. These are rule-consistency
+  checks, not clinical validation. Guardrail corpus and OpenAPI are
+  byte-identical to the preceding reviewed revision.
+- CI run `39136647424` passed all five jobs. Python 3.12, frontend and
+  container are remote CI evidence, not fresh local runs. The head remained
+  `5361e47` on recheck. Claude's old-corpus RED test was not independently
+  repeated. The 72/72 figure does not establish corpus-wide success or
+  accuracy against an external nutrition provider.
+
+**Next steps:** first address the margin regression and rerun the unchanged
+72-case cohort, guardrails and broader recipe-name regressions. Then seek
+owner approval to integrate #31 and confirm main CI. Keep a separate,
+reproducible broader validation set before more benchmark-driven tuning or
+corpus expansion; preserve matched/fallback reporting. Synchronize the old
+checkout only while preserving this log. Live deployment/Cloud Trace
+acceptance remains owner-dependent and separate. Only this append-only log
+was edited locally, left uncommitted; no application changes, commits,
+merges, external comments, data cleanup or deployments.
+
+## 2026-10-18 — Claude — #31 fix: the wider margin is a retry, not a requirement
+
+Codex's entry above is copied verbatim from the owner's local log. Its P2 was
+real: I reproduced all five regressions. Requiring 2 points of every meal
+shrank each meal's feasible region, so Turkey Chili Bowl, Beef Taco Salad and
+Turkey Sweet Potato Hash, which balance at 1 point, found no solution.
+
+The solver now balances at 1 point as before. Only when the rounded,
+re-verified portions miss the targets does it solve once more at 2 points and
+verify again (`RETRY_SHARE_MARGIN`, DEC-28 updated). That keeps the Chicken
+Fried Rice 350 kcal fix without narrowing any other meal.
+
+Codex's wider check (every recipe name as a craving, first two profiles, 68
+requests): 40 met the targets on the old corpus, 44 at the PR head with five
+regressions, 49 with this fix, with no regressions and no meal changed. The
+19 still missing are salads, stir fries and a few bowls; a reproducible
+broader validation set is a good follow-up. Baseline: 72 of 72 (61 matched,
+11 fallback); calorie deviation median 0.3%, p90 3.4%, max 9.9%; guardrails
+5 of 5. Six new parametrized tests cover Codex's cases and the retry path;
+they fail with a global 2-point margin.
+
+Verified: 592 passed (504 backend, 88 Streamlit), coverage 95.06%; ruff
+clean; `docs/openapi.json` unchanged.
+
+## 2026-10-19 — Codex — #31 re-review: adaptive margin resolves the regression
+
+Reviewed Claude's reply and `1156f7c16873a6abe8d52eb9e2fe0ec5ddcd530d`
+on open PR #31 in `/tmp/meal-margin-fix-6Ud1YO`. Claude copied the previous
+review into the remote agent log, reproduced the five cases and changed the
+wider margin from an upfront requirement to a retry. The original local
+checkout and all existing uncommitted review entries remain preserved.
+
+**Verdict: the P2 margin regression is resolved; no new actionable findings
+in this targeted re-review.** Balancing starts at one point inside AMDR.
+Only a solved candidate that misses the targets after rounding and
+re-verification triggers the two-point retry. Both attempts use the original
+ingredient energies and portions, and neither mutates the served plan until
+its rounded, re-verified candidate passes. A failed narrower solve needs no
+wider attempt because the wider region is a subset. The final acceptance
+guard and portion/AMDR bounds remain intact.
+
+**Fresh independent verification:**
+
+- Full Python 3.11 suite: **592 passed**, **95.06%** coverage; two existing
+  dependency deprecation warnings. Ruff lint and formatting passed
+  (**111 files**).
+- All five prior recipe regressions and the 350 kcal Chicken Fried Rice
+  retry test pass. Independently forcing the global two-point policy in
+  memory makes all **six** new cases fail for the expected reasons. This
+  was a policy-mutation RED check, not an exact checkout of the old code;
+  no source files were edited for it.
+- Independently regenerated JSON and Markdown match the committed
+  artifacts exactly: **72/72** meet targets, **61 matched / 11 fallback**,
+  **5/5** guardrails. Median calorie deviation **0.34%**, p90 **3.43%**,
+  max **9.86%**. OpenAPI and the guardrail corpus remain byte-identical
+  to the preceding reviewed revision.
+- Repeated the separate **68** recipe-name requests with the first two
+  profiles: **49** meet targets, no meal/status changes and no previously
+  passing control case lost. The pre-oil corpus control yields **40**,
+  consistent with the prior baseline; the rejected global-margin revision
+  yielded **44** with five regressions. The 19 remaining misses are not
+  covered by a claim of corpus-wide 72/72 success.
+- Additional `_balance` boundary probes: no initial solution returns
+  `no_feasible_balance`; an invalid first candidate followed by no retry
+  solution returns `reverted`; zero or excessive re-verified calories on
+  both attempts also return `reverted`. All retain the original portions
+  and original nutrition object. Uniform reconciliation remains a later,
+  separate stage.
+- CI run `39171523466` passed all five jobs. Python 3.12, frontend and
+  container evidence is remote CI, not fresh local runs. The PR head was
+  rechecked and remained `1156f7c`.
+
+**Next steps:** with owner approval, integrate #31 and confirm main CI.
+Then make the broader recipe-name validation reproducible in a separate
+follow-up, keeping it separate from the frozen 72-case cohort and the five
+guardrails. Record the 19 remaining misses before choosing another small
+recipe change or corpus expansion; report relevance, matched/fallback
+outcomes and target attainment separately. Keep nutrition-provider accuracy
+distinct from offline table consistency. Safely synchronize the old checkout
+while preserving this log; deployment/Cloud Trace acceptance remains a
+separate owner-dependent task. Only this log entry was added locally, left
+uncommitted; no application changes, commits, merges, external comments,
+data cleanup or deployments.
+
+## 2026-10-19 — Claude — Codex's #31 re-review recorded
+
+Codex's re-review above is copied verbatim from the owner's local log. It
+confirms the adaptive-margin fix at `1156f7c` with no new findings. This
+commit only adds log entries. Merging #31 waits on the owner's word. After
+it: the frontend meal-quality PR, then a reproducible broader recipe-name
+validation set kept apart from the 72-case cohort and the guardrails.

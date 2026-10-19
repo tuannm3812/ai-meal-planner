@@ -38,6 +38,10 @@
       {
         "item_name": "soy sauce",
         "base_quantity_grams": 15
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 10
       }
     ]
   },
@@ -151,6 +155,10 @@
       {
         "item_name": "baby spinach",
         "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
       }
     ]
   },
@@ -500,6 +508,10 @@
       {
         "item_name": "tomato",
         "base_quantity_grams": 80
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
       }
     ]
   },
@@ -657,6 +669,10 @@
       {
         "item_name": "baby spinach",
         "base_quantity_grams": 80
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
       }
     ]
   },
@@ -692,6 +708,10 @@
       {
         "item_name": "baby spinach",
         "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
       }
     ]
   },
@@ -1104,6 +1124,10 @@
       {
         "item_name": "low sodium chicken broth",
         "base_quantity_grams": 250
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
       }
     ]
   },

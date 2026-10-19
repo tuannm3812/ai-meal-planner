@@ -37,6 +37,12 @@ MIN_FACTOR = 0.5
 MAX_FACTOR = 2.0
 CALORIE_BAND = 0.05
 SHARE_MARGIN = 1.0
+RETRY_SHARE_MARGIN = 2.0
+"""A wider margin, tried only when portions solved at ``SHARE_MARGIN`` miss the
+targets once rounded and re-verified. A 350 kcal Chicken Fried Rice with 10 g of
+oil rounded to 44.7% carbohydrate at 1 point (DEC-28); requiring 2 points of
+every meal instead left Turkey Chili Bowl, Beef Taco Salad and Turkey Sweet
+Potato Hash with no solution (Codex, 2026-10-19)."""
 CALORIE_WEIGHT = 10.0
 """A 10% calorie miss costs as much as changing one portion by its whole size."""
 
@@ -84,18 +90,23 @@ def in_amdr(percentages: dict[str, float]) -> dict[str, bool]:
 
 
 def balance_factors(
-    ingredients: Sequence[IngredientEnergy], target_calories: float
+    ingredients: Sequence[IngredientEnergy],
+    target_calories: float,
+    share_margin: float | None = None,
 ) -> list[float] | None:
     """Find per-ingredient factors that put the meal on target and inside AMDR.
 
     Args:
         ingredients: Each ingredient's energy at its current portion.
         target_calories: The meal's calorie target.
+        share_margin: Points inside each AMDR bound to aim for; ``SHARE_MARGIN``
+            when omitted.
 
     Returns:
         One factor per ingredient, in order, or None when no factors within
         the bounds satisfy every constraint.
     """
+    margin = SHARE_MARGIN if share_margin is None else share_margin
     count = len(ingredients)
     if count == 0 or target_calories <= 0:
         return None
@@ -122,8 +133,8 @@ def balance_factors(
     add(calories, 1.0, u=-1.0)  # deviation above the target <= u
     add(-calories, -1.0, u=-1.0)  # deviation below the target <= u
     for macro, (low, high) in AMDR_PERCENT.items():
-        low_share = (low + SHARE_MARGIN) / 100
-        high_share = (high - SHARE_MARGIN) / 100
+        low_share = (low + margin) / 100
+        high_share = (high - margin) / 100
         add(macro_kcal[macro] - high_share * energy, 0.0)  # share <= high
         add(low_share * energy - macro_kcal[macro], 0.0)  # share >= low
     identity = np.eye(count)
