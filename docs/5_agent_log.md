@@ -6092,3 +6092,71 @@ they fail with a global 2-point margin.
 
 Verified: 592 passed (504 backend, 88 Streamlit), coverage 95.06%; ruff
 clean; `docs/openapi.json` unchanged.
+
+## 2026-10-19 — Codex — #31 re-review: adaptive margin resolves the regression
+
+Reviewed Claude's reply and `1156f7c16873a6abe8d52eb9e2fe0ec5ddcd530d`
+on open PR #31 in `/tmp/meal-margin-fix-6Ud1YO`. Claude copied the previous
+review into the remote agent log, reproduced the five cases and changed the
+wider margin from an upfront requirement to a retry. The original local
+checkout and all existing uncommitted review entries remain preserved.
+
+**Verdict: the P2 margin regression is resolved; no new actionable findings
+in this targeted re-review.** Balancing starts at one point inside AMDR.
+Only a solved candidate that misses the targets after rounding and
+re-verification triggers the two-point retry. Both attempts use the original
+ingredient energies and portions, and neither mutates the served plan until
+its rounded, re-verified candidate passes. A failed narrower solve needs no
+wider attempt because the wider region is a subset. The final acceptance
+guard and portion/AMDR bounds remain intact.
+
+**Fresh independent verification:**
+
+- Full Python 3.11 suite: **592 passed**, **95.06%** coverage; two existing
+  dependency deprecation warnings. Ruff lint and formatting passed
+  (**111 files**).
+- All five prior recipe regressions and the 350 kcal Chicken Fried Rice
+  retry test pass. Independently forcing the global two-point policy in
+  memory makes all **six** new cases fail for the expected reasons. This
+  was a policy-mutation RED check, not an exact checkout of the old code;
+  no source files were edited for it.
+- Independently regenerated JSON and Markdown match the committed
+  artifacts exactly: **72/72** meet targets, **61 matched / 11 fallback**,
+  **5/5** guardrails. Median calorie deviation **0.34%**, p90 **3.43%**,
+  max **9.86%**. OpenAPI and the guardrail corpus remain byte-identical
+  to the preceding reviewed revision.
+- Repeated the separate **68** recipe-name requests with the first two
+  profiles: **49** meet targets, no meal/status changes and no previously
+  passing control case lost. The pre-oil corpus control yields **40**,
+  consistent with the prior baseline; the rejected global-margin revision
+  yielded **44** with five regressions. The 19 remaining misses are not
+  covered by a claim of corpus-wide 72/72 success.
+- Additional `_balance` boundary probes: no initial solution returns
+  `no_feasible_balance`; an invalid first candidate followed by no retry
+  solution returns `reverted`; zero or excessive re-verified calories on
+  both attempts also return `reverted`. All retain the original portions
+  and original nutrition object. Uniform reconciliation remains a later,
+  separate stage.
+- CI run `39171523466` passed all five jobs. Python 3.12, frontend and
+  container evidence is remote CI, not fresh local runs. The PR head was
+  rechecked and remained `1156f7c`.
+
+**Next steps:** with owner approval, integrate #31 and confirm main CI.
+Then make the broader recipe-name validation reproducible in a separate
+follow-up, keeping it separate from the frozen 72-case cohort and the five
+guardrails. Record the 19 remaining misses before choosing another small
+recipe change or corpus expansion; report relevance, matched/fallback
+outcomes and target attainment separately. Keep nutrition-provider accuracy
+distinct from offline table consistency. Safely synchronize the old checkout
+while preserving this log; deployment/Cloud Trace acceptance remains a
+separate owner-dependent task. Only this log entry was added locally, left
+uncommitted; no application changes, commits, merges, external comments,
+data cleanup or deployments.
+
+## 2026-10-19 — Claude — Codex's #31 re-review recorded
+
+Codex's re-review above is copied verbatim from the owner's local log. It
+confirms the adaptive-margin fix at `1156f7c` with no new findings. This
+commit only adds log entries. Merging #31 waits on the owner's word. After
+it: the frontend meal-quality PR, then a reproducible broader recipe-name
+validation set kept apart from the 72-case cohort and the guardrails.
