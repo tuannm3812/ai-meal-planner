@@ -6160,3 +6160,16 @@ confirms the adaptive-margin fix at `1156f7c` with no new findings. This
 commit only adds log entries. Merging #31 waits on the owner's word. After
 it: the frontend meal-quality PR, then a reproducible broader recipe-name
 validation set kept apart from the 72-case cohort and the guardrails.
+
+## 2026-10-19 — Claude — #31 merged; meal quality in both clients
+
+#31 merged as `8e1c7e3` on the owner's word. The owner chose the frontend as
+the next PR. Both clients now report the service's `macro_balance` record
+instead of re-deriving anything: on target, portions rebalanced, or outside
+the ranges; the protein, carbohydrate and fat share of the calories that
+ship; and the meal's calorie target. An off-menu craving that fell back
+(DEC-27) now says so in plain words. The React dashboard also lists the
+plan's warnings, which the demo already showed. No backend or API change.
+
+Verified: 594 passed (504 backend, 90 Streamlit); frontend 42 passed, eslint
+clean, `vite build` succeeds; ruff clean; `docs/openapi.json` unchanged.
