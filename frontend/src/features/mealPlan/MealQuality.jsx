@@ -2,7 +2,8 @@ import SectionCard from '../../components/ui/SectionCard'
 
 // The service decides whether a plan meets the targets (DEC-25, DEC-26); the
 // dashboard only reports its `macro_balance` record, so the ranges live in
-// one place.
+// one place. That record describes the balancing step, which can be followed
+// by a calorie rescale, so the split shown comes from the served nutrition.
 const OUTCOMES = {
   in_range: {
     label: 'On target',
@@ -16,15 +17,17 @@ const OUTCOMES = {
   },
   no_feasible_balance: {
     label: 'Outside the ranges',
-    body: "This meal's ingredients cannot be resized into the recommended ranges.",
+    body: "This meal's ingredients could not be resized into the recommended ranges.",
     tone: 'bg-amber-50 text-amber-700',
   },
   reverted: {
     label: 'Outside the ranges',
-    body: 'Resized portions missed the ranges once checked, so the original portions are shown.',
+    body: 'Resized portions missed the ranges once checked, so they were not used.',
     tone: 'bg-amber-50 text-amber-700',
   },
 }
+
+const KCAL_PER_GRAM = { protein: 4, carbs: 4, fat: 9 }
 
 const SPLIT = [
   { key: 'protein', label: 'Protein', dot: 'bg-sky-500' },
@@ -32,12 +35,22 @@ const SPLIT = [
   { key: 'fat', label: 'Fat', dot: 'bg-rose-500' },
 ]
 
-function MealQuality({ craving, planStatus, macroBalance, warnings }) {
+// Each macro's share of the calories the three macros supply, as the
+// service's macro_percentages computes it.
+function servedSplit(nutrition) {
+  const energy = {
+    protein: (nutrition?.total_protein || 0) * KCAL_PER_GRAM.protein,
+    carbs: (nutrition?.total_carbs || 0) * KCAL_PER_GRAM.carbs,
+    fat: (nutrition?.total_fat || 0) * KCAL_PER_GRAM.fat,
+  }
+  const total = energy.protein + energy.carbs + energy.fat
+  if (total <= 0) return null
+  return Object.fromEntries(Object.entries(energy).map(([key, kcal]) => [key, (kcal / total) * 100]))
+}
+
+function MealQuality({ craving, planStatus, macroBalance, nutrition, reconciliation, warnings }) {
   const outcome = macroBalance && OUTCOMES[macroBalance.outcome]
-  const split =
-    macroBalance?.outcome === 'rebalanced'
-      ? macroBalance.macro_percent_after
-      : macroBalance?.macro_percent_before
+  const split = servedSplit(nutrition)
 
   if (planStatus !== 'fallback' && !outcome && !warnings.length) return null
 
@@ -57,12 +70,17 @@ function MealQuality({ craving, planStatus, macroBalance, warnings }) {
               {outcome.label}
             </span>
             <p className="mt-2 text-sm text-gray-500">{outcome.body}</p>
+            {reconciliation?.rescaled && (
+              <p className="mt-1 text-sm text-gray-500">
+                All portions were then scaled toward the meal&rsquo;s calorie target.
+              </p>
+            )}
             <p className="mt-1 text-xs text-gray-400">
               Meal target: {macroBalance.target_meal_calories} kcal
             </p>
           </div>
           {split && (
-            <dl className="flex gap-5" aria-label="Share of calories">
+            <dl className="flex gap-5" aria-label="Share of calories served">
               {SPLIT.map((macro) => (
                 <div key={macro.key}>
                   <dt className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-gray-500">

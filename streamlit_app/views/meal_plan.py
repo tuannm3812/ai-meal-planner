@@ -147,13 +147,35 @@ BALANCE_OUTCOMES = {
     ),
     "no_feasible_balance": (
         "Outside the ranges",
-        "This meal's ingredients cannot be resized into the recommended ranges.",
+        "This meal's ingredients could not be resized into the recommended ranges.",
     ),
     "reverted": (
         "Outside the ranges",
-        "Resized portions missed the ranges once checked, so the original portions are shown.",
+        "Resized portions missed the ranges once checked, so they were not used.",
     ),
 }
+KCAL_PER_GRAM = {"protein": 4.0, "carbs": 4.0, "fat": 9.0}
+
+
+def _served_split(nutrition: dict[str, Any]) -> dict[str, float]:
+    """Each macro's share of the calories the served meal's macros supply.
+
+    The balance record describes the balancing step; a calorie rescale can
+    follow it and move the split, so the split shown comes from the served
+    nutrition, as the service's ``macro_percentages`` computes it.
+
+    Args:
+        nutrition: The response's ``nutrition`` section.
+
+    Returns:
+        Percentages keyed by macro; empty when the macros supply no energy.
+    """
+    energy = {
+        macro: (nutrition.get(f"total_{macro}") or 0) * kcal
+        for macro, kcal in KCAL_PER_GRAM.items()
+    }
+    total = sum(energy.values())
+    return {macro: kcal / total * 100 for macro, kcal in energy.items()} if total > 0 else {}
 
 
 def _render_meal_quality(meal_result: dict[str, Any], craving: str) -> None:
@@ -161,8 +183,11 @@ def _render_meal_quality(meal_result: dict[str, Any], craving: str) -> None:
 
     Args:
         meal_result: The /generate-meal-plan response for a plan with a meal.
-        craving: What the user asked for.
+        craving: What the user asked for; the response's own record of the
+            craving wins when it has one.
     """
+    meal_definition = (meal_result.get("meal_plan") or {}).get("meal_definition") or {}
+    craving = meal_definition.get("craving_input") or craving
     if meal_result.get("plan_status") == "fallback":
         st.warning(
             f"Nothing on the menu is a close match for \u201c{craving}\u201d, "
@@ -172,11 +197,9 @@ def _render_meal_quality(meal_result: dict[str, Any], craving: str) -> None:
     if not balance or balance.get("outcome") not in BALANCE_OUTCOMES:
         return
     label, body = BALANCE_OUTCOMES[balance["outcome"]]
-    split = (
-        balance.get("macro_percent_after")
-        if balance["outcome"] == "rebalanced"
-        else balance.get("macro_percent_before")
-    ) or {}
+    split = _served_split(meal_result.get("nutrition") or {})
+    if (meal_result.get("reconciliation") or {}).get("rescaled"):
+        body += " All portions were then scaled toward the meal's calorie target."
     st.markdown(f"**Meal quality: {label}.** {body}")
     split_cols = st.columns(4)
     for col, (key, name) in zip(

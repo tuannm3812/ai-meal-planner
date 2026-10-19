@@ -6173,3 +6173,101 @@ plan's warnings, which the demo already showed. No backend or API change.
 
 Verified: 594 passed (504 backend, 90 Streamlit); frontend 42 passed, eslint
 clean, `vite build` succeeds; ruff clean; `docs/openapi.json` unchanged.
+
+## 2026-10-19 — Codex — #32 review: report the served meal and submitted craving
+
+Reviewed Claude's PR #32 at `762f900ca0680915fa66c7739a201e30b693d3d0`
+in `/tmp/meal-quality-ui-bxAq31`. #31 merged as `8e1c7e3`; main CI run
+`39194424756` passed. The original local checkout and its uncommitted log
+history remain preserved. The review PR is attached to this chat.
+
+**Verdict: two P2 findings to address before merging.** Showing quality
+and fallback information is useful, but the new UI confuses intermediate
+balance metadata with final nutrition and draft input with the served request.
+
+**P2 — Show the final served split after reconciliation, not the balance-stage
+snapshot.** `frontend/src/features/mealPlan/MealQuality.jsx:37–40` and
+`streamlit_app/views/meal_plan.py:175–179` use `macro_percent_before` for
+`reverted`/`no_feasible_balance`. That record precedes `_reconcile`, which
+can change portions and the split through 5 g rounding. A real request for
+`Lentil Bolognese Pasta` with `PROFILES[0]` (older sedentary woman losing)
+returns `reverted`, then reconciliation reduces **420.3 to 354.5 kcal**
+against the **350 kcal** target. Both clients display **19/65/15** from
+the earlier **19.4/65.4/15.2** snapshot. Final nutrition is **17.0 g protein,
+58.4 g carbohydrate, 6.8 g fat**, yielding approximately **19/64/17**.
+The reverted explanation also incorrectly says the original portions are
+shown, although reconciliation rescaled them.
+
+Reproduced through the real service, captured Streamlit's rendered metrics
+with column spies, and added a diagnostic React test using that response;
+the expected final split is absent. Recommendation: display shares based
+on final nutrition (or authoritative final service metadata), distinguish
+the balancing attempt from the final result, and account for reconciliation
+in the copy. Keep before/after audit splits separately labelled; a reverted
+candidate's `macro_percent_after` is also not the served nutrition. Add
+reverted-plus-reconciliation coverage in both clients rather than assuming
+every balance outcome describes the final stage.
+
+**P2 — Bind the fallback notice to the submitted craving, not editable form
+state.** The new notice at `MealQuality.jsx:48` receives `craving` from
+`MealPlanTab.jsx:119`, which is the live input. Generate a fallback for
+`pizza`, then edit the input to `salmon dinner` without submitting again:
+the existing result now claims nothing on the menu matches salmon dinner,
+although the only API request was for pizza. A diagnostic interaction test
+confirms one POST occurred and the pizza notice disappeared after editing.
+Recommendation: use the response's `meal_definition.craving_input` or a
+snapshot of the submitted request, and cover editing both after and during
+a request. The older overview also used live input; this PR introduces the
+same problem into a new factual no-match assertion.
+
+**Fresh verification at the reviewed head:**
+
+- Committed Python suite: **594 passed**, **95.06%** coverage, two existing
+  dependency deprecation warnings. Ruff lint/format passed (**111 files**).
+- Committed frontend suite: **42 passed**; eslint and production build
+  passed. Used existing installed dependencies through a temporary symlink;
+  the package lock matches the original checkout byte-for-byte. Build warns
+  that Browserslist data is old; no dependency update was made.
+- The **two additional diagnostic React tests fail for the findings above**.
+  They exist only in the isolated archive as
+  `frontend/src/features/mealPlan/MealQuality.review.test.jsx`, not in the
+  user's checkout or committed test counts. No fixes were implemented.
+- CI run `39194719121` passed all five jobs. Python 3.12 and container
+  results are remote CI evidence; Python 3.11 and frontend were also run
+  locally. The PR head remained `762f900` on recheck. No visual browser QA
+  or new baseline regeneration is claimed for this client-only review.
+
+**Discussion / next action for Claude:** correct both reporting paths and
+add the missing regressions, then rerun both client suites and CI before
+seeking owner approval to merge. Preserve backend target ownership and
+the rejected-candidate audit semantics; do not make an audit snapshot look
+like a final nutrition assessment. Broader recipe validation remains a
+separate follow-up. Only this append-only agent log was edited in the
+original checkout, left uncommitted; no application fixes, commits, merges,
+external PR comments, data cleanup or deployments were performed.
+
+## 2026-10-19 — Claude — #32 fix: served split and submitted craving
+
+Codex's review above is copied verbatim from the owner's local log. Both P2
+findings were real.
+
+1. The split is now computed from the served `nutrition` totals in both
+   clients, with the same 4/4/9 kcal per gram as `macro_percentages`, so a
+   calorie rescale after balancing is reflected. `macro_balance` still names
+   the balancing outcome; the reverted copy now says the resized portions
+   "were not used" instead of claiming the original portions are shown, and
+   a rescale adds "All portions were then scaled toward the meal's calorie
+   target." For `in_range` and `rebalanced` the 10% calorie gate is inside
+   reconciliation's tolerance, so their nutrition is never rescaled.
+2. React keeps the craving of the submitted request and passes it to both
+   the success banner and the no-match notice, so editing the input during
+   or after a request no longer rewrites what the result answered.
+   Streamlit prefers the response's `meal_definition.craving_input`.
+
+New regressions use Codex's Lentil Bolognese numbers (served 19/64/17, not
+the 19/65/15 snapshot or the rejected 20/59/21 candidate) and an edit both
+during and after a request; all four fail on the reviewed head.
+
+Verified: 596 passed (504 backend, 92 Streamlit), coverage 95.06%; frontend
+44 passed, eslint clean, `vite build` succeeds; ruff clean; no backend or
+`docs/openapi.json` change.

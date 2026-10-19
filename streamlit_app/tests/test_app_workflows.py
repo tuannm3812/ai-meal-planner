@@ -142,3 +142,53 @@ def test_an_off_menu_craving_says_it_got_a_standard_meal(app: AppTest) -> None:
         "Nothing on the menu is a close match for “pizza”, so this is a standard meal instead."
     ]
     assert _meal_quality(app)
+
+
+def _render_quality(meal_result: dict) -> None:
+    from views.meal_plan import _render_meal_quality
+
+    _render_meal_quality(meal_result, "typed later")
+
+
+def test_a_reverted_then_rescaled_meal_shows_the_served_split() -> None:
+    """Lentil Bolognese Pasta for an older sedentary woman losing weight
+    (Codex's #32 review): balancing reverted, then reconciliation scaled
+    420 kcal down toward 350, which moved the split."""
+    response = {
+        "plan_status": "matched",
+        "meal_plan": {"meal_definition": {"craving_input": "lentil bolognese"}},
+        "nutrition": {"total_protein": 17.0, "total_carbs": 58.4, "total_fat": 6.8},
+        "macro_balance": {
+            "outcome": "reverted",
+            "target_meal_calories": 350,
+            "macro_percent_before": {"protein": 19.4, "carbs": 65.4, "fat": 15.2},
+            "macro_percent_after": {"protein": 20.1, "carbs": 59.0, "fat": 20.9},
+        },
+        "reconciliation": {"rescaled": True},
+    }
+    app = AppTest.from_function(_render_quality, kwargs={"meal_result": response})
+    app.run(timeout=TIMEOUT)
+    assert not _errors(app), _errors(app)
+
+    shares = {metric.label: metric.value for metric in app.metric}
+    assert shares["Protein share"] == "19%"
+    assert shares["Carbs share"] == "64%"
+    assert shares["Fat share"] == "17%"
+    (quality,) = _meal_quality(app)
+    assert "so they were not used" in quality
+    assert "then scaled toward the meal's calorie target" in quality
+
+
+def test_the_no_match_notice_names_the_craving_the_service_answered() -> None:
+    response = {
+        "plan_status": "fallback",
+        "meal_plan": {"meal_definition": {"craving_input": "pizza"}},
+        "nutrition": {},
+    }
+    app = AppTest.from_function(_render_quality, kwargs={"meal_result": response})
+    app.run(timeout=TIMEOUT)
+
+    assert [str(w.value) for w in app.warning] == [
+        "Nothing on the menu is a close match for \u201cpizza\u201d, "
+        "so this is a standard meal instead."
+    ]

@@ -14,6 +14,7 @@ function MealPlanResult({
   location,
   planStatus,
   macroBalance,
+  reconciliation,
   warnings = [],
 }) {
   return (
@@ -78,7 +79,9 @@ function MealPlanResult({
       <MealQuality
         craving={craving}
         macroBalance={macroBalance}
+        nutrition={nutrition}
         planStatus={planStatus}
+        reconciliation={reconciliation}
         warnings={warnings}
       />
 

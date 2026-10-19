@@ -116,7 +116,7 @@ describe('MealPlanTab error text', () => {
             warnings: ['Rebalanced ingredient portions toward the recommended split.'],
           },
         },
-        nutrition: {},
+        nutrition: { total_calories: 698, total_protein: 52, total_carbs: 82, total_fat: 18 },
         shopping_list: {},
         macro_balance: {
           outcome: 'rebalanced',
@@ -133,7 +133,7 @@ describe('MealPlanTab error text', () => {
     await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
 
     expect(await screen.findByText('Portions rebalanced')).toBeInTheDocument()
-    // The split after rebalancing is the one that ships, not the one before.
+    // The split of the served nutrition, not the one before rebalancing.
     expect(screen.getByText('30%')).toBeInTheDocument()
     expect(screen.getByText('47%')).toBeInTheDocument()
     expect(screen.getByText('23%')).toBeInTheDocument()
@@ -175,6 +175,88 @@ describe('MealPlanTab error text', () => {
       await screen.findByText(/Nothing on the menu is a close match for/),
     ).toBeInTheDocument()
     expect(screen.getByText('On target')).toBeInTheDocument()
+  })
+
+  it('shows the served split when a reverted meal was then rescaled', async () => {
+    // Lentil Bolognese Pasta for an older sedentary woman losing weight
+    // (Codex's #32 review): balancing reverted, then reconciliation scaled
+    // 420 kcal down toward 350, which moved the split.
+    axios.post.mockResolvedValueOnce({
+      data: {
+        plan_status: 'matched',
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Lentil Bolognese Pasta', ingredients: [] },
+          metadata: { warnings: [] },
+        },
+        nutrition: {
+          total_calories: 354.5,
+          total_protein: 17.0,
+          total_carbs: 58.4,
+          total_fat: 6.8,
+        },
+        shopping_list: {},
+        macro_balance: {
+          outcome: 'reverted',
+          target_meal_calories: 350,
+          macro_percent_before: { protein: 19.4, carbs: 65.4, fat: 15.2 },
+          macro_percent_after: { protein: 20.1, carbs: 59.0, fat: 20.9 },
+        },
+        reconciliation: { rescaled: true, target_meal_calories: 350 },
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(screen.getByLabelText(/Craving Input/i), 'lentil bolognese')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+
+    expect(await screen.findByText('Outside the ranges')).toBeInTheDocument()
+    expect(screen.getByText(/so they were not used/)).toBeInTheDocument()
+    expect(screen.getByText(/then scaled toward the meal/)).toBeInTheDocument()
+    expect(screen.getByText('19%')).toBeInTheDocument()
+    expect(screen.getByText('64%')).toBeInTheDocument()
+    expect(screen.getByText('17%')).toBeInTheDocument()
+    // Neither the balance-stage snapshot nor the rejected candidate.
+    expect(screen.queryByText('65%')).not.toBeInTheDocument()
+    expect(screen.queryByText('15%')).not.toBeInTheDocument()
+    expect(screen.queryByText('59%')).not.toBeInTheDocument()
+  })
+
+  it('names the submitted craving after the input is edited', async () => {
+    let resolve
+    axios.post.mockImplementationOnce(
+      () =>
+        new Promise((done) => {
+          resolve = done
+        }),
+    )
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    const input = screen.getByLabelText(/Craving Input/i)
+    await user.type(input, 'pizza')
+    await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+    // Edited while the request is in flight, and again after it returns.
+    await user.clear(input)
+    await user.type(input, 'salmon')
+    resolve({
+      data: {
+        plan_status: 'fallback',
+        meal_plan: {
+          meal_definition: { structured_meal_name: 'Chicken Fried Rice', ingredients: [] },
+          metadata: { warnings: [] },
+        },
+        nutrition: {},
+        shopping_list: {},
+      },
+    })
+    expect(await screen.findByText(/close match for .pizza./)).toBeInTheDocument()
+    await user.type(input, ' dinner')
+
+    expect(axios.post).toHaveBeenCalledTimes(1)
+    expect(screen.getByText(/close match for .pizza./)).toBeInTheDocument()
+    expect(screen.getByText(/generated successfully for .pizza./)).toBeInTheDocument()
+    expect(screen.queryByText(/salmon/)).not.toBeInTheDocument()
   })
 
   it('shows no quality section for a response without one', async () => {
