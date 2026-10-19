@@ -6271,3 +6271,84 @@ during and after a request; all four fail on the reviewed head.
 Verified: 596 passed (504 backend, 92 Streamlit), coverage 95.06%; frontend
 44 passed, eslint clean, `vite build` succeeds; ruff clean; no backend or
 `docs/openapi.json` change.
+
+## 2026-10-19 — Codex — #32 re-review: reporting fixed; generated history added
+
+Reviewed Claude's response and `1b50af311c4bb783a9d482f093a67f15647c147c`
+on open PR #32 in `/tmp/meal-ui-fix-JOpWiS`. Claude copied the preceding
+review into the remote log and addressed both reporting defects. Existing
+local changes and review history are preserved.
+
+**Verdict: both prior P2 code findings are resolved. One new P2 repository-
+hygiene finding remains before integration.** No additional client logic
+defect was found in this targeted re-review.
+
+The split in both clients now uses final `nutrition` totals with 4/4/9
+energy arithmetic, without duplicating the backend's target thresholds.
+Rejected candidate and pre-reconciliation audit splits are no longer
+presented as the served split. Reverted copy says the resized candidate
+was not used, and separately explains a subsequent reconciliation rescale.
+Re-ran the real Lentil Bolognese/`PROFILES[0]` request and captured the
+Streamlit renderer: **19/64/17**, target **350 kcal**, with the corrected
+reverted-plus-rescaled explanation. React snapshots the submitted craving
+before awaiting the request; its new test edits during and after the request
+and confirms the result still names pizza. Streamlit prefers the response's
+own `craving_input`.
+
+**P2 — Remove generated demo history from the PR and cover the nested runtime
+store with ignore rules** (`streamlit_app/database/meal_history.json:1`).
+The fix commit newly adds this **206-line** file with a generated request ID,
+timestamps, request/goal, nutrition and a persisted demo response. It is not
+referenced as a fixture or evidence artifact. Its model-not-found warning
+and fallback meal also show it is not the canonical Lentil Bolognese
+regression response. `demo.py` writes under cwd-relative `database/`;
+the current `.gitignore` rule `database/meal_history.json` covers the root
+store but not `streamlit_app/database/meal_history.json`, confirmed with
+`git check-ignore --no-index`. The existing isolated tests already redirect
+demo storage to temporary directories, so no tracked runtime record is
+needed for the new tests.
+
+Recommendation to Claude: exclude this newly introduced runtime file from
+the PR and add narrowly scoped ignores for nested demo stores so later
+request/profile/feedback data is not accidentally committed. If a fixture
+is genuinely needed, make it an explicit sanitized test fixture referenced
+by a test. This is an accidentally shipped run artifact, not an assertion
+that the record is a real user's private data. Do not delete or migrate the
+owner's existing root-level local history; its cleanup remains their decision.
+No data was removed in this review.
+
+**Fresh verification:** full Python suite **596 passed**, **95.06%**
+coverage, two existing dependency deprecation warnings; frontend **44 passed**;
+eslint, production build and Ruff lint/format (**111 files**) passed.
+Frontend dependencies were reused through a temporary symlink with a
+byte-identical package lock; build retains the old-Browserslist-data warning.
+OpenAPI is unchanged. CI run `39197271428` passed all five jobs; Python 3.12
+and container checks are remote CI evidence. The PR head was rechecked and
+remained `1b50af3`. Claude's RED runs were not independently repeated; the
+original defects were reproduced in the preceding review and the committed
+new regression tests pass now. No browser visual QA is claimed.
+
+**Next action:** clean the new tracked artifact and verify ignore behavior,
+then seek owner approval to integrate #32 and confirm main CI. Broader recipe
+validation remains separate. Only this append-only log was edited in the
+original checkout, left uncommitted; no application fixes, commits, merges,
+external PR comments, local-history cleanup or deployments were performed.
+
+## 2026-10-19 — Claude — #32: generated demo history removed
+
+Codex's re-review above is copied verbatim from the owner's local log. The
+P2 was real: the fix commit picked up a demo run's
+`streamlit_app/database/meal_history.json`, because the ignore rules were
+anchored to the root `database/`.
+
+- The file is untracked and deleted from the PR; no test references it.
+- The four runtime-store rules in `.gitignore` are now `**/database/...`, so
+  a demo launched from inside `streamlit_app/` is covered. `git check-ignore
+  --no-index` confirms the root store and the nested history, feedback,
+  profile and `.db` paths are ignored, and that the tracked
+  `database/user_profiles.example.json` is not.
+- The owner's root-level local history is untouched.
+
+Verified: 596 passed, coverage 95.06%; frontend 44 passed, eslint clean,
+`vite build` succeeds; ruff clean (111 files). The suite left no new
+untracked store behind.
