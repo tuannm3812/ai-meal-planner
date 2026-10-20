@@ -114,3 +114,81 @@ def test_generating_saving_and_reloading_a_meal_updates_history(app: AppTest) ->
     assert not _errors(app), f"Load saved meals raised: {_errors(app)}"
     saved = _by_label(app.metric, "Saved")
     assert saved.value == "1", f"expected the saved meal to show up, got {saved.value!r}"
+
+
+def _meal_quality(app: AppTest) -> list[str]:
+    return [str(item.value) for item in app.markdown if "Meal quality:" in str(item.value)]
+
+
+def test_a_menu_craving_reports_its_meal_quality(app: AppTest) -> None:
+    """The default craving matches a menu meal, so there is no no-match notice."""
+    _by_label(app.button, "Generate meal").click().run(timeout=TIMEOUT)
+    assert not _errors(app), f"Generate meal raised: {_errors(app)}"
+
+    (quality,) = _meal_quality(app)
+    assert "On target" in quality or "Portions rebalanced" in quality, quality
+    assert not [w for w in app.warning if "close match" in str(w.value)]
+    shares = {metric.label: metric.value for metric in app.metric}
+    assert {"Protein share", "Carbs share", "Fat share", "Meal target"} <= shares.keys()
+
+
+def test_an_off_menu_craving_says_it_got_a_standard_meal(app: AppTest) -> None:
+    _by_label(app.text_input, "Craving or meal goal").set_value("pizza").run(timeout=TIMEOUT)
+    _by_label(app.button, "Generate meal").click().run(timeout=TIMEOUT)
+    assert not _errors(app), f"Generate meal raised: {_errors(app)}"
+
+    notices = [str(w.value) for w in app.warning if "close match" in str(w.value)]
+    assert notices == [
+        "Nothing on the menu is a close match for “pizza”, so this is a standard meal instead."
+    ]
+    assert _meal_quality(app)
+
+
+def _render_quality(meal_result: dict) -> None:
+    from views.meal_plan import _render_meal_quality
+
+    _render_meal_quality(meal_result, "typed later")
+
+
+def test_a_reverted_then_rescaled_meal_shows_the_served_split() -> None:
+    """Lentil Bolognese Pasta for an older sedentary woman losing weight
+    (Codex's #32 review): balancing reverted, then reconciliation scaled
+    420 kcal down toward 350, which moved the split."""
+    response = {
+        "plan_status": "matched",
+        "meal_plan": {"meal_definition": {"craving_input": "lentil bolognese"}},
+        "nutrition": {"total_protein": 17.0, "total_carbs": 58.4, "total_fat": 6.8},
+        "macro_balance": {
+            "outcome": "reverted",
+            "target_meal_calories": 350,
+            "macro_percent_before": {"protein": 19.4, "carbs": 65.4, "fat": 15.2},
+            "macro_percent_after": {"protein": 20.1, "carbs": 59.0, "fat": 20.9},
+        },
+        "reconciliation": {"rescaled": True},
+    }
+    app = AppTest.from_function(_render_quality, kwargs={"meal_result": response})
+    app.run(timeout=TIMEOUT)
+    assert not _errors(app), _errors(app)
+
+    shares = {metric.label: metric.value for metric in app.metric}
+    assert shares["Protein share"] == "19%"
+    assert shares["Carbs share"] == "64%"
+    assert shares["Fat share"] == "17%"
+    (quality,) = _meal_quality(app)
+    assert "so they were not used" in quality
+    assert "then scaled toward the meal's calorie target" in quality
+
+
+def test_the_no_match_notice_names_the_craving_the_service_answered() -> None:
+    response = {
+        "plan_status": "fallback",
+        "meal_plan": {"meal_definition": {"craving_input": "pizza"}},
+        "nutrition": {},
+    }
+    app = AppTest.from_function(_render_quality, kwargs={"meal_result": response})
+    app.run(timeout=TIMEOUT)
+
+    assert [str(w.value) for w in app.warning] == [
+        "Nothing on the menu is a close match for \u201cpizza\u201d, "
+        "so this is a standard meal instead."
+    ]

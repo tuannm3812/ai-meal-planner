@@ -2,8 +2,21 @@ import { formatCurrency, formatMacro, macroCards } from '../../lib/format'
 import SectionCard from '../../components/ui/SectionCard'
 import StatCard from '../../components/ui/StatCard'
 import SuccessBanner from '../../components/ui/SuccessBanner'
+import MealQuality from './MealQuality'
 
-function MealPlanResult({ craving, mealDefinition, nutrition, shopping, ingredients, shoppingItems, location }) {
+function MealPlanResult({
+  craving,
+  mealDefinition,
+  nutrition,
+  shopping,
+  ingredients,
+  shoppingItems,
+  location,
+  planStatus,
+  macroBalance,
+  reconciliation,
+  warnings = [],
+}) {
   return (
     <>
       <SuccessBanner>
@@ -62,6 +75,15 @@ function MealPlanResult({ craving, mealDefinition, nutrition, shopping, ingredie
           ))}
         </div>
       </SectionCard>
+
+      <MealQuality
+        craving={craving}
+        macroBalance={macroBalance}
+        nutrition={nutrition}
+        planStatus={planStatus}
+        reconciliation={reconciliation}
+        warnings={warnings}
+      />
 
       <SectionCard eyebrow="Grocery" title="Supermarket">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">

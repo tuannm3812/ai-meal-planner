@@ -10,6 +10,9 @@ import MealPlanResult from './MealPlanResult'
 
 function MealPlanTab() {
   const [craving, setCraving] = useState('')
+  // The craving of the request that produced the result, so editing the input
+  // afterwards does not rewrite what the result says it answered.
+  const [submittedCraving, setSubmittedCraving] = useState('')
   const [userId, setUserId] = useState('user_123')
   const [location, setLocation] = useState('Earlwood, NSW')
   const {
@@ -39,6 +42,7 @@ function MealPlanTab() {
   const handleSubmit = async (event) => {
     event.preventDefault()
     clearMealPlan()
+    setSubmittedCraving(craving.trim())
     await requestMealPlan({
       user_id: userId.trim(),
       craving: craving.trim(),
@@ -116,13 +120,17 @@ function MealPlanTab() {
 
         {mealPlan && !isInfeasible && (
           <MealPlanResult
-            craving={craving.trim()}
+            craving={submittedCraving}
             ingredients={ingredients}
             location={location}
+            macroBalance={mealPlan.macro_balance}
             mealDefinition={mealDefinition}
             nutrition={nutrition}
+            planStatus={mealPlan.plan_status}
+            reconciliation={mealPlan.reconciliation}
             shopping={shopping}
             shoppingItems={shoppingItems}
+            warnings={mealPlan.meal_plan?.metadata?.warnings || []}
           />
         )}
       </div>
