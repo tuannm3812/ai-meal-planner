@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meal planner: craving</title>
+<link rel="icon" type="image/svg+xml" href="../../../frontend/public/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F2}
+a{color:#15291F}a:hover{color:#B23A17}
+input,select,button{font:inherit}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #F6F7F2; color: #15291F; font-family: Inter, system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="border-bottom: 1px solid #DDE3DA; background: #FFFFFF">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="none" stroke="#C8431F" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6" fill="#C8431F"></circle></svg>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">AI Meal Planner</span>
+      </div>
+      <nav aria-label="Progress" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px">
+        <a href="1-profile.html" style="padding: 6px 12px; border-radius: 999px; background: #EEF1EA; color: #15291F; text-decoration: none">✓ You</a>
+        <span style="padding: 6px 12px; border-radius: 999px; background: #15291F; color: #FFFFFF; font-weight: 600">2 · Craving</span>
+        <span style="padding: 6px 12px; border-radius: 999px; background: #EEF1EA; color: #4B5B52">3 · Your plan</span>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width: 820px; margin: 0 auto; padding: 72px 24px 64px; display: flex; flex-direction: column; gap: 32px">
+    <div>
+      <p style="margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #B23A17">Step 2 of 3</p>
+      <h1 style="margin: 8px 0 12px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 52px; line-height: 1.05; font-weight: 700">What are you in the mood for?</h1>
+      <p style="margin: 0; color: #4B5B52">Describe a dish or a feeling. We match it against our menu and tell you plainly if nothing is close.</p>
+    </div>
+
+    <form style="display: flex; flex-direction: column; gap: 20px">
+      <label style="display: flex; flex-direction: column; gap: 8px; font-weight: 600">Your craving
+        <span style="display: flex; flex-wrap: wrap; gap: 12px">
+          <input type="text" value="chicken fried rice" style="flex: 1 1 360px; min-width: 0; height: 60px; padding: 0 20px; border: 2px solid #15291F; border-radius: 14px; background: #FFFFFF; color: #15291F; font-size: 20px; font-weight: 500">
+          <a href="3-plan.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 60px; padding: 0 28px; border-radius: 14px; background: #C8431F; color: #FFFFFF; font-weight: 600; text-decoration: none">Plan my meal</a>
+        </span>
+      </label>
+
+      <div>
+        <p style="margin: 0 0 10px; font-size: 14px; color: #4B5B52">Or try one of these</p>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Salmon quinoa</button>
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Chickpea curry</button>
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Banana oat bowl</button>
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Tofu fried rice</button>
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Beef taco salad</button>
+          
+            <button type="button" style="min-height: 44px; padding: 0 16px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; color: #15291F; font-size: 14px; cursor: pointer">Greek chicken bowl</button>
+          
+        </div>
+      </div>
+
+      <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500; max-width: 360px">Where you shop
+        <input type="text" value="Earlwood, NSW" style="height: 48px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F">
+      </label>
+    </form>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DDE3DA">
+        <p style="margin: 0; font-weight: 600">Matched to a real menu</p>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #4B5B52">Every meal comes from a tested recipe, never made up on the spot.</p>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DDE3DA">
+        <p style="margin: 0; font-weight: 600">Honest when it misses</p>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #4B5B52">No close match? You get a balanced standard meal and a clear note.</p>
+      </div>
+      <div style="padding: 18px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DDE3DA">
+        <p style="margin: 0; font-weight: 600">Shopping list included</p>
+        <p style="margin: 4px 0 0; font-size: 14px; color: #4B5B52">Ingredients mapped to store aisles, with estimated prices.</p>
+      </div>
+    </div>
+  </main>
+</div>
+</body>
+</html>

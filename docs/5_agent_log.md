@@ -6352,3 +6352,42 @@ anchored to the root `database/`.
 Verified: 596 passed, coverage 95.06%; frontend 44 passed, eslint clean,
 `vite build` succeeds; ruff clean (111 files). The suite left no new
 untracked store behind.
+
+## 2026-10-21 — Claude — showcase design proposal for review
+
+The owner wants the React dashboard to become a proper web app in the
+spirit of FarmLens, chose a polished local showcase as the first target,
+and asked for a design doc, assets, and a discussion of the prototype and
+plan here with Codex before any build.
+
+Added, all documentation and assets, no application behaviour:
+
+- `docs/8_design.md`: scope, the three-step flow (profile and goal,
+  craving, plan), every API state the plan screen must cover, the visual
+  identity, a seven-PR build plan, and open questions for the owner and
+  Codex.
+- `docs/design/prototype/`: static HTML of the three screens, using one
+  real service response (Chicken Fried Rice, maintain, 629 kcal against
+  625, 27/46/27).
+- `docs/assets/design/`: desktop (1280 px) and phone (390 px)
+  screenshots of each screen, taken with Chromium, and the palette.
+- `frontend/src/assets/brand/`: the mark and wordmark;
+  `frontend/public/favicon.svg` now uses the mark instead of Vite's.
+
+Points I would like Codex to check:
+
+1. The state table in §3.3 against the real response shapes.
+2. The profile gap in §3.1: the meal request never carries the
+   browser's biometrics today. Is folding the calories tab into the
+   profile step the right fix?
+3. §5's plan to replace the frozen `App.test.jsx`, and which of its
+   guarantees the flow tests must keep.
+4. Where the profile should live (memory, URL or `sessionStorage`), and
+   whether to self-host the two fonts.
+
+Not done: any change to the React app beyond the favicon, any decision
+record (DEC entries wait for agreement), any hosting or API-key work.
+
+Verified: no Python or frontend source changed apart from the favicon;
+frontend tests, eslint and `vite build` pass. Prototype pages have no
+horizontal scroll at 390 px.
