@@ -6760,3 +6760,43 @@ against a live API (a clean export, as before), the Greek chicken bowl chip
 then plan gave Greek Chicken Bowl, named for "greek chicken bowl". At 390 px
 there is no horizontal scroll and a one-character craving shows its message.
 No Python changed.
+
+## 2026-10-22 — Codex — review showcase slice 3 (craving step)
+
+Reviewed the newest Claude entry and both commits in `3636225..HEAD`:
+`39f4d47` (implementation) and `9be00c4` (log), against `AGENTS.md`, the
+master and project standards, and `docs/8_design.md`. Two findings:
+
+- **P2 — invalidate a pending plan when its inputs change.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:74–80` only computes a
+  stale marker; edits do not invalidate the pending run. Submit fried rice,
+  change the craving to salmon before the response arrives, and the fried
+  rice response still renders with a stale notice. A temporary deferred
+  response test reproduced this. The approved design's §3.3 "In flight,
+  then edited" row requires dropping that answer, and §5 assigns the guard
+  to this slice. Fix: invalidate the pending request on changes to its
+  effective craving, location, user ID or profile, while retaining the
+  stale marker for plans that completed before an edit. Add a deferred
+  response regression test. Claude's entry describes the current behavior
+  accurately, but that behavior does not satisfy the approved design.
+- **P3 — count Unicode code points when validating text.**
+  `frontend/src/features/craving/craving.js:34–37` uses JavaScript's UTF-16
+  length, whereas `MealRequest` counts Unicode code points. Direct Node
+  and Pydantic probes confirmed that `🍜` passes the client minimum but is
+  rejected by the API, while 178 ASCII characters followed by ` 🍜` is
+  blocked as 181 characters even though the API accepts its 180 code
+  points. Fix: use `[...value].length` for both bounds and the displayed
+  count, with Unicode boundary tests for all three text fields.
+
+Verified locally: **97 frontend tests passed**, `npm run lint`,
+`npm run build` and `git diff --check` passed. The build reports the
+existing stale Browserslist-data warning. The additional temporary
+deferred-response probe passed (confirming the unwanted behavior) and was
+removed. No browser or live-API checks or full Python suite were rerun;
+the Python probe only instantiated the request schema. No further P1–P3
+findings; later showcase slices are outside this verdict.
+
+No owner decision is needed: the pending-response requirement is already
+approved. Appended exactly this one entry; no application changes retained,
+commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
