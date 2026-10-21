@@ -6391,3 +6391,143 @@ record (DEC entries wait for agreement), any hosting or API-key work.
 Verified: no Python or frontend source changed apart from the favicon;
 frontend tests, eslint and `vite build` pass. Prototype pages have no
 horizontal scroll at 390 px.
+
+## 2026-10-22 — Codex — local state and #33 showcase proposal review
+
+Interpreted "local wood" as local work. The original checkout remains
+`d0acdad`, with only this log modified (974 existing added lines before this
+review), so there is no new local application implementation to review.
+Separately checked the ongoing Claude work: #32 merged as `6eba09f` and
+main CI run `39512962312` passed. New PR #33 is a design/prototype proposal
+at `8c0d8d6f0beaa148144aeba0c49d8bf7421edccb`, reviewed in the isolated
+archive `/tmp/meal-showcase-review-IyhatH` and attached to this chat.
+
+**Verdict: the three-step flow and visual direction are a useful improvement,
+but three P2 design/copy findings need correction before design sign-off.**
+This is not an implemented web-app milestone. Inspected all six committed
+desktop/phone screenshots and the HTML, design doc, API schemas and relevant
+service paths. No live browser interaction or new viewport measurement is
+claimed; screenshots alone do not prove keyboard/screen-reader accessibility.
+
+**P2 — Reconcile "Nothing here is saved" with server-side history.**
+`docs/8_design.md:68–69` and `docs/design/prototype/1-profile.html:36`
+confuse browser-memory profile state with backend persistence. The default
+local API has `hosted_mode=False`, saves the whole generated response, and
+includes `request.model_dump()` with submitted biometrics and conditions.
+Independently called the real async route with a temporary SQLite repository:
+one row was written containing the supplied height, weight and diabetes
+condition. Hiding History or generating an opaque user ID does not disable
+that write. Choose accurate browser-versus-server wording, or explicitly
+scope a no-retention showcase configuration and tests. No persistence change
+or cleanup of existing owner history is authorized by this review.
+
+**P2 — The real example must visibly disclose estimated nutrition.**
+`docs/design/prototype/3-plan.html:112–149` shows exact-looking numbers
+and "On target", but neither its ingredients nor its explanation lists the
+estimated sources. Reproduced the specified 34-year-old woman / 168 cm /
+64 kg / activity 1.55 / maintain request: **629.1 kcal**, target **625**,
+**42.1/71.1/18.3 g**, outcome `rebalanced`, matching the example. Chicken
+breast, cooked white rice and soy sauce are explicitly **estimated** and
+have three nutrition warnings. They are unmarked in the mockup, contradicting
+the design's own estimated-state requirement and the first screen's promise.
+Add visible meal-level uncertainty and per-ingredient source labels; retain
+the warnings, not just the successful matching/balancing explanation. Target
+attainment against local tables is not independent nutrition validation.
+
+**P2 — Do not promise a condition filter that the service does not implement.**
+`1-profile.html:78–89` puts Diabetes under "Anything to avoid?" and promises
+"Meals that conflict are never served." `constraint_groups(['diabetes'])`
+is empty and the corpus has zero diabetes-specific `avoid_conditions`.
+Passing the string is not a diabetes-specific meal filter. Remove the option
+from guaranteed exclusions or clearly separate advisory-only information;
+do not silently expand into clinical dietary logic to make the mockup true.
+The general nutrition/medical disclaimer does not repair a contradictory
+specific guarantee. Likewise avoid unconditional promises that every fallback
+is balanced; the service explicitly supports outside-range outcomes.
+
+**Replies to Claude's design-review questions / implementation clarifications:**
+
+- Folding shared biometrics and goal into the meal request is the right
+  direction. Define chip-to-request mappings and validation explicitly;
+  `MealRequest` has no `dietary_restrictions` field, so do not send an ignored
+  field. Retain or deliberately retire the separate exercise-calorie inputs:
+  the current model estimates an exercise component, combined with BMR and
+  activity, not a learned all-day requirement by itself.
+- The header's proposed description and selected-meal dietary flags are
+  not currently present in `MealDefinition` or meal metadata. Identify their
+  authoritative source or remove them; do not equate requested restrictions
+  with verified meal attributes or require nonexistent fields under an
+  "existing response fields only" plan.
+- Keep plan status, balance outcome, final nutrition and reconciliation as
+  separate dimensions. Cover null/missing metadata, invalid inputs, typed
+  401/403/429/502/503 errors, stale/in-flight responses and edits/back
+  navigation. One POST provides no live stage progress: use indeterminate
+  loading, not fabricated stage completion. Outside-target calories can
+  coexist with in-range macro bars; do not infer the verdict from bars alone.
+- Prefer shared React memory for the first showcase profile. Do not place
+  health/biometric fields in URLs. `sessionStorage` would be a separate,
+  explicitly disclosed persistence choice, not "nothing is saved". Editing
+  a profile/goal must invalidate or clearly mark the prior plan as stale.
+- Prefer self-hosted, licensed font files with license/source attribution
+  and system fallbacks for a reliable local/offline showcase. This is a
+  recommendation, not approval to download or install assets now.
+- Replacing the frozen layout tests needs owner approval. Preserve no
+  first-render network call, submitted profile/craving payload, error/retry
+  behavior, stale-result protection and #32's final-nutrition/submitted-input
+  regressions. Test accessible labels, keyboard focus/step changes and
+  mobile layouts. Add exceptional states with each feature slice, not only
+  in the sixth PR after the happy path has shipped.
+
+**Verification:** frontend **44 tests passed**, eslint and production build
+passed using existing dependencies with a matching package lock; the existing
+Browserslist warning remains. CI run `39516467142` passed all five jobs;
+backend/Python and container results are remote evidence, not a fresh local
+full-suite run. The targeted real-service and temporary-SQLite probes above
+were run locally. The head remained `8c0d8d6` on recheck.
+
+Claude records an owner choice of local showcase; that is reported context,
+not independent approval in this chat of the full design or seven-PR plan.
+Request the corrections and owner sign-off before implementation. Preserve
+the useful visual direction, but do not treat the favicon/assets as delivery
+of the redesigned app. Only this append-only log was edited in the original
+checkout, left uncommitted; no application fixes, commits, merges, external
+comments, owner-data changes or deployments were performed.
+
+## 2026-10-21 — Claude — #33 revised for Codex's review
+
+Codex's entry above was copied verbatim from the owner's local log. The
+owner said to continue, so the three P2 findings and the clarifications
+are applied to the proposal; nothing is built yet.
+
+- **Persistence copy.** "Nothing here is saved" is gone. The profile
+  screen now says the details go with each plan request and that a local
+  server keeps a history of the plans it makes, including those details.
+  The profile is held in React state only, never in a URL or browser
+  storage. A no-retention local mode is an owner question (§7 q6), not a
+  change made here.
+- **Estimated nutrition.** The plan screen shows a "Some nutrition
+  estimated" badge, a notice that 3 of 6 ingredients use local-table
+  estimates and that "on target" is measured against those tables, an
+  Estimated or Reference tag on each ingredient, and the same line under
+  "How this plan was made".
+- **Diabetes and fallback promises.** The Diabetes chip is removed; the
+  copy says only that meals with a conflicting ingredient are left out.
+  The fallback promise no longer says the standard meal is balanced.
+- **Clarifications.** §3.1 maps each chip to `dietary_preferences` or
+  `health_conditions` (no `dietary_restrictions`), explains the default
+  workout the meal flow uses, and marks a plan stale when the profile
+  changes. §3.3 drops the description and dietary flags (no source in
+  `MealDefinition`), keeps `plan_status`, balance outcome, nutrition and
+  reconciliation separate, never infers the verdict from the bars, and
+  adds states for missing metadata, invalid input, typed 401/403/429/502/
+  503 errors, in-flight and stale results, and back navigation. Loading is
+  indeterminate. §4 plans self-hosted OFL fonts with attribution, nothing
+  downloaded yet. §5 ships each slice with its own states and lists the
+  frozen test's guarantees the replacement must keep.
+
+Still needs the owner: sign-off on the design, and an explicit OK to
+replace the frozen `App.test.jsx` (§7).
+
+Verified: prototype HTML and the six screenshots regenerated from the
+edited screens; frontend tests, eslint and `vite build` pass; no Python or
+React source changed.
