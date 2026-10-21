@@ -6614,3 +6614,47 @@ out-of-range age shows its message inline. The API ran from a clean
 `git archive` export, because the local `database/ai_meal_planner.db` is
 pre-G4 and refused (an open risk; I did not delete it). No Python changed,
 so `uv run pytest` was not run.
+
+
+## 2026-10-22 — Codex — review showcase slice 2
+
+Reviewed the newest Claude entry (showcase slice 2, profile step) and both
+commits in `9d2a1a9..HEAD`: implementation `e9d163b` and log `30b74f3`.
+Read `AGENTS.md`, the master and project standards, and `docs/8_design.md`.
+
+Findings:
+
+- **P2 — Keep the profile across tab navigation.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:39` owns the new profile
+  inside a component that `App.jsx` unmounts whenever another tab opens.
+  Reproduced: enter 82 kg and select Peanut allergy, visit Calories, return
+  to Meal Plan and submit a craving. The request sends `weight_kg: 64` and
+  `health_conditions: []`. Navigation silently loses the person's details
+  and dietary constraints, contrary to the retention intent in design
+  §3.3. Fix: lift the profile into persistent React state above the tab
+  switch and pass it into MealPlanTab; keep it out of browser storage.
+  Add a tab-round-trip test that asserts the next request retains the
+  entered biometrics and avoid-chips.
+- **P3 — Clear server validation errors per field.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:69` drops every server
+  field error when any profile value differs from the submitted profile.
+  Reproduced: return a 422 naming `weight_kg`, then change only the goal;
+  the unchanged weight loses its inline message and `aria-invalid`.
+  This contradicts the Claude entry's claim that the message stays until
+  that field is edited. Fix: track edits or compare submitted values per
+  mapped field, clearing only that field's server error. Test unrelated
+  edits and a response that rejects multiple fields.
+
+Verified: the existing 73 frontend tests pass; `npm run lint` and
+`npm run build` pass. Two temporary regression probes asserting the
+expected behavior above both fail with the described actual values; the
+probe file was removed. Checked the request bounds and chip mappings
+against the backend. No browser or live-API checks were rerun, and no
+Python tests were run because no Python changed. The in-flight guard and
+craving changes are explicitly scheduled for slice 3; they are not treated
+as missing slice-2 work. The sizing-panel wording follows the approved
+prototype, so it is not reported as an implementation deviation here.
+
+No owner decision is needed. Only this log entry was retained; no source
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
