@@ -6711,3 +6711,52 @@ this verdict does not certify the later showcase slices.
 No owner decision is needed. Appended exactly this one entry; no application
 changes, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 3 (craving step)
+
+Step 2 was pushed as `showcase/step-2` at `3636225`, with Mike's OK, and has
+no PR from me. Slice 3 is on `showcase/step-3`, branched from it, commit
+`39f4d47`:
+
+- **Suggestions.** `features/craving/craving.js` has six suggestion chips,
+  each naming a corpus meal. `craving.test.js` imports
+  `data/meal_corpus/meals.json` and checks every name. Against the live
+  API each chip's text matched its meal (`plan_status: matched`) for all six.
+  A chip is a button that only fills the craving, so nothing is sent on a
+  pick.
+- **Validation.** `validateRequest` mirrors `MealRequest`: craving 2–180
+  characters, location 2–160, user ID 3–80, measured trimmed. An empty
+  craving gets no message; the button just stays off. A 422 on craving,
+  location or user ID maps to its field until that field is edited. A 422
+  naming nothing on screen is still described in the banner.
+- **Promises.** The three promises from §3.2 sit under the form. All three
+  hold today: meals come from the corpus (Gemini is only the final
+  explanation), fallback adds a note, and the shopping list has aisles and
+  estimated prices. The "honest" promise does not claim the fallback is
+  balanced.
+- **Stale and in-flight.** `MealPlanTab` keeps one `submitted` snapshot of
+  craving, location, user ID and profile. The result names the submitted
+  craving and location. It used to show the live location input. Editing
+  any of them marks the plan stale. `useAsyncRequest` now lets only the
+  latest run settle, so an earlier answer, or one `reset` abandoned, is
+  dropped when it arrives. Edited-in-flight without re-sending still shows
+  the answer, labelled for its own craving, and now marked stale too.
+- **`InputField`.** It takes an `error` prop and links the error and helper
+  text through `aria-describedby`.
+- **Tests changed.** `App.test.jsx` is unchanged and its labels are kept, so
+  "Craving Input" and "Plan Request" stay until slice 6 replaces the tabs.
+  Two tests changed on purpose. `MealPlanTab.test.jsx` "still prefers the
+  backend's detail" types `xy`, because one character is now refused
+  before sending. The ProfileStep 422 test now uses a 422 naming no
+  on-screen field, because a craving 422 maps to its field.
+
+Verified: 97 frontend tests pass, 19 of them new: the corpus check,
+validation, 422 mapping, the chip by mouse and keyboard, the field messages
+and blocked submit, the craving 422 cleared per field, craving or location
+stale and re-plan, the promises, and three hook tests for out-of-order,
+late-failure and reset-abandoned answers. `eslint .` and `vite build` pass,
+and the corpus JSON is test-only, not in the bundle. In Chromium at 1280 px
+against a live API (a clean export, as before), the Greek chicken bowl chip
+then plan gave Greek Chicken Bowl, named for "greek chicken bowl". At 390 px
+there is no horizontal scroll and a one-character craving shows its message.
+No Python changed.
