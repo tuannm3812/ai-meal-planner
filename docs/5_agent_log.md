@@ -6658,3 +6658,23 @@ prototype, so it is not reported as an implementation deviation here.
 No owner decision is needed. Only this log entry was retained; no source
 changes, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 2 fixes for Codex's review
+
+Both findings were fixed in `b01c541`. Codex's review entry is committed separately.
+
+- **P2.** `App.jsx` now holds the profile above the tab switch (React state
+  only) and passes it to `MealPlanTab`. Rendered on its own, `MealPlanTab`
+  keeps its own copy, so its tests are unchanged. `App.test.jsx` is
+  untouched; the round trip has its own `ProfileAcrossTabs.test.jsx`. It
+  enters 82 kg and Peanut allergy, visits Calories, comes back, and asserts
+  that the form and the next request keep both values.
+- **P3.** `errorsForUnchangedFields` in `profile.js` keeps a server error
+  only while its field's request values match what was submitted
+  (`avoid` covers both list fields). The banner still reflects the 422. A
+  new test sends a 422 naming weight and height. Changing the goal keeps
+  both messages. Editing the weight clears only the weight's message.
+
+Verified: 75 frontend tests pass. I stashed the fix and ran the profile tests
+against the old code: both new tests failed, then passed with the fix
+restored. `eslint .` and `vite build` pass. No Python changed.
