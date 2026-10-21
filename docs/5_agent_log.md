@@ -6541,14 +6541,16 @@ conditions. Recorded as DEC-29 in `docs/3_decisions.md`; `docs/8_design.md`
 disclosed local retention taken as defaults the owner can change. Nothing
 built yet; the build follows §5's six PRs.
 
-## 2026-10-21 — Claude — live-check probe count on the new CI runners
+## 2026-10-21 — Claude — live-check probe test on the new CI runners
 
-`test_a_probe_that_dies_fails_the_check` failed twice on #33's docs-only
-commits (3.12, then 3.11), both on `ubuntu-26.04` runners, each time
-counting 2 dead probes when the test makes exactly one fail. It never failed
-on `main` and passes locally (bash 5.2), including 8 parallel copies. Not
-reproduced, so the cause is unconfirmed; the per-pid `wait` statuses were the
-part that depends on the shell. `fan_out` in `scripts/live_check.sh` now
-waits for all probes and counts the lines they recorded: each finished probe
-writes exactly one, so a dead probe is still caught. The 14 live-check tests
+`test_a_probe_that_dies_fails_the_check` failed three times on #33's
+docs-only commits (3.12, then 3.11 twice), all on `ubuntu-26.04` runners,
+each time counting 2 dead probes when the test makes exactly one fail. It
+never failed on `main` and passes locally, including 8 parallel copies.
+Counting recorded lines instead of `wait "$pid"` statuses still found 2
+missing, so two probes really died: the test's fake `python3` claims "first"
+with `mkdir`, and on those runners two parallel probes could both see it
+succeed (likely the image's coreutils; not reproduced). The fake now claims it
+with bash's noclobber, an O_EXCL create done by bash itself, and
+`scripts/live_check.sh` is back to its `main` version. The 14 live-check tests
 pass locally; CI on the 26.04 runners is the real check.
