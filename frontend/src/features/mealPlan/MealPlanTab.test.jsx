@@ -42,7 +42,8 @@ describe('MealPlanTab error text', () => {
     const user = userEvent.setup()
     render(<MealPlanTab />)
 
-    await user.type(screen.getByLabelText(/Craving Input/i), 'x')
+    // Two characters: one is now refused before sending (MealRequest's minimum).
+    await user.type(screen.getByLabelText(/Craving Input/i), 'xy')
     await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
 
     expect(await screen.findByText('Craving too short')).toBeInTheDocument()

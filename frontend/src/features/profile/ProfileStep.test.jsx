@@ -183,11 +183,11 @@ describe('Profile step', () => {
     expect(height).toHaveAccessibleDescription('Input should be greater than 80')
   })
 
-  it('says what a 422 on a non-profile field rejected', async () => {
+  it('says what a 422 naming no field on screen rejected', async () => {
     axios.post.mockRejectedValueOnce({
       response: {
         status: 422,
-        data: { detail: [{ loc: ['body', 'craving'], msg: 'String should have at most 180 characters' }] },
+        data: { detail: [{ loc: ['body'], msg: 'Field required' }] },
       },
     })
     const user = userEvent.setup()
@@ -195,9 +195,7 @@ describe('Profile step', () => {
 
     await planMeal(user)
     expect(
-      await screen.findByText(
-        'The service rejected this request: craving: String should have at most 180 characters',
-      ),
+      await screen.findByText('The service rejected this request: body: Field required'),
     ).toBeInTheDocument()
   })
 

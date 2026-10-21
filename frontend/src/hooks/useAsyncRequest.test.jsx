@@ -102,3 +102,90 @@ describe('useAsyncRequest validation errors', () => {
     expect(result.current.errorDetail).toBeNull()
   })
 })
+
+describe('useAsyncRequest in-flight guard', () => {
+  function deferred() {
+    let resolve
+    let reject
+    const promise = new Promise((done, fail) => {
+      resolve = done
+      reject = fail
+    })
+    return { promise, resolve, reject }
+  }
+
+  it('drops an earlier answer that arrives after a newer one', async () => {
+    const first = deferred()
+    const second = deferred()
+    const request = vi.fn().mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise)
+    const { result } = renderHook(() => useAsyncRequest(request))
+
+    let firstRun
+    let secondRun
+    act(() => {
+      firstRun = result.current.run('first')
+    })
+    act(() => {
+      secondRun = result.current.run('second')
+    })
+    await act(async () => {
+      second.resolve({ answer: 'second' })
+      await secondRun
+    })
+    expect(result.current.data).toEqual({ answer: 'second' })
+    expect(result.current.isLoading).toBe(false)
+
+    await act(async () => {
+      first.resolve({ answer: 'first' })
+      await firstRun
+    })
+    expect(result.current.data).toEqual({ answer: 'second' })
+  })
+
+  it('keeps loading until the latest run settles, ignoring an earlier failure', async () => {
+    const first = deferred()
+    const second = deferred()
+    const request = vi.fn().mockReturnValueOnce(first.promise).mockReturnValueOnce(second.promise)
+    const { result } = renderHook(() => useAsyncRequest(request, 'my fallback'))
+
+    let firstRun
+    act(() => {
+      firstRun = result.current.run()
+    })
+    act(() => {
+      result.current.run()
+    })
+    await act(async () => {
+      first.reject(new Error('late failure'))
+      await firstRun
+    })
+    expect(result.current.error).toBe('')
+    expect(result.current.isLoading).toBe(true)
+
+    await act(async () => {
+      second.resolve({ ok: true })
+    })
+    await waitFor(() => expect(result.current.isLoading).toBe(false))
+    expect(result.current.data).toEqual({ ok: true })
+  })
+
+  it('drops the answer to a run that reset abandoned', async () => {
+    const pending = deferred()
+    const request = vi.fn().mockReturnValueOnce(pending.promise)
+    const { result } = renderHook(() => useAsyncRequest(request))
+
+    let run
+    act(() => {
+      run = result.current.run()
+    })
+    act(() => {
+      result.current.reset()
+    })
+    expect(result.current.isLoading).toBe(false)
+    await act(async () => {
+      pending.resolve({ late: true })
+      await run
+    })
+    expect(result.current.data).toBeNull()
+  })
+})
