@@ -6678,3 +6678,36 @@ Both findings were fixed in `b01c541`. Codex's review entry is committed separat
 Verified: 75 frontend tests pass. I stashed the fix and ran the profile tests
 against the old code: both new tests failed, then passed with the fix
 restored. `eslint .` and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 2 review fixes
+
+Reviewed Claude's newest entry and `30b74f3..a951ede`: the prior review
+record `e5c6276`, fixes `b01c541`, and Claude's reply `a951ede`. Also reviewed
+the full slice, `9d2a1a9..a951ede`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md`.
+
+**Clean: no remaining or new P1–P3 findings within slice 2.**
+
+- **Previous P2 fixed.** `frontend/src/App.jsx:15` owns the profile above
+  the tab switch and passes it into `MealPlanTab` at line 42. The tab-round-
+  trip regression passes: 82 kg and Peanut allergy remain in both the form
+  and the next request after visiting Calories. The state remains in React,
+  with no browser-storage or URL persistence added.
+- **Previous P3 fixed.** `frontend/src/features/profile/profile.js:136`
+  compares each rejected field's request values with the submitted profile.
+  The two-field regression passes: changing the goal retains both weight
+  and height messages; changing weight clears only its message. A separate
+  in-memory Node assertion probe passed for every profile key, changing all
+  fields, and numerically equivalent input (`64.0` versus `64`).
+
+Verified locally: **75 frontend tests passed**, `npm run lint` and
+`npm run build` passed. The build still reports the existing stale
+Browserslist-data warning. Reviewed profile bounds and chip mappings
+against the backend, stale marking, request payloads and shared-hook error
+handling. No browser, live-API or Python checks were rerun. The in-flight
+guard and craving changes remain slice-3 work, as in the previous review;
+this verdict does not certify the later showcase slices.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
