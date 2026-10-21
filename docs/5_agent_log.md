@@ -6540,3 +6540,15 @@ conditions. Recorded as DEC-29 in `docs/3_decisions.md`; `docs/8_design.md`
 §7 now lists the answers, with the name, History link, default workout and
 disclosed local retention taken as defaults the owner can change. Nothing
 built yet; the build follows §5's six PRs.
+
+## 2026-10-21 — Claude — live-check probe count on the new CI runners
+
+`test_a_probe_that_dies_fails_the_check` failed twice on #33's docs-only
+commits (3.12, then 3.11), both on `ubuntu-26.04` runners, each time
+counting 2 dead probes when the test makes exactly one fail. It never failed
+on `main` and passes locally (bash 5.2), including 8 parallel copies. Not
+reproduced, so the cause is unconfirmed; the per-pid `wait` statuses were the
+part that depends on the shell. `fan_out` in `scripts/live_check.sh` now
+waits for all probes and counts the lines they recorded: each finished probe
+writes exactly one, so a dead probe is still caught. The 14 live-check tests
+pass locally; CI on the 26.04 runners is the real check.

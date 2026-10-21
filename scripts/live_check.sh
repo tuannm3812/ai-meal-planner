@@ -64,11 +64,16 @@ except Exception: print("-")' "$out.body")"
 # complete and match, and this check alone must reach EXPECT_INSTANCES ids.
 fan_out() {
   local label="$1" want_status="$2" want_code="$3"; shift 3
-  local pids=() pid died=0
-  for _ in $(seq 1 "$REQUESTS"); do probe "$label" "$@" & pids+=("$!"); done
-  # Each probe's own exit status: a bare `wait` ignores it, and a probe that died
-  # before recording its answer would silently shrink the sample.
-  for pid in "${pids[@]}"; do wait "$pid" || died=$((died + 1)); done
+  local i got=0 died
+  for ((i = 0; i < REQUESTS; i++)); do probe "$label" "$@" & done
+  wait
+  # Every probe that finishes records exactly one line, so a probe that died
+  # before recording its answer shows up as a missing line rather than silently
+  # shrinking the sample. Lines are counted rather than `wait "$pid"` statuses,
+  # which on the Ubuntu 26.04 CI runners counted two dead probes when only one
+  # was made to fail (not seen with bash 5.2).
+  [ -f "$WORK/$label" ] && got="$(wc -l < "$WORK/$label" | tr -d ' ')"
+  died=$((REQUESTS - got))
   [ "$died" -eq 0 ] || { echo "   $label: $died probe(s) did not finish"; exit 1; }
   local bad distinct
   bad="$(awk -v s="$want_status" -v c="$want_code" '$1!=s || (c!="*" && $2!=c)' "$WORK/$label")"
