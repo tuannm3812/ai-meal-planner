@@ -80,6 +80,9 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 - 2026-10-19: the Streamlit demo and the React dashboard show each plan's
   macro split, whether it met the targets or was rebalanced, its calorie
   target, and a notice when an off-menu craving fell back to a standard meal.
+- 2026-10-21: the owner approved the React showcase design (`docs/8_design.md`,
+  DEC-29; #33 merged). It is built in six slices; the first adds the "Kitchen
+  green" Tailwind tokens, self-hosted fonts and the brand bar.
 
 ## Open risks
 

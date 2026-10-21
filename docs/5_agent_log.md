@@ -6554,3 +6554,24 @@ succeed (likely the image's coreutils; not reproduced). The fake now claims it
 with bash's noclobber, an O_EXCL create done by bash itself, and
 `scripts/live_check.sh` is back to its `main` version. The 14 live-check tests
 pass locally; CI on the 26.04 runners is the real check.
+
+## 2026-10-21 — Claude — #33 merged; showcase slice 1 (tokens, fonts, brand bar)
+
+#33 merged as 84d9e40 after all five CI jobs passed on 9bbcaf8 (owner's
+"Merge, build here"). Slice 1 of `docs/8_design.md` §5, no behaviour change:
+
+- `tailwind.config.js` gains the §4 tokens (`ink`, `muted`, `ground`,
+  `surface`, `line`, `accent`, `accent-text`, `success-bg/fg`, `protein`,
+  `carbs`, `fat`) and `font-sans` (Inter) / `font-display` (Bricolage
+  Grotesque).
+- Fonts are self-hosted from `@fontsource/inter` and
+  `@fontsource/bricolage-grotesque` 5.3.0 (OFL 1.1), pinned exactly;
+  attribution in `frontend/THIRD_PARTY_NOTICES.md`. No Google Fonts request.
+- Page title "AI Meal Planner", a description and theme colour; a brand bar
+  with the mark (decorative, `alt=""`) and name above the existing dashboard.
+  The dashboard's heading, tabs and copy stay, so the frozen `App.test.jsx`
+  is untouched; only the header text picks up the tokens.
+
+Verified: 45 frontend tests (one new for the brand bar), eslint and `vite
+build` pass; in Chromium at 1280 and 390 px all four font faces load from the
+bundle, the title is right and there is no horizontal scroll.
