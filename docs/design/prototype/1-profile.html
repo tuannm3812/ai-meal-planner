@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meal planner: profile and goal</title>
+<link rel="icon" type="image/svg+xml" href="../../../frontend/public/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#F6F7F2}
+a{color:#15291F}a:hover{color:#B23A17}
+input,select,button{font:inherit}
+</style>
+</head>
+<body>
+<div style="min-height: 100vh; background: #F6F7F2; color: #15291F; font-family: Inter, system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+  <header style="border-bottom: 1px solid #DDE3DA; background: #FFFFFF">
+    <div style="max-width: 1120px; margin: 0 auto; padding: 18px 24px; display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><circle cx="14" cy="14" r="12" fill="none" stroke="#C8431F" stroke-width="2.5"></circle><circle cx="14" cy="14" r="6" fill="#C8431F"></circle></svg>
+        <span style="font-family: 'Bricolage Grotesque', sans-serif; font-weight: 700; font-size: 20px">AI Meal Planner</span>
+      </div>
+      <nav aria-label="Progress" style="display: flex; flex-wrap: wrap; gap: 8px; font-size: 14px">
+        <span style="padding: 6px 12px; border-radius: 999px; background: #15291F; color: #FFFFFF; font-weight: 600">1 · You</span>
+        <span style="padding: 6px 12px; border-radius: 999px; background: #EEF1EA; color: #4B5B52">2 · Craving</span>
+        <span style="padding: 6px 12px; border-radius: 999px; background: #EEF1EA; color: #4B5B52">3 · Your plan</span>
+      </nav>
+    </div>
+  </header>
+
+  <main style="max-width: 1120px; margin: 0 auto; padding: 48px 24px 64px; display: flex; flex-wrap: wrap; gap: 40px">
+    <section style="flex: 999 1 560px; min-width: 0">
+      <p style="margin: 0; font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #B23A17">Step 1 of 3</p>
+      <h1 style="margin: 8px 0 12px; font-family: 'Bricolage Grotesque', sans-serif; font-size: 44px; line-height: 1.1; font-weight: 700">Tell us about you</h1>
+      <p style="margin: 0 0 32px; max-width: 560px; color: #4B5B52">We use this to estimate how much energy you burn in a day and size your meal to fit your goal. Your details go with each plan request, and when the app runs locally the server keeps a history of the plans it makes, including these details.</p>
+
+      <form style="display: flex; flex-direction: column; gap: 28px">
+        <fieldset style="border: 0; margin: 0; padding: 0">
+          <legend style="font-weight: 600; margin-bottom: 12px">Your goal</legend>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px">
+            <label style="display: flex; flex-direction: column; gap: 4px; padding: 16px; border: 1px solid #DDE3DA; border-radius: 14px; background: #FFFFFF; cursor: pointer">
+              <span style="display: flex; gap: 8px; align-items: center; font-weight: 600"><input type="radio" name="goal"> Lose weight</span>
+              <span style="font-size: 14px; color: #4B5B52">A gentle deficit, never below a safe floor</span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 4px; padding: 16px; border: 2px solid #15291F; border-radius: 14px; background: #FFFFFF; cursor: pointer">
+              <span style="display: flex; gap: 8px; align-items: center; font-weight: 600"><input type="radio" name="goal" checked> Maintain</span>
+              <span style="font-size: 14px; color: #4B5B52">Eat about what you burn</span>
+            </label>
+            <label style="display: flex; flex-direction: column; gap: 4px; padding: 16px; border: 1px solid #DDE3DA; border-radius: 14px; background: #FFFFFF; cursor: pointer">
+              <span style="display: flex; gap: 8px; align-items: center; font-weight: 600"><input type="radio" name="goal"> Gain</span>
+              <span style="font-size: 14px; color: #4B5B52">A modest surplus for building</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px">
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Age
+            <input type="number" value="34" style="height: 48px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F">
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Sex
+            <select style="height: 48px; padding: 0 12px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F"><option>Female</option><option>Male</option></select>
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Height (cm)
+            <input type="number" value="168" style="height: 48px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F">
+          </label>
+          <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">Weight (kg)
+            <input type="number" value="64" style="height: 48px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F">
+          </label>
+        </div>
+
+        <label style="display: flex; flex-direction: column; gap: 6px; font-size: 14px; font-weight: 500">How active are you?
+          <select style="height: 48px; padding: 0 12px; border: 1px solid #C9D2C5; border-radius: 10px; background: #FFFFFF; color: #15291F; max-width: 420px"><option>Moderately active (exercise 3–5 days a week)</option></select>
+        </label>
+
+        <fieldset style="border: 0; margin: 0; padding: 0">
+          <legend style="font-weight: 600; margin-bottom: 4px">Anything to avoid? <span style="font-weight: 400; color: #4B5B52">(optional)</span></legend>
+          <p style="margin: 0 0 12px; font-size: 14px; color: #4B5B52">Meals with a conflicting ingredient are left out.</p>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px">
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Vegetarian</label>
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Vegan</label>
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Dairy-free</label>
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Gluten-free</label>
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Peanut allergy</label>
+            
+              <label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #C9D2C5; border-radius: 999px; background: #FFFFFF; font-size: 14px; cursor: pointer"><input type="checkbox"> Kidney disease</label>
+            
+          </div>
+        </fieldset>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center">
+          <a href="2-craving.html" style="display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 28px; border-radius: 12px; background: #C8431F; color: #FFFFFF; font-weight: 600; text-decoration: none">Next: what are you craving?</a>
+          <span style="font-size: 14px; color: #4B5B52">You can change these at any time.</span>
+        </div>
+      </form>
+    </section>
+
+    <aside style="flex: 1 1 300px; min-width: 0; align-self: flex-start; padding: 28px; border-radius: 20px; background: #15291F; color: #F6F7F2">
+      <p style="margin: 0; font-size: 14px; color: #B9C7BE">How your meal is sized</p>
+      <ol style="margin: 16px 0 0; padding-left: 20px; display: flex; flex-direction: column; gap: 14px">
+        <li>A trained model estimates the energy you burn in a day.</li>
+        <li>Your goal sets the calories for this meal, with a safe floor when losing weight.</li>
+        <li>Portions are resized so protein, carbs and fat sit inside recommended ranges.</li>
+        <li>Nutrition is checked against food data, and anything estimated is labelled.</li>
+      </ol>
+      <p style="margin: 24px 0 0; padding-top: 16px; border-top: 1px solid #2F4A3D; font-size: 14px; color: #B9C7BE">A planning aid, not medical advice.</p>
+    </aside>
+  </main>
+</div>
+</body>
+</html>

@@ -221,11 +221,13 @@ def test_a_failed_transfer_fails_even_when_what_arrived_looks_right(mode: str) -
 
 
 # Stands in for python3 on PATH: the first meal-plans probe to parse its result
-# fails, as a probe can if anything in it errors under `set -e`.
+# fails, as a probe can if anything in it errors under `set -e`. "First" is
+# claimed with bash's noclobber (an O_EXCL create), not `mkdir`: on the
+# ubuntu-26.04 runners two parallel probes could both see `mkdir` succeed.
 FAKE_PYTHON3 = """#!/usr/bin/env bash
 for arg in "$@"; do
   case "$arg" in
-    */meal-plans.*) mkdir "$CRASH_ONCE" 2>/dev/null && exit 1 ;;
+    */meal-plans.*) ( set -C; : > "$CRASH_ONCE" ) 2>/dev/null && exit 1 ;;
   esac
 done
 exec "$REAL_PYTHON3" "$@"
@@ -254,7 +256,7 @@ def test_a_probe_that_dies_fails_the_check(tmp_path: Path) -> None:
             CRASH_ONCE=str(tmp_path / "crashed"),
         )
 
-    assert (tmp_path / "crashed").is_dir(), "precondition: one probe was made to fail"
+    assert (tmp_path / "crashed").is_file(), "precondition: one probe was made to fail"
     assert result.returncode != 0, result.stdout
     assert "meal-plans: 1 probe(s) did not finish" in result.stdout
     assert "live check passed" not in result.stdout

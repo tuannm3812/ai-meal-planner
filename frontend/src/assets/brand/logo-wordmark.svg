@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="64" viewBox="0 0 320 64" role="img" aria-label="AI Meal Planner">
+  <circle cx="32" cy="32" r="24" fill="none" stroke="#C8431F" stroke-width="5"/>
+  <circle cx="32" cy="32" r="11.5" fill="#C8431F"/>
+  <text x="70" y="42" fill="#15291F" font-family="'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif" font-size="30" font-weight="700">AI Meal Planner</text>
+</svg>
