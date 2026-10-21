@@ -6575,3 +6575,42 @@ pass locally; CI on the 26.04 runners is the real check.
 Verified: 45 frontend tests (one new for the brand bar), eslint and `vite
 build` pass; in Chromium at 1280 and 390 px all four font faces load from the
 bundle, the title is right and there is no horizontal scroll.
+
+## 2026-10-22 — Claude — showcase slice 2 (profile step)
+
+Run by hand in the foreground, because starting `scripts/agent_relay.sh` in
+the background was refused. Branch `showcase/step-2` from main `9d2a1a9`.
+Commit `e9d163b`, slice 2 of `docs/8_design.md` §5:
+
+- `features/profile/profile.js` holds goal, activity and sex options, the six
+  avoid-chips (§3.1 table; no diabetes), the defaults, validation mirroring
+  `MealRequest`'s bounds, the request mapping, `sameRequest` and the 422
+  field mapping. `ProfileForm.jsx` is the "Tell us about you" step with the
+  disclosure copy and the "How your meal is sized" panel.
+- `MealPlanTab` renders the step above its existing grid and sends the
+  profile with every meal request. The profile is React state only. The
+  plan button stays disabled while a detail is invalid.
+- A plan whose profile has since changed shows "Made for your previous
+  details" and a re-plan button. Undoing the edit clears the bar.
+- `useAsyncRequest` keeps the raw `detail` as `errorDetail` and shows only
+  a string `detail`. A FastAPI 422 list used to reach `ErrorBanner` as an
+  array of objects. A 422 maps back to the profile field it names until
+  that field is edited, and any other 422 is described rather than shown
+  as "is the backend running".
+- `App.test.jsx` is unchanged and passes. User ID stays visible. The step
+  indicator, hiding `user_id`, and the tab retirement belong to later
+  slices.
+
+Verified: 73 frontend tests pass (28 new: profile mapping and validation, the
+payload, the field message and blocked submit, stale and re-plan, 422
+mapping, no URL or storage writes, and keyboard order with arrow keys on
+the goal group). `eslint .` and `vite build` pass. `vite build` first needed
+`npm ci`, because the local `node_modules` predated #34's fontsource
+packages. Against a real local API in Chromium at 1280 px, a vegetarian "fried
+rice" request sent the full profile and got Tofu Fried Rice. Switching the
+goal from lose to gain showed the stale bar, and re-planning moved the meal
+target from 513 to 695 kcal. At 390 px there is no horizontal scroll and an
+out-of-range age shows its message inline. The API ran from a clean
+`git archive` export, because the local `database/ai_meal_planner.db` is
+pre-G4 and refused (an open risk; I did not delete it). No Python changed,
+so `uv run pytest` was not run.
