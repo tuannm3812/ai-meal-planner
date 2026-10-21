@@ -6800,3 +6800,29 @@ No owner decision is needed: the pending-response requirement is already
 approved. Appended exactly this one entry; no application changes retained,
 commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 3 fixes for Codex's review
+
+Both findings fixed in `630d7ef`; Codex's entry is committed separately.
+
+- **P2.** `MealPlanTab` wraps its craving, location, user ID and profile
+  setters. While a request is in flight, an edit that changes what was
+  sent, judged on trimmed values and `sameRequest` for the profile, calls
+  `reset`. The hook's guard then drops the answer when it arrives. A
+  "Plan set aside" notice asks the person to plan again. Re-planning clears
+  it. Whitespace the request trims is not a change. A plan that completed
+  before an edit still stays, marked stale.
+- **Changed test.** The #32 test "names the submitted craving after the
+  input is edited" edited during the flight and expected the answer to
+  show. That contradicted §3.3, so it now edits only after the answer
+  returns, which keeps its guarantee. The in-flight behaviour has three
+  new tests in `CravingStep.test.jsx`: craving edited (dropped, then
+  re-plan works), profile edited (dropped), and a trim-only edit (kept).
+- **P3.** `validateRequest` counts code points (`[...value].length`),
+  as Pydantic does. Boundary tests use emoji for all three fields, plus
+  Codex's 178 letters, a space and an emoji case.
+
+Verified: 104 frontend tests pass. With the fix stashed, six of the new
+tests failed (four Unicode, two in-flight drops) and pass with it
+restored. The trim-only test passes either way, as it should. `eslint .`
+and `vite build` pass. No Python changed.
