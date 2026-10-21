@@ -125,6 +125,28 @@ export function sameRequest(a, b) {
   return JSON.stringify(profileToRequest(a)) === JSON.stringify(profileToRequest(b))
 }
 
+// The request fields each profile key is sent as.
+const PROFILE_KEY_TO_REQUEST_FIELDS = Object.entries(REQUEST_FIELD_TO_PROFILE_KEY).reduce(
+  (fields, [field, key]) => ({ ...fields, [key]: [...(fields[key] || []), field] }),
+  {},
+)
+
+// The errors whose profile field still sends what it sent when they were
+// reported. Editing one field clears only that field's server error.
+export function errorsForUnchangedFields(errors, profile, submitted) {
+  if (!errors || !submitted) return null
+  const now = profileToRequest(profile)
+  const then = profileToRequest(submitted)
+  const kept = Object.fromEntries(
+    Object.entries(errors).filter(([key]) =>
+      PROFILE_KEY_TO_REQUEST_FIELDS[key].every(
+        (field) => JSON.stringify(now[field]) === JSON.stringify(then[field]),
+      ),
+    ),
+  )
+  return Object.keys(kept).length ? kept : null
+}
+
 // FastAPI's 422 detail is a list of {loc: ['body', field], msg}. Returns the
 // profile keys it names, each with the service's message, or null when the
 // detail is not that shape or names no profile field.

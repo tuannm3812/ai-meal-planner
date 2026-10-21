@@ -9,6 +9,7 @@ import SubmitButton from '../../components/ui/SubmitButton'
 import ProfileForm from '../profile/ProfileForm'
 import {
   DEFAULT_PROFILE,
+  errorsForUnchangedFields,
   profileErrorsFrom422,
   profileToRequest,
   sameRequest,
@@ -28,7 +29,10 @@ function describeRejection(detail) {
     .join('; ')
 }
 
-function MealPlanTab() {
+// The profile is passed in by App, which outlives the tabs, so leaving this
+// tab and coming back keeps the person's details. Rendered on its own (as in
+// the tab's tests) it holds its own copy.
+function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
   const [craving, setCraving] = useState('')
   // The craving of the request that produced the result, so editing the input
   // afterwards does not rewrite what the result says it answered.
@@ -36,7 +40,9 @@ function MealPlanTab() {
   const [userId, setUserId] = useState('user_123')
   const [location, setLocation] = useState('Earlwood, NSW')
   // The profile is React state only: never the URL, never browser storage.
-  const [profile, setProfile] = useState(DEFAULT_PROFILE)
+  const [ownProfile, setOwnProfile] = useState(DEFAULT_PROFILE)
+  const profile = sharedProfile ?? ownProfile
+  const setProfile = onProfileChange ?? setOwnProfile
   // The profile the last request was sent with. A plan made for different
   // details is marked stale rather than shown as current.
   const [submittedProfile, setSubmittedProfile] = useState(null)
@@ -65,12 +71,13 @@ function MealPlanTab() {
   const profileEdited = submittedProfile !== null && !sameRequest(profile, submittedProfile)
   const isStale = Boolean(mealPlan) && profileEdited
 
-  // A 422 maps back to the fields it names until the person edits them.
-  const serverErrors = profileEdited ? null : profileErrorsFrom422(errorDetail)
+  // A 422 maps back to each field it names until that field is edited.
+  const rejectedFields = profileErrorsFrom422(errorDetail)
+  const serverErrors = errorsForUnchangedFields(rejectedFields, profile, submittedProfile)
   const fieldErrors = { ...serverErrors, ...profileErrors }
   let errorMessage = error
   if (Array.isArray(errorDetail)) {
-    errorMessage = serverErrors
+    errorMessage = rejectedFields
       ? 'The service could not use some of your details. Check the highlighted fields.'
       : `The service rejected this request: ${describeRejection(errorDetail)}`
   }

@@ -150,6 +150,39 @@ describe('Profile step', () => {
     expect(weight).not.toHaveAccessibleDescription()
   })
 
+  it('clears a server error only for the field that was edited', async () => {
+    axios.post.mockRejectedValueOnce({
+      response: {
+        status: 422,
+        data: {
+          detail: [
+            { loc: ['body', 'weight_kg'], msg: 'Input should be greater than 20' },
+            { loc: ['body', 'height_cm'], msg: 'Input should be greater than 80' },
+          ],
+        },
+      },
+    })
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await planMeal(user)
+    const weight = screen.getByLabelText('Weight (kg)')
+    const height = screen.getByLabelText('Height (cm)')
+    await screen.findByText('Input should be greater than 20')
+
+    // An unrelated edit leaves both messages in place.
+    await user.click(screen.getByRole('radio', { name: /Gain/ }))
+    expect(weight).toHaveAccessibleDescription('Input should be greater than 20')
+    expect(height).toHaveAccessibleDescription('Input should be greater than 80')
+
+    // Editing the weight clears its message only.
+    await user.clear(weight)
+    await user.type(weight, '65')
+    expect(weight).not.toHaveAttribute('aria-invalid')
+    expect(height).toHaveAttribute('aria-invalid', 'true')
+    expect(height).toHaveAccessibleDescription('Input should be greater than 80')
+  })
+
   it('says what a 422 on a non-profile field rejected', async () => {
     axios.post.mockRejectedValueOnce({
       response: {
