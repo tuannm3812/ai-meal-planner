@@ -13,7 +13,10 @@ export const CRAVING_SUGGESTIONS = [
   { label: 'Greek chicken bowl', meal: 'Greek Chicken Bowl' },
 ]
 
-// Mirrors MealRequest in backend/app/schemas/requests.py.
+// Mirrors MealRequest in backend/app/schemas/requests.py. Pydantic counts
+// Unicode code points, not JavaScript's UTF-16 units, so lengths here do too.
+const codePoints = (value) => [...value].length
+
 const TEXT_FIELDS = [
   { key: 'craving', label: 'craving', min: 2, max: 180 },
   { key: 'location', label: 'location', min: 2, max: 160 },
@@ -31,10 +34,10 @@ export function validateRequest(values) {
     const value = String(values[field.key] ?? '').trim()
     if (!value) {
       if (field.key !== 'craving') errors[field.key] = `Enter a ${field.label}.`
-    } else if (value.length < field.min) {
+    } else if (codePoints(value) < field.min) {
       errors[field.key] = `Use at least ${field.min} characters.`
-    } else if (value.length > field.max) {
-      errors[field.key] = `Use at most ${field.max} characters (now ${value.length}).`
+    } else if (codePoints(value) > field.max) {
+      errors[field.key] = `Use at most ${field.max} characters (now ${codePoints(value)}).`
     }
   }
   return errors

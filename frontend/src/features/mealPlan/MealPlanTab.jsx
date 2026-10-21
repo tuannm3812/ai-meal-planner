@@ -34,13 +34,15 @@ function describeRejection(detail) {
 // tab and coming back keeps the person's details. Rendered on its own (as in
 // the tab's tests) it holds its own copy.
 function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
-  const [craving, setCraving] = useState('')
-  const [userId, setUserId] = useState('user_123')
-  const [location, setLocation] = useState('Earlwood, NSW')
+  const [craving, setCravingValue] = useState('')
+  const [userId, setUserIdValue] = useState('user_123')
+  const [location, setLocationValue] = useState('Earlwood, NSW')
+  // Set when an edit dropped a plan that was still being made.
+  const [droppedInFlight, setDroppedInFlight] = useState(false)
   // The profile is React state only: never the URL, never browser storage.
   const [ownProfile, setOwnProfile] = useState(DEFAULT_PROFILE)
   const profile = sharedProfile ?? ownProfile
-  const setProfile = onProfileChange ?? setOwnProfile
+  const storeProfile = onProfileChange ?? setOwnProfile
   // What the last request was sent with. The result names this craving and
   // location, not the live inputs, and a plan made for anything else is
   // marked stale rather than shown as current.
@@ -103,8 +105,36 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
     [craving, requestIsValid, profileIsValid, isLoading],
   )
 
+  // The in-flight guard (docs/8_design.md §3.3): an edit that changes what
+  // the pending request asked for drops its answer, rather than showing a plan
+  // for inputs the person has already changed. A plan that completed before
+  // the edit stays, marked stale.
+  const dropIfInFlight = (changed) => {
+    if (isLoading && submitted && changed) {
+      clearMealPlan()
+      setDroppedInFlight(true)
+    }
+  }
+  const setCraving = (value) => {
+    dropIfInFlight(value.trim() !== submitted?.craving)
+    setCravingValue(value)
+  }
+  const setLocation = (value) => {
+    dropIfInFlight(value.trim() !== submitted?.location)
+    setLocationValue(value)
+  }
+  const setUserId = (value) => {
+    dropIfInFlight(value.trim() !== submitted?.userId)
+    setUserIdValue(value)
+  }
+  const setProfile = (next) => {
+    dropIfInFlight(!sameRequest(next, submitted?.profile ?? next))
+    storeProfile(next)
+  }
+
   const submitPlan = async () => {
     clearMealPlan()
+    setDroppedInFlight(false)
     setSubmitted({
       craving: craving.trim(),
       location: location.trim(),
@@ -204,6 +234,17 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
         </aside>
 
         <div className="grid content-start gap-6">
+          {droppedInFlight && !isLoading && !mealPlan && (
+            <div
+              className="rounded-[14px] border border-accent-text bg-ground p-4 text-sm text-ink"
+              role="status"
+            >
+              <span className="font-semibold">Plan set aside.</span> Your details or craving
+              changed while it was being made, so it was not shown. Plan again when you are
+              ready.
+            </div>
+          )}
+
           {isStale && (
             <div
               className="flex flex-col gap-3 rounded-[14px] border border-accent-text bg-ground p-4 text-ink sm:flex-row sm:items-center sm:justify-between"

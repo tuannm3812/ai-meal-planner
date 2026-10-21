@@ -133,6 +133,68 @@ describe('Craving step', () => {
     expect(screen.getByText(/generated successfully for .salmon./)).toBeInTheDocument()
   })
 
+  function deferPost() {
+    let resolve
+    axios.post.mockImplementationOnce(
+      () =>
+        new Promise((done) => {
+          resolve = done
+        }),
+    )
+    return (value) => resolve(value)
+  }
+
+  it('drops a pending answer when the craving changes before it arrives', async () => {
+    const answer = deferPost()
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(cravingInput(), 'fried rice')
+    await user.click(planButton())
+    await user.clear(cravingInput())
+    await user.type(cravingInput(), 'salmon')
+    answer(plan('Chicken Fried Rice'))
+
+    expect(await screen.findByText(/Plan set aside/)).toBeInTheDocument()
+    expect(screen.queryByText('Chicken Fried Rice')).not.toBeInTheDocument()
+    expect(planButton()).toBeEnabled()
+
+    axios.post.mockResolvedValueOnce(plan('Salmon Quinoa Plate'))
+    await user.click(planButton())
+    expect(axios.post.mock.calls[1][1]).toMatchObject({ craving: 'salmon' })
+    await screen.findByText('Salmon Quinoa Plate')
+    expect(screen.queryByText(/Plan set aside/)).not.toBeInTheDocument()
+  })
+
+  it('drops a pending answer when the profile changes before it arrives', async () => {
+    const answer = deferPost()
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(cravingInput(), 'fried rice')
+    await user.click(planButton())
+    await user.click(screen.getByRole('checkbox', { name: 'Vegan' }))
+    answer(plan('Chicken Fried Rice'))
+
+    expect(await screen.findByText(/Plan set aside/)).toBeInTheDocument()
+    expect(screen.queryByText('Chicken Fried Rice')).not.toBeInTheDocument()
+  })
+
+  it('keeps a pending answer when an edit is undone before it arrives', async () => {
+    const answer = deferPost()
+    const user = userEvent.setup()
+    render(<MealPlanTab />)
+
+    await user.type(cravingInput(), 'fried rice')
+    await user.click(planButton())
+    // Whitespace the request trims away is not a change to what was asked.
+    await user.type(cravingInput(), ' ')
+    answer(plan('Chicken Fried Rice'))
+
+    expect(await screen.findByText('Chicken Fried Rice')).toBeInTheDocument()
+    expect(screen.queryByText(/Plan set aside/)).not.toBeInTheDocument()
+  })
+
   it('makes only promises that hold today', () => {
     render(<MealPlanTab />)
     expect(screen.getByText('Matched to a real menu')).toBeInTheDocument()

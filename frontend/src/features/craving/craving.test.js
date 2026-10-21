@@ -38,6 +38,28 @@ describe('validateRequest', () => {
   })
 })
 
+describe('validateRequest counts characters as the API does', () => {
+  // Pydantic counts Unicode code points; an emoji is one, not two UTF-16 units.
+  it.each([
+    ['craving', 2, 180],
+    ['location', 2, 160],
+    ['userId', 3, 80],
+  ])('%s: below %i and above %i code points', (key, min, max) => {
+    expect(validateRequest({ ...VALID, [key]: '🍜'.repeat(min - 1) })[key]).toBe(
+      `Use at least ${min} characters.`,
+    )
+    expect(validateRequest({ ...VALID, [key]: '🍜'.repeat(min) })[key]).toBeUndefined()
+    expect(validateRequest({ ...VALID, [key]: '🍜'.repeat(max) })[key]).toBeUndefined()
+    expect(validateRequest({ ...VALID, [key]: '🍜'.repeat(max + 1) })[key]).toBe(
+      `Use at most ${max} characters (now ${max + 1}).`,
+    )
+  })
+
+  it('accepts 178 letters, a space and an emoji as 180', () => {
+    expect(validateRequest({ ...VALID, craving: `${'a'.repeat(178)} 🍜` })).toEqual({})
+  })
+})
+
 describe('requestErrorsFrom422', () => {
   it('maps craving, location and user_id', () => {
     const detail = [
