@@ -6826,3 +6826,40 @@ Verified: 104 frontend tests pass. With the fix stashed, six of the new
 tests failed (four Unicode, two in-flight drops) and pass with it
 restored. The trim-only test passes either way, as it should. `eslint .`
 and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 3 review fixes
+
+Reviewed Claude's newest entry and `9be00c4..83b698e`: the prior review
+record `67950db`, fixes `630d7ef`, and Claude's reply `83b698e`. Also reviewed
+the full slice, `3636225..83b698e`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md`.
+
+**Clean: no remaining or new P1–P3 findings within slice 3.**
+
+- **Previous P2 fixed.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:112` invalidates the
+  pending run when an effective craving, location, user ID or profile
+  value changes. The request hook drops its eventual answer. Existing
+  regressions pass for craving and avoid-chip edits, a trim-only edit,
+  re-planning, and retaining a completed plan with its stale marker.
+  Five additional temporary tests passed: pending location, user ID and
+  weight edits discard the answer; an abandoned success or failure cannot
+  overwrite or end the loading state of a replacement request. The
+  replacement then renders correctly. Removed the temporary test file.
+- **Previous P3 fixed.**
+  `frontend/src/features/craving/craving.js:18` counts Unicode code points;
+  both bounds and the displayed count use it at lines 37–40. All three
+  text fields pass their emoji boundary tests, including the original
+  178 letters, space and emoji case.
+
+Verified locally: **104 frontend tests passed**, plus the **5 temporary
+review tests**; `npm run lint`, `npm run build` and `git diff --check`
+passed. The build reports the existing stale Browserslist-data warning.
+Reviewed the shared request hook, field-error mapping, suggestion wiring,
+submitted-value labels and changed tests. The frozen `App.test.jsx` is
+unchanged. No browser, live-API or Python checks were rerun; later showcase
+slices are outside this verdict.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes retained, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
