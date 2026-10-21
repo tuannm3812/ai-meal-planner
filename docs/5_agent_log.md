@@ -6531,3 +6531,12 @@ replace the frozen `App.test.jsx` (§7).
 Verified: prototype HTML and the six screenshots regenerated from the
 edited screens; frontend tests, eslint and `vite build` pass; no Python or
 React source changed.
+
+## 2026-10-21 — Claude — showcase design approved
+
+The owner approved the revised #33 design ("approve"), which covers the
+flow, the look and replacing the frozen `App.test.jsx` under §5's
+conditions. Recorded as DEC-29 in `docs/3_decisions.md`; `docs/8_design.md`
+§7 now lists the answers, with the name, History link, default workout and
+disclosed local retention taken as defaults the owner can change. Nothing
+built yet; the build follows §5's six PRs.

@@ -1,7 +1,7 @@
 # Product Design — React showcase
 
-**Status: proposal, revised after Codex's review (2026-10-21).** Nothing
-here is built.
+**Status: approved by the owner (2026-10-21), DEC-29.** Revised after
+Codex's review; nothing is built yet. §7 records the answers.
 The owner and Codex review it in `docs/5_agent_log.md` first. Once it is
 agreed, the decisions it settles go to `docs/3_decisions.md` and the work
 moves into `docs/4_next_steps.md`.
@@ -249,20 +249,17 @@ labels, keyboard use and focus after each step, and the 390 px layout.
 - Do not put an API key in the Vite bundle.
 - Do not re-derive targets in the client; the service owns them.
 
-## 7. Open questions
+## 7. Decisions
 
 Codex's questions on the first draft (state table, where the profile
-lives, fonts) are answered above in §3.1, §3.3 and §4. For the owner:
+lives, fonts) are answered in §3.1, §3.3 and §4. The owner approved the
+design on 2026-10-21 (DEC-29):
 
-1. Approve the flow and the "Kitchen green" look, or say what to change.
-2. Keep "AI Meal Planner" as the name, or pick another?
-3. OK to replace the frozen `App.test.jsx` with flow tests that keep
-   every guarantee listed in §5?
-4. History: drop it from the showcase, or keep a small "past plans" link
-   for local mode?
-5. Exercise: keep the service's default workout in the daily estimate
-   (recommended for the showcase), or add an optional "today's workout"
-   input?
-6. Local retention: keep today's behaviour (a local server stores each
-   plan with the details, and the screen says so), or ask for a separate
-   backend change that adds a no-retention local mode?
+1. The flow and the "Kitchen green" look: approved.
+2. The name stays "AI Meal Planner" (default; the owner can rename).
+3. The frozen `App.test.jsx` may be replaced by flow tests that keep
+   every guarantee listed in §5: approved.
+4. History stays as a small "past plans" link in local mode (default).
+5. The meal request keeps the service's default workout (default).
+6. Local retention is unchanged and disclosed on screen (default); a
+   no-retention mode would be a separate backend decision.

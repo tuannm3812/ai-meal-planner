@@ -36,6 +36,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 26 | Portions are rebalanced per ingredient toward AMDR, never the meal itself | 2026-10-18 |
 | 27 | Only the craving decides whether the corpus has a match; the profile only ranks | 2026-10-18 |
 | 28 | Recipes with no fat source get a cooking oil; a rounding miss is retried 2 points inside AMDR | 2026-10-18 |
+| 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -452,3 +453,26 @@ already met them. Rules out adding ingredients a recipe would not plausibly
 contain, and changing meals to reach the targets. The guardrail corpus keeps
 its pre-DEC-28 copies, so the guardrails stay comparable.
 
+## 2026-10-21 — React showcase
+
+Source: `docs/8_design.md`, reviewed by Codex (agent log, 2026-10-22 entry)
+and approved by the owner.
+
+### DEC-29 — The React app becomes one guided showcase flow, per `docs/8_design.md`
+
+The three-tab dashboard becomes one flow: profile and goal, then craving, then
+the plan with its shopping list, in the "Kitchen green" look. The first target
+is a local showcase, not a public app. The profile is held in React state only,
+never in a URL or browser storage, and goes with the meal request, so the meal
+is sized to the person on screen. The screen says that a local server keeps
+plan history with those details; retention is unchanged. Estimated nutrition
+is disclosed per ingredient and at meal level, and "on target" is described as
+measured against the same local tables. No avoid-option is offered that the
+rules do not enforce, so diabetes is not offered. The frozen `App.test.jsx`
+may be replaced by flow tests that keep every guarantee it has today (no
+network on first render, the request payload, error and retry, the
+stale-result guard, #32's meal-quality regressions). Defaults taken with the
+approval, changeable by the owner: the name stays "AI Meal Planner", the meal
+request keeps the service's default workout, and History stays as a small
+link in local mode. Rules out photos, recipes, live prices and accounts in
+this milestone, and an API key in the browser bundle.
