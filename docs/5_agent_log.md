@@ -7052,3 +7052,85 @@ Claude's browser claims were not independently reverified.
 No owner decision is needed. Appended exactly this one entry; no application
 changes retained, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 5 (shopping list)
+
+`showcase/step-4` merged `origin/main` (`bdd2fbe`, #36) with no conflicts.
+136 tests, eslint and build passed, and it was pushed at `0504dfb`. Slice 5
+is on `showcase/step-5`, branched from it, commit `192d9b7`. It is built
+from `SupermarketPayload` as `supermarket_agent.py` fills it:
+
+- **Aisles.** `features/plan/shopping.js` groups items by
+  `category_or_aisle`, in the order the list first reaches each aisle. An
+  item without an aisle goes under "Other". Each item keeps its position as
+  its id, because two ingredients can map to the same product. A missing
+  price stays missing rather than becoming $0.
+- **Honesty.** An item whose `data_source` is not
+  `local_inventory_reference` was guessed by the service's category
+  fallback ("Generic …" at a flat price), and says "Product and price
+  guessed from its category". A store whose `location_source` is not
+  `local_reference` says it is a likely store for the area, not one
+  matched to the address. The total is `total_estimated_cost` as sent,
+  never summed on screen. The note "Prices are estimates from a local
+  reference list, not live store prices." is from §3.3.
+- **Ticks.** `ShoppingList.jsx` gives each item a checkbox (44 px rows) and
+  shows "N of M ticked". Ticks are screen state only, never sent or
+  stored. The list is keyed by `request_id`, so a new plan starts with
+  nothing ticked.
+- **Empty state.** When `shopping_list` is null or empty, the list says "No
+  shopping list came with this plan.", with no checkboxes, total or note.
+  The meal still shows.
+- **Location.** The list names the location the plan was requested for
+  ("For shopping near “…”"). The old section showed it only as a stand-in
+  for a missing store address, so one assertion in `CravingStep.test.jsx`
+  now matches that line. The old `ShoppingSection` is removed.
+  `App.test.jsx` is unchanged and passes.
+
+Verified: 148 frontend tests pass, 12 of them new:
+- 6 for the helpers: aisle order, rough estimates, the same product
+  twice, the "Other" aisle, a missing price, a guessed store, and the
+  service's total;
+- 6 on screen: the full list, ticking by mouse and Space with no network
+  call, ticks reset on a new plan, the guessed-store note, and the
+  empty-list and no-list states.
+
+`eslint .` and `vite build` pass. Against a live API (a clean export, as
+before), the Beef taco salad chip gave a five-item list in Protein, Produce
+and Grocery aisles, with two category guesses labelled, and the total
+$16.40. No element overflows at 390 px or 1280 px. No Python changed.
+
+
+## 2026-10-22 — Codex — review showcase slice 5 shopping list
+
+Reviewed Claude's newest entry and both commits in `0504dfb..a43c66d`:
+`192d9b7` (shopping list) and `a43c66d` (its record), against `AGENTS.md`,
+the master and project standards, and `docs/8_design.md` §§3.3 and 5.
+
+**Clean: no P1–P3 findings in this slice.**
+
+- `frontend/src/features/plan/shopping.js:9–43` matches the current
+  `SupermarketPayload` and its producer: stable aisle grouping, separate
+  identities for duplicate products, explicit category/store estimates,
+  omitted missing prices, and the service's total without recomputation.
+- `frontend/src/features/plan/ShoppingList.jsx:25–115` provides labelled
+  native checkboxes grouped by aisle, 44 px label targets, estimated prices
+  and the reference-list notice. Empty/null lists leave the meal visible
+  and omit the total and price note. Ticks stay in component state.
+- `frontend/src/features/mealPlan/MealPlanTab.jsx:333–337` uses the submitted
+  location and keys the list to the response. The existing request reset
+  also unmounts the old list before replanning. The changed craving-test
+  assertion still checks that editing the location does not relabel a result.
+- The frozen `frontend/src/App.test.jsx` is byte-identical to the base and
+  passes. The full suite also preserves the payload, error/retry,
+  stale-result and meal-quality regressions required by §5.
+
+Verified locally: **148 frontend tests passed across 17 files**, including
+all 12 new shopping tests; `npm run lint`, `npm run build` and
+`git diff --check` passed. The build reports the existing stale
+Browserslist-data warning. No browser/viewport, live-API or Python suite
+checks were run in this review; Claude's corresponding claims were not
+independently reverified.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.

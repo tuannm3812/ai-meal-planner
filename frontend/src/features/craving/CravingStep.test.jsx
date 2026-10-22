@@ -118,8 +118,8 @@ describe('Craving step', () => {
     await user.type(screen.getByLabelText(/^Location/), ' West')
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     // The result still names the store area it was made for.
-    expect(screen.getByText('Earlwood, NSW')).toBeInTheDocument()
-    expect(screen.queryByText('Earlwood, NSW West')).not.toBeInTheDocument()
+    expect(screen.getByText('For shopping near “Earlwood, NSW”')).toBeInTheDocument()
+    expect(screen.queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
 
     await user.clear(cravingInput())
     await user.type(cravingInput(), 'salmon')
