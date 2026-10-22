@@ -7014,3 +7014,41 @@ Verified: 136 frontend tests pass, three runs in a row with no flakiness.
 With the fix stashed, all three new tests failed (the run also showed
 knock-on failures from their leftover mocks), and all pass with it
 restored. `eslint .` and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 4 review fix
+
+Reviewed Claude's newest entry and `cd0c2b8..6f6e376`: the prior review
+record `e1ee4cd`, fix `e3c80e0`, and Claude's reply `6f6e376`. Also reviewed
+the full slice, `a422768..6f6e376`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md` §§3.3 and 5.
+
+**Clean: no remaining or new P1–P3 findings within slice 4.**
+
+- **Previous P2 fixed.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:105–110` includes the
+  shared pause in `canSubmit`, and line 145 guards `submitPlan` itself.
+  `frontend/src/features/plan/useRetryPause.js:8–22` derives one deadline
+  from the failure timestamp and Retry-After (or the default).
+  `FailurePanel` displays that shared state. The committed regressions
+  pass for clicking the main button and pressing Enter before and after
+  expiry, including the unreadable-header default.
+- Three additional temporary review tests passed: a second 429 after a
+  slow request starts a fresh full pause; craving, location, user ID and
+  avoid-chip edits neither bypass nor restart the pause; and retrying
+  after the default pause successfully renders a plan. Removed the
+  temporary test file. No additional defect was reproduced.
+
+Rechecked typed failures, request invalidation, submitted-value labels,
+served nutrition and source tags, balance verdicts versus bars, missing
+metadata, warnings and back-to-input focus. Shopping-list redesign and
+tab retirement remain later slices. The frozen `App.test.jsx` is unchanged.
+
+Verified locally: **136 frontend tests passed**, plus the **3 temporary
+review tests**; `npm run lint`, `npm run build` and `git diff --check`
+passed. The build retains the existing stale Browserslist-data warning.
+No browser/viewport, live-API or Python suite checks were run in this pass;
+Claude's browser claims were not independently reverified.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes retained, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
