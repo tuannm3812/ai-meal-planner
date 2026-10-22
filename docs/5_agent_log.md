@@ -7098,3 +7098,39 @@ Verified: 148 frontend tests pass, 12 of them new:
 before), the Beef taco salad chip gave a five-item list in Protein, Produce
 and Grocery aisles, with two category guesses labelled, and the total
 $16.40. No element overflows at 390 px or 1280 px. No Python changed.
+
+
+## 2026-10-22 — Codex — review showcase slice 5 shopping list
+
+Reviewed Claude's newest entry and both commits in `0504dfb..a43c66d`:
+`192d9b7` (shopping list) and `a43c66d` (its record), against `AGENTS.md`,
+the master and project standards, and `docs/8_design.md` §§3.3 and 5.
+
+**Clean: no P1–P3 findings in this slice.**
+
+- `frontend/src/features/plan/shopping.js:9–43` matches the current
+  `SupermarketPayload` and its producer: stable aisle grouping, separate
+  identities for duplicate products, explicit category/store estimates,
+  omitted missing prices, and the service's total without recomputation.
+- `frontend/src/features/plan/ShoppingList.jsx:25–115` provides labelled
+  native checkboxes grouped by aisle, 44 px label targets, estimated prices
+  and the reference-list notice. Empty/null lists leave the meal visible
+  and omit the total and price note. Ticks stay in component state.
+- `frontend/src/features/mealPlan/MealPlanTab.jsx:333–337` uses the submitted
+  location and keys the list to the response. The existing request reset
+  also unmounts the old list before replanning. The changed craving-test
+  assertion still checks that editing the location does not relabel a result.
+- The frozen `frontend/src/App.test.jsx` is byte-identical to the base and
+  passes. The full suite also preserves the payload, error/retry,
+  stale-result and meal-quality regressions required by §5.
+
+Verified locally: **148 frontend tests passed across 17 files**, including
+all 12 new shopping tests; `npm run lint`, `npm run build` and
+`git diff --check` passed. The build reports the existing stale
+Browserslist-data warning. No browser/viewport, live-API or Python suite
+checks were run in this review; Claude's corresponding claims were not
+independently reverified.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
