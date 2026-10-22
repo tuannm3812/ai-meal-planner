@@ -11,14 +11,15 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import MealPlanTab from '../mealPlan/MealPlanTab'
+import { goToStep } from '../../test/flow'
+import MealFlow from '../flow/MealFlow'
 import { DEFAULT_RETRY_SECONDS } from './failures'
 import { SAMPLE_PLAN } from './samplePlan'
 
-const planButton = () => screen.getByRole('button', { name: 'Generate Meal Plan' })
+const planButton = () => screen.getByRole('button', { name: 'Plan my meal' })
 
 async function plan(user, craving = 'chicken fried rice') {
-  await user.type(screen.getByLabelText(/Craving Input/i), craving)
+  await user.type(screen.getByLabelText(/Your craving/i), craving)
   await user.click(planButton())
 }
 
@@ -33,7 +34,7 @@ describe('Plan screen', () => {
   it('shows the header, badges and estimated-nutrition notice for a real response', async () => {
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const header = await screen.findByRole('region', { name: 'Chicken Fried Rice' })
@@ -51,7 +52,7 @@ describe('Plan screen', () => {
   it('shows calories against the target, grams, and the served split in its bands', async () => {
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const energy = await screen.findByRole('region', { name: 'Calories' })
@@ -72,7 +73,7 @@ describe('Plan screen', () => {
   it('tags each served ingredient and keeps the notes collapsed', async () => {
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const list = await screen.findByRole('region', { name: 'Ingredients' })
@@ -98,7 +99,7 @@ describe('Plan screen', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const header = await screen.findByRole('region', { name: 'Chicken Fried Rice' })
@@ -114,7 +115,7 @@ describe('Plan screen', () => {
     delete older.macro_balance
     axios.post.mockResolvedValueOnce({ data: older })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const header = await screen.findByRole('region', { name: 'Chicken Fried Rice' })
@@ -137,7 +138,7 @@ describe('Plan screen', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user, 'peanut noodles')
 
     expect(await screen.findByText('No meal fits these constraints')).toBeInTheDocument()
@@ -145,8 +146,11 @@ describe('Plan screen', () => {
     expect(screen.queryByRole('region', { name: 'Calories' })).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('button', { name: 'Try another craving' }))
-    expect(screen.getByLabelText(/Craving Input/i)).toHaveFocus()
-    expect(screen.getByLabelText(/Craving Input/i)).toHaveValue('peanut noodles')
+    expect(screen.getByRole('heading', { name: 'What are you in the mood for?' })).toHaveFocus()
+    expect(screen.getByLabelText(/Your craving/i)).toHaveValue('peanut noodles')
+
+    await goToStep(user, '3 · Your plan')
+    expect(screen.getByText('No meal fits these constraints')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: 'Change your details' }))
     expect(screen.getByRole('heading', { name: 'Tell us about you' })).toHaveFocus()
   })
@@ -154,7 +158,7 @@ describe('Plan screen', () => {
   it('shows an indeterminate loading state with no invented stages', async () => {
     axios.post.mockImplementationOnce(() => new Promise(() => {}))
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     expect(screen.getByText('Planning your meal…', { selector: 'h2' })).toBeInTheDocument()
@@ -177,7 +181,7 @@ describe('Plan screen failures', () => {
   ])('says a %i server needs an API key and offers no retry', async (status, code, body) => {
     reject(status, { code, detail: 'from the server' })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const alert = await screen.findByRole('alert')
@@ -191,7 +195,7 @@ describe('Plan screen failures', () => {
     reject(429, { code: 'rate_limited' }, { 'retry-after': '3' })
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const alert = await screen.findByRole('alert')
@@ -211,15 +215,17 @@ describe('Plan screen failures', () => {
 
   it.each([
     ['clicking the plan button', async (user) => user.click(planButton())],
-    ['pressing Enter in the craving', async (user) => user.type(screen.getByLabelText(/Craving Input/i), '{Enter}')],
+    ['pressing Enter in the craving', async (user) => user.type(screen.getByLabelText(/Your craving/i), '{Enter}')],
   ])('sends nothing during the pause by %s', async (_route, send) => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     reject(429, { code: 'rate_limited' }, { 'retry-after': '60' })
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
     await screen.findByRole('alert')
+    await goToStep(user, '2 · Craving')
+    expect(screen.getByText(/You can plan again in about 60 seconds/)).toBeInTheDocument()
 
     expect(planButton()).toBeDisabled()
     await send(user)
@@ -238,11 +244,12 @@ describe('Plan screen failures', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true })
     reject(429, { code: 'rate_limited' })
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
     await screen.findByRole('alert')
+    await goToStep(user, '2 · Craving')
 
-    await user.type(screen.getByLabelText(/Craving Input/i), '{Enter}')
+    await user.type(screen.getByLabelText(/Your craving/i), '{Enter}')
     expect(axios.post).toHaveBeenCalledTimes(1)
     await act(async () => {
       vi.advanceTimersByTime((DEFAULT_RETRY_SECONDS - 1) * 1000)
@@ -257,7 +264,7 @@ describe('Plan screen failures', () => {
   it('uses its default pause when Retry-After cannot be read', async () => {
     reject(429, { code: 'rate_limited' })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     expect(await screen.findByRole('alert')).toHaveTextContent(
@@ -271,7 +278,7 @@ describe('Plan screen failures', () => {
       detail: 'Nutrition verification is temporarily unavailable.',
     })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const alert = await screen.findByRole('alert')
@@ -284,7 +291,7 @@ describe('Plan screen failures', () => {
     reject(503, { detail: 'Meal retrieval is temporarily unavailable. Please try again shortly.' })
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const alert = await screen.findByRole('alert')
@@ -298,7 +305,7 @@ describe('Plan screen failures', () => {
   it('keeps the unreachable copy, with a retry', async () => {
     axios.post.mockRejectedValueOnce(new Error('Network Error'))
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     await plan(user)
 
     const alert = await screen.findByRole('alert')

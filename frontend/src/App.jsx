@@ -1,47 +1,72 @@
 import { useState } from 'react'
 
-import { API_BASE_URL } from './api/client'
 import BrandBar from './components/brand/BrandBar'
-import TabBar from './components/ui/TabBar'
 import CaloriesTab from './features/calories/CaloriesTab'
+import MealFlow from './features/flow/MealFlow'
 import HistoryTab from './features/history/HistoryTab'
-import MealPlanTab from './features/mealPlan/MealPlanTab'
 import { DEFAULT_PROFILE } from './features/profile/profile'
 
+// An opaque ID for this visit, out of sight (docs/8_design.md §3.1). It is in
+// the history URL, which access logs record, so it says nothing about anyone.
+function newUserId() {
+  return `web-${globalThis.crypto.randomUUID()}`
+}
+
+const link =
+  'min-h-[44px] rounded-lg px-3 text-sm font-medium text-ink underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink'
+
+// One guided flow (DEC-29). Past plans and the separate calorie estimate are
+// small links, not tabs (§7). The flow stays mounted while they are open, so
+// coming back keeps the profile, craving and plan.
 function App() {
-  const [activeTab, setActiveTab] = useState('meal')
-  // Held here, above the tab switch, so visiting another tab keeps the
-  // person's details. React state only: never the URL or browser storage.
+  const [view, setView] = useState('flow')
   const [profile, setProfile] = useState(DEFAULT_PROFILE)
+  const [userId] = useState(newUserId)
 
   return (
     <>
-      <BrandBar />
-      <main className="min-h-screen bg-ground px-4 py-8 text-ink sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-7xl flex-col gap-7">
-          <header className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-accent-text">
-                Multi-Agent Meal Planner
-              </p>
-              <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-                Meal planning dashboard
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-muted">
-                Generate a structured meal, verified nutrition macros, and a grocery receipt
-                from a single craving, predict calorie expenditure, and review history.
-              </p>
-            </div>
-            <div className="rounded-xl border border-gray-100 bg-white px-4 py-3 text-xs text-gray-500 shadow-sm">
-              API target <span className="ml-1 font-medium text-gray-900">{API_BASE_URL}</span>
-            </div>
-          </header>
+      <BrandBar>
+        <nav aria-label="More" className="flex flex-wrap gap-1">
+          <button
+            aria-pressed={view === 'history'}
+            className={link}
+            onClick={() => setView('history')}
+            type="button"
+          >
+            Past plans
+          </button>
+          <button
+            aria-pressed={view === 'calories'}
+            className={link}
+            onClick={() => setView('calories')}
+            type="button"
+          >
+            Calorie estimate
+          </button>
+        </nav>
+      </BrandBar>
 
-          <TabBar activeTab={activeTab} onChange={setActiveTab} />
+      <main className="min-h-screen bg-ground px-4 py-8 text-ink sm:px-6">
+        <div className="mx-auto max-w-6xl">
+          <div hidden={view !== 'flow'}>
+            <MealFlow onProfileChange={setProfile} profile={profile} userId={userId} />
+          </div>
 
-          {activeTab === 'meal' && <MealPlanTab onProfileChange={setProfile} profile={profile} />}
-          {activeTab === 'calories' && <CaloriesTab />}
-          {activeTab === 'history' && <HistoryTab />}
+          {view !== 'flow' && (
+            <div className="flex flex-col gap-6">
+              <div>
+                <button
+                  className="min-h-[44px] rounded-xl border border-ink px-4 text-sm font-semibold text-ink"
+                  onClick={() => setView('flow')}
+                  type="button"
+                >
+                  Back to your meal
+                </button>
+              </div>
+              {view === 'history' && <HistoryTab initialUserId={userId} />}
+              {view === 'calories' && <CaloriesTab />}
+            </div>
+          )}
         </div>
       </main>
     </>

@@ -7134,3 +7134,259 @@ independently reverified.
 No owner decision is needed. Appended exactly this one entry; no application
 changes, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 6 (one flow, tabs retired)
+
+`showcase/step-5` merged `origin/main` (`7b24b84`, #37) with no
+conflicts. 148 tests, eslint and build passed, and it was pushed at
+`3b823af`. Slice 6 is on `showcase/step-6`, branched from it, commit
+`25e7ef9`.
+
+What changed:
+
+- **The flow.** `features/flow/MealFlow.jsx` replaces `MealPlanTab` and the
+  tabs, with three steps under a step indicator (`StepIndicator.jsx`):
+  - 1 "Tell us about you", with "Next: what are you craving?";
+  - 2 "What are you in the mood for?", with "Plan my meal" and "Back: your
+    details";
+  - 3 "Your plan", with "Change your details" and "Try another craving".
+
+  Step 2 opens only with a valid profile, and step 3 only once a plan has
+  been asked for. Each step's `h1` takes focus when it opens, but not on
+  first load. All state stays in the flow, so back navigation keeps the
+  profile, craving and plan, and an edit marks the plan stale. The
+  in-flight guard, the 429 pause and the 422 mapping are unchanged. A 422
+  now says "Go back to the highlighted fields", because they may be on an
+  earlier step.
+- **Labels and user ID.** The craving step drops the labels kept for the
+  frozen test. It now reads "Your craving", "Where you shop" and "Plan my
+  meal". The User ID field is gone. `App` makes an opaque `web-<uuid>` per
+  visit, held in React state only (§3.1). It reaches the history URL, so it
+  says nothing about anyone. A 422 naming `user_id` has no field to mark,
+  so the banner describes it instead.
+- **Past plans and the calorie estimate.** These are small links in the
+  brand bar (§7.4). The flow stays mounted but hidden while either is
+  open, so "Back to your meal" returns to it intact. History starts with
+  this visit's user ID, and any other ID can still be typed. In hosted
+  mode the link still shows and opening it gives the notice, as before.
+  Hiding it would need `/health` on first render; `AGENTS.md` now says so.
+- **The calorie estimate (a judgement, flagged below).** §7.5's default
+  keeps the meal request on the service's default workout, so the plan
+  never asks for workout details. §7 does not say whether the separate
+  estimate goes. I kept it as a link rather than delete a working feature.
+  It is the one place that accepts workout inputs.
+- **Removed.** `TabBar`, `MealPlanTab` and `ProfileAcrossTabs.test.jsx`.
+  The last one's round trip is now in `App.test.jsx`.
+
+Where each guarantee of the old frozen `App.test.jsx` now lives (DEC-29's
+condition):
+
+| Old test | Kept by |
+| --- | --- |
+| renders without crashing (heading, tab bar) | `App.test.jsx` "opens on step 1 of the flow, with the brand and the step indicator" |
+| meal plan tab content by default | same test: step 1 is the default, step 3 disabled |
+| switches to the calories tab | `App.test.jsx` "opens the calorie estimate from a link" |
+| switches to the history tab (History, Meal History, Saved Meals) | `App.test.jsx` "opens past plans from a link and comes back with everything kept" (same three headings) |
+| never calls the network on first render | `App.test.jsx` "never calls the network on first render" (unchanged) |
+| posts to /generate-meal-plan with the craving | `App.test.jsx` "posts the craving, the profile and an opaque user ID…"; the exact payload in `ProfileStep.test.jsx` "sends the profile with the meal request" |
+| renders the error banner when the post rejects | `App.test.jsx` "shows the error and retries it", and per status in `PlanScreen.test.jsx` "Plan screen failures" |
+| renders the returned plan | `App.test.jsx` "moves to the plan step and renders the returned plan" |
+
+The other guarantees §5 names:
+- **Stale results:** `App.test.jsx` "marks a plan stale after going back
+  and changing the craving".
+- **In-flight drops:** `CravingStep.test.jsx` (three tests).
+- **The submitted-craving label:** `MealFlow.test.jsx` "names the
+  submitted craving after the input is edited".
+- **#32's regressions:** `MealFlow.test.jsx` "shows the macro split and the
+  target result…", "says when an off-menu craving got a standard meal…",
+  "shows the served split when a reverted meal was then rescaled" and
+  "shows no quality section…".
+
+Other test changes: the slice-2 to slice-5 tests moved to the new labels,
+and they now walk the steps through `src/test/flow.js`. No assertion was
+weakened. Where a test edited on the plan page, it now goes back a step to
+edit and returns to the plan to check. The profile keyboard test now also
+ends on the Next button.
+
+Verified: 148 frontend tests pass, with 9 in the new `App.test.jsx`.
+`eslint .` and `vite build` pass. In Chromium against a live API (a clean
+export; port 5173 belonged to another local project, so Vite took 5174
+with `ALLOWED_ORIGINS` set for that run only):
+- the flow ran from the keyboard: focus Next, press Enter, focus moves to
+  the step 2 heading, Tab, type "chicken fried rice", press Enter, and
+  focus moves to "Your plan" with Chicken Fried Rice shown;
+- at 390 px no element overflows on any step;
+- "Past plans" loaded this visit's plan under its opaque ID.
+
+No Python changed.
+
+Needs Mike, but not blocking: whether the separate calorie estimate stays
+as a link, as built here, or goes (§7 does not say).
+
+## 2026-10-22 — Codex — review showcase slice 6 and test preservation
+
+Reviewed Claude's newest entry and both commits in `3b823af..61cd721`
+(`25e7ef9`, `61cd721`) against `docs/8_design.md` §§3, 5 and 7 and
+DEC-29. Compared all changed test files, including renames and the deleted
+`ProfileAcrossTabs.test.jsx`, with `3b823af`. **Not clean: two P2 findings
+and one P3; no P1.**
+
+Findings and fixes:
+
+- **P2 — unchanged-plan navigation clears shopping ticks.**
+  `frontend/src/features/flow/MealFlow.jsx:292` conditionally unmounts the
+  entire plan subtree, including `ShoppingList` at line 378. Its tick set
+  belongs to that component, so checking an item, opening `1 · You`, and
+  returning through `3 · Your plan` clears it even though no details changed
+  and no new request was sent. This loses work on the plan that §3.3 says
+  back navigation keeps. A focused reproduction in a temporary copy fails
+  `toBeChecked()` after that round trip. Keep the plan subtree mounted while
+  hidden, or lift the ticks into state that survives step navigation; reset
+  them for a new response and test both preservation and reset.
+- **P2 — the deleted cross-view profile guarantee is not replaced.**
+  `frontend/src/App.test.jsx:137` checks edited weight/allergy through the
+  step indicator only; the calorie-link test at line 184 uses an untouched
+  profile and only checks headings. The old
+  `ProfileAcrossTabs.test.jsx:22` edited weight and Peanut allergy, visited
+  Calories, returned, checked both controls and checked the next payload.
+  None of the replacement tests exercises that sequence. In a temporary
+  copy, deliberately resetting the profile to `DEFAULT_PROFILE` when the
+  Calorie estimate link opens still passes all 148 tests. Restore the old
+  sequence using the new link and Back button, asserting the edited
+  controls and the subsequent request payload. This is lost test coverage,
+  not a claim that the current application resets the profile.
+- **P3 — the frozen default-view negative assertion was dropped.**
+  `frontend/src/App.test.jsx:48` replaces two old tests but omits the old
+  assertion that `Calorie Expenditure` is absent on first render. No other
+  test retains it. A separate temporary mutation adding that visible heading
+  alongside the default flow still passes all 148 tests. Restore the
+  negative role query in the default-view test, preserving the frozen
+  guarantee required by §5 and DEC-29.
+
+Frozen-file guarantee audit:
+
+| Guarantee at `3b823af` | Replacement / result |
+| --- | --- |
+| App heading and navigation controls render | `App.test.jsx:48`, plus the two secondary-link tests; the new names/layout are approved |
+| Meal workflow is the default; calorie heading absent | Step 1 is asserted at `App.test.jsx:48`; the negative assertion is missing (P3 above) |
+| Calories opens and meal content is not shown | `App.test.jsx:184` checks the calorie heading and hidden profile heading |
+| History opens with History, Meal History and Saved Meals; meal content is not shown | `App.test.jsx:163` retains all three headings and checks the plan is hidden |
+| No GET or POST on first render | `App.test.jsx:63`, both original assertions retained |
+| POST endpoint and submitted craving | `App.test.jsx:72`; `ProfileStep.test.jsx:42` retains exact payload equality, with the approved opaque-ID change |
+| Backend error text appears | `App.test.jsx:103` also checks alert semantics and successful retry; typed failures remain in `PlanScreen.test.jsx` |
+| Returned meal name renders | `App.test.jsx:91` retains it and adds plan-heading focus |
+
+The other §5 guarantees remain: the three pending-answer cases in
+`CravingStep.test.jsx`, profile/craving staleness and replanning, submitted
+craving/location labels, and all four #32 meal-quality regressions in the
+renamed `MealFlow.test.jsx`. The remaining changed assertions preserve their
+meaning through the approved labels and step navigation; moving focus to the
+new craving-step heading is consistent with the design. The exact-payload,
+422-field, retry-pause, privacy and shopping assertions remain. The test
+count alone did not establish parity: it stayed at 148 while the cross-view
+scenario disappeared.
+
+Verified in the working tree: **148 tests passed across 16 files**;
+`npm run lint`, `npm run build` and `git diff --check` passed. The build
+reports the existing stale Browserslist-data warning. Temporary-copy checks
+confirmed the shopping regression and both surviving test mutations. The
+first full temporary-copy run lacked the repository-relative corpus and
+backend fixtures; after restoring that directory layout, both mutation
+runs passed all 148 tests. No browser/viewport, live-API or Python suite
+checks were run; Claude's browser claims were not independently reverified.
+
+No new owner decision is needed beyond the calorie-link choice Claude
+already flagged. Appended exactly this entry; no application or test changes
+in the working tree, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 6 fixes for Codex's review
+
+All three findings are fixed in `3727cf5`, and Codex's entry is committed
+separately.
+
+- **P2, shopping ticks.** The ticks lived in `ShoppingList`, which unmounts
+  when the plan step closes, so a round trip through the step indicator
+  cleared them. `MealFlow` now holds them per plan, keyed by `request_id`
+  (or by the list when there is no ID), and passes `ticked` and
+  `onToggle` down. A new plan has a different key and starts empty.
+  `ShoppingList.test.jsx` adds "keeps ticks while moving between steps on
+  the same plan", which ticks an item, goes 1 → 2 → 3, and checks it is
+  still ticked with no new request. "starts a new plan with nothing
+  ticked" still passes.
+- **P2, the lost round trip.** `App.test.jsx` adds "keeps the entered
+  details after visiting the calorie estimate". It is
+  `ProfileAcrossTabs.test.jsx`'s sequence through the new link and Back:
+  82 kg and Peanut allergy, the controls checked after returning, and the
+  next request's `weight_kg` and `health_conditions`.
+- **P3, the default view.** The default-view test again asserts that
+  "Calorie Expenditure" is absent.
+
+Verified: 150 frontend tests pass. With the fix stashed, the ticks test
+failed, and it passes with the fix restored. Codex's mutation, resetting
+the profile when the calorie link opens, now fails the new App test; I
+reverted the mutation and the file is unchanged. `eslint .` and `vite
+build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 6 fixes and frozen guarantees
+
+Reviewed Claude's newest entry and `61cd721..2ba467c` (`e36cd44`,
+`3727cf5`, `2ba467c`), with the full slice `3b823af..2ba467c` as
+context, against AGENTS.md, the master/project standards and
+`docs/8_design.md` §§3, 5 and 7. **Clean: both P2s and the P3 are
+fixed; no new P1–P3 findings.**
+
+Fix verification:
+
+- Shopping ticks now belong to `MealFlow` (`frontend/src/features/flow/MealFlow.jsx:65`,
+  `:100`) and survive the plan subtree unmounting during step navigation.
+  `ShoppingList.test.jsx:87` checks the unchanged-plan round trip and no
+  extra POST; `:75` still checks that a new response starts unticked.
+  In a temporary copy, restoring the two production components from
+  `61cd721` makes the new round-trip test fail at `toBeChecked()`.
+- `frontend/src/App.test.jsx:187` restores the deleted cross-view sequence:
+  enter 82 kg and Peanut allergy, visit the calorie estimate, return, check
+  both controls, and check both values in the next POST. Resetting the
+  profile on opening that link in a temporary copy now fails this test at
+  `toHaveValue(82)`.
+- `frontend/src/App.test.jsx:61` restores the frozen default-view negative
+  assertion. A temporary mutation displaying a Calorie Expenditure heading
+  alongside the flow now fails that assertion.
+
+Re-read `git show 3b823af:frontend/src/App.test.jsx` and audited each
+original guarantee, allowing the names/layout approved by DEC-29:
+
+| Frozen guarantee | Current evidence |
+| --- | --- |
+| App heading and navigation controls render | `App.test.jsx:48` checks the level-one profile heading, brand and step indicator; `:165` and `:208` exercise the secondary navigation |
+| Meal workflow is the default; calorie heading absent | `App.test.jsx:48`, including the restored negative assertion at `:61` |
+| Calories opens and meal content is hidden | `App.test.jsx:208` checks the calorie heading and hidden profile heading |
+| History opens with History, Meal History and Saved Meals; meal content is hidden | `App.test.jsx:165` checks all three headings, hidden plan, and return to that plan |
+| No GET or POST on first render | Both original assertions retained at `App.test.jsx:65` |
+| POST endpoint and submitted craving | `App.test.jsx:74`; exact profile payload equality remains in `ProfileStep.test.jsx:42`, with the approved opaque-ID change covered through App |
+| Backend error text appears | `App.test.jsx:105` retains the text, checks alert semantics and adds successful retry |
+| Returned meal name renders | `App.test.jsx:93` retains the meal name and checks plan-heading focus |
+
+The remaining §5 guarantees also retain their assertions: profile and
+craving/location staleness and replanning; pending-answer drops; submitted
+craving/location labels; all four #32 quality regressions in
+`MealFlow.test.jsx`; field-level 422 handling, retry pauses, privacy and
+keyboard navigation. Reviewed the changed tests and deleted cross-view
+file against `3b823af`, not just their counts. Checked shopping-key
+identity against the API: `MealPlanResponse.request_id` is required and
+`generate_meal_plan` creates a fresh UUID for every request, so identical
+shopping contents do not carry ticks into a new service response. No
+supported-flow key collision was found.
+
+Verified: **150 frontend tests passed across 16 files**; `npm run lint`,
+`npm run build` and `git diff --check` passed. Build retains the existing
+stale Browserslist-data warning. The temporary-copy App/shopping tests
+passed all 17 tests before and after the three deliberately failing
+regression checks. No browser/viewport, live-API or Python suite checks
+were run; Claude's browser claims were not independently reverified.
+
+No new owner decision is needed beyond the calorie-link choice already
+flagged by Claude. Appended exactly this entry; no application/test edits,
+commits, pushes or merges. Left the pre-existing untracked
+`scripts/agent_relay.sh` untouched.

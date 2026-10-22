@@ -11,14 +11,13 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import MealPlanTab from '../mealPlan/MealPlanTab'
+import { goToStep, planMeal } from '../../test/flow'
+import MealFlow from '../flow/MealFlow'
 import { SAMPLE_PLAN } from './samplePlan'
 
 async function planWith(user, data, craving = 'chicken fried rice') {
   axios.post.mockResolvedValueOnce({ data })
-  await user.clear(screen.getByLabelText(/Craving Input/i))
-  await user.type(screen.getByLabelText(/Craving Input/i), craving)
-  await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
+  await planMeal(user, craving)
   return screen.findByRole('region', { name: 'Shopping list' })
 }
 
@@ -29,7 +28,7 @@ describe('Shopping list', () => {
 
   it('lists items by aisle with prices, the total and the estimate note', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     const list = await planWith(user, SAMPLE_PLAN)
 
     expect(within(list).getByText('For shopping near “Earlwood, NSW”')).toBeInTheDocument()
@@ -56,7 +55,7 @@ describe('Shopping list', () => {
 
   it('ticks items by mouse and keyboard, sending nothing', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     const list = await planWith(user, SAMPLE_PLAN)
     expect(within(list).getByText('0 of 6 ticked')).toBeInTheDocument()
 
@@ -76,7 +75,7 @@ describe('Shopping list', () => {
 
   it('starts a new plan with nothing ticked', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     let list = await planWith(user, SAMPLE_PLAN)
     await user.click(within(list).getByRole('checkbox', { name: /Chicken Breast Fillets/ }))
 
@@ -85,9 +84,23 @@ describe('Shopping list', () => {
     expect(within(list).getByRole('checkbox', { name: /Chicken Breast Fillets/ })).not.toBeChecked()
   })
 
+  it('keeps ticks while moving between steps on the same plan', async () => {
+    const user = userEvent.setup()
+    render(<MealFlow initialStep="craving" />)
+    await planWith(user, SAMPLE_PLAN)
+    await user.click(screen.getByRole('checkbox', { name: /Chicken Breast Fillets/ }))
+
+    await goToStep(user, '1 · You')
+    await goToStep(user, '2 · Craving')
+    await goToStep(user, '3 · Your plan')
+    expect(screen.getByRole('checkbox', { name: /Chicken Breast Fillets/ })).toBeChecked()
+    expect(screen.getByText('1 of 6 ticked')).toBeInTheDocument()
+    expect(axios.post).toHaveBeenCalledTimes(1)
+  })
+
   it('says when the store is a guess for the area', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     const list = await planWith(user, {
       ...SAMPLE_PLAN,
       shopping_list: {
@@ -107,7 +120,7 @@ describe('Shopping list', () => {
     ['no list at all', null],
   ])('shows its empty state for %s, with no total or note', async (_case, shopping) => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     const list = await planWith(user, { ...SAMPLE_PLAN, shopping_list: shopping })
 
     expect(within(list).getByText('No shopping list came with this plan.')).toBeInTheDocument()

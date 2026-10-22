@@ -11,7 +11,8 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import MealPlanTab from '../mealPlan/MealPlanTab'
+import { goToStep } from '../../test/flow'
+import MealFlow from '../flow/MealFlow'
 
 const plan = (name) => ({
   data: {
@@ -22,8 +23,8 @@ const plan = (name) => ({
   },
 })
 
-const cravingInput = () => screen.getByLabelText(/Craving Input/i)
-const planButton = () => screen.getByRole('button', { name: 'Generate Meal Plan' })
+const cravingInput = () => screen.getByLabelText(/Your craving/i)
+const planButton = () => screen.getByRole('button', { name: 'Plan my meal' })
 
 describe('Craving step', () => {
   beforeEach(() => {
@@ -32,7 +33,7 @@ describe('Craving step', () => {
 
   it('fills the craving from a suggestion and sends it', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     const suggestions = screen.getByRole('list', { name: 'Or try one of these' })
     await user.click(within(suggestions).getByRole('button', { name: 'Salmon quinoa' }))
@@ -44,7 +45,7 @@ describe('Craving step', () => {
 
   it('picks a suggestion from the keyboard', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     screen.getByRole('button', { name: 'Chickpea curry' }).focus()
     await user.keyboard('{Enter}')
@@ -55,7 +56,7 @@ describe('Craving step', () => {
 
   it('says why a craving is refused and sends nothing', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'x')
     expect(cravingInput()).toHaveAttribute('aria-invalid', 'true')
@@ -70,10 +71,10 @@ describe('Craving step', () => {
 
   it('says when the location is emptied', async () => {
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'fried rice')
-    await user.clear(screen.getByLabelText(/^Location/))
+    await user.clear(screen.getByLabelText(/^Where you shop/))
     expect(screen.getByText('Enter a location.')).toBeInTheDocument()
     expect(planButton()).toBeDisabled()
   })
@@ -86,19 +87,20 @@ describe('Craving step', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'zzz')
     await user.click(planButton())
     expect(
       await screen.findByText(
-        'The service could not use some of your details. Check the highlighted fields.',
+        'The service could not use some of your details. Go back to the highlighted fields.',
       ),
     ).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Try another craving' }))
     expect(cravingInput()).toHaveAccessibleDescription('Not a food we recognise')
 
     // Editing the location leaves the craving's message; editing the craving clears it.
-    await user.type(screen.getByLabelText(/^Location/), ' West')
+    await user.type(screen.getByLabelText(/^Where you shop/), ' West')
     expect(cravingInput()).toHaveAttribute('aria-invalid', 'true')
     await user.type(cravingInput(), 'z')
     expect(cravingInput()).not.toHaveAttribute('aria-invalid')
@@ -108,21 +110,25 @@ describe('Craving step', () => {
     axios.post.mockResolvedValueOnce(plan('Chicken Fried Rice'))
     axios.post.mockResolvedValueOnce(plan('Salmon Quinoa Plate'))
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'fried rice')
     await user.click(planButton())
     await screen.findByText('Chicken Fried Rice')
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
 
-    await user.type(screen.getByLabelText(/^Location/), ' West')
+    await goToStep(user, '2 · Craving')
+    await user.type(screen.getByLabelText(/^Where you shop/), ' West')
+    await goToStep(user, '3 · Your plan')
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     // The result still names the store area it was made for.
     expect(screen.getByText('For shopping near “Earlwood, NSW”')).toBeInTheDocument()
     expect(screen.queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
 
+    await goToStep(user, '2 · Craving')
     await user.clear(cravingInput())
     await user.type(cravingInput(), 'salmon')
+    await goToStep(user, '3 · Your plan')
     await user.click(screen.getByRole('button', { name: 'Plan again with these details' }))
     expect(axios.post.mock.calls[1][1]).toMatchObject({
       craving: 'salmon',
@@ -147,19 +153,23 @@ describe('Craving step', () => {
   it('drops a pending answer when the craving changes before it arrives', async () => {
     const answer = deferPost()
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'fried rice')
     await user.click(planButton())
+    // Back to the craving while the plan is still being made.
+    await goToStep(user, '2 · Craving')
     await user.clear(cravingInput())
     await user.type(cravingInput(), 'salmon')
     answer(plan('Chicken Fried Rice'))
+    await goToStep(user, '3 · Your plan')
 
     expect(await screen.findByText(/Plan set aside/)).toBeInTheDocument()
     expect(screen.queryByText('Chicken Fried Rice')).not.toBeInTheDocument()
-    expect(planButton()).toBeEnabled()
 
     axios.post.mockResolvedValueOnce(plan('Salmon Quinoa Plate'))
+    await goToStep(user, '2 · Craving')
+    expect(planButton()).toBeEnabled()
     await user.click(planButton())
     expect(axios.post.mock.calls[1][1]).toMatchObject({ craving: 'salmon' })
     await screen.findByText('Salmon Quinoa Plate')
@@ -169,12 +179,14 @@ describe('Craving step', () => {
   it('drops a pending answer when the profile changes before it arrives', async () => {
     const answer = deferPost()
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'fried rice')
     await user.click(planButton())
+    await user.click(screen.getByRole('button', { name: 'Change your details' }))
     await user.click(screen.getByRole('checkbox', { name: 'Vegan' }))
     answer(plan('Chicken Fried Rice'))
+    await goToStep(user, '3 · Your plan')
 
     expect(await screen.findByText(/Plan set aside/)).toBeInTheDocument()
     expect(screen.queryByText('Chicken Fried Rice')).not.toBeInTheDocument()
@@ -183,20 +195,22 @@ describe('Craving step', () => {
   it('keeps a pending answer when an edit is undone before it arrives', async () => {
     const answer = deferPost()
     const user = userEvent.setup()
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
 
     await user.type(cravingInput(), 'fried rice')
     await user.click(planButton())
     // Whitespace the request trims away is not a change to what was asked.
+    await goToStep(user, '2 · Craving')
     await user.type(cravingInput(), ' ')
     answer(plan('Chicken Fried Rice'))
+    await goToStep(user, '3 · Your plan')
 
     expect(await screen.findByText('Chicken Fried Rice')).toBeInTheDocument()
     expect(screen.queryByText(/Plan set aside/)).not.toBeInTheDocument()
   })
 
   it('makes only promises that hold today', () => {
-    render(<MealPlanTab />)
+    render(<MealFlow initialStep="craving" />)
     expect(screen.getByText('Matched to a real menu')).toBeInTheDocument()
     expect(
       screen.getByText('No close match? You get a standard meal and a note saying so.'),

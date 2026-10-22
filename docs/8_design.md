@@ -263,3 +263,5 @@ design on 2026-10-21 (DEC-29):
 5. The meal request keeps the service's default workout (default).
 6. Local retention is unchanged and disclosed on screen (default); a
    no-retention mode would be a separate backend decision.
+7. The separate calorie estimate stays as a small header link next to
+   "Past plans" (owner's choice, 2026-10-22).

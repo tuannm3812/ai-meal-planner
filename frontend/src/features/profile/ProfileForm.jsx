@@ -87,13 +87,13 @@ function ProfileForm({ profile, errors = {}, onChange }) {
         <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">
           Step 1 · You
         </p>
-        <h2
+        <h1
           className="mt-2 font-display text-3xl font-bold tracking-tight text-ink"
           id="profile-heading"
           tabIndex={-1}
         >
           Tell us about you
-        </h2>
+        </h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
           We use this to estimate how much energy you burn in a day and size your meal to fit
           your goal. Your details go with each plan request, and when the app runs locally the

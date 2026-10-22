@@ -1,26 +1,16 @@
-import { useState } from 'react'
-
 import { formatCurrency } from '../../lib/format'
 import { aisles, storeOf, total } from './shopping'
 
 // The shopping list by aisle, with a checkbox per item (docs/8_design.md
-// §3.3). Ticks are this screen's only state: they are never sent or stored,
-// and a new plan (a new key) starts with none.
+// §3.3). The ticks belong to the flow, which keeps them while the person
+// moves between steps and clears them for a new plan; they are never sent
+// or stored.
 // `location` is the one the plan was requested for, not the live input.
-function ShoppingList({ shopping, location }) {
+function ShoppingList({ shopping, location, ticked, onToggle }) {
   const store = storeOf(shopping)
   const groups = aisles(shopping)
   const sum = total(shopping)
-  const [ticked, setTicked] = useState(() => new Set())
   const count = groups.reduce((n, group) => n + group.items.length, 0)
-
-  const toggle = (id) =>
-    setTicked((current) => {
-      const next = new Set(current)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
 
   return (
     <section
@@ -72,7 +62,7 @@ function ShoppingList({ shopping, location }) {
                       <input
                         checked={ticked.has(item.id)}
                         className="h-5 w-5 shrink-0 accent-ink"
-                        onChange={() => toggle(item.id)}
+                        onChange={() => onToggle(item.id)}
                         type="checkbox"
                       />
                       <span className="min-w-0 flex-1">

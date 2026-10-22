@@ -7,8 +7,10 @@ import ErrorBanner from '../../components/ui/ErrorBanner'
 import InputField from '../../components/ui/InputField'
 import SectionCard from '../../components/ui/SectionCard'
 
-function HistoryTab() {
-  const [userId, setUserId] = useState('user_123')
+// `initialUserId` is the planner's own (opaque) user ID, so its plans show
+// first; any other ID can still be looked up.
+function HistoryTab({ initialUserId = 'user_123' }) {
+  const [userId, setUserId] = useState(initialUserId)
   const [limit, setLimit] = useState(10)
   const [mealHistory, setMealHistory] = useState(null)
   const [savedMeals, setSavedMeals] = useState(null)
