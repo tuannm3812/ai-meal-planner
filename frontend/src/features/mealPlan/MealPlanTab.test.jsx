@@ -42,7 +42,8 @@ describe('MealPlanTab error text', () => {
     const user = userEvent.setup()
     render(<MealPlanTab />)
 
-    await user.type(screen.getByLabelText(/Craving Input/i), 'x')
+    // Two characters: one is now refused before sending (MealRequest's minimum).
+    await user.type(screen.getByLabelText(/Craving Input/i), 'xy')
     await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
 
     expect(await screen.findByText('Craving too short')).toBeInTheDocument()
@@ -236,9 +237,8 @@ describe('MealPlanTab error text', () => {
     const input = screen.getByLabelText(/Craving Input/i)
     await user.type(input, 'pizza')
     await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
-    // Edited while the request is in flight, and again after it returns.
-    await user.clear(input)
-    await user.type(input, 'salmon')
+    // Edited after the answer returns. (An edit while it is in flight drops
+    // the answer: see CravingStep.test.jsx, per docs/8_design.md §3.3.)
     resolve({
       data: {
         plan_status: 'fallback',
@@ -251,7 +251,8 @@ describe('MealPlanTab error text', () => {
       },
     })
     expect(await screen.findByText(/close match for .pizza./)).toBeInTheDocument()
-    await user.type(input, ' dinner')
+    await user.clear(input)
+    await user.type(input, 'salmon dinner')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(screen.getByText(/close match for .pizza./)).toBeInTheDocument()

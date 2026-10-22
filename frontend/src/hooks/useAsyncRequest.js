@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 // Every tab repeats the same isLoading/error/data triple around a request.
 // This hook holds that once. `run` never re-throws: a rejected request must
@@ -16,32 +16,42 @@ import { useCallback, useState } from 'react'
 // Only a string `detail` is shown. A 422's detail is a list of field errors,
 // which cannot be rendered as text; `errorDetail` keeps whatever the backend
 // sent so a form can map those errors back to its fields.
+//
+// Only the latest request may settle the state. An answer to an earlier run,
+// or to one `reset` has abandoned, is dropped when it arrives, so a slow
+// response can never replace a newer one (the in-flight guard).
 export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wrong.') {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [errorDetail, setErrorDetail] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
+  const latestRun = useRef(0)
 
   const run = useCallback(
     async (...args) => {
+      latestRun.current += 1
+      const thisRun = latestRun.current
       setError('')
       setErrorDetail(null)
       setIsLoading(true)
       try {
         const result = await requestFn(...args)
-        setData(result)
+        if (thisRun === latestRun.current) setData(result)
       } catch (requestError) {
+        if (thisRun !== latestRun.current) return
         const detail = requestError?.response?.data?.detail
         setError(typeof detail === 'string' && detail ? detail : fallbackMessage)
         setErrorDetail(detail ?? null)
       } finally {
-        setIsLoading(false)
+        if (thisRun === latestRun.current) setIsLoading(false)
       }
     },
     [requestFn, fallbackMessage],
   )
 
   const reset = useCallback(() => {
+    latestRun.current += 1
+    setIsLoading(false)
     setData(null)
     setError('')
     setErrorDetail(null)

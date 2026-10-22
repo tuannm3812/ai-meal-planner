@@ -6711,3 +6711,155 @@ this verdict does not certify the later showcase slices.
 No owner decision is needed. Appended exactly this one entry; no application
 changes, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 3 (craving step)
+
+Step 2 was pushed as `showcase/step-2` at `3636225`, with Mike's OK, and has
+no PR from me. Slice 3 is on `showcase/step-3`, branched from it, commit
+`39f4d47`:
+
+- **Suggestions.** `features/craving/craving.js` has six suggestion chips,
+  each naming a corpus meal. `craving.test.js` imports
+  `data/meal_corpus/meals.json` and checks every name. Against the live
+  API each chip's text matched its meal (`plan_status: matched`) for all six.
+  A chip is a button that only fills the craving, so nothing is sent on a
+  pick.
+- **Validation.** `validateRequest` mirrors `MealRequest`: craving 2–180
+  characters, location 2–160, user ID 3–80, measured trimmed. An empty
+  craving gets no message; the button just stays off. A 422 on craving,
+  location or user ID maps to its field until that field is edited. A 422
+  naming nothing on screen is still described in the banner.
+- **Promises.** The three promises from §3.2 sit under the form. All three
+  hold today: meals come from the corpus (Gemini is only the final
+  explanation), fallback adds a note, and the shopping list has aisles and
+  estimated prices. The "honest" promise does not claim the fallback is
+  balanced.
+- **Stale and in-flight.** `MealPlanTab` keeps one `submitted` snapshot of
+  craving, location, user ID and profile. The result names the submitted
+  craving and location. It used to show the live location input. Editing
+  any of them marks the plan stale. `useAsyncRequest` now lets only the
+  latest run settle, so an earlier answer, or one `reset` abandoned, is
+  dropped when it arrives. Edited-in-flight without re-sending still shows
+  the answer, labelled for its own craving, and now marked stale too.
+- **`InputField`.** It takes an `error` prop and links the error and helper
+  text through `aria-describedby`.
+- **Tests changed.** `App.test.jsx` is unchanged and its labels are kept, so
+  "Craving Input" and "Plan Request" stay until slice 6 replaces the tabs.
+  Two tests changed on purpose. `MealPlanTab.test.jsx` "still prefers the
+  backend's detail" types `xy`, because one character is now refused
+  before sending. The ProfileStep 422 test now uses a 422 naming no
+  on-screen field, because a craving 422 maps to its field.
+
+Verified: 97 frontend tests pass, 19 of them new: the corpus check,
+validation, 422 mapping, the chip by mouse and keyboard, the field messages
+and blocked submit, the craving 422 cleared per field, craving or location
+stale and re-plan, the promises, and three hook tests for out-of-order,
+late-failure and reset-abandoned answers. `eslint .` and `vite build` pass,
+and the corpus JSON is test-only, not in the bundle. In Chromium at 1280 px
+against a live API (a clean export, as before), the Greek chicken bowl chip
+then plan gave Greek Chicken Bowl, named for "greek chicken bowl". At 390 px
+there is no horizontal scroll and a one-character craving shows its message.
+No Python changed.
+
+## 2026-10-22 — Codex — review showcase slice 3 (craving step)
+
+Reviewed the newest Claude entry and both commits in `3636225..HEAD`:
+`39f4d47` (implementation) and `9be00c4` (log), against `AGENTS.md`, the
+master and project standards, and `docs/8_design.md`. Two findings:
+
+- **P2 — invalidate a pending plan when its inputs change.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:74–80` only computes a
+  stale marker; edits do not invalidate the pending run. Submit fried rice,
+  change the craving to salmon before the response arrives, and the fried
+  rice response still renders with a stale notice. A temporary deferred
+  response test reproduced this. The approved design's §3.3 "In flight,
+  then edited" row requires dropping that answer, and §5 assigns the guard
+  to this slice. Fix: invalidate the pending request on changes to its
+  effective craving, location, user ID or profile, while retaining the
+  stale marker for plans that completed before an edit. Add a deferred
+  response regression test. Claude's entry describes the current behavior
+  accurately, but that behavior does not satisfy the approved design.
+- **P3 — count Unicode code points when validating text.**
+  `frontend/src/features/craving/craving.js:34–37` uses JavaScript's UTF-16
+  length, whereas `MealRequest` counts Unicode code points. Direct Node
+  and Pydantic probes confirmed that `🍜` passes the client minimum but is
+  rejected by the API, while 178 ASCII characters followed by ` 🍜` is
+  blocked as 181 characters even though the API accepts its 180 code
+  points. Fix: use `[...value].length` for both bounds and the displayed
+  count, with Unicode boundary tests for all three text fields.
+
+Verified locally: **97 frontend tests passed**, `npm run lint`,
+`npm run build` and `git diff --check` passed. The build reports the
+existing stale Browserslist-data warning. The additional temporary
+deferred-response probe passed (confirming the unwanted behavior) and was
+removed. No browser or live-API checks or full Python suite were rerun;
+the Python probe only instantiated the request schema. No further P1–P3
+findings; later showcase slices are outside this verdict.
+
+No owner decision is needed: the pending-response requirement is already
+approved. Appended exactly this one entry; no application changes retained,
+commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 3 fixes for Codex's review
+
+Both findings fixed in `630d7ef`; Codex's entry is committed separately.
+
+- **P2.** `MealPlanTab` wraps its craving, location, user ID and profile
+  setters. While a request is in flight, an edit that changes what was
+  sent, judged on trimmed values and `sameRequest` for the profile, calls
+  `reset`. The hook's guard then drops the answer when it arrives. A
+  "Plan set aside" notice asks the person to plan again. Re-planning clears
+  it. Whitespace the request trims is not a change. A plan that completed
+  before an edit still stays, marked stale.
+- **Changed test.** The #32 test "names the submitted craving after the
+  input is edited" edited during the flight and expected the answer to
+  show. That contradicted §3.3, so it now edits only after the answer
+  returns, which keeps its guarantee. The in-flight behaviour has three
+  new tests in `CravingStep.test.jsx`: craving edited (dropped, then
+  re-plan works), profile edited (dropped), and a trim-only edit (kept).
+- **P3.** `validateRequest` counts code points (`[...value].length`),
+  as Pydantic does. Boundary tests use emoji for all three fields, plus
+  Codex's 178 letters, a space and an emoji case.
+
+Verified: 104 frontend tests pass. With the fix stashed, six of the new
+tests failed (four Unicode, two in-flight drops) and pass with it
+restored. The trim-only test passes either way, as it should. `eslint .`
+and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 3 review fixes
+
+Reviewed Claude's newest entry and `9be00c4..83b698e`: the prior review
+record `67950db`, fixes `630d7ef`, and Claude's reply `83b698e`. Also reviewed
+the full slice, `3636225..83b698e`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md`.
+
+**Clean: no remaining or new P1–P3 findings within slice 3.**
+
+- **Previous P2 fixed.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:112` invalidates the
+  pending run when an effective craving, location, user ID or profile
+  value changes. The request hook drops its eventual answer. Existing
+  regressions pass for craving and avoid-chip edits, a trim-only edit,
+  re-planning, and retaining a completed plan with its stale marker.
+  Five additional temporary tests passed: pending location, user ID and
+  weight edits discard the answer; an abandoned success or failure cannot
+  overwrite or end the loading state of a replacement request. The
+  replacement then renders correctly. Removed the temporary test file.
+- **Previous P3 fixed.**
+  `frontend/src/features/craving/craving.js:18` counts Unicode code points;
+  both bounds and the displayed count use it at lines 37–40. All three
+  text fields pass their emoji boundary tests, including the original
+  178 letters, space and emoji case.
+
+Verified locally: **104 frontend tests passed**, plus the **5 temporary
+review tests**; `npm run lint`, `npm run build` and `git diff --check`
+passed. The build reports the existing stale Browserslist-data warning.
+Reviewed the shared request hook, field-error mapping, suggestion wiring,
+submitted-value labels and changed tests. The frozen `App.test.jsx` is
+unchanged. No browser, live-API or Python checks were rerun; later showcase
+slices are outside this verdict.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes retained, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
