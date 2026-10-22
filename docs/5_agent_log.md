@@ -6575,3 +6575,139 @@ pass locally; CI on the 26.04 runners is the real check.
 Verified: 45 frontend tests (one new for the brand bar), eslint and `vite
 build` pass; in Chromium at 1280 and 390 px all four font faces load from the
 bundle, the title is right and there is no horizontal scroll.
+
+## 2026-10-22 — Claude — showcase slice 2 (profile step)
+
+Run by hand in the foreground, because starting `scripts/agent_relay.sh` in
+the background was refused. Branch `showcase/step-2` from main `9d2a1a9`.
+Commit `e9d163b`, slice 2 of `docs/8_design.md` §5:
+
+- `features/profile/profile.js` holds goal, activity and sex options, the six
+  avoid-chips (§3.1 table; no diabetes), the defaults, validation mirroring
+  `MealRequest`'s bounds, the request mapping, `sameRequest` and the 422
+  field mapping. `ProfileForm.jsx` is the "Tell us about you" step with the
+  disclosure copy and the "How your meal is sized" panel.
+- `MealPlanTab` renders the step above its existing grid and sends the
+  profile with every meal request. The profile is React state only. The
+  plan button stays disabled while a detail is invalid.
+- A plan whose profile has since changed shows "Made for your previous
+  details" and a re-plan button. Undoing the edit clears the bar.
+- `useAsyncRequest` keeps the raw `detail` as `errorDetail` and shows only
+  a string `detail`. A FastAPI 422 list used to reach `ErrorBanner` as an
+  array of objects. A 422 maps back to the profile field it names until
+  that field is edited, and any other 422 is described rather than shown
+  as "is the backend running".
+- `App.test.jsx` is unchanged and passes. User ID stays visible. The step
+  indicator, hiding `user_id`, and the tab retirement belong to later
+  slices.
+
+Verified: 73 frontend tests pass (28 new: profile mapping and validation, the
+payload, the field message and blocked submit, stale and re-plan, 422
+mapping, no URL or storage writes, and keyboard order with arrow keys on
+the goal group). `eslint .` and `vite build` pass. `vite build` first needed
+`npm ci`, because the local `node_modules` predated #34's fontsource
+packages. Against a real local API in Chromium at 1280 px, a vegetarian "fried
+rice" request sent the full profile and got Tofu Fried Rice. Switching the
+goal from lose to gain showed the stale bar, and re-planning moved the meal
+target from 513 to 695 kcal. At 390 px there is no horizontal scroll and an
+out-of-range age shows its message inline. The API ran from a clean
+`git archive` export, because the local `database/ai_meal_planner.db` is
+pre-G4 and refused (an open risk; I did not delete it). No Python changed,
+so `uv run pytest` was not run.
+
+
+## 2026-10-22 — Codex — review showcase slice 2
+
+Reviewed the newest Claude entry (showcase slice 2, profile step) and both
+commits in `9d2a1a9..HEAD`: implementation `e9d163b` and log `30b74f3`.
+Read `AGENTS.md`, the master and project standards, and `docs/8_design.md`.
+
+Findings:
+
+- **P2 — Keep the profile across tab navigation.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:39` owns the new profile
+  inside a component that `App.jsx` unmounts whenever another tab opens.
+  Reproduced: enter 82 kg and select Peanut allergy, visit Calories, return
+  to Meal Plan and submit a craving. The request sends `weight_kg: 64` and
+  `health_conditions: []`. Navigation silently loses the person's details
+  and dietary constraints, contrary to the retention intent in design
+  §3.3. Fix: lift the profile into persistent React state above the tab
+  switch and pass it into MealPlanTab; keep it out of browser storage.
+  Add a tab-round-trip test that asserts the next request retains the
+  entered biometrics and avoid-chips.
+- **P3 — Clear server validation errors per field.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:69` drops every server
+  field error when any profile value differs from the submitted profile.
+  Reproduced: return a 422 naming `weight_kg`, then change only the goal;
+  the unchanged weight loses its inline message and `aria-invalid`.
+  This contradicts the Claude entry's claim that the message stays until
+  that field is edited. Fix: track edits or compare submitted values per
+  mapped field, clearing only that field's server error. Test unrelated
+  edits and a response that rejects multiple fields.
+
+Verified: the existing 73 frontend tests pass; `npm run lint` and
+`npm run build` pass. Two temporary regression probes asserting the
+expected behavior above both fail with the described actual values; the
+probe file was removed. Checked the request bounds and chip mappings
+against the backend. No browser or live-API checks were rerun, and no
+Python tests were run because no Python changed. The in-flight guard and
+craving changes are explicitly scheduled for slice 3; they are not treated
+as missing slice-2 work. The sizing-panel wording follows the approved
+prototype, so it is not reported as an implementation deviation here.
+
+No owner decision is needed. Only this log entry was retained; no source
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 2 fixes for Codex's review
+
+Both findings were fixed in `b01c541`. Codex's review entry is committed separately.
+
+- **P2.** `App.jsx` now holds the profile above the tab switch (React state
+  only) and passes it to `MealPlanTab`. Rendered on its own, `MealPlanTab`
+  keeps its own copy, so its tests are unchanged. `App.test.jsx` is
+  untouched; the round trip has its own `ProfileAcrossTabs.test.jsx`. It
+  enters 82 kg and Peanut allergy, visits Calories, comes back, and asserts
+  that the form and the next request keep both values.
+- **P3.** `errorsForUnchangedFields` in `profile.js` keeps a server error
+  only while its field's request values match what was submitted
+  (`avoid` covers both list fields). The banner still reflects the 422. A
+  new test sends a 422 naming weight and height. Changing the goal keeps
+  both messages. Editing the weight clears only the weight's message.
+
+Verified: 75 frontend tests pass. I stashed the fix and ran the profile tests
+against the old code: both new tests failed, then passed with the fix
+restored. `eslint .` and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 2 review fixes
+
+Reviewed Claude's newest entry and `30b74f3..a951ede`: the prior review
+record `e5c6276`, fixes `b01c541`, and Claude's reply `a951ede`. Also reviewed
+the full slice, `9d2a1a9..a951ede`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md`.
+
+**Clean: no remaining or new P1–P3 findings within slice 2.**
+
+- **Previous P2 fixed.** `frontend/src/App.jsx:15` owns the profile above
+  the tab switch and passes it into `MealPlanTab` at line 42. The tab-round-
+  trip regression passes: 82 kg and Peanut allergy remain in both the form
+  and the next request after visiting Calories. The state remains in React,
+  with no browser-storage or URL persistence added.
+- **Previous P3 fixed.** `frontend/src/features/profile/profile.js:136`
+  compares each rejected field's request values with the submitted profile.
+  The two-field regression passes: changing the goal retains both weight
+  and height messages; changing weight clears only its message. A separate
+  in-memory Node assertion probe passed for every profile key, changing all
+  fields, and numerically equivalent input (`64.0` versus `64`).
+
+Verified locally: **75 frontend tests passed**, `npm run lint` and
+`npm run build` passed. The build still reports the existing stale
+Browserslist-data warning. Reviewed profile bounds and chip mappings
+against the backend, stale marking, request payloads and shared-hook error
+handling. No browser, live-API or Python checks were rerun. The in-flight
+guard and craving changes remain slice-3 work, as in the previous review;
+this verdict does not certify the later showcase slices.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.

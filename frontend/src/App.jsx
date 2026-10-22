@@ -6,9 +6,13 @@ import TabBar from './components/ui/TabBar'
 import CaloriesTab from './features/calories/CaloriesTab'
 import HistoryTab from './features/history/HistoryTab'
 import MealPlanTab from './features/mealPlan/MealPlanTab'
+import { DEFAULT_PROFILE } from './features/profile/profile'
 
 function App() {
   const [activeTab, setActiveTab] = useState('meal')
+  // Held here, above the tab switch, so visiting another tab keeps the
+  // person's details. React state only: never the URL or browser storage.
+  const [profile, setProfile] = useState(DEFAULT_PROFILE)
 
   return (
     <>
@@ -35,7 +39,7 @@ function App() {
 
           <TabBar activeTab={activeTab} onChange={setActiveTab} />
 
-          {activeTab === 'meal' && <MealPlanTab />}
+          {activeTab === 'meal' && <MealPlanTab onProfileChange={setProfile} profile={profile} />}
           {activeTab === 'calories' && <CaloriesTab />}
           {activeTab === 'history' && <HistoryTab />}
         </div>

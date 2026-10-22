@@ -12,20 +12,28 @@ import { useCallback, useState } from 'react'
 // "Could not load saved meals...", and so on), so a hook with a hard-coded
 // generic message would have silently changed user-facing text and none of
 // them could have used it.
+//
+// Only a string `detail` is shown. A 422's detail is a list of field errors,
+// which cannot be rendered as text; `errorDetail` keeps whatever the backend
+// sent so a form can map those errors back to its fields.
 export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wrong.') {
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
+  const [errorDetail, setErrorDetail] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
 
   const run = useCallback(
     async (...args) => {
       setError('')
+      setErrorDetail(null)
       setIsLoading(true)
       try {
         const result = await requestFn(...args)
         setData(result)
       } catch (requestError) {
-        setError(requestError?.response?.data?.detail || fallbackMessage)
+        const detail = requestError?.response?.data?.detail
+        setError(typeof detail === 'string' && detail ? detail : fallbackMessage)
+        setErrorDetail(detail ?? null)
       } finally {
         setIsLoading(false)
       }
@@ -36,7 +44,8 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
   const reset = useCallback(() => {
     setData(null)
     setError('')
+    setErrorDetail(null)
   }, [])
 
-  return { data, error, isLoading, run, reset }
+  return { data, error, errorDetail, isLoading, run, reset }
 }
