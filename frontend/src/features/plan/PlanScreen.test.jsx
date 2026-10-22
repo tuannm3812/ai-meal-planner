@@ -209,6 +209,51 @@ describe('Plan screen failures', () => {
     expect(await screen.findByRole('region', { name: 'Chicken Fried Rice' })).toBeInTheDocument()
   })
 
+  it.each([
+    ['clicking the plan button', async (user) => user.click(planButton())],
+    ['pressing Enter in the craving', async (user) => user.type(screen.getByLabelText(/Craving Input/i), '{Enter}')],
+  ])('sends nothing during the pause by %s', async (_route, send) => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    reject(429, { code: 'rate_limited' }, { 'retry-after': '60' })
+    axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    render(<MealPlanTab />)
+    await plan(user)
+    await screen.findByRole('alert')
+
+    expect(planButton()).toBeDisabled()
+    await send(user)
+    expect(axios.post).toHaveBeenCalledTimes(1)
+
+    await act(async () => {
+      vi.advanceTimersByTime(60_000)
+    })
+    expect(planButton()).toBeEnabled()
+    await send(user)
+    expect(axios.post).toHaveBeenCalledTimes(2)
+    expect(await screen.findByRole('region', { name: 'Chicken Fried Rice' })).toBeInTheDocument()
+  })
+
+  it('holds the default pause for every route when Retry-After cannot be read', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true })
+    reject(429, { code: 'rate_limited' })
+    const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime })
+    render(<MealPlanTab />)
+    await plan(user)
+    await screen.findByRole('alert')
+
+    await user.type(screen.getByLabelText(/Craving Input/i), '{Enter}')
+    expect(axios.post).toHaveBeenCalledTimes(1)
+    await act(async () => {
+      vi.advanceTimersByTime((DEFAULT_RETRY_SECONDS - 1) * 1000)
+    })
+    expect(planButton()).toBeDisabled()
+    await act(async () => {
+      vi.advanceTimersByTime(1000)
+    })
+    expect(planButton()).toBeEnabled()
+  })
+
   it('uses its default pause when Retry-After cannot be read', async () => {
     reject(429, { code: 'rate_limited' })
     const user = userEvent.setup()

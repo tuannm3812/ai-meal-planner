@@ -211,6 +211,7 @@ describe('useAsyncRequest failure record', () => {
       code: 'rate_limited',
       detail: 'Too many requests.',
       retryAfter: '7',
+      at: expect.any(Number),
     })
   })
 

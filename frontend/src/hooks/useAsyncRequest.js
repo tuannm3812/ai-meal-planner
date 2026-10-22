@@ -53,6 +53,7 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
           code: response?.data?.code,
           detail: detail ?? null,
           retryAfter: response?.headers?.['retry-after'],
+          at: Date.now(),
         })
       } finally {
         if (thisRun === latestRun.current) setIsLoading(false)

@@ -19,6 +19,7 @@ import {
 import FailurePanel from '../plan/FailurePanel'
 import PlanView from '../plan/PlanView'
 import ShoppingSection from '../plan/ShoppingSection'
+import { useRetryPause } from '../plan/useRetryPause'
 
 // A 422 that names no field on screen still says what the service rejected,
 // rather than the "is the backend running" sentence.
@@ -100,9 +101,13 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
         : `The service rejected this request: ${describeRejection(errorDetail)}`
   }
 
+  // After a 429 nothing is sent until the pause passes, by any route.
+  const retryPause = useRetryPause(failure)
+
   const canSubmit = useMemo(
-    () => craving.trim() && requestIsValid && profileIsValid && !isLoading,
-    [craving, requestIsValid, profileIsValid, isLoading],
+    () =>
+      craving.trim() && requestIsValid && profileIsValid && !isLoading && !retryPause.active,
+    [craving, requestIsValid, profileIsValid, isLoading, retryPause.active],
   )
 
   // The in-flight guard (docs/8_design.md §3.3): an edit that changes what
@@ -137,6 +142,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
   const focusProfile = () => document.getElementById('profile-heading')?.focus()
 
   const submitPlan = async () => {
+    if (retryPause.active) return
     clearMealPlan()
     setDroppedInFlight(false)
     setSubmitted({
@@ -242,9 +248,9 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
             <FailurePanel
               canRetry={canSubmit}
               failure={failure}
-              key={JSON.stringify(failure)}
               message={errorMessage}
               onRetry={submitPlan}
+              pause={retryPause}
             />
           )}
 
