@@ -90,6 +90,7 @@ function ProfileForm({ profile, errors = {}, onChange }) {
         <h2
           className="mt-2 font-display text-3xl font-bold tracking-tight text-ink"
           id="profile-heading"
+          tabIndex={-1}
         >
           Tell us about you
         </h2>

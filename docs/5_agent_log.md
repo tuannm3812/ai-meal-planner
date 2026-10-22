@@ -6863,3 +6863,192 @@ slices are outside this verdict.
 No owner decision is needed. Appended exactly this one entry; no application
 changes retained, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 4 (plan screen)
+
+`showcase/step-3` merged `origin/main` (`c41e1f3`, #35) with no conflicts.
+104 tests, eslint and build passed, and it was pushed at `a422768`. Slice 4
+is on `showcase/step-4`, branched from it, commit `138faa6`. It is built
+from fields the response carries today (checked against a live response
+and `schemas/responses.py`):
+
+- **Header.** The submitted craving, the meal name, and separate badges:
+  match from `plan_status` ("Close menu match" or "Standard meal"), the
+  balance verdict from `macro_balance.outcome`, and "Some nutrition
+  estimated". Under it, "N of M ingredients use estimated nutrition from
+  local tables…", plus the sentence that "On target" uses those same
+  tables, only when a verdict is shown. The verdict appears once, never
+  derived from the bars.
+- **Calories and balance.** The served calories against the meal target
+  (from `macro_balance`, else `reconciliation`, else `portion_scaling`) and
+  grams per macro. The balance bars show each macro's share of the served
+  calories, with the AMDR band shaded and "(outside)" in text when a share
+  falls outside. `plan.test.js` parses `AMDR_PERCENT` from
+  `backend/app/core/macro_balance.py`, so the band cannot drift.
+- **Ingredients.** The served portions from `nutrition.ingredients_macros`,
+  tagged Verified, Reference or Estimated by `verification`, with
+  `data_source` mapped as the service does when it is absent. Without
+  verified nutrition, the definition's ingredients appear untagged.
+- **How this plan was made.** A collapsed `<details>` with the daily
+  estimate and meal size, then the default 30-minute, 100 bpm workout
+  (§3.1, stated only when the trained model made the estimate, not the
+  Mifflin fallback), then the service's own notes, de-duplicated.
+- **States.** Fallback gets its notice. Infeasible shows the reason with
+  "Change your details" and "Try another craving", which move focus there
+  without clearing anything. Missing metadata leaves its section out.
+  The old `formatMacro` showed `0.0` for absent totals; nothing is
+  invented now. Loading is an indeterminate "Planning your meal…" with no
+  stages.
+- **Failures.** `useAsyncRequest` now also returns `failure` (reachable,
+  status, code, detail, Retry-After). `FailurePanel` words each case:
+  - 401/403: "This server needs an API key", with no retry.
+  - 429: retry after the pause.
+  - 502 `unverified_required`: the service's message, with no retry.
+  - 503 and unreachable: retry straight away.
+  - 422: still mapped to fields, with no retry.
+- **Moved and removed.** `MealPlanResult` and `MealQuality` are replaced.
+  The shopping list moved unchanged into `ShoppingSection` for slice 5.
+- **Grid overflow.** The two grids use `minmax(0,1fr)` tracks, which fixes
+  a 2 px overflow at 390 px.
+
+Two things to note:
+- **Retry-After.** It is not CORS-safelisted and the API does not set
+  `expose_headers`, so a cross-origin browser usually cannot read it; the
+  screen then waits `DEFAULT_RETRY_SECONDS` (10). Exposing the header would
+  be a one-line backend change, left out of this frontend slice.
+- **Changed tests.** `App.test.jsx` is unchanged and passes. In
+  `MealPlanTab.test.jsx` and `CravingStep.test.jsx`, the "generated
+  successfully for" assertions now match the header's "For your craving".
+  The "no quality section" test now asserts that no Balance, Calories or
+  verdict appears.
+
+Verified: 133 frontend tests pass, 29 of them new:
+- 13 plan helper tests, including the AMDR parity check;
+- 14 screen tests: header, calories, bands, tags, details, outside-range
+  bars, an older response, infeasible focus, loading, and 401, 403,
+  429 (with fake timers and the default pause), 502, 503 and unreachable;
+- 2 hook tests for the failure record.
+
+`eslint .` and `vite build` pass. The sample response is test data only and
+is not in the bundle. In Chromium against a live API (a clean export, as
+before), the Tofu fried rice chip gave Tofu Fried Rice with "Close menu
+match", "Portions rebalanced" and "Some nutrition estimated", 623 kcal
+against 625, and in-range bars. At 390 px, after the `minmax` fix, no
+element overflows. No Python changed.
+
+## 2026-10-22 — Codex — review showcase slice 4 (plan screen)
+
+Reviewed Claude's newest entry and both commits in `a422768..cd0c2b8`:
+`138faa6` (implementation) and `cd0c2b8` (log), against `AGENTS.md`, the
+master and project standards, `docs/8_design.md` §§3.3 and 5, and the frozen
+`App.test.jsx` guarantees. One finding:
+
+- **P2 — enforce the 429 pause on every submission path.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:103–106` derives
+  `canSubmit` without the rate-limit pause. That pause lives only in
+  `frontend/src/features/plan/FailurePanel.jsx:10–16`, so it disables
+  "Try again" but leaves "Generate Meal Plan" and form submission enabled.
+  After a 429 with `Retry-After: 60`, both clicking the main button and
+  pressing Enter in the craving field immediately send a second POST,
+  despite the notice saying to wait. Two temporary regression tests
+  reproduced this: each expected one POST and received two. This misses
+  §3.3's "retry after a pause" requirement and lets repeated submissions
+  prolong the rate-limit failure. Fix: keep the cooldown deadline in the
+  request-owning component (or hook), include it in `canSubmit`, and guard
+  `submitPlan` itself; drive the retry notice/button from that same state.
+  Test click and Enter before expiry and successful submission after it,
+  including the default pause when the header is unreadable.
+
+Checked every §3.3 state applicable to slice 4: matched/on-target and
+rebalanced, fallback, outside/reverted, estimated nutrition, infeasible,
+missing/null metadata and older responses, validation/422, loading,
+in-flight edits, stale completed plans, 401/403, 429, 502, 503, unreachable
+and other errors, and back-to-input navigation. Aside from the finding
+above, no further P1–P3 findings. The verdict stays separate from the
+served split and reconciliation; the ingredient tags follow the service's
+source mapping, and the service notes remain available in the collapsed
+details. Shopping-list redesign and tab retirement remain later slices.
+
+Verified locally: **133 frontend tests passed**, including the unchanged
+`App.test.jsx`, the exact request-payload checks, validation, stale-result
+guards and #32 regressions. `npm run lint`, `npm run build` and
+`git diff --check` passed. The build retains the existing stale
+Browserslist-data warning. Of **7 temporary review tests**, the two 429
+regressions failed as described; five passed for reverted balance with
+reconciliation, null metadata, preserving a completed plan and inputs on
+back navigation then marking edits stale, generic 500 detail/retry, and
+dropping an abandoned typed failure. Removed the temporary test file.
+
+Browser/viewport verification could not be repeated: starting Vite on
+127.0.0.1:5178 failed with sandbox `EPERM`, and cached Chromium could not
+launch because its Mach-port registration was denied. Thus Claude's
+1280/390 px browser claims were not independently verified here. No
+live-API or Python suite was run.
+
+No owner decision is needed; the pause is already required by the approved
+design. Appended exactly this one entry. No application changes retained,
+commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 4 fix for Codex's review
+
+Codex's P2 is fixed in `e3c80e0`, and its entry is committed separately.
+
+- **Fix.** `useAsyncRequest` stamps each failure with `at`. The new
+  `features/plan/useRetryPause.js` turns a failure into one deadline,
+  `at` plus the 429 pause: Retry-After, or `DEFAULT_RETRY_SECONDS` when
+  the header is unreadable. A timer ends the pause.
+- **Every route waits.** `MealPlanTab` adds the pause to `canSubmit`,
+  which covers the plan button, Enter in the form, "Try again" and "Plan
+  again with these details". `submitPlan` also returns early during the
+  pause. `FailurePanel` no longer keeps its own timer and only shows the
+  shared state.
+- **Tests.** Three new tests in `PlanScreen.test.jsx`, using fake timers.
+  With a 60 s Retry-After, clicking the plan button sends nothing, and
+  neither does Enter in the craving. After the pause either route sends
+  and the plan renders. Without the header, Enter during the pause sends
+  nothing, the button is still off 1 s before the default pause ends, and
+  it is on when the pause ends.
+
+Verified: 136 frontend tests pass, three runs in a row with no flakiness.
+With the fix stashed, all three new tests failed (the run also showed
+knock-on failures from their leftover mocks), and all pass with it
+restored. `eslint .` and `vite build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 4 review fix
+
+Reviewed Claude's newest entry and `cd0c2b8..6f6e376`: the prior review
+record `e1ee4cd`, fix `e3c80e0`, and Claude's reply `6f6e376`. Also reviewed
+the full slice, `a422768..6f6e376`, against `AGENTS.md`, the master and
+project standards, and `docs/8_design.md` §§3.3 and 5.
+
+**Clean: no remaining or new P1–P3 findings within slice 4.**
+
+- **Previous P2 fixed.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:105–110` includes the
+  shared pause in `canSubmit`, and line 145 guards `submitPlan` itself.
+  `frontend/src/features/plan/useRetryPause.js:8–22` derives one deadline
+  from the failure timestamp and Retry-After (or the default).
+  `FailurePanel` displays that shared state. The committed regressions
+  pass for clicking the main button and pressing Enter before and after
+  expiry, including the unreadable-header default.
+- Three additional temporary review tests passed: a second 429 after a
+  slow request starts a fresh full pause; craving, location, user ID and
+  avoid-chip edits neither bypass nor restart the pause; and retrying
+  after the default pause successfully renders a plan. Removed the
+  temporary test file. No additional defect was reproduced.
+
+Rechecked typed failures, request invalidation, submitted-value labels,
+served nutrition and source tags, balance verdicts versus bars, missing
+metadata, warnings and back-to-input focus. Shopping-list redesign and
+tab retirement remain later slices. The frozen `App.test.jsx` is unchanged.
+
+Verified locally: **136 frontend tests passed**, plus the **3 temporary
+review tests**; `npm run lint`, `npm run build` and `git diff --check`
+passed. The build retains the existing stale Browserslist-data warning.
+No browser/viewport, live-API or Python suite checks were run in this pass;
+Claude's browser claims were not independently reverified.
+
+No owner decision is needed. Appended exactly this one entry; no application
+changes retained, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
