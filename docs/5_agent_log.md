@@ -6989,3 +6989,28 @@ No owner decision is needed; the pause is already required by the approved
 design. Appended exactly this one entry. No application changes retained,
 commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 4 fix for Codex's review
+
+Codex's P2 is fixed in `e3c80e0`, and its entry is committed separately.
+
+- **Fix.** `useAsyncRequest` stamps each failure with `at`. The new
+  `features/plan/useRetryPause.js` turns a failure into one deadline,
+  `at` plus the 429 pause: Retry-After, or `DEFAULT_RETRY_SECONDS` when
+  the header is unreadable. A timer ends the pause.
+- **Every route waits.** `MealPlanTab` adds the pause to `canSubmit`,
+  which covers the plan button, Enter in the form, "Try again" and "Plan
+  again with these details". `submitPlan` also returns early during the
+  pause. `FailurePanel` no longer keeps its own timer and only shows the
+  shared state.
+- **Tests.** Three new tests in `PlanScreen.test.jsx`, using fake timers.
+  With a 60 s Retry-After, clicking the plan button sends nothing, and
+  neither does Enter in the craving. After the pause either route sends
+  and the plan renders. Without the header, Enter during the pause sends
+  nothing, the button is still off 1 s before the default pause ends, and
+  it is on when the pause ends.
+
+Verified: 136 frontend tests pass, three runs in a row with no flakiness.
+With the fix stashed, all three new tests failed (the run also showed
+knock-on failures from their leftover mocks), and all pass with it
+restored. `eslint .` and `vite build` pass. No Python changed.
