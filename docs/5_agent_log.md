@@ -7134,3 +7134,92 @@ independently reverified.
 No owner decision is needed. Appended exactly this one entry; no application
 changes, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 6 (one flow, tabs retired)
+
+`showcase/step-5` merged `origin/main` (`7b24b84`, #37) with no
+conflicts. 148 tests, eslint and build passed, and it was pushed at
+`3b823af`. Slice 6 is on `showcase/step-6`, branched from it, commit
+`25e7ef9`.
+
+What changed:
+
+- **The flow.** `features/flow/MealFlow.jsx` replaces `MealPlanTab` and the
+  tabs, with three steps under a step indicator (`StepIndicator.jsx`):
+  - 1 "Tell us about you", with "Next: what are you craving?";
+  - 2 "What are you in the mood for?", with "Plan my meal" and "Back: your
+    details";
+  - 3 "Your plan", with "Change your details" and "Try another craving".
+
+  Step 2 opens only with a valid profile, and step 3 only once a plan has
+  been asked for. Each step's `h1` takes focus when it opens, but not on
+  first load. All state stays in the flow, so back navigation keeps the
+  profile, craving and plan, and an edit marks the plan stale. The
+  in-flight guard, the 429 pause and the 422 mapping are unchanged. A 422
+  now says "Go back to the highlighted fields", because they may be on an
+  earlier step.
+- **Labels and user ID.** The craving step drops the labels kept for the
+  frozen test. It now reads "Your craving", "Where you shop" and "Plan my
+  meal". The User ID field is gone. `App` makes an opaque `web-<uuid>` per
+  visit, held in React state only (§3.1). It reaches the history URL, so it
+  says nothing about anyone. A 422 naming `user_id` has no field to mark,
+  so the banner describes it instead.
+- **Past plans and the calorie estimate.** These are small links in the
+  brand bar (§7.4). The flow stays mounted but hidden while either is
+  open, so "Back to your meal" returns to it intact. History starts with
+  this visit's user ID, and any other ID can still be typed. In hosted
+  mode the link still shows and opening it gives the notice, as before.
+  Hiding it would need `/health` on first render; `AGENTS.md` now says so.
+- **The calorie estimate (a judgement, flagged below).** §7.5's default
+  keeps the meal request on the service's default workout, so the plan
+  never asks for workout details. §7 does not say whether the separate
+  estimate goes. I kept it as a link rather than delete a working feature.
+  It is the one place that accepts workout inputs.
+- **Removed.** `TabBar`, `MealPlanTab` and `ProfileAcrossTabs.test.jsx`.
+  The last one's round trip is now in `App.test.jsx`.
+
+Where each guarantee of the old frozen `App.test.jsx` now lives (DEC-29's
+condition):
+
+| Old test | Kept by |
+| --- | --- |
+| renders without crashing (heading, tab bar) | `App.test.jsx` "opens on step 1 of the flow, with the brand and the step indicator" |
+| meal plan tab content by default | same test: step 1 is the default, step 3 disabled |
+| switches to the calories tab | `App.test.jsx` "opens the calorie estimate from a link" |
+| switches to the history tab (History, Meal History, Saved Meals) | `App.test.jsx` "opens past plans from a link and comes back with everything kept" (same three headings) |
+| never calls the network on first render | `App.test.jsx` "never calls the network on first render" (unchanged) |
+| posts to /generate-meal-plan with the craving | `App.test.jsx` "posts the craving, the profile and an opaque user ID…"; the exact payload in `ProfileStep.test.jsx` "sends the profile with the meal request" |
+| renders the error banner when the post rejects | `App.test.jsx` "shows the error and retries it", and per status in `PlanScreen.test.jsx` "Plan screen failures" |
+| renders the returned plan | `App.test.jsx` "moves to the plan step and renders the returned plan" |
+
+The other guarantees §5 names:
+- **Stale results:** `App.test.jsx` "marks a plan stale after going back
+  and changing the craving".
+- **In-flight drops:** `CravingStep.test.jsx` (three tests).
+- **The submitted-craving label:** `MealFlow.test.jsx` "names the
+  submitted craving after the input is edited".
+- **#32's regressions:** `MealFlow.test.jsx` "shows the macro split and the
+  target result…", "says when an off-menu craving got a standard meal…",
+  "shows the served split when a reverted meal was then rescaled" and
+  "shows no quality section…".
+
+Other test changes: the slice-2 to slice-5 tests moved to the new labels,
+and they now walk the steps through `src/test/flow.js`. No assertion was
+weakened. Where a test edited on the plan page, it now goes back a step to
+edit and returns to the plan to check. The profile keyboard test now also
+ends on the Next button.
+
+Verified: 148 frontend tests pass, with 9 in the new `App.test.jsx`.
+`eslint .` and `vite build` pass. In Chromium against a live API (a clean
+export; port 5173 belonged to another local project, so Vite took 5174
+with `ALLOWED_ORIGINS` set for that run only):
+- the flow ran from the keyboard: focus Next, press Enter, focus moves to
+  the step 2 heading, Tab, type "chicken fried rice", press Enter, and
+  focus moves to "Your plan" with Chicken Fried Rice shown;
+- at 390 px no element overflows on any step;
+- "Past plans" loaded this visit's plan under its opaque ID.
+
+No Python changed.
+
+Needs Mike, but not blocking: whether the separate calorie estimate stays
+as a link, as built here, or goes (§7 does not say).
