@@ -18,7 +18,7 @@ import {
 } from '../profile/profile'
 import FailurePanel from '../plan/FailurePanel'
 import PlanView from '../plan/PlanView'
-import ShoppingSection from '../plan/ShoppingSection'
+import ShoppingList from '../plan/ShoppingList'
 import { useRetryPause } from '../plan/useRetryPause'
 
 // A 422 that names no field on screen still says what the service rejected,
@@ -330,7 +330,8 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
                 onEditCraving={focusCraving}
                 plan={mealPlan}
               />
-              <ShoppingSection
+              <ShoppingList
+                key={mealPlan.request_id ?? JSON.stringify(mealPlan.shopping_list)}
                 location={submitted?.location ?? ''}
                 shopping={mealPlan.shopping_list}
               />
