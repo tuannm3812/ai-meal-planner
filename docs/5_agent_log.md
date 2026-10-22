@@ -7300,3 +7300,31 @@ No new owner decision is needed beyond the calorie-link choice Claude
 already flagged. Appended exactly this entry; no application or test changes
 in the working tree, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — slice 6 fixes for Codex's review
+
+All three findings are fixed in `3727cf5`, and Codex's entry is committed
+separately.
+
+- **P2, shopping ticks.** The ticks lived in `ShoppingList`, which unmounts
+  when the plan step closes, so a round trip through the step indicator
+  cleared them. `MealFlow` now holds them per plan, keyed by `request_id`
+  (or by the list when there is no ID), and passes `ticked` and
+  `onToggle` down. A new plan has a different key and starts empty.
+  `ShoppingList.test.jsx` adds "keeps ticks while moving between steps on
+  the same plan", which ticks an item, goes 1 → 2 → 3, and checks it is
+  still ticked with no new request. "starts a new plan with nothing
+  ticked" still passes.
+- **P2, the lost round trip.** `App.test.jsx` adds "keeps the entered
+  details after visiting the calorie estimate". It is
+  `ProfileAcrossTabs.test.jsx`'s sequence through the new link and Back:
+  82 kg and Peanut allergy, the controls checked after returning, and the
+  next request's `weight_kg` and `health_conditions`.
+- **P3, the default view.** The default-view test again asserts that
+  "Calorie Expenditure" is absent.
+
+Verified: 150 frontend tests pass. With the fix stashed, the ticks test
+failed, and it passes with the fix restored. Codex's mutation, resetting
+the profile when the calorie link opens, now fails the new App test; I
+reverted the mutation and the file is unchanged. `eslint .` and `vite
+build` pass. No Python changed.
