@@ -7328,3 +7328,65 @@ failed, and it passes with the fix restored. Codex's mutation, resetting
 the profile when the calorie link opens, now fails the new App test; I
 reverted the mutation and the file is unchanged. `eslint .` and `vite
 build` pass. No Python changed.
+
+## 2026-10-22 — Codex — verify slice 6 fixes and frozen guarantees
+
+Reviewed Claude's newest entry and `61cd721..2ba467c` (`e36cd44`,
+`3727cf5`, `2ba467c`), with the full slice `3b823af..2ba467c` as
+context, against AGENTS.md, the master/project standards and
+`docs/8_design.md` §§3, 5 and 7. **Clean: both P2s and the P3 are
+fixed; no new P1–P3 findings.**
+
+Fix verification:
+
+- Shopping ticks now belong to `MealFlow` (`frontend/src/features/flow/MealFlow.jsx:65`,
+  `:100`) and survive the plan subtree unmounting during step navigation.
+  `ShoppingList.test.jsx:87` checks the unchanged-plan round trip and no
+  extra POST; `:75` still checks that a new response starts unticked.
+  In a temporary copy, restoring the two production components from
+  `61cd721` makes the new round-trip test fail at `toBeChecked()`.
+- `frontend/src/App.test.jsx:187` restores the deleted cross-view sequence:
+  enter 82 kg and Peanut allergy, visit the calorie estimate, return, check
+  both controls, and check both values in the next POST. Resetting the
+  profile on opening that link in a temporary copy now fails this test at
+  `toHaveValue(82)`.
+- `frontend/src/App.test.jsx:61` restores the frozen default-view negative
+  assertion. A temporary mutation displaying a Calorie Expenditure heading
+  alongside the flow now fails that assertion.
+
+Re-read `git show 3b823af:frontend/src/App.test.jsx` and audited each
+original guarantee, allowing the names/layout approved by DEC-29:
+
+| Frozen guarantee | Current evidence |
+| --- | --- |
+| App heading and navigation controls render | `App.test.jsx:48` checks the level-one profile heading, brand and step indicator; `:165` and `:208` exercise the secondary navigation |
+| Meal workflow is the default; calorie heading absent | `App.test.jsx:48`, including the restored negative assertion at `:61` |
+| Calories opens and meal content is hidden | `App.test.jsx:208` checks the calorie heading and hidden profile heading |
+| History opens with History, Meal History and Saved Meals; meal content is hidden | `App.test.jsx:165` checks all three headings, hidden plan, and return to that plan |
+| No GET or POST on first render | Both original assertions retained at `App.test.jsx:65` |
+| POST endpoint and submitted craving | `App.test.jsx:74`; exact profile payload equality remains in `ProfileStep.test.jsx:42`, with the approved opaque-ID change covered through App |
+| Backend error text appears | `App.test.jsx:105` retains the text, checks alert semantics and adds successful retry |
+| Returned meal name renders | `App.test.jsx:93` retains the meal name and checks plan-heading focus |
+
+The remaining §5 guarantees also retain their assertions: profile and
+craving/location staleness and replanning; pending-answer drops; submitted
+craving/location labels; all four #32 quality regressions in
+`MealFlow.test.jsx`; field-level 422 handling, retry pauses, privacy and
+keyboard navigation. Reviewed the changed tests and deleted cross-view
+file against `3b823af`, not just their counts. Checked shopping-key
+identity against the API: `MealPlanResponse.request_id` is required and
+`generate_meal_plan` creates a fresh UUID for every request, so identical
+shopping contents do not carry ticks into a new service response. No
+supported-flow key collision was found.
+
+Verified: **150 frontend tests passed across 16 files**; `npm run lint`,
+`npm run build` and `git diff --check` passed. Build retains the existing
+stale Browserslist-data warning. The temporary-copy App/shopping tests
+passed all 17 tests before and after the three deliberately failing
+regression checks. No browser/viewport, live-API or Python suite checks
+were run; Claude's browser claims were not independently reverified.
+
+No new owner decision is needed beyond the calorie-link choice already
+flagged by Claude. Appended exactly this entry; no application/test edits,
+commits, pushes or merges. Left the pre-existing untracked
+`scripts/agent_relay.sh` untouched.
