@@ -11,7 +11,7 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import { planMeal } from '../../test/flow'
+import { goToStep, planMeal } from '../../test/flow'
 import MealFlow from '../flow/MealFlow'
 import { SAMPLE_PLAN } from './samplePlan'
 
@@ -82,6 +82,20 @@ describe('Shopping list', () => {
     list = await planWith(user, { ...SAMPLE_PLAN, request_id: 'another-request' }, 'fried rice')
     expect(within(list).getByText('0 of 6 ticked')).toBeInTheDocument()
     expect(within(list).getByRole('checkbox', { name: /Chicken Breast Fillets/ })).not.toBeChecked()
+  })
+
+  it('keeps ticks while moving between steps on the same plan', async () => {
+    const user = userEvent.setup()
+    render(<MealFlow initialStep="craving" />)
+    await planWith(user, SAMPLE_PLAN)
+    await user.click(screen.getByRole('checkbox', { name: /Chicken Breast Fillets/ }))
+
+    await goToStep(user, '1 · You')
+    await goToStep(user, '2 · Craving')
+    await goToStep(user, '3 · Your plan')
+    expect(screen.getByRole('checkbox', { name: /Chicken Breast Fillets/ })).toBeChecked()
+    expect(screen.getByText('1 of 6 ticked')).toBeInTheDocument()
+    expect(axios.post).toHaveBeenCalledTimes(1)
   })
 
   it('says when the store is a guess for the area', async () => {

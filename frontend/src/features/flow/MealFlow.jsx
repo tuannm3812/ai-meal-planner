@@ -60,6 +60,9 @@ function MealFlow({
   // Set when an edit dropped a plan that was still being made.
   const [droppedInFlight, setDroppedInFlight] = useState(false)
   const opened = useRef(false)
+  // Shopping-list ticks, for one plan: kept across steps, cleared when a new
+  // plan arrives (a different key).
+  const [ticks, setTicks] = useState({ plan: null, ids: new Set() })
   // The profile is React state only: never the URL, never browser storage.
   const [ownProfile, setOwnProfile] = useState(DEFAULT_PROFILE)
   const profile = sharedProfile ?? ownProfile
@@ -93,6 +96,15 @@ function MealFlow({
 
   // G3: "infeasible" is a successful response with null meal sections.
   const isInfeasible = mealPlan?.plan_status === 'infeasible'
+
+  const planKey = mealPlan ? (mealPlan.request_id ?? JSON.stringify(mealPlan.shopping_list)) : null
+  const ticked = ticks.plan === planKey ? ticks.ids : new Set()
+  const toggleTick = (id) => {
+    const ids = new Set(ticked)
+    if (ids.has(id)) ids.delete(id)
+    else ids.add(id)
+    setTicks({ plan: planKey, ids })
+  }
 
   const profileErrors = useMemo(() => validateProfile(profile), [profile])
   const profileIsValid = Object.keys(profileErrors).length === 0
@@ -376,9 +388,10 @@ function MealFlow({
             <>
               <PlanView craving={submitted?.craving ?? ''} plan={mealPlan} />
               <ShoppingList
-                key={mealPlan.request_id ?? JSON.stringify(mealPlan.shopping_list)}
                 location={submitted?.location ?? ''}
+                onToggle={toggleTick}
                 shopping={mealPlan.shopping_list}
+                ticked={ticked}
               />
             </>
           )}

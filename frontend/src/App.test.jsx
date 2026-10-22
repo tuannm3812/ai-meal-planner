@@ -57,6 +57,8 @@ describe('App', () => {
     // The plan step cannot be opened before a plan has been asked for.
     expect(within(progress).getByRole('button', { name: '3 · Your plan' })).toBeDisabled()
     expect(screen.queryByRole('button', { name: 'Meal Plan' })).not.toBeInTheDocument()
+    // Kept from the old default-view test: the calorie estimate is not shown.
+    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
   })
 
   // Old: "never calls the network on first render". Kept as it was.
@@ -178,6 +180,28 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Back to your meal' }))
     expect(screen.getByText('Grilled Chicken Bowl')).toBeVisible()
     expect(screen.queryByRole('heading', { name: 'Meal History' })).not.toBeInTheDocument()
+  })
+
+  // Kept from the deleted ProfileAcrossTabs.test.jsx: details entered before
+  // visiting the calorie estimate survive the visit and reach the request.
+  it('keeps the entered details after visiting the calorie estimate', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.clear(screen.getByLabelText('Weight (kg)'))
+    await user.type(screen.getByLabelText('Weight (kg)'), '82')
+    await user.click(screen.getByRole('checkbox', { name: 'Peanut allergy' }))
+
+    await user.click(screen.getByRole('button', { name: 'Calorie estimate' }))
+    await user.click(screen.getByRole('button', { name: 'Back to your meal' }))
+
+    expect(screen.getByLabelText('Weight (kg)')).toHaveValue(82)
+    expect(screen.getByRole('checkbox', { name: 'Peanut allergy' })).toBeChecked()
+    await planFromStart(user, 'fried rice')
+    expect(axios.post.mock.calls[0][1]).toMatchObject({
+      weight_kg: 82,
+      health_conditions: ['peanut allergy'],
+    })
   })
 
   // Old: "switches to the calories tab". The separate estimate stays as a link.
