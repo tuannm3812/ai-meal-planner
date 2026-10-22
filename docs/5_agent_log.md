@@ -6935,3 +6935,57 @@ before), the Tofu fried rice chip gave Tofu Fried Rice with "Close menu
 match", "Portions rebalanced" and "Some nutrition estimated", 623 kcal
 against 625, and in-range bars. At 390 px, after the `minmax` fix, no
 element overflows. No Python changed.
+
+## 2026-10-22 — Codex — review showcase slice 4 (plan screen)
+
+Reviewed Claude's newest entry and both commits in `a422768..cd0c2b8`:
+`138faa6` (implementation) and `cd0c2b8` (log), against `AGENTS.md`, the
+master and project standards, `docs/8_design.md` §§3.3 and 5, and the frozen
+`App.test.jsx` guarantees. One finding:
+
+- **P2 — enforce the 429 pause on every submission path.**
+  `frontend/src/features/mealPlan/MealPlanTab.jsx:103–106` derives
+  `canSubmit` without the rate-limit pause. That pause lives only in
+  `frontend/src/features/plan/FailurePanel.jsx:10–16`, so it disables
+  "Try again" but leaves "Generate Meal Plan" and form submission enabled.
+  After a 429 with `Retry-After: 60`, both clicking the main button and
+  pressing Enter in the craving field immediately send a second POST,
+  despite the notice saying to wait. Two temporary regression tests
+  reproduced this: each expected one POST and received two. This misses
+  §3.3's "retry after a pause" requirement and lets repeated submissions
+  prolong the rate-limit failure. Fix: keep the cooldown deadline in the
+  request-owning component (or hook), include it in `canSubmit`, and guard
+  `submitPlan` itself; drive the retry notice/button from that same state.
+  Test click and Enter before expiry and successful submission after it,
+  including the default pause when the header is unreadable.
+
+Checked every §3.3 state applicable to slice 4: matched/on-target and
+rebalanced, fallback, outside/reverted, estimated nutrition, infeasible,
+missing/null metadata and older responses, validation/422, loading,
+in-flight edits, stale completed plans, 401/403, 429, 502, 503, unreachable
+and other errors, and back-to-input navigation. Aside from the finding
+above, no further P1–P3 findings. The verdict stays separate from the
+served split and reconciliation; the ingredient tags follow the service's
+source mapping, and the service notes remain available in the collapsed
+details. Shopping-list redesign and tab retirement remain later slices.
+
+Verified locally: **133 frontend tests passed**, including the unchanged
+`App.test.jsx`, the exact request-payload checks, validation, stale-result
+guards and #32 regressions. `npm run lint`, `npm run build` and
+`git diff --check` passed. The build retains the existing stale
+Browserslist-data warning. Of **7 temporary review tests**, the two 429
+regressions failed as described; five passed for reverted balance with
+reconciliation, null metadata, preserving a completed plan and inputs on
+back navigation then marking edits stale, generic 500 detail/retry, and
+dropping an abandoned typed failure. Removed the temporary test file.
+
+Browser/viewport verification could not be repeated: starting Vite on
+127.0.0.1:5178 failed with sandbox `EPERM`, and cached Chromium could not
+launch because its Mach-port registration was denied. Thus Claude's
+1280/390 px browser claims were not independently verified here. No
+live-API or Python suite was run.
+
+No owner decision is needed; the pause is already required by the approved
+design. Appended exactly this one entry. No application changes retained,
+commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
