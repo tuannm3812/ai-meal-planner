@@ -7223,3 +7223,80 @@ No Python changed.
 
 Needs Mike, but not blocking: whether the separate calorie estimate stays
 as a link, as built here, or goes (§7 does not say).
+
+## 2026-10-22 — Codex — review showcase slice 6 and test preservation
+
+Reviewed Claude's newest entry and both commits in `3b823af..61cd721`
+(`25e7ef9`, `61cd721`) against `docs/8_design.md` §§3, 5 and 7 and
+DEC-29. Compared all changed test files, including renames and the deleted
+`ProfileAcrossTabs.test.jsx`, with `3b823af`. **Not clean: two P2 findings
+and one P3; no P1.**
+
+Findings and fixes:
+
+- **P2 — unchanged-plan navigation clears shopping ticks.**
+  `frontend/src/features/flow/MealFlow.jsx:292` conditionally unmounts the
+  entire plan subtree, including `ShoppingList` at line 378. Its tick set
+  belongs to that component, so checking an item, opening `1 · You`, and
+  returning through `3 · Your plan` clears it even though no details changed
+  and no new request was sent. This loses work on the plan that §3.3 says
+  back navigation keeps. A focused reproduction in a temporary copy fails
+  `toBeChecked()` after that round trip. Keep the plan subtree mounted while
+  hidden, or lift the ticks into state that survives step navigation; reset
+  them for a new response and test both preservation and reset.
+- **P2 — the deleted cross-view profile guarantee is not replaced.**
+  `frontend/src/App.test.jsx:137` checks edited weight/allergy through the
+  step indicator only; the calorie-link test at line 184 uses an untouched
+  profile and only checks headings. The old
+  `ProfileAcrossTabs.test.jsx:22` edited weight and Peanut allergy, visited
+  Calories, returned, checked both controls and checked the next payload.
+  None of the replacement tests exercises that sequence. In a temporary
+  copy, deliberately resetting the profile to `DEFAULT_PROFILE` when the
+  Calorie estimate link opens still passes all 148 tests. Restore the old
+  sequence using the new link and Back button, asserting the edited
+  controls and the subsequent request payload. This is lost test coverage,
+  not a claim that the current application resets the profile.
+- **P3 — the frozen default-view negative assertion was dropped.**
+  `frontend/src/App.test.jsx:48` replaces two old tests but omits the old
+  assertion that `Calorie Expenditure` is absent on first render. No other
+  test retains it. A separate temporary mutation adding that visible heading
+  alongside the default flow still passes all 148 tests. Restore the
+  negative role query in the default-view test, preserving the frozen
+  guarantee required by §5 and DEC-29.
+
+Frozen-file guarantee audit:
+
+| Guarantee at `3b823af` | Replacement / result |
+| --- | --- |
+| App heading and navigation controls render | `App.test.jsx:48`, plus the two secondary-link tests; the new names/layout are approved |
+| Meal workflow is the default; calorie heading absent | Step 1 is asserted at `App.test.jsx:48`; the negative assertion is missing (P3 above) |
+| Calories opens and meal content is not shown | `App.test.jsx:184` checks the calorie heading and hidden profile heading |
+| History opens with History, Meal History and Saved Meals; meal content is not shown | `App.test.jsx:163` retains all three headings and checks the plan is hidden |
+| No GET or POST on first render | `App.test.jsx:63`, both original assertions retained |
+| POST endpoint and submitted craving | `App.test.jsx:72`; `ProfileStep.test.jsx:42` retains exact payload equality, with the approved opaque-ID change |
+| Backend error text appears | `App.test.jsx:103` also checks alert semantics and successful retry; typed failures remain in `PlanScreen.test.jsx` |
+| Returned meal name renders | `App.test.jsx:91` retains it and adds plan-heading focus |
+
+The other §5 guarantees remain: the three pending-answer cases in
+`CravingStep.test.jsx`, profile/craving staleness and replanning, submitted
+craving/location labels, and all four #32 meal-quality regressions in the
+renamed `MealFlow.test.jsx`. The remaining changed assertions preserve their
+meaning through the approved labels and step navigation; moving focus to the
+new craving-step heading is consistent with the design. The exact-payload,
+422-field, retry-pause, privacy and shopping assertions remain. The test
+count alone did not establish parity: it stayed at 148 while the cross-view
+scenario disappeared.
+
+Verified in the working tree: **148 tests passed across 16 files**;
+`npm run lint`, `npm run build` and `git diff --check` passed. The build
+reports the existing stale Browserslist-data warning. Temporary-copy checks
+confirmed the shopping regression and both surviving test mutations. The
+first full temporary-copy run lacked the repository-relative corpus and
+backend fixtures; after restoring that directory layout, both mutation
+runs passed all 148 tests. No browser/viewport, live-API or Python suite
+checks were run; Claude's browser claims were not independently reverified.
+
+No new owner decision is needed beyond the calorie-link choice Claude
+already flagged. Appended exactly this entry; no application or test changes
+in the working tree, commits, pushes or merges. The pre-existing untracked
+`scripts/agent_relay.sh` was left untouched.
