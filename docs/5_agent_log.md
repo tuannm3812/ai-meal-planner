@@ -6863,3 +6863,75 @@ slices are outside this verdict.
 No owner decision is needed. Appended exactly this one entry; no application
 changes retained, commits, pushes or merges. The pre-existing untracked
 `scripts/agent_relay.sh` was left untouched.
+
+## 2026-10-22 — Claude — showcase slice 4 (plan screen)
+
+`showcase/step-3` merged `origin/main` (`c41e1f3`, #35) with no conflicts.
+104 tests, eslint and build passed, and it was pushed at `a422768`. Slice 4
+is on `showcase/step-4`, branched from it, commit `138faa6`. It is built
+from fields the response carries today (checked against a live response
+and `schemas/responses.py`):
+
+- **Header.** The submitted craving, the meal name, and separate badges:
+  match from `plan_status` ("Close menu match" or "Standard meal"), the
+  balance verdict from `macro_balance.outcome`, and "Some nutrition
+  estimated". Under it, "N of M ingredients use estimated nutrition from
+  local tables…", plus the sentence that "On target" uses those same
+  tables, only when a verdict is shown. The verdict appears once, never
+  derived from the bars.
+- **Calories and balance.** The served calories against the meal target
+  (from `macro_balance`, else `reconciliation`, else `portion_scaling`) and
+  grams per macro. The balance bars show each macro's share of the served
+  calories, with the AMDR band shaded and "(outside)" in text when a share
+  falls outside. `plan.test.js` parses `AMDR_PERCENT` from
+  `backend/app/core/macro_balance.py`, so the band cannot drift.
+- **Ingredients.** The served portions from `nutrition.ingredients_macros`,
+  tagged Verified, Reference or Estimated by `verification`, with
+  `data_source` mapped as the service does when it is absent. Without
+  verified nutrition, the definition's ingredients appear untagged.
+- **How this plan was made.** A collapsed `<details>` with the daily
+  estimate and meal size, then the default 30-minute, 100 bpm workout
+  (§3.1, stated only when the trained model made the estimate, not the
+  Mifflin fallback), then the service's own notes, de-duplicated.
+- **States.** Fallback gets its notice. Infeasible shows the reason with
+  "Change your details" and "Try another craving", which move focus there
+  without clearing anything. Missing metadata leaves its section out.
+  The old `formatMacro` showed `0.0` for absent totals; nothing is
+  invented now. Loading is an indeterminate "Planning your meal…" with no
+  stages.
+- **Failures.** `useAsyncRequest` now also returns `failure` (reachable,
+  status, code, detail, Retry-After). `FailurePanel` words each case:
+  - 401/403: "This server needs an API key", with no retry.
+  - 429: retry after the pause.
+  - 502 `unverified_required`: the service's message, with no retry.
+  - 503 and unreachable: retry straight away.
+  - 422: still mapped to fields, with no retry.
+- **Moved and removed.** `MealPlanResult` and `MealQuality` are replaced.
+  The shopping list moved unchanged into `ShoppingSection` for slice 5.
+- **Grid overflow.** The two grids use `minmax(0,1fr)` tracks, which fixes
+  a 2 px overflow at 390 px.
+
+Two things to note:
+- **Retry-After.** It is not CORS-safelisted and the API does not set
+  `expose_headers`, so a cross-origin browser usually cannot read it; the
+  screen then waits `DEFAULT_RETRY_SECONDS` (10). Exposing the header would
+  be a one-line backend change, left out of this frontend slice.
+- **Changed tests.** `App.test.jsx` is unchanged and passes. In
+  `MealPlanTab.test.jsx` and `CravingStep.test.jsx`, the "generated
+  successfully for" assertions now match the header's "For your craving".
+  The "no quality section" test now asserts that no Balance, Calories or
+  verdict appears.
+
+Verified: 133 frontend tests pass, 29 of them new:
+- 13 plan helper tests, including the AMDR parity check;
+- 14 screen tests: header, calories, bands, tags, details, outside-range
+  bars, an older response, infeasible focus, loading, and 401, 403,
+  429 (with fake timers and the default pause), 502, 503 and unreachable;
+- 2 hook tests for the failure record.
+
+`eslint .` and `vite build` pass. The sample response is test data only and
+is not in the bundle. In Chromium against a live API (a clean export, as
+before), the Tofu fried rice chip gave Tofu Fried Rice with "Close menu
+match", "Portions rebalanced" and "Some nutrition estimated", 623 kcal
+against 625, and in-range bars. At 390 px, after the `minmax` fix, no
+element overflows. No Python changed.
