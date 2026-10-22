@@ -15,7 +15,9 @@ import { useCallback, useRef, useState } from 'react'
 //
 // Only a string `detail` is shown. A 422's detail is a list of field errors,
 // which cannot be rendered as text; `errorDetail` keeps whatever the backend
-// sent so a form can map those errors back to its fields.
+// sent so a form can map those errors back to its fields. `failure` says what
+// kind of failure it was (no response, or a status, code and Retry-After), so
+// a screen can word each one and decide whether a retry can help.
 //
 // Only the latest request may settle the state. An answer to an earlier run,
 // or to one `reset` has abandoned, is dropped when it arrives, so a slow
@@ -24,6 +26,7 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
   const [data, setData] = useState(null)
   const [error, setError] = useState('')
   const [errorDetail, setErrorDetail] = useState(null)
+  const [failure, setFailure] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const latestRun = useRef(0)
 
@@ -33,6 +36,7 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
       const thisRun = latestRun.current
       setError('')
       setErrorDetail(null)
+      setFailure(null)
       setIsLoading(true)
       try {
         const result = await requestFn(...args)
@@ -42,6 +46,14 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
         const detail = requestError?.response?.data?.detail
         setError(typeof detail === 'string' && detail ? detail : fallbackMessage)
         setErrorDetail(detail ?? null)
+        const response = requestError?.response
+        setFailure({
+          reachable: Boolean(response),
+          status: response?.status,
+          code: response?.data?.code,
+          detail: detail ?? null,
+          retryAfter: response?.headers?.['retry-after'],
+        })
       } finally {
         if (thisRun === latestRun.current) setIsLoading(false)
       }
@@ -55,7 +67,8 @@ export function useAsyncRequest(requestFn, fallbackMessage = 'Something went wro
     setData(null)
     setError('')
     setErrorDetail(null)
+    setFailure(null)
   }, [])
 
-  return { data, error, errorDetail, isLoading, run, reset }
+  return { data, error, errorDetail, failure, isLoading, run, reset }
 }

@@ -130,7 +130,7 @@ describe('Craving step', () => {
     })
     await screen.findByText('Salmon Quinoa Plate')
     expect(screen.queryByRole('status')).not.toBeInTheDocument()
-    expect(screen.getByText(/generated successfully for .salmon./)).toBeInTheDocument()
+    expect(screen.getByText(/For your craving .salmon./)).toBeInTheDocument()
   })
 
   function deferPost() {

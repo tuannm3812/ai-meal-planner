@@ -1,9 +1,8 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 
 import { generateMealPlan } from '../../api/mealPlanner'
 import { useAsyncRequest } from '../../hooks/useAsyncRequest'
 import EmptyState from '../../components/ui/EmptyState'
-import ErrorBanner from '../../components/ui/ErrorBanner'
 import InputField from '../../components/ui/InputField'
 import SubmitButton from '../../components/ui/SubmitButton'
 import CravingSuggestions from '../craving/CravingSuggestions'
@@ -17,9 +16,12 @@ import {
   sameRequest,
   validateProfile,
 } from '../profile/profile'
-import MealPlanResult from './MealPlanResult'
+import FailurePanel from '../plan/FailurePanel'
+import PlanView from '../plan/PlanView'
+import ShoppingSection from '../plan/ShoppingSection'
 
-// A 422 that names no field on screen still says what the service rejected, rather than the "is the backend running" sentence.
+// A 422 that names no field on screen still says what the service rejected,
+// rather than the "is the backend running" sentence.
 function describeRejection(detail) {
   return detail
     .map((item) => {
@@ -39,6 +41,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
   const [location, setLocationValue] = useState('Earlwood, NSW')
   // Set when an edit dropped a plan that was still being made.
   const [droppedInFlight, setDroppedInFlight] = useState(false)
+  const cravingRef = useRef(null)
   // The profile is React state only: never the URL, never browser storage.
   const [ownProfile, setOwnProfile] = useState(DEFAULT_PROFILE)
   const profile = sharedProfile ?? ownProfile
@@ -52,6 +55,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
     data: mealPlan,
     error,
     errorDetail,
+    failure,
     isLoading,
     run: requestMealPlan,
     reset: clearMealPlan,
@@ -62,11 +66,6 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
 
   // G3: "infeasible" is a successful response with null meal sections.
   const isInfeasible = mealPlan?.plan_status === 'infeasible'
-  const mealDefinition = mealPlan?.meal_plan?.meal_definition
-  const nutrition = mealPlan?.nutrition
-  const shopping = mealPlan?.shopping_list
-  const ingredients = mealDefinition?.ingredients || []
-  const shoppingItems = shopping?.shopping_list || []
 
   const profileErrors = useMemo(() => validateProfile(profile), [profile])
   const profileIsValid = Object.keys(profileErrors).length === 0
@@ -92,7 +91,8 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
       requestFieldErrors[key] = message
     }
   }
-  let errorMessage = error
+  // Only a 422's list needs wording here; FailurePanel words every other failure.
+  let errorMessage = null
   if (Array.isArray(errorDetail)) {
     errorMessage =
       rejectedFields || rejectedRequest
@@ -132,6 +132,10 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
     storeProfile(next)
   }
 
+  // Back to an earlier step, keeping everything entered there.
+  const focusCraving = () => cravingRef.current?.focus()
+  const focusProfile = () => document.getElementById('profile-heading')?.focus()
+
   const submitPlan = async () => {
     clearMealPlan()
     setDroppedInFlight(false)
@@ -159,7 +163,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
     <div className="flex flex-col gap-6">
       <ProfileForm errors={fieldErrors} onChange={setProfile} profile={profile} />
 
-      <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
+      <div className="grid grid-cols-[minmax(0,1fr)] gap-6 lg:grid-cols-[360px_minmax(0,1fr)]">
         <aside className="rounded-2xl border border-gray-100 bg-white p-6 shadow-md lg:sticky lg:top-6 lg:self-start">
           <div className="flex items-start justify-between gap-4">
             <div>
@@ -180,6 +184,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
           <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
             <InputField
               error={requestFieldErrors.craving}
+              ref={cravingRef}
               label="Craving Input"
               placeholder="High-protein burger"
               value={craving}
@@ -208,7 +213,7 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
               disabled={!canSubmit}
               idleLabel="Generate Meal Plan"
               isLoading={isLoading}
-              loadingLabel="Orchestrating Agents..."
+              loadingLabel="Planning your meal…"
             />
             {!profileIsValid && (
               <p className="text-sm text-accent-text">Fix your details above to plan a meal.</p>
@@ -230,10 +235,19 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
             </li>
           </ul>
 
-          {error && <div className="mt-5"><ErrorBanner>{errorMessage}</ErrorBanner></div>}
         </aside>
 
-        <div className="grid content-start gap-6">
+        <div aria-live="polite" className="grid min-w-0 grid-cols-[minmax(0,1fr)] content-start gap-6">
+          {error && (
+            <FailurePanel
+              canRetry={canSubmit}
+              failure={failure}
+              key={JSON.stringify(failure)}
+              message={errorMessage}
+              onRetry={submitPlan}
+            />
+          )}
+
           {droppedInFlight && !isLoading && !mealPlan && (
             <div
               className="rounded-[14px] border border-accent-text bg-ground p-4 text-sm text-ink"
@@ -265,38 +279,56 @@ function MealPlanTab({ profile: sharedProfile, onProfileChange }) {
             </div>
           )}
 
-          {!mealPlan && (
+          {!mealPlan && (isLoading || !error) && (
+            // Indeterminate: one POST reports no stages, so none are shown.
             <EmptyState
-              idleBody="Enter a craving to generate your personalized meal plan, nutrition macros, and grocery list."
-              idleTitle="Enter a craving to generate your plan"
+              idleBody="Enter a craving to plan a meal sized to you, with its nutrition and a shopping list."
+              idleTitle="Enter a craving to plan your meal"
               isLoading={isLoading}
-              loadingBody="The meal, nutrition, and grocery agents are coordinating a personalized result."
-              loadingTitle="Orchestrating your agents"
+              loadingBody="This can take a few seconds."
+              loadingTitle="Planning your meal…"
             />
           )}
 
           {isInfeasible && (
-            <EmptyState
-              idleBody={mealPlan.infeasible_reason}
-              idleTitle="No meal fits these constraints"
-              isLoading={false}
-            />
+            <section className="rounded-[20px] border border-line bg-surface p-6">
+              <h2 className="font-display text-2xl font-bold text-ink">
+                No meal fits these constraints
+              </h2>
+              <p className="mt-2 text-muted">
+                {mealPlan.infeasible_reason || 'The service found no meal for this request.'}
+              </p>
+              <div className="mt-4 flex flex-wrap gap-3">
+                <button
+                  className="min-h-[44px] rounded-xl border border-ink px-4 text-sm font-semibold text-ink"
+                  onClick={focusProfile}
+                  type="button"
+                >
+                  Change your details
+                </button>
+                <button
+                  className="min-h-[44px] rounded-xl border border-ink px-4 text-sm font-semibold text-ink"
+                  onClick={focusCraving}
+                  type="button"
+                >
+                  Try another craving
+                </button>
+              </div>
+            </section>
           )}
 
           {mealPlan && !isInfeasible && (
-            <MealPlanResult
-              craving={submitted?.craving ?? ''}
-              ingredients={ingredients}
-              location={submitted?.location ?? ''}
-              macroBalance={mealPlan.macro_balance}
-              mealDefinition={mealDefinition}
-              nutrition={nutrition}
-              planStatus={mealPlan.plan_status}
-              reconciliation={mealPlan.reconciliation}
-              shopping={shopping}
-              shoppingItems={shoppingItems}
-              warnings={mealPlan.meal_plan?.metadata?.warnings || []}
-            />
+            <>
+              <PlanView
+                craving={submitted?.craving ?? ''}
+                onEditCraving={focusCraving}
+                plan={mealPlan}
+              />
+              <ShoppingSection
+                location={submitted?.location ?? ''}
+                shopping={mealPlan.shopping_list}
+              />
+            </>
           )}
         </div>
       </div>

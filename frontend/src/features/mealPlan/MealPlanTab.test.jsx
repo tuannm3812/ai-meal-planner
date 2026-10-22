@@ -256,7 +256,7 @@ describe('MealPlanTab error text', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(screen.getByText(/close match for .pizza./)).toBeInTheDocument()
-    expect(screen.getByText(/generated successfully for .pizza./)).toBeInTheDocument()
+    expect(screen.getByText(/For your craving .pizza./)).toBeInTheDocument()
     expect(screen.queryByText(/salmon/)).not.toBeInTheDocument()
   })
 
@@ -279,6 +279,10 @@ describe('MealPlanTab error text', () => {
     await user.click(screen.getByRole('button', { name: 'Generate Meal Plan' }))
 
     expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
-    expect(screen.queryByText('Meal Quality')).not.toBeInTheDocument()
+    // No balance verdict, bars or calories are invented for a response that
+    // carries none.
+    expect(screen.queryByRole('heading', { name: 'Balance' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('region', { name: 'Calories' })).not.toBeInTheDocument()
+    expect(screen.queryByText('On target')).not.toBeInTheDocument()
   })
 })

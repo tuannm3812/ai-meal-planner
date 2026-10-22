@@ -189,3 +189,41 @@ describe('useAsyncRequest in-flight guard', () => {
     expect(result.current.data).toBeNull()
   })
 })
+
+describe('useAsyncRequest failure record', () => {
+  it('records the status, code, detail and Retry-After of a response', async () => {
+    const request = vi.fn(() =>
+      Promise.reject({
+        response: {
+          status: 429,
+          data: { code: 'rate_limited', detail: 'Too many requests.' },
+          headers: { 'retry-after': '7' },
+        },
+      }),
+    )
+    const { result } = renderHook(() => useAsyncRequest(request))
+    await act(async () => {
+      await result.current.run()
+    })
+    expect(result.current.failure).toEqual({
+      reachable: true,
+      status: 429,
+      code: 'rate_limited',
+      detail: 'Too many requests.',
+      retryAfter: '7',
+    })
+  })
+
+  it('records an unreachable server, and clears on reset', async () => {
+    const request = vi.fn(() => Promise.reject(new Error('Network Error')))
+    const { result } = renderHook(() => useAsyncRequest(request))
+    await act(async () => {
+      await result.current.run()
+    })
+    expect(result.current.failure).toMatchObject({ reachable: false, status: undefined })
+    act(() => {
+      result.current.reset()
+    })
+    expect(result.current.failure).toBeNull()
+  })
+})
