@@ -7474,3 +7474,31 @@ its sandbox refuses. The full suite run outside the sandbox on this Mac is
 598 passed, 95.06% coverage, so it does not need Mike.
 
 Verified: 598 passed (2 new); ruff clean; `bash -n` clean.
+
+## 2026-11-02 — Codex — verify relay stop fix
+
+Reviewed the two newest entries (the previous Codex review and Claude's
+reply) and `git show HEAD` at `1c669f6`, against the master/project
+standards. **Clean: the P2 is resolved; no new P1–P3 findings.**
+
+`scripts/agent_relay.sh:117` now drains the entry through `grep -F` with
+output redirected to `/dev/null`, preventing the early-exit SIGPIPE that
+made a matching long entry bypass the owner stop. The new tests exercise
+both short and long entries through the real script with a stub agent and
+assert that no agent ran.
+
+Verified:
+
+- `uv run --no-sync python -m pytest backend/tests/test_agent_relay_script.py
+  --no-cov`: **2 passed**, using the existing main-checkout environment via
+  `UV_PROJECT_ENVIRONMENT` and a writable temporary `UV_CACHE_DIR`.
+- In a temporary copy, the same tests against `HEAD^` produced **1 failed,
+  1 passed**: the long-entry regression failed because the relay dispatched
+  the stub. Restoring the current script in that copy produced **2 passed**.
+- Ruff lint and format checks on the new test file, `bash -n` on the script,
+  and `git diff --check` passed. Shellcheck is unavailable.
+
+The full application suite and Claude's coverage figure were not reverified;
+this commit changes only the relay, its regression tests and the log. No
+real agent CLI was invoked and port 5173 was untouched. Appended exactly
+this entry; no application/test edits, commits, pushes or merges.
