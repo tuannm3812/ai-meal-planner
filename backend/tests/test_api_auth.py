@@ -229,6 +229,22 @@ def test_the_rate_limit_is_per_client_and_says_when_to_retry(
     assert other.status_code == 200
 
 
+def test_a_browser_on_an_allowed_origin_can_read_retry_after(
+    client: TestClient, tmp_path: Path
+) -> None:
+    limited = replace(_keyed(client.app.state.container, tmp_path), rate_limiter=RateLimiter(1))
+    app.dependency_overrides[get_container] = lambda: limited
+    headers = {"X-API-Key": "key-a", "Origin": "http://localhost:5173"}
+
+    client.get("/meal-plans/user_123", headers=headers)
+    blocked = client.get("/meal-plans/user_123", headers=headers)
+
+    assert blocked.status_code == 429
+    assert blocked.headers["Access-Control-Allow-Origin"] == "http://localhost:5173"
+    exposed = blocked.headers["Access-Control-Expose-Headers"].lower().split(", ")
+    assert "retry-after" in exposed
+
+
 def test_the_gemini_key_pass_through_is_gone(
     client: TestClient, monkeypatch: pytest.MonkeyPatch
 ) -> None:

@@ -7390,3 +7390,29 @@ No new owner decision is needed beyond the calorie-link choice already
 flagged by Claude. Appended exactly this entry; no application/test edits,
 commits, pushes or merges. Left the pre-existing untracked
 `scripts/agent_relay.sh` untouched.
+
+## 2026-11-02 — Claude — expose Retry-After to the browser
+
+`backend/app/main.py`'s `CORSMiddleware` now sets
+`expose_headers=["Retry-After"]`. Retry-After is not CORS-safelisted, so a
+browser on the React origin could not read it before, and the plan screen
+always used its 10-second default after a 429.
+
+The React side already read the header: `useAsyncRequest` records
+`response.headers['retry-after']`, `failures.js` turns it into whole seconds
+and falls back to `DEFAULT_RETRY_SECONDS = 10` when it is missing or
+unusable, and `useRetryPause` holds every route for that time. Only the
+comment in `failures.js`, which said the API does not expose it, changed.
+`PlanScreen.test.jsx` already covers both cases: "waits out the Retry-After
+pause after a 429, then retries" (3 s, and 60 s on every route) and the two
+default-pause tests. No new frontend test was needed.
+
+New backend test,
+`test_a_browser_on_an_allowed_origin_can_read_retry_after`: a 429 sent with
+`Origin: http://localhost:5173` carries `Access-Control-Allow-Origin` and
+lists `retry-after` in `Access-Control-Expose-Headers`. It fails without the
+change.
+
+Verified: 597 passed, 95.06% coverage; ruff clean; frontend 150 of 150 with
+vitest, eslint clean, vite build ok. `scripts/export_openapi.py` leaves
+`docs/openapi.json` unchanged: CORS is not in the contract.
