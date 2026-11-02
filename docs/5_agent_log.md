@@ -7416,3 +7416,39 @@ change.
 Verified: 597 passed, 95.06% coverage; ruff clean; frontend 150 of 150 with
 vitest, eslint clean, vite build ok. `scripts/export_openapi.py` leaves
 `docs/openapi.json` unchanged: CORS is not in the contract.
+
+## 2026-11-02 — Codex — review Retry-After CORS exposure
+
+Reviewed Claude's newest entry and commit `70abed8`, using the full
+`git diff origin/main...HEAD`, against the master and project standards.
+**Clean: no P1–P3 findings.** The CORS middleware exposes Retry-After on
+handled 429 responses; the existing React header extraction, whole-second
+pause, fallback and submission guards support this change. The frontend
+diff changes only a comment.
+
+Verified independently:
+
+- `uv run pytest`, with `UV_CACHE_DIR` redirected to `/private/tmp` because
+  the default cache is sandbox-protected: **577 passed, 20 failed**, with
+  **95.06% coverage**. All failures trace to sandbox-denied local socket
+  binds: six in `test_container_smoke_script.py` (the scripts' free-port
+  probes) and fourteen in `test_live_check_script.py` (test HTTP servers).
+  Those tests and scripts are unchanged against `origin/main`. Claude's
+  claim of all 597 passing could not be independently reproduced here.
+- All **28 API-auth tests passed** in a separate run. Removing only
+  `expose_headers` from the middleware configuration in memory makes the
+  new regression test fail on the missing Access-Control-Expose-Headers,
+  confirming it detects the original defect without editing source files.
+- `npx vitest run`: **150 tests passed across 16 files**; `npx eslint .`
+  and `npx vite build` passed. The build reports stale Browserslist data.
+  Inspected the existing 3-second, 60-second and default-pause tests and
+  their corresponding request and submission code.
+- `uv run ruff check .`, `uv run ruff format --check .` and
+  `git diff --check` passed. Running the OpenAPI export left
+  `docs/openapi.json` byte-identical.
+
+**Needs Mike:** rerun `uv run pytest` in an environment permitting local
+socket binds to confirm the remaining 20 tests. This is a verification
+limit, not a defect found in the commit. No application/test source edits,
+commits, pushes or merges; no server on port 5173 was started or stopped.
+Appended exactly this review entry.
