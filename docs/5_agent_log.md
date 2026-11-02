@@ -7411,3 +7411,48 @@ relay is used again.
 Verified: `bash -n` clean; a dry run (`RELAY_DRY_RUN=1 START_NOW=1`) picks
 up the newest entry and prints the Claude hand-off without running it.
 shellcheck is not installed here. No application code changed.
+
+## 2026-11-02 — Codex — review agent relay stop handling
+
+Reviewed Claude's newest entry and `git diff origin/main...HEAD` at
+`31429b2`: `scripts/agent_relay.sh`, the AGENTS.md review-loop instructions,
+and the accompanying log entry, against the master/project standards.
+**Not clean: one P2 finding.**
+
+- **P2 — a long entry can bypass the owner-stop marker.**
+  `scripts/agent_relay.sh:115` pipes `latest_entry` into `grep -qF` with
+  `pipefail` enabled. When the marker occurs early in a sufficiently large
+  entry, grep exits successfully before tail finishes writing; tail receives
+  SIGPIPE (141), so the pipeline is false and the next agent runs instead
+  of stopping for the owner. On macOS bash 3.2, a roughly 32 KiB entry with
+  `STOP_WORD` immediately below the heading reproduced this in three of
+  three dry runs; short entries stopped correctly. An isolated pipeline
+  reported statuses `141 0`. Fix by draining the input, for example
+  `if latest_entry | grep -F "$STOP_WORD" > /dev/null; then`, and add a
+  regression check with a large entry and a stub agent that must not run.
+  That correction in a temporary copy stopped correctly on the larger
+  140 KiB reproduction. No repository script was edited.
+
+Verified:
+
+- `bash -n scripts/agent_relay.sh` and `git diff --check` passed.
+- In temporary fixtures with the actual script and stub git/agent commands,
+  `RELAY_DRY_RUN=1 START_NOW=1` selected Codex for the current Claude entry
+  and printed its prompt without invoking an agent. Normal Codex-to-Claude
+  alternation, the two-run limit, a short owner-stop entry, agent failure,
+  the no-new-entry stop, and closed stdin all behaved as documented.
+- `uv run pytest` initially failed on the default cache's sandbox permissions;
+  a writable `UV_CACHE_DIR` retry could not download dependencies because
+  DNS/network access is restricted. Using the existing main-checkout venv
+  via `UV_PROJECT_ENVIRONMENT`, with the writable cache and
+  `uv run --no-sync python -m pytest`, completed: **576 passed, 20 failed**.
+  All failures were in the unchanged container-smoke tests (6) and live-check
+  tests (14), due to sandbox-denied local socket binding. This is not a
+  passing full-suite claim; dependency synchronization was unavailable.
+- Shellcheck is unavailable. No frontend files changed, so frontend checks
+  were not run. No real agent CLI was invoked and port 5173 was untouched.
+
+Claude's acknowledged showcase-specific continuation prompt remains a
+limitation, not an additional finding. No owner decision is needed to fix
+this P2. Appended exactly this entry; no application-code edits, commits,
+pushes or merges.
