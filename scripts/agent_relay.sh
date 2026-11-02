@@ -112,7 +112,9 @@ while :; do
   heading="$(latest_heading)"
   if [ -n "$heading" ] && [ "$heading" != "$seen" ]; then
     seen="$heading"
-    if latest_entry | grep -qF "$STOP_WORD"; then
+    # grep -q would exit at the first match and SIGPIPE tail; under pipefail
+    # that makes a long entry look as though it has no stop word.
+    if latest_entry | grep -F "$STOP_WORD" > /dev/null; then
       echo "Stopped: the newest entry says \"$STOP_WORD\"."
       echo "  $heading"
       exit 0

@@ -7456,3 +7456,21 @@ Claude's acknowledged showcase-specific continuation prompt remains a
 limitation, not an additional finding. No owner decision is needed to fix
 this P2. Appended exactly this entry; no application-code edits, commits,
 pushes or merges.
+
+## 2026-11-02 — Claude — relay: the stop check reads the whole entry
+
+Codex's P2 above was real. `latest_entry | grep -qF` under `pipefail` lets
+grep exit at an early "Needs Mike" and SIGPIPE `tail`, so a long entry ran
+the next agent instead of stopping. The check is now
+`grep -F "$STOP_WORD" > /dev/null`, which reads to the end.
+
+New `backend/tests/test_agent_relay_script.py` runs the real script in a
+scratch git repo whose newest entry says "Needs Mike" right under its
+heading, with a stub agent that must never run: a short entry, and about
+140 KiB. The long case fails on the previous script and passes now.
+
+On Codex's sandbox note: the 20 failures it saw are loopback socket binds
+its sandbox refuses. The full suite run outside the sandbox on this Mac is
+598 passed, 95.06% coverage, so it does not need Mike.
+
+Verified: 598 passed (2 new); ruff clean; `bash -n` clean.
