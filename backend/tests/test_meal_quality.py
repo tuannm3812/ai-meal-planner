@@ -37,6 +37,7 @@ from backend.app.evaluation.meal_quality import (
     run,
     run_guardrails,
     summarise,
+    wider_scenarios,
 )
 from backend.app.rag.meal_corpus import load_meal_corpus
 from backend.app.rag.rules import constraint_groups, meal_is_allowed
@@ -73,6 +74,17 @@ def test_default_scenarios_are_fixed_and_distinct() -> None:
     assert len(scenarios) == 72
     assert len({scenario.label for scenario in scenarios}) == 72
     assert scenarios == default_scenarios()
+
+
+def test_wider_scenarios_ask_for_every_recipe_by_name_for_two_profiles() -> None:
+    names = [meal.name for meal in load_meal_corpus(BenchmarkConfig.canonical().meal_corpus_path)]
+    scenarios = wider_scenarios()
+
+    assert len(scenarios) == 2 * len(names) == 68
+    assert [scenario.craving for scenario in scenarios] == names * 2
+    assert {scenario.profile for scenario in scenarios} == set(PROFILES[:2])
+    assert not any(s.health_conditions or s.dietary_preferences for s in scenarios)
+    assert len({scenario.label for scenario in scenarios}) == 68
 
 
 def test_an_infeasible_result_keeps_only_its_status_and_budget() -> None:
@@ -200,6 +212,22 @@ def test_script_prints_the_report_and_writes_json(tmp_path: Path) -> None:
     assert len(payload["plans"]) == 72
     assert [result["as_expected"] for result in payload["guardrails"]] == [True] * 5
     assert "\n## Guardrails\n" in completed.stdout
+
+
+def test_script_runs_the_wider_check_without_guardrails(tmp_path: Path) -> None:
+    output = tmp_path / "wider.json"
+    completed = subprocess.run(
+        [sys.executable, "scripts/meal_quality_baseline.py", "--wider", "--json", str(output)],
+        cwd=REPO,
+        capture_output=True,
+        text=True,
+        check=True,
+    )
+
+    payload = json.loads(output.read_text(encoding="utf-8"))
+    assert payload["summary"]["plans"] == 68
+    assert "guardrails" not in payload
+    assert "\n## Guardrails\n" not in completed.stdout
 
 
 # Codex, 2026-10-18: rounding must not decide pass or fail at a boundary.

@@ -5,9 +5,14 @@ through the real planning service, offline, and prints a Markdown report:
 
     uv run python scripts/meal_quality_baseline.py
     uv run python scripts/meal_quality_baseline.py --json docs/meal_quality/baseline.json
+    uv run python scripts/meal_quality_baseline.py --wider
 
 Run it before and after a meal-quality change and compare the two reports. It
 exits 1 when a guardrail (a fixed fallback or refusal case) does not hold.
+
+``--wider`` runs the wider recipe check instead: every corpus recipe's name as
+a craving for the first two profiles (68 requests), reported on its own and
+without the guardrails.
 """
 
 import argparse
@@ -25,6 +30,7 @@ from backend.app.evaluation.meal_quality import (  # noqa: E402
     run,
     run_guardrails,
     summarise,
+    wider_scenarios,
 )
 
 
@@ -36,21 +42,28 @@ def main(argv: list[str] | None = None) -> int:
     """
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--json", type=Path, help="Also write the summary and rows here.")
+    parser.add_argument(
+        "--wider",
+        action="store_true",
+        help="Run every corpus recipe as a craving (68 requests) instead of the fixed set.",
+    )
     args = parser.parse_args(argv)
 
-    rows, provenance = run()
+    rows, provenance = run(wider_scenarios() if args.wider else None)
     summary = summarise(rows)
-    guardrails = run_guardrails()
+    guardrails = [] if args.wider else run_guardrails()
     print(render_markdown(rows, summary, provenance), end="")
-    print(render_guardrails(guardrails), end="")
+    if not args.wider:
+        print(render_guardrails(guardrails), end="")
     if args.json:
         args.json.parent.mkdir(parents=True, exist_ok=True)
         payload = {
             "provenance": provenance,
             "summary": dataclasses.asdict(summary),
             "plans": [row.model_dump() for row in rows],
-            "guardrails": [result.model_dump() for result in guardrails],
         }
+        if not args.wider:
+            payload["guardrails"] = [result.model_dump() for result in guardrails]
         args.json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     failed = [result.scenario for result in guardrails if not result.as_expected]
     if failed:

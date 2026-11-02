@@ -7390,3 +7390,37 @@ No new owner decision is needed beyond the calorie-link choice already
 flagged by Claude. Appended exactly this entry; no application/test edits,
 commits, pushes or merges. Left the pre-existing untracked
 `scripts/agent_relay.sh` untouched.
+
+## 2026-11-02 — Claude — wider recipe check as a repeatable flag
+
+The 68-request wider recipe check from Codex's #31 review (2026-10-19) only
+existed as an ad-hoc run. It is now `wider_scenarios()` in
+`backend/app/evaluation/meal_quality.py` and a `--wider` flag on
+`scripts/meal_quality_baseline.py`: every corpus recipe's name as a craving,
+for `PROFILES[:2]` (older sedentary woman losing, average man maintaining),
+34 × 2 = 68. It runs instead of the fixed 72 and skips the guardrails, so the
+baseline's denominator is untouched. No meal, corpus or planner change.
+
+**Result at `096c869` (current `main`): 49 of 68 meet the targets**, the same
+as Codex's 49 after the #31 fix. 68 matched, 0 fallback; 66 of 68 within 10%
+on calories (misses: Vegetarian Spinach Omelette 14.6%, Falafel Salad Bowl
+14.8%, both for the average man); median calorie deviation 0.6%, p90 3.5%,
+max 14.8%. Corpus sha256 `5243924a…`, model
+`hist_gradient_boosting_deep_v0.1.0`.
+
+The 19 misses are 10 recipes, all on macros: Chicken Avocado Power Salad,
+Chicken Vegetable Stir Fry, Vegetarian Spinach Omelette, Steak Salad Bowl,
+Greek Chicken Bowl, Falafel Salad Bowl, Sweet Potato Chicken Plate and
+Low-Sodium Salmon Salad for both profiles; Lentil Bolognese Pasta and Beef
+Taco Salad for the woman; Cottage Cheese Toast Plate for the man. Typical
+causes are protein above 35% with carbs below 45% (the chicken plates), or
+fat above 35% (the omelette and salads).
+
+Also seen, not changed: Vegan Oat Bowl and Peanut Tofu Bowl, asked for by
+their exact names, are served High-Protein Asian Tofu Noodle Bowl for both
+profiles (which meets the targets). The docstring says a request can be
+served another meal rather than claiming each matches its own.
+
+Verified: 598 passed, 95.08% coverage; ruff clean; two new tests (68
+distinct scenarios in corpus order; `--wider` writes 68 plans and no
+guardrails). `docs/openapi.json` and `docs/meal_quality/` unchanged.

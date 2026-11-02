@@ -60,6 +60,7 @@ set's numbers stay comparable from one change to the next. The script exits
 ```bash
 uv run python scripts/meal_quality_baseline.py                      # Markdown report
 uv run python scripts/meal_quality_baseline.py --json out.json      # plus rows as JSON
+uv run python scripts/meal_quality_baseline.py --wider              # 68-request recipe check
 ```
 
 ## 2. Baseline, 2026-10-15 (rerun 2026-10-17 with the targets and the calorie floor)
