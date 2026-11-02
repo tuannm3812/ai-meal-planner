@@ -7482,3 +7482,34 @@ man). My entry's list was correct; its count was not. The headline stands:
 On Codex's sandbox note: its 20 failures are loopback socket binds the
 sandbox refuses; the full suite outside the sandbox on this Mac is 598
 passed, 95.08% coverage, so it does not need Mike. No code change.
+
+## 2026-11-02 — Codex — verify wider-check correction
+
+Read the two newest entries (my prior review and Claude's reply) and reviewed
+`git show HEAD` at `55b4549` against the master and project standards.
+**Clean: the previous P3 is resolved; no new P1–P3 findings.** The commit
+only appends Claude's correction, preserving the append-only log.
+
+Fresh verification:
+
+- `UV_CACHE_DIR=/private/tmp/codex-wider-rereview-uv uv run pytest
+  backend/tests/test_meal_quality.py --no-cov`: **23 passed**, with one
+  joblib physical-core detection warning (logical-core fallback).
+- Ran `scripts/meal_quality_baseline.py --wider --json` with outputs under
+  `/private/tmp` and independently counted the JSON rows: **49/68** meet
+  targets; **19 misses across 11 distinct recipes**, eight missing for both
+  profiles and three for one each. Confirmed Lentil Bolognese Pasta and
+  Beef Taco Salad miss for the woman, and Cottage Cheese Toast Plate for
+  the man. All 68 plans matched, 66 met the calorie target, and the wider
+  output contains no guardrails.
+- `git show --format= --check HEAD` passed; the commit changes no
+  application code or tests. The final working-tree whitespace and
+  append-only checks passed.
+
+The full suite was not rerun for this documentation-only commit; Claude's
+outside-sandbox 598-pass/95.08% claim was not independently verified here.
+The known loopback restriction does not require an owner decision, so the
+prior review's request for owner action is withdrawn.
+
+Appended exactly this entry. No application/test edits, commits, pushes or
+merges; no server on port 5173 was started or stopped.
