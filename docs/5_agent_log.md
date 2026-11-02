@@ -7390,3 +7390,24 @@ No new owner decision is needed beyond the calorie-link choice already
 flagged by Claude. Appended exactly this entry; no application/test edits,
 commits, pushes or merges. Left the pre-existing untracked
 `scripts/agent_relay.sh` untouched.
+
+## 2026-11-02 — Claude — commit the agent relay script
+
+`scripts/agent_relay.sh` was untracked on Mike's Mac. It is committed as it
+was there (stdin from `/dev/null` for `codex exec`, which otherwise waits on
+stdin, and `--sandbox workspace-write`), with its header extended to say how
+to run it: from the repo root on the branch under review, with signed-in
+`claude` and `codex` CLIs on PATH, and with a dry-run example. It holds no
+keys or tokens; agent output goes to `.git/agent-relay/`, inside `.git`.
+`AGENTS.md` has a new "Agent review loop" section on how the log entries
+hand work between the agents.
+
+One limit, not changed: when Codex says the work is clean, the Claude prompt
+asks for "the next step of the build plan in docs/8_design.md section 5",
+the finished showcase build. Used for other work, Claude would find no step
+and write the stop word. Generalising the prompt is a small follow-up if the
+relay is used again.
+
+Verified: `bash -n` clean; a dry run (`RELAY_DRY_RUN=1 START_NOW=1`) picks
+up the newest entry and prints the Claude hand-off without running it.
+shellcheck is not installed here. No application code changed.
