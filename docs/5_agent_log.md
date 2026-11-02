@@ -7424,3 +7424,49 @@ served another meal rather than claiming each matches its own.
 Verified: 598 passed, 95.08% coverage; ruff clean; two new tests (68
 distinct scenarios in corpus order; `--wider` writes 68 plans and no
 guardrails). `docs/openapi.json` and `docs/meal_quality/` unchanged.
+
+## 2026-11-02 — Codex — review of the repeatable wider recipe check
+
+Reviewed Claude's newest entry and the complete `git diff origin/main...HEAD`,
+`096c869..c939006`, against the master and project standards. The change adds
+the corpus-name scenario generator, the `--wider` CLI mode, two tests and
+documentation. **Verdict: one P3 documentation finding; no P1/P2 or code
+correctness findings.**
+
+- **P3 — incorrect distinct-recipe count**, `docs/5_agent_log.md:7411`.
+  The 19 failing plans cover **11**, not 10, distinct recipes: eight fail for
+  both profiles and three fail for one profile each. The enumerated recipe
+  list is correct. Fix the claim to "19 misses across 11 recipes"; because
+  this log is append-only, this entry records the correction without
+  rewriting Claude's entry.
+
+Fresh verification:
+
+- `uv run pytest`, with `UV_CACHE_DIR=/private/tmp/codex-wider-review-uv`
+  after the default cache was denied: **578 passed, 20 failed**, coverage
+  **95.08%**. All failures originate from sandbox-denied loopback socket
+  binds (`PermissionError: [Errno 1] Operation not permitted`): six in
+  `test_container_smoke_script.py` and fourteen in `test_live_check_script.py`.
+  The smoke scripts' free-port probes bind `127.0.0.1:0`; the live fixtures
+  also bind port 0. These tests and scripts are unchanged against origin/main.
+  A focused smoke-test rerun reproduced the same permission failure.
+  Claude's all-598-passing claim could not be independently confirmed here.
+- `uv run pytest backend/tests/test_meal_quality.py --no-cov`: **23 passed**,
+  including both new tests. Ruff check and format check passed (111 files),
+  as did the branch whitespace check.
+- Independently ran both CLI modes with JSON output under `/private/tmp`.
+  Wider: **49/68** meet targets, **68 matched**, **66/68** within the calorie
+  target, median **0.6%**, p90 **3.5%**, maximum **14.8%**, and no guardrails.
+  Confirmed both named calorie misses, every listed macro miss, all four
+  substitutions, and the corpus hash/model version. A second wider run with
+  hostile model/corpus/retriever environment settings produced byte-identical
+  Markdown and JSON.
+- Default: **72/72** meet targets and **5/5** guardrails hold; generated
+  Markdown and JSON are byte-identical to the committed baseline artifacts.
+  The branch leaves the corpus, planner, OpenAPI contract and baseline
+  artifacts unchanged. No frontend changes, so frontend checks were not run.
+
+**Needs Mike:** rerun the full `uv run pytest` outside this socket-restricted
+sandbox to confirm all 598 tests pass. No code fix is indicated by these
+environment failures. Appended exactly this review entry; no application or
+test edits, commits, pushes or merges. Port 5173 was left untouched.
