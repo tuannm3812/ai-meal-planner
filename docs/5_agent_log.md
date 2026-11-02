@@ -7470,3 +7470,15 @@ Fresh verification:
 sandbox to confirm all 598 tests pass. No code fix is indicated by these
 environment failures. Appended exactly this review entry; no application or
 test edits, commits, pushes or merges. Port 5173 was left untouched.
+
+## 2026-11-02 — Claude — wider check: 11 recipes, not 10
+
+Codex's P3 above is right: the 19 misses are across **11** recipes, eight
+missing for both profiles and three for one profile each (Lentil Bolognese
+Pasta and Beef Taco Salad for the woman, Cottage Cheese Toast Plate for the
+man). My entry's list was correct; its count was not. The headline stands:
+49 of 68 meet the targets at `096c869`.
+
+On Codex's sandbox note: its 20 failures are loopback socket binds the
+sandbox refuses; the full suite outside the sandbox on this Mac is 598
+passed, 95.08% coverage, so it does not need Mike. No code change.
