@@ -1,9 +1,9 @@
 // What the plan screen says for each failure the meal request can return
 // (docs/8_design.md §3.3, "States the screen must cover").
 
-// Retry-After is not a CORS-safelisted header and the API does not expose it,
-// so a browser on another origin usually cannot read it. This is the pause
-// used then.
+// The API exposes Retry-After to the browser through CORS (backend/app/main.py),
+// so a 429's own wait is used. This is the pause when the header is missing
+// or unreadable, for example from a proxy that strips it.
 export const DEFAULT_RETRY_SECONDS = 10
 
 export const UNREACHABLE_MESSAGE =

@@ -39,6 +39,9 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    # Not CORS-safelisted, so a browser hides it unless exposed; the React plan
+    # screen waits it out after a 429.
+    expose_headers=["Retry-After"],
 )
 register_exception_handlers(app)
 
