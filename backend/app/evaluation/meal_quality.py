@@ -49,6 +49,7 @@ from backend.app.core.macro_balance import (
     macro_percentages,
 )
 from backend.app.core.portions import MAX_SCALE, MIN_SCALE
+from backend.app.rag.meal_corpus import load_meal_corpus
 from backend.app.repositories.json_store import UserProfileRepository
 from backend.app.schemas.requests import MealRequest
 from backend.app.services.meal_planning_service import (
@@ -157,6 +158,31 @@ def default_scenarios() -> list[Scenario]:
             Scenario(craving, average, conditions, preferences) for craving in CRAVINGS[:6]
         )
     return scenarios
+
+
+WIDER_PROFILES = PROFILES[:2]
+"""The profiles of the wider recipe check: a losing and a maintaining budget."""
+
+
+def wider_scenarios(config: "BenchmarkConfig | None" = None) -> list[Scenario]:
+    """Return the wider recipe check: every corpus recipe's name as a craving.
+
+    Codex first ran this by hand on 2026-10-19 (#31 review). It is a separate
+    diagnostic, never added to the fixed 72, so the baseline stays comparable.
+    Each craving names a recipe, so it measures portion balancing across the
+    whole corpus more than retrieval; a request can still be served another
+    meal, and the report shows which.
+
+    Args:
+        config: The artifacts to measure; the canonical baseline when omitted.
+
+    Returns:
+        One scenario per recipe for each of ``WIDER_PROFILES``, in corpus order:
+        68 for the shipped 34-recipe corpus.
+    """
+    config = config or BenchmarkConfig.canonical()
+    names = [meal.name for meal in load_meal_corpus(config.meal_corpus_path)]
+    return [Scenario(name, profile) for profile in WIDER_PROFILES for name in names]
 
 
 class PlanQuality(BaseModel):
