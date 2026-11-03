@@ -7452,3 +7452,115 @@ socket binds to confirm the remaining 20 tests. This is a verification
 limit, not a defect found in the commit. No application/test source edits,
 commits, pushes or merges; no server on port 5173 was started or stopped.
 Appended exactly this review entry.
+
+## 2026-11-02 — Claude — commit the agent relay script
+
+`scripts/agent_relay.sh` was untracked on Mike's Mac. It is committed as it
+was there (stdin from `/dev/null` for `codex exec`, which otherwise waits on
+stdin, and `--sandbox workspace-write`), with its header extended to say how
+to run it: from the repo root on the branch under review, with signed-in
+`claude` and `codex` CLIs on PATH, and with a dry-run example. It holds no
+keys or tokens; agent output goes to `.git/agent-relay/`, inside `.git`.
+`AGENTS.md` has a new "Agent review loop" section on how the log entries
+hand work between the agents.
+
+One limit, not changed: when Codex says the work is clean, the Claude prompt
+asks for "the next step of the build plan in docs/8_design.md section 5",
+the finished showcase build. Used for other work, Claude would find no step
+and write the stop word. Generalising the prompt is a small follow-up if the
+relay is used again.
+
+Verified: `bash -n` clean; a dry run (`RELAY_DRY_RUN=1 START_NOW=1`) picks
+up the newest entry and prints the Claude hand-off without running it.
+shellcheck is not installed here. No application code changed.
+
+## 2026-11-02 — Codex — review agent relay stop handling
+
+Reviewed Claude's newest entry and `git diff origin/main...HEAD` at
+`31429b2`: `scripts/agent_relay.sh`, the AGENTS.md review-loop instructions,
+and the accompanying log entry, against the master/project standards.
+**Not clean: one P2 finding.**
+
+- **P2 — a long entry can bypass the owner-stop marker.**
+  `scripts/agent_relay.sh:115` pipes `latest_entry` into `grep -qF` with
+  `pipefail` enabled. When the marker occurs early in a sufficiently large
+  entry, grep exits successfully before tail finishes writing; tail receives
+  SIGPIPE (141), so the pipeline is false and the next agent runs instead
+  of stopping for the owner. On macOS bash 3.2, a roughly 32 KiB entry with
+  `STOP_WORD` immediately below the heading reproduced this in three of
+  three dry runs; short entries stopped correctly. An isolated pipeline
+  reported statuses `141 0`. Fix by draining the input, for example
+  `if latest_entry | grep -F "$STOP_WORD" > /dev/null; then`, and add a
+  regression check with a large entry and a stub agent that must not run.
+  That correction in a temporary copy stopped correctly on the larger
+  140 KiB reproduction. No repository script was edited.
+
+Verified:
+
+- `bash -n scripts/agent_relay.sh` and `git diff --check` passed.
+- In temporary fixtures with the actual script and stub git/agent commands,
+  `RELAY_DRY_RUN=1 START_NOW=1` selected Codex for the current Claude entry
+  and printed its prompt without invoking an agent. Normal Codex-to-Claude
+  alternation, the two-run limit, a short owner-stop entry, agent failure,
+  the no-new-entry stop, and closed stdin all behaved as documented.
+- `uv run pytest` initially failed on the default cache's sandbox permissions;
+  a writable `UV_CACHE_DIR` retry could not download dependencies because
+  DNS/network access is restricted. Using the existing main-checkout venv
+  via `UV_PROJECT_ENVIRONMENT`, with the writable cache and
+  `uv run --no-sync python -m pytest`, completed: **576 passed, 20 failed**.
+  All failures were in the unchanged container-smoke tests (6) and live-check
+  tests (14), due to sandbox-denied local socket binding. This is not a
+  passing full-suite claim; dependency synchronization was unavailable.
+- Shellcheck is unavailable. No frontend files changed, so frontend checks
+  were not run. No real agent CLI was invoked and port 5173 was untouched.
+
+Claude's acknowledged showcase-specific continuation prompt remains a
+limitation, not an additional finding. No owner decision is needed to fix
+this P2. Appended exactly this entry; no application-code edits, commits,
+pushes or merges.
+
+## 2026-11-02 — Claude — relay: the stop check reads the whole entry
+
+Codex's P2 above was real. `latest_entry | grep -qF` under `pipefail` lets
+grep exit at an early "Needs Mike" and SIGPIPE `tail`, so a long entry ran
+the next agent instead of stopping. The check is now
+`grep -F "$STOP_WORD" > /dev/null`, which reads to the end.
+
+New `backend/tests/test_agent_relay_script.py` runs the real script in a
+scratch git repo whose newest entry says "Needs Mike" right under its
+heading, with a stub agent that must never run: a short entry, and about
+140 KiB. The long case fails on the previous script and passes now.
+
+On Codex's sandbox note: the 20 failures it saw are loopback socket binds
+its sandbox refuses. The full suite run outside the sandbox on this Mac is
+598 passed, 95.06% coverage, so it does not need Mike.
+
+Verified: 598 passed (2 new); ruff clean; `bash -n` clean.
+
+## 2026-11-02 — Codex — verify relay stop fix
+
+Reviewed the two newest entries (the previous Codex review and Claude's
+reply) and `git show HEAD` at `1c669f6`, against the master/project
+standards. **Clean: the P2 is resolved; no new P1–P3 findings.**
+
+`scripts/agent_relay.sh:117` now drains the entry through `grep -F` with
+output redirected to `/dev/null`, preventing the early-exit SIGPIPE that
+made a matching long entry bypass the owner stop. The new tests exercise
+both short and long entries through the real script with a stub agent and
+assert that no agent ran.
+
+Verified:
+
+- `uv run --no-sync python -m pytest backend/tests/test_agent_relay_script.py
+  --no-cov`: **2 passed**, using the existing main-checkout environment via
+  `UV_PROJECT_ENVIRONMENT` and a writable temporary `UV_CACHE_DIR`.
+- In a temporary copy, the same tests against `HEAD^` produced **1 failed,
+  1 passed**: the long-entry regression failed because the relay dispatched
+  the stub. Restoring the current script in that copy produced **2 passed**.
+- Ruff lint and format checks on the new test file, `bash -n` on the script,
+  and `git diff --check` passed. Shellcheck is unavailable.
+
+The full application suite and Claude's coverage figure were not reverified;
+this commit changes only the relay, its regression tests and the log. No
+real agent CLI was invoked and port 5173 was untouched. Appended exactly
+this entry; no application/test edits, commits, pushes or merges.
