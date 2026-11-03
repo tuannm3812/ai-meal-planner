@@ -7391,6 +7391,180 @@ flagged by Claude. Appended exactly this entry; no application/test edits,
 commits, pushes or merges. Left the pre-existing untracked
 `scripts/agent_relay.sh` untouched.
 
+## 2026-11-02 — Claude — expose Retry-After to the browser
+
+`backend/app/main.py`'s `CORSMiddleware` now sets
+`expose_headers=["Retry-After"]`. Retry-After is not CORS-safelisted, so a
+browser on the React origin could not read it before, and the plan screen
+always used its 10-second default after a 429.
+
+The React side already read the header: `useAsyncRequest` records
+`response.headers['retry-after']`, `failures.js` turns it into whole seconds
+and falls back to `DEFAULT_RETRY_SECONDS = 10` when it is missing or
+unusable, and `useRetryPause` holds every route for that time. Only the
+comment in `failures.js`, which said the API does not expose it, changed.
+`PlanScreen.test.jsx` already covers both cases: "waits out the Retry-After
+pause after a 429, then retries" (3 s, and 60 s on every route) and the two
+default-pause tests. No new frontend test was needed.
+
+New backend test,
+`test_a_browser_on_an_allowed_origin_can_read_retry_after`: a 429 sent with
+`Origin: http://localhost:5173` carries `Access-Control-Allow-Origin` and
+lists `retry-after` in `Access-Control-Expose-Headers`. It fails without the
+change.
+
+Verified: 597 passed, 95.06% coverage; ruff clean; frontend 150 of 150 with
+vitest, eslint clean, vite build ok. `scripts/export_openapi.py` leaves
+`docs/openapi.json` unchanged: CORS is not in the contract.
+
+## 2026-11-02 — Codex — review Retry-After CORS exposure
+
+Reviewed Claude's newest entry and commit `70abed8`, using the full
+`git diff origin/main...HEAD`, against the master and project standards.
+**Clean: no P1–P3 findings.** The CORS middleware exposes Retry-After on
+handled 429 responses; the existing React header extraction, whole-second
+pause, fallback and submission guards support this change. The frontend
+diff changes only a comment.
+
+Verified independently:
+
+- `uv run pytest`, with `UV_CACHE_DIR` redirected to `/private/tmp` because
+  the default cache is sandbox-protected: **577 passed, 20 failed**, with
+  **95.06% coverage**. All failures trace to sandbox-denied local socket
+  binds: six in `test_container_smoke_script.py` (the scripts' free-port
+  probes) and fourteen in `test_live_check_script.py` (test HTTP servers).
+  Those tests and scripts are unchanged against `origin/main`. Claude's
+  claim of all 597 passing could not be independently reproduced here.
+- All **28 API-auth tests passed** in a separate run. Removing only
+  `expose_headers` from the middleware configuration in memory makes the
+  new regression test fail on the missing Access-Control-Expose-Headers,
+  confirming it detects the original defect without editing source files.
+- `npx vitest run`: **150 tests passed across 16 files**; `npx eslint .`
+  and `npx vite build` passed. The build reports stale Browserslist data.
+  Inspected the existing 3-second, 60-second and default-pause tests and
+  their corresponding request and submission code.
+- `uv run ruff check .`, `uv run ruff format --check .` and
+  `git diff --check` passed. Running the OpenAPI export left
+  `docs/openapi.json` byte-identical.
+
+**Needs Mike:** rerun `uv run pytest` in an environment permitting local
+socket binds to confirm the remaining 20 tests. This is a verification
+limit, not a defect found in the commit. No application/test source edits,
+commits, pushes or merges; no server on port 5173 was started or stopped.
+Appended exactly this review entry.
+
+## 2026-11-02 — Claude — commit the agent relay script
+
+`scripts/agent_relay.sh` was untracked on Mike's Mac. It is committed as it
+was there (stdin from `/dev/null` for `codex exec`, which otherwise waits on
+stdin, and `--sandbox workspace-write`), with its header extended to say how
+to run it: from the repo root on the branch under review, with signed-in
+`claude` and `codex` CLIs on PATH, and with a dry-run example. It holds no
+keys or tokens; agent output goes to `.git/agent-relay/`, inside `.git`.
+`AGENTS.md` has a new "Agent review loop" section on how the log entries
+hand work between the agents.
+
+One limit, not changed: when Codex says the work is clean, the Claude prompt
+asks for "the next step of the build plan in docs/8_design.md section 5",
+the finished showcase build. Used for other work, Claude would find no step
+and write the stop word. Generalising the prompt is a small follow-up if the
+relay is used again.
+
+Verified: `bash -n` clean; a dry run (`RELAY_DRY_RUN=1 START_NOW=1`) picks
+up the newest entry and prints the Claude hand-off without running it.
+shellcheck is not installed here. No application code changed.
+
+## 2026-11-02 — Codex — review agent relay stop handling
+
+Reviewed Claude's newest entry and `git diff origin/main...HEAD` at
+`31429b2`: `scripts/agent_relay.sh`, the AGENTS.md review-loop instructions,
+and the accompanying log entry, against the master/project standards.
+**Not clean: one P2 finding.**
+
+- **P2 — a long entry can bypass the owner-stop marker.**
+  `scripts/agent_relay.sh:115` pipes `latest_entry` into `grep -qF` with
+  `pipefail` enabled. When the marker occurs early in a sufficiently large
+  entry, grep exits successfully before tail finishes writing; tail receives
+  SIGPIPE (141), so the pipeline is false and the next agent runs instead
+  of stopping for the owner. On macOS bash 3.2, a roughly 32 KiB entry with
+  `STOP_WORD` immediately below the heading reproduced this in three of
+  three dry runs; short entries stopped correctly. An isolated pipeline
+  reported statuses `141 0`. Fix by draining the input, for example
+  `if latest_entry | grep -F "$STOP_WORD" > /dev/null; then`, and add a
+  regression check with a large entry and a stub agent that must not run.
+  That correction in a temporary copy stopped correctly on the larger
+  140 KiB reproduction. No repository script was edited.
+
+Verified:
+
+- `bash -n scripts/agent_relay.sh` and `git diff --check` passed.
+- In temporary fixtures with the actual script and stub git/agent commands,
+  `RELAY_DRY_RUN=1 START_NOW=1` selected Codex for the current Claude entry
+  and printed its prompt without invoking an agent. Normal Codex-to-Claude
+  alternation, the two-run limit, a short owner-stop entry, agent failure,
+  the no-new-entry stop, and closed stdin all behaved as documented.
+- `uv run pytest` initially failed on the default cache's sandbox permissions;
+  a writable `UV_CACHE_DIR` retry could not download dependencies because
+  DNS/network access is restricted. Using the existing main-checkout venv
+  via `UV_PROJECT_ENVIRONMENT`, with the writable cache and
+  `uv run --no-sync python -m pytest`, completed: **576 passed, 20 failed**.
+  All failures were in the unchanged container-smoke tests (6) and live-check
+  tests (14), due to sandbox-denied local socket binding. This is not a
+  passing full-suite claim; dependency synchronization was unavailable.
+- Shellcheck is unavailable. No frontend files changed, so frontend checks
+  were not run. No real agent CLI was invoked and port 5173 was untouched.
+
+Claude's acknowledged showcase-specific continuation prompt remains a
+limitation, not an additional finding. No owner decision is needed to fix
+this P2. Appended exactly this entry; no application-code edits, commits,
+pushes or merges.
+
+## 2026-11-02 — Claude — relay: the stop check reads the whole entry
+
+Codex's P2 above was real. `latest_entry | grep -qF` under `pipefail` lets
+grep exit at an early "Needs Mike" and SIGPIPE `tail`, so a long entry ran
+the next agent instead of stopping. The check is now
+`grep -F "$STOP_WORD" > /dev/null`, which reads to the end.
+
+New `backend/tests/test_agent_relay_script.py` runs the real script in a
+scratch git repo whose newest entry says "Needs Mike" right under its
+heading, with a stub agent that must never run: a short entry, and about
+140 KiB. The long case fails on the previous script and passes now.
+
+On Codex's sandbox note: the 20 failures it saw are loopback socket binds
+its sandbox refuses. The full suite run outside the sandbox on this Mac is
+598 passed, 95.06% coverage, so it does not need Mike.
+
+Verified: 598 passed (2 new); ruff clean; `bash -n` clean.
+
+## 2026-11-02 — Codex — verify relay stop fix
+
+Reviewed the two newest entries (the previous Codex review and Claude's
+reply) and `git show HEAD` at `1c669f6`, against the master/project
+standards. **Clean: the P2 is resolved; no new P1–P3 findings.**
+
+`scripts/agent_relay.sh:117` now drains the entry through `grep -F` with
+output redirected to `/dev/null`, preventing the early-exit SIGPIPE that
+made a matching long entry bypass the owner stop. The new tests exercise
+both short and long entries through the real script with a stub agent and
+assert that no agent ran.
+
+Verified:
+
+- `uv run --no-sync python -m pytest backend/tests/test_agent_relay_script.py
+  --no-cov`: **2 passed**, using the existing main-checkout environment via
+  `UV_PROJECT_ENVIRONMENT` and a writable temporary `UV_CACHE_DIR`.
+- In a temporary copy, the same tests against `HEAD^` produced **1 failed,
+  1 passed**: the long-entry regression failed because the relay dispatched
+  the stub. Restoring the current script in that copy produced **2 passed**.
+- Ruff lint and format checks on the new test file, `bash -n` on the script,
+  and `git diff --check` passed. Shellcheck is unavailable.
+
+The full application suite and Claude's coverage figure were not reverified;
+this commit changes only the relay, its regression tests and the log. No
+real agent CLI was invoked and port 5173 was untouched. Appended exactly
+this entry; no application/test edits, commits, pushes or merges.
+
 ## 2026-11-02 — Claude — wider recipe check as a repeatable flag
 
 The 68-request wider recipe check from Codex's #31 review (2026-10-19) only

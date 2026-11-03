@@ -32,6 +32,21 @@ Project-specific rules and deliberate overrides: @docs/0_coding_standards.md
 - `docs/openapi.json` — the API contract; CI fails on drift, regenerate with
   `scripts/export_openapi.py`
 
+## Agent review loop
+
+Changes are reviewed in a loop between Claude Code and Codex, through
+`docs/5_agent_log.md`. Each agent appends one dated entry per turn, headed
+`## YYYY-MM-DD — Claude — <title>` or `— Codex —`: Claude records what it
+changed and verified, Codex reviews that and records findings (P1–P3) or a
+clean verdict, and Claude answers each finding in its next entry. A branch is
+pushed only after a clean Codex review; nothing is merged without the owner.
+An entry that needs the owner says "Needs Mike", which ends the loop.
+
+Run a Codex review by hand with
+`codex exec --sandbox workspace-write "<prompt>" < /dev/null` (without the
+redirect it waits on stdin and never starts). `scripts/agent_relay.sh` automates
+the hand-offs by watching the log; its header says how to run it.
+
 ## Current state
 
 - 2026-10-08: the refactor (`docs/superpowers/specs/2026-09-10-refactor-and-
