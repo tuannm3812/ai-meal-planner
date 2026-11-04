@@ -2,7 +2,7 @@
   "provenance": {
     "calorie_model_version": "hist_gradient_boosting_deep_v0.1.0",
     "calorie_model_sha256": "33a154b3d5807af1e2dd53ee69dc250e3f9a4429bfed90260e27671eac168c95",
-    "meal_corpus_sha256": "5243924a0a8aab3557d68bff805f00d786dbe8ee30359b84d7e14b873c0c1ac2",
+    "meal_corpus_sha256": "2a66cab83126ba6721d3fa223b5ddd38dcc335221e0fc60b4ab79f8067d8a5ae",
     "meal_count": 34,
     "retriever": "tfidf_vector_retriever_v0.1"
   },
@@ -16,7 +16,7 @@
     "within_tolerance": 72,
     "within_calorie_target": 72,
     "meets_targets": 72,
-    "median_deviation": 0.0034,
+    "median_deviation": 0.0036,
     "p90_deviation": 0.0343,
     "max_deviation": 0.0986,
     "rescaled": 0,
@@ -65,7 +65,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / older sedentary woman, losing",
@@ -93,7 +93,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / older sedentary woman, losing",
@@ -121,7 +121,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / older sedentary woman, losing",
@@ -177,7 +177,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / older sedentary woman, losing",
@@ -205,7 +205,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     },
     {
       "scenario": "breakfast oats / older sedentary woman, losing",
@@ -261,7 +261,7 @@
         "fat": true
       },
       "estimated_ingredients": 5,
-      "retrieval_score": 0.689
+      "retrieval_score": 0.69
     },
     {
       "scenario": "light soup / older sedentary woman, losing",
@@ -289,7 +289,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.769
+      "retrieval_score": 0.771
     },
     {
       "scenario": "sushi / older sedentary woman, losing",
@@ -317,7 +317,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.568
+      "retrieval_score": 0.569
     },
     {
       "scenario": "pizza / older sedentary woman, losing",
@@ -401,7 +401,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / average man, maintaining",
@@ -429,7 +429,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / average man, maintaining",
@@ -457,7 +457,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / average man, maintaining",
@@ -513,7 +513,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / average man, maintaining",
@@ -541,7 +541,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     },
     {
       "scenario": "breakfast oats / average man, maintaining",
@@ -597,7 +597,7 @@
         "fat": true
       },
       "estimated_ingredients": 5,
-      "retrieval_score": 0.689
+      "retrieval_score": 0.69
     },
     {
       "scenario": "light soup / average man, maintaining",
@@ -625,7 +625,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.769
+      "retrieval_score": 0.771
     },
     {
       "scenario": "sushi / average man, maintaining",
@@ -653,7 +653,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.568
+      "retrieval_score": 0.569
     },
     {
       "scenario": "pizza / average man, maintaining",
@@ -737,7 +737,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / active woman, maintaining",
@@ -765,7 +765,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / active woman, maintaining",
@@ -793,7 +793,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / active woman, maintaining",
@@ -849,7 +849,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / active woman, maintaining",
@@ -877,7 +877,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     },
     {
       "scenario": "breakfast oats / active woman, maintaining",
@@ -933,7 +933,7 @@
         "fat": true
       },
       "estimated_ingredients": 5,
-      "retrieval_score": 0.689
+      "retrieval_score": 0.69
     },
     {
       "scenario": "light soup / active woman, maintaining",
@@ -961,7 +961,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.769
+      "retrieval_score": 0.771
     },
     {
       "scenario": "sushi / active woman, maintaining",
@@ -989,7 +989,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.568
+      "retrieval_score": 0.569
     },
     {
       "scenario": "pizza / active woman, maintaining",
@@ -1073,7 +1073,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / large athlete, gaining",
@@ -1101,7 +1101,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / large athlete, gaining",
@@ -1129,7 +1129,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / large athlete, gaining",
@@ -1185,7 +1185,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / large athlete, gaining",
@@ -1213,7 +1213,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     },
     {
       "scenario": "breakfast oats / large athlete, gaining",
@@ -1269,7 +1269,7 @@
         "fat": true
       },
       "estimated_ingredients": 5,
-      "retrieval_score": 0.689
+      "retrieval_score": 0.69
     },
     {
       "scenario": "light soup / large athlete, gaining",
@@ -1297,7 +1297,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.769
+      "retrieval_score": 0.771
     },
     {
       "scenario": "sushi / large athlete, gaining",
@@ -1325,7 +1325,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.568
+      "retrieval_score": 0.569
     },
     {
       "scenario": "pizza / large athlete, gaining",
@@ -1409,7 +1409,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.683
+      "retrieval_score": 0.682
     },
     {
       "scenario": "high-protein burger / average man, maintaining [vegan]",
@@ -1445,19 +1445,19 @@
       "meal_name": "Lentil Bolognese Pasta",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 809.0,
-      "calorie_deviation": 0.0,
+      "verified_kcal": 793.0,
+      "calorie_deviation": 0.019777503090234856,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
-      "scale_factor": 1.22,
+      "scale_factor": 1.14,
       "scale_clamped": false,
-      "protein_g": 37.8,
+      "protein_g": 36.5,
       "macro_percent": {
-        "protein": 18.219062537655137,
-        "carbs": 61.06759850584408,
-        "fat": 20.713338956500785
+        "protein": 17.96701944376077,
+        "carbs": 60.98941668717696,
+        "fat": 21.043563869062268
       },
       "macros_in_range": {
         "protein": true,
@@ -1465,7 +1465,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.416
+      "retrieval_score": 0.418
     },
     {
       "scenario": "salmon dinner / average man, maintaining [vegan]",
@@ -1549,7 +1549,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.571
+      "retrieval_score": 0.573
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [hypertension]",
@@ -1577,7 +1577,7 @@
         "fat": true
       },
       "estimated_ingredients": 2,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / average man, maintaining [hypertension]",
@@ -1605,7 +1605,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / average man, maintaining [hypertension]",
@@ -1633,7 +1633,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / average man, maintaining [hypertension]",
@@ -1689,7 +1689,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / average man, maintaining [hypertension]",
@@ -1717,7 +1717,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     },
     {
       "scenario": "chicken fried rice / average man, maintaining [kidney disease]",
@@ -1745,7 +1745,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.535
+      "retrieval_score": 0.534
     },
     {
       "scenario": "high-protein burger / average man, maintaining [kidney disease]",
@@ -1773,7 +1773,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / average man, maintaining [kidney disease]",
@@ -1801,7 +1801,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / average man, maintaining [kidney disease]",
@@ -1857,7 +1857,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / average man, maintaining [kidney disease]",
@@ -1913,7 +1913,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 1.001
+      "retrieval_score": 1.004
     },
     {
       "scenario": "high-protein burger / average man, maintaining [celiac]",
@@ -1941,7 +1941,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.672
+      "retrieval_score": 0.673
     },
     {
       "scenario": "creamy pasta / average man, maintaining [celiac]",
@@ -1969,7 +1969,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.48
+      "retrieval_score": 0.481
     },
     {
       "scenario": "salmon dinner / average man, maintaining [celiac]",
@@ -2025,7 +2025,7 @@
         "fat": true
       },
       "estimated_ingredients": 4,
-      "retrieval_score": 0.853
+      "retrieval_score": 0.856
     },
     {
       "scenario": "spicy curry / average man, maintaining [celiac]",
@@ -2053,7 +2053,7 @@
         "fat": true
       },
       "estimated_ingredients": 3,
-      "retrieval_score": 0.445
+      "retrieval_score": 0.447
     }
   ],
   "guardrails": [

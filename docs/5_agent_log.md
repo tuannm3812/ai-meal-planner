@@ -7687,3 +7687,50 @@ prior review's request for owner action is withdrawn.
 
 Appended exactly this entry. No application/test edits, commits, pushes or
 merges; no server on port 5173 was started or stopped.
+
+## 2026-11-04 — Claude — eleven recipes balanced; plant milks are not dairy (DEC-30)
+
+The owner chose the wider check's misses as the next milestone. At `b93a799`
+the wider check met the targets in 49 of 68; the 19 misses were eleven
+recipes whose ingredients cannot reach AMDR at any portions inside 0.5x–2x.
+Each now holds more of a carbohydrate or fat it would plausibly contain
+(listed in DEC-30): more rice, quinoa or tortilla in four, toast with the
+omelette, rice in the steak bowl, a cooking oil in five (one of them 10 to
+15 g), avocado on the cottage cheese toast. Portions were kept as they were;
+the smaller of two candidate sets was chosen, since both met every target.
+
+The omelette and steak bowl lose `low-carb` (a low-carb meal cannot reach 45%
+carbohydrate), the omelette also `gluten-free`; descriptions name what was
+added. So the Streamlit "Low carb" preference now favours no meal. That is a
+side effect worth the owner's eye, not a blocker: keeping a low-carb meal would
+mean exempting it from the targets.
+
+Vegan Oat Bowl and Peanut Tofu Bowl served Tofu Noodle Bowl because
+`blocked_groups_for_ingredient` matched "milk" in soy milk and "butter" in
+peanut butter as dairy, and the default profile is dairy-free. The same rule
+kept Vegan Oat Bowl from vegan requests and refused peanut butter's
+sunflower-seed-butter swap on a dairy-free profile. `PLANT_BASED_DAIRY_NAMES`
+in `rag/rules.py` now exempts named plant foods from the dairy group only.
+Two ranking tests used `oats` as the case where the relevant meal sits outside
+the top three by score; Vegan Oat Bowl now leads on score too, so they use
+`eggs` (Egg Breakfast Wrap, fourth by score), found by a search over cravings
+and preferences.
+
+Verified:
+
+- `--wider`: **68 of 68** meet the targets, 68 matched, every recipe served as
+  itself; was 49.
+- Default baseline: **72 of 72**, 61 matched / 11 fallback, guardrails 5 of 5,
+  no meal or status changed. Only the vegan `creamy pasta` plan (Lentil
+  Bolognese Pasta, the oil change) moved: 0.0% to 2.0% from target. Median
+  deviation 0.34% to 0.36%. `docs/meal_quality/` regenerated.
+- Ad hoc, not committed: all 34 recipe names × all four profiles, plus each
+  constraint set on the average profile, 272 of 272 (205 with the old
+  recipes). A celiac omelette gets gluten-free bread; a vegan Vegan Oat Bowl
+  is served.
+- New tests fail without the rules change (12 failures) and pass with it.
+- `uv run pytest`: **618 passed**, coverage 95%. Ruff check and format clean.
+  `docs/openapi.json` unchanged; no frontend change.
+
+Done in a separate clone because the owner's checkout holds Codex's
+uncommitted brand-guidelines draft; it was not touched.
