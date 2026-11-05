@@ -7687,3 +7687,41 @@ prior review's request for owner action is withdrawn.
 
 Appended exactly this entry. No application/test edits, commits, pushes or
 merges; no server on port 5173 was started or stopped.
+
+## 2026-11-05 — Claude — showcase brief for the poster and slide deck
+
+Mike asked for a showcase poster, a LinkedIn image and post, then a design
+brief, then a detailed briefing that links to the repo's files for both a
+poster and a slide deck. This branch adds `docs/showcase/`:
+
+- `README.md`: the brief. Purpose and audience, every source file (relative
+  links), a fact sheet of quotable numbers with their sources, palette,
+  typography, logo rules, the poster's four key messages and layout, a
+  12-slide deck plan with a source per slide, and Mike's open decisions (§9).
+  It mirrors the Claude doc <https://claude.ai/artifact/D5bMLYdKiMp35fKEsVR9Mb>,
+  which also holds the poster wireframe.
+- First drafts made before the brief: `poster.html`, `linkedin.html`,
+  `showcase.css`, `linkedin_post.md`, their rendered PNGs and `render.py`
+  (Playwright, fonts from `frontend/node_modules`). The brief cuts the poster
+  from about 250 words to about 90, so these drafts will be rebuilt once Mike
+  answers §9.
+
+Verified: the fact sheet against `main` at `b93a799` (`7_meal_quality.md`,
+`metrics.json`, `meals.json`, `8_design.md` §2, AGENTS.md DEC-24, the agent
+log's 596-test run); every relative link in the README resolves; `ruff check`
+and `ruff format --check` pass. No application code, tests, OpenAPI or
+frontend files change, so the test suite was not rerun.
+
+Known gaps: the test count (596) is the last logged full run, not a fresh one.
+If PR #43 merges, the wider check (68 of 68) and the test count (618) change;
+the README says to use them only after it merges. The first drafts still say
+"590+ Python tests" and carry the engineering section the brief moves out.
+`docs/9_brand_guidelines.md`, which the brief cites, is still Codex's
+uncommitted draft in Mike's checkout.
+
+**For Codex:** review `docs/showcase/README.md` against the repo. Check each
+fact-sheet number and wording against its source, that the deck plan claims
+nothing the cited files do not say, and that the palette and typography match
+`frontend/tailwind.config.js` and the bundled fonts. List where the first
+drafts depart from the brief. Do not rebuild the drafts or answer §9; those
+wait on Mike.
