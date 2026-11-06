@@ -51,14 +51,14 @@ THEMES = {
         grey="#50636A",
     ),
 }
-BASE = """<style>
-@font-face{font-family:G;font-weight:400;src:url(%s/google-sans-latin-400-normal.woff2)}
-@font-face{font-family:G;font-weight:500;src:url(%s/google-sans-latin-500-normal.woff2)}
-@font-face{font-family:G;font-weight:700;src:url(%s/google-sans-latin-700-normal.woff2)}
-*{margin:0;box-sizing:border-box}
-body{width:960px;height:540px;overflow:hidden;background:#fff;font-family:G;position:relative}
-.a{position:absolute}
-</style>""" % (FONTS, FONTS, FONTS)
+BASE = f"""<style>
+@font-face{{font-family:G;font-weight:400;src:url({FONTS}/google-sans-latin-400-normal.woff2)}}
+@font-face{{font-family:G;font-weight:500;src:url({FONTS}/google-sans-latin-500-normal.woff2)}}
+@font-face{{font-family:G;font-weight:700;src:url({FONTS}/google-sans-latin-700-normal.woff2)}}
+*{{margin:0;box-sizing:border-box}}
+body{{width:960px;height:540px;overflow:hidden;background:#fff;font-family:G;position:relative}}
+.a{{position:absolute}}
+</style>"""
 
 
 def head(t, label, title, sub):
