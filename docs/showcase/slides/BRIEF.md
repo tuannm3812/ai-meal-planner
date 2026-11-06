@@ -105,7 +105,7 @@ Titles are working titles.
 - **Question:** why build this?
 - **Message:** the work is how much, whether it suits you, and what to buy.
 - **Content:** a speech bubble, "I feel like pasta tonight.", then three questions with facts: budgets from 1,200 to 4,521 kcal; four diet and health limits; several ingredients to find and price.
-- **Visual:** an ink panel with a pasta plate, beside three tinted question cards with icons.
+- **Visual:** an ink panel with a pasta plate, beside three tinted question cards, each with a small Today to With the app flow.
 - **Source:** `docs/1_brief.md`, `docs/meal_quality/baseline.json`, `docs/7_meal_quality.md` §1. The questions are framing in Mike's voice, not research findings.
 - **Elsewhere:** how the app answers each one.
 
@@ -121,7 +121,7 @@ Titles are working titles.
 
 **Slide 6. "Four agents work like one kitchen"** (`p4`)
 - **Subtitle:** An order comes in, each station does one job, and a planning service runs them in order.
-- **Visual:** an order ticket feeding four kitchen stations: portion planner, chef, taster, shopper. The roles are a metaphor.
+- **Visual:** an order ticket feeding four kitchen stations, each with a flat illustration and aligned text: portion planner, chef, taster, shopper. The roles are a metaphor.
 - **Question:** what happens behind the screen?
 - **Message:** the four steps, and the core path works with no LLM key.
 - **Content:** Calorie expenditure: estimates daily expenditure and sets the daily budget. Meal recommendation: sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes its portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: maps ingredients to products with an estimated cost. The service balances portions after verification. Output: one typed JSON response with meal, nutrition, shopping list and warnings.

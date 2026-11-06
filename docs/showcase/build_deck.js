@@ -232,20 +232,27 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 4 — problem
 {
   const s = slide("PROBLEM > WHY IT MATTERS", "Picking a meal is easy; sizing it to you is not", "Three questions sit between a craving and a meal you can trust.",
-    "Most of us know what we feel like eating. The hard part comes after that.\n\n[Point: How much?]\nThe right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.\n\n[Point: Is it right for me?]\nDiets and health conditions each rule out different meals.\n\n[Point: What do I buy?]\nEven one meal means several ingredients to find and price.\n\nThe next section shows how one request answers all three.\n\nReference — not read aloud\nThe three questions are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.", PROBLEM);
+    "Most of us know what we feel like eating. The hard part comes after that.\n\n[Point: How much?]\nThe right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.\n\n[Point: Is it right for me?]\nDiets and health conditions each rule out different meals.\n\n[Point: What do I buy?]\nEven one meal means several ingredients to find and price.\n\n[Point: Today, With the app]\nEach question has a manual habit today, and each card shows what the app does in its place.\n\nThe next section shows how one request answers all three.\n\nReference — not read aloud\nThe three questions are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.", PROBLEM);
   card(s, "", X0, TOP, 270, 356, { fill: INK });
   s.addImage({ path: "slides/assets/plate-pasta.png", ...box(X0 + 35, TOP + 92, 200, 200), altText: "Plate of tomato turkey pasta" });
   s.addText("I feel like pasta tonight.", { shape: pres.ShapeType.wedgeRoundRectCallout, ...box(X0 + 20, TOP + 18, 230, 56), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: INK, fontSize: 16, bold: true, align: "center", valign: "middle", margin: 6 });
   text(s, "One request answers all three.", X0 + 20, TOP + 306, 230, 30, { fontSize: 16, bold: true, color: WHITE, align: "center", valign: "middle" });
   [
-    ["monitor_weight", "E3EFE6", GREEN, "How much?", "Needs change with your body, activity and goal. Daily budgets in our benchmark run from 1,200 to 4,521 kcal."],
-    ["no_food", "FBE4DC", TOMATO, "Is it right for me?", "Vegan, coeliac, hypertension and kidney disease each rule out different meals."],
-    ["shopping_cart", TINT_WARN, WARN, "What do I buy?", "Even one meal means several ingredients to find and price."],
-  ].forEach(([icon, tint, deep, h, b], i) => {
+    ["monitor_weight", "E3EFE6", GREEN, "How much?", "Daily budgets in our benchmark run from 1,200 to 4,521 kcal.", "Guess from \"serves 4\"", "A budget, then a meal target"],
+    ["no_food", "FBE4DC", TOMATO, "Is it right for me?", "Vegan, coeliac, hypertension and kidney disease each rule out different meals.", "Read every label", "Conflicts ruled out first"],
+    ["shopping_cart", TINT_WARN, WARN, "What do I buy?", "Even one meal means several ingredients to find and price.", "Write a list, guess the cost", "A list with an estimated total"],
+  ].forEach(([icon, tint, deep, h, b, before, after], i) => {
     const y = TOP + i * 123;
     card(s, "", 331.5, y, 585, 110, { fill: tint });
-    iconDot(s, icon, deep, 349, y + 36, 38);
-    text(s, hb(h, b, { hc: deep, bc: deep }), 402, y + 8, 498, 94, { valign: "middle" });
+    iconDot(s, icon, deep, 345, y + 37, 36);
+    text(s, hb(h, b, { hc: deep, bc: deep }), 392, y + 8, 212, 94, { valign: "middle" });
+    const chip = (x, w, label, t, fill, colour) => s.addText([
+      { text: label, options: { fontSize: 8, bold: true, color: colour, breakLine: true, paraSpaceAfter: 2 } },
+      { text: t, options: { fontSize: 11, bold: true, color: colour } },
+    ], { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x, y + 18, w, 74), fill: { color: fill }, line: { color: fill === WHITE ? deep : fill, width: 1 }, margin: 8, valign: "middle" });
+    chip(614, 128, "TODAY", before, WHITE, deep);
+    arrow(s, 743, y + 55, 758, y + 55);
+    chip(760, 144, "WITH THE APP", after, deep, WHITE);
   });
 }
 
@@ -274,19 +281,20 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     "Behind the screens is a FastAPI service, and it works like a kitchen.\n\n[Point: The portion planner]\nThe calorie agent sets a daily budget.\n\n[Point: The chef]\nThe recommendation agent sets the meal target, excludes conflicting meals and picks a relevant recipe.\n\n[Point: The taster]\nThe nutrition agent looks up each ingredient and labels estimates.\n\n[Point: The shopper]\nThe supermarket agent maps ingredients to products with an estimated cost.\n\nThe meal comes from retrieval, not generation, so the core path needs no LLM key.\n\nReference — not read aloud\ndocs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.", SOLUTION);
   s.addText([{ text: "ORDER  ", options: { bold: true } }, { text: "chicken fried rice, active woman, maintaining" }], { shape: pres.ShapeType.rect, ...box(X0, TOP, W, 34), fill: { color: WHITE }, line: { color: INK, width: 1, dashType: "dash" }, color: INK, fontFace: MONO, fontSize: 12, margin: 10, valign: "middle" });
   [
-    ["calculate", "E3EFE6", GREEN, "THE PORTION PLANNER", "Calorie expenditure", "Estimates daily expenditure and sets the daily budget."],
-    ["skillet", "FBE4DC", TOMATO, "THE CHEF", "Meal recommendation", "Sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes portions."],
-    ["fact_check", TINT_WARN, WARN, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels estimates."],
-    ["shopping_cart", "DDE3DA", INK, "THE SHOPPER", "Supermarket", "Maps ingredients to products with an estimated cost."],
-  ].forEach(([icon, tint, deep, role, h, b], i) => {
-    const x = X0 + i * 223, y = 178;
-    card(s, [
-      { text: role, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 3 } },
-      { text: h, options: { fontFace: HEAD, fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
+    ["scale", "E3EFE6", GREEN, "THE PORTION PLANNER", "Calorie expenditure", "Estimates what you burn in a day and sets your daily budget."],
+    ["pan", "FBE4DC", TOMATO, "THE CHEF", "Meal recommendation", "Sets the meal target, rules out conflicts, picks a relevant recipe and sizes it."],
+    ["taster", TINT_WARN, WARN, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels what is estimated."],
+    ["basket", "DDE3DA", INK, "THE SHOPPER", "Supermarket", "Maps ingredients to products with an estimated cost."],
+  ].forEach(([art, tint, deep, role, h, b], i) => {
+    const x = X0 + i * 223, y = 174;
+    card(s, "", x, y, 204, 206, { fill: tint });
+    s.addImage({ path: `slides/assets/station-${art}.png`, ...box(x + 32, y + 10, 140, 70), altText: `Illustration for ${role.toLowerCase()}` });
+    text(s, [
+      { text: role, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 2 } },
+      { text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
       { text: b, options: { fontSize: 12, color: deep } },
-    ], x, y, 204, 198, { fill: tint, margin: 12, valign: "bottom" });
-    iconDot(s, icon, deep, x + 12, y + 12, 32);
-    if (i < 3) arrow(s, x + 206, y + 99, x + 221, y + 99);
+    ], x + 12, y + 88, 182, 112);
+    if (i < 3) arrow(s, x + 206, y + 103, x + 221, y + 103);
   });
   card(s, [{ text: "One typed JSON response: meal, nutrition, shopping list and warnings", options: { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE } }], X0, 388, W, 56, { fill: INK, margin: 16, valign: "middle" });
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the service balances portions after verification. The core path needs no LLM key." }], X0, 454, W, 14, { fontSize: 8, color: MUTED });
