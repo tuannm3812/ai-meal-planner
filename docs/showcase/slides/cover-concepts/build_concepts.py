@@ -13,21 +13,21 @@ from playwright.sync_api import sync_playwright
 HERE = Path(__file__).resolve().parent
 FONTS = (HERE / "../../fonts").resolve().as_uri()
 BASE = f"""<style>
-@font-face{{font-family:B;font-weight:700;src:url({FONTS}/bricolage-grotesque-latin-700-normal.woff2)}}
-@font-face{{font-family:B;font-weight:800;src:url({FONTS}/bricolage-grotesque-latin-800-normal.woff2)}}
-@font-face{{font-family:I;font-weight:400;src:url({FONTS}/inter-latin-400-normal.woff2)}}
-@font-face{{font-family:I;font-weight:600;src:url({FONTS}/inter-latin-600-normal.woff2)}}
+@font-face{{font-family:G;font-weight:400;src:url({FONTS}/google-sans-latin-400-normal.woff2)}}
+@font-face{{font-family:G;font-weight:500;src:url({FONTS}/google-sans-latin-500-normal.woff2)}}
+@font-face{{font-family:G;font-weight:700;src:url({FONTS}/google-sans-latin-700-normal.woff2)}}
 *{{margin:0;box-sizing:border-box}}
-body{{width:960px;height:540px;overflow:hidden;background:#15291F;color:#fff;font-family:I;position:relative}}
-.brand{{position:absolute;left:43.5px;top:40px;display:flex;gap:10px;align-items:center;font:700 16px B}}
-.title{{font:800 60px/1.02 B;letter-spacing:-.02em}}
-.tag{{font:400 20px/1.35 I;color:#C9D3CC}}
+body{{width:960px;height:540px;overflow:hidden;background:#15291F;color:#fff;font-family:G;position:relative}}
+.brand{{position:absolute;left:43.5px;top:40px;display:flex;gap:10px;align-items:center;font:700 16px G}}
+.title{{font:700 56px/1.04 G;letter-spacing:-.02em}}
+.tag{{font:400 20px/1.35 G;color:#C9D3CC}}
 .tag em{{font-style:normal;font-weight:600;color:#C8431F}}
-.foot{{position:absolute;left:43.5px;bottom:40px;font:400 12px I;color:#C9D3CC}}
+.foot{{position:absolute;left:43.5px;bottom:40px;font:400 12px G;color:#C9D3CC}}
 </style>"""
 MARK = (
-    '<svg width="26" height="26" viewBox="0 0 64 64"><circle cx="32" cy="32" r="27" fill="none"'
-    ' stroke="#C8431F" stroke-width="6"/><circle cx="32" cy="32" r="13" fill="#C8431F"/></svg>'
+    (HERE / "../assets/logo-mark-dark.svg")
+    .read_text()
+    .replace('width="64" height="64"', 'width="28" height="28"')
 )
 BRAND = f'<div class="brand">{MARK}AI Meal Planner</div>'
 FOOT = '<div class="foot">A multi-agent meal planner, a portfolio project by Mike</div>'
@@ -58,13 +58,13 @@ def plate():
 <circle cx="{cx}" cy="{cy}" r="{r + 40}" fill="#F6F7F2"/>
 <circle cx="{cx}" cy="{cy}" r="{r - 40}" fill="#fff" stroke="#DDE3DA"/>
 <circle cx="{cx}" cy="{cy}" r="96" fill="#C8431F"/>
-<text x="{cx}" y="{cy + 2}" text-anchor="middle" font-family="B" font-weight="800" font-size="40" fill="#fff">694</text>
-<text x="{cx}" y="{cy + 26}" text-anchor="middle" font-family="I" font-size="14" fill="#fff">kcal</text>
+<text x="{cx}" y="{cy + 2}" text-anchor="middle" font-family="G" font-weight="700" font-size="40" fill="#fff">694</text>
+<text x="{cx}" y="{cy + 26}" text-anchor="middle" font-family="G" font-size="14" fill="#fff">kcal</text>
 <g fill="none">{out}</g></svg>
 <div style="position:absolute;left:43.5px;top:170px;width:400px">
 <div class="title">Say what you crave.</div>
 <div class="tag" style="margin-top:18px">Get a meal that <em>fits you</em>.</div>
-<div style="font:400 12px I;color:#C9D3CC;margin-top:14px">Plate rim: a real plan's 28% protein, 46% carbs, 26% fat.</div></div>{FOOT}"""
+<div style="font:400 12px G;color:#C9D3CC;margin-top:14px">Plate rim: a real plan's 28% protein, 46% carbs, 26% fat.</div></div>{FOOT}"""
 
 
 def product():
@@ -86,14 +86,14 @@ def craving():
         ("6 items", "on the shopping list"),
     ]
     cards = "".join(
-        f'<div style="background:#fff;color:#15291F;border-radius:14px;padding:14px 16px;width:266px"><div style="font:700 24px B">{a}</div><div style="font:400 13px I;color:#4B5B52;margin-top:2px">{b}</div></div>'
+        f'<div style="background:#fff;color:#15291F;border-radius:14px;padding:14px 16px;width:266px"><div style="font:700 24px G">{a}</div><div style="font:400 13px G;color:#4B5B52;margin-top:2px">{b}</div></div>'
         for a, b in chips
     )
     return f"""{BASE}{BRAND}
 <div class="title" style="position:absolute;left:43.5px;top:96px;font-size:50px">Say what you crave.</div>
 <div style="position:absolute;left:43.5px;top:176px;width:873px;height:84px;background:#fff;border-radius:42px;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 34px">
-<span style="font:400 30px I;color:#15291F">chicken fried rice<span style="color:#C8431F">|</span></span>
-<span style="background:#C8431F;border-radius:30px;padding:16px 28px;font:600 17px I">Plan my meal</span></div>
+<span style="font:400 30px G;color:#15291F">chicken fried rice<span style="color:#C8431F">|</span></span>
+<span style="background:#C8431F;border-radius:30px;padding:16px 28px;font:500 17px G">Plan my meal</span></div>
 <div class="title" style="position:absolute;left:43.5px;top:286px;font-size:50px">Get a meal that <span style="color:#C8431F">fits you</span>.</div>
 <div style="position:absolute;left:43.5px;top:366px;display:flex;gap:37px">{cards}</div>{FOOT}"""
 

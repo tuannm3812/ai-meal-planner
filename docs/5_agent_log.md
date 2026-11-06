@@ -7923,3 +7923,16 @@ PDF from `render.py`, and a README in the Text-to-SQL handoff form.
 
 Verified: seed rebuilds, poster and LinkedIn render from the bundled fonts, relative
 links resolve. The Google-rendered PDFs don't exist yet: they belong to release.
+
+## 2026-11-06 — Claude — showcase standards revised with Mike
+
+Mike changed direction on the standards, so slides and the poster wait on them:
+audience is portfolio viewers; Google Sans replaces Bricolage and Inter for the
+showcase, while the app keeps its fonts; Garden green on a white canvas; the plate
+on a calendar is the showcase logo (`slides/assets/logo-mark.svg`), and the app keeps
+its mark until a separate change. `slides/DESIGN.md`, `DESIGN.md`, root `DESIGN.md`,
+the brief and design history record these. Trials are in `palette-trials/`,
+`logo-concepts/` and `cover-concepts/`. The live deck isn't restyled yet.
+
+**For Codex:** check the revised standards for contradictions, including the
+previous entry's request on the seed's slide text. Don't edit the live deck.

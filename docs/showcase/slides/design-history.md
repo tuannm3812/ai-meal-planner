@@ -4,6 +4,8 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
 
 ## 6 November 2026
 
+- **The plate on a calendar replaced the plate mark for the showcase.** Mike chose it from seven
+  options because it says meal planner directly. The app keeps the old mark for now.
 - **Garden green on white replaced the `ground` canvas.** Mike chose theme A from four trials. Green
   titles replace ink titles, and #EEF4EF panels are added.
 - **Google Sans replaced Bricolage Grotesque and Inter for the showcase.** Mike finds it more

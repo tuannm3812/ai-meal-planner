@@ -74,13 +74,17 @@ Put units next to numbers (629 kcal, 42 g). Don't write paragraphs in the displa
 
 ## 5. Logo and icons
 
-The project has one icon, the **plate mark**: a tomato ring around a tomato dot
-([`logo-mark.svg`](frontend/src/assets/brand/logo-mark.svg)). Put it beside the
-name "AI Meal Planner". Use it alone only where space is tiny.
+The mark is the **plate on a calendar**: a green calendar outline around a tomato plate
+([`logo-mark.svg`](docs/showcase/slides/assets/logo-mark.svg), and a white-outline
+[dark version](docs/showcase/slides/assets/logo-mark-dark.svg)). Mike chose it on
+6 November 2026 for the showcase. The app still uses the earlier plate mark
+([`logo-mark.svg`](frontend/src/assets/brand/logo-mark.svg)) until a separate app change.
 
-- Don't stretch, rotate, recolour or add effects.
+Put it beside the name "AI Meal Planner". Use it alone only where space is tiny.
+
+- Don't stretch, rotate, recolour or add effects. Use the dark version on `ink`.
 - Leave a quarter of its width clear on every side; never under 24 px.
-- Prefer light backgrounds. On ink, check the contrast.
+- It stands for a planned meal, not a weekly calendar feature, so don't imply one.
 
 There is no icon set. Numbered ink circles do that job. If a piece truly needs
 pictograms, use one outline set, 1.5 px stroke, in ink.
@@ -112,6 +116,6 @@ the app works by keyboard and screen reader.
 
 - [ ] Every number traces to the [fact sheet](docs/showcase/README.md#fact-sheet) or to the service.
 - [ ] Estimates and "not medical advice" are stated where they apply.
-- [ ] Only the tokens, typefaces and plate mark for that output are used.
+- [ ] Only the tokens, typefaces and mark for that output are used.
 - [ ] Tomato marks one focal point per surface, not counting the logo and paired markers.
 - [ ] It reads at a glance: headline first, detail second.

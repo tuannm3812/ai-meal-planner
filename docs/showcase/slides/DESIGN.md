@@ -52,7 +52,7 @@ Canvas 960 × 540 pt (13⅓ × 7½ in), white background. All positions in point
 | Content area | x 43.5 to 916.5, y 130 to 486 | Left and right rails are fixed |
 | Takeaway column | x 684, y 130; 232.5 × 356 | See Takeaways |
 | Takeaway marker | x 668 | Aligned to the rendered heading line |
-| Footer mark | x 43.5, y 501; 18 × 18 | Plate mark |
+| Footer mark | x 43.5, y 501; 18 × 18 | Calendar plate mark, `assets/logo-mark.svg` |
 | Footer name | x 68, y 500 | Google Sans 10 pt, `muted`: AI Meal Planner |
 | Page number | Right edge at x 916.5, y 500 | Google Sans 10 pt, `muted`, automatic field |
 
@@ -178,7 +178,7 @@ Project-specific claim rules:
 
 ## Icons and images
 
-The plate mark is the only icon. Numbered chips do the job of icons. If a diagram needs
+The calendar plate mark is the only icon; use `assets/logo-mark-dark.svg` on ink. Numbered chips do the job of icons. If a diagram needs
 pictograms, use Material Symbols Rounded, unfilled, 24 pt, in `ink`, with a text label. No
 emoji or clip art. Keep the licence with any asset added. No stock imagery of food or bodies.
 

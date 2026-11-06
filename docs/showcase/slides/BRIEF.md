@@ -1,6 +1,6 @@
 # Showcase deck brief
 
-**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: Google Sans and Garden green chosen; logo and cover next, then the deck is restyled.** Stage 5 items are in §5.
+**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: Google Sans, Garden green and the logo chosen; cover next, then the deck is restyled.** Stage 5 items are in §5.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
 [live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
@@ -212,7 +212,8 @@ Decided by Mike, 6 November 2026:
 
 1. **Type:** Google Sans for the showcase (changed from Bricolage and Inter, 6 November). The app keeps its own fonts.
    **Colour:** Garden green on a white canvas.
-   **App:** keeps its own UI fonts.
+   **Logo:** plate on a calendar.
+   **App:** keeps its own UI fonts and, for now, its logo.
 2. **Audience:** portfolio viewers, reading with no presenter. The deck can also be presented.
 3. **Length:** 14 slides, adding an executive summary and agenda.
 4. **Slide 5:** capture the real React app.
