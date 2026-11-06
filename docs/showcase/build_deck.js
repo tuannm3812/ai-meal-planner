@@ -211,12 +211,12 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     text(s, [
       { text: course, options: { fontSize: 10, bold: true, color: deep, breakLine: true } },
       { text: h, options: { fontSize: 16, bold: true, color: deep, breakLine: true } },
-      { text: q, options: { fontSize: 10, color: INK } },
+      { text: q, options: { fontSize: 10, color: deep } },
     ], X0 + 60, y + 4, 200, ch - 8, { valign: "middle" });
     const rowH = 19, y0 = y + (ch - pages.length * rowH) / 2;
     pages.forEach(([label, page], k) => {
       const ry = y0 + k * rowH;
-      text(s, [{ text: label, options: { hyperlink: { slide: page }, color: INK } }], X0 + 268, ry, 130, rowH, { valign: "middle" });
+      text(s, [{ text: label, options: { hyperlink: { slide: page }, color: deep } }], X0 + 268, ry, 130, rowH, { valign: "middle" });
       s.addShape(pres.ShapeType.line, { ...box(X0 + 400, ry + 13, 160, 0), line: { color: deep, width: 1, dashType: "sysDot" } });
       text(s, [{ text: String(page), options: { hyperlink: { slide: page }, color: deep, bold: true } }], X0 + 564, ry, 30, rowH, { align: "right", valign: "middle" });
     });
