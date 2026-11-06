@@ -40,20 +40,20 @@ Then what it does and how it works.
 Then what a good meal means, and whether it got there.
 [Point: The bill]
 Last, how it's built and what isn't proven yet.
-Each page reference is a link, so you can jump straight to a course.
+Each page is a link, so you can jump straight to it.
 
 ## Slide 4 — p4
 
 Most of us know what we feel like eating. The hard part comes after that.
 [Point: How much?]
-The right amount depends on your body, activity and goal.
+The right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.
 [Point: Is it right for me?]
-Diets, allergies and health conditions rule meals out.
+Diets and health conditions each rule out different meals.
 [Point: What do I buy?]
-The recipe, the nutrition and the shopping list usually live in different places.
+Even one meal means several ingredients to find and price.
 The next section shows how one request answers all three.
 Reference — not read aloud
-These three are the project's framing, from docs/1_brief.md, not research findings.
+The three questions are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.
 
 ## Slide 5 — p5
 
@@ -61,27 +61,27 @@ This is the real React app, in three steps.
 [Point: You]
 You enter your body, goal and anything to avoid.
 [Point: Craving]
-You say what you feel like eating.
+You say what you feel like eating and where you shop.
 [Point: Your plan]
-You get one meal, its balance and a shopping list. The badges say how it matched and what is estimated.
+You get one meal, its balance, each ingredient's source and a shopping list. The badges say how it matched and what is estimated.
 Next, what happens behind these screens.
 Reference — not read aloud
-Captured 6 November 2026 from a local run with no provider keys. frontend/src/features/flow/MealFlow.jsx.
+Captured 6 November 2026 from a local run with no provider keys: slides/captures/2026-11-06-plan.json. frontend/src/features/flow/MealFlow.jsx.
 
 ## Slide 6 — p6
 
-Behind the screens is a FastAPI service with four agents.
-[Point: Calorie expenditure]
-This agent sets a daily budget.
-[Point: Meal recommendation]
-This one sets the meal target, excludes conflicting meals and picks a relevant recipe.
-[Point: Nutrition verification]
-This one looks up each ingredient and labels estimates.
-[Point: Supermarket]
-This one maps ingredients to products with an estimated cost.
+Behind the screens is a FastAPI service, and it works like a kitchen.
+[Point: The portion planner]
+The calorie agent sets a daily budget.
+[Point: The chef]
+The recommendation agent sets the meal target, excludes conflicting meals and picks a relevant recipe.
+[Point: The taster]
+The nutrition agent looks up each ingredient and labels estimates.
+[Point: The shopper]
+The supermarket agent maps ingredients to products with an estimated cost.
 The meal comes from retrieval, not generation, so the core path needs no LLM key.
 Reference — not read aloud
-docs/2_architecture.md; docs/agents/; MealPlanningService.
+docs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.
 
 ## Slide 7 — p7
 

@@ -115,6 +115,35 @@ def salmon_scene():
 </svg>"""
 
 
+def pasta_scene():
+    """High-Protein Tomato Turkey Pasta from the recipe library, for slide 4."""
+    rnd.seed(8)
+    parts = []
+    for _ in range(170):
+        x, y = spot(0.98)
+        turn = rnd.randint(0, 179)
+        parts.append(
+            f'<g transform="rotate({turn} {x:.1f} {y:.1f})"><rect x="{x - 22:.1f}" y="{y - 7:.1f}" width="44" height="14" rx="3" fill="{rnd.choice(["#F2D08A", "#EBC277", "#F7DDA3"])}"/><ellipse cx="{x + 21:.1f}" cy="{y:.1f}" rx="3" ry="6" fill="#C99A4E"/></g>'
+        )
+    for _ in range(70):
+        x, y = spot(0.95)
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rnd.uniform(6, 10):.1f}" fill="{rnd.choice(["#B9502F", "#A8452A", "#8E5A3A"])}"/>'
+        )
+    for _ in range(9):
+        x, y = spot(0.7)
+        parts.append(
+            f'<ellipse cx="{x:.1f}" cy="{y:.1f}" rx="17" ry="9" fill="#4F8C31" transform="rotate({rnd.randint(0, 179)} {x:.1f} {y:.1f})"/>'
+        )
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+<circle cx="{CX}" cy="{CY + 8}" r="{R + 4}" fill="#0C1A13"/>
+<circle cx="{CX}" cy="{CY}" r="{R}" fill="#FAFAF6"/>
+<circle cx="{CX}" cy="{CY}" r="{FOOD + 8:.1f}" fill="#EFEFE8"/>
+<circle cx="{CX}" cy="{CY}" r="{FOOD:.1f}" fill="#C8553A"/>
+{"".join(parts)}
+</svg>"""
+
+
 svg = scene(11, 26)
 # kcal on slide 2 -> chicken pieces, in proportion to each plan's protein (26, 48, 60, 63 g).
 PLATES = {363: 11, 694: 20, 809: 25, 850: 27}
@@ -143,4 +172,11 @@ with sync_playwright() as p:
     page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
     page.wait_for_timeout(300)
     page.screenshot(path=HERE / "assets/plate-salmon.png", omit_background=True)
+    square = pasta_scene().replace(
+        'width="960" height="540" viewBox="0 0 960 540"',
+        f'width="{side}" height="{side}" viewBox="{CX - side / 2} {CY - side / 2 + 4} {side} {side}"',
+    )
+    page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
+    page.wait_for_timeout(300)
+    page.screenshot(path=HERE / "assets/plate-pasta.png", omit_background=True)
     browser.close()
