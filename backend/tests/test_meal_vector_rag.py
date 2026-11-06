@@ -163,7 +163,7 @@ def test_relevant_meals_rank_ahead_of_profile_boosted_ones() -> None:
     results = retriever.retrieve(
         "eggs",
         dietary_restrictions=["dairy-free", "high-protein"],
-        dietary_preferences=["dairy-free", "gluten-free"],
+        dietary_preferences=["dairy-free", "low-sodium"],
         top_k=34,
     )
 

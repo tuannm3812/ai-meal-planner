@@ -90,7 +90,7 @@
 | salmon dinner / average man, maintaining [kidney disease] | matched | Salmon Quinoa Plate | 809 | 808.2 | 0.1% | 1.31 | 21/46/33 | 0.569 |
 | steak and rice / average man, maintaining [kidney disease] | matched | Lean Steak Rice Plate | 809 | 808.9 | 0.0% | 1.37 | 23/46/31 | 0.856 |
 | spicy curry / average man, maintaining [kidney disease] | fallback | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 |  |
-| chicken fried rice / average man, maintaining [celiac] | matched | Chicken Fried Rice | 809 | 808.8 | 0.0% | 1.11 | 30/46/24 | 1.004 |
+| chicken fried rice / average man, maintaining [celiac] | matched | Chicken Fried Rice | 809 | 803.4 | 0.7% | 1.11 | 30/46/24 | 1.004 |
 | high-protein burger / average man, maintaining [celiac] | matched | High-Protein Turkey Burger Bowl | 809 | 809.9 | 0.1% | 1.6 | 28/46/26 | 0.673 |
 | creamy pasta / average man, maintaining [celiac] | matched | High-Protein Tomato Turkey Pasta | 809 | 801.4 | 0.9% | 1.14 | 25/47/28 | 0.481 |
 | salmon dinner / average man, maintaining [celiac] | matched | Salmon Quinoa Plate | 809 | 808.2 | 0.1% | 1.31 | 21/46/33 | 0.569 |

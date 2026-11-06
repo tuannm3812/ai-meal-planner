@@ -105,6 +105,9 @@ each constraint set for the average profile, 272 of 272 meet the targets
 | Corpus matches scoring below 0.25 | 11 | 11 | 0 | 0 | 0 |
 | Guardrails as expected (separate, controlled corpus) | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 |
 
+DEC-31 (2026-11-07) later changed one plan, the celiac chicken fried rice, so the current
+median calorie deviation is 0.4%. Every other figure in the last column stands.
+
 ## 3. What the baseline shows
 
 1. **Calories are on target; macros are not balanced.** Fixed 2026-10-18:

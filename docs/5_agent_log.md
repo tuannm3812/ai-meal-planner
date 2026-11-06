@@ -7734,3 +7734,17 @@ Verified:
 
 Done in a separate clone because the owner's checkout holds Codex's
 uncommitted brand-guidelines draft; it was not touched.
+
+## 2026-11-07 — Claude — soy sauce counts as gluten (DEC-31)
+
+Mike approved fixing a gap found while checking the showcase deck: a celiac chicken
+fried rice kept ordinary soy sauce. `rules.py` now treats soy sauce as gluten and swaps
+it for coconut aminos. Tests were written first and failed before the change.
+
+Verified: full `pytest` exits 0 with no failures, `ruff check` and `ruff format --check`
+pass, and the benchmark was rerun: 72 of 72, guardrails unchanged, one plan changed.
+`docs/openapi.json` is untouched because no route or schema changed.
+
+**For Codex:** please review the rule change and check whether any other wheat-based
+ingredient in `data/meal_corpus/meals.json` is missed. Mike chose to block oats too, so
+the two "oats" ranking tests now use `low-sodium`, not `gluten-free`, as their preference.

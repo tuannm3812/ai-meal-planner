@@ -16,7 +16,7 @@
     "within_tolerance": 72,
     "within_calorie_target": 72,
     "meets_targets": 72,
-    "median_deviation": 0.0036,
+    "median_deviation": 0.0037,
     "p90_deviation": 0.0343,
     "max_deviation": 0.0986,
     "rescaled": 0,
@@ -1893,26 +1893,26 @@
       "meal_name": "Chicken Fried Rice",
       "daily_budget_kcal": 2889.4,
       "target_meal_kcal": 809,
-      "verified_kcal": 808.8,
-      "calorie_deviation": 0.00024721878862799196,
+      "verified_kcal": 803.4,
+      "calorie_deviation": 0.006922126081582229,
       "within_tolerance": true,
       "within_calorie_target": true,
       "meets_targets": true,
       "rescaled": false,
       "scale_factor": 1.11,
       "scale_clamped": false,
-      "protein_g": 59.8,
+      "protein_g": 58.5,
       "macro_percent": {
-        "protein": 30.221099178774484,
-        "carbs": 45.786481364497796,
-        "fat": 23.992419456727735
+        "protein": 29.839326702371842,
+        "carbs": 46.05967865340474,
+        "fat": 24.100994644223412
       },
       "macros_in_range": {
         "protein": true,
         "carbs": true,
         "fat": true
       },
-      "estimated_ingredients": 3,
+      "estimated_ingredients": 2,
       "retrieval_score": 1.004
     },
     {

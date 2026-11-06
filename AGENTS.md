@@ -102,6 +102,8 @@ the hand-offs by watching the log; its header says how to run it.
   milks and nut butters no longer read as dairy (DEC-30). The wider recipe
   check (`--wider`) meets the targets in 68 of 68, up from 49; the baseline
   stays 72 of 72. The corpus has no low-carb meal now.
+- 2026-11-07: gluten limits now swap soy sauce for coconut aminos (DEC-31). 72 of 72
+  still meet the targets; the median calorie deviation rounds to 0.4%.
 
 ## Open risks
 

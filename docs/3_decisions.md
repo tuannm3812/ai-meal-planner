@@ -38,6 +38,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 28 | Recipes with no fat source get a cooking oil; a rounding miss is retried 2 points inside AMDR | 2026-10-18 |
 | 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
 | 30 | Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy | 2026-11-04 |
+| 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -524,3 +525,21 @@ the vegan `creamy pasta` plan (Lentil Bolognese Pasta) moves, to 2.0% from its
 target. Guardrails 5 of 5. Rules out adding ingredients a recipe would not
 plausibly contain, widening the portion bounds, and exempting low-carb meals
 from the targets.
+
+### DEC-31 — Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos
+
+Dated 2026-11-07. A check of the showcase deck found that a celiac request for
+chicken fried rice kept ordinary soy sauce, which is normally brewed with wheat.
+The gluten keywords named only wheat, bread, buns, pasta and tortillas. Soy sauce
+and low-sodium soy sauce now count as gluten, and the swap to coconut aminos that
+soy and sodium limits already use covers gluten too. Five recipes are affected.
+The benchmark still has 72 of 72 plans on target. One plan changed, and the median
+calorie deviation moves from 0.36% to 0.37%, which rounds to 0.4%.
+
+Oats now count as gluten too, on the owner's choice: they contain no wheat but are
+often cross-contaminated, and Australian labelling does not treat them as
+gluten-free. Two oat recipes have no swap, so a gluten limit excludes them. The
+benchmark's constrained cravings do not include oats, so its numbers do not move.
+
+Rules out a gluten-free soy sauce as the replacement, because the keyword rules
+would flag it and it would need a new nutrition entry.
