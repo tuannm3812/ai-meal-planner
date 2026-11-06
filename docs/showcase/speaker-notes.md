@@ -89,57 +89,57 @@ docs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are
 
 ## Slide 7 — p7
 
-How does it decide how much? It's a short calculation, not one model.
-[Point: Exercise calories]
-The trained model predicts exercise calories.
-[Point: Daily estimate]
-Those are added to a BMR-based daily estimate.
+How does it decide how much? It's a short calculation, and this follows one real person through it.
+[Point: Body and activity]
+Body size and activity give about 2,344 kcal a day.
+[Point: Exercise]
+The trained model adds 125 kcal of exercise.
 [Point: Goal]
-Your goal then adjusts it.
-[Point: Meal target]
-The meal target is 28% of the daily budget, kept between 350 and 850 kcal.
-The model's scores describe exercise calories only. In these plans it adds about 110 to 146 kcal, so the BMR estimate does most of the work. The exercise inputs are defaults, and the activity multiplier may already count that exercise.
+Her goal is to maintain, so nothing changes, and her budget is 2,469 kcal.
+[Point: This meal]
+One meal gets 28% of that, which is 691 kcal.
+[Point: Bars]
+The bars show how small the model's share is. Its high score is for exercise calories only, and in these plans it adds about 110 to 140 kcal.
+The exercise inputs are defaults, and the activity multiplier may already count that exercise.
 Reference — not read aloud
-metrics.json; docs/agents/calorie_expenditure_agent.md; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. In the meal flow, exercise inputs use defaults: 30 minutes, 100 bpm.
+Local run, 7 November 2026: expenditure less BMR × activity is 142, 115, 125 and 108 kcal across the four profiles, 3–10% of expenditure. metrics.json; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. The 28% share is a design choice.
 
 ## Slide 8 — p8
 
-This is how it picks the meal.
-[Point: Relevance and limits]
-The craving is compared with each recipe, and anything that conflicts with your diet, allergies or conditions is excluded, or adapted when a safe swap exists.
-[Point: Ranking]
-Relevance decides what qualifies. Your profile only influences the order.
-Then there are three honest outcomes.
-[Point: No close match]
-If nothing is close, you get a standard meal and a note saying so.
-[Point: Nothing safe]
-If nothing is safe, it refuses.
+This is how it picks the meal, using one real request.
+[Point: Funnel]
+A vegan asks for chicken fried rice. Of 34 recipes, 11 are safe, 4 are relevant to the craving, and one is served: Tofu Fried Rice.
+Safety comes first, so a recipe can't win on relevance alone. Limits can also swap an ingredient rather than drop the recipe.
+[Point: Outcomes]
+There are three possible endings: a close match, a standard meal with a note, or a refusal.
 Reference — not read aloud
-docs/agents/meal_recommendation_agent.md; backend/app/rag/retriever.py; DEC-27.
+Local run, 7 November 2026: backend/app/rag/retriever.py, TF-IDF at 34 recipes, relevance threshold 0.16. DEC-27. Counts: docs/meal_quality/baseline.json. Refusals come from the guardrail cases, on a controlled recipe set; none of the 72 plans was refused.
 
 ## Slide 9 — p9
 
 Can you trust the numbers? Each one shows where it came from.
 [Point: Source column]
 This is a real plan. Three of its six ingredients are estimates, and the app says so.
+[Point: Stacked bar]
+Those three carry about two thirds of the calories, because chicken and rice are the biggest items.
 [Point: Lookup order]
-A trusted local reference comes first. Otherwise it tries cached or provider lookups, USDA and then FatSecret if configured, and last a local or category estimate.
+A trusted local reference comes first. Otherwise it tries USDA and then FatSecret, if keys are set, and last a local or category estimate.
 A reference value isn't an external verification either, so the plan's totals are approximate.
 Reference — not read aloud
-backend/app/agents/nutrition_verification_agent.py. Run of 6 November 2026: 694 kcal against a 691 kcal target, 28/46/26% split; profile 34, male, 165 cm, 65 kg, moderately active, maintain.
+backend/app/agents/nutrition_verification_agent.py. Local run, 7 November 2026: 459 kcal estimated, 235 kcal reference, 694 kcal in all, against a 691 kcal target.
 
 ## Slide 10 — p10
 
-Before changing anything, I fixed what good means.
-[Point: Macro bands]
-Each macro has to sit inside the adult AMDR range, as a share of the meal's energy.
+Before changing anything, I fixed what good means. A plan has to clear two tests.
 [Point: Within 10%]
-Calories have to land within 10% of the target.
+First, calories have to land within 10% of the meal's target.
+[Point: Macro bands]
+Second, each macro has to sit inside the adult AMDR range, as a share of the meal's energy. The dots show one real plan.
 [Point: 72 requests]
-A plan passes only if all of that holds, on a fixed set of 72 requests.
+It runs on the same 72 requests every time, so results can be compared.
 One limit: AMDR is a daily reference, applied here to one meal.
 Reference — not read aloud
-docs/7_meal_quality.md §1; DEC-25.
+docs/7_meal_quality.md §1; DEC-25. Example plan: docs/meal_quality/baseline.json, 28/46/26%.
 
 ## Slide 11 — p11
 
@@ -147,7 +147,7 @@ The first run passed only 10 of 72.
 [Point: Portion balancing]
 Resizing each ingredient toward the ranges took it to 41, with the same meals.
 [Point: Honest fallback]
-The relevance gate moved 11 off-menu scenarios to fallback meals, which took it to 47. That rise is from moving requests, not from better meals.
+The relevance gate moved 11 off-menu requests to fallback meals, which took it to 47. That rise comes from moving requests, not from better meals.
 [Point: Cooking fat and rounding retry]
 Adding a fat to six recipes, and a retry after rounding, took it to all 72.
 [Point: 49 of 68]
@@ -171,14 +171,18 @@ docs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 N
 
 ## Slide 13 — p13
 
-Here are the next steps and the limits, side by side.
-[Point: Next]
-A larger recipe library, learning from feedback, and a live deployment.
-[Point: Not yet]
-Prices are local estimates, nutrition isn't fully verified, not every recipe passes when asked for by name, and it hasn't been tested with users or clinicians.
+Here are the limits, each with the step that answers it.
+[Point: Recipes]
+Not every recipe passes when asked for by name, so the library needs rebalancing and growth.
+[Point: Data]
+Nutrition and prices are mostly local estimates, so the next step is verified data.
+[Point: People]
+It hasn't been tested with users or clinicians. Feedback is stored but not yet used.
+[Point: Hosting]
+The Cloud Run workflow is ready but not deployed.
 It's a planning aid, not medical advice.
 Reference — not read aloud
-docs/4_next_steps.md §6 and §7.
+docs/4_next_steps.md §6 and §7; scripts/meal_quality_baseline.py --wider, 7 November 2026.
 
 ## Slide 14 — p14
 

@@ -24,3 +24,7 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
 - **The live deck became the source of truth** once converted. `build_deck.js` is the seed.
 - **Calorie claim corrected.** The first deck said the trained model predicts daily burn and
   sets the meal target. It predicts exercise calories. The claim rule is now in DESIGN.md.
+
+## 7 November 2026
+
+Slides 7 to 13 moved from plain panels to the four feature colours, Material Symbols icons and to-scale figures drawn from shapes: a day-and-meal bar, a recipe funnel, a calorie-source bar, plan dots on the macro bands and a 72-dot request grid. Mike asked for clearer visuals and balanced colour.

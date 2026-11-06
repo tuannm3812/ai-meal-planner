@@ -7988,3 +7988,13 @@ Numbers tied to PRs #43 and #45 use today's values and change after those merge.
 Verified: OOXML validator passes; full `pytest` passed 601 tests at 95% coverage; slides 7–9
 and 11–14 inspected in Google Slides, with markers realigned on 7 and 11. The live demo still
 opens with demo mode off, pending Mike's Streamlit setting. No application code changed.
+
+## 2026-11-07 — Claude — slides 7 to 13 redesigned
+
+Mike asked for clearer content and better visuals. Slides 7 to 13 now use icons, the four
+feature colours and to-scale figures. New numbers are in the fact sheet. A correction: my first
+exercise-calorie range (110–146 kcal) used the wrong sex label; the real figures are 108–142
+kcal. Slides, brief and fact sheet now say about 110–140 kcal, 3–10%.
+
+Verified: OOXML validator passes; slides 7 to 13 inspected in Google Slides. Numbers tied to
+PRs #43 and #45 still use today's values. No application code changed on this branch.

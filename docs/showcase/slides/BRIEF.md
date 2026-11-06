@@ -129,21 +129,21 @@ Titles are working titles.
 - **Elsewhere:** how each agent works (slides 7–9).
 
 **Slide 7. "From your body to a meal target"** (`p5`)
-- **Subtitle:** A trained exercise-calorie model feeds a daily budget, then one meal's target.
+- **Subtitle:** Worked example: an active woman who is keeping her weight gets a 691 kcal target for this meal.
 - **Question:** how does it decide how much?
 - **Message:** a four-step calculation with a safety floor.
-- **Content, as a flow:** model predicts exercise calories → added to a BMR-based daily estimate → goal adjusts it (+250 kcal to gain, −400 to lose, subject to the floor) → meal target is 28% of the daily budget, kept between 350 and 850 kcal.
+- **Content, as a flow:** body and activity (2,344 kcal) → trained model adds exercise (+125 kcal) → goal (+250 to gain, −400 to lose, with a floor; here a 2,469 kcal budget) → this meal, 28% of the budget, kept to 350–850 kcal (691 kcal). A to-scale bar chart shows the day and the meal.
 - **Evidence:** exercise-calorie model, validation R² 0.996 and MAE 2.2 kcal; Kaggle Playground dataset of 750,000 rows.
-- **Takeaways:** 1. The score is for exercise calories, not daily needs; with default inputs the model adds only 110–146 kcal, 3–11% of expenditure, so the BMR estimate does most of the work. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure. Without it, the older woman's budget would be about 990 kcal.
+- **Takeaways:** 1. The score is for exercise calories, not daily needs; with default inputs the model adds about 110–140 kcal, 3–10% of the day. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure. Without it, one test profile would get 986 kcal.
 - **Note:** in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise. The 28% share is a design choice.
 - **Source:** `docs/agents/calorie_expenditure_agent.md`, `metrics.json`, `calorie_expenditure_agent.py`, `meal_recommendation_agent.py`, DEC-24, `docs/8_design.md` §3.1.
 
 **Slide 8. "Hard limits first, then a relevant recipe"** (`p6`)
-- **Subtitle:** Conflicting recipes are excluded or adapted before selection, across 34 curated recipes.
+- **Subtitle:** A vegan asks for chicken fried rice: the recipes narrow down to one, and the app ends in one of three ways.
 - **Question:** how does it choose the meal?
 - **Message:** three honest outcomes: close match, standard meal with a note, or refusal.
-- **Content:** craving and profile → TF-IDF relevance and hard constraints, which exclude a recipe or swap an ingredient → ranking → three outcomes: 61 of 72 benchmark plans matched, 11 of 72 fell back, and refusal appears in 2 of 5 guardrail cases.
-- **Takeaways:** 1. Relevance alone decides whether a recipe qualifies, so an off-menu craving falls back with a warning; the profile only influences ranking. 2. If nothing is safe, it refuses.
+- **Content:** a funnel from one real request: 34 recipes, 11 safe, 4 relevant, 1 served (Tofu Fried Rice). Three outcomes with examples and counts: close match, 61 of 72; no close match, 11 of 72; nothing safe, 2 of 5 guardrail cases on a controlled recipe set. A fourth card shows a safe swap: gluten-free pasta for a coeliac.
+- **Takeaways:** 1. Safety comes before taste: a recipe that breaks a limit is out, or adapted, before relevance counts. 2. Relevance decides what qualifies; an off-menu craving falls back with a warning, and the profile only changes the order.
 - **Source:** `docs/agents/meal_recommendation_agent.md`, `backend/app/rag/retriever.py`, DEC-27, `docs/7_meal_quality.md`.
 - **Elsewhere:** results (slide 11).
 
@@ -151,22 +151,22 @@ Titles are working titles.
 - **Subtitle:** Example: Chicken Fried Rice from a real local run with no provider keys.
 - **Question:** can I trust the numbers?
 - **Message:** every value shows its source, and estimates are visible.
-- **Content:** ingredient table with badges; lookup order: trusted local reference first; otherwise cached or provider lookup (USDA, then FatSecret if configured); then local or category estimates.
-- **Takeaways:** 1. 3 of 6 ingredients here are estimates, and the app says so. 2. With no provider keys, values come from local tables, so "Reference" is local too and nothing here is externally verified.
+- **Content:** ingredient table with kcal and badges; a stacked bar of the 694 kcal (459 estimated, 235 reference); lookup order: trusted local reference first; otherwise cached or provider lookup (USDA, then FatSecret if configured); then local or category estimates.
+- **Takeaways:** 1. 3 of 6 ingredients are estimates, and they carry 66% of the calories. 2. With no provider keys, values come from local tables, so "Reference" is local too and nothing here is externally verified.
 - **Source:** run of 6 November 2026 (34, male, 165 cm, 65 kg, moderately active, maintain): 694 kcal against 691, 48/78/19 g, 28/46/26%; `backend/app/agents/nutrition_verification_agent.py`.
 
 ### 03 Evidence
 
 **Slide 10. "We defined a good meal before improving one"** (`p8`)
-- **Subtitle:** Fixed targets on 72 requests, run offline and repeatably.
+- **Subtitle:** A plan passes only if it clears both tests, on a fixed set of 72 requests run offline.
 - **Question:** what counts as good?
 - **Message:** a plan passes only if calories and all three macros are in range.
-- **Content:** calories within 10% of target; protein 10–35%, carbs 45–65%, fat 20–35% of energy. 72 requests: 12 cravings × 4 body profiles, plus 6 cravings × 4 diet or health limits.
+- **Content:** two tests, with one real plan (28/46/26%) marked on the bands, and 72 dots for the requests. Calories within 10% of target; protein 10–35%, carbs 45–65%, fat 20–35% of energy. 72 requests: 12 cravings × 4 body profiles, plus 6 cravings × 4 diet or health limits.
 - **Limit:** AMDR is a daily reference, applied here to one meal.
 - **Source:** `docs/7_meal_quality.md` §1, DEC-25.
 
 **Slide 11. "Three fixes took the planner from 10 to 72 of 72"** (`p9`)
-- **Subtitle:** Plans meeting the targets on the project's own benchmark.
+- **Subtitle:** Plans meeting both targets on the project's own benchmark, and what each fix changed.
 - **Question:** did it get better, and why?
 - **Message:** each change is measured. Balancing and the final step kept the served meals; the relevance gate moved 11 off-menu scenarios to fallback meals, which accounts for the rise to 47.
 - **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat and rounding retry 72.
@@ -177,7 +177,7 @@ Titles are working titles.
 ### 04 Build and limits
 
 **Slide 12. "Built like a product, not a notebook"** (`p10`)
-- **Subtitle:** Production habits on a portfolio project.
+- **Subtitle:** Six production habits on a portfolio project, each with a file you can open in the repo.
 - **Question:** is the engineering real?
 - **Message:** six habits, each with a file behind it.
 - **Content:** typed API contract checked in CI; 601 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
@@ -185,10 +185,10 @@ Titles are working titles.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
 **Slide 13. "What comes next, and what it is not yet"** (`p11`)
-- **Subtitle:** The next steps follow from the limits.
+- **Subtitle:** Each next step answers a limit that is true today.
 - **Question:** what is unproven?
-- **Message:** next steps and limits, side by side.
-- **Content:** Next: a larger recipe library; learning from user feedback; a live Cloud Run deployment. Not yet: live store prices; full verified nutrition; every recipe on target by name (49 of 68); any user or clinical testing. Not medical advice.
+- **Message:** each limit is paired with the step that answers it.
+- **Content:** four pairs. Recipes: 49 of 68 pass by name → a larger, rebalanced library. Data: nutrition and prices are mostly local estimates → verified nutrition and live store prices. People: no user or clinical testing, feedback unused → learn from feedback, then test with people. Hosting: Cloud Run not deployed → a live deployment. Not medical advice.
 - **Source:** `docs/4_next_steps.md` §6, §7.
 
 ### Close
@@ -216,9 +216,9 @@ depend on PR #43 or #45 use today's numbers and change again after those merge.
 | Slide | Record | Result | Proposed change |
 | --- | --- | --- | --- |
 | 7 | Four-step flow, +250/−400, 28%, 350–850 | Correct | None |
-| 7 | R² 0.996, MAE 2.2 kcal, 750,000 rows | Correct, on Kaggle data | Add why it matters less: with default inputs the model adds only 110–146 kcal, 3–11% of expenditure. The BMR estimate does most of the work |
+| 7 | R² 0.996, MAE 2.2 kcal, 750,000 rows | Correct, on Kaggle data | Add why it matters less: with default inputs the model adds about 110–140 kcal, 3–10% of expenditure |
 | 7 | Exercise inputs use defaults | Correct | Add as a limit: the activity multiplier may already count that exercise, so the model's calories can double count it |
-| 7 | Floor of 1,200 or 1,500 kcal | Correct | Add the example: the older woman's budget would be about 990 kcal without it |
+| 7 | Floor of 1,200 or 1,500 kcal | Correct | Add the example: the older woman's budget would be 986 kcal without it |
 | 7 | 350–850 kcal | Correct, but the 28% has no recorded reason | State it as a design choice. The athlete's meal is capped at 19% of the day |
 | 8 | Limits checked before scoring | Correct (`retriever.py`) | Add that limits can swap an ingredient as well as exclude a recipe |
 | 8 | Three outcomes | Correct | Add counts: 61 matched and 11 fallback of 72; refusal appears only in 2 guardrail cases |

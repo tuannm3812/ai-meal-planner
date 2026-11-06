@@ -30,6 +30,20 @@ GLYPHS = [
     "fact_check",
     "search",
     "rice_bowl",
+    "fitness_center",
+    "flag",
+    "check_circle",
+    "block",
+    "menu_book",
+    "group",
+    "cloud_upload",
+    "verified",
+    "lock",
+    "visibility",
+    "devices",
+    "science",
+    "storefront",
+    "inventory_2",
 ]
 # name, x, y, size, rotation: a loose cluster in the free top right corner of content slides.
 CORNER = [
