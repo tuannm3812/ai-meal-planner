@@ -55,7 +55,7 @@ Even one meal means several ingredients to find and price.
 Each question has a manual habit today, and each card shows what the app does in its place.
 The next section shows how one request answers all three.
 Reference — not read aloud
-The three questions are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.
+The three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.
 
 ## Slide 5 — p5
 
