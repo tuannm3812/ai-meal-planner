@@ -1,0 +1,40 @@
+{
+  "captured": "2026-11-06",
+  "app": "React client, frontend/src/features/flow/MealFlow.jsx",
+  "code_commit": "b93a799 (main)",
+  "script": "capture_app.py",
+  "viewport": [
+    1280,
+    900
+  ],
+  "environment": {
+    "STORAGE_BACKEND": "json",
+    "provider_keys": false,
+    "api_keys": false
+  },
+  "profile": {
+    "age": 34,
+    "sex": "male",
+    "height_cm": 165,
+    "weight_kg": 65,
+    "activity": "Moderately active (default)",
+    "goal": "maintain (default)"
+  },
+  "craving": "chicken fried rice",
+  "location": "Earlwood, NSW",
+  "result": {
+    "meal": "Chicken Fried Rice",
+    "kcal": 694,
+    "meal_target_kcal": 691,
+    "protein_g": 48,
+    "carbs_g": 78,
+    "fat_g": 19,
+    "split_percent": [
+      28,
+      46,
+      26
+    ],
+    "estimated_ingredients": "3 of 6"
+  },
+  "use": "Product illustration, not benchmark evidence. The slide JPGs are 1280 px downscales of the 1.5x captures."
+}

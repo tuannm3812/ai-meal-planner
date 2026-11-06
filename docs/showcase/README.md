@@ -1,23 +1,50 @@
 # Showcase poster and slide deck
 
-Everything for the project's showcase. Start here.
+Everything for the project's showcase, laid out like the Text-to-SQL showcase folder.
 
-| Need | Go to |
+## Editable deck
+
+[Open the live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit),
+in Drive at `06_Projects/AI Meal Planner`. Created 6 November 2026 with 14 editable slides.
+Access is private; no sharing was changed.
+
+**The live Google deck is the formatting source of truth.** Read its current objects before
+editing, and don't overwrite it by rebuilding or importing the local PowerPoint.
+
+- `build_deck.js` and `ai-meal-planner-deck.pptx`: the reviewed seed, historical from now on.
+- [speaker-notes.md](speaker-notes.md): the deck's notes; keep aligned with the live deck.
+- `ai-meal-planner-deck-google-slides.pdf`: export this at release (brief stage 6) and refresh
+  it after later edits. It doesn't exist yet.
+
+## How this folder works
+
+Three questions, three kinds of file. Each has one owner, so nothing is decided twice.
+
+| Question | File |
 | --- | --- |
-| Edit the deck | [Live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit) (source of truth for formatting) |
-| What each slide says | [slides/BRIEF.md](slides/BRIEF.md) |
-| How slides look | [slides/DESIGN.md](slides/DESIGN.md), with [design history](slides/design-history.md) |
-| How the poster looks and reads | [DESIGN.md](DESIGN.md) |
-| Brand tokens, voice and logo | [root DESIGN.md](../../DESIGN.md) |
-| Numbers we may quote | [Fact sheet](#fact-sheet) below |
+| What does each slide say? | [slides/BRIEF.md](slides/BRIEF.md) |
+| How does every slide look? | [slides/DESIGN.md](slides/DESIGN.md) |
+| How does the poster read and look? | [DESIGN.md](DESIGN.md) |
+| Why did a rule change? | [slides/design-history.md](slides/design-history.md) |
+| What may we quote? | [Fact sheet](#fact-sheet) below |
+| What is the brand? | [root DESIGN.md](../../DESIGN.md) |
+| What is the demo's provenance? | `slides/captures/`: screens plus a `.json` record |
+
+| Folder or file | Holds |
+| --- | --- |
+| `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py` |
+| `fonts/` | Bundled Bricolage Grotesque and Inter with their OFL licences |
+| `poster.html`, `linkedin.html`, `showcase.css`, `render.py` | Poster and LinkedIn source and renderer |
+| `ai-meal-planner-*.png`, `.pdf`, `linkedin_post.md` | First poster outputs and post text |
 
 **For design agents:** read the slide's entry in the brief, then the deck standard, then the
-live slide. Change the brief first if the story changes. One editor on the live deck at a
-time. Never reimport `deck/` over it; `deck/build_deck.js` and the `.pptx` are the first seed.
+live slide. If the story changes, change the brief first; a new number goes in the fact sheet
+first. One editor on the live deck at a time. Log each pass in `docs/5_agent_log.md`.
 
-The poster, LinkedIn image and `linkedin_post.md` in this folder are first drafts, to be
-rebuilt to [DESIGN.md](DESIGN.md). Render them from the repo root (fonts load from
-`frontend/node_modules`, so run `npm install` in `frontend/` first):
+## Poster
+
+`poster.html` and `linkedin.html` are first drafts, rebuilt to [DESIGN.md](DESIGN.md) after
+the deck's content is approved. Render from the repo root:
 
 ```bash
 uv run --no-project --with "playwright==1.60.0" python docs/showcase/render.py
@@ -61,7 +88,7 @@ on 2026-11-05.
 | Meal target | Exercise calories + BMR-based estimate, goal +250 or −400 kcal (subject to the floor), then 28% of the daily budget, kept to 350–850 kcal | calorie_expenditure_agent.md, meal_recommendation_agent.py |
 | Recipe library | 34 curated recipes | meals.json |
 | Example plan, design | Chicken Fried Rice: 629 kcal against 625; 42 g protein, 71 g carbs, 18 g fat (27/46/27%) | 8_design.md §2 |
-| Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated | Local run, 2026-11-06, no provider keys; deck/assets/ |
+| Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated | Local run, 2026-11-06, no provider keys; slides/captures/2026-11-06-plan.json |
 | Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
 | Tests | 598 Python tests, 95% coverage (Claude's full run logged 2026-11-02) | 5_agent_log.md |
 | Benchmark split | 61 matched and 11 fallback plans; 68 of 72 include an estimated ingredient | 7_meal_quality.md §2 |

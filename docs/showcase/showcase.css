@@ -1,12 +1,12 @@
 /* Shared styles for the showcase posters. Kitchen green tokens from
    frontend/tailwind.config.js; fonts are the app's bundled @fontsource files. */
-@font-face { font-family: "Bricolage"; font-weight: 600; src: url("../../frontend/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-600-normal.woff2"); }
-@font-face { font-family: "Bricolage"; font-weight: 700; src: url("../../frontend/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-700-normal.woff2"); }
-@font-face { font-family: "Bricolage"; font-weight: 800; src: url("../../frontend/node_modules/@fontsource/bricolage-grotesque/files/bricolage-grotesque-latin-800-normal.woff2"); }
-@font-face { font-family: "Inter"; font-weight: 400; src: url("../../frontend/node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2"); }
-@font-face { font-family: "Inter"; font-weight: 500; src: url("../../frontend/node_modules/@fontsource/inter/files/inter-latin-500-normal.woff2"); }
-@font-face { font-family: "Inter"; font-weight: 600; src: url("../../frontend/node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2"); }
-@font-face { font-family: "Inter"; font-weight: 700; src: url("../../frontend/node_modules/@fontsource/inter/files/inter-latin-700-normal.woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 600; src: url("fonts/bricolage-grotesque-latin-600-normal.woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 700; src: url("fonts/bricolage-grotesque-latin-700-normal.woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 800; src: url("fonts/bricolage-grotesque-latin-800-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("fonts/inter-latin-400-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("fonts/inter-latin-700-normal.woff2"); }
 
 :root {
   --ink: #15291F; --muted: #4B5B52; --ground: #F6F7F2; --surface: #FFFFFF;

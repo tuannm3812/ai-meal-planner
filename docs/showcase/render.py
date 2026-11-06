@@ -1,7 +1,7 @@
-"""Render the showcase posters to PNG at 2x.
+"""Render the poster and LinkedIn image from their HTML. The deck is build_deck.js.
 
-Run from the repo root (fonts load from frontend/node_modules, so run
-`npm install` in frontend/ first):
+Every figure comes from the fact sheet in README.md; update that first.
+Run from the repo root:
 
     uv run --no-project --with "playwright==1.60.0" python docs/showcase/render.py
 """
@@ -25,5 +25,12 @@ with sync_playwright() as p:
         page.goto((HERE / src).as_uri())
         page.evaluate("document.fonts.ready")
         page.screenshot(path=HERE / out)
+        if src == "poster.html":
+            page.pdf(
+                path=HERE / "ai-meal-planner-poster.pdf",
+                width=f"{width}px",
+                height=f"{height}px",
+                print_background=True,
+            )
         print("wrote", out)
     browser.close()

@@ -7910,3 +7910,16 @@ opened a menu by accident and it closed with no change; live text confirms that.
 
 **For Codex:** compare the seed's slide text and notes (`deck/build_deck.js`) with
 the brief and fact sheet. Don't edit the live deck.
+
+## 2026-11-06 — Claude — showcase folder laid out like Text-to-SQL
+
+Mike asked to set the showcase folder up like `aipa-text-to-sql-agent/docs/showcase/`.
+`deck/` is gone: `build_deck.js` and the `.pptx` sit at the showcase root, the mark
+and QR code in `slides/assets/`, and the app screens in `slides/captures/` with a
+provenance record, `2026-11-06-plan.json`, and `slides/capture_app.py`. Added
+`fonts/` (Bricolage Grotesque and Inter with OFL licences, so rendering no longer
+needs `frontend/node_modules`), `speaker-notes.md` generated from the seed, a poster
+PDF from `render.py`, and a README in the Text-to-SQL handoff form.
+
+Verified: seed rebuilds, poster and LinkedIn render from the bundled fonts, relative
+links resolve. The Google-rendered PDFs don't exist yet: they belong to release.

@@ -45,7 +45,7 @@ pres.defineSlideMaster({
     { placeholder: { options: { name: "label", type: "body", ...box(X0, 21.7, W, 18), fontSize: 10, bold: true, color: INK, align: "left", valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "title", type: "title", ...box(X0, 48.4, W, 36), fontFace: HEAD, fontSize: 24, bold: true, color: INK, align: "left", valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "subtitle", type: "body", ...box(X0, 90.9, W, 22), fontSize: 12, color: MUTED, align: "left", valign: "top", margin: 0 }, text: "" } },
-    { image: { path: "assets/mark.png", ...box(X0, 501, 18, 18) } },
+    { image: { path: "slides/assets/mark.png", ...box(X0, 501, 18, 18) } },
     { text: { text: "AI Meal Planner", options: { ...box(68, 500, 200, 20), fontSize: 10, color: MUTED, margin: 0, valign: "middle" } } },
   ],
   slideNumber: { ...box(856.5, 500, 60, 20), fontSize: 10, color: MUTED, align: "right" },
@@ -100,7 +100,7 @@ const dark = (title, notes, section) => {
   s.addText(title, { placeholder: "title" });
   s.addNotes(notes);
   card(s, "", 656, 126, 250, 288);
-  s.addImage({ path: "assets/qr.png", ...box(681, 142, 200, 200), altText: "QR code to the live demo" });
+  s.addImage({ path: "slides/assets/qr.png", ...box(681, 142, 200, 200), altText: "QR code to the live demo" });
   text(s, "Scan to try the live demo", 666, 354, 230, 24, { fontSize: 12, bold: true, align: "center" });
   return s;
 };
@@ -112,7 +112,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 {
   const s = dark("AI Meal Planner",
     "This is AI Meal Planner, a portfolio project I built end to end.\n\nIt turns a craving into one meal sized to you, and it says how each number was produced.\n\n[Point: QR code]\nYou can try the live demo while you read.\n\nReference — not read aloud\nREADME.md.", OPEN);
-  s.addImage({ path: "assets/mark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner plate mark" });
+  s.addImage({ path: "slides/assets/mark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner plate mark" });
   text(s, [{ text: "Say what you crave.", options: { breakLine: true } }, { text: "Get a meal that " }, { text: "fits you", options: { color: TOMATO, bold: true } }, { text: "." }],
     X0, 236, 590, 76, { fontFace: HEAD, fontSize: 24, color: WHITE });
   text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 20, { color: ON_INK });
@@ -167,7 +167,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     "This is the real React app, in three steps.\n\n[Point: You]\nYou enter your body, goal and anything to avoid.\n\n[Point: Craving]\nYou say what you feel like eating.\n\n[Point: Your plan]\nYou get one meal, its balance and a shopping list. The badges say how it matched and what is estimated.\n\nNext, what happens behind these screens.\n\nReference — not read aloud\nCaptured 6 November 2026 from a local run with no provider keys. frontend/src/features/flow/MealFlow.jsx.", SOLUTION);
   [["1-profile", "You", "Body, goal and what to avoid"], ["2-craving", "Craving", "What you feel like eating"], ["3-plan", "Your plan", "One meal, balance and shopping list"]].forEach(([f, h, b], i) => {
     const x = X0 + i * 297;
-    s.addImage({ path: `assets/${f}.jpg`, ...box(x, TOP, 279, 196), altText: `${h} screen of the React app` });
+    s.addImage({ path: `slides/captures/2026-11-06-${f}.jpg`, ...box(x, TOP, 279, 196), altText: `${h} screen of the React app` });
     s.addShape(pres.ShapeType.rect, { ...box(x, TOP, 279, 196), fill: { color: WHITE, transparency: 100 }, line: { color: LINE, width: 1 } });
     chip(s, i + 1, x, 342);
     text(s, h, x + 30, 342, 245, 22, { fontFace: HEAD, fontSize: 16, bold: true, valign: "middle" });

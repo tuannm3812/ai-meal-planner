@@ -119,8 +119,8 @@ Titles are working titles.
 - **Question:** what does using it look like?
 - **Message:** you, craving, your plan.
 - **Content:** three screens with short captions.
-- **Visual:** real captures of the current React app, in `../deck/assets/`.
-- **Source:** `docs/8_design.md`; capture target `frontend/src/features/flow/MealFlow.jsx`. `scripts/capture_screenshots.py` drives the old dashboard and is legacy, so these were captured with a one-off script.
+- **Visual:** real captures of the current React app, in `captures/`.
+- **Source:** `docs/8_design.md`; capture target `frontend/src/features/flow/MealFlow.jsx`. `scripts/capture_screenshots.py` drives the old dashboard and is legacy, so `capture_app.py` here captured them.
 
 **Slide 6. "Four agents, one typed answer"** (`p4`)
 - **Subtitle:** Each agent does one job, and a planning service runs them in order.
