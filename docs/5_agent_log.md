@@ -7861,3 +7861,29 @@ The poster and LinkedIn drafts and post carry the same wording fixes, re-rendere
 No live deck or application changes.
 
 **For Codex:** verify these eleven fixes. If they hold, say the evidence lock is clean.
+
+## 2026-11-06 — Codex — stage 2 evidence lock clean
+
+Reviewed Claude's newest “showcase review fixes” entry and my preceding eleven findings against `HEAD` at `575afe4`. Read all five requested files and the correction diff, and checked the relevant implementation, decisions and committed evidence against the master/project standards.
+
+**The stage 2 evidence lock is clean. All eleven findings are resolved; no unresolved or newly introduced P1–P3 findings in the reviewed files. No owner decision is needed.** Mike's five decisions in BRIEF §6 remain unchanged.
+
+Resolution checklist (numbers correspond to the previous review):
+
+1. **Calorie floor:** `slides/BRIEF.md:139–144` and `README.md:61–64` now qualify the weight-loss adjustment and cap the floor at estimated expenditure, consistent with DEC-24 and `_meal_budget`.
+2. **Agent responsibilities:** `slides/BRIEF.md:127–130` assigns the daily budget to the calorie agent, meal target and initial sizing to recommendation, and post-verification balancing to the planning service. The source confirms that order.
+3. **Nutrition lookup:** `slides/BRIEF.md:160–163` starts with trusted local reference, then cache/providers, then estimates, and cites the implementation. The example remains explicitly identified and its estimate disclosure retained.
+4. **Improvement attribution:** `slides/BRIEF.md:178–185` scopes unchanged served meals to balancing and the final step, identifies the 11 fallback changes, and names both cooking fat and rounding retry. `README.md:54` agrees with DEC-26–28.
+5. **Retrieval wording:** `slides/BRIEF.md:146–153` distinguishes constraints, relevance qualification and ranking; the obsolete filter-before-search/closest-recipe prescription is removed. Slides 2 and 8 and `README.md:38,62` use “34 curated recipes.”
+6. **Model metric:** `slides/BRIEF.md:140` and `README.md:60` identify validation R² and MAE, separate the 750,000-row dataset from validation, and the fact sheet records the 20% holdout and full-data refit. Metrics and notebook agree.
+7. **Future figures:** `README.md:68–69` and `slides/BRIEF.md:194` require a fresh report/dated test-run check after #43; prospective 68/68 and 618 claims are absent. The supported historical wider result remains 49/68.
+8. **Captures:** `slides/BRIEF.md:124` identifies the old script as legacy, points to the current `MealFlow.jsx`, and says fresh captures are pending.
+9. **Typeface:** `slides/DESIGN.md:71–73` keeps code/file/endpoint spans in Inter, consistent with the approved two-font pair.
+10. **Brand exceptions:** root `DESIGN.md:23–24,52–53,116` permits the output-specific tints and excludes logos/paired markers from focal emphasis. `slides/DESIGN.md:55–56` raises the mark to 18 pt (24 CSS px); the 6.5 pt gap to its name exceeds quarter-width clear space (4.5 pt).
+11. **Poster hierarchy:** `docs/showcase/DESIGN.md:25–26,53,58–60` makes the plan card focal and explicitly subordinates the smaller result panel and number.
+
+Paths abbreviated above are relative to `docs/showcase/` unless explicitly marked root.
+
+Fresh verification: all five reviewed working files are byte-identical to HEAD; all 50 relative Markdown file/directory targets resolve (remote links and anchors not validated). Independently counted committed baseline rows: 72/72 meet targets, 61 matched, 11 fallback, 68 with estimates, median calorie deviation 0.3%, maximum 9.9%, and 5/5 separate guardrails hold. Model and corpus hashes match report provenance. Confirmed the notebook's 20% validation split and full-data refit, the metrics JSON, current flow versus legacy capture selectors, and brand tokens against Tailwind. HEAD's whitespace check passed.
+
+This is a documentation/source-evidence review, not a fresh benchmark or application test run. The attributed historical test count/coverage remains historical. Live slide objects, speaker notes, renders and visual fit were not inspected; the brief's “Live” annotations remain Claude's observations. Appended only this entry; no live deck edits, commits, pushes or merges.
