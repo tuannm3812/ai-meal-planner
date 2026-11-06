@@ -195,14 +195,26 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 3 — agenda
 {
-  const s = slide("AGENDA", "From the problem to what is still unproven", "Four sections, each answering one question.",
-    "The deck has four sections.\n\nFirst why this is worth solving, then how it works, then what was measured, and last how it's built and what isn't proven yet.\n\nEach range is a link, so you can jump straight to a section.", OPEN);
-  [["01", "Problem", "Why is this worth solving?", "Page 4", 4], ["02", "Solution", "What does it do, and how?", "Pages 5–9", 5], ["03", "Evidence", "What is a good meal, and did we get there?", "Pages 10–11", 10], ["04", "Build and limits", "How is it built, and what is unproven?", "Pages 12–13", 12]].forEach(([n, h, q, r, p], i) => {
-    const x = X0 + i * 224;
-    text(s, n, x, 150, 200, 60, { fontFace: HEAD, fontSize: 46, bold: true, color: GREEN });
-    text(s, h, x, 224, 200, 24, { fontFace: HEAD, fontSize: 16, bold: true });
-    text(s, q, x, 254, 190, 54, { color: MUTED });
-    text(s, [{ text: r, options: { hyperlink: { slide: p }, color: INK, bold: true } }], x, 318, 200, 18);
+  const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course answers one question. Select a page to jump to it.",
+    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built and what isn't proven yet.\n\nEach page reference is a link, so you can jump straight to a course.", OPEN);
+  s.addImage({ path: "slides/assets/plate-light.png", ...box(660, 186, 256, 256), altText: "Plate of chicken fried rice" });
+  [
+    ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", "Page 4", 4],
+    ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", "Pages 5–9", 5],
+    ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "What is a good meal, and did we get there?", "Pages 10–11", 10],
+    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "How is it built, and what is unproven?", "Pages 12–13", 12],
+  ].forEach(([icon, tint, deep, course, h, q, r, page], i) => {
+    const y = TOP + i * 90;
+    card(s, "", X0, y, 600, 78, { fill: tint });
+    s.addShape(pres.ShapeType.ellipse, { ...box(X0 + 16, y + 21, 36, 36), fill: { color: deep }, line: { color: deep, width: 0.5 } });
+    s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(X0 + 22, y + 27, 24, 24), altText: "" });
+    text(s, [
+      { text: course, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 1 } },
+      { text: h, options: { fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 1 } },
+      { text: q, options: { fontSize: 12, color: INK } },
+    ], X0 + 66, y + 9, 340, 62, { valign: "middle" });
+    s.addShape(pres.ShapeType.line, { ...box(X0 + 400, y + 44, 96, 0), line: { color: deep, width: 1, dashType: "sysDot" } });
+    text(s, [{ text: r, options: { hyperlink: { slide: page }, color: deep, bold: true } }], X0 + 502, y + 34, 90, 20, { align: "right", valign: "middle" });
   });
 }
 

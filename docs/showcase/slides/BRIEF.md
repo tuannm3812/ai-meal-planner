@@ -93,10 +93,10 @@ Titles are working titles.
 - **Visual:** three rows: four plates on an ink band, area to scale with calories; four feature cards; four key numbers. No takeaway column or markers.
 - **Source:** fact sheet; `docs/meal_quality/baseline.json`.
 
-**Slide 3. Agenda** (new)
-- **Message:** four sections with page ranges.
-- **Content:** 01 Problem, 02 Solution, 03 Evidence, 04 Build and limits, each with its question and a clickable page range.
-- **Visual:** four equal columns, large numbers. Navigation, not a data flow.
+**Slide 3. Agenda: "Today's menu"** (new)
+- **Message:** four courses with page ranges.
+- **Content:** Starter: Problem. Main: Solution. Taste test: Evidence. The bill: Build and limits. Each has its question and a clickable page range, like a menu with prices.
+- **Visual:** four tinted menu rows with icons and dotted leaders to the page, and a plate on the right. Section names stay the same as the slide labels.
 
 ### 01 Problem
 

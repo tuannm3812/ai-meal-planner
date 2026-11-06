@@ -13,7 +13,16 @@ from playwright.sync_api import sync_playwright
 
 HERE = Path(__file__).resolve().parent
 ICONS = HERE / "assets/icons"
-GLYPHS = ["person", "health_and_safety", "balance", "shopping_basket"]
+GLYPHS = [
+    "person",
+    "health_and_safety",
+    "balance",
+    "shopping_basket",
+    "soup_kitchen",
+    "lunch_dining",
+    "restaurant",
+    "receipt_long",
+]
 # name, x, y, size, rotation: a loose cluster in the free top right corner of content slides.
 CORNER = [
     ("rice_bowl", 700, 12, 34, -10),

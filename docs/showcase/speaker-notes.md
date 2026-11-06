@@ -31,9 +31,16 @@ docs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showc
 
 ## Slide 3 — p3
 
-The deck has four sections.
-First why this is worth solving, then how it works, then what was measured, and last how it's built and what isn't proven yet.
-Each range is a link, so you can jump straight to a section.
+This deck is served as a four-course menu.
+[Point: Starter]
+First, why this is worth solving.
+[Point: Main]
+Then what it does and how it works.
+[Point: Taste test]
+Then what a good meal means, and whether it got there.
+[Point: The bill]
+Last, how it's built and what isn't proven yet.
+Each page reference is a link, so you can jump straight to a course.
 
 ## Slide 4 — p4
 

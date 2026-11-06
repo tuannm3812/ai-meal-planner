@@ -98,4 +98,10 @@ with sync_playwright() as p:
         page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
         page.wait_for_timeout(300)
         page.screenshot(path=HERE / f"assets/plate-{kcal}.png", omit_background=True)
+        if kcal == 850:  # the same plate with a soft shadow, for white slides
+            page.set_content(
+                f'<body style="margin:0;background:transparent">{square.replace("#0C1A13", "#DDE3DA")}</body>'
+            )
+            page.wait_for_timeout(300)
+            page.screenshot(path=HERE / "assets/plate-light.png", omit_background=True)
     browser.close()
