@@ -3,7 +3,8 @@
 **Status: draft for Mike, 2026-11-05.** The working copy is the Claude doc
 <https://claude.ai/artifact/D5bMLYdKiMp35fKEsVR9Mb> (it also has the poster
 wireframe). This file mirrors it so the brief lives next to the drafts.
-Mike's open decisions are in §9; nothing here is built to them yet.
+Design rules live in [`DESIGN.md`](../../DESIGN.md). The first deck is in `deck/`,
+built on the recommended answers in §9, for Mike to adjust in Google Slides.
 
 ## 1. Purpose and audience
 

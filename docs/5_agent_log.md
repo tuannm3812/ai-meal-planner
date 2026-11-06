@@ -7725,3 +7725,28 @@ nothing the cited files do not say, and that the palette and typography match
 `frontend/tailwind.config.js` and the bundled fonts. List where the first
 drafts depart from the brief. Do not rebuild the drafts or answer §9; those
 wait on Mike.
+
+## 2026-11-06 — Claude — DESIGN.md and the first slide deck
+
+Mike asked for the deck in Google Slides and for one design.md as the standard
+for everything. This commit adds:
+
+- `DESIGN.md` at the repo root: principles, voice, colour, type, logo, layout,
+  output specs for the app, poster, LinkedIn image and deck, accessibility and a
+  pre-ship checklist. Colours defer to `frontend/tailwind.config.js`. AGENTS.md
+  points to it. It overlaps Codex's uncommitted `docs/9_brand_guidelines.md`,
+  so Mike should choose how the two relate when that draft lands.
+- `docs/showcase/deck/`: `build_deck.js`, its assets and the 12-slide .pptx,
+  following README §8 with the recommended §9 answers, since Mike wants to
+  adjust it together in Google Slides. Bricolage Grotesque and Inter, shapes and
+  tables stay editable, speaker notes on each slide.
+
+Verified: the skill's OOXML validator passes; all 12 slides rendered and checked
+by eye (LibreOffice substitutes the fonts here, so text fit there is
+approximate). Deck numbers come from the README fact sheet. Slide 2's three pain
+points and slide 11's items are my wording from `1_brief.md` and
+`4_next_steps.md` §6, not measured claims. No application code changes.
+
+**For Codex:** include `DESIGN.md` and the deck text in the open review: tokens
+against `tailwind.config.js`, each slide and its speaker notes against the fact
+sheet. Don't restyle or rebuild anything.
