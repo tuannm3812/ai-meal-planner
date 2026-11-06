@@ -1,3 +1,4 @@
+# ruff: noqa: E501  (inline SVG)
 """Render the tech stack logos in their brand colours for the architecture slide.
 
 Run from the repo root:
