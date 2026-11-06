@@ -155,7 +155,7 @@ Titles are working titles.
 - **Takeaways:** 1. 3 of 6 ingredients are estimates, and they carry 66% of the calories. 2. With no provider keys, values come from local tables, so "Reference" is local too and nothing here is externally verified.
 - **Source:** run of 6 November 2026 (34, male, 165 cm, 65 kg, moderately active, maintain): 694 kcal against 691, 48/78/19 g, 28/46/26%; `backend/app/agents/nutrition_verification_agent.py`.
 
-**Takeaway columns, 7 November 2026.** Slides 2 to 15 each have three takeaways with supporting points; the exact text is in `build_deck.js`. Slide 3 uses them as a reading guide. First wording: Slide 4: fourfold range, limits change the meal, framing. Slide 5: two screens, the plan shows its working. Slide 6: one job per station, retrieval not generation. Slide 7 adds that 28% is a design choice. Slide 10: only 10 of 72 first cleared both tests though 68 hit calories; fixed requests make runs fair.
+**Takeaway columns, 7 November 2026.** Only slides 7 to 14 have takeaways, three each with supporting points and key terms; the exact text is in `build_deck.js`. Slides 2 to 6 and 15 are full width. Earlier wording, kept for reference: Slide 4: fourfold range, limits change the meal, framing. Slide 5: two screens, the plan shows its working. Slide 6: one job per station, retrieval not generation. Slide 7 adds that 28% is a design choice. Slide 10: only 10 of 72 first cleared both tests though 68 hit calories; fixed requests make runs fair.
 
 ### 03 Evidence
 
@@ -208,7 +208,7 @@ Titles are working titles.
 - **Subtitle:** Each paper tag in this deck points to one of these notes.
 - **Question:** what comes next?
 - **Message:** nine open tasks, in the order they should be done.
-- **Content:** a Now, Next, Later board of nine notes, P1 to P9, matching `pending-tasks.md`.
+- **Content:** a milestone line (8 Oct refactor, 11 Oct keys, deploy workflow and tracing, 18 Oct 72 of 72, 21 Oct React design, 7 Nov 68 of 68 and the gluten fix), above a Now, Next, Later board of nine notes, P1 to P9, matching `pending-tasks.md`.
 - **Takeaways:** fix what visitors see first; accuracy before scale; people matter most.
 - **Source:** [../pending-tasks.md](../pending-tasks.md), `docs/4_next_steps.md` §6, §7.
 

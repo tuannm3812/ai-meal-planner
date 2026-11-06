@@ -8093,3 +8093,10 @@ the five CI checks by name. Inspected in Google Slides. The live demo still open
 Mike asked for a consistent column with more support. Each slide now has three takeaways in fixed
 slots, each with supporting points, so markers sit in the same place. Slides 2 and 3 narrowed to
 fit; the agenda's plate gave way to a reading guide. Every slide 2 to 15 inspected in Google Slides.
+
+## 2026-11-07 — Claude — takeaways limited to analysis slides
+
+Mike wants takeaways on findings and analysis slides only, so slides 7 to 14 keep them, with a third
+supporting point and highlighted key terms. Slides 2 to 6 and 15 are full width again. Slide 15 gained
+a milestone line. Read through every slide; one wrong line fixed (68 by-name requests, not recipes).
+Every slide 2 to 15 inspected in Google Slides.

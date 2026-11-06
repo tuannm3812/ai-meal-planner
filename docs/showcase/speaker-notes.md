@@ -202,7 +202,9 @@ docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.
 
 ## Slide 15 — p15
 
-This board is the work still open, in the order I'd do it.
+This is where the project has been, and the work still open.
+[Point: Timeline]
+The milestones run from the refactor to the wider recipe check.
 [Point: Now]
 First, make the demo work on first use, add migrations and deploy.
 [Point: Next]
@@ -210,7 +212,7 @@ Then better inputs: real nutrition data, real exercise details and proper allerg
 [Point: Later]
 Then scale: more recipes, live prices, and testing with people.
 Reference — not read aloud
-docs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.
+docs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7; AGENTS.md, Current state.
 
 ## Slide 16 — p16
 
