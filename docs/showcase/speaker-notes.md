@@ -175,47 +175,38 @@ docs/2_architecture.md; pyproject.toml; frontend/package.json; backend/app/servi
 
 ## Slide 13 — p13
 
-Although this is a portfolio project, I held it to production habits.
-[Point: Typed API contract]
+Although this is a portfolio project, I held it to production habits. Follow a change from left to right.
+[Point: Contract]
 The API contract is committed, and CI fails if it drifts.
-[Point: Tested]
+[Point: Tests]
 The last full run passed 630 Python tests at 95% coverage.
-[Point: Deployable]
-The Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.
-Each of these has a file behind it in the repo.
+[Point: Cloud Run]
+From here the line turns amber: the deployment workflow and tracing are built, but they wait for a GCP project.
 Reference — not read aloud
-docs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.
+docs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; test_telemetry_redaction.py; local full run, 7 November 2026.
 
 ## Slide 14 — p14
 
-These are the limits, in one place.
-[Point: People]
-The plans hit their targets, but nobody has tested whether people like them or benefit.
-[Point: Nutrition data]
-Most plans include an estimated ingredient, and AMDR is a daily range applied to one meal.
-[Point: Recipes]
-The library is small, and the recipe fixes were guided by the same checks that measure them.
-[Point: Calorie model]
-The exercise inputs are defaults, and activity may be counted twice.
-[Point: Diet rules]
-Rules match ingredient names, so a hidden ingredient can slip through. Soy sauce did, until this review found it.
-[Point: Hosting]
-The Cloud Run workflow isn't deployed yet.
+These are the limits, arranged by how far the evidence goes. Each step up is less proven.
+[Point: Measured]
+The plans hit their targets on fixed requests. That's solid, but the checks also guided the fixes.
+[Point: Estimated]
+A lot of what's inside those plans is estimated or assumed.
+[Point: Not tested]
+Nobody has used it, it isn't deployed, and no clinician has reviewed it.
 It's a planning aid, not medical advice.
 Reference — not read aloud
 docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.
 
 ## Slide 15 — p15
 
-This is the work that's still open, in the order I'd do it.
-[Point: Storage]
-Migrations come first, because nothing real should be stored without them.
-[Point: Hosting]
-Then a real deployment.
-[Point: Data]
-Then a benchmark run with real provider keys.
-[Point: People]
-Last, testing with real users, which is what would turn targets into evidence.
+This board is the work still open, in the order I'd do it.
+[Point: Now]
+First, make the demo work on first use, add migrations and deploy.
+[Point: Next]
+Then better inputs: real nutrition data, real exercise details and proper allergen tags.
+[Point: Later]
+Then scale: more recipes, live prices, and testing with people.
 Reference — not read aloud
 docs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.
 

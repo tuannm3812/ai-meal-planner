@@ -155,6 +155,8 @@ Titles are working titles.
 - **Takeaways:** 1. 3 of 6 ingredients are estimates, and they carry 66% of the calories. 2. With no provider keys, values come from local tables, so "Reference" is local too and nothing here is externally verified.
 - **Source:** run of 6 November 2026 (34, male, 165 cm, 65 kg, moderately active, maintain): 694 kcal against 691, 48/78/19 g, 28/46/26%; `backend/app/agents/nutrition_verification_agent.py`.
 
+**Takeaway columns added 7 November 2026.** Slide 4: fourfold range, limits change the meal, framing. Slide 5: two screens, the plan shows its working. Slide 6: one job per station, retrieval not generation. Slide 7 adds that 28% is a design choice. Slide 10: only 10 of 72 first cleared both tests though 68 hit calories; fixed requests make runs fair.
+
 ### 03 Evidence
 
 **Slide 10. "We defined a good meal before improving one"** (`p8`)
@@ -180,30 +182,34 @@ Titles are working titles.
 - **Subtitle:** A request flows left to right. Each box names the model, data or tool behind it.
 - **Question:** what is it made of?
 - **Message:** one typed service serves two clients, and each agent has its own model or data source.
-- **Content:** a diagram: clients (Streamlit; React, Vite, Tailwind) → FastAPI and Pydantic, with SQLite history → MealPlanningService's four agents → trained model, recipe corpus, nutrition sources, store reference. A "Built with" row: Python, Docker, GitHub Actions, Cloud Run, OpenTelemetry, optional Gemini. Logos are used only here.
+- **Content:** a diagram: clients (Streamlit; React, Vite, Tailwind) → FastAPI and Pydantic, with SQLite history → MealPlanningService: calorie expenditure (HistGradientBoosting), meal recommendation (TF-IDF, diet rules), nutrition verification (local tables, USDA, FatSecret), a balance and reconcile step (SciPy), supermarket. A "Built with" row: Python, Docker, GitHub Actions, Cloud Run, OpenTelemetry, Gemini. Logos are used only here.
+- **Takeaways:** 1. Both clients use the same planning service. 2. The trained model is 0.64 MB, and TF-IDF is enough for 34 recipes. 3. Balancing runs after lookup, before the shopping list.
 - **Note:** the hosted demo runs the agents inside Streamlit. Cloud Run is ready but not deployed.
 - **Source:** `docs/2_architecture.md`, `pyproject.toml`, `frontend/package.json`, DEC-2.
 
 **Slide 13. "Built like a product, not a notebook"** (`p10`)
-- **Subtitle:** Six production habits on a portfolio project, each with a file you can open in the repo.
+- **Subtitle:** Six production habits, in the order a change travels through them.
 - **Question:** is the engineering real?
-- **Message:** six habits, each with a file behind it.
-- **Content:** typed API contract checked in CI; 630 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
+- **Message:** a change passes six habits on its way to production; four run today and two wait for a GCP project.
+- **Content:** a delivery line: contract, tests, security, container (green); Cloud Run, tracing (amber). Three figures: 630 Python tests, 95% coverage with an 89% floor, 5 CI checks on every pull request.
+- **Takeaways:** 1. CI checks tests, the API contract and the dependency file on each pull request. 2. Built isn't live: no GCP project exists yet.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
 **Slide 14. "What this project does not prove yet"** (new)
-- **Subtitle:** Six limits, stated plainly, so nobody reads more into the results than they show.
+- **Subtitle:** The further right, the less has been shown.
 - **Question:** what is unproven?
 - **Message:** the results are real, and their limits are stated in one place.
-- **Content:** People: no user or clinical testing. Nutrition data: 68 of 72 include an estimate; AMDR is a daily range applied to one meal. Recipes: 34 recipes, 11 of 72 fall back, and the checks guided the fixes. Calorie model: default exercise inputs, possible double counting, Kaggle data. Diet rules: matched on ingredient names; soy sauce slipped through until this review. Hosting: not deployed, no migration path. Not medical advice.
+- **Content:** an evidence staircase. Measured: 72 of 72 and 68 of 68 offline; the checks guided the fixes; 11 of 72 fall back. Estimated: 68 of 72 include an estimate; AMDR on one meal; default exercise inputs; name-matched diet rules. Not tested: no users, no clinical review, not deployed, no migrations, taste and health unknown. Not medical advice.
+- **Takeaways:** what is solid, what is soft, what is unknown.
 - **Source:** `docs/4_next_steps.md` §7, `docs/7_meal_quality.md`, DEC-31, AGENTS.md.
 
 **Slide 15. "Pending tasks, in priority order"** (`p11`)
-- **Subtitle:** What isn't finished yet, and what each task unlocks.
+- **Subtitle:** Each paper tag in this deck points to one of these notes.
 - **Question:** what comes next?
-- **Message:** six open tasks, each with what it unlocks.
-- **Content:** storage migrations; Cloud Run deployment; benchmark with USDA keys; 34 to 75–100 recipes; live store prices; feedback in ranking, then user testing.
+- **Message:** nine open tasks, in the order they should be done.
+- **Content:** a Now, Next, Later board of nine notes, P1 to P9, matching `pending-tasks.md`.
+- **Takeaways:** fix what visitors see first; accuracy before scale; people matter most.
 - **Source:** [../pending-tasks.md](../pending-tasks.md), `docs/4_next_steps.md` §6, §7.
 
 ### Close

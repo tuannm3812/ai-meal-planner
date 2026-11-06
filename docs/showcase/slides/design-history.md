@@ -30,3 +30,5 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
 Slides 7 to 13 moved from plain panels to the four feature colours, Material Symbols icons and to-scale figures drawn from shapes: a day-and-meal bar, a recipe funnel, a calorie-source bar, plan dots on the macro bands and a 72-dot request grid. Mike asked for clearer visuals and balanced colour.
 
 Mike then asked for a clear architecture diagram with tech stack logos, limits on their own slide, and pending tasks. The deck is now 16 slides, and tool logos are allowed on the architecture slide only.
+
+Mike asked for the takeaway column back. It was only ever on slides 7, 8, 9 and 11, and two of those had moved, so it is now a rule for every content slide, and figures fit the 608 pt content width. Slides 13, 14 and 15 got distinct forms: a delivery line, an evidence staircase and a Now, Next, Later board. Paper tags mark pending work.

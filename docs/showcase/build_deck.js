@@ -121,6 +121,30 @@ const dark = (title, notes, section) => {
 const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDENCE = "03 Evidence", BUILD = "04 Build and limits", CLOSE = "Close";
 [OPEN, PROBLEM, SOLUTION, EVIDENCE, BUILD, CLOSE].forEach((title) => pres.addSection({ title }));
 
+// The four feature colours from DESIGN.md: tint, deep.
+const G = ["E3EFE6", GREEN], T = ["FBE4DC", TOMATO], A = [TINT_WARN, WARN], K = ["DDE3DA", INK];
+// Like takeaways, but placed anywhere; bodies stay one text box.
+const notes = (s, items, offsets, x, y, w, h) => {
+  const runs = [];
+  items.forEach(([hd, b], i) => {
+    runs.push({ text: hd, options: { bold: true, breakLine: true, paraSpaceBefore: i ? 12 : 0, paraSpaceAfter: 4 } });
+    runs.push({ text: b, options: { color: MUTED, breakLine: i < items.length - 1 } });
+  });
+  text(s, runs, x, y, w, h, { lineSpacingMultiple: 1.1, objectName: "Takeaways" });
+  offsets.forEach((o, i) => marker(s, i + 1, x - 18, y + o));
+};
+const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "", {
+  shape: pres.ShapeType.rect, ...box(x, y, w, h), fill: { color: fill }, line: { color: fill, width: 0.5 }, color: colour, fontSize: 12, bold: true, margin: 8, valign: "middle",
+});
+
+// A paper tag marks pending work; ids match docs/showcase/pending-tasks.md.
+// Delete every object named "Pending" before release.
+const pend = (s, id, x, y) => {
+  s.addShape(pres.ShapeType.roundRect, { ...box(x, y, 66, 16), rectRadius: pt(4), fill: { color: WARN }, line: { color: WHITE, width: 0.75 }, objectName: `Pending ${id}` });
+  s.addImage({ path: "slides/assets/glyph-description.png", ...box(x + 3, y + 2, 12, 12), altText: `Pending task ${id}`, objectName: `Pending ${id} icon` });
+  text(s, `${id} pending`, x + 17, y, 48, 16, { fontSize: 8, bold: true, color: WHITE, valign: "middle", objectName: `Pending ${id} label` });
+};
+
 // 1 — cover
 {
   const s = pres.addSlide({ masterName: "COVER", sectionTitle: OPEN });
@@ -159,6 +183,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   s.addShape(pres.ShapeType.roundRect, { ...box(X0, 404, 84, 84), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
   s.addImage({ path: "slides/assets/qr.png", ...box(X0 + 6, 410, 72, 72), altText: "QR code to the live demo" });
   text(s, [{ text: "Try the live demo", options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } }, { text: "Scan with your phone", options: { fontSize: 10, color: ON_INK } }], 139, 428, 110, 36);
+  pend(s, "P1", 139, 466);
 }
 
 // 2 — executive summary
@@ -196,6 +221,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(x + 17, y + 17, 20, 20), altText: "" });
     text(s, [{ text: v, options: { fontSize: 24, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
   });
+  pend(s, "P8", X0 + 3 * 223 + 134, 436);
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the project's own offline test, not real users. 11 of the 72 are fallback meals; guardrails use a controlled recipe set. Meal targets stay within 350–850 kcal. Plate area shows calories." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
 }
 
@@ -234,27 +260,30 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 {
   const s = slide("PROBLEM > WHY IT MATTERS", "Picking a meal is easy; sizing it to you is not", "Three questions sit between a craving and a meal you can trust.",
     "Most of us know what we feel like eating. The hard part comes after that.\n\n[Point: How much?]\nThe right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.\n\n[Point: Is it right for me?]\nThe same request changes with your limits. A vegan gets a different recipe, and a coeliac keeps the recipe with gluten-free pasta.\n\n[Point: What do I buy?]\nThis one pasta means five ingredients to find and price.\n\n[Point: Today, With the app]\nEach question has a manual habit today, and each card shows what the app does in its place.\n\nThe next section shows how one request answers all three.\n\nReference — not read aloud\nThe three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Pasta examples: a local run of the craving \"pasta\" for the average man, 7 November 2026, no provider keys.", PROBLEM);
-  card(s, "", X0, TOP, 270, 356, { fill: INK });
-  s.addImage({ path: "slides/assets/plate-pasta.png", ...box(X0 + 35, TOP + 92, 200, 200), altText: "Plate of tomato turkey pasta" });
-  s.addText("I feel like pasta tonight.", { shape: pres.ShapeType.wedgeRoundRectCallout, ...box(X0 + 20, TOP + 18, 230, 56), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: INK, fontSize: 16, bold: true, align: "center", valign: "middle", margin: 6 });
-  text(s, "One request answers all three.", X0 + 20, TOP + 306, 230, 30, { fontSize: 16, bold: true, color: WHITE, align: "center", valign: "middle" });
+  card(s, "", X0, TOP, 608, 78, { fill: INK });
+  s.addImage({ path: "slides/assets/plate-pasta.png", ...box(X0 + 12, TOP + 6, 66, 66), altText: "Plate of tomato turkey pasta" });
+  s.addText("I feel like pasta tonight.", { shape: pres.ShapeType.wedgeRoundRectCallout, ...box(X0 + 90, TOP + 16, 226, 42), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: INK, fontSize: 14, bold: true, align: "center", valign: "middle", margin: 4 });
+  text(s, "One request answers all three.", X0 + 336, TOP, 260, 78, { fontSize: 14, bold: true, color: WHITE, valign: "middle" });
   [
-    ["monitor_weight", "E3EFE6", GREEN, "How much?", "Daily budgets in our benchmark run from 1,200 to 4,521 kcal.", "Guess from \"serves 4\"", "A budget, then a meal target"],
-    ["no_food", "FBE4DC", TOMATO, "Is it right for me?", "Asked for pasta, a vegan gets lentil bolognese and a coeliac gets gluten-free pasta.", "Read every label", "Conflicts ruled out or swapped first"],
-    ["shopping_cart", TINT_WARN, WARN, "What do I buy?", "This one pasta means five ingredients to find and price.", "Write a list, guess the cost", "A list with an estimated total"],
-  ].forEach(([icon, tint, deep, h, b, before, after], i) => {
-    const y = TOP + i * 123;
-    card(s, "", 331.5, y, 585, 110, { fill: tint });
-    iconDot(s, icon, deep, 345, y + 37, 36);
-    text(s, hb(h, b, { hc: deep, bc: deep }), 392, y + 8, 212, 94, { valign: "middle" });
-    const chip = (x, w, label, t, fill, colour) => s.addText([
+    ["monitor_weight", G, "How much?", "Daily budgets in our benchmark run from 1,200 to 4,521 kcal.", "Guess from \"serves 4\"", "A budget, then a meal target"],
+    ["no_food", T, "Is it right for me?", "Asked for pasta, a vegan gets lentil bolognese and a coeliac gets gluten-free pasta.", "Read every label", "Conflicts ruled out or swapped first"],
+    ["shopping_cart", A, "What do I buy?", "This one pasta means five ingredients to find and price.", "Write a list, guess the cost", "A list with an estimated total"],
+  ].forEach(([icon, [tint, deep], h, b, before, after], i) => {
+    const y = 216 + i * 90;
+    card(s, "", X0, y, 608, 84, { fill: tint });
+    iconDot(s, icon, deep, X0 + 10, y + 27, 30);
+    text(s, [{ text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true, paraSpaceAfter: 2 } }, { text: b, options: { color: deep } }], X0 + 50, y + 4, 240, 76, { valign: "middle" });
+    const chip2 = (x, w, label, v, fill, colour) => s.addText([
       { text: label, options: { fontSize: 8, bold: true, color: colour, breakLine: true, paraSpaceAfter: 2 } },
-      { text: t, options: { fontSize: 11, bold: true, color: colour } },
-    ], { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x, y + 18, w, 74), fill: { color: fill }, line: { color: fill === WHITE ? deep : fill, width: 1 }, margin: 8, valign: "middle" });
-    chip(614, 128, "TODAY", before, WHITE, deep);
-    arrow(s, 743, y + 55, 758, y + 55);
-    chip(760, 144, "WITH THE APP", after, deep, WHITE);
+      { text: v, options: { fontSize: 11, bold: true, color: colour } },
+    ], { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x, y + 8, w, 68), fill: { color: fill }, line: { color: fill === WHITE ? deep : fill, width: 1 }, margin: 6, valign: "middle" });
+    chip2(X0 + 298, 136, "TODAY", before, WHITE, deep);
+    arrow(s, X0 + 435, y + 42, X0 + 450, y + 42);
+    chip2(X0 + 451, 150, "WITH THE APP", after, deep, WHITE);
   });
+  marker(s, 1, X0 + 590, 220);
+  marker(s, 2, X0 + 590, 310);
+  takeaways(s, [["The range is almost fourfold", "The largest daily budget is 3.8 times the smallest, so one recipe size can't fit everyone."], ["Limits change the meal itself", "Portions aren't enough. A limit can change the recipe or swap an ingredient."], ["Today is our framing", "The Today chips describe the problem as this project sees it. They aren't survey results."]], [2, 90, 164]);
 }
 
 // 5 — flow
@@ -262,94 +291,91 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   const s = slide("SOLUTION > THE FLOW", "One craving in, one meal and a shopping list out", "Three steps in the React app.",
     "This is the real React app, in three steps.\n\n[Point: You]\nYou enter your body, goal and anything to avoid.\n\n[Point: Craving]\nYou say what you feel like eating and where you shop.\n\n[Point: Your plan]\nYou get one meal, its balance, each ingredient's source and a shopping list. The badges say how it matched and what is estimated.\n\nNext, what happens behind these screens.\n\nReference — not read aloud\nCaptured 6 November 2026 from a local run with no provider keys: slides/captures/2026-11-06-plan.json. frontend/src/features/flow/MealFlow.jsx.", SOLUTION);
   [
-    ["1-profile", "person", "E3EFE6", GREEN, "1. You", "Goal, body details, activity and anything to avoid."],
-    ["2-craving", "search", "FBE4DC", TOMATO, "2. Craving", "Say what you feel like eating and where you shop."],
-    ["3-plan", "rice_bowl", TINT_WARN, WARN, "3. Your plan", "One meal, its balance, each ingredient's source and a shopping list."],
-  ].forEach(([f, icon, tint, deep, h, b], i) => {
-    const x = X0 + i * 297;
-    card(s, hb(h, b, { hc: deep, bc: deep }), x, TOP, 279, 336, { fill: tint, margin: 14, valign: "bottom" });
-    s.addImage({ path: `slides/captures/2026-11-06-${f}.jpg`, ...box(x + 12, TOP + 12, 255, 179), altText: `${h} screen of the React app` });
-    s.addShape(pres.ShapeType.rect, { ...box(x + 12, TOP + 12, 255, 179), fill: { color: WHITE, transparency: 100 }, line: { color: LINE, width: 1 } });
-    iconDot(s, icon, deep, x + 14, TOP + 203, 30);
-    if (i < 2) arrow(s, x + 281, TOP + 168, x + 295, TOP + 168);
+    ["1-profile", "person", G, "1. You", "Goal, body details, activity and anything to avoid.", "34, male, 165 cm, 65 kg"],
+    ["2-craving", "search", T, "2. Craving", "Say what you feel like eating and where you shop.", "chicken fried rice"],
+    ["3-plan", "rice_bowl", A, "3. Your plan", "One meal, its balance, each ingredient's source and a shopping list.", "694 kcal, target 691"],
+  ].forEach(([f, icon, [tint, deep], h, b, ex], i) => {
+    const x = X0 + i * 209;
+    card(s, "", x, TOP, 190, 336, { fill: tint });
+    s.addImage({ path: `slides/captures/2026-11-06-${f}.jpg`, ...box(x + 10, TOP + 10, 170, 119), altText: `${h} screen of the React app` });
+    s.addShape(pres.ShapeType.rect, { ...box(x + 10, TOP + 10, 170, 119), fill: { color: WHITE, transparency: 100 }, line: { color: LINE, width: 1 } });
+    iconDot(s, icon, deep, x + 12, TOP + 142, 30);
+    text(s, hb(h, b, { hc: deep, bc: deep }), x + 12, TOP + 180, 168, 104);
+    s.addText(ex, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 10, TOP + 294, 170, 30), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
+    if (i < 2) arrow(s, x + 191, TOP + 70, x + 208, TOP + 70);
   });
-  caption(s, 1, "Real captures of the React app, run locally with no provider keys, 6 November 2026.", X0, 474, W);
+  marker(s, 1, X0 + 170, TOP + 146);
+  marker(s, 2, X0 + 418 + 170, TOP + 146);
+  caption(s, 1, "Real captures of the React app, run locally with no provider keys, 6 November 2026.", X0, 472, 608);
+  takeaways(s, [["Two screens, then a result", "Everything the planner needs fits on the first two steps, then the result is one page."], ["The plan shows its working", "Balance, ingredient sources and estimates sit on the result page, not behind a menu."]], [2, 74]);
 }
 
 // 6 — agents
 {
   const s = slide("SOLUTION > FOUR AGENTS", "Four agents work like one kitchen", "An order comes in, each station does one job, and a planning service runs them in order.",
     "Behind the screens is a FastAPI service, and it works like a kitchen.\n\n[Point: The portion planner]\nThe calorie agent sets a daily budget.\n\n[Point: The chef]\nThe recommendation agent sets the meal target, excludes conflicting meals and picks a relevant recipe.\n\n[Point: The taster]\nThe nutrition agent looks up each ingredient and labels estimates.\n\n[Point: The shopper]\nThe supermarket agent matches ingredients to store items or category prices, with an estimated total.\n\n[Point: white labels]\nThe white labels follow one real order: a 2,469 kcal budget, a 691 kcal target, 694 kcal served and a $24.50 estimated basket.\n\nThe meal comes from retrieval, not generation, so the core path needs no LLM key.\n\nReference — not read aloud\ndocs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.", SOLUTION);
-  s.addText([{ text: "ORDER  ", options: { bold: true } }, { text: "chicken fried rice, active woman, maintaining" }], { shape: pres.ShapeType.rect, ...box(X0, TOP, W, 34), fill: { color: WHITE }, line: { color: INK, width: 1, dashType: "dash" }, color: INK, fontFace: MONO, fontSize: 12, margin: 10, valign: "middle" });
+  s.addText([{ text: "ORDER  ", options: { bold: true } }, { text: "chicken fried rice, active woman, maintaining" }], { shape: pres.ShapeType.rect, ...box(X0, TOP, 608, 30), fill: { color: WHITE }, line: { color: INK, width: 1, dashType: "dash" }, color: INK, fontFace: MONO, fontSize: 12, margin: 10, valign: "middle" });
   [
-    ["scale", "E3EFE6", GREEN, "THE PORTION PLANNER", "Calorie expenditure", "Estimates what you burn in a day and sets your daily budget.", "2,469 kcal budget"],
-    ["pan", "FBE4DC", TOMATO, "THE CHEF", "Meal recommendation", "Sets the meal target, rules out conflicts, picks a relevant recipe and sizes it.", "691 kcal target"],
-    ["taster", TINT_WARN, WARN, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels what is estimated.", "694 kcal, 3 of 6 estimated"],
-    ["basket", "DDE3DA", INK, "THE SHOPPER", "Supermarket", "Matches ingredients to store items or category prices.", "$24.50 estimated"],
-  ].forEach(([art, tint, deep, role, h, b, out], i) => {
-    const x = X0 + i * 223, y = 174;
-    card(s, "", x, y, 204, 226, { fill: tint });
-    s.addImage({ path: `slides/assets/station-${art}.png`, ...box(x + 32, y + 10, 140, 70), altText: `Illustration for ${role.toLowerCase()}` });
+    [1, "scale", G, "THE PORTION PLANNER", "Calorie expenditure", "Estimates what you burn in a day and sets your budget.", "2,469 kcal budget", X0, 168],
+    [2, "pan", T, "THE CHEF", "Meal recommendation", "Sets the meal target, rules out conflicts, picks a recipe and sizes it.", "691 kcal target", X0 + 313, 168],
+    [3, "taster", A, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels what is estimated.", "694 kcal, 3 of 6 estimated", X0 + 313, 298],
+    [4, "basket", K, "THE SHOPPER", "Supermarket", "Matches ingredients to store items or category prices.", "$24.50 estimated", X0, 298],
+  ].forEach(([n, art, [tint, deep], role, h, b, out, x, y]) => {
+    card(s, "", x, y, 295, 120, { fill: tint });
+    s.addImage({ path: `slides/assets/station-${art}.png`, ...box(x + 8, y + 12, 104, 52), altText: `Illustration for ${role.toLowerCase()}` });
+    s.addText(out, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 8, y + 72, 104, 38), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 10, bold: true, align: "center", valign: "middle", margin: 2 });
     text(s, [
-      { text: role, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 2 } },
-      { text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
-      { text: b, options: { fontSize: 12, color: deep } },
-    ], x + 12, y + 84, 182, 104);
-    s.addText(out, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 12, y + 192, 180, 26), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
-    if (i < 3) arrow(s, x + 206, y + 113, x + 221, y + 113);
+      { text: role, options: { fontSize: 10, bold: true, color: deep, breakLine: true } },
+      { text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true, paraSpaceAfter: 2 } },
+      { text: b, options: { color: deep } },
+    ], x + 120, y + 8, 168, 106);
+    chip(s, n, x + 266, y + 6);
   });
-  card(s, [{ text: "One typed JSON response: meal, nutrition, shopping list and warnings", options: { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE } }], X0, 408, W, 42, { fill: INK, margin: 16, valign: "middle" });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "white labels show the active woman's real plan. The service balances portions after verification. The core path needs no LLM key." }], X0, 458, W, 14, { fontSize: 8, color: MUTED });
+  arrow(s, X0 + 296, 228, X0 + 312, 228);
+  arrow(s, X0 + 460, 289, X0 + 460, 297);
+  s.addShape(pres.ShapeType.line, { ...box(X0 + 296, 358, 16, 0), line: { color: MUTED, width: 1, beginArrowType: "triangle" } });
+  arrow(s, X0 + 146, 419, X0 + 146, 427);
+  card(s, [{ text: "One typed JSON response: meal, nutrition, shopping list and warnings", options: { fontFace: HEAD, fontSize: 12, bold: true, color: WHITE } }], X0, 428, 608, 32, { fill: INK, margin: 12, valign: "middle" });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "white labels show the active woman's real plan. The service balances portions after verification." }], X0, 468, 608, 14, { fontSize: 8, color: MUTED });
+  marker(s, 1, X0 + 250, 172);
+  marker(s, 2, X0 + 563, 172);
+  takeaways(s, [["One job per station", "Each agent does a single task, so it can be tested and changed on its own."], ["Retrieval, not generation", "Meals come from 34 curated recipes, so the core path needs no LLM key, and offline the same request gives the same plan."]], [2, 74]);
 }
-
-// The four feature colours from DESIGN.md: tint, deep.
-const G = ["E3EFE6", GREEN], T = ["FBE4DC", TOMATO], A = [TINT_WARN, WARN], K = ["DDE3DA", INK];
-// Like takeaways, but placed anywhere; bodies stay one text box.
-const notes = (s, items, offsets, x, y, w, h) => {
-  const runs = [];
-  items.forEach(([hd, b], i) => {
-    runs.push({ text: hd, options: { bold: true, breakLine: true, paraSpaceBefore: i ? 12 : 0, paraSpaceAfter: 4 } });
-    runs.push({ text: b, options: { color: MUTED, breakLine: i < items.length - 1 } });
-  });
-  text(s, runs, x, y, w, h, { lineSpacingMultiple: 1.1, objectName: "Takeaways" });
-  offsets.forEach((o, i) => marker(s, i + 1, x - 18, y + o));
-};
-const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "", {
-  shape: pres.ShapeType.rect, ...box(x, y, w, h), fill: { color: fill }, line: { color: fill, width: 0.5 }, color: colour, fontSize: 12, bold: true, margin: 8, valign: "middle",
-});
 
 // 7 — calorie target
 {
   const s = slide("SOLUTION > CALORIE TARGET", "From your body to a meal target", "Worked example: an active woman who is keeping her weight gets a 691 kcal target for this meal.",
     "How does it decide how much? It's a short calculation, and this follows one real person through it.\n\n[Point: Body and activity]\nBody size and activity give about 2,344 kcal a day.\n\n[Point: Exercise]\nThe trained model adds 125 kcal of exercise.\n\n[Point: Goal]\nHer goal is to maintain, so nothing changes, and her budget is 2,469 kcal.\n\n[Point: This meal]\nOne meal gets 28% of that, which is 691 kcal.\n\n[Point: Bars]\nThe bars show how small the model's share is. Its high score is for exercise calories only, and in these plans it adds about 110 to 140 kcal.\n\nThe exercise inputs are defaults, and the activity multiplier may already count that exercise.\n\nReference — not read aloud\nLocal run, 7 November 2026: expenditure less BMR × activity is 142, 115, 125 and 108 kcal across the four profiles, 3–10% of expenditure. metrics.json; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. The 28% share is a design choice.", SOLUTION);
   [
-    ["person", G, "Body and activity", "Body size and activity give a daily estimate.", "2,344 kcal"],
+    ["person", G, "Body and activity", "Size and activity give a daily estimate.", "2,344 kcal"],
     ["fitness_center", T, "Exercise", "A trained model adds exercise calories.", "+125 kcal"],
-    ["flag", A, "Goal", "Gain +250, lose −400, with a safety floor.", "2,469 kcal budget"],
-    ["rice_bowl", K, "This meal", "28% of the budget, kept to 350–850 kcal.", "691 kcal target"],
+    ["flag", A, "Goal", "Gain +250, lose −400, with a floor.", "2,469 kcal"],
+    ["rice_bowl", K, "This meal", "28% of the budget, within 350–850 kcal.", "691 kcal"],
   ].forEach(([icon, [tint, deep], h, b, out], i) => {
-    const x = X0 + i * 223;
-    card(s, "", x, TOP, 204, 132, { fill: tint });
-    iconDot(s, icon, deep, x + 12, TOP + 10, 28);
-    text(s, h, x + 48, TOP + 10, 150, 28, { fontSize: 14, bold: true, color: deep, valign: "middle" });
-    text(s, b, x + 12, TOP + 44, 182, 40, { color: deep });
-    s.addText(out, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 12, TOP + 96, 180, 26), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
-    if (i < 3) arrow(s, x + 205, TOP + 66, x + 222, TOP + 66);
+    const x = X0 + i * 156;
+    card(s, "", x, TOP, 140, 136, { fill: tint });
+    iconDot(s, icon, deep, x + 8, TOP + 8, 26);
+    text(s, h, x + 40, TOP + 6, 96, 30, { bold: true, color: deep, valign: "middle" });
+    text(s, b, x + 10, TOP + 40, 124, 52, { color: deep });
+    s.addText(out, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 10, TOP + 102, 120, 26), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
+    if (i < 3) arrow(s, x + 141, TOP + 68, x + 155, TOP + 68);
   });
-  marker(s, 2, X0 + 446 + 186, TOP + 6);
-  card(s, "", X0, 274, 608, 186);
-  text(s, "Her day and this meal, on one scale", X0 + 16, 284, 400, 18, { bold: true });
+  marker(s, 2, X0 + 312 + 124, TOP + 4);
+  marker(s, 3, X0 + 468 + 124, TOP + 4);
+  pend(s, "P5", X0 + 156 + 68, TOP + 84);
+  card(s, "", X0, 276, 608, 186);
+  text(s, "Her day and this meal, on one scale", X0 + 16, 286, 400, 18, { bold: true });
   const x0 = X0 + 16, k = 576 / 2469.2, w1 = 2344.3 * k, w2 = 124.9 * k;
-  text(s, "Daily budget: 2,469 kcal", x0, 308, 300, 16, { color: MUTED });
-  text(s, "+125 kcal from the model", x0 + 300, 308, 276, 16, { color: TOMATO, bold: true, align: "right" });
-  bar(s, x0, 326, w1, 30, GREEN, "2,344 kcal from body and activity");
-  bar(s, x0 + w1, 326, w2, 30, TOMATO);
-  marker(s, 1, x0 + 562, 361);
-  text(s, "This meal: 28% of the day", x0, 378, 300, 16, { color: MUTED });
-  bar(s, x0, 396, 691.3 * k, 30, INK, "691 kcal");
-  text(s, "Scale: full width is 2,469 kcal.", x0, 436, 400, 14, { fontSize: 9, color: MUTED });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise." }], X0, 466, 608, 14, { fontSize: 8, color: MUTED });
-  notes(s, [["The model is a small part", "It adds about 110–140 kcal in these plans, 3–10% of the day. Its R² of 0.996 and 2.2 kcal error describe exercise calories only."], ["A floor protects low budgets", "Weight-loss budgets stop at 1,200 kcal for women and 1,500 for men. One test profile would otherwise get 986 kcal."]], [2, 80], 684, 274, 232.5, 212);
+  text(s, "Daily budget: 2,469 kcal", x0, 310, 300, 16, { color: MUTED });
+  text(s, "+125 kcal from the model", x0 + 300, 310, 276, 16, { color: TOMATO, bold: true, align: "right" });
+  bar(s, x0, 328, w1, 30, GREEN, "2,344 kcal from body and activity");
+  bar(s, x0 + w1, 328, w2, 30, TOMATO);
+  marker(s, 1, x0 + 562, 363);
+  text(s, "This meal: 28% of the day", x0, 380, 300, 16, { color: MUTED });
+  bar(s, x0, 398, 691.3 * k, 30, INK, "691 kcal");
+  text(s, "Scale: full width is 2,469 kcal.", x0, 438, 400, 14, { fontSize: 9, color: MUTED });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise." }], X0, 468, 608, 14, { fontSize: 8, color: MUTED });
+  takeaways(s, [["The model is a small part", "It adds about 110–140 kcal in these plans, 3–10% of the day. Its R² of 0.996 and 2.2 kcal error describe exercise calories only."], ["A floor protects low budgets", "Weight-loss budgets stop at 1,200 kcal for women and 1,500 for men. One test profile would otherwise get 986 kcal."], ["28% is a design choice", "It keeps meals in proportion, but the cap holds a large athlete's meal to 19% of the day."]], [2, 91, 180]);
 }
 
 // 8 — choosing the meal
@@ -385,6 +411,7 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   iconDot(s, "health_and_safety", TOMATO, 696, 320, 28);
   text(s, "Or a safe swap", 732, 320, 180, 28, { fontSize: 14, bold: true, color: TOMATO, valign: "middle" });
   text(s, "A coeliac who asks for pasta keeps the recipe, made with gluten-free pasta. A limit doesn't always cost you the meal.", 696, 354, 208, 100, { color: TOMATO });
+  pend(s, "P6", 696, 440);
 }
 
 // 9 — nutrition
@@ -396,57 +423,62 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   const right = { align: "right" };
   const rows = [
     [cell("Ingredient", { bold: true }), cell("Amount", { bold: true, ...right }), cell("kcal", { bold: true, ...right }), cell("Source", { bold: true })],
-    ...[["Chicken breast", "100 g", "165", 0], ["Cooked white rice", "220 g", "286", 0], ["Whole egg", "50 g", "72", 1], ["Mixed vegetables", "115 g", "75", 1], ["Soy sauce", "15 g", "8", 0], ["Sesame oil", "10 g", "88", 1]].map(([n, a, c, ok]) => [cell(n), cell(a, right), cell(c, right), badge(ok)]),
+    ...[["Chicken breast", "100 g", "165", 0], ["Cooked rice", "220 g", "286", 0], ["Whole egg", "50 g", "72", 1], ["Vegetables", "115 g", "75", 1], ["Soy sauce", "15 g", "8", 0], ["Sesame oil", "10 g", "88", 1]].map(([n, a, c, ok]) => [cell(n), cell(a, right), cell(c, right), badge(ok)]),
   ];
-  card(s, "", X0, TOP, 390, 276);
-  s.addTable(rows, { ...box(X0 + 10, TOP + 12, 370, 252), colW: [pt(150), pt(62), pt(58), pt(100)], rowH: pt(36), fontSize: 12, color: INK, fontFace: HEAD, valign: "middle", border: { type: "none" } });
-  caption(s, 1, "A real plan: 694 kcal against a 691 kcal meal target.", X0, 414, 390);
-  const rx = 452, rw = 464, kk = rw / 693.6;
+  card(s, "", X0, TOP, 322, 276);
+  s.addTable(rows, { ...box(X0 + 8, TOP + 12, 306, 252), colW: [pt(106), pt(66), pt(44), pt(90)], rowH: pt(36), fontSize: 12, color: INK, fontFace: HEAD, valign: "middle", border: { type: "none" } });
+  caption(s, 1, "A real plan: 694 kcal against a 691 kcal meal target.", X0, 414, 322);
+  const rx = 382, rw = 269.5, kk = rw / 693.6;
   text(s, "Where the 694 kcal come from", rx, TOP, rw, 18, { bold: true });
-  bar(s, rx, TOP + 22, 458.9 * kk, 34, WARN, "459 kcal estimated, 66%");
-  bar(s, rx + 458.9 * kk, TOP + 22, 234.7 * kk, 34, GREEN, "235 kcal reference");
-  marker(s, 1, rx - 18, TOP + 33);
-  text(s, "Lookup order", rx, 200, rw, 18, { bold: true });
+  bar(s, rx, TOP + 22, 458.9 * kk, 32, WARN, "459 estimated");
+  bar(s, rx + 458.9 * kk, TOP + 22, 234.7 * kk, 32, GREEN, "235");
+  text(s, "66% estimated, 34% reference", rx, TOP + 58, rw, 14, { fontSize: 10, color: MUTED });
+  marker(s, 1, rx + rw - 12, TOP + 2);
+  text(s, "Lookup order", rx, 212, rw, 18, { bold: true });
   [["verified", G, "1. Trusted local reference"], ["search", T, "2. USDA, then FatSecret, if keys are set"], ["calculate", A, "3. Local or category estimate"]].forEach(([icon, [tint, deep], t], i) => {
-    const x = rx + i * 160;
-    card(s, "", x, 222, 144, 92, { fill: tint });
-    iconDot(s, icon, deep, x + 10, 230, 26);
-    text(s, t, x + 10, 260, 126, 48, { color: deep });
-    if (i < 2) arrow(s, x + 145, 268, x + 159, 268);
+    const y = 234 + i * 62;
+    card(s, "", rx, y, rw, 50, { fill: tint });
+    iconDot(s, icon, deep, rx + 10, y + 12, 26);
+    text(s, t, rx + 44, y, rw - 52, 50, { color: deep, valign: "middle" });
+    if (i < 2) arrow(s, rx + 134, y + 51, rx + 134, y + 61);
   });
-  marker(s, 2, rx - 18, 262);
-  notes(s, [["Estimates carry most of the calories", "3 of 6 ingredients are estimates, but chicken and rice make them 66% of this meal."], ["Reference still means local", "With no provider keys, a plan's target check isn't an independent verification."]], [2, 50], rx, 326, rw, 150);
+  marker(s, 2, rx + rw - 16, 300);
+  pend(s, "P4", rx + rw - 72, 340);
+  takeaways(s, [["Estimates carry 66% of the calories", "Only 3 of 6 ingredients are estimates, but they include chicken and rice, the biggest items."], ["Reference still means local", "With no provider keys, a plan's target check isn't an independent verification."]], [2, 90]);
 }
 
 // 10 — what good means
 {
   const s = slide("EVIDENCE > WHAT GOOD MEANS", "We defined a good meal before improving one", "A plan passes only if it clears both tests, on a fixed set of 72 requests run offline.",
     "Before changing anything, I fixed what good means. A plan has to clear two tests.\n\n[Point: Within 10%]\nFirst, calories have to land within 10% of the meal's target.\n\n[Point: Macro bands]\nSecond, each macro has to sit inside the adult AMDR range, as a share of the meal's energy. The dots show one real plan.\n\n[Point: 72 requests]\nIt runs on the same 72 requests every time, so results can be compared.\n\nOne limit: AMDR is a daily reference, applied here to one meal.\n\nReference — not read aloud\ndocs/7_meal_quality.md §1; DEC-25. Example plan: docs/meal_quality/baseline.json, 28/46/26%.", EVIDENCE);
-  card(s, "", X0, TOP, 560, 300);
-  text(s, [{ text: "Test 2  ", options: { bold: true, color: TOMATO } }, { text: "Share of the meal's energy" }], X0 + 18, TOP + 14, 500, 22, { fontFace: HEAD, fontSize: 16, bold: true });
-  const bx = X0 + 18, bw = 524;
+  card(s, "", X0, TOP, 352, 300);
+  text(s, [{ text: "Test 2  ", options: { bold: true, color: TOMATO } }, { text: "Share of the meal's energy" }], X0 + 14, TOP + 14, 330, 22, { fontFace: HEAD, fontSize: 14, bold: true });
+  const bx = X0 + 14, bw = 324;
   [["Protein", 10, 35, C.accent3, 28], ["Carbs", 45, 65, C.accent4, 46], ["Fat", 20, 35, C.accent5, 26]].forEach(([n, a, b, col, v], i) => {
-    const y = 180 + i * 72;
-    text(s, n, bx, y, 200, 18, { bold: true });
+    const y = 176 + i * 76;
+    text(s, n, bx, y, 120, 18, { bold: true });
     text(s, `Allowed ${a}–${b}%`, bx + bw - 160, y, 160, 18, { bold: true, align: "right" });
-    s.addShape(pres.ShapeType.roundRect, { ...box(bx, y + 28, bw, 14), rectRadius: pt(7), fill: { color: NEUTRAL }, line: { color: NEUTRAL, width: 0.5 } });
-    s.addShape(pres.ShapeType.roundRect, { ...box(bx + (bw * a) / 100, y + 28, (bw * (b - a)) / 100, 14), rectRadius: pt(7), fill: { color: col }, line: { color: col, width: 0.5 } });
-    s.addShape(pres.ShapeType.ellipse, { ...box(bx + (bw * v) / 100 - 9, y + 26, 18, 18), fill: { color: WHITE }, line: { color: INK, width: 2 } });
-    text(s, `${v}%`, bx + (bw * v) / 100 - 30, y + 46, 60, 14, { fontSize: 10, bold: true, align: "center" });
+    s.addShape(pres.ShapeType.roundRect, { ...box(bx, y + 26, bw, 14), rectRadius: pt(7), fill: { color: NEUTRAL }, line: { color: NEUTRAL, width: 0.5 } });
+    s.addShape(pres.ShapeType.roundRect, { ...box(bx + (bw * a) / 100, y + 26, (bw * (b - a)) / 100, 14), rectRadius: pt(7), fill: { color: col }, line: { color: col, width: 0.5 } });
+    s.addShape(pres.ShapeType.ellipse, { ...box(bx + (bw * v) / 100 - 9, y + 24, 18, 18), fill: { color: WHITE }, line: { color: INK, width: 2 } });
+    text(s, `${v}%`, bx + (bw * v) / 100 - 30, y + 44, 60, 14, { fontSize: 10, bold: true, align: "center" });
   });
-  text(s, "White dots: chicken fried rice for the active woman. Coloured bands: the allowed range.", bx, 408, bw, 14, { fontSize: 9, color: MUTED });
-  const x = 621.5, w = 295;
-  card(s, [{ text: "Test 1", options: { fontSize: 12, bold: true, color: ON_INK, breakLine: true } }, { text: "Within 10%", options: { fontFace: HEAD, fontSize: 40, bold: true, color: WHITE, breakLine: true } }, { text: "of the meal's calorie target", options: { fontSize: 12, color: ON_INK } }], x, TOP, w, 142, { fill: INK, margin: 16, valign: "middle" });
-  card(s, "", x, 288, w, 142);
-  text(s, "72 fixed requests", x + 14, 298, 260, 20, { fontFace: HEAD, fontSize: 16, bold: true });
+  text(s, "White dots: chicken fried rice for the active woman.", bx, 408, bw, 14, { fontSize: 9, color: MUTED });
+  const x = X0 + 368, w = 240;
+  card(s, [{ text: "Test 1", options: { fontSize: 12, bold: true, color: ON_INK, breakLine: true } }, { text: "Within 10%", options: { fontFace: HEAD, fontSize: 32, bold: true, color: WHITE, breakLine: true } }, { text: "of the meal's calorie target", options: { fontSize: 12, color: ON_INK } }], x, TOP, w, 124, { fill: INK, margin: 14, valign: "middle" });
+  card(s, "", x, 266, w, 164);
+  text(s, "72 fixed requests", x + 12, 276, 210, 20, { fontFace: HEAD, fontSize: 14, bold: true });
   const dots = (cols, x0, colour) => {
-    for (let c = 0; c < cols; c++) for (let r = 0; r < 4; r++) s.addShape(pres.ShapeType.ellipse, { ...box(x0 + c * 14, 326 + r * 14, 10, 10), fill: { color: colour }, line: { color: colour, width: 0.5 } });
+    for (let c = 0; c < cols; c++) for (let r = 0; r < 4; r++) s.addShape(pres.ShapeType.ellipse, { ...box(x0 + c * 11.5, 304 + r * 12.5, 9, 9), fill: { color: colour }, line: { color: colour, width: 0.5 } });
   };
-  dots(12, x + 14, GREEN);
-  dots(6, x + 194, TOMATO);
-  text(s, "12 cravings × 4 body profiles", x + 14, 386, 170, 32, { fontSize: 10, color: GREEN, bold: true });
-  text(s, "6 cravings × 4 diet or health limits", x + 194, 386, 92, 38, { fontSize: 10, color: TOMATO, bold: true });
-  limit(s, "AMDR is a daily reference, applied here to one meal.", X0, 444, W, 30);
+  dots(12, x + 12, GREEN);
+  dots(6, x + 160, TOMATO);
+  text(s, "12 cravings × 4 body profiles", x + 12, 362, 136, 30, { fontSize: 10, color: GREEN, bold: true });
+  text(s, "6 cravings × 4 limits", x + 160, 362, 72, 44, { fontSize: 10, color: TOMATO, bold: true });
+  marker(s, 1, x + w - 18, TOP + 6);
+  marker(s, 2, x + w - 18, 272);
+  limit(s, "AMDR is a daily reference, applied here to one meal.", X0, 442, 608, 30);
+  takeaways(s, [["Calories weren't the hard part", "At the first run 68 of 72 plans were within 10%, but only 10 cleared both tests."], ["Fixed requests make runs fair", "The same 72 requests run every time, offline, so each change can be measured."]], [2, 90]);
 }
 
 // 11 — results
@@ -481,123 +513,144 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
 {
   const s = slide("BUILD AND LIMITS > ARCHITECTURE", "One service, two clients, four agents", "A request flows left to right. Each box names the model, data or tool behind it.",
     "This is the whole system on one page.\n\n[Point: Clients]\nThere are two clients: the live Streamlit demo and a React app.\n\n[Point: FastAPI]\nThey share one typed FastAPI contract, with API keys and rate limits.\n\n[Point: Planning service]\nA planning service runs the four agents in order.\n\n[Point: Models and data]\nEach agent has its own source: the trained model, the recipe corpus, the nutrition tables and the store reference.\n\n[Point: Built with]\nThe bottom row is the delivery stack.\n\nThe hosted demo runs the agents inside Streamlit, and Cloud Run is ready but not deployed.\n\nReference — not read aloud\ndocs/2_architecture.md; pyproject.toml; frontend/package.json; backend/app/services/meal_planning_service.py; DEC-2. Logos: slides/assets/logos/NOTICE.txt.", BUILD);
-  const logo = (n, x, y, d = 22) => s.addImage({ path: `slides/assets/logos/${n}.png`, ...box(x, y, d, d), altText: `${n} logo` });
-  [["CLIENTS", X0], ["API", 191], ["PLANNING SERVICE", 329], ["MODELS AND DATA", 686.5]].forEach(([t, x]) => text(s, t, x, TOP, 220, 14, { fontSize: 10, bold: true, color: MUTED }));
+  const logo = (n, x, y, d = 20) => s.addImage({ path: `slides/assets/logos/${n}.png`, ...box(x, y, d, d), altText: `${n} logo` });
+  [["CLIENTS", X0], ["API", 153], ["PLANNING SERVICE", 263]].forEach(([t, x]) => text(s, t, x, TOP, 220, 14, { fontSize: 10, bold: true, color: MUTED }));
   const top = 148;
   [
     ["Streamlit demo", "Live and public", ["streamlit"], G, top],
-    ["React app", "The guided flow, run locally", ["react", "vite", "tailwindcss"], T, top + 134],
+    ["React app", "Guided flow, run locally", ["react", "vite", "tailwindcss"], T, top + 134],
   ].forEach(([h, b, logos, [tint, deep], y]) => {
-    card(s, "", X0, y, 130, 124, { fill: tint });
-    s.addShape(pres.ShapeType.roundRect, { ...box(X0 + 10, y + 10, 110, 36), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
-    logos.forEach((n, i) => logo(n, X0 + 18 + i * 32, y + 17));
-    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], X0 + 10, y + 54, 112, 62);
-    arrow(s, X0 + 131, y + 62, 190, y + 62);
+    card(s, "", X0, y, 96, 124, { fill: tint });
+    s.addShape(pres.ShapeType.roundRect, { ...box(X0 + 6, y + 8, 84, 32), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
+    logos.forEach((n, i) => logo(n, X0 + 12 + i * 25, y + 14));
+    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], X0 + 8, y + 46, 84, 74);
+    arrow(s, X0 + 97, y + 62, 152, y + 62);
   });
-  card(s, "", 191, top, 120, 258);
-  logo("fastapi", 203, top + 12); logo("pydantic", 233, top + 12);
-  text(s, [{ text: "FastAPI", options: { bold: true, breakLine: true } }, { text: "Typed JSON, API keys, rate limits", options: { fontSize: 10, color: MUTED } }], 203, top + 42, 98, 70);
-  card(s, "", 199, top + 142, 104, 106, { fill: "DDE3DA" });
-  logo("sqlite", 209, top + 150);
-  text(s, [{ text: "SQLite", options: { bold: true, breakLine: true } }, { text: "Local plan history, via SQLModel", options: { fontSize: 10 } }], 209, top + 178, 88, 66);
-  arrow(s, 251, top + 118, 251, top + 141);
-  arrow(s, 312, top + 129, 328, top + 129);
-  card(s, "", 329, top, 340, 258, { fill: PANEL });
-  logo("python", 339, top + 6, 16);
-  text(s, "MealPlanningService", 360, top + 6, 280, 16, { fontFace: MONO, fontSize: 10, bold: true, valign: "middle" });
+  card(s, "", 153, top, 96, 258);
+  logo("fastapi", 161, top + 10); logo("pydantic", 187, top + 10);
+  text(s, [{ text: "FastAPI", options: { bold: true, breakLine: true } }, { text: "Typed JSON, API keys, rate limits", options: { fontSize: 10, color: MUTED } }], 161, top + 36, 82, 76);
+  card(s, "", 159, top + 136, 84, 114, { fill: "DDE3DA" });
+  logo("sqlite", 166, top + 142);
+  text(s, [{ text: "SQLite", options: { bold: true, breakLine: true } }, { text: "Local history, via SQLModel", options: { fontSize: 10 } }], 166, top + 166, 74, 60);
+  pend(s, "P2", 168, top + 230);
+  arrow(s, 201, top + 116, 201, top + 135);
+  arrow(s, 250, top + 129, 262, top + 129);
+  card(s, "", 263, top, 388.5, 258, { fill: PANEL });
+  logo("python", 271, top + 5, 16);
+  text(s, "MealPlanningService", 292, top + 5, 280, 16, { fontFace: MONO, fontSize: 10, bold: true, valign: "middle" });
   [
-    ["monitor_weight", G, "Calorie expenditure", "Sets the daily budget", "Trained model", "HistGradientBoosting, .joblib", ["scikitlearn"]],
-    ["skillet", T, "Meal recommendation", "Limits, retrieval, portions", "34-recipe corpus", "TF-IDF search, SciPy balancing", ["scikitlearn", "scipy"]],
-    ["fact_check", A, "Nutrition verification", "Looks up each ingredient", "Nutrition sources", "Local tables; USDA, FatSecret with keys", []],
-    ["shopping_basket", K, "Supermarket", "Items and an estimated total", "Store reference", "Local products, category prices", []],
-  ].forEach(([icon, [tint, deep], h, b, dh, db, logos], i) => {
-    const y = top + 28 + i * 57;
-    card(s, "", 337, y, 324, 51, { fill: tint });
-    iconDot(s, icon, deep, 345, y + 10, 30);
-    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], 384, y + 6, 270, 40, { valign: "middle" });
-    arrow(s, 662, y + 25, 685, y + 25);
-    card(s, "", 686.5, y, 230, 51);
-    text(s, [{ text: dh, options: { bold: true, breakLine: true } }, { text: db, options: { fontSize: 10, color: MUTED } }], 696, y + 6, logos.length ? 214 - logos.length * 26 : 212, 40, { valign: "middle" });
-    logos.forEach((n, k) => logo(n, 888 - (logos.length - 1 - k) * 26, y + 15));
+    ["monitor_weight", G, "Calorie expenditure", "Trained HistGradientBoosting model", ["scikitlearn"]],
+    ["skillet", T, "Meal recommendation", "TF-IDF search of 34 recipes, diet rules", ["scikitlearn"]],
+    ["fact_check", A, "Nutrition verification", "Local tables; USDA, FatSecret with keys", []],
+    ["balance", ["FFFFFF", INK], "Balance and reconcile", "A service step: linear programme for portions", ["scipy"]],
+    ["shopping_basket", K, "Supermarket", "Local store items and category prices", []],
+  ].forEach(([icon, [tint, deep], h, b, logos], i) => {
+    const y = top + 26 + i * 46;
+    card(s, "", 271, y, 372.5, 41, { fill: tint });
+    iconDot(s, icon, deep, 278, y + 8, 25);
+    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], 312, y + 2, 296, 37, { valign: "middle" });
+    logos.forEach((n) => logo(n, 615, y + 10));
+    if (i < 4) arrow(s, 290, y + 41, 290, y + 46);
   });
-  card(s, "", X0, 414, W, 56, { fill: INK });
-  text(s, "Built with", X0 + 14, 414, 70, 56, { bold: true, color: WHITE, valign: "middle" });
-  [["python", "Python"], ["docker", "Docker"], ["githubactions", "GitHub Actions"], ["googlecloud", "Cloud Run"], ["opentelemetry", "OpenTelemetry"], ["googlegemini", "Gemini, optional"]].forEach(([n, t], i) => {
-    const x = X0 + 84 + i * 130;
-    s.addShape(pres.ShapeType.roundRect, { ...box(x, 425, 124, 34), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
-    logo(n, x + 8, 432, 20);
-    text(s, t, x + 33, 425, 90, 34, { fontSize: 10, bold: true, valign: "middle" });
+  card(s, "", X0, 414, 608, 54, { fill: INK });
+  text(s, "BUILT WITH", X0 + 10, 417, 200, 12, { fontSize: 8, bold: true, color: ON_INK });
+  let cx = X0 + 6;
+  [["python", "Python", 78], ["docker", "Docker", 78], ["githubactions", "GitHub Actions", 116], ["googlecloud", "Cloud Run", 94], ["opentelemetry", "OpenTelemetry", 116], ["googlegemini", "Gemini", 78]].forEach(([n, t, w]) => {
+    s.addShape(pres.ShapeType.roundRect, { ...box(cx, 431, w, 30), rectRadius: pt(6), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
+    logo(n, cx + 5, 437, 18);
+    text(s, t, cx + 27, 431, w - 28, 30, { fontSize: 10, bold: true, valign: "middle" });
+    if (n === "googlecloud") pend(s, "P3", cx + 14, 410);
+    cx += w + 4;
   });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the hosted demo runs the agents inside Streamlit. Gemini is off without a key. Cloud Run is ready but not deployed. Logos belong to their owners." }], X0, 476, W, 14, { fontSize: 8, color: MUTED });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the hosted demo runs the same service inside Streamlit. Gemini is optional and off by default. Logos belong to their owners." }], X0, 472, 608, 14, { fontSize: 8, color: MUTED });
+  marker(s, 1, 234, top + 6);
+  marker(s, 2, 628, top + 5);
+  marker(s, 3, 628, top + 26 + 3 * 46 + 2);
+  takeaways(s, [["One contract, two clients", "Streamlit and React use the same planning service, so the logic lives in one place."], ["Small models, no GPU", "The one trained model is 0.64 MB, and TF-IDF is enough for 34 recipes."], ["Balancing comes after lookup", "Portions are solved on looked-up numbers, then the shopping list is written from the final amounts."]], [2, 74, 149]);
 }
 
 // 13 — engineering
 {
-  const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits on a portfolio project, each with a file you can open in the repo.",
-    "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run passed 630 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.", BUILD);
+  const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits, in the order a change travels through them.",
+    "Although this is a portfolio project, I held it to production habits. Follow a change from left to right.\n\n[Point: Contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tests]\nThe last full run passed 630 Python tests at 95% coverage.\n\n[Point: Cloud Run]\nFrom here the line turns amber: the deployment workflow and tracing are built, but they wait for a GCP project.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; test_telemetry_redaction.py; local full run, 7 November 2026.", BUILD);
+  card(s, "", X0, TOP, 608, 196);
+  text(s, "From a change to production", X0 + 16, TOP + 10, 400, 18, { bold: true });
+  const ly = 196, sx = X0 + 54, step = 100;
+  s.addShape(pres.ShapeType.line, { ...box(sx, ly, step * 3, 0), line: { color: GREEN, width: 4 } });
+  s.addShape(pres.ShapeType.line, { ...box(sx + step * 3, ly, step * 2, 0), line: { color: WARN, width: 4, dashType: "dash" } });
   [
-    ["fact_check", G, "Typed API contract", "CI fails if the API drifts from it.", "docs/openapi.json"],
-    ["science", T, "Tested", "630 Python tests at 95% coverage.", "backend/tests/"],
-    ["lock", A, "Secured", "API keys, rate limits, no stored history when hosted.", "backend/app/api/auth.py"],
-    ["cloud_upload", K, "Deployable", "Containers and a Cloud Run workflow.", ".github/workflows/deploy.yml"],
-    ["visibility", G, "Observable", "Tracing that keeps health data out.", "test_telemetry_redaction.py"],
-    ["devices", T, "Two clients", "A live Streamlit demo and a React app.", "streamlit_app/, frontend/"],
-  ].forEach(([icon, [tint, deep], h, b, f], i) => {
-    const x = X0 + (i % 3) * 297, y = TOP + Math.floor(i / 3) * 150;
-    card(s, "", x, y, 279, 138, { fill: tint });
-    iconDot(s, icon, deep, x + 14, y + 12, 30);
-    text(s, h, x + 54, y + 12, 216, 30, { fontSize: 16, bold: true, color: deep, valign: "middle" });
-    text(s, b, x + 14, y + 52, 250, 40, { color: deep });
-    text(s, f, x + 14, y + 104, 250, 18, { fontFace: MONO, fontSize: 10, color: deep });
+    ["fact_check", GREEN, "Contract", "CI fails on any drift"],
+    ["science", GREEN, "Tests", "630 Python tests"],
+    ["lock", GREEN, "Security", "API keys, rate limits"],
+    ["inventory_2", GREEN, "Container", "One Docker image"],
+    ["cloud_upload", WARN, "Cloud Run", "Ready, not live"],
+    ["visibility", WARN, "Tracing", "Keeps health data out"],
+  ].forEach(([icon, c, h, b], i) => {
+    const x = sx + i * step;
+    iconDot(s, icon, c, x - 21, ly - 21, 42);
+    text(s, [{ text: h, options: { bold: true, color: c, breakLine: true } }, { text: b, options: { fontSize: 10, color: MUTED } }], x - 48, ly + 28, 96, 56, { align: "center" });
   });
-  limit(s, "the Cloud Run workflow is ready but not yet deployed to a GCP project.", X0, 434, W, 30);
+  pend(s, "P3", sx + 4 * step - 33, 266);
+  text(s, "Green: runs today. Amber: built, waiting for a GCP project.", X0 + 16, 306, 330, 14, { fontSize: 9, color: MUTED });
+  marker(s, 1, sx + step - 6, ly - 34);
+  marker(s, 2, sx + 4 * step - 6, ly - 34);
+  [["630", "Python tests, all passing", G], ["95%", "coverage, with an 89% floor in CI", T], ["5", "CI checks on every pull request", A]].forEach(([v, l, [tint, deep]], i) => {
+    const x = X0 + i * 208;
+    card(s, "", x, 338, 192, 136, { fill: tint });
+    text(s, v, x + 14, 350, 170, 62, { fontSize: 48, bold: true, color: deep, valign: "middle" });
+    text(s, l, x + 14, 418, 168, 44, { color: deep });
+  });
+  takeaways(s, [["CI stops drift", "Tests, the API contract and the dependency file are all checked on each pull request."], ["Built is not the same as live", "Cloud Run and tracing are ready, but no GCP project exists yet, so neither has run for real."]], [2, 90]);
 }
 
 // 14 — limits
 {
-  const s = slide("BUILD AND LIMITS > LIMITS", "What this project does not prove yet", "Six limits, stated plainly, so nobody reads more into the results than they show.",
-    "These are the limits, in one place.\n\n[Point: People]\nThe plans hit their targets, but nobody has tested whether people like them or benefit.\n\n[Point: Nutrition data]\nMost plans include an estimated ingredient, and AMDR is a daily range applied to one meal.\n\n[Point: Recipes]\nThe library is small, and the recipe fixes were guided by the same checks that measure them.\n\n[Point: Calorie model]\nThe exercise inputs are defaults, and activity may be counted twice.\n\n[Point: Diet rules]\nRules match ingredient names, so a hidden ingredient can slip through. Soy sauce did, until this review found it.\n\n[Point: Hosting]\nThe Cloud Run workflow isn't deployed yet.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.", BUILD);
+  const s = slide("BUILD AND LIMITS > LIMITS", "What this project does not prove yet", "The further right, the less has been shown.",
+    "These are the limits, arranged by how far the evidence goes. Each step up is less proven.\n\n[Point: Measured]\nThe plans hit their targets on fixed requests. That's solid, but the checks also guided the fixes.\n\n[Point: Estimated]\nA lot of what's inside those plans is estimated or assumed.\n\n[Point: Not tested]\nNobody has used it, it isn't deployed, and no clinician has reviewed it.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.", BUILD);
   [
-    ["group", G, "People", "No user or clinical testing", "Plans hit their targets, but nobody has tested whether people like them or benefit."],
-    ["fact_check", T, "Nutrition data", "68 of 72 include an estimate", "Values are local without provider keys, and AMDR is a daily range applied to one meal."],
-    ["menu_book", A, "Recipes", "34 recipes, 11 of 72 fall back", "The same checks that measure the recipes also guided their fixes."],
-    ["fitness_center", K, "Calorie model", "Default exercise inputs", "It assumes 30 minutes at 100 bpm, activity may count twice, and it learned from Kaggle data."],
-    ["no_food", G, "Diet rules", "Matched on ingredient names", "A hidden ingredient can slip through. Soy sauce did, until this review found it."],
-    ["cloud_upload", T, "Hosting", "Not deployed yet", "Cloud Run is ready but unused, and the database has no migration path."],
-  ].forEach(([icon, [tint, deep], h, st, b], i) => {
-    const x = X0 + (i % 3) * 297, y = TOP + Math.floor(i / 3) * 152;
-    card(s, "", x, y, 279, 142, { fill: tint });
-    iconDot(s, icon, deep, x + 14, y + 12, 30);
-    text(s, h, x + 54, y + 12, 216, 30, { fontSize: 16, bold: true, color: deep, valign: "middle" });
-    text(s, st, x + 14, y + 50, 252, 18, { bold: true, color: deep });
-    text(s, b, x + 14, y + 72, 252, 62, { color: deep });
+    ["check_circle", G, "Measured", ["72 of 72 and 68 of 68, offline", "But the checks guided the fixes", "11 of 72 fall back"], 178],
+    ["calculate", A, "Estimated", ["68 of 72 plans include an estimate", "AMDR is a daily range on one meal", "Default exercise inputs", "Diet rules match ingredient names"], 258],
+    ["group", T, "Not tested", ["No user testing", "No clinical review", "Not deployed", "No database migrations", "Taste and health outcomes unknown"], 336],
+  ].forEach(([icon, [tint, deep], h, items, ht], i) => {
+    const x = X0 + i * 208, y = 468 - ht;
+    card(s, "", x, y, 192, ht, { fill: tint });
+    iconDot(s, icon, deep, x + 12, y + 10, 30);
+    text(s, h, x + 50, y + 10, 136, 30, { fontSize: 16, bold: true, color: deep, valign: "middle" });
+    text(s, items.map((t, k) => ({ text: t, options: { color: deep, bullet: { indent: 10 }, breakLine: k < items.length - 1, paraSpaceAfter: 6 } })), x + 12, y + 50, 172, ht - 58);
   });
-  limit(s, "a planning aid, not medical advice.", X0, 438, W, 30, "Note:");
+  pend(s, "P9", X0 + 416 + 12, 442);
+  text(s, [{ text: "How far the evidence goes", options: { fontSize: 14, bold: true, breakLine: true } }, { text: "Each step up is less proven.", options: { color: MUTED } }], X0, TOP + 4, 340, 44);
+  text(s, "A planning aid, not medical advice.", X0, 472, 608, 14, { fontSize: 9, bold: true, color: WARN });
+  marker(s, 1, X0 + 172, 468 - 178 + 6);
+  marker(s, 2, X0 + 208 + 172, 468 - 258 + 6);
+  marker(s, 3, X0 + 416 + 172, 468 - 336 + 6);
+  takeaways(s, [["What is solid", "Plans hit their targets on fixed requests, and the run can be repeated."], ["What is soft", "Most plans lean on estimates. Name matching missed soy sauce until this review."], ["What is unknown", "Nobody has used it, so targets say nothing yet about taste or health."]], [2, 74, 164]);
 }
 
 // 15 — pending tasks
 {
-  const s = slide("BUILD AND LIMITS > PENDING TASKS", "Pending tasks, in priority order", "What isn't finished yet, and what each task unlocks.",
-    "This is the work that's still open, in the order I'd do it.\n\n[Point: Storage]\nMigrations come first, because nothing real should be stored without them.\n\n[Point: Hosting]\nThen a real deployment.\n\n[Point: Data]\nThen a benchmark run with real provider keys.\n\n[Point: People]\nLast, testing with real users, which is what would turn targets into evidence.\n\nReference — not read aloud\ndocs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.", BUILD);
-  text(s, "TASK", X0 + 150, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
-  text(s, "UNLOCKS", 600, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
+  const s = slide("BUILD AND LIMITS > PENDING TASKS", "Pending tasks, in priority order", "Each paper tag in this deck points to one of these notes.",
+    "This board is the work still open, in the order I'd do it.\n\n[Point: Now]\nFirst, make the demo work on first use, add migrations and deploy.\n\n[Point: Next]\nThen better inputs: real nutrition data, real exercise details and proper allergen tags.\n\n[Point: Later]\nThen scale: more recipes, live prices, and testing with people.\n\nReference — not read aloud\ndocs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.", BUILD);
   [
-    ["inventory_2", G, "Storage", "Add database migrations", "Safe to hold real data"],
-    ["cloud_upload", T, "Hosting", "Create the GCP project and deploy to Cloud Run", "A hosted API and real traces"],
-    ["fact_check", A, "Data", "Run the benchmark with USDA keys", "Independent nutrition numbers"],
-    ["menu_book", K, "Recipes", "Grow the library from 34 to 75–100 recipes", "Fewer fallback meals"],
-    ["storefront", G, "Prices", "Connect live store prices", "A real shopping total"],
-    ["group", T, "People", "Use feedback in ranking, then test with users", "Evidence that plans help"],
-  ].forEach(([icon, [tint, deep], h, b, u], i) => {
-    const y = 148 + i * 53;
-    card(s, "", X0, y, 873, 47, { fill: tint });
-    iconDot(s, icon, deep, X0 + 10, y + 9, 29);
-    text(s, h, X0 + 48, y, 96, 47, { fontSize: 14, bold: true, color: deep, valign: "middle" });
-    text(s, b, X0 + 150, y, 390, 47, { color: deep, valign: "middle" });
-    arrow(s, 556, y + 23, 590, y + 23);
-    text(s, u, 600, y, 306, 47, { bold: true, color: deep, valign: "middle" });
+    ["NOW", T, [["P1", "Turn on demo mode"], ["P2", "Add database migrations"], ["P3", "Deploy to Cloud Run"]]],
+    ["NEXT", A, [["P4", "Run the benchmark with USDA keys"], ["P5", "Ask for real exercise details"], ["P6", "Tag allergens on ingredients"]]],
+    ["LATER", G, [["P7", "Grow to 75–100 recipes"], ["P8", "Connect live store prices"], ["P9", "Use feedback, test with people"]]],
+  ].forEach(([h, [tint, deep], notes], i) => {
+    const x = X0 + i * 208;
+    card(s, "", x, TOP, 192, 340, { fill: PANEL });
+    s.addText(h, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 10, TOP + 10, 172, 26), fill: { color: deep }, line: { color: deep, width: 1 }, color: WHITE, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
+    notes.forEach(([id, t], k) => {
+      const y = TOP + 46 + k * 96;
+      s.addShape(pres.ShapeType.rect, { ...box(x + 12, y, 168, 86), fill: { color: tint }, line: { color: tint, width: 1 }, rotate: [-1, 1, 0][(i + k) % 3], shadow: { type: "outer", color: "15291F", opacity: 0.18, blur: 4, offset: 2, angle: 90 } });
+      pend(s, id, x + 20, y + 8);
+      text(s, t, x + 20, y + 28, 152, 52, { bold: true, color: deep });
+    });
   });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the full checklist is in " }, { text: "docs/showcase/pending-tasks.md", options: { fontFace: MONO } }, { text: "." }], X0, 470, W, 14, { fontSize: 8, color: MUTED });
+  marker(s, 1, X0 + 162, TOP + 54);
+  marker(s, 2, X0 + 208 + 162, TOP + 54);
+  marker(s, 3, X0 + 416 + 162, TOP + 54);
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the full checklist is in " }, { text: "docs/showcase/pending-tasks.md", options: { fontFace: MONO } }, { text: "." }], X0, 474, 608, 12, { fontSize: 8, color: MUTED });
+  takeaways(s, [["Fix what visitors see first", "A demo that fails on first use undoes everything else, so it leads the board."], ["Accuracy before scale", "Better inputs and allergen tags come before more recipes."], ["People matter most", "Only testing with people can show that the plans help."]], [2, 74, 149]);
 }
 
 // 16 — close
@@ -609,6 +662,7 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 18, { color: WHITE });
   text(s, "A study project. Not medical advice.", X0, 352, 590, 18, { color: ON_INK });
   text(s, "The demo is the Streamlit client and may take a minute to wake.", X0, 374, 590, 18, { color: ON_INK });
+  pend(s, "P1", X0, 400);
   s.addImage({ path: "slides/assets/mark-dark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner logo" });
 }
 

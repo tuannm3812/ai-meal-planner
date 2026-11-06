@@ -44,6 +44,7 @@ GLYPHS = [
     "science",
     "storefront",
     "inventory_2",
+    "description",
 ]
 # name, x, y, size, rotation: a loose cluster in the free top right corner of content slides.
 CORNER = [

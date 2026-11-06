@@ -8068,3 +8068,16 @@ tests at 95%, and the funnel is now 13 safe and 5 relevant. New slides: architec
 logos, limits, pending tasks. `docs/showcase/pending-tasks.md` holds the full checklist.
 
 Verified: OOXML validator passes; slides 2, 3, 8, 11 to 16 inspected in Google Slides.
+
+## 2026-11-07 — Claude — takeaways, new layouts, paper tags, architecture check
+
+Mike asked why takeaway columns were missing. They were only ever on slides 7, 8, 9 and 11, so
+slides 4 to 15 now all have one, and the rule is in the deck standard. Slides 13, 14 and 15 are
+now a delivery line, an evidence staircase and a Now, Next, Later board. Paper tags P1 to P9 mark
+pending spots; `docs/showcase/pending-tasks.md` maps each tag to its slides.
+
+The architecture check found one error: SciPy balancing sat under the recipe corpus, but it is a
+service step after verification (`core/macro_balance.py`). The diagram now shows it as its own step.
+
+Verified: OOXML validator passes; every slide inspected in Google Slides on the final build,
+except 3 and 11, which didn't change. No application code changed.

@@ -63,7 +63,7 @@ Exactly one automatic page number per numbered slide, inherited from the layout.
 close are unnumbered, use the `ink` background, and have their own composition. Footer items
 live on the layout, never on a slide. No bars, stripes, rules under titles or decoration.
 
-Default content width beside a takeaway column is x 43.5 to 652. One dominant figure or
+Content width beside a takeaway column is x 43.5 to 652. One dominant figure or
 diagram leads each content slide. Leave at least 12 pt between neighbouring components.
 
 ## Cover and close
@@ -136,6 +136,7 @@ converted to Slides, so draw charts from shapes and keep their values in the bri
 | Limit strip | #FBEBD6 fill, 8 pt text, bold #7A4A0C `Limit:` prefix |
 | Badge | Short text on tint, never colour alone: `Estimated`, `Reference`, `On target` |
 | Table | No outer border, 1 pt `line` row rules, 12 pt headings, right-aligned numbers |
+| Pending tag | #7A4A0C pill, 66 × 16 pt, white paper icon and 8 pt bold `P1 pending`. Marks a spot tied to `../pending-tasks.md`. Objects are named "Pending"; all are deleted before release |
 | Arrow | Native connector, 1 pt `muted`, one arrowhead, attached to shape edges |
 
 Arrows show a real sequence or dependency. Don't imply causes the evidence doesn't support.
@@ -144,7 +145,8 @@ Arrows show a real sequence or dependency. Don't imply causes the evidence doesn
 
 Use a takeaway column only when it interprets the evidence on its left: a consequence,
 limitation, decision or next test. Don't restate a label. No generic KEY TAKEAWAYS heading.
-Omit it on the cover, agenda, executive summary, close, or where the slide already says it.
+Every content slide has one, from the problem slide to pending tasks. Omit it only on the cover,
+agenda, executive summary and close.
 
 One native text box, zero internal padding, 12 pt, bold headings, 110% line spacing, 6 pt
 after paragraphs, 14 pt before later headings. No fixed point count. Keep the frame fixed;
