@@ -202,7 +202,7 @@ Titles are working titles.
 - Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
 - Slide 3's lower half is empty; consider a taller layout.
 - The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
-- **App gap, found 7 November 2026:** a celiac request for chicken fried rice keeps ordinary soy sauce, because `ALLERGEN_KEYWORDS["gluten"]` in `backend/app/rag/rules.py` doesn't include it. Soy sauce is normally made with wheat, and 5 recipes use it. Until that is fixed, don't claim gluten safety; if it stays, state it on the limits slide.
+- **After PR #45 merges:** soy sauce is fixed for coeliac plans, and the median calorie deviation rounds to 0.4%. Change 0.3% on slide 2, the fact sheet and the poster drafts. Until it merges, don't claim gluten safety.
 - Slide 7 pass: without a duration, the model is fed a default 30-minute session at 100 bpm, so check how the deck describes its role.
 - Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
 
