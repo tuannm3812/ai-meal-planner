@@ -225,13 +225,16 @@ const STORY = "The product", HOW = "How it works", PROOF = "Quality", END = "Clo
   const s = slide("LIGHT", "Three fixes took the planner from 10 to 72 of 72",
     "The first run passed only 10 of 72. Balancing portions per ingredient took it to 41. Making the planner admit when nothing matches took it to 47. Adding a cooking fat to six recipes that had none took it to all 72, with a median calorie deviation of 0.3%. Five guardrail cases, including refusals, also behave as designed.", PROOF);
   card(s, L, 1.75, 7.3, 4.8);
-  s.addChart(pres.charts.BAR, [{ name: "Plans meeting the targets", labels: ["First run", "Portion balancing", "Honest fallback", "Cooking fat"], values: [10, 41, 47, 72] }], {
-    x: L + 0.2, y: 1.9, w: 6.9, h: 4.5, barDir: "col", chartColors: ["1B5E3F"], barGapWidthPct: 55,
-    showTitle: true, title: "Plans meeting the targets, out of 72", titleFontSize: 14, titleColor: "4B5B52", titleFontFace: "Inter",
-    showValue: true, dataLabelPosition: "outEnd", dataLabelFontSize: 16, dataLabelFontBold: true, dataLabelColor: "15291F", dataLabelFontFace: "Inter",
-    catAxisLabelColor: "4B5B52", catAxisLabelFontSize: 12, catAxisLabelFontFace: "Inter",
-    valAxisHidden: true, valAxisMinVal: 0, valAxisMaxVal: 80, valGridLine: { style: "none" }, catGridLine: { style: "none" }, showLegend: false,
+  // Drawn from shapes: Google Slides turns a native chart into a picture and loses its labels.
+  text(s, "Plans meeting the targets, out of 72", { x: L + 0.35, y: 1.95, w: 6.6, h: 0.4, fontSize: 14, color: MUTED });
+  const base = 5.8, unit = 3.0 / 72;
+  [["First run", 10], ["Portion balancing", 41], ["Honest fallback", 47], ["Cooking fat", 72]].forEach(([n, v], i) => {
+    const x = L + 0.35 + i * 1.68, bh = v * unit;
+    s.addShape(pres.ShapeType.rect, { x: x + 0.2, y: base - bh, w: 1.2, h: bh, fill: { color: i ? GREEN : MUTED }, line: { color: i ? GREEN : MUTED, width: 0.5 }, objectName: `Bar ${n}` });
+    text(s, String(v), { x, y: base - bh - 0.48, w: 1.6, h: 0.42, fontFace: HEAD, fontSize: 20, bold: true, align: "center", valign: "bottom" });
+    text(s, n, { x, y: base + 0.1, w: 1.6, h: 0.55, fontSize: 12, color: MUTED, align: "center" });
   });
+  s.addShape(pres.ShapeType.line, { x: L + 0.35, y: base, w: 6.6, h: 0, line: { color: LINE, width: 1 } });
   const x = 8.25, w = 4.48;
   [["Portion balancing", "Resize each ingredient toward the ranges"], ["Honest fallback", "Say so when nothing on the menu matches"], ["Cooking fat", "Add oil to six recipes that had no fat source"]].forEach(([h, b], i) => {
     const y = 1.75 + i * 1.27;
