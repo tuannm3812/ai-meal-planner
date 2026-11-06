@@ -49,6 +49,50 @@ def rim(ring=GREEN):
     return f'{arcs}<circle cx="32" cy="32" r="13" fill="{TOMATO}"/>'
 
 
+def calendar(ring=GREEN):
+    """D. A plate on a calendar: planning a meal, in one shape."""
+    return (
+        f'<rect x="8" y="13" width="48" height="44" rx="10" fill="none" stroke="{ring}" stroke-width="5"/>'
+        f'<path d="M22 7v11M42 7v11" stroke="{ring}" stroke-width="5" stroke-linecap="round"/>'
+        f'<circle cx="32" cy="36" r="12" fill="{TOMATO}"/>'
+    )
+
+
+def tick(ring=GREEN):
+    """E. A plate with a tick: this meal is sorted."""
+    return (
+        f'<circle cx="32" cy="32" r="28" fill="none" stroke="{ring}" stroke-width="5"/>'
+        f'<path d="M20 33l9 9 16-19" fill="none" stroke="{TOMATO}" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+
+
+def fork(ring=GREEN):
+    """F. A fork whose tines are bars: food and measured balance in one mark."""
+    return (
+        f'<path d="M15 35a17 12 0 0 0 34 0" fill="none" stroke="{ring}" stroke-width="6"/>'
+        f'<rect x="12" y="20" width="6" height="16" rx="3" fill="{ring}"/>'
+        f'<rect x="29" y="5" width="6" height="31" rx="3" fill="{TOMATO}"/>'
+        f'<rect x="46" y="13" width="6" height="23" rx="3" fill="{ring}"/>'
+        f'<rect x="29" y="46" width="6" height="16" rx="3" fill="{ring}"/>'
+    )
+
+
+def bowl(ring=GREEN):
+    """G. A full bowl with a tick: a meal that is planned."""
+    mark = "#15291F" if ring == "#FFFFFF" else "#FFFFFF"
+    return (
+        f'<circle cx="32" cy="23" r="13" fill="{TOMATO}"/>'
+        f'<path d="M6 29h52a26 26 0 0 1-52 0z" fill="{ring}"/>'
+        f'<path d="M22 40l7 7 13-14" fill="none" stroke="{mark}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>'
+    )
+
+
+MEAL = [
+    ("D. Plate on a calendar", calendar),
+    ("E. Plate and tick", tick),
+    ("F. Fork of bars", fork),
+    ("G. Bowl and tick", bowl),
+]
 OPTIONS = [
     ("Current", current),
     ("A. Refined plate", refined),
@@ -75,19 +119,21 @@ body{{margin:0;width:1280px;background:#fff;font-family:G;color:{INK}}}
 .n{{font:700 18px G}}.s{{display:flex;align-items:center}}
 .w{{display:flex;align-items:center;gap:12px;font:700 24px G;padding:20px 22px;border-radius:12px;background:#fff;border:1px solid #DDE3DA}}
 .d{{background:{INK};color:#fff;border-color:{INK}}}
-</style>{"".join(row(n, f) for n, f in OPTIONS)}"""
+</style>"""
+sheets = {"logo-options.png": OPTIONS, "logo-options-meal.png": MEAL}
 
-for name, fn in OPTIONS[1:]:
+for name, fn in OPTIONS[1:] + MEAL:
     (HERE / f"logo-{name[0].lower()}.svg").write_text(svg(fn(), 64) + "\n")
 
 with sync_playwright() as p:
     browser = p.chromium.launch()
-    page = browser.new_page(viewport={"width": 1280, "height": 720}, device_scale_factor=2)
-    path = HERE / "t.html"
-    path.write_text(html)
-    page.goto(path.as_uri())
-    page.evaluate("document.fonts.ready")
-    page.wait_for_timeout(200)
-    page.screenshot(path=HERE / "logo-options.png", full_page=True)
-    path.unlink()
+    page = browser.new_page(viewport={"width": 1280, "height": 400}, device_scale_factor=2)
+    for out, options in sheets.items():
+        path = HERE / "t.html"
+        path.write_text(html + "".join(row(n, f) for n, f in options))
+        page.goto(path.as_uri())
+        page.evaluate("document.fonts.ready")
+        page.wait_for_timeout(200)
+        page.screenshot(path=HERE / out, full_page=True)
+        path.unlink()
     browser.close()
