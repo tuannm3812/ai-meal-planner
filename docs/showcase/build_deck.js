@@ -157,22 +157,31 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 2 — executive summary
 {
-  const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "Chicken fried rice from the benchmark. Plate area is to scale, and every plan met its targets.",
-    "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: It says when it doesn't know]\nAnd it's honest. Estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
-  card(s, "", X0, TOP, W, 228, { fill: INK });
-  const scale = 150 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
-  [[363, "Older woman, losing weight"], [694, "Active woman, maintaining"], [809, "Average man, maintaining"], [850, "Large athlete, gaining"]].forEach(([kcal, who], i) => {
-    const cx = X0 + 109 + i * 218, cy = TOP + 88, d = Math.sqrt(kcal) * scale * art;
+  const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "The same chicken fried rice from the benchmark, and every plan met its targets.",
+    "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: Balanced and checked]\nFour features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
+  // Row 1: the proof of "sized to you". Plate area is to scale with calories.
+  card(s, "", X0, TOP, W, 158, { fill: INK });
+  const scale = 124 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
+  [[363, "Older woman,", "losing weight"], [694, "Active woman,", "maintaining"], [809, "Average man,", "maintaining"], [850, "Large athlete,", "gaining"]].forEach(([kcal, a, b], i) => {
+    const x = X0 + 10 + i * 218, cy = TOP + 79, cx = x + 66, d = Math.sqrt(kcal) * scale * art;
     s.addImage({ path: "slides/assets/plate.png", ...box(cx - d / 2, cy - d / 2, d, d), altText: `Plate of chicken fried rice, ${kcal} kcal` });
-    text(s, `${kcal} kcal`, cx - 100, TOP + 172, 200, 22, { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE, align: "center" });
-    text(s, who, cx - 100, TOP + 196, 200, 18, { color: ON_INK, align: "center" });
+    text(s, [
+      { text: `${kcal} kcal`, options: { fontSize: 16, bold: true, color: WHITE, breakLine: true, paraSpaceAfter: 2 } },
+      { text: a, options: { fontSize: 10, color: ON_INK, breakLine: true } },
+      { text: b, options: { fontSize: 10, color: ON_INK } },
+    ], x + 134, TOP + 44, 84, 70, { valign: "middle" });
   });
-  card(s, [
-    { text: "72 of 72", options: { fontFace: HEAD, fontSize: 32, bold: true, color: GREEN, breakLine: true, paraSpaceAfter: 2 } },
-    { text: "benchmark plans meet the calorie and macro targets, up from 10", options: { fontSize: 12, color: INK, breakLine: true, paraSpaceAfter: 3 } },
-    { text: "The project's own offline benchmark.", options: { fontSize: 8, color: MUTED } },
-  ], X0, 370, 427, 116, { margin: 14, valign: "middle" });
-  card(s, hb("It says when it doesn't know", "Estimates are labelled, it tells you when nothing matches, and it refuses when nothing is safe.", { hc: WARN, bc: INK }), 489.5, 370, 427, 116, { fill: TINT_WARN, margin: 14, valign: "middle" });
+  // Row 2: the key features.
+  [["Sized to you", "Body, activity and goal set the calories."], ["Safe for your diet", "Allergies, diets and conditions rule meals out first."], ["Balanced and checked", "Portions fit healthy ranges, and estimates are labelled."], ["Ready to shop", "A shopping list with an estimated cost."]].forEach(([h, b], i) => {
+    const x = X0 + i * 223;
+    card(s, hb(h, b), x, 300, 204, 104, { margin: 12 });
+  });
+  // Row 3: the key numbers.
+  [["72 of 72", "benchmark plans on target, up from 10"], ["0.3%", "median calorie deviation"], ["34", "curated recipes"], ["4 agents", "and no LLM key needed"]].forEach(([v, l], i) => {
+    const x = X0 + i * 223;
+    text(s, [{ text: v, options: { fontSize: 24, bold: true, color: GREEN, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 416, 192, 56);
+  });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "benchmark figures come from the project's own offline test. Plate area is to scale with calories." }], X0, 476, W, 14, { fontSize: 8, color: MUTED });
 }
 
 // 3 — agenda

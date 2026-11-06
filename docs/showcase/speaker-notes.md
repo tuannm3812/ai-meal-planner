@@ -23,8 +23,8 @@ If you read one slide, read this one.
 This is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.
 [Point: 72 of 72]
 That quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.
-[Point: It says when it doesn't know]
-And it's honest. Estimates are labelled, and it says so when nothing matches.
+[Point: Balanced and checked]
+Four features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.
 The rest of the deck shows how it works and how that number was reached.
 Reference — not read aloud
 docs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.
