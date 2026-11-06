@@ -133,6 +133,43 @@ def question():
 <div class="a s" style="left:0;width:960px;top:168px;text-align:center">One craving in. One meal, sized to you, out.</div>"""
 
 
+def call2(x1, y1, x2, y2):
+    return (
+        f'<path d="M{x1} {y1}L{x2} {y2}" stroke="#15291F" stroke-width="3.5"/>'
+        f'<path d="M{x1} {y1}L{x2} {y2}" stroke="#fff" stroke-width="1.3"/>'
+        f'<circle cx="{x1}" cy="{y1}" r="5.5" fill="#fff" stroke="#15291F" stroke-width="2"/>'
+    )
+
+
+def combined():
+    """The question leads, the craving answers it, the plate proves it, the list finishes it."""
+    rows = [
+        ("Chicken breast", "$7.80"),
+        ("Cooked rice", "$3.20"),
+        ("Whole egg", "$3.50"),
+        ("Vegetables", "$3.50"),
+        ("Sesame oil", "$3.50"),
+        ("Soy sauce", "$3.00"),
+    ]
+    items = "".join(
+        f'<div style="display:flex;justify-content:space-between;margin-top:6px"><span>{a}</span><span>{b}</span></div>'
+        for a, b in rows
+    )
+    lines = call2(560, 215, 508, 118) + call2(530, 400, 366, 470) + call2(690, 420, 800, 470)
+    labels = (
+        label(352, 88, "Chicken breast, 100 g", "Estimated", "right")
+        + label(210, 458, "Cooked rice, 220 g", "Estimated", "right")
+        + label(806, 458, "Vegetables, 115 g", "Reference")
+    )
+    return f"""{BASE}<svg class=a style="inset:0" width="960" height="540">{plate(610, 330, 232, 11)}{lines}</svg>{labels}
+<div class="a t" style="left:43.5px;top:92px;width:300px;font-size:46px">What should I eat tonight?</div>
+<div class=a style="left:43.5px;top:262px;width:300px;height:50px;background:#fff;border-radius:26px;color:#15291F;display:flex;align-items:center;padding:0 22px;font:400 18px G">chicken fried rice<span style="color:#C8431F">|</span></div>
+<div class="a s" style="left:43.5px;top:328px;width:280px;font-size:14px">One meal sized to you, every number explained, the shopping list ready.</div>
+<div class=a style="left:750px;top:62px;width:176px;height:216px;background:#fff;color:#15291F;padding:16px 15px;font:400 11px G;transform:rotate(3deg)">
+<div style="font:700 13px G">Shopping list</div>{items}
+<div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:8px;border-top:1px dashed #9AA5A0;font:700 12px G"><span>Estimated</span><span>$24.50</span></div></div>"""
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page(viewport={"width": 960, "height": 540}, device_scale_factor=2)
@@ -140,6 +177,7 @@ with sync_playwright() as p:
         ("image-1-annotated", annotated()),
         ("image-2-checkout", checkout()),
         ("image-3-question", question()),
+        ("image-4-combined", combined()),
     ):
         path = HERE / f"{name}.html"
         path.write_text(f"<!doctype html><meta charset=utf-8>{html}")
