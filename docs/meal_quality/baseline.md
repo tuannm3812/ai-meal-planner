@@ -12,7 +12,7 @@
 - **Meeting the targets** (calories within 10%, all macros in AMDR): 72 of 72.
 - Within the 10% calorie target: 72 of 72 scaled plans.
 - Within the service's 15% retry tolerance: 72 of 72 scaled plans.
-- Calorie deviation: median 0.3%, 90th percentile 3.4%, max 9.9%.
+- Calorie deviation: median 0.4%, 90th percentile 3.4%, max 9.9%.
 - Rescaled by reconciliation: 0. First-pass scaling clamped: 27.
 - Meal target as a share of the daily budget: 18.8% to 29.2%.
 - Daily budget across profiles: 1200.0 to 4521.1 kcal.
@@ -90,7 +90,7 @@
 | salmon dinner / average man, maintaining [kidney disease] | matched | Salmon Quinoa Plate | 809 | 808.2 | 0.1% | 1.31 | 21/46/33 | 0.569 |
 | steak and rice / average man, maintaining [kidney disease] | matched | Lean Steak Rice Plate | 809 | 808.9 | 0.0% | 1.37 | 23/46/31 | 0.853 |
 | spicy curry / average man, maintaining [kidney disease] | fallback | High-Protein Turkey Burger Bowl | 809 | 811.4 | 0.3% | 1.6 | 31/46/23 |  |
-| chicken fried rice / average man, maintaining [celiac] | matched | Chicken Fried Rice | 809 | 808.8 | 0.0% | 1.11 | 30/46/24 | 1.001 |
+| chicken fried rice / average man, maintaining [celiac] | matched | Chicken Fried Rice | 809 | 803.4 | 0.7% | 1.11 | 30/46/24 | 1.001 |
 | high-protein burger / average man, maintaining [celiac] | matched | High-Protein Turkey Burger Bowl | 809 | 809.9 | 0.1% | 1.6 | 28/46/26 | 0.672 |
 | creamy pasta / average man, maintaining [celiac] | matched | High-Protein Tomato Turkey Pasta | 809 | 801.4 | 0.9% | 1.14 | 25/47/28 | 0.48 |
 | salmon dinner / average man, maintaining [celiac] | matched | Salmon Quinoa Plate | 809 | 808.2 | 0.1% | 1.31 | 21/46/33 | 0.569 |

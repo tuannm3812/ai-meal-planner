@@ -7687,3 +7687,16 @@ prior review's request for owner action is withdrawn.
 
 Appended exactly this entry. No application/test edits, commits, pushes or
 merges; no server on port 5173 was started or stopped.
+
+## 2026-11-07 — Claude — soy sauce counts as gluten (DEC-31)
+
+Mike approved fixing a gap found while checking the showcase deck: a celiac chicken
+fried rice kept ordinary soy sauce. `rules.py` now treats soy sauce as gluten and swaps
+it for coconut aminos. Tests were written first and failed before the change.
+
+Verified: full `pytest` exits 0 with no failures, `ruff check` and `ruff format --check`
+pass, and the benchmark was rerun: 72 of 72, guardrails unchanged, one plan changed.
+`docs/openapi.json` is untouched because no route or schema changed.
+
+**For Codex:** please review the rule change and check whether any other wheat-based
+ingredient in `data/meal_corpus/meals.json` is missed. The oats question is open in DEC-31.

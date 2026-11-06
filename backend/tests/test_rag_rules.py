@@ -190,3 +190,17 @@ def test_a_replacement_is_not_judged_by_its_own_group() -> None:
     assert [s.replacement_name for s in substitution_plan_for_meal(meal, groups)] == [
         "gluten-free pasta"
     ]
+
+
+@pytest.mark.parametrize("ingredient", ["soy sauce", "low sodium soy sauce"])
+@pytest.mark.parametrize("label", ["celiac", "coeliac", "gluten-free"])
+def test_gluten_constraints_block_soy_sauce(label: str, ingredient: str) -> None:
+    """Soy sauce is normally brewed with wheat, so its name alone does not make it safe."""
+    assert "gluten" in blocked_groups_for_ingredient(ingredient, constraint_groups([label]))
+
+
+@pytest.mark.parametrize("ingredient", ["soy sauce", "low sodium soy sauce"])
+def test_gluten_swap_replaces_soy_sauce_with_coconut_aminos(ingredient: str) -> None:
+    meal = _meal(ingredient)
+    plan = substitution_plan_for_meal(meal, constraint_groups(["celiac"]))
+    assert [item.replacement_name for item in plan] == ["coconut aminos"]

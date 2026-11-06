@@ -98,6 +98,8 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-10-21: the owner approved the React showcase design (`docs/8_design.md`,
   DEC-29; #33 merged). It is built in six slices; the first adds the "Kitchen
   green" Tailwind tokens, self-hosted fonts and the brand bar.
+- 2026-11-07: gluten limits now swap soy sauce for coconut aminos (DEC-31). 72 of 72
+  still meet the targets; the median calorie deviation rounds to 0.4%.
 
 ## Open risks
 
