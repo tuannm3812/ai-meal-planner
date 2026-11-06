@@ -1,3 +1,4 @@
+# ruff: noqa: E501  (inline HTML mockups)
 """Render the cover concepts for Mike to choose from. Run from the repo root:
 
     uv run --no-project --with "playwright==1.60.0" \\
