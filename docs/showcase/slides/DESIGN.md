@@ -70,7 +70,7 @@ diagram leads each content slide. Leave at least 12 pt between neighbouring comp
 
 The cover sells the app, so it carries no author name; that goes on the close. Read order:
 question, search bar, labelled plate, receipt, then a small QR code at bottom left for laptop
-viewers. Keep to three plate labels and one calorie tag, using values from a real plan. The
+viewers, with "Try the live demo" to its right and centred on it, clear of every label. Keep to three plate labels and one calorie tag, using values from a real plan. The
 plate is `assets/cover-art.png`, from `build_cover_art.py`; every word over it stays editable.
 The receipt uses Google Sans Code, tilted 3°. The close keeps the `ink` background and carries
 the credit, links and a larger QR code.
