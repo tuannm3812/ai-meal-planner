@@ -28,3 +28,5 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
 ## 7 November 2026
 
 Slides 7 to 13 moved from plain panels to the four feature colours, Material Symbols icons and to-scale figures drawn from shapes: a day-and-meal bar, a recipe funnel, a calorie-source bar, plan dots on the macro bands and a 72-dot request grid. Mike asked for clearer visuals and balanced colour.
+
+Mike then asked for a clear architecture diagram with tech stack logos, limits on their own slide, and pending tasks. The deck is now 16 slides, and tool logos are allowed on the architecture slide only.

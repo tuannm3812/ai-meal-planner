@@ -189,6 +189,7 @@ Project-specific claim rules:
 ## Icons and images
 
 Use Material Symbols Rounded (`assets/icons/`, Apache-2.0), one style only, with a text label.
+Tool logos appear only on the architecture slide, in brand colours, each next to its name (`assets/logos/`, from `build_logos.py`).
 Card icons are white glyphs in a 30 pt coloured circle. No emoji or clip art. Keep the licence
 with any asset added. No stock imagery of food or bodies; the plates are our own flat illustration.
 

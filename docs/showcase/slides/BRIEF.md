@@ -54,8 +54,8 @@ These names appear in the agenda and slide labels, so the two always match.
 | 01 Problem | Why is this worth solving? | 4 |
 | 02 Solution | What does it do, and how? | 5–9 |
 | 03 Evidence | What is a good meal, and did we get there? | 10–11 |
-| 04 Build and limits | How is it built, and what is still unproven? | 12–13 |
-| Close | Where do I try it? | 14 |
+| 04 Build and limits | How is it built, what is unproven, and what is pending? | 12–15 |
+| Close | Where do I try it? | 16 |
 
 | New | First deck | Label | Change |
 | --- | --- | --- | --- |
@@ -89,7 +89,7 @@ Titles are working titles.
 **Slide 2. Executive summary: "One craving, sized to four different people"** (new)
 - **Question:** if I read one slide, what should I know?
 - **Message:** what it does, the features behind it, and the numbers that prove it.
-- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal (26, 48, 60, 63 g protein) for four benchmark profiles. Four features, each with key terms highlighted and the number that proves it: sized to you (0.3% median gap to the meal target, worst 9.9%); fits your limits (5 of 5 guardrail cases, on a controlled recipe set); balanced and checked (72 of 72, up from 10, 11 of them fallback meals); ready to shop ($24.50 estimated basket for the 694 kcal plan, not a cost per meal). A note states that meal targets stay within 350–850 kcal. Subtitle: four agents, 34 curated recipes, no LLM key.
+- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal (26, 48, 60, 63 g protein) for four benchmark profiles. Four features, each with key terms highlighted and the number that proves it: sized to you (0.4% median gap to the meal target, worst 9.9%); fits your limits (5 of 5 guardrail cases, on a controlled recipe set); balanced and checked (72 of 72, up from 10, 11 of them fallback meals); ready to shop ($24.50 estimated basket for the 694 kcal plan, not a cost per meal). A note states that meal targets stay within 350–850 kcal. Subtitle: four agents, 34 curated recipes, no LLM key.
 - **Visual:** three rows: four plates on an ink band, area to scale with calories; four feature cards; four key numbers. No takeaway column or markers.
 - **Source:** fact sheet; `docs/meal_quality/baseline.json`.
 
@@ -142,7 +142,7 @@ Titles are working titles.
 - **Subtitle:** A vegan asks for chicken fried rice: the recipes narrow down to one, and the app ends in one of three ways.
 - **Question:** how does it choose the meal?
 - **Message:** three honest outcomes: close match, standard meal with a note, or refusal.
-- **Content:** a funnel from one real request: 34 recipes, 11 safe, 4 relevant, 1 served (Tofu Fried Rice). Three outcomes with examples and counts: close match, 61 of 72; no close match, 11 of 72; nothing safe, 2 of 5 guardrail cases on a controlled recipe set. A fourth card shows a safe swap: gluten-free pasta for a coeliac.
+- **Content:** a funnel from one real request: 34 recipes, 13 safe, 5 relevant, 1 served (Tofu Fried Rice). Three outcomes with examples and counts: close match, 61 of 72; no close match, 11 of 72; nothing safe, 2 of 5 guardrail cases on a controlled recipe set. A fourth card shows a safe swap: gluten-free pasta for a coeliac.
 - **Takeaways:** 1. Safety comes before taste: a recipe that breaks a limit is out, or adapted, before relevance counts. 2. Relevance decides what qualifies; an off-menu craving falls back with a warning, and the profile only changes the order.
 - **Source:** `docs/agents/meal_recommendation_agent.md`, `backend/app/rag/retriever.py`, DEC-27, `docs/7_meal_quality.md`.
 - **Elsewhere:** results (slide 11).
@@ -170,30 +170,45 @@ Titles are working titles.
 - **Question:** did it get better, and why?
 - **Message:** each change is measured. Balancing and the final step kept the served meals; the relevance gate moved 11 off-menu scenarios to fallback meals, which accounts for the rise to 47.
 - **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat and rounding retry 72.
-- **Content:** median calorie deviation 0.3%, worst 9.9%. 5 of 5 guardrail cases hold. Wider check, 49 of 68.
-- **Takeaways:** 1. 61 plans match the craving; 11 are fallbacks, and both pass. The 41 to 47 step came from those 11 moving to fallback meals, not from better meals; 8 of them are pizza and dessert. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. The fixes were tuned on these 72. Asking for every recipe by name passes 49 of 68, and none of this shows that users prefer the plans.
+- **Content:** median calorie deviation 0.4%, worst 9.9%. 5 of 5 guardrail cases hold. Wider check, 68 of 68.
+- **Takeaways:** 1. 61 plans match the craving; 11 are fallbacks, and both pass. The 41 to 47 step came from those 11 moving to fallback meals, not from better meals; 8 of them are pizza and dessert. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. The fixes were tuned on these 72. Asked for by name, recipes passed only 49 of 68 until a further fix made it 68 of 68, and neither shows that users prefer the plans.
 - **Source:** `docs/7_meal_quality.md` §2, `docs/meal_quality/baseline.md`, DEC-26 to DEC-28.
 
 ### 04 Build and limits
 
-**Slide 12. "Built like a product, not a notebook"** (`p10`)
+**Slide 12. "One service, two clients, four agents"** (new)
+- **Subtitle:** A request flows left to right. Each box names the model, data or tool behind it.
+- **Question:** what is it made of?
+- **Message:** one typed service serves two clients, and each agent has its own model or data source.
+- **Content:** a diagram: clients (Streamlit; React, Vite, Tailwind) → FastAPI and Pydantic, with SQLite history → MealPlanningService's four agents → trained model, recipe corpus, nutrition sources, store reference. A "Built with" row: Python, Docker, GitHub Actions, Cloud Run, OpenTelemetry, optional Gemini. Logos are used only here.
+- **Note:** the hosted demo runs the agents inside Streamlit. Cloud Run is ready but not deployed.
+- **Source:** `docs/2_architecture.md`, `pyproject.toml`, `frontend/package.json`, DEC-2.
+
+**Slide 13. "Built like a product, not a notebook"** (`p10`)
 - **Subtitle:** Six production habits on a portfolio project, each with a file you can open in the repo.
 - **Question:** is the engineering real?
 - **Message:** six habits, each with a file behind it.
-- **Content:** typed API contract checked in CI; 601 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
+- **Content:** typed API contract checked in CI; 630 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
-**Slide 13. "What comes next, and what it is not yet"** (`p11`)
-- **Subtitle:** Each next step answers a limit that is true today.
+**Slide 14. "What this project does not prove yet"** (new)
+- **Subtitle:** Six limits, stated plainly, so nobody reads more into the results than they show.
 - **Question:** what is unproven?
-- **Message:** each limit is paired with the step that answers it.
-- **Content:** four pairs. Recipes: 49 of 68 pass by name → a larger, rebalanced library. Data: nutrition and prices are mostly local estimates → verified nutrition and live store prices. People: no user or clinical testing, feedback unused → learn from feedback, then test with people. Hosting: Cloud Run not deployed → a live deployment. Not medical advice.
-- **Source:** `docs/4_next_steps.md` §6, §7.
+- **Message:** the results are real, and their limits are stated in one place.
+- **Content:** People: no user or clinical testing. Nutrition data: 68 of 72 include an estimate; AMDR is a daily range applied to one meal. Recipes: 34 recipes, 11 of 72 fall back, and the checks guided the fixes. Calorie model: default exercise inputs, possible double counting, Kaggle data. Diet rules: matched on ingredient names; soy sauce slipped through until this review. Hosting: not deployed, no migration path. Not medical advice.
+- **Source:** `docs/4_next_steps.md` §7, `docs/7_meal_quality.md`, DEC-31, AGENTS.md.
+
+**Slide 15. "Pending tasks, in priority order"** (`p11`)
+- **Subtitle:** What isn't finished yet, and what each task unlocks.
+- **Question:** what comes next?
+- **Message:** six open tasks, each with what it unlocks.
+- **Content:** storage migrations; Cloud Run deployment; benchmark with USDA keys; 34 to 75–100 recipes; live store prices; feedback in ranking, then user testing.
+- **Source:** [../pending-tasks.md](../pending-tasks.md), `docs/4_next_steps.md` §6, §7.
 
 ### Close
 
-**Slide 14. "Try it and read the code"** (`p12`)
+**Slide 16. "Try it and read the code"** (`p12`)
 - **Content:** live demo link, GitHub link, QR code, "A multi-agent meal planner, a portfolio project by Mike", "A study project. Not medical advice." "The demo is the Streamlit client and may take a minute to wake."
 - **Visual:** matches the cover.
 
@@ -202,16 +217,15 @@ Titles are working titles.
 - Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
 - Slide 3's lower half is empty; consider a taller layout.
 - The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
-- **After PR #43 merges:** the wider check becomes 68 of 68. Update slides 11 and 13, and rerun the tests for slide 12.
-- **After PR #45 merges:** soy sauce is fixed for coeliac plans, and the median calorie deviation rounds to 0.4%. Change 0.3% on slide 2, the fact sheet and the poster drafts. Until it merges, don't claim gluten safety.
 - Slide 7 pass: without a duration, the model is fed a default 30-minute session at 100 bpm, so check how the deck describes its role.
 - Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
 
 ## 5a. Record check, slides 7 to 14
 
 Checked 7 November 2026 against the code, `baseline.json` and fresh runs with no provider
-keys. Mike approved these on 7 November 2026: section 4 changed first, then the slides. Rows that
-depend on PR #43 or #45 use today's numbers and change again after those merge.
+keys. Mike approved these on 7 November 2026: section 4 changed first, then the slides. PRs #43
+and #45 have since merged, so 49 of 68, 0.3% and 601 tests became 68 of 68, 0.4% and 630, and the
+slide numbers below 12 are unchanged but 12 to 14 moved to 13 to 16. See [../pending-tasks.md](../pending-tasks.md).
 
 | Slide | Record | Result | Proposed change |
 | --- | --- | --- | --- |
@@ -245,6 +259,6 @@ Decided by Mike, 6 November 2026:
    **Logo:** plate on a calendar.
    **App:** keeps its own UI fonts and, for now, its logo.
 2. **Audience:** portfolio viewers, reading with no presenter. The deck can also be presented.
-3. **Length:** 14 slides, adding an executive summary and agenda.
+3. **Length:** 14 slides, adding an executive summary and agenda. Now 16, with architecture and limits slides.
 4. **Slide 5:** capture the real React app.
 5. **Poster order:** rebuild the poster after the deck's content is approved.

@@ -1,4 +1,4 @@
-// Builds the 14-slide seed to docs/showcase/slides/BRIEF.md and DESIGN.md.
+// Builds the 16-slide seed to docs/showcase/slides/BRIEF.md and DESIGN.md.
 // Slides stay plain shapes, text and tables so they are editable in Google Slides.
 // Run from this folder with pptxgenjs installed and PPTX_SKILL set to the pptx
 // skill folder (its apply_theme.js writes the Kitchen green theme into the file).
@@ -181,7 +181,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   });
   // Row 2: the key features, in Garden green colours. Row 3: the number that proves each one.
   [
-    ["person", "E3EFE6", GREEN, "Sized to you", [["Your body, a trained exercise model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.3%", "median gap to the meal target, worst 9.9%"],
+    ["person", "E3EFE6", GREEN, "Sized to you", [["Your body, a trained exercise model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.4%", "median gap to the meal target, worst 9.9%"],
     ["health_and_safety", "FBE4DC", TOMATO, "Fits your limits", [["Allergies, diets and health conditions "], ["rule out recipes or swap ingredients", 1], [" before a meal is picked."]], "5 of 5", "guardrail cases hold, including refusals"],
     ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions are resized toward "], ["target macro ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
     ["shopping_basket", "DDE3DA", INK, "Ready to shop", [["Ingredients map to store items or category prices, with an "], ["estimated total", 1], ["."]], "$24.50", "estimated basket, not a cost per meal"],
@@ -202,7 +202,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 3 — agenda
 {
   const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course lists its pages by label. Select one to jump to it.",
-    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built and what isn't proven yet.\n\nEach page is a link, so you can jump straight to it.", OPEN);
+    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built, what isn't proven yet and what's still pending.\n\nEach page is a link, so you can jump straight to it.", OPEN);
   s.addImage({ path: "slides/assets/plate-salmon.png", ...box(668, 196, 248, 248), altText: "Plate of salmon and quinoa" });
   let y = TOP;
   [
@@ -355,17 +355,17 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
 // 8 — choosing the meal
 {
   const s = slide("SOLUTION > CHOOSING THE MEAL", "Hard limits first, then a relevant recipe", "A vegan asks for chicken fried rice: the recipes narrow down to one, and the app ends in one of three ways.",
-    "This is how it picks the meal, using one real request.\n\n[Point: Funnel]\nA vegan asks for chicken fried rice. Of 34 recipes, 11 are safe, 4 are relevant to the craving, and one is served: Tofu Fried Rice.\n\nSafety comes first, so a recipe can't win on relevance alone. Limits can also swap an ingredient rather than drop the recipe.\n\n[Point: Outcomes]\nThere are three possible endings: a close match, a standard meal with a note, or a refusal.\n\nReference — not read aloud\nLocal run, 7 November 2026: backend/app/rag/retriever.py, TF-IDF at 34 recipes, relevance threshold 0.16. DEC-27. Counts: docs/meal_quality/baseline.json. Refusals come from the guardrail cases, on a controlled recipe set; none of the 72 plans was refused.", SOLUTION);
+    "This is how it picks the meal, using one real request.\n\n[Point: Funnel]\nA vegan asks for chicken fried rice. Of 34 recipes, 13 are safe, 5 are relevant to the craving, and one is served: Tofu Fried Rice.\n\nSafety comes first, so a recipe can't win on relevance alone. Limits can also swap an ingredient rather than drop the recipe.\n\n[Point: Outcomes]\nThere are three possible endings: a close match, a standard meal with a note, or a refusal.\n\nReference — not read aloud\nLocal run, 7 November 2026: backend/app/rag/retriever.py, TF-IDF at 34 recipes, relevance threshold 0.16. DEC-27. Counts: docs/meal_quality/baseline.json. Refusals come from the guardrail cases, on a controlled recipe set; none of the 72 plans was refused.", SOLUTION);
   card(s, "", X0, TOP, 608, 170);
   text(s, "Recipes left at each step", X0 + 16, TOP + 10, 400, 18, { bold: true });
   const k = 11;
-  [["All recipes", 34, BASELINE, "34"], ["Safe for a vegan", 11, TOMATO, "11"], ["Relevant to the craving", 4, WARN, "4"], ["Served", 1, GREEN, "1: Tofu Fried Rice"]].forEach(([l, n, c, v], i) => {
+  [["All recipes", 34, BASELINE, "34"], ["Safe for a vegan", 13, TOMATO, "13"], ["Relevant to the craving", 5, WARN, "5"], ["Served", 1, GREEN, "1: Tofu Fried Rice"]].forEach(([l, n, c, v], i) => {
     const y = TOP + 36 + i * 32;
     text(s, l, X0 + 16, y, 148, 24, { valign: "middle" });
     bar(s, X0 + 168, y, n * k, 24, c);
     text(s, v, X0 + 168 + n * k + 8, y, 150, 24, { fontSize: 12, bold: true, color: c === BASELINE ? MUTED : c, valign: "middle" });
   });
-  marker(s, 1, X0 + 168 + 11 * k + 34, TOP + 74);
+  marker(s, 1, X0 + 168 + 13 * k + 34, TOP + 74);
   [
     ["check_circle", G, "Close match", "“chicken fried rice” gets that recipe, sized to you.", "61 of 72", "benchmark plans"],
     ["flag", A, "No close match", "“pizza” gets a standard meal and a note saying so.", "11 of 72", "benchmark plans"],
@@ -452,7 +452,7 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
 // 11 — results
 {
   const s = slide("EVIDENCE > RESULTS", "Three fixes took the planner from 10 to 72 of 72", "Plans meeting both targets on the project's own benchmark, and what each fix changed.",
-    "The first run passed only 10 of 72.\n\n[Point: Portion balancing]\nResizing each ingredient toward the ranges took it to 41, with the same meals.\n\n[Point: Honest fallback]\nThe relevance gate moved 11 off-menu requests to fallback meals, which took it to 47. That rise comes from moving requests, not from better meals.\n\n[Point: Cooking fat and rounding retry]\nAdding a fat to six recipes, and a retry after rounding, took it to all 72.\n\n[Point: 49 of 68]\nThe fixes were tuned on these 72, so I also asked for every recipe by name, and 49 of 68 pass.\n\nThis shows plans meet the targets. It doesn't show that people prefer them.\n\nReference — not read aloud\ndocs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28; scripts/meal_quality_baseline.py --wider, 7 November 2026.", EVIDENCE);
+    "The first run passed only 10 of 72.\n\n[Point: Portion balancing]\nResizing each ingredient toward the ranges took it to 41, with the same meals.\n\n[Point: Honest fallback]\nThe relevance gate moved 11 off-menu requests to fallback meals, which took it to 47. That rise comes from moving requests, not from better meals.\n\n[Point: Cooking fat and rounding retry]\nAdding a fat to six recipes, and a retry after rounding, took it to all 72.\n\n[Point: 68 of 68]\nThe fixes were tuned on these 72, so I also asked for every recipe by name. Only 49 of 68 passed, so a further recipe fix took it to 68 of 68.\n\nThis shows plans meet the targets. It doesn't show that people prefer them.\n\nReference — not read aloud\ndocs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30; scripts/meal_quality_baseline.py --wider, 7 November 2026.", EVIDENCE);
   card(s, "", X0, TOP, 608, 262);
   text(s, "Plans meeting the targets, out of 72", X0 + 16, TOP + 10, 500, 18, { color: MUTED });
   // Drawn from shapes: Google Slides turns a native chart into a picture and loses its labels.
@@ -466,7 +466,7 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   s.addShape(pres.ShapeType.line, { ...box(X0 + 20, base, 568, 0), line: { color: LINE, width: 1 } });
   marker(s, 1, X0 + 20 + 2 * 144 + 116, base - 47 * unit - 18);
   marker(s, 2, X0 + 20 + 3 * 144 + 116, base - 72 * unit - 18);
-  [["balance", G, "0.3%", "median calorie gap, worst 9.9%"], ["health_and_safety", T, "5 of 5", "guardrail cases hold"], ["search", A, "49 of 68", "every recipe asked for by name"]].forEach(([icon, [tint, deep], v, l], i) => {
+  [["balance", G, "0.4%", "median calorie gap, worst 9.9%"], ["health_and_safety", T, "5 of 5", "guardrail cases hold"], ["search", A, "68 of 68", "wider check: every recipe by name"]].forEach(([icon, [tint, deep], v, l], i) => {
     const x = X0 + i * 205;
     card(s, "", x, 402, 197, 78, { fill: tint });
     iconDot(s, icon, deep, x + 10, 412, 26);
@@ -474,7 +474,7 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
     text(s, l, x + 12, 442, 180, 32, { color: deep, fontSize: 10 });
   });
   marker(s, 3, 643, 396);
-  takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass, but the 41 to 47 step came from those 11 moving to fallback meals, not better meals. 8 of them are pizza and dessert."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Tuned on these 72", "Asking for every recipe by name passes 49 of 68. None of this shows that users prefer the plans."]], [2, 106, 180]);
+  takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass, but the 41 to 47 step came from those 11 moving to fallback meals, not better meals. 8 of them are pizza and dessert."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Tuned on these 72", "Asked for by name, recipes passed only 49 of 68 until a further fix made it 68 of 68. Neither shows that users prefer the plans."]], [2, 106, 180]);
 }
 
 // 12 — architecture
@@ -534,10 +534,10 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
 // 13 — engineering
 {
   const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits on a portfolio project, each with a file you can open in the repo.",
-    "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run passed 601 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.", BUILD);
+    "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run passed 630 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.", BUILD);
   [
     ["fact_check", G, "Typed API contract", "CI fails if the API drifts from it.", "docs/openapi.json"],
-    ["science", T, "Tested", "601 Python tests at 95% coverage.", "backend/tests/"],
+    ["science", T, "Tested", "630 Python tests at 95% coverage.", "backend/tests/"],
     ["lock", A, "Secured", "API keys, rate limits, no stored history when hosted.", "backend/app/api/auth.py"],
     ["cloud_upload", K, "Deployable", "Containers and a Cloud Run workflow.", ".github/workflows/deploy.yml"],
     ["visibility", G, "Observable", "Tracing that keeps health data out.", "test_telemetry_redaction.py"],

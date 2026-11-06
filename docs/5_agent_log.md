@@ -8059,3 +8059,12 @@ kcal. Slides, brief and fact sheet now say about 110–140 kcal, 3–10%.
 
 Verified: OOXML validator passes; slides 7 to 13 inspected in Google Slides. Numbers tied to
 PRs #43 and #45 still use today's values. No application code changed on this branch.
+
+## 2026-11-07 — Claude — PRs #43 and #45 merged; deck now 16 slides
+
+Mike asked me to merge both. #43 merged first; #45 took `main`, keeping DEC-30 and DEC-31, then
+passed CI and merged. Rechecked on the merged code: 72 of 72, 68 of 68, 5 of 5, median 0.4%, 630
+tests at 95%, and the funnel is now 13 safe and 5 relevant. New slides: architecture with tool
+logos, limits, pending tasks. `docs/showcase/pending-tasks.md` holds the full checklist.
+
+Verified: OOXML validator passes; slides 2, 3, 8, 11 to 16 inspected in Google Slides.

@@ -39,7 +39,7 @@ Then what it does and how it works.
 [Point: Taste test]
 Then what a good meal means, and whether it got there.
 [Point: The bill]
-Last, how it's built and what isn't proven yet.
+Last, how it's built, what isn't proven yet and what's still pending.
 Each page is a link, so you can jump straight to it.
 
 ## Slide 4 — p4
@@ -108,7 +108,7 @@ Local run, 7 November 2026: expenditure less BMR × activity is 142, 115, 125 an
 
 This is how it picks the meal, using one real request.
 [Point: Funnel]
-A vegan asks for chicken fried rice. Of 34 recipes, 11 are safe, 4 are relevant to the craving, and one is served: Tofu Fried Rice.
+A vegan asks for chicken fried rice. Of 34 recipes, 13 are safe, 5 are relevant to the craving, and one is served: Tofu Fried Rice.
 Safety comes first, so a recipe can't win on relevance alone. Limits can also swap an ingredient rather than drop the recipe.
 [Point: Outcomes]
 There are three possible endings: a close match, a standard meal with a note, or a refusal.
@@ -150,41 +150,76 @@ Resizing each ingredient toward the ranges took it to 41, with the same meals.
 The relevance gate moved 11 off-menu requests to fallback meals, which took it to 47. That rise comes from moving requests, not from better meals.
 [Point: Cooking fat and rounding retry]
 Adding a fat to six recipes, and a retry after rounding, took it to all 72.
-[Point: 49 of 68]
-The fixes were tuned on these 72, so I also asked for every recipe by name, and 49 of 68 pass.
+[Point: 68 of 68]
+The fixes were tuned on these 72, so I also asked for every recipe by name. Only 49 of 68 passed, so a further recipe fix took it to 68 of 68.
 This shows plans meet the targets. It doesn't show that people prefer them.
 Reference — not read aloud
-docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28; scripts/meal_quality_baseline.py --wider, 7 November 2026.
+docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30; scripts/meal_quality_baseline.py --wider, 7 November 2026.
 
 ## Slide 12 — p12
+
+This is the whole system on one page.
+[Point: Clients]
+There are two clients: the live Streamlit demo and a React app.
+[Point: FastAPI]
+They share one typed FastAPI contract, with API keys and rate limits.
+[Point: Planning service]
+A planning service runs the four agents in order.
+[Point: Models and data]
+Each agent has its own source: the trained model, the recipe corpus, the nutrition tables and the store reference.
+[Point: Built with]
+The bottom row is the delivery stack.
+The hosted demo runs the agents inside Streamlit, and Cloud Run is ready but not deployed.
+Reference — not read aloud
+docs/2_architecture.md; pyproject.toml; frontend/package.json; backend/app/services/meal_planning_service.py; DEC-2. Logos: slides/assets/logos/NOTICE.txt.
+
+## Slide 13 — p13
 
 Although this is a portfolio project, I held it to production habits.
 [Point: Typed API contract]
 The API contract is committed, and CI fails if it drifts.
 [Point: Tested]
-The last full run passed 601 Python tests at 95% coverage.
+The last full run passed 630 Python tests at 95% coverage.
 [Point: Deployable]
 The Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.
 Each of these has a file behind it in the repo.
 Reference — not read aloud
 docs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.
 
-## Slide 13 — p13
+## Slide 14 — p14
 
-Here are the limits, each with the step that answers it.
-[Point: Recipes]
-Not every recipe passes when asked for by name, so the library needs rebalancing and growth.
-[Point: Data]
-Nutrition and prices are mostly local estimates, so the next step is verified data.
+These are the limits, in one place.
 [Point: People]
-It hasn't been tested with users or clinicians. Feedback is stored but not yet used.
+The plans hit their targets, but nobody has tested whether people like them or benefit.
+[Point: Nutrition data]
+Most plans include an estimated ingredient, and AMDR is a daily range applied to one meal.
+[Point: Recipes]
+The library is small, and the recipe fixes were guided by the same checks that measure them.
+[Point: Calorie model]
+The exercise inputs are defaults, and activity may be counted twice.
+[Point: Diet rules]
+Rules match ingredient names, so a hidden ingredient can slip through. Soy sauce did, until this review found it.
 [Point: Hosting]
-The Cloud Run workflow is ready but not deployed.
+The Cloud Run workflow isn't deployed yet.
 It's a planning aid, not medical advice.
 Reference — not read aloud
-docs/4_next_steps.md §6 and §7; scripts/meal_quality_baseline.py --wider, 7 November 2026.
+docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.
 
-## Slide 14 — p14
+## Slide 15 — p15
+
+This is the work that's still open, in the order I'd do it.
+[Point: Storage]
+Migrations come first, because nothing real should be stored without them.
+[Point: Hosting]
+Then a real deployment.
+[Point: Data]
+Then a benchmark run with real provider keys.
+[Point: People]
+Last, testing with real users, which is what would turn targets into evidence.
+Reference — not read aloud
+docs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.
+
+## Slide 16 — p16
 
 That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.
 [Point: QR code]
