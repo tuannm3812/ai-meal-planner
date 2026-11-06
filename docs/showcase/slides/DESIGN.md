@@ -6,7 +6,7 @@ colours, fonts, logos and claims do not.
 
 ## Authority and maintenance
 
-The [live Google Slides deck](https://docs.google.com/presentation/d/1Pm0IzeQQoAXNDdjvKvWIPQUkZCUnHgkgS3YE6-w1zm0/edit)
+The [live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
 is the formatting source of truth. Read its current objects before editing and keep
 Mike's changes. `../deck/build_deck.js` and the `.pptx` are the first seed only; never
 reimport them over the live deck.

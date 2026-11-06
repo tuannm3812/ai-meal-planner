@@ -4,7 +4,7 @@ Everything for the project's showcase. Start here.
 
 | Need | Go to |
 | --- | --- |
-| Edit the deck | [Live Google Slides deck](https://docs.google.com/presentation/d/1Pm0IzeQQoAXNDdjvKvWIPQUkZCUnHgkgS3YE6-w1zm0/edit) (source of truth for formatting) |
+| Edit the deck | [Live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit) (source of truth for formatting) |
 | What each slide says | [slides/BRIEF.md](slides/BRIEF.md) |
 | How slides look | [slides/DESIGN.md](slides/DESIGN.md), with [design history](slides/design-history.md) |
 | How the poster looks and reads | [DESIGN.md](DESIGN.md) |
@@ -60,7 +60,8 @@ on 2026-11-05.
 | Calorie model | Predicts exercise calories: validation R² 0.996, MAE 2.2 kcal; dataset of 750,000 rows (20% held out, then refit on all) | metrics.json, agents/calorie_expenditure_agent.md |
 | Meal target | Exercise calories + BMR-based estimate, goal +250 or −400 kcal (subject to the floor), then 28% of the daily budget, kept to 350–850 kcal | calorie_expenditure_agent.md, meal_recommendation_agent.py |
 | Recipe library | 34 curated recipes | meals.json |
-| Example plan | Chicken Fried Rice: 629 kcal against 625; 42 g protein, 71 g carbs, 18 g fat (27/46/27%) | 8_design.md §2 |
+| Example plan, design | Chicken Fried Rice: 629 kcal against 625; 42 g protein, 71 g carbs, 18 g fat (27/46/27%) | 8_design.md §2 |
+| Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated | Local run, 2026-11-06, no provider keys; deck/assets/ |
 | Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
 | Tests | 598 Python tests, 95% coverage (Claude's full run logged 2026-11-02) | 5_agent_log.md |
 | Benchmark split | 61 matched and 11 fallback plans; 68 of 72 include an estimated ingredient | 7_meal_quality.md §2 |

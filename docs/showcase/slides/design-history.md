@@ -11,6 +11,7 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
   (30–32 pt titles, 14–18 pt body, 10-minute talk).
 - **Charts drawn from shapes.** A native PowerPoint chart lost its category labels when
   converted to Google Slides, showing 1 to 4. Bars are now native shapes.
+- **A 14-slide live deck replaced the first 12-slide one**, built to this standard while nobody had edited the first.
 - **The live deck became the source of truth** once converted. `build_deck.js` is the seed.
 - **Calorie claim corrected.** The first deck said the trained model predicts daily burn and
   sets the meal target. It predicts exercise calories. The claim rule is now in DESIGN.md.

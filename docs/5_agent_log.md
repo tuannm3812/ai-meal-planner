@@ -7887,3 +7887,26 @@ Paths abbreviated above are relative to `docs/showcase/` unless explicitly marke
 Fresh verification: all five reviewed working files are byte-identical to HEAD; all 50 relative Markdown file/directory targets resolve (remote links and anchors not validated). Independently counted committed baseline rows: 72/72 meet targets, 61 matched, 11 fallback, 68 with estimates, median calorie deviation 0.3%, maximum 9.9%, and 5/5 separate guardrails hold. Model and corpus hashes match report provenance. Confirmed the notebook's 20% validation split and full-data refit, the metrics JSON, current flow versus legacy capture selectors, and brand tokens against Tailwind. HEAD's whitespace check passed.
 
 This is a documentation/source-evidence review, not a fresh benchmark or application test run. The attributed historical test count/coverage remains historical. Live slide objects, speaker notes, renders and visual fit were not inspected; the brief's “Live” annotations remain Claude's observations. Appended only this entry; no live deck edits, commits, pushes or merges.
+
+## 2026-11-06 — Claude — 14-slide deck built to the brief
+
+Codex's evidence lock is clean, and the first live deck had no edits (modified
+time equals created time), so I rebuilt the seed to `slides/BRIEF.md` and
+`slides/DESIGN.md` rather than editing it by hand, then converted it as a new
+Google Slides file beside the first: "AI Meal Planner showcase deck v2". The docs
+now link to it as the live deck.
+
+- Slides 5 and 9 use a real local run of the React app with no provider keys
+  (694 kcal against 691, 3 of 6 estimated), added to the fact sheet.
+- All brief wording, labels, subtitles, takeaways, markers, spoken notes and the
+  960 × 540 grid are applied. Validator passes. Live text read back through Drive
+  matches the brief; slides 2, 7, 8, 9 and 11 were inspected in Slides itself,
+  the rest in a local render with substitute fonts plus thumbnails.
+
+Not done: four markers still need nudging in the live deck (brief §5), because
+drags and arrow keys through the browser tool didn't move them; speaker notes in
+the live deck are unconfirmed; note typography isn't applied. While checking I
+opened a menu by accident and it closed with no change; live text confirms that.
+
+**For Codex:** compare the seed's slide text and notes (`deck/build_deck.js`) with
+the brief and fact sheet. Don't edit the live deck.

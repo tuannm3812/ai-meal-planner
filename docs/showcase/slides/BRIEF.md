@@ -1,9 +1,9 @@
 # Showcase deck brief
 
-**Status: Mike's decisions recorded, 6 November 2026; stage 2 evidence lock next.** Nothing in §4 has been applied to the live deck yet.
+**Status: evidence lock clean; stages 3 and 4 applied in a new 14-slide live deck, 6 November 2026, awaiting Mike's flip-through.** Stage 5 items are in §5.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
-[live Google Slides deck](https://docs.google.com/presentation/d/1Pm0IzeQQoAXNDdjvKvWIPQUkZCUnHgkgS3YE6-w1zm0/edit)
+[live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
 follows both. A design agent can work from this file alone: find the slide, read its fields,
 then edit the live slide. When the story changes, change this file first, then the slide.
 Numbers and sources are in the [fact sheet](../README.md#fact-sheet).
@@ -57,7 +57,7 @@ These names appear in the agenda and slide labels, so the two always match.
 | 04 Build and limits | How is it built, and what is still unproven? | 12–13 |
 | Close | Where do I try it? | 14 |
 
-| New | Live page | Label | Change |
+| New | First deck | Label | Change |
 | --- | --- | --- | --- |
 | 1 | `p1` | none | Keep; light wording |
 | 2 | new | EXECUTIVE SUMMARY | New slide |
@@ -76,7 +76,7 @@ These names appear in the agenda and slide labels, so the two always match.
 
 ## 4. Slide briefs
 
-Titles are working titles. **Live** lists what differs from the deck today.
+Titles are working titles.
 
 ### Opening
 
@@ -119,16 +119,14 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Question:** what does using it look like?
 - **Message:** you, craving, your plan.
 - **Content:** three screens with short captions.
-- **Visual:** real captures of the current React app.
-- **Live:** uses prototype screens with no such caption.
-- **Source:** `docs/8_design.md`; capture target `frontend/src/features/flow/MealFlow.jsx`. `scripts/capture_screenshots.py` drives the old dashboard and is legacy, so fresh captures are pending.
+- **Visual:** real captures of the current React app, in `../deck/assets/`.
+- **Source:** `docs/8_design.md`; capture target `frontend/src/features/flow/MealFlow.jsx`. `scripts/capture_screenshots.py` drives the old dashboard and is legacy, so these were captured with a one-off script.
 
 **Slide 6. "Four agents, one typed answer"** (`p4`)
 - **Subtitle:** Each agent does one job, and a planning service runs them in order.
 - **Question:** what happens behind the screen?
 - **Message:** the four steps, and the core path works with no LLM key.
 - **Content:** Calorie expenditure: estimates daily expenditure and sets the daily budget. Meal recommendation: sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes its portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: maps ingredients to products with an estimated cost. The service balances portions after verification. Output: one typed JSON response with meal, nutrition, shopping list and warnings.
-- **Live:** agent 1 says the model "predicts your daily burn". **Wrong: fix.**
 - **Source:** `docs/2_architecture.md`, `docs/agents/`.
 - **Elsewhere:** how each agent works (slides 7–9).
 
@@ -140,7 +138,6 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Evidence:** exercise-calorie model, validation R² 0.996 and MAE 2.2 kcal; Kaggle Playground dataset of 750,000 rows.
 - **Takeaways:** 1. The score is for exercise calories, not daily needs. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure, and a warning explains when it applies.
 - **Note:** in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm).
-- **Live:** title says the 750,000-row model "sets each meal's calorie target", and the metrics are unlabelled. **Rewrite the slide.**
 - **Source:** `docs/agents/calorie_expenditure_agent.md`, `metrics.json`, `calorie_expenditure_agent.py`, `meal_recommendation_agent.py`, DEC-24, `docs/8_design.md` §3.1.
 
 **Slide 8. "Hard limits first, then a relevant recipe"** (`p6`)
@@ -149,18 +146,16 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Message:** three honest outcomes: close match, standard meal with a note, or refusal.
 - **Content:** craving and profile → vector relevance and hard constraints → ranking → three outcomes.
 - **Takeaways:** 1. Relevance alone decides whether a recipe qualifies, so an off-menu craving falls back with a warning; the profile only influences ranking. 2. If nothing is safe, it refuses.
-- **Live:** title says filters run first and search finds the "closest tested recipe". **Reword.**
 - **Source:** `docs/agents/meal_recommendation_agent.md`, `backend/app/rag/retriever.py`, DEC-27, `docs/7_meal_quality.md`.
 - **Elsewhere:** results (slide 11).
 
 **Slide 9. "Each ingredient is looked up, and estimates are labelled"** (`p7`)
-- **Subtitle:** Example: Chicken Fried Rice, from the approved design.
+- **Subtitle:** Example: Chicken Fried Rice from a real local run with no provider keys.
 - **Question:** can I trust the numbers?
 - **Message:** every value shows its source, and estimates are visible.
 - **Content:** ingredient table with badges; lookup order: trusted local reference first; otherwise cached or provider lookup (USDA, then FatSecret if configured); then local or category estimates.
 - **Takeaways:** 1. 3 of 6 ingredients here are estimates, and the app says so. 2. With no provider keys, values come from local tables.
-- **Live:** title says every ingredient "is checked against USDA", and the chain starts at USDA. **Fix both.**
-- **Source:** `docs/8_design.md` §2, `docs/design/prototype/3-plan.html`, `backend/app/agents/nutrition_verification_agent.py`.
+- **Source:** run of 6 November 2026 (34, male, 165 cm, 65 kg, moderately active, maintain): 694 kcal against 691, 48/78/19 g, 28/46/26%; `backend/app/agents/nutrition_verification_agent.py`.
 
 ### 03 Evidence
 
@@ -179,8 +174,6 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat and rounding retry 72.
 - **Content:** median calorie deviation 0.3%, worst 9.9%. 5 of 5 guardrail cases hold.
 - **Takeaways:** 1. 61 plans match the craving; 11 are honest fallbacks, and both pass. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. This shows plans meet targets, not that users prefer them.
-- **Live:** missing all three takeaways. **Add.**
-- **Live:** names the last step "Cooking fat" only. **Update.**
 - **Source:** `docs/7_meal_quality.md` §2, `docs/meal_quality/baseline.md`, DEC-26 to DEC-28.
 
 ### 04 Build and limits
@@ -191,7 +184,6 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Message:** six habits, each with a file behind it.
 - **Content:** typed API contract checked in CI; 598 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
-- **Live:** says 596 tests. **Update.** After #43 merges, recheck the dated test run before changing this.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
 **Slide 13. "What comes next, and what it is not yet"** (`p11`)
@@ -207,14 +199,12 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Content:** live demo link, GitHub link, QR code, "A study project. Not medical advice."
 - **Visual:** matches the cover.
 
-## 5. Current gaps against DESIGN.md
+## 5. Open items for the design pass
 
-The live deck predates the standard. The stage 5 design pass closes these:
-
-- No section labels or subtitles; titles are 30 pt, not 24 pt.
-- Body text is 14–18 pt, not 12 pt; content sits on an earlier grid.
-- Footer positions differ, and takeaway columns and paired markers don't exist yet.
-- Speaker notes follow an earlier style, with no `[Point:]` cues or references, and need confirming in the live deck.
+- Takeaway markers sit below their heading line and need moving up: slide 7 marker 2, slide 9 marker 2, slide 11 markers 2 and 3. The seed is already corrected.
+- Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
+- Slide 3's lower half is empty; consider a taller layout.
+- The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
 
 ## 6. Decisions
 
