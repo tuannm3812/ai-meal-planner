@@ -1,6 +1,6 @@
 # Slide deck design standard
 
-Status: current living standard, 6 November 2026. Adapted from the Project 15 and
+Status: current living standard, 6 November 2026; colour theme pending. Adapted from the Project 15 and
 Text-to-SQL slide standards. Their structure and discipline carry over; their
 colours, fonts, logos and claims do not.
 
@@ -46,15 +46,15 @@ Canvas 960 × 540 pt (13⅓ × 7½ in), background `ground` #F6F7F2. All positio
 
 | Element | Position and size | Style |
 | --- | --- | --- |
-| Section label | x 43.5, y 21.7 | Inter 10 pt bold uppercase |
-| Title | x 43.5, y 48.4; w 873 | Bricolage Grotesque 24 pt bold, `ink` |
-| Subtitle | x 43.5, y 90.9; w 873 | Inter 12 pt, `muted` |
+| Section label | x 43.5, y 21.7 | Google Sans 10 pt bold uppercase |
+| Title | x 43.5, y 48.4; w 873 | Google Sans 24 pt bold |
+| Subtitle | x 43.5, y 90.9; w 873 | Google Sans 12 pt, `muted` |
 | Content area | x 43.5 to 916.5, y 130 to 486 | Left and right rails are fixed |
 | Takeaway column | x 684, y 130; 232.5 × 356 | See Takeaways |
 | Takeaway marker | x 668 | Aligned to the rendered heading line |
 | Footer mark | x 43.5, y 501; 18 × 18 | Plate mark |
-| Footer name | x 68, y 500 | Inter 10 pt, `muted`: AI Meal Planner |
-| Page number | Right edge at x 916.5, y 500 | Inter 10 pt, `muted`, automatic field |
+| Footer name | x 68, y 500 | Google Sans 10 pt, `muted`: AI Meal Planner |
+| Page number | Right edge at x 916.5, y 500 | Google Sans 10 pt, `muted`, automatic field |
 
 Section label format is one text box: `MAIN SECTION > SUBSECTION`. Main in `ink`, separator
 and subsection in `muted`. A standalone section such as EXECUTIVE SUMMARY has no subsection.
@@ -68,8 +68,8 @@ diagram leads each content slide. Leave at least 12 pt between neighbouring comp
 
 ## Typography
 
-Bricolage Grotesque for titles, headings and focal numbers. Inter for everything read.
-Code spans, filenames and endpoints stay in Inter. Screenshots keep their own type.
+Google Sans for all editable text. Google Sans Code for code spans, filenames and endpoints,
+for the span only. Screenshots keep their own type.
 No other faces, and no sizes outside these roles.
 
 | Role | Size | Treatment |
@@ -78,9 +78,9 @@ No other faces, and no sizes outside these roles.
 | Figure caption | 9 pt | `muted`; only `Figure N.` bold |
 | Section label, footer | 10 pt | Bold uppercase label; regular footer |
 | Body, takeaways, table headings, chart labels | 12 pt | Regular; bold for headings |
-| Content heading, key value | 16 pt | Bricolage bold |
-| Slide title | 24 pt | Bricolage bold |
-| Focal number | 32–54 pt | Bricolage 800; one per slide |
+| Content heading, key value | 16 pt | Bold |
+| Slide title | 24 pt | Bold |
+| Focal number | 32–54 pt | Bold; one per slide |
 
 Enlarge the owning shape or cut words before reducing type. Never use 8 or 9 pt for a
 conclusion. Left-align text; right-align comparable numbers; centre only markers and chips.
@@ -88,6 +88,9 @@ Line spacing 110% for body. Emphasise short evidence-bearing phrases in bold; do
 whole sentences.
 
 ## Colour
+
+**Theme pending Mike's choice from `palette-trials/`.** The roles below are the Kitchen green
+values until then.
 
 Colours come from [the brand tokens](../../../DESIGN.md). In the deck their roles are fixed:
 

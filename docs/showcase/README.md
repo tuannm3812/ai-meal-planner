@@ -32,8 +32,8 @@ Three questions, three kinds of file. Each has one owner, so nothing is decided 
 
 | Folder or file | Holds |
 | --- | --- |
-| `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py` |
-| `fonts/` | Bundled Bricolage Grotesque and Inter with their OFL licences |
+| `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py`, `cover-concepts/`, `palette-trials/` |
+| `fonts/` | Bundled Google Sans (showcase), Bricolage Grotesque and Inter (current drafts), with OFL licences |
 | `poster.html`, `linkedin.html`, `showcase.css`, `render.py` | Poster and LinkedIn source and renderer |
 | `ai-meal-planner-*.png`, `.pdf`, `linkedin_post.md` | First poster outputs and post text |
 

@@ -54,11 +54,10 @@ never means an error. Estimate badges use #FBEBD6 with #7A4A0C text. Outside the
 
 ## 4. Type
 
-- **Bricolage Grotesque** for headlines, slide titles and big numbers.
-- **Inter** for everything read: body, labels, tables, captions.
-- No other typefaces. The app bundles both; both are on Google Fonts, so they
-  work in Google Slides. On a machine without them, keep the layout and let
-  system sans-serif stand in.
+- **App:** Bricolage Grotesque for headlines and big numbers; Inter for everything read.
+- **Showcase (deck, poster, LinkedIn image):** Google Sans, chosen by Mike for a professional
+  portfolio look, with Google Sans Code for code spans.
+- No other typefaces. Authentic app screenshots keep their own type.
 
 | Role | App |
 | --- | --- |
@@ -112,6 +111,6 @@ the app works by keyboard and screen reader.
 
 - [ ] Every number traces to the [fact sheet](docs/showcase/README.md#fact-sheet) or to the service.
 - [ ] Estimates and "not medical advice" are stated where they apply.
-- [ ] Only the tokens, typefaces and plate mark above are used.
+- [ ] Only the tokens, typefaces and plate mark for that output are used.
 - [ ] Tomato marks one focal point per surface, not counting the logo and paired markers.
 - [ ] It reads at a glance: headline first, detail second.

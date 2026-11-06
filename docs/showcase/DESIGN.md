@@ -45,7 +45,7 @@ The portrait poster suits screens and A3 or A2 prints. Get the exact physical si
 
 ## Type and colour
 
-Bricolage Grotesque and Inter only, loaded and verified before rendering.
+Google Sans only, from `fonts/`, loaded and verified before rendering.
 
 | Role | Poster | LinkedIn |
 | --- | --- | --- |
