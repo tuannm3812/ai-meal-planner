@@ -31,6 +31,21 @@ ALLERGEN_KEYWORDS = {
     "soy": {"soy", "tofu", "tempeh"},
 }
 
+PLANT_BASED_DAIRY_NAMES = {
+    "almond butter",
+    "almond milk",
+    "coconut milk",
+    "coconut yogurt",
+    "oat milk",
+    "peanut butter",
+    "soy milk",
+    "soy yogurt",
+    "sunflower seed butter",
+}
+"""Plant foods whose names hold a dairy keyword. The keyword rules would block
+"soy milk" and "peanut butter" for a dairy-free or vegan request, so Vegan Oat
+Bowl and Peanut Tofu Bowl were never served under the default profile."""
+
 ANIMAL_PROTEIN_KEYWORDS = {
     "meat": {"chicken", "turkey", "beef", "lean beef", "steak"},
     "fish": {"salmon", "tuna", "fish"},
@@ -209,6 +224,8 @@ def blocked_groups_for_ingredient(item_name: str, groups: set[str]) -> set[str]:
         for group, keywords in ALLERGEN_KEYWORDS.items()
         if group in groups and any(keyword in normalized_name for keyword in keywords)
     }
+    if any(name in normalized_name for name in PLANT_BASED_DAIRY_NAMES):
+        blocked.discard("dairy")
 
     if "vegan" in groups:
         blocked.update(

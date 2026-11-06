@@ -55,3 +55,17 @@ def test_retrieval_regression_gluten_free_keeps_substitutable_burger() -> None:
     assert result is not None
     assert result.meal.meal_id == "turkey_burger_bowl"
     assert result.substitutions
+
+
+def test_every_recipe_asked_for_by_name_is_served_under_the_default_profile() -> None:
+    """The default profile is dairy-free. "milk" in soy milk and "butter" in peanut
+    butter once blocked Vegan Oat Bowl and Peanut Tofu Bowl as dairy, so asking for
+    either by name served High-Protein Asian Tofu Noodle Bowl (2026-11-04)."""
+    retriever = MealVectorRetriever(CORPUS_PATH)
+
+    for meal in retriever.meals:
+        result = retriever.best_match(
+            query=meal.name,
+            dietary_restrictions=["dairy-free", "high-protein"],
+        )
+        assert result is not None and result.meal.meal_id == meal.meal_id, meal.name

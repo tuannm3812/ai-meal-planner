@@ -37,6 +37,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 27 | Only the craving decides whether the corpus has a match; the profile only ranks | 2026-10-18 |
 | 28 | Recipes with no fat source get a cooking oil; a rounding miss is retried 2 points inside AMDR | 2026-10-18 |
 | 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
+| 30 | Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy | 2026-11-04 |
 | 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
 
 ## 2026-09-10 — Refactor and standards alignment
@@ -478,6 +479,53 @@ request keeps the service's default workout, and History stays as a small
 link in local mode. Rules out photos, recipes, live prices and accounts in
 this milestone, and an API key in the browser bundle.
 
+## 2026-11-04 — Meal quality: the wider recipe check
+
+Source: the wider recipe check (`scripts/meal_quality_baseline.py --wider`),
+approved as the next milestone by the owner.
+
+### DEC-30 — Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy
+
+Asking for every recipe by name, for the first two profiles, 49 of 68 plans
+met the targets. All 19 misses were eleven recipes whose ingredients cannot
+reach AMDR at any portions inside 0.5x to 2x: too much protein and too little
+carbohydrate (the chicken plates), or too much fat (the omelette and the
+avocado salads). Each now holds more of a carbohydrate or a fat it would
+plausibly contain, almost always one it already listed or one a sibling recipe
+uses:
+
+- more brown rice (80 to 180 g) in Chicken Avocado Power Salad, more quinoa
+  (100 to 200 g) in Low-Sodium Salmon Salad, a larger tortilla (50 to 80 g)
+  in Beef Taco Salad;
+- 120 g brown rice in Steak Salad Bowl and 80 g wholegrain toast with
+  Vegetarian Spinach Omelette;
+- a cooking oil in Chicken Vegetable Stir Fry (10 g sesame), Greek Chicken
+  Bowl (10 g olive), Sweet Potato Chicken Plate (10 g olive) and Falafel Salad
+  Bowl (15 g olive), and 15 g olive oil instead of 10 in Lentil Bolognese
+  Pasta;
+- 40 g avocado in Cottage Cheese Toast Plate.
+
+The omelette and the steak bowl were the corpus's only low-carb meals. A
+low-carb meal cannot reach AMDR's 45% carbohydrate, so both lose the
+`low-carb` flag, and the omelette its `gluten-free` flag (a celiac request
+still gets it, with gluten-free bread). The "Low carb" preference now favours
+no meal.
+
+Separately, a dairy keyword inside a plant food's name blocked it as dairy:
+"milk" in soy milk, "butter" in peanut butter and sunflower seed butter,
+"yogurt" in soy yogurt. The default profile is dairy-free, so Vegan Oat Bowl
+and Peanut Tofu Bowl were never served, and asking for either by name gave
+High-Protein Asian Tofu Noodle Bowl. A vegan request could not get Vegan Oat
+Bowl either. Named plant foods (`PLANT_BASED_DAIRY_NAMES` in `rag/rules.py`)
+are no longer dairy; real dairy and their soy or peanut groups still block.
+
+Effect: the wider check meets the targets in 68 of 68, every recipe served as
+itself. The baseline stays 72 of 72 with no meal or plan status changed; only
+the vegan `creamy pasta` plan (Lentil Bolognese Pasta) moves, to 2.0% from its
+target. Guardrails 5 of 5. Rules out adding ingredients a recipe would not
+plausibly contain, widening the portion bounds, and exempting low-carb meals
+from the targets.
+
 ### DEC-31 — Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos
 
 Dated 2026-11-07. A check of the showcase deck found that a celiac request for
@@ -486,7 +534,7 @@ The gluten keywords named only wheat, bread, buns, pasta and tortillas. Soy sauc
 and low-sodium soy sauce now count as gluten, and the swap to coconut aminos that
 soy and sodium limits already use covers gluten too. Five recipes are affected.
 The benchmark still has 72 of 72 plans on target. One plan changed, and the median
-calorie deviation moves from 0.34% to 0.36%, which rounds to 0.4%.
+calorie deviation moves from 0.36% to 0.37%, which rounds to 0.4%.
 
 Oats now count as gluten too, on the owner's choice: they contain no wheat but are
 often cross-contaminated, and Australian labelling does not treat them as
@@ -495,4 +543,3 @@ benchmark's constrained cravings do not include oats, so its numbers do not move
 
 Rules out a gluten-free soy sauce as the replacement, because the keyword rules
 would flag it and it would need a new nutrition entry.
-The number skips DEC-30, which open PR #43 uses.

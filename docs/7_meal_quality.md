@@ -81,20 +81,29 @@ Chickpea Curry Bowl, High-Protein Tomato Turkey Pasta, Lentil Bolognese
 Pasta). Every matched plan now meets the targets, with the same meal served
 for every scenario. After balancing, the oil ships at 5 to 15 g.
 
-| Measure | Baseline | Per-ingredient balancing (DEC-26) | Plus the relevance gate (DEC-27) | Plus a cooking fat in six recipes (DEC-28) |
-|---|---|---|---|---|
-| Plans served | 72 of 72, all `matched` (no fallback, none infeasible) | unchanged | 61 `matched`, 11 `fallback` | unchanged |
-| **Meeting the targets** | **10 of 72** | **41 of 72** | **47 of 72** (36 of 61 matched) | **72 of 72** (61 of 61 matched) |
-| Within the 10% calorie target | 68 of 72 | 70 of 72 | 70 of 72 | 72 of 72 |
-| Within the service's 15% retry tolerance | 72 of 72 | 72 of 72 | 72 of 72 | 72 of 72 |
-| Calorie deviation | median 1.6%, p90 8.5%, max 14.3% | median 0.9%, p90 8.5%, max 12.9% | median 0.8%, p90 8.5%, max 12.9% | median 0.3%, p90 3.4%, max 9.9% |
-| Rescaled by reconciliation | 12 | 4 | 2 | 0 |
-| First-pass scaling clamped (0.65–1.6) | 33 | 33 | 37 | 27 |
-| All three macros inside AMDR | **11 of 72** | **41 of 72** | **47 of 72** | **72 of 72** |
-| Protein / carbs / fat inside AMDR | 32 / 18 / 31 | 51 / 43 / 48 | 57 / 49 / 54 | 72 / 72 / 72 |
-| Plans with an estimated ingredient | 68 of 72 | 68 of 72 | 68 of 72 | 68 of 72 |
-| Corpus matches scoring below 0.25 | 11 | 11 | 0 | 0 |
-| Guardrails as expected (separate, controlled corpus) | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 |
+DEC-30 fixes the eleven recipes that the wider check (every recipe asked for
+by name, for the first two profiles) found could not be balanced, and stops
+soy milk and peanut butter reading as dairy. The wider check goes from 49 to
+**68 of 68**, every recipe served as itself; the 72 here keep every meal and
+status, and only the vegan `creamy pasta` plan moves (0.0% to 2.0% from its
+target). Asking for all 34 recipes by name for all four profiles, and under
+each constraint set for the average profile, 272 of 272 meet the targets
+(205 with the old recipes; an ad-hoc run, not committed).
+
+| Measure | Baseline | Per-ingredient balancing (DEC-26) | Plus the relevance gate (DEC-27) | Plus a cooking fat in six recipes (DEC-28) | Plus eleven recipes (DEC-30) |
+|---|---|---|---|---|---|
+| Plans served | 72 of 72, all `matched` (no fallback, none infeasible) | unchanged | 61 `matched`, 11 `fallback` | unchanged | unchanged |
+| **Meeting the targets** | **10 of 72** | **41 of 72** | **47 of 72** (36 of 61 matched) | **72 of 72** (61 of 61 matched) | **72 of 72** (61 of 61 matched) |
+| Within the 10% calorie target | 68 of 72 | 70 of 72 | 70 of 72 | 72 of 72 | 72 of 72 |
+| Within the service's 15% retry tolerance | 72 of 72 | 72 of 72 | 72 of 72 | 72 of 72 | 72 of 72 |
+| Calorie deviation | median 1.6%, p90 8.5%, max 14.3% | median 0.9%, p90 8.5%, max 12.9% | median 0.8%, p90 8.5%, max 12.9% | median 0.3%, p90 3.4%, max 9.9% | median 0.4%, p90 3.4%, max 9.9% |
+| Rescaled by reconciliation | 12 | 4 | 2 | 0 | 0 |
+| First-pass scaling clamped (0.65–1.6) | 33 | 33 | 37 | 27 | 27 |
+| All three macros inside AMDR | **11 of 72** | **41 of 72** | **47 of 72** | **72 of 72** | **72 of 72** |
+| Protein / carbs / fat inside AMDR | 32 / 18 / 31 | 51 / 43 / 48 | 57 / 49 / 54 | 72 / 72 / 72 | 72 / 72 / 72 |
+| Plans with an estimated ingredient | 68 of 72 | 68 of 72 | 68 of 72 | 68 of 72 | 68 of 72 |
+| Corpus matches scoring below 0.25 | 11 | 11 | 0 | 0 | 0 |
+| Guardrails as expected (separate, controlled corpus) | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | 5 of 5 |
 
 DEC-31 (2026-11-07) later changed one plan, the celiac chicken fried rice, so the current
 median calorie deviation is 0.4%. Every other figure in the last column stands.
@@ -147,7 +156,9 @@ Each item is a separate PR that reruns the baseline and reports the change.
    (DEC-26): each ingredient gets its own portion factor. Selection was
    measured and ruled out (DEC-27): every meal that would meet the targets in
    place of a missing one is less relevant to the craving. The recipes that
-   could not be balanced now have a cooking fat (DEC-28), so this is done.
+   could not be balanced now have a cooking fat (DEC-28), and the eleven the
+   wider check found have a carb or fat they plausibly hold (DEC-30), so this
+   is done.
 2. **Relevance gate on craving terms** (finding 2). Done (DEC-27).
 3. **Corpus growth** (`4_next_steps.md` §7.9), aimed at the gaps the baseline
    shows: balanced vegan mains, kidney-safe options, and the cravings with no
