@@ -206,10 +206,10 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   s.addImage({ path: "slides/assets/plate-salmon.png", ...box(668, 196, 248, 248), altText: "Plate of salmon and quinoa" });
   let y = TOP;
   [
-    ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", [["Why it matters", 4]], 62],
-    ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", [["The flow", 5], ["Four agents", 6], ["Calorie target", 7], ["Choosing the meal", 8], ["Nutrition", 9]], 112],
-    ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "Did we get there?", [["What good means", 10], ["Results", 11]], 78],
-    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "What is unproven?", [["Engineering", 12], ["Next steps", 13]], 78],
+    ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", [["Why it matters", 4]], 56],
+    ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", [["The flow", 5], ["Four agents", 6], ["Calorie target", 7], ["Choosing the meal", 8], ["Nutrition", 9]], 104],
+    ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "Did we get there?", [["What good means", 10], ["Results", 11]], 62],
+    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "What is unproven?", [["Architecture", 12], ["Engineering", 13], ["Limits", 14], ["Pending tasks", 15]], 104],
   ].forEach(([icon, tint, deep, course, h, q, pages, ch]) => {
     card(s, "", X0, y, 608, ch, { fill: tint });
     s.addShape(pres.ShapeType.ellipse, { ...box(X0 + 14, y + ch / 2 - 17, 34, 34), fill: { color: deep }, line: { color: deep, width: 0.5 } });
@@ -477,7 +477,61 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass, but the 41 to 47 step came from those 11 moving to fallback meals, not better meals. 8 of them are pizza and dessert."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Tuned on these 72", "Asking for every recipe by name passes 49 of 68. None of this shows that users prefer the plans."]], [2, 106, 180]);
 }
 
-// 12 — engineering
+// 12 — architecture
+{
+  const s = slide("BUILD AND LIMITS > ARCHITECTURE", "One service, two clients, four agents", "A request flows left to right. Each box names the model, data or tool behind it.",
+    "This is the whole system on one page.\n\n[Point: Clients]\nThere are two clients: the live Streamlit demo and a React app.\n\n[Point: FastAPI]\nThey share one typed FastAPI contract, with API keys and rate limits.\n\n[Point: Planning service]\nA planning service runs the four agents in order.\n\n[Point: Models and data]\nEach agent has its own source: the trained model, the recipe corpus, the nutrition tables and the store reference.\n\n[Point: Built with]\nThe bottom row is the delivery stack.\n\nThe hosted demo runs the agents inside Streamlit, and Cloud Run is ready but not deployed.\n\nReference — not read aloud\ndocs/2_architecture.md; pyproject.toml; frontend/package.json; backend/app/services/meal_planning_service.py; DEC-2. Logos: slides/assets/logos/NOTICE.txt.", BUILD);
+  const logo = (n, x, y, d = 22) => s.addImage({ path: `slides/assets/logos/${n}.png`, ...box(x, y, d, d), altText: `${n} logo` });
+  [["CLIENTS", X0], ["API", 191], ["PLANNING SERVICE", 329], ["MODELS AND DATA", 686.5]].forEach(([t, x]) => text(s, t, x, TOP, 220, 14, { fontSize: 10, bold: true, color: MUTED }));
+  const top = 148;
+  [
+    ["Streamlit demo", "Live and public", ["streamlit"], G, top],
+    ["React app", "The guided flow, run locally", ["react", "vite", "tailwindcss"], T, top + 134],
+  ].forEach(([h, b, logos, [tint, deep], y]) => {
+    card(s, "", X0, y, 130, 124, { fill: tint });
+    s.addShape(pres.ShapeType.roundRect, { ...box(X0 + 10, y + 10, 110, 36), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
+    logos.forEach((n, i) => logo(n, X0 + 18 + i * 32, y + 17));
+    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], X0 + 10, y + 54, 112, 62);
+    arrow(s, X0 + 131, y + 62, 190, y + 62);
+  });
+  card(s, "", 191, top, 120, 258);
+  logo("fastapi", 203, top + 12); logo("pydantic", 233, top + 12);
+  text(s, [{ text: "FastAPI", options: { bold: true, breakLine: true } }, { text: "Typed JSON, API keys, rate limits", options: { fontSize: 10, color: MUTED } }], 203, top + 42, 98, 70);
+  card(s, "", 199, top + 142, 104, 106, { fill: "DDE3DA" });
+  logo("sqlite", 209, top + 150);
+  text(s, [{ text: "SQLite", options: { bold: true, breakLine: true } }, { text: "Local plan history, via SQLModel", options: { fontSize: 10 } }], 209, top + 178, 88, 66);
+  arrow(s, 251, top + 118, 251, top + 141);
+  arrow(s, 312, top + 129, 328, top + 129);
+  card(s, "", 329, top, 340, 258, { fill: PANEL });
+  logo("python", 339, top + 6, 16);
+  text(s, "MealPlanningService", 360, top + 6, 280, 16, { fontFace: MONO, fontSize: 10, bold: true, valign: "middle" });
+  [
+    ["monitor_weight", G, "Calorie expenditure", "Sets the daily budget", "Trained model", "HistGradientBoosting, .joblib", ["scikitlearn"]],
+    ["skillet", T, "Meal recommendation", "Limits, retrieval, portions", "34-recipe corpus", "TF-IDF search, SciPy balancing", ["scikitlearn", "scipy"]],
+    ["fact_check", A, "Nutrition verification", "Looks up each ingredient", "Nutrition sources", "Local tables; USDA, FatSecret with keys", []],
+    ["shopping_basket", K, "Supermarket", "Items and an estimated total", "Store reference", "Local products, category prices", []],
+  ].forEach(([icon, [tint, deep], h, b, dh, db, logos], i) => {
+    const y = top + 28 + i * 57;
+    card(s, "", 337, y, 324, 51, { fill: tint });
+    iconDot(s, icon, deep, 345, y + 10, 30);
+    text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], 384, y + 6, 270, 40, { valign: "middle" });
+    arrow(s, 662, y + 25, 685, y + 25);
+    card(s, "", 686.5, y, 230, 51);
+    text(s, [{ text: dh, options: { bold: true, breakLine: true } }, { text: db, options: { fontSize: 10, color: MUTED } }], 696, y + 6, logos.length ? 214 - logos.length * 26 : 212, 40, { valign: "middle" });
+    logos.forEach((n, k) => logo(n, 888 - (logos.length - 1 - k) * 26, y + 15));
+  });
+  card(s, "", X0, 414, W, 56, { fill: INK });
+  text(s, "Built with", X0 + 14, 414, 70, 56, { bold: true, color: WHITE, valign: "middle" });
+  [["python", "Python"], ["docker", "Docker"], ["githubactions", "GitHub Actions"], ["googlecloud", "Cloud Run"], ["opentelemetry", "OpenTelemetry"], ["googlegemini", "Gemini, optional"]].forEach(([n, t], i) => {
+    const x = X0 + 84 + i * 130;
+    s.addShape(pres.ShapeType.roundRect, { ...box(x, 425, 124, 34), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
+    logo(n, x + 8, 432, 20);
+    text(s, t, x + 33, 425, 90, 34, { fontSize: 10, bold: true, valign: "middle" });
+  });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the hosted demo runs the agents inside Streamlit. Gemini is off without a key. Cloud Run is ready but not deployed. Logos belong to their owners." }], X0, 476, W, 14, { fontSize: 8, color: MUTED });
+}
+
+// 13 — engineering
 {
   const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits on a portfolio project, each with a file you can open in the repo.",
     "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run passed 601 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.", BUILD);
@@ -499,29 +553,54 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   limit(s, "the Cloud Run workflow is ready but not yet deployed to a GCP project.", X0, 434, W, 30);
 }
 
-// 13 — next
+// 14 — limits
 {
-  const s = slide("BUILD AND LIMITS > NEXT STEPS", "What comes next, and what it is not yet", "Each next step answers a limit that is true today.",
-    "Here are the limits, each with the step that answers it.\n\n[Point: Recipes]\nNot every recipe passes when asked for by name, so the library needs rebalancing and growth.\n\n[Point: Data]\nNutrition and prices are mostly local estimates, so the next step is verified data.\n\n[Point: People]\nIt hasn't been tested with users or clinicians. Feedback is stored but not yet used.\n\n[Point: Hosting]\nThe Cloud Run workflow is ready but not deployed.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §6 and §7; scripts/meal_quality_baseline.py --wider, 7 November 2026.", BUILD);
-  text(s, "NOT YET", X0 + 60, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
-  text(s, "NEXT", 600, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
+  const s = slide("BUILD AND LIMITS > LIMITS", "What this project does not prove yet", "Six limits, stated plainly, so nobody reads more into the results than they show.",
+    "These are the limits, in one place.\n\n[Point: People]\nThe plans hit their targets, but nobody has tested whether people like them or benefit.\n\n[Point: Nutrition data]\nMost plans include an estimated ingredient, and AMDR is a daily range applied to one meal.\n\n[Point: Recipes]\nThe library is small, and the recipe fixes were guided by the same checks that measure them.\n\n[Point: Calorie model]\nThe exercise inputs are defaults, and activity may be counted twice.\n\n[Point: Diet rules]\nRules match ingredient names, so a hidden ingredient can slip through. Soy sauce did, until this review found it.\n\n[Point: Hosting]\nThe Cloud Run workflow isn't deployed yet.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31; AGENTS.md, Open risks.", BUILD);
   [
-    ["menu_book", G, "Recipes", "49 of 68 recipes pass when asked for by name", "A larger, rebalanced recipe library"],
-    ["storefront", T, "Data", "Nutrition and prices are mostly local estimates", "Verified nutrition and live store prices"],
-    ["group", A, "People", "No user or clinical testing; feedback isn't used yet", "Learn from feedback, then test with people"],
-    ["cloud_upload", K, "Hosting", "The Cloud Run workflow isn't deployed", "A live Cloud Run deployment"],
-  ].forEach(([icon, [tint, deep], h, b, nxt], i) => {
-    const y = 150 + i * 76;
-    card(s, "", X0, y, 526, 68, { fill: tint });
-    iconDot(s, icon, deep, X0 + 14, y + 17, 34);
-    text(s, [{ text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true } }, { text: b, options: { color: deep } }], X0 + 60, y + 8, 456, 52, { valign: "middle" });
-    arrow(s, X0 + 528, y + 34, 598, y + 34);
-    s.addText(nxt, { shape: pres.ShapeType.roundRect, rectRadius: pt(12), ...box(600, y, 316.5, 68), fill: { color: deep }, line: { color: deep, width: 1 }, color: WHITE, fontSize: 12, bold: true, margin: 12, valign: "middle" });
+    ["group", G, "People", "No user or clinical testing", "Plans hit their targets, but nobody has tested whether people like them or benefit."],
+    ["fact_check", T, "Nutrition data", "68 of 72 include an estimate", "Values are local without provider keys, and AMDR is a daily range applied to one meal."],
+    ["menu_book", A, "Recipes", "34 recipes, 11 of 72 fall back", "The same checks that measure the recipes also guided their fixes."],
+    ["fitness_center", K, "Calorie model", "Default exercise inputs", "It assumes 30 minutes at 100 bpm, activity may count twice, and it learned from Kaggle data."],
+    ["no_food", G, "Diet rules", "Matched on ingredient names", "A hidden ingredient can slip through. Soy sauce did, until this review found it."],
+    ["cloud_upload", T, "Hosting", "Not deployed yet", "Cloud Run is ready but unused, and the database has no migration path."],
+  ].forEach(([icon, [tint, deep], h, st, b], i) => {
+    const x = X0 + (i % 3) * 297, y = TOP + Math.floor(i / 3) * 152;
+    card(s, "", x, y, 279, 142, { fill: tint });
+    iconDot(s, icon, deep, x + 14, y + 12, 30);
+    text(s, h, x + 54, y + 12, 216, 30, { fontSize: 16, bold: true, color: deep, valign: "middle" });
+    text(s, st, x + 14, y + 50, 252, 18, { bold: true, color: deep });
+    text(s, b, x + 14, y + 72, 252, 62, { color: deep });
   });
-  limit(s, "a planning aid, not medical advice.", X0, 456, W, 26, "Note:");
+  limit(s, "a planning aid, not medical advice.", X0, 438, W, 30, "Note:");
 }
 
-// 14 — close
+// 15 — pending tasks
+{
+  const s = slide("BUILD AND LIMITS > PENDING TASKS", "Pending tasks, in priority order", "What isn't finished yet, and what each task unlocks.",
+    "This is the work that's still open, in the order I'd do it.\n\n[Point: Storage]\nMigrations come first, because nothing real should be stored without them.\n\n[Point: Hosting]\nThen a real deployment.\n\n[Point: Data]\nThen a benchmark run with real provider keys.\n\n[Point: People]\nLast, testing with real users, which is what would turn targets into evidence.\n\nReference — not read aloud\ndocs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7.", BUILD);
+  text(s, "TASK", X0 + 150, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
+  text(s, "UNLOCKS", 600, TOP, 300, 14, { fontSize: 10, bold: true, color: MUTED });
+  [
+    ["inventory_2", G, "Storage", "Add database migrations", "Safe to hold real data"],
+    ["cloud_upload", T, "Hosting", "Create the GCP project and deploy to Cloud Run", "A hosted API and real traces"],
+    ["fact_check", A, "Data", "Run the benchmark with USDA keys", "Independent nutrition numbers"],
+    ["menu_book", K, "Recipes", "Grow the library from 34 to 75–100 recipes", "Fewer fallback meals"],
+    ["storefront", G, "Prices", "Connect live store prices", "A real shopping total"],
+    ["group", T, "People", "Use feedback in ranking, then test with users", "Evidence that plans help"],
+  ].forEach(([icon, [tint, deep], h, b, u], i) => {
+    const y = 148 + i * 53;
+    card(s, "", X0, y, 873, 47, { fill: tint });
+    iconDot(s, icon, deep, X0 + 10, y + 9, 29);
+    text(s, h, X0 + 48, y, 96, 47, { fontSize: 14, bold: true, color: deep, valign: "middle" });
+    text(s, b, X0 + 150, y, 390, 47, { color: deep, valign: "middle" });
+    arrow(s, 556, y + 23, 590, y + 23);
+    text(s, u, 600, y, 306, 47, { bold: true, color: deep, valign: "middle" });
+  });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the full checklist is in " }, { text: "docs/showcase/pending-tasks.md", options: { fontFace: MONO } }, { text: "." }], X0, 470, W, 14, { fontSize: 8, color: MUTED });
+}
+
+// 16 — close
 {
   const s = dark("Try it and read the code",
     "That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.\n\n[Point: QR code]\nThe demo and code are here.\n\nReference — not read aloud\nREADME.md.", CLOSE);
