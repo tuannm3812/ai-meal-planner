@@ -179,7 +179,7 @@ def lum(h):
     return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]
 
 
-for key, t in THEMES.items():
+for t in THEMES.values():
     ratio = 1.05 / (lum(t["primary"]) + 0.05)
     ratio2 = 1.05 / (lum(t["accent"]) + 0.05)
     print(t["name"], f"primary on white {ratio:.1f}:1, accent on white {ratio2:.1f}:1")
