@@ -9,7 +9,8 @@ The identity is **Kitchen green**. Colour values live in
 [`frontend/tailwind.config.js`](frontend/tailwind.config.js); if the two ever
 differ, that file wins and this one gets fixed. The app's flow and screens are
 in [`docs/8_design.md`](docs/8_design.md) (DEC-29). What the poster and deck
-say is in [`docs/showcase/README.md`](docs/showcase/README.md).
+say is in [`docs/showcase/`](docs/showcase/README.md), which also holds the strict
+[slide](docs/showcase/slides/DESIGN.md) and [poster](docs/showcase/DESIGN.md) standards.
 
 ## 1. Principles
 
@@ -57,13 +58,15 @@ never means an error. Estimate badges use #FBEBD6 with #7A4A0C text.
   work in Google Slides. On a machine without them, keep the layout and let
   system sans-serif stand in.
 
-| Role | App | Slides (16:9) | Poster (1200 px wide) | LinkedIn (1080 px wide) |
-| --- | --- | --- | --- | --- |
-| Title | 32–40 px, 700 | 30–32 pt, 700 | 64–76 px, 800 | 76–84 px, 800 |
-| Big number | 32–40 px, 700 | 54–66 pt, 800 | 96–112 px, 800 | 84 px, 800 |
-| Section heading | 22–24 px, 700 | 18–20 pt, 700 | 28–32 px, 700 | not used |
-| Body | 16 px | 14–18 pt | 16–20 px | 18–22 px |
-| Caption or label | 12–14 px | 11–12 pt | 14 px | 14 px |
+| Role | App |
+| --- | --- |
+| Title | 32–40 px, 700 |
+| Big number | 32–40 px, 700 |
+| Section heading | 22–24 px, 700 |
+| Body | 16 px |
+| Caption or label | 12–14 px |
+
+Slide and poster sizes are in their own standards.
 
 Put units next to numbers (629 kcal, 42 g). Don't write paragraphs in the display face.
 
@@ -91,17 +94,11 @@ pictograms, use one outline set, 1.5 px stroke, in ink.
 
 ## 7. Output specs
 
-| Output | Size | Structure |
-| --- | --- | --- |
-| Poster | 1200 × 1800 px at 2× (2:3, prints at A3 or A2) | Logo, headline, meal card, four steps, result, footer; about 90 words |
-| LinkedIn image | 1080 × 1350 px at 2× (4:5) | Headline, meal card, steps and result side by side, footer |
-| Slide deck | 16:9, 12 slides, 10 minutes | Dark title and closing slides, light content slides |
-| App | `max-w-6xl` shell, 16 px phone gutter, 24 px wider | You → Craving → Your plan |
-
-**Slides.** A slide title is the slide's point as a sentence, with no full stop.
-At most about 30 words on screen; the rest goes in speaker notes. Every slide
-has a visual. Content titles sit in the same place on every slide, and the logo
-and page number sit on the layout, not on each slide.
+| Output | Standard |
+| --- | --- |
+| App | `max-w-6xl` shell, 16 px phone gutter, 24 px wider; [`docs/8_design.md`](docs/8_design.md) |
+| Slide deck | [`docs/showcase/slides/DESIGN.md`](docs/showcase/slides/DESIGN.md) |
+| Poster and LinkedIn image | [`docs/showcase/DESIGN.md`](docs/showcase/DESIGN.md) |
 
 ## 8. Accessibility
 
@@ -111,7 +108,7 @@ the app works by keyboard and screen reader.
 
 ## 9. Before you ship
 
-- [ ] Every number traces to the fact sheet in `docs/showcase/README.md` or to the service.
+- [ ] Every number traces to the [fact sheet](docs/showcase/README.md#fact-sheet) or to the service.
 - [ ] Estimates and "not medical advice" are stated where they apply.
 - [ ] Only the tokens, typefaces and plate mark above are used.
 - [ ] Tomato marks one thing per surface.

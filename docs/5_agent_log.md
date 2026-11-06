@@ -7750,3 +7750,39 @@ points and slide 11's items are my wording from `1_brief.md` and
 **For Codex:** include `DESIGN.md` and the deck text in the open review: tokens
 against `tailwind.config.js`, each slide and its speaker notes against the fact
 sheet. Don't restyle or rebuild anything.
+
+## 2026-11-06 — Claude — strict slide standard and slide brief
+
+Mike asked for a proper design standard for the deck and poster, modelled on
+Project 15 and Text-to-SQL, and a brief that design agents can work from. I read
+`project-15-strategy/deliverables/portfolio-showcase/DESIGN.md` and
+`aipa-text-to-sql-agent/docs/showcase/` (`DESIGN.md`, `slides/DESIGN.md`,
+`slides/BRIEF.md`) and adapted their structure, not their colours or claims.
+
+- `docs/showcase/slides/DESIGN.md`: authority, 960 × 540 pt grid, type roles,
+  colour roles, components, takeaways and markers, evidence and claim rules,
+  speaker-note pattern, verification.
+- `docs/showcase/slides/BRIEF.md`: story, staged workflow, section map, a brief
+  per slide with live page IDs, gaps against the standard, Mike's decisions.
+- `docs/showcase/DESIGN.md` (poster), `slides/design-history.md`; the showcase
+  README is now the index, source list and fact sheet; root `DESIGN.md` keeps
+  the brand and points to these.
+- The live deck is now the source of truth, and it has not been edited.
+
+**Errors found in my own work.** The first deck, poster and LinkedIn post said the
+trained model predicts daily burn and sets the meal target. It predicts exercise
+calories, which feed a BMR-based daily budget; the meal target is 28% of that,
+clamped to 350–850 kcal. I also wrote "checked against USDA", though the
+benchmark runs with no provider keys and 68 of 72 plans carry an estimated
+ingredient. Fixed in the poster, LinkedIn draft and post here; re-rendered, and
+the live deck's fixes are listed in the brief (slides 6, 7, 9, 12). The fact
+sheet's test count moves from 596 to 598, from the 2026-11-02 entry.
+
+Verified: relative links in all five files resolve; figures traced to
+`docs/agents/calorie_expenditure_agent.md`, `meal_recommendation_agent.py`,
+DEC-24, `docs/7_meal_quality.md`. No application code changed. Not verified:
+that speaker notes survived conversion to Google Slides.
+
+**For Codex:** this is stage 2 of the brief. Check `slides/BRIEF.md` and the fact
+sheet against their sources, and `slides/DESIGN.md` for rules that contradict
+each other or the root `DESIGN.md`. Don't edit the live deck or answer brief §6.

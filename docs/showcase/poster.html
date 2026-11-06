@@ -68,7 +68,7 @@
     <div>
       <div class="eyebrow">Multi-agent meal planning</div>
       <h1 class="display" style="margin-top:12px">Say what<br>you crave. Get<br>a meal that<br><em>fits you</em>.</h1>
-      <p>A FastAPI service sizes one meal to your body and goal, checks every number against USDA data, balances the macros and prices the shopping list. Each number says how it was produced.</p>
+      <p>A FastAPI service sizes one meal to your body and goal, looks up each ingredient, labels any estimates, balances the macros and prices the shopping list. Each number says how it was produced.</p>
       <div class="flow"><span>You</span><i>→</i><span>Craving</span><i>→</i><span>Your plan</span></div>
     </div>
     <div class="card plan">
@@ -91,7 +91,7 @@
     <div class="eyebrow">How a plan is made</div>
     <h2>Four agents, one typed response</h2>
     <div class="agents">
-      <div class="card agent"><div class="n">1</div><h4>Calorie expenditure</h4><p>A gradient-boosted model trained on 750,000 Kaggle rows predicts daily burn, then sets the meal's calorie target from the goal.</p><span class="chip">R² 0.996 · MAE 2.2 kcal</span></div>
+      <div class="card agent"><div class="n">1</div><h4>Calorie expenditure</h4><p>A gradient-boosted model trained on 750,000 Kaggle rows predicts exercise calories, which feed a daily budget and the meal's target.</p><span class="chip">Exercise model R² 0.996</span></div>
       <div class="card agent"><div class="n">2</div><h4>Meal recommendation</h4><p>Allergy, diet and health filters run first, then local vector RAG retrieves from 34 tested recipes and rescales portions.</p><span class="chip">Works with no LLM key</span></div>
       <div class="card agent"><div class="n">3</div><h4>Nutrition verification</h4><p>Each ingredient is checked against USDA FoodData Central, with FatSecret and local tables as cached fallbacks.</p><span class="chip">Estimates are labelled</span></div>
       <div class="card agent"><div class="n">4</div><h4>Supermarket</h4><p>Ingredients map to grocery products with an estimated cost and a tick-off list, marked as estimates.</p><span class="chip">Shopping list included</span></div>
