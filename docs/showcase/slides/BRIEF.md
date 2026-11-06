@@ -134,15 +134,15 @@ Titles are working titles.
 - **Message:** a four-step calculation with a safety floor.
 - **Content, as a flow:** model predicts exercise calories → added to a BMR-based daily estimate → goal adjusts it (+250 kcal to gain, −400 to lose, subject to the floor) → meal target is 28% of the daily budget, kept between 350 and 850 kcal.
 - **Evidence:** exercise-calorie model, validation R² 0.996 and MAE 2.2 kcal; Kaggle Playground dataset of 750,000 rows.
-- **Takeaways:** 1. The score is for exercise calories, not daily needs. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure, and a warning explains when it applies.
-- **Note:** in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm).
+- **Takeaways:** 1. The score is for exercise calories, not daily needs; with default inputs the model adds only 110–146 kcal, 3–11% of expenditure, so the BMR estimate does most of the work. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure. Without it, the older woman's budget would be about 990 kcal.
+- **Note:** in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise. The 28% share is a design choice.
 - **Source:** `docs/agents/calorie_expenditure_agent.md`, `metrics.json`, `calorie_expenditure_agent.py`, `meal_recommendation_agent.py`, DEC-24, `docs/8_design.md` §3.1.
 
 **Slide 8. "Hard limits first, then a relevant recipe"** (`p6`)
-- **Subtitle:** Incompatible recipes are excluded before selection, across 34 curated recipes.
+- **Subtitle:** Conflicting recipes are excluded or adapted before selection, across 34 curated recipes.
 - **Question:** how does it choose the meal?
 - **Message:** three honest outcomes: close match, standard meal with a note, or refusal.
-- **Content:** craving and profile → vector relevance and hard constraints → ranking → three outcomes.
+- **Content:** craving and profile → TF-IDF relevance and hard constraints, which exclude a recipe or swap an ingredient → ranking → three outcomes: 61 of 72 benchmark plans matched, 11 of 72 fell back, and refusal appears in 2 of 5 guardrail cases.
 - **Takeaways:** 1. Relevance alone decides whether a recipe qualifies, so an off-menu craving falls back with a warning; the profile only influences ranking. 2. If nothing is safe, it refuses.
 - **Source:** `docs/agents/meal_recommendation_agent.md`, `backend/app/rag/retriever.py`, DEC-27, `docs/7_meal_quality.md`.
 - **Elsewhere:** results (slide 11).
@@ -152,7 +152,7 @@ Titles are working titles.
 - **Question:** can I trust the numbers?
 - **Message:** every value shows its source, and estimates are visible.
 - **Content:** ingredient table with badges; lookup order: trusted local reference first; otherwise cached or provider lookup (USDA, then FatSecret if configured); then local or category estimates.
-- **Takeaways:** 1. 3 of 6 ingredients here are estimates, and the app says so. 2. With no provider keys, values come from local tables.
+- **Takeaways:** 1. 3 of 6 ingredients here are estimates, and the app says so. 2. With no provider keys, values come from local tables, so "Reference" is local too and nothing here is externally verified.
 - **Source:** run of 6 November 2026 (34, male, 165 cm, 65 kg, moderately active, maintain): 694 kcal against 691, 48/78/19 g, 28/46/26%; `backend/app/agents/nutrition_verification_agent.py`.
 
 ### 03 Evidence
@@ -170,8 +170,8 @@ Titles are working titles.
 - **Question:** did it get better, and why?
 - **Message:** each change is measured. Balancing and the final step kept the served meals; the relevance gate moved 11 off-menu scenarios to fallback meals, which accounts for the rise to 47.
 - **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat and rounding retry 72.
-- **Content:** median calorie deviation 0.3%, worst 9.9%. 5 of 5 guardrail cases hold.
-- **Takeaways:** 1. 61 plans match the craving; 11 are honest fallbacks, and both pass. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. This shows plans meet targets, not that users prefer them.
+- **Content:** median calorie deviation 0.3%, worst 9.9%. 5 of 5 guardrail cases hold. Wider check, 49 of 68.
+- **Takeaways:** 1. 61 plans match the craving; 11 are fallbacks, and both pass. The 41 to 47 step came from those 11 moving to fallback meals, not from better meals; 8 of them are pizza and dessert. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. The fixes were tuned on these 72. Asking for every recipe by name passes 49 of 68, and none of this shows that users prefer the plans.
 - **Source:** `docs/7_meal_quality.md` §2, `docs/meal_quality/baseline.md`, DEC-26 to DEC-28.
 
 ### 04 Build and limits
@@ -180,7 +180,7 @@ Titles are working titles.
 - **Subtitle:** Production habits on a portfolio project.
 - **Question:** is the engineering real?
 - **Message:** six habits, each with a file behind it.
-- **Content:** typed API contract checked in CI; 598 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
+- **Content:** typed API contract checked in CI; 601 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
@@ -188,13 +188,13 @@ Titles are working titles.
 - **Subtitle:** The next steps follow from the limits.
 - **Question:** what is unproven?
 - **Message:** next steps and limits, side by side.
-- **Content:** Next: a larger recipe library; learning from user feedback; a live Cloud Run deployment. Not yet: live store prices; full verified nutrition; any user or clinical testing. Not medical advice.
+- **Content:** Next: a larger recipe library; learning from user feedback; a live Cloud Run deployment. Not yet: live store prices; full verified nutrition; every recipe on target by name (49 of 68); any user or clinical testing. Not medical advice.
 - **Source:** `docs/4_next_steps.md` §6, §7.
 
 ### Close
 
 **Slide 14. "Try it and read the code"** (`p12`)
-- **Content:** live demo link, GitHub link, QR code, "A multi-agent meal planner, a portfolio project by Mike", "A study project. Not medical advice."
+- **Content:** live demo link, GitHub link, QR code, "A multi-agent meal planner, a portfolio project by Mike", "A study project. Not medical advice." "The demo is the Streamlit client and may take a minute to wake."
 - **Visual:** matches the cover.
 
 ## 5. Open items
@@ -202,6 +202,7 @@ Titles are working titles.
 - Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
 - Slide 3's lower half is empty; consider a taller layout.
 - The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
+- **After PR #43 merges:** the wider check becomes 68 of 68. Update slides 11 and 13, and rerun the tests for slide 12.
 - **After PR #45 merges:** soy sauce is fixed for coeliac plans, and the median calorie deviation rounds to 0.4%. Change 0.3% on slide 2, the fact sheet and the poster drafts. Until it merges, don't claim gluten safety.
 - Slide 7 pass: without a duration, the model is fed a default 30-minute session at 100 bpm, so check how the deck describes its role.
 - Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
@@ -209,8 +210,8 @@ Titles are working titles.
 ## 5a. Record check, slides 7 to 14
 
 Checked 7 November 2026 against the code, `baseline.json` and fresh runs with no provider
-keys. **Nothing here is on a slide yet.** Each row waits for Mike's approval, then the entry
-in section 4 changes first and the slide second.
+keys. Mike approved these on 7 November 2026: section 4 changed first, then the slides. Rows that
+depend on PR #43 or #45 use today's numbers and change again after those merge.
 
 | Slide | Record | Result | Proposed change |
 | --- | --- | --- | --- |

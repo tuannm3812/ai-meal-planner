@@ -98,7 +98,7 @@ Those are added to a BMR-based daily estimate.
 Your goal then adjusts it.
 [Point: Meal target]
 The meal target is 28% of the daily budget, kept between 350 and 850 kcal.
-The model's scores describe exercise calories only, not daily needs.
+The model's scores describe exercise calories only. In these plans it adds about 110 to 146 kcal, so the BMR estimate does most of the work. The exercise inputs are defaults, and the activity multiplier may already count that exercise.
 Reference — not read aloud
 metrics.json; docs/agents/calorie_expenditure_agent.md; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. In the meal flow, exercise inputs use defaults: 30 minutes, 100 bpm.
 
@@ -106,7 +106,7 @@ metrics.json; docs/agents/calorie_expenditure_agent.md; calorie_expenditure_agen
 
 This is how it picks the meal.
 [Point: Relevance and limits]
-The craving is compared with each recipe, and anything that conflicts with your diet, allergies or conditions is excluded.
+The craving is compared with each recipe, and anything that conflicts with your diet, allergies or conditions is excluded, or adapted when a safe swap exists.
 [Point: Ranking]
 Relevance decides what qualifies. Your profile only influences the order.
 Then there are three honest outcomes.
@@ -147,12 +147,14 @@ The first run passed only 10 of 72.
 [Point: Portion balancing]
 Resizing each ingredient toward the ranges took it to 41, with the same meals.
 [Point: Honest fallback]
-The relevance gate moved 11 off-menu scenarios to fallback meals, which took it to 47.
+The relevance gate moved 11 off-menu scenarios to fallback meals, which took it to 47. That rise is from moving requests, not from better meals.
 [Point: Cooking fat and rounding retry]
 Adding a fat to six recipes, and a retry after rounding, took it to all 72.
+[Point: 49 of 68]
+The fixes were tuned on these 72, so I also asked for every recipe by name, and 49 of 68 pass.
 This shows plans meet the targets. It doesn't show that people prefer them.
 Reference — not read aloud
-docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28.
+docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28; scripts/meal_quality_baseline.py --wider, 7 November 2026.
 
 ## Slide 12 — p12
 
@@ -160,12 +162,12 @@ Although this is a portfolio project, I held it to production habits.
 [Point: Typed API contract]
 The API contract is committed, and CI fails if it drifts.
 [Point: Tested]
-The last full run logged 598 Python tests at 95% coverage.
+The last full run passed 601 Python tests at 95% coverage.
 [Point: Deployable]
 The Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.
 Each of these has a file behind it in the repo.
 Reference — not read aloud
-docs/openapi.json; .github/workflows/; docs/6_deployment.md; docs/5_agent_log.md, 2026-11-02.
+docs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.
 
 ## Slide 13 — p13
 
@@ -173,14 +175,14 @@ Here are the next steps and the limits, side by side.
 [Point: Next]
 A larger recipe library, learning from feedback, and a live deployment.
 [Point: Not yet]
-Prices are local estimates, nutrition isn't fully verified, and it hasn't been tested with users or clinicians.
+Prices are local estimates, nutrition isn't fully verified, not every recipe passes when asked for by name, and it hasn't been tested with users or clinicians.
 It's a planning aid, not medical advice.
 Reference — not read aloud
 docs/4_next_steps.md §6 and §7.
 
 ## Slide 14 — p14
 
-That's AI Meal Planner: one craving in, one meal sized to you, and every number showing how it was produced.
+That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.
 [Point: QR code]
 The demo and code are here.
 Reference — not read aloud

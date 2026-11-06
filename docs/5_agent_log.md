@@ -7977,3 +7977,14 @@ the gluten keywords in `backend/app/rag/rules.py` omit it. Not fixed here; see b
 
 Verified: OOXML validator passes; slides 1, 2 and 5 inspected in Google Slides on the final
 build, 4 and 6 at low zoom after a full-size check on the build before. No application code changed.
+
+## 2026-11-07 — Claude — brief check applied to slides 7 to 14
+
+Mike set a rule: check each brief record first, then the brief changes, then the slide. The
+check is BRIEF.md §5a. He approved it, so the fact sheet and brief changed first, then the seed.
+Slide 11 now shows the wider check (49 of 68), and slide 7 says how little the model adds.
+Numbers tied to PRs #43 and #45 use today's values and change after those merge.
+
+Verified: OOXML validator passes; full `pytest` passed 601 tests at 95% coverage; slides 7–9
+and 11–14 inspected in Google Slides, with markers realigned on 7 and 11. The live demo still
+opens with demo mode off, pending Mike's Streamlit setting. No application code changed.

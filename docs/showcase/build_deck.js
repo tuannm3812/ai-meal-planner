@@ -305,8 +305,8 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 7 — calorie target
 {
   const s = slide("SOLUTION > CALORIE TARGET", "From your body to a meal target", "A trained exercise-calorie model feeds a daily budget, then one meal's target.",
-    "How does it decide how much? It's a short calculation, not one model.\n\n[Point: Exercise calories]\nThe trained model predicts exercise calories.\n\n[Point: Daily estimate]\nThose are added to a BMR-based daily estimate.\n\n[Point: Goal]\nYour goal then adjusts it.\n\n[Point: Meal target]\nThe meal target is 28% of the daily budget, kept between 350 and 850 kcal.\n\nThe model's scores describe exercise calories only, not daily needs.\n\nReference — not read aloud\nmetrics.json; docs/agents/calorie_expenditure_agent.md; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. In the meal flow, exercise inputs use defaults: 30 minutes, 100 bpm.", SOLUTION);
-  [["Exercise calories", "Predicted by the trained model"], ["Daily estimate", "Added to a BMR-based estimate"], ["Goal", "+250 kcal to gain, −400 to lose, subject to the floor"], ["Meal target", "28% of the budget, kept to 350–850 kcal"]].forEach(([h, b], i) => {
+    "How does it decide how much? It's a short calculation, not one model.\n\n[Point: Exercise calories]\nThe trained model predicts exercise calories.\n\n[Point: Daily estimate]\nThose are added to a BMR-based daily estimate.\n\n[Point: Goal]\nYour goal then adjusts it.\n\n[Point: Meal target]\nThe meal target is 28% of the daily budget, kept between 350 and 850 kcal.\n\nThe model's scores describe exercise calories only. In these plans it adds about 110 to 146 kcal, so the BMR estimate does most of the work. The exercise inputs are defaults, and the activity multiplier may already count that exercise.\n\nReference — not read aloud\nmetrics.json; docs/agents/calorie_expenditure_agent.md; calorie_expenditure_agent.py; meal_recommendation_agent.py; DEC-24; docs/8_design.md §3.1. In the meal flow, exercise inputs use defaults: 30 minutes, 100 bpm.", SOLUTION);
+  [["Exercise calories", "Predicted by the trained model"], ["Daily estimate", "Added to a BMR-based estimate"], ["Goal", "+250 kcal to gain, −400 to lose, subject to the floor"], ["Meal target", "28% of the budget by design, kept to 350–850 kcal"]].forEach(([h, b], i) => {
     const x = X0 + i * 154;
     card(s, hb(h, b), x, TOP, 138, 146, { margin: 10 });
     if (i < 3) arrow(s, x + 139, TOP + 73, x + 153, TOP + 73);
@@ -317,23 +317,23 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   });
   marker(s, 1, 643, 286);
   caption(s, 1, "Exercise-calorie model, Kaggle Playground Series S5E5.", X0, 372, 600);
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm)." }], X0, 390, 600, 14, { fontSize: 8, color: MUTED });
-  takeaways(s, [["These scores are for exercise calories", "They describe the model's task, not daily needs or a meal target."], ["Weight-loss budgets have a floor", "1,200 kcal for women or 1,500 for men, capped at estimated expenditure. A warning explains when it applies."]], [2, 74]);
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise." }], X0, 390, 600, 14, { fontSize: 8, color: MUTED });
+  takeaways(s, [["These scores are for exercise calories", "They describe the model's task, not daily needs. With default inputs it adds only 110–146 kcal, 3–11% of expenditure, so the BMR estimate does most of the work."], ["Weight-loss budgets have a floor", "1,200 kcal for women or 1,500 for men, capped at estimated expenditure. Without it, the older woman's budget would be about 990 kcal."]], [2, 106]);
 }
 
 // 8 — choosing the meal
 {
-  const s = slide("SOLUTION > CHOOSING THE MEAL", "Hard limits first, then a relevant recipe", "Incompatible recipes are excluded before selection, across 34 curated recipes.",
-    "This is how it picks the meal.\n\n[Point: Relevance and limits]\nThe craving is compared with each recipe, and anything that conflicts with your diet, allergies or conditions is excluded.\n\n[Point: Ranking]\nRelevance decides what qualifies. Your profile only influences the order.\n\nThen there are three honest outcomes.\n\n[Point: No close match]\nIf nothing is close, you get a standard meal and a note saying so.\n\n[Point: Nothing safe]\nIf nothing is safe, it refuses.\n\nReference — not read aloud\ndocs/agents/meal_recommendation_agent.md; backend/app/rag/retriever.py; DEC-27.", SOLUTION);
-  [["Craving and profile", "What you want and what to avoid"], ["Relevance and limits", "Vector similarity; conflicts excluded"], ["Ranking", "Your profile influences the order"]].forEach(([h, b], i) => {
+  const s = slide("SOLUTION > CHOOSING THE MEAL", "Hard limits first, then a relevant recipe", "Conflicting recipes are excluded or adapted before selection, across 34 curated recipes.",
+    "This is how it picks the meal.\n\n[Point: Relevance and limits]\nThe craving is compared with each recipe, and anything that conflicts with your diet, allergies or conditions is excluded, or adapted when a safe swap exists.\n\n[Point: Ranking]\nRelevance decides what qualifies. Your profile only influences the order.\n\nThen there are three honest outcomes.\n\n[Point: No close match]\nIf nothing is close, you get a standard meal and a note saying so.\n\n[Point: Nothing safe]\nIf nothing is safe, it refuses.\n\nReference — not read aloud\ndocs/agents/meal_recommendation_agent.md; backend/app/rag/retriever.py; DEC-27.", SOLUTION);
+  [["Craving and profile", "What you want and what to avoid"], ["Relevance and limits", "TF-IDF similarity; conflicts excluded or swapped"], ["Ranking", "Your profile influences the order"]].forEach(([h, b], i) => {
     const x = X0 + i * 208;
     card(s, hb(h, b), x, TOP, 192, 104, { margin: 10 });
     if (i < 2) arrow(s, x + 193, TOP + 52, x + 207, TOP + 52);
   });
   text(s, "Three honest outcomes", X0, 252, 400, 18, { bold: true });
-  card(s, hb("Close match", "That recipe, sized to you", { hc: GREEN, bc: INK }), X0, 276, 192, 112, { fill: TINT_OK, margin: 10 });
-  card(s, hb("No close match", "A standard meal and a note saying so", { hc: WARN, bc: INK }), X0 + 208, 276, 192, 112, { fill: TINT_WARN, margin: 10 });
-  card(s, hb("Nothing safe", "The plan is refused, not guessed", { bc: INK }), X0 + 416, 276, 192, 112, { margin: 10 });
+  card(s, hb("Close match", "That recipe, sized to you. 61 of 72 benchmark plans", { hc: GREEN, bc: INK }), X0, 276, 192, 112, { fill: TINT_OK, margin: 10 });
+  card(s, hb("No close match", "A standard meal and a note saying so. 11 of 72 benchmark plans", { hc: WARN, bc: INK }), X0 + 208, 276, 192, 112, { fill: TINT_WARN, margin: 10 });
+  card(s, hb("Nothing safe", "The plan is refused, not guessed. 2 of 5 guardrail cases", { bc: INK }), X0 + 416, 276, 192, 112, { margin: 10 });
   marker(s, 1, X0 + 208 + 176, 280);
   marker(s, 2, X0 + 416 + 176, 280);
   takeaways(s, [["Relevance decides what qualifies", "An off-menu craving falls back with a warning. The profile only influences ranking."], ["If nothing is safe, it refuses", "It would rather return no plan than guess."]], [2, 92]);
@@ -360,7 +360,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   });
   marker(s, 2, 640, 332);
   caption(s, 1, "A real plan: 694 kcal against a 691 kcal meal target.", X0, 414, 600);
-  takeaways(s, [["3 of 6 ingredients are estimates", "The app says so on screen, so the totals read as approximate."], ["With no provider keys", "Values come from local tables, so a plan's target check isn't an independent verification."]], [2, 74]);
+  takeaways(s, [["3 of 6 ingredients are estimates", "The app says so on screen, so the totals read as approximate."], ["With no provider keys", "Values come from local tables, so \"Reference\" is local too, and a plan's target check isn't an independent verification."]], [2, 74]);
 }
 
 // 10 — what good means
@@ -386,7 +386,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 11 — results
 {
   const s = slide("EVIDENCE > RESULTS", "Three fixes took the planner from 10 to 72 of 72", "Plans meeting the targets on the project's own benchmark.",
-    "The first run passed only 10 of 72.\n\n[Point: Portion balancing]\nResizing each ingredient toward the ranges took it to 41, with the same meals.\n\n[Point: Honest fallback]\nThe relevance gate moved 11 off-menu scenarios to fallback meals, which took it to 47.\n\n[Point: Cooking fat and rounding retry]\nAdding a fat to six recipes, and a retry after rounding, took it to all 72.\n\nThis shows plans meet the targets. It doesn't show that people prefer them.\n\nReference — not read aloud\ndocs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28.", EVIDENCE);
+    "The first run passed only 10 of 72.\n\n[Point: Portion balancing]\nResizing each ingredient toward the ranges took it to 41, with the same meals.\n\n[Point: Honest fallback]\nThe relevance gate moved 11 off-menu scenarios to fallback meals, which took it to 47. That rise is from moving requests, not from better meals.\n\n[Point: Cooking fat and rounding retry]\nAdding a fat to six recipes, and a retry after rounding, took it to all 72.\n\n[Point: 49 of 68]\nThe fixes were tuned on these 72, so I also asked for every recipe by name, and 49 of 68 pass.\n\nThis shows plans meet the targets. It doesn't show that people prefer them.\n\nReference — not read aloud\ndocs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-28; scripts/meal_quality_baseline.py --wider, 7 November 2026.", EVIDENCE);
   card(s, "", X0, TOP, 608, 256);
   text(s, "Plans meeting the targets, out of 72", X0 + 16, TOP + 12, 500, 18, { color: MUTED });
   // Drawn from shapes: Google Slides turns a native chart into a picture and loses its labels.
@@ -400,18 +400,18 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   s.addShape(pres.ShapeType.line, { ...box(X0 + 20, base, 568, 0), line: { color: LINE, width: 1 } });
   marker(s, 1, X0 + 20 + 2 * 144 + 116, base - 47 * unit - 18);
   marker(s, 2, X0 + 20 + 3 * 144 + 116, base - 72 * unit - 18);
-  [["0.3%", "median calorie deviation"], ["9.9%", "worst calorie deviation"], ["5 of 5", "guardrail cases hold"]].forEach(([v, l], i) => {
+  [["0.3%", "median calorie gap, worst 9.9%"], ["5 of 5", "guardrail cases hold"], ["49 of 68", "wider check, every recipe by name"]].forEach(([v, l], i) => {
     card(s, [{ text: v, options: { fontFace: HEAD, fontSize: 16, bold: true, breakLine: true, paraSpaceAfter: 3 } }, { text: l, options: { fontSize: 12, color: MUTED } }], X0 + i * 205, 398, 197, 72, { margin: 12, valign: "middle" });
   });
   marker(s, 3, 643, 392);
-  takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass. A fallback meets the targets but isn't what was asked for."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Targets, not preference", "This shows plans meet targets, not that users prefer them."]], [2, 74, 164]);
+  takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass, but the 41 to 47 step came from those 11 moving to fallback meals, not better meals. 8 of them are pizza and dessert."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Tuned on these 72", "Asking for every recipe by name passes 49 of 68. None of this shows that users prefer the plans."]], [2, 106, 180]);
 }
 
 // 12 — engineering
 {
   const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Production habits on a portfolio project.",
-    "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run logged 598 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; docs/5_agent_log.md, 2026-11-02.", BUILD);
-  [["Typed API contract", "FastAPI and Pydantic; OpenAPI checked in CI"], ["Tested", "598 Python tests at 95% coverage"], ["Secured", "API keys and rate limits; no history in hosted mode"], ["Deployable", "Containers and a Cloud Run workflow"], ["Observable", "Tracing that keeps health data out"], ["Two clients", "A live Streamlit demo and a React app"]].forEach(([h, b], i) => {
+    "Although this is a portfolio project, I held it to production habits.\n\n[Point: Typed API contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tested]\nThe last full run passed 601 Python tests at 95% coverage.\n\n[Point: Deployable]\nThe Cloud Run workflow is ready, but it isn't deployed to a GCP project yet.\n\nEach of these has a file behind it in the repo.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/; docs/6_deployment.md; local full run, 7 November 2026.", BUILD);
+  [["Typed API contract", "FastAPI and Pydantic; OpenAPI checked in CI"], ["Tested", "601 Python tests at 95% coverage"], ["Secured", "API keys and rate limits; no history in hosted mode"], ["Deployable", "Containers and a Cloud Run workflow"], ["Observable", "Tracing that keeps health data out"], ["Two clients", "A live Streamlit demo and a React app"]].forEach(([h, b], i) => {
     card(s, hb(h, b), X0 + (i % 3) * 297, TOP + Math.floor(i / 3) * 150, 279, 134, { margin: 14, valign: "middle" });
   });
   limit(s, "the Cloud Run workflow is ready but not yet deployed to a GCP project.", X0, 434, W, 30);
@@ -420,28 +420,29 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 13 — next
 {
   const s = slide("BUILD AND LIMITS > NEXT STEPS", "What comes next, and what it is not yet", "The next steps follow from the limits.",
-    "Here are the next steps and the limits, side by side.\n\n[Point: Next]\nA larger recipe library, learning from feedback, and a live deployment.\n\n[Point: Not yet]\nPrices are local estimates, nutrition isn't fully verified, and it hasn't been tested with users or clinicians.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §6 and §7.", BUILD);
+    "Here are the next steps and the limits, side by side.\n\n[Point: Next]\nA larger recipe library, learning from feedback, and a live deployment.\n\n[Point: Not yet]\nPrices are local estimates, nutrition isn't fully verified, not every recipe passes when asked for by name, and it hasn't been tested with users or clinicians.\n\nIt's a planning aid, not medical advice.\n\nReference — not read aloud\ndocs/4_next_steps.md §6 and §7.", BUILD);
   const col = (x, h, items, fill, hc) => {
     card(s, [{ text: h, options: { fontFace: HEAD, fontSize: 16, bold: true, color: hc || INK } }], x, TOP, 427.5, 300, { fill, margin: 18 });
     items.forEach((t, i) => {
-      const y = 186 + i * 72;
+      const y = 186 + i * 56;
       chip(s, i + 1, x + 18, y);
       text(s, t, x + 52, y, 360, 22, { valign: "middle" });
     });
   };
   col(X0, "Next", ["A larger recipe library", "Learning from user feedback", "A live Cloud Run deployment"]);
-  col(X0 + 445.5, "Not yet", ["Live store prices", "Full verified nutrition", "Any user or clinical testing"], TINT_WARN, WARN);
+  col(X0 + 445.5, "Not yet", ["Live store prices", "Full verified nutrition", "Every recipe on target by name (49 of 68)", "Any user or clinical testing"], TINT_WARN, WARN);
   limit(s, "a planning aid, not medical advice.", X0, 444, W, 30, "Note:");
 }
 
 // 14 — close
 {
   const s = dark("Try it and read the code",
-    "That's AI Meal Planner: one craving in, one meal sized to you, and every number showing how it was produced.\n\n[Point: QR code]\nThe demo and code are here.\n\nReference — not read aloud\nREADME.md.", CLOSE);
+    "That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.\n\n[Point: QR code]\nThe demo and code are here.\n\nReference — not read aloud\nREADME.md.", CLOSE);
   text(s, "tuannm3812-ai-meal-planner.streamlit.app", X0, 248, 590, 22, { fontSize: 16, bold: true, color: WHITE, hyperlink: { url: "https://tuannm3812-ai-meal-planner.streamlit.app/" } });
   text(s, "github.com/tuannm3812/ai-meal-planner", X0, 282, 590, 22, { fontSize: 16, color: ON_INK, hyperlink: { url: "https://github.com/tuannm3812/ai-meal-planner" } });
   text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 18, { color: WHITE });
   text(s, "A study project. Not medical advice.", X0, 352, 590, 18, { color: ON_INK });
+  text(s, "The demo is the Streamlit client and may take a minute to wake.", X0, 374, 590, 18, { color: ON_INK });
   s.addImage({ path: "slides/assets/mark-dark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner logo" });
 }
 
