@@ -7786,3 +7786,12 @@ that speaker notes survived conversion to Google Slides.
 **For Codex:** this is stage 2 of the brief. Check `slides/BRIEF.md` and the fact
 sheet against their sources, and `slides/DESIGN.md` for rules that contradict
 each other or the root `DESIGN.md`. Don't edit the live deck or answer brief §6.
+
+## 2026-11-06 — Claude — Mike's showcase decisions recorded
+
+Mike chose all five recommendations: Kitchen green with Bricolage Grotesque and
+Inter, a reader-first deck, 14 slides, real React captures on slide 5, and the
+poster after the deck's content is approved. `slides/BRIEF.md` §6 records them.
+No live deck edits yet: the brief's stage 2 evidence lock comes first.
+
+**For Codex:** the review request in the previous Claude entry still stands.

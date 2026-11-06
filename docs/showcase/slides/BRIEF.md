@@ -1,6 +1,6 @@
 # Showcase deck brief
 
-**Status: draft for Mike, 6 November 2026.** Nothing in §4 has been applied to the live deck yet.
+**Status: Mike's decisions recorded, 6 November 2026; stage 2 evidence lock next.** Nothing in §4 has been applied to the live deck yet.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
 [live Google Slides deck](https://docs.google.com/presentation/d/1Pm0IzeQQoAXNDdjvKvWIPQUkZCUnHgkgS3YE6-w1zm0/edit)
@@ -119,7 +119,7 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Question:** what does using it look like?
 - **Message:** you, craving, your plan.
 - **Content:** three screens with short captions.
-- **Visual:** real captures of the current app if they can be taken; otherwise caption them "Approved design prototype".
+- **Visual:** real captures of the current React app.
 - **Live:** uses prototype screens with no such caption.
 - **Source:** `docs/8_design.md`, `docs/assets/design/`, `scripts/capture_screenshots.py`.
 
@@ -214,10 +214,12 @@ The live deck predates the standard. The stage 5 design pass closes these:
 - Footer positions differ, and takeaway columns and paired markers don't exist yet.
 - Speaker notes follow an earlier style, with no `[Point:]` cues or references, and need confirming in the live deck.
 
-## 6. Decisions for Mike
+## 6. Decisions
 
-1. **Audience:** a reader-first portfolio deck that can also be presented (recommended), or a talk-first deck with larger type.
-2. **Length:** 14 slides as above (recommended), or the current 12 without an executive summary and agenda.
-3. **Brand:** keep Kitchen green with Bricolage Grotesque and Inter (recommended), or move to the blue and Google Sans family of your other decks.
-4. **Slide 5:** capture the real React app (recommended), or keep labelled prototype screens.
-5. **Poster order:** rebuild the poster after the deck's content is approved (recommended), or in parallel.
+Decided by Mike, 6 November 2026:
+
+1. **Brand:** keep Kitchen green with Bricolage Grotesque and Inter.
+2. **Audience:** a reader-first portfolio deck that can also be presented.
+3. **Length:** 14 slides, adding an executive summary and agenda.
+4. **Slide 5:** capture the real React app.
+5. **Poster order:** rebuild the poster after the deck's content is approved.

@@ -1,6 +1,6 @@
 # Poster design standard
 
-Status: proposed, 6 November 2026. This file is the standard for the poster and the LinkedIn
+Status: current, 6 November 2026; the poster is rebuilt after the deck's content is approved. This file is the standard for the poster and the LinkedIn
 image. The [slide-deck standard](slides/DESIGN.md) is separate. Brand tokens are in the
 [root DESIGN.md](../../DESIGN.md). Numbers and sources are in the [fact sheet](README.md#fact-sheet).
 
