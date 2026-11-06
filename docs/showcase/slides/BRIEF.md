@@ -3,7 +3,7 @@
 **Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: all choices made and applied in the restyled live deck; awaiting Mike's flip-through, then the deck is restyled.** Stage 5 items are in §5.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
-[live Google Slides deck](https://docs.google.com/presentation/d/1oKs5FFUak7_AIuMEWYxDS_IAvSTtoh97GfAsB3vXlik/edit)
+[live Google Slides deck](https://docs.google.com/presentation/d/1KpI1000mDr8I143nNIUvZvncuwm51mZvPYzZvAm7hGM/edit)
 follows both. A design agent can work from this file alone: find the slide, read its fields,
 then edit the live slide. When the story changes, change this file first, then the slide.
 Numbers and sources are in the [fact sheet](../README.md#fact-sheet).

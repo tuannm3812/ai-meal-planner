@@ -7951,3 +7951,10 @@ the live deck. No application code changed.
 
 **For Codex:** the earlier review requests stand: seed text and notes against the
 brief and fact sheet, and the revised standards for contradictions.
+
+## 2026-11-06 — Claude — cover revised after Mike's review
+
+Mike preferred the flat plate from the sketch, with more food, and found the rice
+label too close to the QR block. `build_cover_art.py` now paints a flat, fuller
+plate, and the label sits nearer the plate. Mike approved it, so the live deck is
+now "AI Meal Planner showcase deck v4" (links updated). Earlier Codex requests stand.
