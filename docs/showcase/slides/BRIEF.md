@@ -217,7 +217,7 @@ in section 4 changes first and the slide second.
 | 7 | Four-step flow, +250/−400, 28%, 350–850 | Correct | None |
 | 7 | R² 0.996, MAE 2.2 kcal, 750,000 rows | Correct, on Kaggle data | Add why it matters less: with default inputs the model adds only 110–146 kcal, 3–11% of expenditure. The BMR estimate does most of the work |
 | 7 | Exercise inputs use defaults | Correct | Add as a limit: the activity multiplier may already count that exercise, so the model's calories can double count it |
-| 7 | Floor of 1,200 or 1,500 kcal | Correct | Add the example: the older woman's budget would be 986 kcal without it |
+| 7 | Floor of 1,200 or 1,500 kcal | Correct | Add the example: the older woman's budget would be about 990 kcal without it |
 | 7 | 350–850 kcal | Correct, but the 28% has no recorded reason | State it as a design choice. The athlete's meal is capped at 19% of the day |
 | 8 | Limits checked before scoring | Correct (`retriever.py`) | Add that limits can swap an ingredient as well as exclude a recipe |
 | 8 | Three outcomes | Correct | Add counts: 61 matched and 11 fallback of 72; refusal appears only in 2 guardrail cases |
@@ -232,7 +232,8 @@ in section 4 changes first and the slide second.
 | 12 | Other five habits | Correct | None |
 | 13 | Next and Not yet | Correct | Add the wider check and the oats question if still open |
 | 14 | Notes: "every number showing how it was produced" | Overclaims | Match the cover: "each ingredient's source shown" |
-| 14 | Live demo link | Public, but it sleeps when idle and took about a minute to wake | Add "may take a minute to wake", or keep it awake before sharing |
+| 14 | Live demo link | **Fails on first use.** It sleeps when idle and took about a minute to wake. It then opens with demo mode off, and Generate shows "Could not connect to the API". With the toggle on, a plan generates | Turn demo mode on by default in the Streamlit Cloud settings, then retest from a phone. Same fix covers the cover's QR code |
+| 5, 14 | Demo versus deck | The QR opens the Streamlit demo, not the React app slide 5 shows | Say so on slide 14, or host the React app |
 
 ## 6. Decisions
 
