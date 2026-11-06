@@ -158,39 +158,39 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 2 — executive summary
 {
-  const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "The same chicken fried rice from the benchmark, and every plan met its targets.",
+  const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
     "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: Balanced and checked]\nFour features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
   // Row 1: the proof of "sized to you". Plate area is to scale with calories.
   card(s, "", X0, TOP, W, 140, { fill: INK });
   s.addImage({ path: "slides/assets/bg-band.png", ...box(X0, TOP, W, 140), altText: "" });
   const scale = 112 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
-  [[363, "Older woman,", "losing weight"], [694, "Active woman,", "maintaining"], [809, "Average man,", "maintaining"], [850, "Large athlete,", "gaining"]].forEach(([kcal, a, b], i) => {
+  [[363, 26, "Older woman,", "losing weight"], [694, 48, "Active woman,", "maintaining"], [809, 60, "Average man,", "maintaining"], [850, 63, "Large athlete,", "gaining"]].forEach(([kcal, protein, a, b], i) => {
     const x = X0 + 10 + i * 218, cy = TOP + 70, cx = x + 62, d = Math.sqrt(kcal) * scale * art;
-    s.addImage({ path: "slides/assets/plate.png", ...box(cx - d / 2, cy - d / 2, d, d), altText: `Plate of chicken fried rice, ${kcal} kcal` });
+    s.addImage({ path: `slides/assets/plate-${kcal}.png`, ...box(cx - d / 2, cy - d / 2, d, d), altText: `Plate of chicken fried rice, ${kcal} kcal` });
     text(s, [
       { text: `${kcal} kcal`, options: { fontSize: 16, bold: true, color: WHITE, breakLine: true, paraSpaceAfter: 2 } },
+      { text: `${protein} g protein`, options: { fontSize: 10, bold: true, color: WHITE, breakLine: true, paraSpaceAfter: 2 } },
       { text: a, options: { fontSize: 10, color: ON_INK, breakLine: true } },
       { text: b, options: { fontSize: 10, color: ON_INK } },
-    ], x + 126, TOP + 36, 90, 70, { valign: "middle" });
+    ], x + 126, TOP + 30, 90, 80, { valign: "middle" });
   });
-  // Row 2: the key features, each with its own food colour and icon.
+  // Row 2: the key features, in Garden green colours. Row 3: the number that proves each one.
   [
-    ["person", "E3EFE6", "1B5E3F", "Sized to you", "A trained model and your goal set a daily budget, then this meal's target."],
-    ["health_and_safety", "FBE4DC", "C8431F", "Safe for your diet", "Allergies, diets and health conditions rule out conflicting recipes first."],
-    ["balance", "FFF3C9", "A67C00", "Balanced and checked", "Portions are resized toward healthy ranges, and each ingredient shows its source."],
-    ["shopping_basket", "EEF2D6", "66791C", "Ready to shop", "Ingredients map to products, with an estimated total for your list."],
-  ].forEach(([icon, tint, deep, h, b], i) => {
+    ["person", "E3EFE6", GREEN, "Sized to you", [["A trained model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.3%", "median calorie deviation"],
+    ["health_and_safety", "FBE4DC", TOMATO, "Safe for your diet", [["Allergies, diets and health conditions "], ["rule out conflicting recipes", 1], [" first."]], "5 of 5", "guardrail cases hold, including refusals"],
+    ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions are resized toward "], ["healthy ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
+    ["shopping_basket", "DDE3DA", INK, "Ready to shop", [["Ingredients map to products, with an "], ["estimated total", 1], [" for your list."]], "$24.50", "estimated list for the 694 kcal plan"],
+  ].forEach(([icon, tint, deep, h, body, v, l], i) => {
     const x = X0 + i * 223, y = 282;
-    card(s, hb(h, b, { bc: INK }), x, y, 204, 142, { fill: tint, margin: 12, valign: "bottom" });
+    card(s, [
+      { text: h, options: { fontFace: HEAD, fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
+      ...body.map(([t, key]) => ({ text: t, options: { fontSize: 12, color: key ? deep : INK, bold: !!key } })),
+    ], x, y, 204, 142, { fill: tint, margin: 12, valign: "bottom" });
     s.addShape(pres.ShapeType.ellipse, { ...box(x + 12, y + 12, 30, 30), fill: { color: deep }, line: { color: deep, width: 0.5 } });
     s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(x + 17, y + 17, 20, 20), altText: "" });
+    text(s, [{ text: v, options: { fontSize: 24, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
   });
-  // Row 3: the key numbers.
-  [["72 of 72", "benchmark plans on target, up from 10"], ["0.3%", "median calorie deviation"], ["34", "curated recipes"], ["4 agents", "and no LLM key needed"]].forEach(([v, l], i) => {
-    const x = X0 + i * 223;
-    text(s, [{ text: v, options: { fontSize: 24, bold: true, color: GREEN, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
-  });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "benchmark figures come from the project's own offline test. Plate area is to scale with calories." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "benchmark figures come from the project's own offline test. Plate area is to scale with calories, and every plan met its targets." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
 }
 
 // 3 — agenda

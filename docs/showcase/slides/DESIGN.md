@@ -113,7 +113,7 @@ and tomato, so real screenshots sit naturally in the deck. Canvas is white, like
 | Limitation strips; estimate badges | #7A4A0C on #FBEBD6 |
 | Positive badges with a label | #1B5E3F on #E3EFE6 |
 | Neutral tracks and reference badges | #ECEFE8 |
-| Feature cards, one each | #E3EFE6 with #1B5E3F; #FBE4DC with #C8431F; #FFF3C9 with #A67C00; #EEF2D6 with #66791C |
+| Feature cards, one each | #E3EFE6 with green; #FBE4DC with tomato; #FBEBD6 with #7A4A0C; #DDE3DA with ink. Key terms and the number below take the card's deep colour |
 | Macro data only | Protein #2F6FAB, carbs #9A6A12, fat #7A4E9C |
 
 Most of each slide stays white. One ink focal panel at most per slide. Colour is never the

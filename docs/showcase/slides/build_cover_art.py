@@ -61,12 +61,14 @@ def scallion():
     return f'<circle cx="{x:.1f}" cy="{y:.1f}" r="4.6" fill="none" stroke="#3F7E27" stroke-width="2.4"/>'
 
 
-food = [rice() for _ in range(3000)]
-pieces = [chicken] * 26 + [egg] * 20 + [carrot] * 40 + [pea] * 52 + [scallion] * 12
-rnd.shuffle(pieces)
-food += [draw() for draw in pieces]
-
-svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+def scene(seed, chickens):
+    """One plate. The dish stays the same; chicken pieces follow the plan's protein."""
+    rnd.seed(seed)
+    food = [rice() for _ in range(3000)]
+    pieces = [chicken] * chickens + [egg] * 20 + [carrot] * 40 + [pea] * 52 + [scallion] * 12
+    rnd.shuffle(pieces)
+    food += [draw() for draw in pieces]
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
 <circle cx="{CX}" cy="{CY + 8}" r="{R + 4}" fill="#0C1A13"/>
 <circle cx="{CX}" cy="{CY}" r="{R}" fill="#FAFAF6"/>
 <circle cx="{CX}" cy="{CY}" r="{FOOD + 8:.1f}" fill="#EFEFE8"/>
@@ -74,20 +76,26 @@ svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewB
 {"".join(food)}
 </svg>"""
 
+
+svg = scene(11, 26)
+# kcal on slide 2 -> chicken pieces, in proportion to each plan's protein (26, 48, 60, 63 g).
+PLATES = {363: 11, 694: 20, 809: 25, 850: 27}
+
 with sync_playwright() as p:
     browser = p.chromium.launch()
     page = browser.new_page(viewport={"width": 960, "height": 540}, device_scale_factor=2)
     page.set_content(f'<body style="margin:0;background:transparent">{svg}</body>')
     page.wait_for_timeout(300)
     page.screenshot(path=HERE / "assets/cover-art.png", omit_background=True)
-    # The whole plate on its own, for the four plates on slide 2.
+    # Whole plates on their own, for slide 2.
     side = 2 * R + 32
-    square = svg.replace(
-        'width="960" height="540" viewBox="0 0 960 540"',
-        f'width="{side}" height="{side}" viewBox="{CX - side / 2} {CY - side / 2 + 4} {side} {side}"',
-    )
     page.set_viewport_size({"width": side, "height": side})
-    page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
-    page.wait_for_timeout(300)
-    page.screenshot(path=HERE / "assets/plate.png", omit_background=True)
+    for kcal, chickens in PLATES.items():
+        square = scene(kcal, chickens).replace(
+            'width="960" height="540" viewBox="0 0 960 540"',
+            f'width="{side}" height="{side}" viewBox="{CX - side / 2} {CY - side / 2 + 4} {side} {side}"',
+        )
+        page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
+        page.wait_for_timeout(300)
+        page.screenshot(path=HERE / f"assets/plate-{kcal}.png", omit_background=True)
     browser.close()
