@@ -145,16 +145,15 @@ Arrows show a real sequence or dependency. Don't imply causes the evidence doesn
 
 Use a takeaway column only when it interprets the evidence on its left: a consequence,
 limitation, decision or next test. Don't restate a label. No generic KEY TAKEAWAYS heading.
-Every content slide has one, from the problem slide to pending tasks. Omit it only on the cover,
-agenda, executive summary and close.
+Slides 2 to 15 all have one. Only the cover and close go without. Each has exactly three takeaways
+in fixed slots: a bold heading, one sentence, then two or three supporting points.
 
-One native text box, zero internal padding, 12 pt, bold headings, 110% line spacing, 6 pt
-after paragraphs, 14 pt before later headings. No fixed point count. Keep the frame fixed;
-never shrink the text or stretch the frame to fit.
+Three native text boxes at x 684, y 130, 250 and 370, each 232.5 × 114 pt, zero padding, 12 pt.
+Keep the frames fixed; never shrink the text or stretch a frame to fit. Cut words instead.
 
 Number each interpretation in reading order. A marker is one 12 pt `accent` ellipse with a
-centred white 8 pt bold number, zero padding. Align it to the centre of its heading's
-rendered first line, and repeat the same number beside its evidence, clear of data and text.
+centred white 8 pt bold number, zero padding. Place it at x 666, level with its heading,
+and repeat the same number beside its evidence, clear of data and text.
 Markers are a reference, not a judgment. Use them only in pairs. Step chips are `ink` so the two never read as one system.
 
 Use small `muted` superscripts (¹ ²) for qualifications, restarted per slide, with a matching

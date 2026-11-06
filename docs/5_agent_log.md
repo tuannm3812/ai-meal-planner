@@ -8087,3 +8087,9 @@ except 3 and 11, which didn't change. No application code changed.
 The delivery line now names each habit's file, and P3 tags sit on Cloud Run and tracing. The panels
 show real figures: 538 backend and 92 Streamlit tests, 95% coverage against the 89% CI floor, and
 the five CI checks by name. Inspected in Google Slides. The live demo still opens with demo mode off.
+
+## 2026-11-07 — Claude — one takeaway column on slides 2 to 15
+
+Mike asked for a consistent column with more support. Each slide now has three takeaways in fixed
+slots, each with supporting points, so markers sit in the same place. Slides 2 and 3 narrowed to
+fit; the agenda's plate gave way to a reading guide. Every slide 2 to 15 inspected in Google Slides.

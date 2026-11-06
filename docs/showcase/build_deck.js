@@ -84,15 +84,18 @@ const limit = (s, t, x, y, w, h, prefix = "Limit:") =>
   });
 const caption = (s, n, t, x, y, w) =>
   text(s, [{ text: `Figure ${n}. `, options: { bold: true } }, { text: t }], x, y, w, 14, { fontSize: 9, color: MUTED });
-// items: [[heading, body], ...]; offsets place each marker on its heading's first line.
-const takeaways = (s, items, offsets) => {
-  const runs = [];
-  items.forEach(([h, b], i) => {
-    runs.push({ text: h, options: { bold: true, breakLine: true, paraSpaceBefore: i ? 14 : 0, paraSpaceAfter: 6 } });
-    runs.push({ text: b, options: { color: MUTED, breakLine: i < items.length - 1, paraSpaceAfter: 6 } });
+// Three fixed slots, so the column and its markers sit in the same place on every slide.
+// items: [[heading, sentence, [supporting points]], x3]
+const takeaways = (s, items) => {
+  items.forEach(([h, b, points], i) => {
+    const y = TOP + i * 120;
+    text(s, [
+      { text: h, options: { bold: true, breakLine: true, paraSpaceAfter: 3 } },
+      { text: b, options: { color: MUTED, breakLine: true, paraSpaceAfter: 3 } },
+      ...points.map((p, k) => ({ text: p, options: { color: MUTED, bullet: { indent: 10 }, breakLine: k < points.length - 1 } })),
+    ], 684, y, 232.5, 114, { objectName: `Takeaway ${i + 1}` });
+    marker(s, i + 1, 666, y + 2);
   });
-  text(s, runs, 684, TOP, 232.5, 356, { lineSpacingMultiple: 1.1, objectName: "Takeaways" });
-  offsets.forEach((o, i) => marker(s, i + 1, 666, TOP + o));
 };
 // A coloured circle holding a white glyph, the icon style from slide 2.
 const iconDot = (s, name, colour, x, y, d = 30) => {
@@ -123,16 +126,6 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // The four feature colours from DESIGN.md: tint, deep.
 const G = ["E3EFE6", GREEN], T = ["FBE4DC", TOMATO], A = [TINT_WARN, WARN], K = ["DDE3DA", INK];
-// Like takeaways, but placed anywhere; bodies stay one text box.
-const notes = (s, items, offsets, x, y, w, h) => {
-  const runs = [];
-  items.forEach(([hd, b], i) => {
-    runs.push({ text: hd, options: { bold: true, breakLine: true, paraSpaceBefore: i ? 12 : 0, paraSpaceAfter: 4 } });
-    runs.push({ text: b, options: { color: MUTED, breakLine: i < items.length - 1 } });
-  });
-  text(s, runs, x, y, w, h, { lineSpacingMultiple: 1.1, objectName: "Takeaways" });
-  offsets.forEach((o, i) => marker(s, i + 1, x - 18, y + o));
-};
 const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "", {
   shape: pres.ShapeType.rect, ...box(x, y, w, h), fill: { color: fill }, line: { color: fill, width: 0.5 }, color: colour, fontSize: 12, bold: true, margin: 8, valign: "middle",
 });
@@ -191,45 +184,42 @@ const pend = (s, id, x, y) => {
   const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
     "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person. Meal targets stay within 350 to 850 kcal, so the first and last plates sit at those limits.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: Balanced and checked]\nFour features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
   // Row 1: the proof of "sized to you". Plate area is to scale with calories.
-  card(s, "", X0, TOP, W, 140, { fill: INK });
-  s.addImage({ path: "slides/assets/bg-band.png", ...box(X0, TOP, W, 140), altText: "" });
-  const scale = 112 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
+  card(s, "", X0, TOP, 608, 98, { fill: INK });
+  s.addImage({ path: "slides/assets/bg-band.png", ...box(X0, TOP, 608, 98), altText: "" });
+  const scale = 76 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
   [[363, 26, "Older woman,", "losing weight"], [694, 48, "Active woman,", "maintaining"], [809, 60, "Average man,", "maintaining"], [850, 63, "Large athlete,", "gaining"]].forEach(([kcal, protein, a, b], i) => {
-    const x = X0 + 10 + i * 218, cy = TOP + 70, cx = x + 62, d = Math.sqrt(kcal) * scale * art;
+    const x = X0 + 6 + i * 150, cy = TOP + 49, cx = x + 39, d = Math.sqrt(kcal) * scale * art;
     s.addImage({ path: `slides/assets/plate-${kcal}.png`, ...box(cx - d / 2, cy - d / 2, d, d), altText: `Plate of chicken fried rice, ${kcal} kcal` });
     text(s, [
-      { text: `${kcal} kcal`, options: { fontSize: 16, bold: true, color: WHITE, breakLine: true, paraSpaceAfter: 2 } },
-      { text: `${protein} g protein`, options: { fontSize: 10, bold: true, color: WHITE, breakLine: true, paraSpaceAfter: 2 } },
-      { text: a, options: { fontSize: 10, color: ON_INK, breakLine: true } },
-      { text: b, options: { fontSize: 10, color: ON_INK } },
-    ], x + 126, TOP + 30, 90, 80, { valign: "middle" });
+      { text: `${kcal} kcal`, options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } },
+      { text: `${protein} g protein`, options: { fontSize: 10, bold: true, color: WHITE, breakLine: true } },
+      { text: a, options: { fontSize: 8, color: ON_INK, breakLine: true } },
+      { text: b, options: { fontSize: 8, color: ON_INK } },
+    ], x + 80, TOP + 18, 68, 62, { valign: "middle" });
   });
   // Row 2: the key features, in Garden green colours. Row 3: the number that proves each one.
   [
     ["person", "E3EFE6", GREEN, "Sized to you", [["Your body, a trained exercise model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.4%", "median gap to the meal target, worst 9.9%"],
-    ["health_and_safety", "FBE4DC", TOMATO, "Fits your limits", [["Allergies, diets and health conditions "], ["rule out recipes or swap ingredients", 1], [" before a meal is picked."]], "5 of 5", "guardrail cases hold, including refusals"],
-    ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions are resized toward "], ["target macro ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
+    ["health_and_safety", "FBE4DC", TOMATO, "Fits your limits", [["Allergies, diets and conditions "], ["rule out recipes or swap ingredients", 1], [" first."]], "5 of 5", "guardrail cases hold, including refusals"],
+    ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions move toward "], ["target macro ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
     ["shopping_basket", "DDE3DA", INK, "Ready to shop", [["Ingredients map to store items or category prices, with an "], ["estimated total", 1], ["."]], "$24.50", "estimated basket, not a cost per meal"],
   ].forEach(([icon, tint, deep, h, body, v, l], i) => {
-    const x = X0 + i * 223, y = 282;
-    card(s, "", x, y, 204, 142, { fill: tint });
-    text(s, [
-      { text: h, options: { fontFace: HEAD, fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
-      ...body.map(([t, key]) => ({ text: t, options: { fontSize: 12, color: key ? deep : INK, bold: !!key } })),
-    ], x + 12, y + 48, 184, 90);
-    s.addShape(pres.ShapeType.ellipse, { ...box(x + 12, y + 12, 30, 30), fill: { color: deep }, line: { color: deep, width: 0.5 } });
-    s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(x + 17, y + 17, 20, 20), altText: "" });
-    text(s, [{ text: v, options: { fontSize: 24, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
+    const x = X0 + i * 156, y = 236;
+    card(s, "", x, y, 140, 172, { fill: tint });
+    iconDot(s, icon, deep, x + 8, y + 8, 26);
+    text(s, h, x + 40, y + 6, 96, 30, { bold: true, color: deep, valign: "middle" });
+    text(s, body.map(([t, key]) => ({ text: t, options: { fontSize: 12, color: key ? deep : INK, bold: !!key } })), x + 10, y + 42, 124, 124);
+    text(s, [{ text: v, options: { fontSize: 20, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 8, color: MUTED } }], x + 4, 412, 136, 56);
   });
-  pend(s, "P8", X0 + 3 * 223 + 134, 436);
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the project's own offline test, not real users. 11 of the 72 are fallback meals; guardrails use a controlled recipe set. Meal targets stay within 350–850 kcal. Plate area shows calories." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
+  pend(s, "P8", X0 + 3 * 156 + 74, 416);
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the project's own offline test, not real users. Guardrails use a controlled recipe set. Plate area shows calories." }], X0, 472, 608, 14, { fontSize: 8, color: MUTED });
+  takeaways(s, [["Same craving, four meals", "One dish spans 363 to 850 kcal, sized to each person.", ["Protein scales too: 26 to 63 g", "Targets stay within 350–850 kcal"]], ["Measured, not claimed", "Every plan is checked against fixed targets.", ["72 of 72, up from 10", "68 of 68 on the wider check"]], ["Honest about gaps", "Estimates and fallbacks are shown, not hidden.", ["68 of 72 include an estimate", "11 of 72 are fallback meals"]]]);
 }
 
 // 3 — agenda
 {
   const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course lists its pages by label. Select one to jump to it.",
     "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built, what isn't proven yet and what's still pending.\n\nEach page is a link, so you can jump straight to it.", OPEN);
-  s.addImage({ path: "slides/assets/plate-salmon.png", ...box(668, 196, 248, 248), altText: "Plate of salmon and quinoa" });
   let y = TOP;
   [
     ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", [["Why it matters", 4]], 56],
@@ -254,6 +244,7 @@ const pend = (s, id, x, y) => {
     });
     y += ch + 8;
   });
+  takeaways(s, [["Short on time?", "Three slides carry the story.", ["2: the result on one page", "11: how it got there", "14: what isn't proven"]], ["Technical reader?", "These show how it's built.", ["6 to 9: the agents and logic", "12 and 13: architecture and CI"]], ["Want to help build?", "Slide 15 lists what's open.", ["Paper tags mark each spot", "Full list: pending-tasks.md"]]]);
 }
 
 // 4 — problem
@@ -283,7 +274,8 @@ const pend = (s, id, x, y) => {
   });
   marker(s, 1, X0 + 590, 220);
   marker(s, 2, X0 + 590, 310);
-  takeaways(s, [["The range is almost fourfold", "The largest daily budget is 3.8 times the smallest, so one recipe size can't fit everyone."], ["Limits change the meal itself", "Portions aren't enough. A limit can change the recipe or swap an ingredient."], ["Today is our framing", "The Today chips describe the problem as this project sees it. They aren't survey results."]], [2, 90, 164]);
+  marker(s, 3, X0 + 420, 228);
+  takeaways(s, [["The range is almost fourfold", "The largest budget is 3.8 times the smallest.", ["Lowest: 1,200 kcal, older woman", "Highest: 4,521 kcal, large athlete"]], ["Limits change the meal itself", "A limit can change the recipe or swap an ingredient.", ["Vegan: a different recipe", "Coeliac: same recipe, new pasta"]], ["Today is our framing", "The Today chips aren't survey results.", ["They come from the project brief", "Slide 11 has the measured evidence"]]]);
 }
 
 // 5 — flow
@@ -306,8 +298,9 @@ const pend = (s, id, x, y) => {
   });
   marker(s, 1, X0 + 170, TOP + 146);
   marker(s, 2, X0 + 418 + 170, TOP + 146);
+  marker(s, 3, X0 + 418 + 170, TOP + 296);
   caption(s, 1, "Real captures of the React app, run locally with no provider keys, 6 November 2026.", X0, 472, 608);
-  takeaways(s, [["Two screens, then a result", "Everything the planner needs fits on the first two steps, then the result is one page."], ["The plan shows its working", "Balance, ingredient sources and estimates sit on the result page, not behind a menu."]], [2, 74]);
+  takeaways(s, [["Two screens, then a result", "The planner asks only what it needs.", ["Body, goal and limits first", "Then the craving and the store"]], ["The plan shows its working", "Everything sits on the result page.", ["Macro balance against its ranges", "A source label on each ingredient"]], ["It says when something is off", "Problems appear on the page.", ["A note when a craving has no match", "A refusal when nothing is safe"]]]);
 }
 
 // 6 — agents
@@ -339,7 +332,8 @@ const pend = (s, id, x, y) => {
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "white labels show the active woman's real plan. The service balances portions after verification." }], X0, 468, 608, 14, { fontSize: 8, color: MUTED });
   marker(s, 1, X0 + 250, 172);
   marker(s, 2, X0 + 563, 172);
-  takeaways(s, [["One job per station", "Each agent does a single task, so it can be tested and changed on its own."], ["Retrieval, not generation", "Meals come from 34 curated recipes, so the core path needs no LLM key, and offline the same request gives the same plan."]], [2, 74]);
+  marker(s, 3, X0 + 590, 434);
+  takeaways(s, [["One job per station", "Each agent can be tested and changed alone.", ["One file per agent", "A service runs them in order"]], ["Retrieval, not generation", "Meals come from 34 curated recipes.", ["The core path needs no LLM key", "Offline, same request, same plan"]], ["Typed output", "Clients get one checked JSON shape.", ["Estimates and warnings included", "No free-form LLM text"]]]);
 }
 
 // 7 — calorie target
@@ -375,7 +369,7 @@ const pend = (s, id, x, y) => {
   bar(s, x0, 398, 691.3 * k, 30, INK, "691 kcal");
   text(s, "Scale: full width is 2,469 kcal.", x0, 438, 400, 14, { fontSize: 9, color: MUTED });
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise." }], X0, 468, 608, 14, { fontSize: 8, color: MUTED });
-  takeaways(s, [["The model is a small part", "It adds about 110–140 kcal in these plans, 3–10% of the day. Its R² of 0.996 and 2.2 kcal error describe exercise calories only."], ["A floor protects low budgets", "Weight-loss budgets stop at 1,200 kcal for women and 1,500 for men. One test profile would otherwise get 986 kcal."], ["28% is a design choice", "It keeps meals in proportion, but the cap holds a large athlete's meal to 19% of the day."]], [2, 91, 180]);
+  takeaways(s, [["The model is a small part", "It adds about 110–140 kcal, 3–10% of the day.", ["R² 0.996, on exercise calories only", "2.2 kcal error, on the same task"]], ["A floor protects low budgets", "Weight-loss budgets stop at a minimum.", ["1,200 kcal women, 1,500 men", "One profile would get 986 kcal"]], ["28% is a design choice", "It keeps one meal in proportion to the day.", ["Kept within 350–850 kcal", "A large athlete's meal is 19% of the day"]]]);
 }
 
 // 8 — choosing the meal
@@ -406,12 +400,9 @@ const pend = (s, id, x, y) => {
   });
   marker(s, 2, X0 + 208 + 174, 316);
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "refusals were tested on a controlled recipe set. None of the 72 benchmark plans was refused." }], X0, 470, 608, 14, { fontSize: 8, color: MUTED });
-  notes(s, [["Safety comes before taste", "A recipe that breaks a limit is out, or adapted with a safe swap, before relevance counts."], ["Relevance decides what qualifies", "An off-menu craving falls back with a warning. Your profile only changes the order."]], [2, 80], 684, TOP, 232.5, 170);
-  card(s, "", 684, 310, 232.5, 154, { fill: "FBE4DC" });
-  iconDot(s, "health_and_safety", TOMATO, 696, 320, 28);
-  text(s, "Or a safe swap", 732, 320, 180, 28, { fontSize: 14, bold: true, color: TOMATO, valign: "middle" });
-  text(s, "A coeliac who asks for pasta keeps the recipe, made with gluten-free pasta. A limit doesn't always cost you the meal.", 696, 354, 208, 100, { color: TOMATO });
-  pend(s, "P6", 696, 440);
+  takeaways(s, [["Safety comes before taste", "A conflicting recipe is out before relevance counts.", ["Vegan: 34 recipes become 13", "A refusal beats a risky guess"]], ["Relevance decides what qualifies", "An off-menu craving falls back with a warning.", ["Your profile only changes the order", "8 of 11 fallbacks: pizza, dessert"]], ["A limit can be a swap", "It doesn't always cost you the meal.", ["Coeliac: gluten-free pasta", "Hypertension: coconut aminos"]]]);
+  pend(s, "P6", X0 + 168 + 13 * k + 58, TOP + 72);
+  marker(s, 3, X0 + 174, 316);
 }
 
 // 9 — nutrition
@@ -443,8 +434,9 @@ const pend = (s, id, x, y) => {
     if (i < 2) arrow(s, rx + 134, y + 51, rx + 134, y + 61);
   });
   marker(s, 2, rx + rw - 16, 300);
+  marker(s, 3, rx + rw - 16, 362);
   pend(s, "P4", rx + rw - 72, 340);
-  takeaways(s, [["Estimates carry 66% of the calories", "Only 3 of 6 ingredients are estimates, but they include chicken and rice, the biggest items."], ["Reference still means local", "With no provider keys, a plan's target check isn't an independent verification."]], [2, 90]);
+  takeaways(s, [["Estimates carry 66% of the calories", "Only 3 of 6 ingredients are estimates.", ["Chicken and rice are the big items", "The app labels each one"]], ["Reference still means local", "No provider keys were used here.", ["Not an independent check", "A USDA run is pending"]], ["Order sets the trust", "The best available source wins.", ["Trusted local values first", "Estimates only as a last resort"]]]);
 }
 
 // 10 — what good means
@@ -477,8 +469,9 @@ const pend = (s, id, x, y) => {
   text(s, "6 cravings × 4 limits", x + 160, 362, 72, 44, { fontSize: 10, color: TOMATO, bold: true });
   marker(s, 1, x + w - 18, TOP + 6);
   marker(s, 2, x + w - 18, 272);
+  marker(s, 3, X0 + 334, TOP + 6);
   limit(s, "AMDR is a daily reference, applied here to one meal.", X0, 442, 608, 30);
-  takeaways(s, [["Calories weren't the hard part", "At the first run 68 of 72 plans were within 10%, but only 10 cleared both tests."], ["Fixed requests make runs fair", "The same 72 requests run every time, offline, so each change can be measured."]], [2, 90]);
+  takeaways(s, [["Calories weren't the hard part", "Most plans hit calories from the start.", ["68 of 72 within 10% at first", "Only 10 cleared both tests"]], ["Fixed requests make runs fair", "The same 72 requests run every time.", ["48 across four body profiles", "24 across four diet or health limits"]], ["A daily range on one meal", "AMDR wasn't written for single meals.", ["Used here as a steady yardstick", "Not a clinical result"]]]);
 }
 
 // 11 — results
@@ -506,7 +499,7 @@ const pend = (s, id, x, y) => {
     text(s, l, x + 12, 442, 180, 32, { color: deep, fontSize: 10 });
   });
   marker(s, 3, 643, 396);
-  takeaways(s, [["61 plans match; 11 are fallbacks", "Both pass, but the 41 to 47 step came from those 11 moving to fallback meals, not better meals. 8 of them are pizza and dessert."], ["68 of 72 include an estimate", "The benchmark runs without provider keys, so these plans aren't USDA-verified."], ["Tuned on these 72", "Asked for by name, recipes passed only 49 of 68 until a further fix made it 68 of 68. Neither shows that users prefer the plans."]], [2, 106, 180]);
+  takeaways(s, [["61 match; 11 are fallbacks", "Both pass, but a fallback isn't what was asked for.", ["41 to 47 came from moving requests", "8 of 11 are pizza and dessert"]], ["68 of 72 include an estimate", "The benchmark uses no provider keys.", ["These plans aren't USDA-verified", "Worst calorie gap: 9.9%"]], ["Tuned on these 72", "The wider check caught what this set missed.", ["49 of 68 before a further fix", "Neither shows users prefer them"]]]);
 }
 
 // 12 — architecture
@@ -566,7 +559,7 @@ const pend = (s, id, x, y) => {
   marker(s, 1, 234, top + 6);
   marker(s, 2, 628, top + 5);
   marker(s, 3, 628, top + 26 + 3 * 46 + 2);
-  takeaways(s, [["One contract, two clients", "Streamlit and React use the same planning service, so the logic lives in one place."], ["Small models, no GPU", "The one trained model is 0.64 MB, and TF-IDF is enough for 34 recipes."], ["Balancing comes after lookup", "Portions are solved on looked-up numbers, then the shopping list is written from the final amounts."]], [2, 74, 149]);
+  takeaways(s, [["One contract, two clients", "Both use the same planning service.", ["Logic lives in one place", "The hosted demo runs it in Streamlit"]], ["Small models, no GPU", "The core path is light.", ["Trained model: 0.64 MB", "Embeddings wait for a bigger library"]], ["Balancing comes after lookup", "Portions use looked-up numbers.", ["Solved as a linear programme", "The list uses the final amounts"]]]);
 }
 
 // 13 — engineering
@@ -627,7 +620,7 @@ const pend = (s, id, x, y) => {
     text(s, t, kx + 34, ry, 150, 16, { fontSize: 10, color: WARN, valign: "middle" });
   });
   marker(s, 1, kx + 174, y + 6);
-  takeaways(s, [["CI stops drift", "Tests, the API contract and the dependency file are checked on every pull request, so they can't quietly fall out of step."], ["Built is not the same as live", "Cloud Run is ready, but no GCP project exists yet, so it hasn't run for real."], ["Privacy is tested, not promised", "A test proves health data stays out of traces. A real trace still has to arrive in Cloud Trace."]], [2, 106, 180]);
+  takeaways(s, [["CI stops drift", "Checks run on every pull request.", ["Tests, API contract, dependencies", "Coverage can't drop below 89%"]], ["Built is not the same as live", "No GCP project exists yet.", ["The workflow is written", "It hasn't run for real"]], ["Privacy is tested, not promised", "A test keeps health data out of traces.", ["One allowlist for traces and logs", "A real trace is still pending"]]]);
 }
 
 // 14 — limits
@@ -651,7 +644,7 @@ const pend = (s, id, x, y) => {
   marker(s, 1, X0 + 172, 468 - 178 + 6);
   marker(s, 2, X0 + 208 + 172, 468 - 258 + 6);
   marker(s, 3, X0 + 416 + 172, 468 - 336 + 6);
-  takeaways(s, [["What is solid", "Plans hit their targets on fixed requests, and the run can be repeated."], ["What is soft", "Most plans lean on estimates. Name matching missed soy sauce until this review."], ["What is unknown", "Nobody has used it, so targets say nothing yet about taste or health."]], [2, 74, 164]);
+  takeaways(s, [["What is solid", "Plans hit targets on fixed requests.", ["The run can be repeated", "One script reproduces it"]], ["What is soft", "Most plans lean on estimates.", ["Name matching missed soy sauce", "Found in review, now fixed"]], ["What is unknown", "Nobody has used it yet.", ["Targets say nothing about taste", "Or about health outcomes"]]]);
 }
 
 // 15 — pending tasks
@@ -677,7 +670,7 @@ const pend = (s, id, x, y) => {
   marker(s, 2, X0 + 208 + 162, TOP + 54);
   marker(s, 3, X0 + 416 + 162, TOP + 54);
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the full checklist is in " }, { text: "docs/showcase/pending-tasks.md", options: { fontFace: MONO } }, { text: "." }], X0, 474, 608, 12, { fontSize: 8, color: MUTED });
-  takeaways(s, [["Fix what visitors see first", "A demo that fails on first use undoes everything else, so it leads the board."], ["Accuracy before scale", "Better inputs and allergen tags come before more recipes."], ["People matter most", "Only testing with people can show that the plans help."]], [2, 74, 149]);
+  takeaways(s, [["Fix what visitors see first", "A failing demo undoes the rest.", ["Demo mode is a one-line setting", "Migrations protect real data"]], ["Accuracy before scale", "Better inputs come before more recipes.", ["Real nutrition data", "Real exercise and allergen data"]], ["People matter most", "Only testing shows that plans help.", ["Feedback is stored, not used yet", "Users come after it's live"]]]);
 }
 
 // 16 — close

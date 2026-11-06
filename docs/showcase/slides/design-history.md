@@ -32,3 +32,5 @@ Slides 7 to 13 moved from plain panels to the four feature colours, Material Sym
 Mike then asked for a clear architecture diagram with tech stack logos, limits on their own slide, and pending tasks. The deck is now 16 slides, and tool logos are allowed on the architecture slide only.
 
 Mike asked for the takeaway column back. It was only ever on slides 7, 8, 9 and 11, and two of those had moved, so it is now a rule for every content slide, and figures fit the 608 pt content width. Slides 13, 14 and 15 got distinct forms: a delivery line, an evidence staircase and a Now, Next, Later board. Paper tags mark pending work.
+
+Mike asked for the same takeaway column on every slide, with more support in it. It now has three fixed slots with supporting points on slides 2 to 15, replacing one flowing text box. Slides 2 and 3 narrowed to fit, and the agenda's salmon plate made way for a reading guide.
