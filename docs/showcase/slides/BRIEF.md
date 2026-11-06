@@ -206,6 +206,34 @@ Titles are working titles.
 - Slide 7 pass: without a duration, the model is fed a default 30-minute session at 100 bpm, so check how the deck describes its role.
 - Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
 
+## 5a. Record check, slides 7 to 14
+
+Checked 7 November 2026 against the code, `baseline.json` and fresh runs with no provider
+keys. **Nothing here is on a slide yet.** Each row waits for Mike's approval, then the entry
+in section 4 changes first and the slide second.
+
+| Slide | Record | Result | Proposed change |
+| --- | --- | --- | --- |
+| 7 | Four-step flow, +250/−400, 28%, 350–850 | Correct | None |
+| 7 | R² 0.996, MAE 2.2 kcal, 750,000 rows | Correct, on Kaggle data | Add why it matters less: with default inputs the model adds only 110–146 kcal, 3–11% of expenditure. The BMR estimate does most of the work |
+| 7 | Exercise inputs use defaults | Correct | Add as a limit: the activity multiplier may already count that exercise, so the model's calories can double count it |
+| 7 | Floor of 1,200 or 1,500 kcal | Correct | Add the example: the older woman's budget would be 986 kcal without it |
+| 7 | 350–850 kcal | Correct, but the 28% has no recorded reason | State it as a design choice. The athlete's meal is capped at 19% of the day |
+| 8 | Limits checked before scoring | Correct (`retriever.py`) | Add that limits can swap an ingredient as well as exclude a recipe |
+| 8 | Three outcomes | Correct | Add counts: 61 matched and 11 fallback of 72; refusal appears only in 2 guardrail cases |
+| 8 | "Vector similarity" | Correct but vague | Say TF-IDF, which is what runs at 34 recipes |
+| 9 | Table and 3 of 6 estimated | Correct | None |
+| 9 | Lookup order | Correct | Add that "Reference" still means local, and no benchmark value is externally verified |
+| 10 | Targets and 72 requests | Correct; targets were set on 17 October, before the first fix | None |
+| 11 | 10, 41, 47, 72 | Correct | Say the 41 to 47 step comes from 11 requests moving to fallback meals, not better meals. 8 of the 11 are pizza and dessert |
+| 11 | 72 of 72 as the headline | Correct but incomplete | **Add the wider check:** the fixes were tuned on these 72. Asking for every recipe by name gives 49 of 68 on `main`, and PR #43 would make it 68 of 68 |
+| 11 | Median 0.3% | Changes after PR #45 | Becomes 0.4% |
+| 12 | 598 tests | Out of date | 601 collected on this branch; use a fresh full run after PRs #43 and #45 |
+| 12 | Other five habits | Correct | None |
+| 13 | Next and Not yet | Correct | Add the wider check and the oats question if still open |
+| 14 | Notes: "every number showing how it was produced" | Overclaims | Match the cover: "each ingredient's source shown" |
+| 14 | Live demo link | Public, but it sleeps when idle and took about a minute to wake | Add "may take a minute to wake", or keep it awake before sharing |
+
 ## 6. Decisions
 
 Decided by Mike, 6 November 2026:
