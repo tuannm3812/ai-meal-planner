@@ -132,7 +132,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   s.addText([{ text: "chicken fried rice", options: { color: INK } }, { text: "|", options: { color: TOMATO } }], {
     shape: pres.ShapeType.roundRect, rectRadius: pt(25), ...box(X0, 262, 300, 50), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, fontSize: 18, margin: 14, valign: "middle",
   });
-  text(s, "One meal sized to you, every number explained, the shopping list ready.", X0, 328, 280, 44, { fontSize: 14, color: ON_INK });
+  text(s, "One meal sized to you, each ingredient's source shown, the shopping list ready.", X0, 328, 280, 44, { fontSize: 14, color: ON_INK });
   const callout = (x1, y1, x2, y2, flipV) => {
     const geo = { ...box(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1)), flipV };
     s.addShape(pres.ShapeType.line, { ...geo, line: { color: INK, width: 3 } });
@@ -164,7 +164,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 2 — executive summary
 {
   const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
-    "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: Balanced and checked]\nFour features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
+    "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person. Meal targets stay within 350 to 850 kcal, so the first and last plates sit at those limits.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: Balanced and checked]\nFour features do that work, and it stays honest: estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
   // Row 1: the proof of "sized to you". Plate area is to scale with calories.
   card(s, "", X0, TOP, W, 140, { fill: INK });
   s.addImage({ path: "slides/assets/bg-band.png", ...box(X0, TOP, W, 140), altText: "" });
@@ -181,21 +181,22 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   });
   // Row 2: the key features, in Garden green colours. Row 3: the number that proves each one.
   [
-    ["person", "E3EFE6", GREEN, "Sized to you", [["A trained model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.3%", "median calorie deviation"],
-    ["health_and_safety", "FBE4DC", TOMATO, "Safe for your diet", [["Allergies, diets and health conditions "], ["rule out conflicting recipes", 1], [" first."]], "5 of 5", "guardrail cases hold, including refusals"],
-    ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions are resized toward "], ["healthy ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
-    ["shopping_basket", "DDE3DA", INK, "Ready to shop", [["Ingredients map to products, with an "], ["estimated total", 1], [" for your list."]], "$24.50", "estimated list for the 694 kcal plan"],
+    ["person", "E3EFE6", GREEN, "Sized to you", [["Your body, a trained exercise model and your goal set a "], ["daily budget", 1], [", then this "], ["meal's target", 1], ["."]], "0.3%", "median gap to the meal target, worst 9.9%"],
+    ["health_and_safety", "FBE4DC", TOMATO, "Fits your limits", [["Allergies, diets and health conditions "], ["rule out recipes or swap ingredients", 1], [" before a meal is picked."]], "5 of 5", "guardrail cases hold, including refusals"],
+    ["balance", TINT_WARN, WARN, "Balanced and checked", [["Portions are resized toward "], ["target macro ranges", 1], [", and each ingredient "], ["shows its source", 1], ["."]], "72 of 72", "benchmark plans on target, up from 10"],
+    ["shopping_basket", "DDE3DA", INK, "Ready to shop", [["Ingredients map to store items or category prices, with an "], ["estimated total", 1], ["."]], "$24.50", "estimated basket, not a cost per meal"],
   ].forEach(([icon, tint, deep, h, body, v, l], i) => {
     const x = X0 + i * 223, y = 282;
-    card(s, [
+    card(s, "", x, y, 204, 142, { fill: tint });
+    text(s, [
       { text: h, options: { fontFace: HEAD, fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
       ...body.map(([t, key]) => ({ text: t, options: { fontSize: 12, color: key ? deep : INK, bold: !!key } })),
-    ], x, y, 204, 142, { fill: tint, margin: 12, valign: "bottom" });
+    ], x + 12, y + 48, 184, 90);
     s.addShape(pres.ShapeType.ellipse, { ...box(x + 12, y + 12, 30, 30), fill: { color: deep }, line: { color: deep, width: 0.5 } });
     s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(x + 17, y + 17, 20, 20), altText: "" });
     text(s, [{ text: v, options: { fontSize: 24, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
   });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "benchmark figures come from the project's own offline test. Plate area is to scale with calories, and every plan met its targets." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the project's own offline test, not real users. 11 of the 72 are fallback meals; guardrails use a controlled recipe set. Meal targets stay within 350–850 kcal. Plate area shows calories." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
 }
 
 // 3 — agenda
@@ -232,15 +233,15 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 4 — problem
 {
   const s = slide("PROBLEM > WHY IT MATTERS", "Picking a meal is easy; sizing it to you is not", "Three questions sit between a craving and a meal you can trust.",
-    "Most of us know what we feel like eating. The hard part comes after that.\n\n[Point: How much?]\nThe right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.\n\n[Point: Is it right for me?]\nDiets and health conditions each rule out different meals.\n\n[Point: What do I buy?]\nEven one meal means several ingredients to find and price.\n\n[Point: Today, With the app]\nEach question has a manual habit today, and each card shows what the app does in its place.\n\nThe next section shows how one request answers all three.\n\nReference — not read aloud\nThe three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.", PROBLEM);
+    "Most of us know what we feel like eating. The hard part comes after that.\n\n[Point: How much?]\nThe right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.\n\n[Point: Is it right for me?]\nThe same request changes with your limits. A vegan gets a different recipe, and a coeliac keeps the recipe with gluten-free pasta.\n\n[Point: What do I buy?]\nThis one pasta means five ingredients to find and price.\n\n[Point: Today, With the app]\nEach question has a manual habit today, and each card shows what the app does in its place.\n\nThe next section shows how one request answers all three.\n\nReference — not read aloud\nThe three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Pasta examples: a local run of the craving \"pasta\" for the average man, 7 November 2026, no provider keys.", PROBLEM);
   card(s, "", X0, TOP, 270, 356, { fill: INK });
   s.addImage({ path: "slides/assets/plate-pasta.png", ...box(X0 + 35, TOP + 92, 200, 200), altText: "Plate of tomato turkey pasta" });
   s.addText("I feel like pasta tonight.", { shape: pres.ShapeType.wedgeRoundRectCallout, ...box(X0 + 20, TOP + 18, 230, 56), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: INK, fontSize: 16, bold: true, align: "center", valign: "middle", margin: 6 });
   text(s, "One request answers all three.", X0 + 20, TOP + 306, 230, 30, { fontSize: 16, bold: true, color: WHITE, align: "center", valign: "middle" });
   [
     ["monitor_weight", "E3EFE6", GREEN, "How much?", "Daily budgets in our benchmark run from 1,200 to 4,521 kcal.", "Guess from \"serves 4\"", "A budget, then a meal target"],
-    ["no_food", "FBE4DC", TOMATO, "Is it right for me?", "Vegan, coeliac, hypertension and kidney disease each rule out different meals.", "Read every label", "Conflicts ruled out first"],
-    ["shopping_cart", TINT_WARN, WARN, "What do I buy?", "Even one meal means several ingredients to find and price.", "Write a list, guess the cost", "A list with an estimated total"],
+    ["no_food", "FBE4DC", TOMATO, "Is it right for me?", "Asked for pasta, a vegan gets lentil bolognese and a coeliac gets gluten-free pasta.", "Read every label", "Conflicts ruled out or swapped first"],
+    ["shopping_cart", TINT_WARN, WARN, "What do I buy?", "This one pasta means five ingredients to find and price.", "Write a list, guess the cost", "A list with an estimated total"],
   ].forEach(([icon, tint, deep, h, b, before, after], i) => {
     const y = TOP + i * 123;
     card(s, "", 331.5, y, 585, 110, { fill: tint });
@@ -261,7 +262,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   const s = slide("SOLUTION > THE FLOW", "One craving in, one meal and a shopping list out", "Three steps in the React app.",
     "This is the real React app, in three steps.\n\n[Point: You]\nYou enter your body, goal and anything to avoid.\n\n[Point: Craving]\nYou say what you feel like eating and where you shop.\n\n[Point: Your plan]\nYou get one meal, its balance, each ingredient's source and a shopping list. The badges say how it matched and what is estimated.\n\nNext, what happens behind these screens.\n\nReference — not read aloud\nCaptured 6 November 2026 from a local run with no provider keys: slides/captures/2026-11-06-plan.json. frontend/src/features/flow/MealFlow.jsx.", SOLUTION);
   [
-    ["1-profile", "person", "E3EFE6", GREEN, "1. You", "Goal, age, height, weight, activity and anything to avoid."],
+    ["1-profile", "person", "E3EFE6", GREEN, "1. You", "Goal, body details, activity and anything to avoid."],
     ["2-craving", "search", "FBE4DC", TOMATO, "2. Craving", "Say what you feel like eating and where you shop."],
     ["3-plan", "rice_bowl", TINT_WARN, WARN, "3. Your plan", "One meal, its balance, each ingredient's source and a shopping list."],
   ].forEach(([f, icon, tint, deep, h, b], i) => {
@@ -278,26 +279,27 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 6 — agents
 {
   const s = slide("SOLUTION > FOUR AGENTS", "Four agents work like one kitchen", "An order comes in, each station does one job, and a planning service runs them in order.",
-    "Behind the screens is a FastAPI service, and it works like a kitchen.\n\n[Point: The portion planner]\nThe calorie agent sets a daily budget.\n\n[Point: The chef]\nThe recommendation agent sets the meal target, excludes conflicting meals and picks a relevant recipe.\n\n[Point: The taster]\nThe nutrition agent looks up each ingredient and labels estimates.\n\n[Point: The shopper]\nThe supermarket agent maps ingredients to products with an estimated cost.\n\nThe meal comes from retrieval, not generation, so the core path needs no LLM key.\n\nReference — not read aloud\ndocs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.", SOLUTION);
+    "Behind the screens is a FastAPI service, and it works like a kitchen.\n\n[Point: The portion planner]\nThe calorie agent sets a daily budget.\n\n[Point: The chef]\nThe recommendation agent sets the meal target, excludes conflicting meals and picks a relevant recipe.\n\n[Point: The taster]\nThe nutrition agent looks up each ingredient and labels estimates.\n\n[Point: The shopper]\nThe supermarket agent matches ingredients to store items or category prices, with an estimated total.\n\n[Point: white labels]\nThe white labels follow one real order: a 2,469 kcal budget, a 691 kcal target, 694 kcal served and a $24.50 estimated basket.\n\nThe meal comes from retrieval, not generation, so the core path needs no LLM key.\n\nReference — not read aloud\ndocs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.", SOLUTION);
   s.addText([{ text: "ORDER  ", options: { bold: true } }, { text: "chicken fried rice, active woman, maintaining" }], { shape: pres.ShapeType.rect, ...box(X0, TOP, W, 34), fill: { color: WHITE }, line: { color: INK, width: 1, dashType: "dash" }, color: INK, fontFace: MONO, fontSize: 12, margin: 10, valign: "middle" });
   [
-    ["scale", "E3EFE6", GREEN, "THE PORTION PLANNER", "Calorie expenditure", "Estimates what you burn in a day and sets your daily budget."],
-    ["pan", "FBE4DC", TOMATO, "THE CHEF", "Meal recommendation", "Sets the meal target, rules out conflicts, picks a relevant recipe and sizes it."],
-    ["taster", TINT_WARN, WARN, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels what is estimated."],
-    ["basket", "DDE3DA", INK, "THE SHOPPER", "Supermarket", "Maps ingredients to products with an estimated cost."],
-  ].forEach(([art, tint, deep, role, h, b], i) => {
+    ["scale", "E3EFE6", GREEN, "THE PORTION PLANNER", "Calorie expenditure", "Estimates what you burn in a day and sets your daily budget.", "2,469 kcal budget"],
+    ["pan", "FBE4DC", TOMATO, "THE CHEF", "Meal recommendation", "Sets the meal target, rules out conflicts, picks a relevant recipe and sizes it.", "691 kcal target"],
+    ["taster", TINT_WARN, WARN, "THE TASTER", "Nutrition verification", "Looks up each ingredient and labels what is estimated.", "694 kcal, 3 of 6 estimated"],
+    ["basket", "DDE3DA", INK, "THE SHOPPER", "Supermarket", "Matches ingredients to store items or category prices.", "$24.50 estimated"],
+  ].forEach(([art, tint, deep, role, h, b, out], i) => {
     const x = X0 + i * 223, y = 174;
-    card(s, "", x, y, 204, 206, { fill: tint });
+    card(s, "", x, y, 204, 226, { fill: tint });
     s.addImage({ path: `slides/assets/station-${art}.png`, ...box(x + 32, y + 10, 140, 70), altText: `Illustration for ${role.toLowerCase()}` });
     text(s, [
       { text: role, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 2 } },
       { text: h, options: { fontSize: 14, bold: true, color: deep, breakLine: true, paraSpaceAfter: 4 } },
       { text: b, options: { fontSize: 12, color: deep } },
-    ], x + 12, y + 88, 182, 112);
-    if (i < 3) arrow(s, x + 206, y + 103, x + 221, y + 103);
+    ], x + 12, y + 84, 182, 104);
+    s.addText(out, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 12, y + 192, 180, 26), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: deep, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
+    if (i < 3) arrow(s, x + 206, y + 113, x + 221, y + 113);
   });
-  card(s, [{ text: "One typed JSON response: meal, nutrition, shopping list and warnings", options: { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE } }], X0, 388, W, 56, { fill: INK, margin: 16, valign: "middle" });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the service balances portions after verification. The core path needs no LLM key." }], X0, 454, W, 14, { fontSize: 8, color: MUTED });
+  card(s, [{ text: "One typed JSON response: meal, nutrition, shopping list and warnings", options: { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE } }], X0, 408, W, 42, { fill: INK, margin: 16, valign: "middle" });
+  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "white labels show the active woman's real plan. The service balances portions after verification. The core path needs no LLM key." }], X0, 458, W, 14, { fontSize: 8, color: MUTED });
 }
 
 // 7 — calorie target

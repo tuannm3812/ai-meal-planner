@@ -1,6 +1,6 @@
 # Speaker notes — AI Meal Planner deck
 
-Generated from the seed on 6 November 2026; keep aligned with the live deck's notes.
+Generated from the seed on 7 November 2026; keep aligned with the live deck's notes.
 Pattern: slides/DESIGN.md, Speaker notes.
 
 ## Slide 1 — p1
@@ -20,7 +20,7 @@ Values are the real local run of 6 November 2026: slides/captures/2026-11-06-pla
 
 If you read one slide, read this one.
 [Point: four plates]
-This is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.
+This is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person. Meal targets stay within 350 to 850 kcal, so the first and last plates sit at those limits.
 [Point: 72 of 72]
 That quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.
 [Point: Balanced and checked]
@@ -48,14 +48,14 @@ Most of us know what we feel like eating. The hard part comes after that.
 [Point: How much?]
 The right amount depends on the person. Across the four benchmark profiles, daily budgets run from 1,200 to 4,521 kcal.
 [Point: Is it right for me?]
-Diets and health conditions each rule out different meals.
+The same request changes with your limits. A vegan gets a different recipe, and a coeliac keeps the recipe with gluten-free pasta.
 [Point: What do I buy?]
-Even one meal means several ingredients to find and price.
+This one pasta means five ingredients to find and price.
 [Point: Today, With the app]
 Each question has a manual habit today, and each card shows what the app does in its place.
 The next section shows how one request answers all three.
 Reference — not read aloud
-The three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Limits: docs/7_meal_quality.md §1.
+The three questions and the Today lines are the project's framing, from docs/1_brief.md, not research findings. Budgets: docs/meal_quality/baseline.json. Pasta examples: a local run of the craving "pasta" for the average man, 7 November 2026, no provider keys.
 
 ## Slide 5 — p5
 
@@ -80,7 +80,9 @@ The recommendation agent sets the meal target, excludes conflicting meals and pi
 [Point: The taster]
 The nutrition agent looks up each ingredient and labels estimates.
 [Point: The shopper]
-The supermarket agent maps ingredients to products with an estimated cost.
+The supermarket agent matches ingredients to store items or category prices, with an estimated total.
+[Point: white labels]
+The white labels follow one real order: a 2,469 kcal budget, a 691 kcal target, 694 kcal served and a $24.50 estimated basket.
 The meal comes from retrieval, not generation, so the core path needs no LLM key.
 Reference — not read aloud
 docs/2_architecture.md; docs/agents/; MealPlanningService. The kitchen roles are a metaphor for the agents.

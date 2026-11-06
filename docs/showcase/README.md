@@ -91,6 +91,8 @@ on 2026-11-05.
 | Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated; estimated shopping total $24.50 | Local run, 2026-11-06, no provider keys; slides/captures/2026-11-06-plan.json |
 | One dish, four people | Chicken fried rice: 363 kcal (older woman, losing), 694 (active woman, maintaining), 809 (average man, maintaining), 850 (large athlete, gaining), with 26, 48, 60 and 63 g protein; all meet the targets | meal_quality/baseline.json |
 | Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
+| Shopping estimate | In the 694 kcal plan, 2 of 6 items match listed store products and 4 use category prices. Prices are for whole items, so $24.50 is a basket, not a cost per meal | Local run, 2026-11-07, no provider keys |
+| Limits change the meal | Craving "pasta", average man: vegan gets Lentil Bolognese Pasta; celiac keeps the recipe with gluten-free pasta; 5 ingredients in the default recipe. Same plan for the capture profile and the benchmark active woman (budgets 2,468.9 and 2,469.2) | Local run, 2026-11-07, no provider keys |
 | Tests | 598 Python tests, 95% coverage (Claude's full run logged 2026-11-02) | 5_agent_log.md |
 | Benchmark split | 61 matched and 11 fallback plans; 68 of 72 include an estimated ingredient | 7_meal_quality.md §2 |
 

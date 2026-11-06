@@ -82,14 +82,14 @@ Titles are working titles.
 
 **Slide 1. Cover** (`p1`)
 - **Message:** the question, the app's answer, and proof that it works. The app leads, not the author.
-- **Content:** "What should I eat tonight?" A search bar reading "chicken fried rice". "One meal sized to you, every number explained, the shopping list ready." Three plate labels: Chicken breast, 100 g, Estimated; Cooked rice, 220 g, Estimated; Vegetables, 115 g, Reference. A tag: 694 kcal, target 691. A receipt: the six items and Estimated $24.50.
+- **Content:** "What should I eat tonight?" A search bar reading "chicken fried rice". "One meal sized to you, each ingredient's source shown, the shopping list ready." Three plate labels: Chicken breast, 100 g, Estimated; Cooked rice, 220 g, Estimated; Vegetables, 115 g, Reference. A tag: 694 kcal, target 691. A receipt: the six items and Estimated $24.50.
 - **Visual:** `ink` background, calendar plate logo with the name top left, our own plate illustration cropped at the bottom (`assets/cover-art.png`), a tilted receipt in Google Sans Code, a small QR code at bottom left with "Try the live demo".
 - **Elsewhere:** Mike's name goes on slide 14.
 
 **Slide 2. Executive summary: "One craving, sized to four different people"** (new)
 - **Question:** if I read one slide, what should I know?
 - **Message:** what it does, the features behind it, and the numbers that prove it.
-- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal (26, 48, 60, 63 g protein) for four benchmark profiles. Four features, each with key terms highlighted and the number that proves it: sized to you (0.3% median calorie deviation); safe for your diet (5 of 5 guardrail cases); balanced and checked (72 of 72, up from 10); ready to shop ($24.50 estimated list for the 694 kcal plan). Subtitle: four agents, 34 curated recipes, no LLM key.
+- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal (26, 48, 60, 63 g protein) for four benchmark profiles. Four features, each with key terms highlighted and the number that proves it: sized to you (0.3% median gap to the meal target, worst 9.9%); fits your limits (5 of 5 guardrail cases, on a controlled recipe set); balanced and checked (72 of 72, up from 10, 11 of them fallback meals); ready to shop ($24.50 estimated basket for the 694 kcal plan, not a cost per meal). A note states that meal targets stay within 350–850 kcal. Subtitle: four agents, 34 curated recipes, no LLM key.
 - **Visual:** three rows: four plates on an ink band, area to scale with calories; four feature cards; four key numbers. No takeaway column or markers.
 - **Source:** fact sheet; `docs/meal_quality/baseline.json`.
 
@@ -104,7 +104,7 @@ Titles are working titles.
 - **Subtitle:** Three questions sit between a craving and a meal you can trust.
 - **Question:** why build this?
 - **Message:** the work is how much, whether it suits you, and what to buy.
-- **Content:** a speech bubble, "I feel like pasta tonight.", then three questions with facts: budgets from 1,200 to 4,521 kcal; four diet and health limits; several ingredients to find and price.
+- **Content:** a speech bubble, "I feel like pasta tonight.", then three questions with facts: budgets from 1,200 to 4,521 kcal; asked for pasta, a vegan gets lentil bolognese and a coeliac gets gluten-free pasta; this pasta means five ingredients to find and price.
 - **Visual:** an ink panel with a pasta plate, beside three tinted question cards, each with a small Today to With the app flow.
 - **Source:** `docs/1_brief.md`, `docs/meal_quality/baseline.json`, `docs/7_meal_quality.md` §1. The questions are framing in Mike's voice, not research findings.
 - **Elsewhere:** how the app answers each one.
@@ -124,7 +124,7 @@ Titles are working titles.
 - **Visual:** an order ticket feeding four kitchen stations, each with a flat illustration and aligned text: portion planner, chef, taster, shopper. The roles are a metaphor.
 - **Question:** what happens behind the screen?
 - **Message:** the four steps, and the core path works with no LLM key.
-- **Content:** Calorie expenditure: estimates daily expenditure and sets the daily budget. Meal recommendation: sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes its portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: maps ingredients to products with an estimated cost. The service balances portions after verification. Output: one typed JSON response with meal, nutrition, shopping list and warnings.
+- **Content:** Calorie expenditure: estimates daily expenditure and sets the daily budget. Meal recommendation: sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes its portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: matches ingredients to store items or category prices. White labels follow the active woman's real plan: 2,469 kcal budget, 691 kcal target, 694 kcal with 3 of 6 estimated, $24.50 estimated. The service balances portions after verification. Output: one typed JSON response with meal, nutrition, shopping list and warnings.
 - **Source:** `docs/2_architecture.md`, `docs/agents/`.
 - **Elsewhere:** how each agent works (slides 7–9).
 
@@ -202,6 +202,8 @@ Titles are working titles.
 - Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
 - Slide 3's lower half is empty; consider a taller layout.
 - The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
+- **App gap, found 7 November 2026:** a celiac request for chicken fried rice keeps ordinary soy sauce, because `ALLERGEN_KEYWORDS["gluten"]` in `backend/app/rag/rules.py` doesn't include it. Soy sauce is normally made with wheat, and 5 recipes use it. Until that is fixed, don't claim gluten safety; if it stays, state it on the limits slide.
+- Slide 7 pass: without a duration, the model is fed a default 30-minute session at 100 bpm, so check how the deck describes its role.
 - Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
 
 ## 6. Decisions

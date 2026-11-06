@@ -7958,3 +7958,22 @@ Mike preferred the flat plate from the sketch, with more food, and found the ric
 label too close to the QR block. `build_cover_art.py` now paints a flat, fuller
 plate, and the label sits nearer the plate. Mike approved it, so the live deck is
 now "AI Meal Planner showcase deck v4" (links updated). Earlier Codex requests stand.
+
+## 2026-11-07 — Claude — content check of showcase slides 1–6
+
+Mike asked whether slides 1–6 are correct, insightful and support each main idea. Checked
+against `baseline.json`, the code and fresh local runs with no provider keys.
+
+Confirmed: benchmark numbers, agent order, the chef owning the 28% meal target, cover grams
+and labels, and that the capture profile and the benchmark active woman give the same plan.
+
+Changed: "Safe for your diet" is now "Fits your limits". Slide 2 states fallback meals, the
+controlled guardrail set and the 350–850 kcal limits. $24.50 is a basket, not a cost per
+meal (2 of 6 items are listed products, 4 category prices). Slide 4 uses real pasta outcomes.
+Slide 6 follows one real order through each station. Cover says "each ingredient's source shown".
+
+**Open, app code:** a celiac request keeps ordinary soy sauce in Chicken Fried Rice, because
+the gluten keywords in `backend/app/rag/rules.py` omit it. Not fixed here; see brief §5.
+
+Verified: OOXML validator passes; slides 1, 2 and 5 inspected in Google Slides on the final
+build, 4 and 6 at low zoom after a full-size check on the build before. No application code changed.
