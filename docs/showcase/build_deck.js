@@ -571,36 +571,63 @@ const pend = (s, id, x, y) => {
 
 // 13 — engineering
 {
-  const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits, in the order a change travels through them.",
-    "Although this is a portfolio project, I held it to production habits. Follow a change from left to right.\n\n[Point: Contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tests]\nThe last full run passed 630 Python tests at 95% coverage.\n\n[Point: Cloud Run]\nFrom here the line turns amber: the deployment workflow and tracing are built, but they wait for a GCP project.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; test_telemetry_redaction.py; local full run, 7 November 2026.", BUILD);
-  card(s, "", X0, TOP, 608, 196);
-  text(s, "From a change to production", X0 + 16, TOP + 10, 400, 18, { bold: true });
-  const ly = 196, sx = X0 + 54, step = 100;
+  const s = slide("BUILD AND LIMITS > ENGINEERING", "Built like a product, not a notebook", "Six production habits, in the order a change travels through them, each with a file behind it.",
+    "Although this is a portfolio project, I held it to production habits. Follow a change from left to right.\n\n[Point: Contract]\nThe API contract is committed, and CI fails if it drifts.\n\n[Point: Tests]\nThe last full run passed 630 Python tests at 95% coverage, and CI won't pass below 89%.\n\n[Point: Cloud Run]\nFrom here the line turns amber: the deployment workflow and tracing are built, but they wait for a GCP project.\n\n[Point: CI checks]\nFive checks run on every pull request, and all five passed on the latest one.\n\nReference — not read aloud\ndocs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; backend/tests/test_telemetry_redaction.py; local full run, 7 November 2026: 538 backend and 92 Streamlit tests.", BUILD);
+  card(s, "", X0, TOP, 608, 190);
+  text(s, "From a change to production", X0 + 16, TOP + 8, 300, 18, { bold: true });
+  [[GREEN, "Runs today", 382], [WARN, "Built, waiting for a GCP project", 462]].forEach(([c, t, x]) => {
+    s.addShape(pres.ShapeType.ellipse, { ...box(x, TOP + 13, 8, 8), fill: { color: c }, line: { color: c, width: 0.5 } });
+    text(s, t, x + 12, TOP + 9, 170, 16, { fontSize: 9, color: MUTED, valign: "middle" });
+  });
+  const ly = 193, sx = X0 + 54, step = 100;
   s.addShape(pres.ShapeType.line, { ...box(sx, ly, step * 3, 0), line: { color: GREEN, width: 4 } });
   s.addShape(pres.ShapeType.line, { ...box(sx + step * 3, ly, step * 2, 0), line: { color: WARN, width: 4, dashType: "dash" } });
   [
-    ["fact_check", GREEN, "Contract", "CI fails on any drift"],
-    ["science", GREEN, "Tests", "630 Python tests"],
-    ["lock", GREEN, "Security", "API keys, rate limits"],
-    ["inventory_2", GREEN, "Container", "One Docker image"],
-    ["cloud_upload", WARN, "Cloud Run", "Ready, not live"],
-    ["visibility", WARN, "Tracing", "Keeps health data out"],
-  ].forEach(([icon, c, h, b], i) => {
+    ["fact_check", GREEN, "Contract", "CI fails on any drift", "docs/openapi.json"],
+    ["science", GREEN, "Tests", "630 Python tests", "backend/tests/"],
+    ["lock", GREEN, "Security", "API keys, rate limits", "api/auth.py"],
+    ["inventory_2", GREEN, "Container", "One Docker image", "Dockerfile"],
+    ["cloud_upload", WARN, "Cloud Run", "Ready, not live", "deploy.yml"],
+    ["visibility", WARN, "Tracing", "Health data kept out", "core/telemetry.py"],
+  ].forEach(([icon, c, h, b, f], i) => {
     const x = sx + i * step;
-    iconDot(s, icon, c, x - 21, ly - 21, 42);
-    text(s, [{ text: h, options: { bold: true, color: c, breakLine: true } }, { text: b, options: { fontSize: 10, color: MUTED } }], x - 48, ly + 28, 96, 56, { align: "center" });
+    iconDot(s, icon, c, x - 20, ly - 20, 40);
+    text(s, [{ text: h, options: { bold: true, color: c, breakLine: true } }, { text: b, options: { fontSize: 10, color: MUTED } }], x - 49, ly + 24, 98, 34, { align: "center" });
+    text(s, f, x - 49, ly + 60, 98, 12, { fontFace: MONO, fontSize: 8, color: c, align: "center" });
+    if (i > 3) pend(s, "P3", x - 33, ly + 76 - 2);
   });
-  pend(s, "P3", sx + 4 * step - 33, 266);
-  text(s, "Green: runs today. Amber: built, waiting for a GCP project.", X0 + 16, 306, 330, 14, { fontSize: 9, color: MUTED });
-  marker(s, 1, sx + step - 6, ly - 34);
-  marker(s, 2, sx + 4 * step - 6, ly - 34);
-  [["630", "Python tests, all passing", G], ["95%", "coverage, with an 89% floor in CI", T], ["5", "CI checks on every pull request", A]].forEach(([v, l, [tint, deep]], i) => {
-    const x = X0 + i * 208;
-    card(s, "", x, 338, 192, 136, { fill: tint });
-    text(s, v, x + 14, 350, 170, 62, { fontSize: 48, bold: true, color: deep, valign: "middle" });
-    text(s, l, x + 14, 418, 168, 44, { color: deep });
+  marker(s, 2, sx + 4 * step + 16, ly - 30);
+  marker(s, 3, sx + 5 * step + 16, ly - 30);
+  const y = 330, h = 146;
+  // Tests: one bar, to scale.
+  card(s, "", X0, y, 192, h, { fill: "E3EFE6" });
+  text(s, "630", X0 + 14, y + 8, 164, 44, { fontSize: 32, bold: true, color: GREEN, valign: "middle" });
+  text(s, "Python tests, all passing", X0 + 14, y + 52, 168, 18, { color: GREEN });
+  const tw = 164;
+  bar(s, X0 + 14, y + 78, tw * 538 / 630, 16, GREEN);
+  bar(s, X0 + 14 + tw * 538 / 630, y + 78, tw * 92 / 630, 16, TOMATO);
+  text(s, [{ text: "538 backend", options: { bold: true, color: GREEN, breakLine: true } }, { text: "92 Streamlit", options: { bold: true, color: TOMATO } }], X0 + 14, y + 100, 164, 34, { fontSize: 10 });
+  // Coverage: the track runs 0 to 100%, with the CI floor marked.
+  const cx = X0 + 208;
+  card(s, "", cx, y, 192, h, { fill: "FBE4DC" });
+  text(s, "95%", cx + 14, y + 8, 164, 44, { fontSize: 32, bold: true, color: TOMATO, valign: "middle" });
+  text(s, "test coverage", cx + 14, y + 52, 168, 18, { color: TOMATO });
+  s.addShape(pres.ShapeType.rect, { ...box(cx + 14, y + 78, tw, 16), fill: { color: WHITE }, line: { color: WHITE, width: 0.5 } });
+  bar(s, cx + 14, y + 78, tw * 0.95, 16, TOMATO);
+  s.addShape(pres.ShapeType.line, { ...box(cx + 14 + tw * 0.89, y + 72, 0, 28), line: { color: INK, width: 1.5 } });
+  text(s, "CI fails below the 89% floor", cx + 14, y + 104, 168, 28, { fontSize: 10, bold: true, color: TOMATO });
+  // CI: the five real checks.
+  const kx = X0 + 416;
+  card(s, "", kx, y, 192, h, { fill: TINT_WARN });
+  text(s, "5 CI checks on every pull request", kx + 14, y + 8, 168, 32, { bold: true, color: WARN });
+  ["backend (Python 3.11)", "backend (Python 3.12)", "requirements drift", "frontend", "container"].forEach((t, i) => {
+    const ry = y + 44 + i * 19;
+    s.addShape(pres.ShapeType.ellipse, { ...box(kx + 14, ry + 1, 14, 14), fill: { color: WARN }, line: { color: WARN, width: 0.5 } });
+    s.addImage({ path: "slides/assets/glyph-check_circle.png", ...box(kx + 15, ry + 2, 12, 12), altText: "" });
+    text(s, t, kx + 34, ry, 150, 16, { fontSize: 10, color: WARN, valign: "middle" });
   });
-  takeaways(s, [["CI stops drift", "Tests, the API contract and the dependency file are all checked on each pull request."], ["Built is not the same as live", "Cloud Run and tracing are ready, but no GCP project exists yet, so neither has run for real."]], [2, 90]);
+  marker(s, 1, kx + 174, y + 6);
+  takeaways(s, [["CI stops drift", "Tests, the API contract and the dependency file are checked on every pull request, so they can't quietly fall out of step."], ["Built is not the same as live", "Cloud Run is ready, but no GCP project exists yet, so it hasn't run for real."], ["Privacy is tested, not promised", "A test proves health data stays out of traces. A real trace still has to arrive in Cloud Trace."]], [2, 106, 180]);
 }
 
 // 14 — limits

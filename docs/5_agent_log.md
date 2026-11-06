@@ -8081,3 +8081,9 @@ service step after verification (`core/macro_balance.py`). The diagram now shows
 
 Verified: OOXML validator passes; every slide inspected in Google Slides on the final build,
 except 3 and 11, which didn't change. No application code changed.
+
+## 2026-11-07 — Claude — slide 13 refined
+
+The delivery line now names each habit's file, and P3 tags sit on Cloud Run and tracing. The panels
+show real figures: 538 backend and 92 Streamlit tests, 95% coverage against the 89% CI floor, and
+the five CI checks by name. Inspected in Google Slides. The live demo still opens with demo mode off.

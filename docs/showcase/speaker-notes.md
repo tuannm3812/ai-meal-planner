@@ -179,11 +179,13 @@ Although this is a portfolio project, I held it to production habits. Follow a c
 [Point: Contract]
 The API contract is committed, and CI fails if it drifts.
 [Point: Tests]
-The last full run passed 630 Python tests at 95% coverage.
+The last full run passed 630 Python tests at 95% coverage, and CI won't pass below 89%.
 [Point: Cloud Run]
 From here the line turns amber: the deployment workflow and tracing are built, but they wait for a GCP project.
+[Point: CI checks]
+Five checks run on every pull request, and all five passed on the latest one.
 Reference — not read aloud
-docs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; test_telemetry_redaction.py; local full run, 7 November 2026.
+docs/openapi.json; .github/workflows/ci.yml and deploy.yml; docs/6_deployment.md; backend/tests/test_telemetry_redaction.py; local full run, 7 November 2026: 538 backend and 92 Streamlit tests.
 
 ## Slide 14 — p14
 

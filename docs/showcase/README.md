@@ -94,7 +94,8 @@ on 2026-11-05.
 | Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
 | Shopping estimate | In the 694 kcal plan, 2 of 6 items match listed store products and 4 use category prices. Prices are for whole items, so $24.50 is a basket, not a cost per meal | Local run, 2026-11-07, no provider keys |
 | Limits change the meal | Craving "pasta", average man: vegan gets Lentil Bolognese Pasta; celiac keeps the recipe with gluten-free pasta; 5 ingredients in the default recipe. Same plan for the capture profile and the benchmark active woman (budgets 2,468.9 and 2,469.2) | Local run, 2026-11-07, no provider keys |
-| Tests | 630 Python tests, 95% coverage (full run, 2026-11-07, after PRs #43 and #45) | Local run |
+| Tests | 630 Python tests (538 backend, 92 Streamlit), 95% coverage, 89% CI floor (full run, 2026-11-07, after PRs #43 and #45) | Local run, ci.yml |
+| CI | 5 checks on every pull request: backend on Python 3.11 and 3.12, requirements drift, frontend, container | ci.yml |
 | Calorie model's share | With default inputs the model adds 142, 115, 125 and 108 kcal across the four profiles, 3–10% of estimated expenditure. Active woman: 2,344 + 125 = 2,469 kcal. Without the floor, the older woman's budget would be 986 kcal | Local run, 2026-11-07 |
 | Wider check | Every recipe asked for by name: 49 of 68 before DEC-30, 68 of 68 after | `meal_quality_baseline.py --wider`, 2026-11-07 |
 | Fallback mix | 8 of the 11 fallback plans are pizza and chocolate dessert | meal_quality/baseline.json |

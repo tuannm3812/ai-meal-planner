@@ -188,11 +188,11 @@ Titles are working titles.
 - **Source:** `docs/2_architecture.md`, `pyproject.toml`, `frontend/package.json`, DEC-2.
 
 **Slide 13. "Built like a product, not a notebook"** (`p10`)
-- **Subtitle:** Six production habits, in the order a change travels through them.
+- **Subtitle:** Six production habits, in the order a change travels through them, each with a file behind it.
 - **Question:** is the engineering real?
 - **Message:** a change passes six habits on its way to production; four run today and two wait for a GCP project.
-- **Content:** a delivery line: contract, tests, security, container (green); Cloud Run, tracing (amber). Three figures: 630 Python tests, 95% coverage with an 89% floor, 5 CI checks on every pull request.
-- **Takeaways:** 1. CI checks tests, the API contract and the dependency file on each pull request. 2. Built isn't live: no GCP project exists yet.
+- **Content:** a delivery line: contract, tests, security, container (green); Cloud Run, tracing (amber), each with its file. Three panels: 630 Python tests (538 backend, 92 Streamlit); 95% coverage against an 89% floor; the 5 CI checks by name.
+- **Takeaways:** 1. CI stops drift. 2. Built isn't live: no GCP project exists yet. 3. Privacy is tested, but a real trace still has to arrive in Cloud Trace.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
