@@ -23,6 +23,7 @@ and all of them come off before release.
 
 ## Showcase
 
+- [ ] **Mike:** confirm the capstone poster's full name, university, supervisor and print size, then delete its P1 tag once the demo works.
 - [ ] **P1, Mike:** add `STREAMLIT_DEMO_MODE = "1"` to the demo's Secrets in Streamlit, then scan the QR code from a phone. Today the demo opens with demo mode off and shows "Could not connect to the API".
 - [ ] Bring the approved slides into the live v4 deck with File > Import slides, then confirm the speaker notes came across.
 - [ ] Merge PR #44 once the deck is approved.

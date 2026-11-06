@@ -8100,3 +8100,9 @@ Mike wants takeaways on findings and analysis slides only, so slides 7 to 14 kee
 supporting point and highlighted key terms. Slides 2 to 6 and 15 are full width again. Slide 15 gained
 a milestone line. Read through every slide; one wrong line fixed (68 by-name requests, not recipes).
 Every slide 2 to 15 inspected in Google Slides.
+
+## 2026-11-07 — Claude — capstone poster
+
+Mike asked for a capstone poster from the deck's strongest figures. `docs/showcase/capstone-poster.html`
+renders to PNG and PDF at A1 proportions. Bars are to scale from zero; numbers match the fact sheet.
+Fits one page, checked at full size. The name, university and print size are still to confirm.

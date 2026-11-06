@@ -14,6 +14,7 @@ HERE = Path(__file__).resolve().parent
 PAGES = [
     ("poster.html", "ai-meal-planner-poster.png", 1200, 1800),
     ("linkedin.html", "ai-meal-planner-linkedin.png", 1080, 1350),
+    ("capstone-poster.html", "ai-meal-planner-capstone-poster.png", 1684, 2384),
 ]
 
 with sync_playwright() as p:
@@ -25,9 +26,9 @@ with sync_playwright() as p:
         page.goto((HERE / src).as_uri())
         page.evaluate("document.fonts.ready")
         page.screenshot(path=HERE / out)
-        if src == "poster.html":
+        if src in ("poster.html", "capstone-poster.html"):
             page.pdf(
-                path=HERE / "ai-meal-planner-poster.pdf",
+                path=HERE / out.replace(".png", ".pdf"),
                 width=f"{width}px",
                 height=f"{height}px",
                 print_background=True,

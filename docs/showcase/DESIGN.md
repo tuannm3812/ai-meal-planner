@@ -66,6 +66,14 @@ of body-level text on a surface. Adjust spacing or cut words before shrinking ty
 Follow the deck's card, badge and chip rules: 1 px `line` borders, 16–20 px corners, 24 px
 between blocks, no shadows, gradients or edge stripes. Group with spacing, not nested cards.
 
+## Capstone poster
+
+`capstone-poster.html` is a second, fuller poster for a capstone display: A1 portrait proportions
+(1684 × 2384 px, vector PDF). It reuses the deck's strongest figures, so it may show test counts,
+R², the intermediate 41 and 47, and tool logos, which the short poster leaves off. Bars stay to
+scale from zero. It follows the same colours, Google Sans and claim rules, and its numbers must
+match the fact sheet. Delete the paper tag before printing.
+
 ## Claim rules
 
 The [deck's claim rules](slides/DESIGN.md#charts-figures-and-evidence) apply here. In particular:

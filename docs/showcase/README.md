@@ -36,6 +36,7 @@ Three questions, three kinds of file. Each has one owner, so nothing is decided 
 | `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py`, `cover-concepts/`, `palette-trials/` |
 | `fonts/` | Bundled Google Sans and Google Sans Code (showcase), Bricolage Grotesque and Inter (current drafts), with OFL licences |
 | `poster.html`, `linkedin.html`, `showcase.css`, `render.py` | Poster and LinkedIn source and renderer |
+| `capstone-poster.html`, `ai-meal-planner-capstone-poster.png`, `.pdf` | Capstone poster source and A1 outputs |
 | `ai-meal-planner-*.png`, `.pdf`, `linkedin_post.md` | First poster outputs and post text |
 
 **For design agents:** read the slide's entry in the brief, then the deck standard, then the
