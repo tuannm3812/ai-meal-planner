@@ -19,15 +19,15 @@ Values are the real local run of 6 November 2026: slides/captures/2026-11-06-pla
 ## Slide 2 — p2
 
 If you read one slide, read this one.
-[Point: You crave]
-Here is the whole product as one real example: a craving becomes one sized meal and a priced shopping list.
+[Point: four plates]
+This is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.
 [Point: 72 of 72]
-All 72 plans in the project's own benchmark now meet the targets, up from 10. That's a measure of the plans, not of real users.
-[Point: Honest limits]
-Nutrition and prices can be estimates, and the app labels them.
+That quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.
+[Point: It says when it doesn't know]
+And it's honest. Estimates are labelled, and it says so when nothing matches.
 The rest of the deck shows how it works and how that number was reached.
 Reference — not read aloud
-Fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2.
+docs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.
 
 ## Slide 3 — p3
 

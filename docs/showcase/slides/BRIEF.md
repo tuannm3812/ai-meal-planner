@@ -86,12 +86,12 @@ Titles are working titles.
 - **Visual:** `ink` background, calendar plate logo with the name top left, our own plate illustration cropped at the bottom (`assets/cover-art.png`), a tilted receipt in Google Sans Code, a small QR code at bottom left with "Try the live demo".
 - **Elsewhere:** Mike's name goes on slide 14.
 
-**Slide 2. Executive summary: "One meal sized to you, with measured quality"** (new)
+**Slide 2. Executive summary: "One craving, sized to four different people"** (new)
 - **Question:** if I read one slide, what should I know?
-- **Message:** it turns a craving into one sized meal and a shopping list, states its estimates, and all 72 benchmark plans now meet the targets.
-- **Content:** row 1, the product as one real example: you crave "chicken fried rice"; you get 694 kcal, target 691; you shop, estimated $24.50. Row 2: 72 of 72 with its 10, 41, 47, 72 trend; how it works (four agents, 34 curated recipes, no LLM key); honest limits (estimates are labelled; not medical advice).
-- **Visual:** three linked example cards, an ink evidence panel with bars, a panel and a limit card. No takeaway column or markers.
-- **Source:** fact sheet.
+- **Message:** it fits you, it's measured, and it's honest.
+- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal for four benchmark profiles; 72 of 72 plans meet the targets, up from 10; estimates are labelled, it says when nothing matches, and it refuses when nothing is safe.
+- **Visual:** four plates on an ink band, area to scale with calories, over two short cards. No takeaway column or markers.
+- **Source:** fact sheet; `docs/meal_quality/baseline.json`.
 
 **Slide 3. Agenda** (new)
 - **Message:** four sections with page ranges.

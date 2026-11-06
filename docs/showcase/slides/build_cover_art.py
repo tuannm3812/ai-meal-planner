@@ -80,4 +80,14 @@ with sync_playwright() as p:
     page.set_content(f'<body style="margin:0;background:transparent">{svg}</body>')
     page.wait_for_timeout(300)
     page.screenshot(path=HERE / "assets/cover-art.png", omit_background=True)
+    # The whole plate on its own, for the four plates on slide 2.
+    side = 2 * R + 32
+    square = svg.replace(
+        'width="960" height="540" viewBox="0 0 960 540"',
+        f'width="{side}" height="{side}" viewBox="{CX - side / 2} {CY - side / 2 + 4} {side} {side}"',
+    )
+    page.set_viewport_size({"width": side, "height": side})
+    page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
+    page.wait_for_timeout(300)
+    page.screenshot(path=HERE / "assets/plate.png", omit_background=True)
     browser.close()

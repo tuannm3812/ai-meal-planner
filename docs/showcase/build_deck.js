@@ -157,33 +157,22 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 2 — executive summary
 {
-  const s = slide("EXECUTIVE SUMMARY", "One meal sized to you, with measured quality", "A craving becomes one meal and a shopping list, and a fixed benchmark checks the result.",
-    "If you read one slide, read this one.\n\n[Point: You crave]\nHere is the whole product as one real example: a craving becomes one sized meal and a priced shopping list.\n\n[Point: 72 of 72]\nAll 72 plans in the project's own benchmark now meet the targets, up from 10. That's a measure of the plans, not of real users.\n\n[Point: Honest limits]\nNutrition and prices can be estimates, and the app labels them.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\nFact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2.", OPEN);
-  // Row 1: the product, as one real example.
-  [["You crave", "chicken fried rice", "One line, in your own words"], ["You get", "694 kcal, target 691", "Chicken Fried Rice, sized to you"], ["You shop", "Estimated $24.50", "Six items, already listed"]].forEach(([l, v, n], i) => {
-    const x = X0 + i * 297;
-    card(s, [
-      { text: l, options: { fontSize: 10, bold: true, color: MUTED, breakLine: true, paraSpaceAfter: 3 } },
-      { text: v, options: { fontFace: HEAD, fontSize: 16, bold: true, color: GREEN, breakLine: true, paraSpaceAfter: 3 } },
-      { text: n, options: { fontSize: 12, color: MUTED } },
-    ], x, TOP, 279, 92, { margin: 12, valign: "middle" });
-    if (i < 2) arrow(s, x + 281, TOP + 46, x + 295, TOP + 46);
+  const s = slide("EXECUTIVE SUMMARY", "One craving, sized to four different people", "Chicken fried rice from the benchmark. Plate area is to scale, and every plan met its targets.",
+    "If you read one slide, read this one.\n\n[Point: four plates]\nThis is the same craving for four people. It runs from 363 kcal for an older woman losing weight to 850 for a large athlete gaining, so the meal fits the person.\n\n[Point: 72 of 72]\nThat quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.\n\n[Point: It says when it doesn't know]\nAnd it's honest. Estimates are labelled, and it says so when nothing matches.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\ndocs/meal_quality/baseline.json, chicken fried rice rows; fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2. These are a measure of plans, not of real users.", OPEN);
+  card(s, "", X0, TOP, W, 228, { fill: INK });
+  const scale = 150 / Math.sqrt(850), art = (2 * 232 + 32) / (2 * 232); // plate.png has a small margin around the plate
+  [[363, "Older woman, losing weight"], [694, "Active woman, maintaining"], [809, "Average man, maintaining"], [850, "Large athlete, gaining"]].forEach(([kcal, who], i) => {
+    const cx = X0 + 109 + i * 218, cy = TOP + 88, d = Math.sqrt(kcal) * scale * art;
+    s.addImage({ path: "slides/assets/plate.png", ...box(cx - d / 2, cy - d / 2, d, d), altText: `Plate of chicken fried rice, ${kcal} kcal` });
+    text(s, `${kcal} kcal`, cx - 100, TOP + 172, 200, 22, { fontFace: HEAD, fontSize: 16, bold: true, color: WHITE, align: "center" });
+    text(s, who, cx - 100, TOP + 196, 200, 18, { color: ON_INK, align: "center" });
   });
-  // Row 2: the evidence, with its trend, beside how it works and its limits.
-  const py = 238, ph = 248;
-  card(s, "", X0, py, 428, ph, { fill: INK });
-  text(s, [{ text: "72", options: { fontSize: 54, bold: true, color: WHITE } }, { text: " of 72", options: { fontSize: 24, bold: true, color: ON_INK } }], X0 + 20, py + 24, 190, 70, { valign: "middle" });
-  text(s, "benchmark plans meet the targets, up from 10", X0 + 20, py + 100, 160, 52, { color: ON_INK });
-  text(s, "The project's own offline benchmark.", X0 + 20, py + 206, 170, 14, { fontSize: 8, color: ON_INK });
-  const base = py + ph - 44, unit = 138 / 72;
-  [["First run", 10], ["Balancing", 41], ["Fallback", 47], ["Fat, retry", 72]].forEach(([n, v], i) => {
-    const x = X0 + 200 + i * 54, bh = v * unit;
-    s.addShape(pres.ShapeType.rect, { ...box(x + 6, base - bh, 36, bh), fill: { color: i ? WHITE : BASELINE }, line: { color: i ? WHITE : BASELINE, width: 0.5 }, objectName: `Bar ${n}` });
-    text(s, String(v), x, base - bh - 18, 48, 16, { bold: true, color: WHITE, align: "center", valign: "bottom" });
-    text(s, n, x - 3, base + 6, 54, 14, { fontSize: 9, color: ON_INK, align: "center" });
-  });
-  card(s, hb("How it works", "Four agents and retrieval from 34 curated recipes, so it needs no LLM key."), 489.5, py, 427, 118, { margin: 14, valign: "middle" });
-  card(s, hb("Honest limits", "Nutrition and prices can be estimates, and the app labels them. Not medical advice.", { hc: WARN, bc: INK }), 489.5, py + 130, 427, 118, { fill: TINT_WARN, margin: 14, valign: "middle" });
+  card(s, [
+    { text: "72 of 72", options: { fontFace: HEAD, fontSize: 32, bold: true, color: GREEN, breakLine: true, paraSpaceAfter: 2 } },
+    { text: "benchmark plans meet the calorie and macro targets, up from 10", options: { fontSize: 12, color: INK, breakLine: true, paraSpaceAfter: 3 } },
+    { text: "The project's own offline benchmark.", options: { fontSize: 8, color: MUTED } },
+  ], X0, 370, 427, 116, { margin: 14, valign: "middle" });
+  card(s, hb("It says when it doesn't know", "Estimates are labelled, it tells you when nothing matches, and it refuses when nothing is safe.", { hc: WARN, bc: INK }), 489.5, 370, 427, 116, { fill: TINT_WARN, margin: 14, valign: "middle" });
 }
 
 // 3 — agenda
