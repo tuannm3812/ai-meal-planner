@@ -195,26 +195,32 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 3 — agenda
 {
-  const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course answers one question. Select a page to jump to it.",
-    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built and what isn't proven yet.\n\nEach page reference is a link, so you can jump straight to a course.", OPEN);
-  s.addImage({ path: "slides/assets/plate-light.png", ...box(660, 186, 256, 256), altText: "Plate of chicken fried rice" });
+  const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course lists its pages by label. Select one to jump to it.",
+    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built and what isn't proven yet.\n\nEach page is a link, so you can jump straight to it.", OPEN);
+  s.addImage({ path: "slides/assets/plate-salmon.png", ...box(668, 196, 248, 248), altText: "Plate of salmon and quinoa" });
+  let y = TOP;
   [
-    ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", "Page 4", 4],
-    ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", "Pages 5–9", 5],
-    ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "What is a good meal, and did we get there?", "Pages 10–11", 10],
-    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "How is it built, and what is unproven?", "Pages 12–13", 12],
-  ].forEach(([icon, tint, deep, course, h, q, r, page], i) => {
-    const y = TOP + i * 90;
-    card(s, "", X0, y, 600, 78, { fill: tint });
-    s.addShape(pres.ShapeType.ellipse, { ...box(X0 + 16, y + 21, 36, 36), fill: { color: deep }, line: { color: deep, width: 0.5 } });
-    s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(X0 + 22, y + 27, 24, 24), altText: "" });
+    ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", [["Why it matters", 4]], 62],
+    ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", [["The flow", 5], ["Four agents", 6], ["Calorie target", 7], ["Choosing the meal", 8], ["Nutrition", 9]], 112],
+    ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "Did we get there?", [["What good means", 10], ["Results", 11]], 78],
+    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "What is unproven?", [["Engineering", 12], ["Next steps", 13]], 78],
+  ].forEach(([icon, tint, deep, course, h, q, pages, ch]) => {
+    card(s, "", X0, y, 608, ch, { fill: tint });
+    s.addShape(pres.ShapeType.ellipse, { ...box(X0 + 14, y + ch / 2 - 17, 34, 34), fill: { color: deep }, line: { color: deep, width: 0.5 } });
+    s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(X0 + 20, y + ch / 2 - 11, 22, 22), altText: "" });
     text(s, [
-      { text: course, options: { fontSize: 10, bold: true, color: deep, breakLine: true, paraSpaceAfter: 1 } },
-      { text: h, options: { fontSize: 16, bold: true, color: deep, breakLine: true, paraSpaceAfter: 1 } },
-      { text: q, options: { fontSize: 12, color: INK } },
-    ], X0 + 66, y + 9, 340, 62, { valign: "middle" });
-    s.addShape(pres.ShapeType.line, { ...box(X0 + 400, y + 44, 96, 0), line: { color: deep, width: 1, dashType: "sysDot" } });
-    text(s, [{ text: r, options: { hyperlink: { slide: page }, color: deep, bold: true } }], X0 + 502, y + 34, 90, 20, { align: "right", valign: "middle" });
+      { text: course, options: { fontSize: 10, bold: true, color: deep, breakLine: true } },
+      { text: h, options: { fontSize: 16, bold: true, color: deep, breakLine: true } },
+      { text: q, options: { fontSize: 10, color: INK } },
+    ], X0 + 60, y + 4, 200, ch - 8, { valign: "middle" });
+    const rowH = 19, y0 = y + (ch - pages.length * rowH) / 2;
+    pages.forEach(([label, page], k) => {
+      const ry = y0 + k * rowH;
+      text(s, [{ text: label, options: { hyperlink: { slide: page }, color: INK } }], X0 + 268, ry, 130, rowH, { valign: "middle" });
+      s.addShape(pres.ShapeType.line, { ...box(X0 + 400, ry + 13, 160, 0), line: { color: deep, width: 1, dashType: "sysDot" } });
+      text(s, [{ text: String(page), options: { hyperlink: { slide: page }, color: deep, bold: true } }], X0 + 564, ry, 30, rowH, { align: "right", valign: "middle" });
+    });
+    y += ch + 8;
   });
 }
 

@@ -77,6 +77,46 @@ def scene(seed, chickens):
 </svg>"""
 
 
+def salmon_scene():
+    """Salmon Quinoa Plate from the recipe library, for the agenda."""
+    rnd.seed(5)
+    parts = []
+    for _ in range(1500):
+        x, y = spot(1.0)
+        parts.append(
+            f'<circle cx="{x:.1f}" cy="{y:.1f}" r="{rnd.uniform(2.6, 3.8):.1f}" fill="{rnd.choice(["#E9D5A6", "#DCC48C", "#F2E3BE", "#C9A96E", "#B98F5A"])}"/>'
+        )
+    for x, y, a in (
+        (CX - 62, CY + 70, -20),
+        (CX - 92, CY + 28, 25),
+        (CX - 40, CY + 112, 10),
+        (CX + 26, CY + 104, -15),
+        (CX + 72, CY + 78, 30),
+    ):
+        for k in range(3):
+            parts.append(
+                f'<circle cx="{x + 13 * math.cos(k * 2.1):.1f}" cy="{y + 13 * math.sin(k * 2.1):.1f}" r="14" fill="{("#4F8C31", "#5E9A3A", "#6FAE45")[k]}"/>'
+            )
+        parts.append(
+            f'<rect x="{x - 4}" y="{y + 6}" width="8" height="24" rx="4" fill="#8DBB5E" transform="rotate({a} {x} {y})"/>'
+        )
+    fillet = '<g transform="translate({} {}) rotate(-14)"><rect x="-96" y="-54" width="192" height="108" rx="40" fill="#F08A6C"/><rect x="-96" y="-54" width="192" height="30" rx="15" fill="#D96B4E"/>'.format(
+        CX + 8, CY - 44
+    )
+    stripes = "".join(
+        f'<path d="M{-70 + i * 28} -36q12 42 -4 84" stroke="#FBC3AE" stroke-width="5" fill="none"/>'
+        for i in range(6)
+    )
+    avocado = f'<ellipse cx="{CX + 124}" cy="{CY + 14}" rx="30" ry="38" fill="#6B8E3A"/><ellipse cx="{CX + 124}" cy="{CY + 14}" rx="25" ry="33" fill="#DDE89A"/><circle cx="{CX + 124}" cy="{CY + 22}" r="13" fill="#8A5A2B"/>'
+    return f"""<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+<circle cx="{CX}" cy="{CY + 8}" r="{R + 4}" fill="#DDE3DA"/>
+<circle cx="{CX}" cy="{CY}" r="{R}" fill="#FAFAF6"/>
+<circle cx="{CX}" cy="{CY}" r="{FOOD + 8:.1f}" fill="#EFEFE8"/>
+<circle cx="{CX}" cy="{CY}" r="{FOOD:.1f}" fill="#DCC48C"/>
+{"".join(parts)}{fillet}{stripes}</g>{avocado}
+</svg>"""
+
+
 svg = scene(11, 26)
 # kcal on slide 2 -> chicken pieces, in proportion to each plan's protein (26, 48, 60, 63 g).
 PLATES = {363: 11, 694: 20, 809: 25, 850: 27}
@@ -98,10 +138,11 @@ with sync_playwright() as p:
         page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
         page.wait_for_timeout(300)
         page.screenshot(path=HERE / f"assets/plate-{kcal}.png", omit_background=True)
-        if kcal == 850:  # the same plate with a soft shadow, for white slides
-            page.set_content(
-                f'<body style="margin:0;background:transparent">{square.replace("#0C1A13", "#DDE3DA")}</body>'
-            )
-            page.wait_for_timeout(300)
-            page.screenshot(path=HERE / "assets/plate-light.png", omit_background=True)
+    square = salmon_scene().replace(
+        'width="960" height="540" viewBox="0 0 960 540"',
+        f'width="{side}" height="{side}" viewBox="{CX - side / 2} {CY - side / 2 + 4} {side} {side}"',
+    )
+    page.set_content(f'<body style="margin:0;background:transparent">{square}</body>')
+    page.wait_for_timeout(300)
+    page.screenshot(path=HERE / "assets/plate-salmon.png", omit_background=True)
     browser.close()

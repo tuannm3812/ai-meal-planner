@@ -95,8 +95,8 @@ Titles are working titles.
 
 **Slide 3. Agenda: "Today's menu"** (new)
 - **Message:** four courses with page ranges.
-- **Content:** Starter: Problem. Main: Solution. Taste test: Evidence. The bill: Build and limits. Each has its question and a clickable page range, like a menu with prices.
-- **Visual:** four tinted menu rows with icons and dotted leaders to the page, and a plate on the right. Section names stay the same as the slide labels.
+- **Content:** Starter: Problem. Main: Solution. Taste test: Evidence. The bill: Build and limits. Each course lists its pages by slide label with the page number, like dishes and prices, and each is clickable.
+- **Visual:** four tinted menu rows with icons and dotted leaders to the page, and a different dish on the right: the Salmon Quinoa Plate from the recipe library. Section names stay the same as the slide labels.
 
 ### 01 Problem
 
