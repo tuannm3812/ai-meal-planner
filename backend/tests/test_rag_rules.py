@@ -190,3 +190,65 @@ def test_a_replacement_is_not_judged_by_its_own_group() -> None:
     assert [s.replacement_name for s in substitution_plan_for_meal(meal, groups)] == [
         "gluten-free pasta"
     ]
+
+
+# --- plant foods whose names hold a dairy keyword ---
+
+
+@pytest.mark.parametrize(
+    "ingredient", ["soy milk", "oat milk", "soy yogurt", "peanut butter", "sunflower seed butter"]
+)
+@pytest.mark.parametrize("label", ["dairy-free", "vegan"])
+def test_plant_foods_named_like_dairy_are_not_dairy(ingredient: str, label: str) -> None:
+    """ "milk" and "butter" inside a plant food's name must not block it as dairy."""
+    assert "dairy" not in blocked_groups_for_ingredient(ingredient, constraint_groups([label]))
+
+
+@pytest.mark.parametrize("ingredient", ["cottage cheese", "greek yogurt", "milk", "butter"])
+def test_dairy_is_still_blocked_for_dairy_free(ingredient: str) -> None:
+    groups = constraint_groups(["dairy-free"])
+    assert blocked_groups_for_ingredient(ingredient, groups) == {"dairy"}
+
+
+def test_soy_milk_is_still_soy() -> None:
+    groups = constraint_groups(["dairy-free", "soy allergy"])
+    assert blocked_groups_for_ingredient("soy milk", groups) == {"soy"}
+
+
+def test_a_peanut_allergy_on_a_dairy_free_profile_gets_sunflower_seed_butter() -> None:
+    """The replacement's "butter" once read as dairy, so the swap was refused."""
+    meal = _meal("peanut butter", grams=20)
+    groups = constraint_groups(["dairy-free", "peanut allergy"])
+    assert meal_is_allowed(meal, groups, []) is True
+    assert [s.replacement_name for s in substitution_plan_for_meal(meal, groups)] == [
+        "sunflower seed butter"
+    ]
+
+
+@pytest.mark.parametrize("ingredient", ["soy sauce", "low sodium soy sauce"])
+@pytest.mark.parametrize("label", ["celiac", "coeliac", "gluten-free"])
+def test_gluten_constraints_block_soy_sauce(label: str, ingredient: str) -> None:
+    """Soy sauce is normally brewed with wheat, so its name alone does not make it safe."""
+    assert "gluten" in blocked_groups_for_ingredient(ingredient, constraint_groups([label]))
+
+
+@pytest.mark.parametrize("ingredient", ["soy sauce", "low sodium soy sauce"])
+def test_gluten_swap_replaces_soy_sauce_with_coconut_aminos(ingredient: str) -> None:
+    meal = _meal(ingredient)
+    plan = substitution_plan_for_meal(meal, constraint_groups(["celiac"]))
+    assert [item.replacement_name for item in plan] == ["coconut aminos"]
+
+
+@pytest.mark.parametrize("ingredient", ["rolled oats", "oat milk"])
+def test_gluten_constraints_block_oats(ingredient: str) -> None:
+    """Oats carry no wheat but are often cross-contaminated, so coeliac plans avoid them."""
+    assert "gluten" in blocked_groups_for_ingredient(ingredient, constraint_groups(["celiac"]))
+
+
+def test_a_meal_built_on_rolled_oats_is_not_allowed_for_celiac() -> None:
+    groups = constraint_groups(["celiac"])
+    assert not meal_is_allowed(_meal("rolled oats"), groups, ["celiac"])
+
+
+def test_oats_stay_allowed_without_a_gluten_constraint() -> None:
+    assert not blocked_groups_for_ingredient("rolled oats", constraint_groups(["vegan"]))
