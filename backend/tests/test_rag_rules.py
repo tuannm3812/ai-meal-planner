@@ -204,3 +204,18 @@ def test_gluten_swap_replaces_soy_sauce_with_coconut_aminos(ingredient: str) -> 
     meal = _meal(ingredient)
     plan = substitution_plan_for_meal(meal, constraint_groups(["celiac"]))
     assert [item.replacement_name for item in plan] == ["coconut aminos"]
+
+
+@pytest.mark.parametrize("ingredient", ["rolled oats", "oat milk"])
+def test_gluten_constraints_block_oats(ingredient: str) -> None:
+    """Oats carry no wheat but are often cross-contaminated, so coeliac plans avoid them."""
+    assert "gluten" in blocked_groups_for_ingredient(ingredient, constraint_groups(["celiac"]))
+
+
+def test_a_meal_built_on_rolled_oats_is_not_allowed_for_celiac() -> None:
+    groups = constraint_groups(["celiac"])
+    assert not meal_is_allowed(_meal("rolled oats"), groups, ["celiac"])
+
+
+def test_oats_stay_allowed_without_a_gluten_constraint() -> None:
+    assert not blocked_groups_for_ingredient("rolled oats", constraint_groups(["vegan"]))

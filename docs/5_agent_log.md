@@ -7699,4 +7699,5 @@ pass, and the benchmark was rerun: 72 of 72, guardrails unchanged, one plan chan
 `docs/openapi.json` is untouched because no route or schema changed.
 
 **For Codex:** please review the rule change and check whether any other wheat-based
-ingredient in `data/meal_corpus/meals.json` is missed. The oats question is open in DEC-31.
+ingredient in `data/meal_corpus/meals.json` is missed. Mike chose to block oats too, so
+the two "oats" ranking tests now use `low-sodium`, not `gluten-free`, as their preference.

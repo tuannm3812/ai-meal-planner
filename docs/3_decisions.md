@@ -37,7 +37,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 27 | Only the craving decides whether the corpus has a match; the profile only ranks | 2026-10-18 |
 | 28 | Recipes with no fat source get a cooking oil; a rounding miss is retried 2 points inside AMDR | 2026-10-18 |
 | 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
-| 31 | Soy sauce counts as gluten; gluten limits swap it for coconut aminos | 2026-11-07 |
+| 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -478,7 +478,7 @@ request keeps the service's default workout, and History stays as a small
 link in local mode. Rules out photos, recipes, live prices and accounts in
 this milestone, and an API key in the browser bundle.
 
-### DEC-31 — Soy sauce counts as gluten; gluten limits swap it for coconut aminos
+### DEC-31 — Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos
 
 Dated 2026-11-07. A check of the showcase deck found that a celiac request for
 chicken fried rice kept ordinary soy sauce, which is normally brewed with wheat.
@@ -488,8 +488,11 @@ soy and sodium limits already use covers gluten too. Five recipes are affected.
 The benchmark still has 72 of 72 plans on target. One plan changed, and the median
 calorie deviation moves from 0.34% to 0.36%, which rounds to 0.4%.
 
+Oats now count as gluten too, on the owner's choice: they contain no wheat but are
+often cross-contaminated, and Australian labelling does not treat them as
+gluten-free. Two oat recipes have no swap, so a gluten limit excludes them. The
+benchmark's constrained cravings do not include oats, so its numbers do not move.
+
 Rules out a gluten-free soy sauce as the replacement, because the keyword rules
-would flag it and it would need a new nutrition entry. Rolled oats stay allowed:
-they contain no wheat but are often cross-contaminated, and Australian labelling
-does not treat them as gluten-free. Whether to block them is an owner decision.
+would flag it and it would need a new nutrition entry.
 The number skips DEC-30, which open PR #43 uses.

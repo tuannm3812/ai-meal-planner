@@ -223,7 +223,7 @@ def test_an_off_menu_vegan_craving_gets_a_safe_fallback() -> None:
         # Codex, 2026-10-18: the match ranked second, under a profile-boosted meal.
         ("curry", ["high-protein", "low-sodium"], "Chickpea Curry Bowl"),
         # ...and outside the top three by score, so filtering those is not enough.
-        ("oats", ["dairy-free", "gluten-free"], "Banana Oat Protein Bowl"),
+        ("oats", ["dairy-free", "low-sodium"], "Banana Oat Protein Bowl"),
     ],
 )
 def test_a_relevant_match_is_served_over_a_profile_boosted_one(

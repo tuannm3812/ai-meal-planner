@@ -24,7 +24,7 @@ ALLERGEN_KEYWORDS = {
     "dairy": {"milk", "cheese", "yogurt", "cottage cheese", "whey", "butter"},
     "egg": {"egg"},
     "fish": {"salmon", "tuna", "fish"},
-    "gluten": {"wheat", "wholemeal", "bread", "bun", "pasta", "tortilla", "soy sauce"},
+    "gluten": {"wheat", "wholemeal", "bread", "bun", "pasta", "tortilla", "soy sauce", "oat"},
     "peanut": {"peanut"},
     "sesame": {"sesame"},
     "shellfish": {"shrimp", "prawn", "crab", "lobster"},
