@@ -134,12 +134,12 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     s.addShape(pres.ShapeType.ellipse, { ...box(x1 - 5.5, y1 - 5.5, 11, 11), fill: { color: WHITE }, line: { color: INK, width: 1.5 } });
   };
   callout(560, 215, 508, 118, false);
-  callout(530, 400, 366, 470, true);
+  callout(530, 400, 420, 476, true);
   callout(690, 420, 800, 470, false);
   const tag = (a, b, x, y, align) =>
     text(s, [{ text: a, options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } }, { text: b, options: { fontSize: 10, color: ON_INK } }], x, y, 160, 34, { align });
   tag("Chicken breast, 100 g", "Estimated", 342, 86, "right");
-  tag("Cooked rice, 220 g", "Estimated", 202, 456, "right");
+  tag("Cooked rice, 220 g", "Estimated", 256, 464, "right");
   tag("Vegetables, 115 g", "Reference", 806, 456, "left");
   s.addText("694 kcal, target 691", { shape: pres.ShapeType.roundRect, rectRadius: pt(14), ...box(540, 84, 150, 28), fill: { color: GREEN }, line: { color: GREEN, width: 1 }, color: WHITE, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
   const row = (a, b) => a + " ".repeat(23 - a.length - b.length) + b;

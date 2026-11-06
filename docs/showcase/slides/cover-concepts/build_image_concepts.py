@@ -20,6 +20,8 @@ MARK = (
     .read_text()
     .replace('width="64" height="64"', 'width="28" height="28"')
 )
+ART = (HERE / "../assets/cover-art.png").resolve().as_uri()
+QR = (HERE / "../assets/qr.png").resolve().as_uri()
 BASE = f"""<style>
 @font-face{{font-family:G;font-weight:400;src:url({FONTS}/google-sans-latin-400-normal.woff2)}}
 @font-face{{font-family:G;font-weight:500;src:url({FONTS}/google-sans-latin-500-normal.woff2)}}
@@ -162,20 +164,22 @@ def combined():
         ("Soy sauce", "$3.00"),
     ]
     rows = [(a.upper(), b) for a, b in rows]
-    lines = call2(560, 215, 508, 118) + call2(530, 400, 366, 470) + call2(690, 420, 800, 470)
+    lines = call2(560, 215, 508, 118) + call2(530, 400, 420, 476) + call2(690, 420, 800, 470)
     labels = (
         label(352, 88, "Chicken breast, 100 g", "Estimated", "right")
-        + label(210, 458, "Cooked rice, 220 g", "Estimated", "right")
+        + label(264, 466, "Cooked rice, 220 g", "Estimated", "right")
         + label(806, 458, "Vegetables, 115 g", "Reference")
     )
     extra = f"""<style>
 @font-face{{font-family:M;font-weight:400;src:url({FONTS}/google-sans-code-latin-400-normal.woff2)}}
 @font-face{{font-family:M;font-weight:700;src:url({FONTS}/google-sans-code-latin-700-normal.woff2)}}
 </style>"""
-    return f"""{BASE}{extra}<svg class=a style="inset:0" width="960" height="540">{plate(610, 330, 232, 11)}{lines}</svg>{labels}
+    return f"""{BASE}{extra}<img class=a src="{ART}" style="left:0;top:0;width:960px"><svg class=a style="inset:0" width="960" height="540">{lines}</svg>{labels}
 <div class="a t" style="left:43.5px;top:92px;width:300px;font-size:46px">What should I eat tonight?</div>
 <div class=a style="left:43.5px;top:262px;width:300px;height:50px;background:#fff;border-radius:26px;color:#15291F;display:flex;align-items:center;padding:0 22px;font:400 18px G">chicken fried rice<span style="color:#C8431F">|</span></div>
 <div class="a s" style="left:43.5px;top:328px;width:280px;font-size:14px">One meal sized to you, every number explained, the shopping list ready.</div>
+<div class=a style="left:43.5px;top:404px;width:84px;height:84px;background:#fff;border-radius:8px;padding:6px"><img src="{QR}" style="width:72px;display:block"></div>
+<div class="a l" style="left:139px;top:430px;width:120px">Try the live demo<span>Scan with your phone</span></div>
 <div class=a style="left:540px;top:86px;width:150px;background:#1B5E3F;color:#fff;border-radius:16px;padding:6px 0;text-align:center;font:700 13px G">694 kcal, target 691</div>
 {receipt_list(rows)}"""
 
