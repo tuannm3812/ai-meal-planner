@@ -55,7 +55,8 @@ Google Sans only, from `fonts/`, loaded and verified before rendering.
 | Body | 16–20 px | 18–22 px |
 | Section label, caption | 14 px | 14 px |
 
-`ground` canvas, white cards, `ink` footer. The result sits in a smaller `ink` panel that
+Garden green, as in the [deck standard](slides/DESIGN.md#colour): white canvas, #EEF4EF panels,
+green #1B5E3F headings, `ink` footer. The result sits in a smaller `ink` panel that
 supports the plan card and never outweighs it. Tomato appears on the logo
 and on the words "fits you" only. Macro colours appear on macro bars only. At most four sizes
 of body-level text on a surface. Adjust spacing or cut words before shrinking type.

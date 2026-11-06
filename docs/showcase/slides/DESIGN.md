@@ -1,6 +1,6 @@
 # Slide deck design standard
 
-Status: current living standard, 6 November 2026; colour theme pending. Adapted from the Project 15 and
+Status: current living standard, 6 November 2026. Adapted from the Project 15 and
 Text-to-SQL slide standards. Their structure and discipline carry over; their
 colours, fonts, logos and claims do not.
 
@@ -42,12 +42,12 @@ mechanism. The executive summary may repeat as synthesis; nothing else repeats a
 
 ## Canvas and grid
 
-Canvas 960 × 540 pt (13⅓ × 7½ in), background `ground` #F6F7F2. All positions in points.
+Canvas 960 × 540 pt (13⅓ × 7½ in), white background. All positions in points.
 
 | Element | Position and size | Style |
 | --- | --- | --- |
 | Section label | x 43.5, y 21.7 | Google Sans 10 pt bold uppercase |
-| Title | x 43.5, y 48.4; w 873 | Google Sans 24 pt bold |
+| Title | x 43.5, y 48.4; w 873 | Google Sans 24 pt bold, green #1B5E3F |
 | Subtitle | x 43.5, y 90.9; w 873 | Google Sans 12 pt, `muted` |
 | Content area | x 43.5 to 916.5, y 130 to 486 | Left and right rails are fixed |
 | Takeaway column | x 684, y 130; 232.5 × 356 | See Takeaways |
@@ -89,27 +89,25 @@ whole sentences.
 
 ## Colour
 
-**Theme pending Mike's choice from `palette-trials/`.** The roles below are the Kitchen green
-values until then.
-
-Colours come from [the brand tokens](../../../DESIGN.md). In the deck their roles are fixed:
+The theme is Garden green, chosen by Mike from `palette-trials/`. It uses the app's own green
+and tomato, so real screenshots sit naturally in the deck. Canvas is white, like his other decks.
 
 | Role | Colour |
 | --- | --- |
-| Canvas | `ground` #F6F7F2 |
-| Cards | `surface` #FFFFFF with 1 pt `line` #DDE3DA |
-| Text; step chips; focal panel | `ink` #15291F |
-| Secondary text | `muted` #4B5B52 |
-| Takeaway markers; the headline's one word on cover | `accent` #C8431F |
-| Current or improved result; "On target" | `success-fg` #1B5E3F on `success-bg` #E3EFE6 |
-| Baseline or earlier result | `muted` #4B5B52 |
+| Canvas and cards | White #FFFFFF; cards use a 1 pt #DDE3DA border or a panel fill |
+| Panel fill | #EEF4EF |
+| Slide titles; primary evidence and current result | Green #1B5E3F |
+| Main text; step chips; focal panel; cover and close background | Ink #15291F |
+| Secondary text | #4B5B52 |
+| Baseline or earlier result | #9AA5A0 |
+| Takeaway markers; the one highlight on cover and close | Tomato #C8431F |
 | Limitation strips; estimate badges | #7A4A0C on #FBEBD6 |
+| Positive badges with a label | #1B5E3F on #E3EFE6 |
 | Neutral tracks and reference badges | #ECEFE8 |
-| Macro data only | `protein` #2F6FAB, `carbs` #9A6A12, `fat` #7A4E9C |
+| Macro data only | Protein #2F6FAB, carbs #9A6A12, fat #7A4E9C |
 
-Most of each slide stays neutral. One `ink` focal panel at most per slide. Colour is never
-the only signal. Green is a measured target result, not medical safety. Tomato is
-not an error colour.
+Most of each slide stays white. One ink focal panel at most per slide. Colour is never the
+only signal. Green is a measured result, not medical safety. Tomato is not an error colour.
 
 ## Editable components
 
@@ -119,7 +117,7 @@ converted to Slides, so draw charts from shapes and keep their values in the bri
 
 | Component | Rule |
 | --- | --- |
-| Card | White, 1 pt `line`, 12 pt corner radius, no shadow. Text sits inside the shape |
+| Card | White with a 1 pt #DDE3DA border, or #EEF4EF with none; 12 pt corner radius, no shadow. Text sits inside the shape |
 | Padding | 8 pt (0.11 in) on all sides; 12 pt for larger narrative cards |
 | Heading and body | One rich-text box: 16 pt heading, 12 pt body, 4 pt gap |
 | Step chip | 22 pt `ink` circle, white 10 pt bold number, centred, zero indents |

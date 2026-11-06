@@ -50,7 +50,8 @@ crave. Get a meal that fits you.**
 Aim for about 70% ground and white, 20% ink, under 10% tomato. Macro colours
 never mean anything but their macro. Green never means medically safe. Tomato
 never means an error. Estimate badges use #FBEBD6 with #7A4A0C text. Outside the app,
-#ECEFE8 is allowed for neutral tracks and badges and #C9D3CC for secondary text on `ink`.
+#ECEFE8 is allowed for neutral tracks and badges, #EEF4EF for panels, #9AA5A0 for baseline
+results and #C9D3CC for secondary text on `ink`. The showcase uses a white canvas.
 
 ## 4. Type
 
