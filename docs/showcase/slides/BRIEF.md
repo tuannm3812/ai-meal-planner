@@ -89,12 +89,8 @@ Titles are working titles.
 **Slide 2. Executive summary: "One meal sized to you, with measured quality"** (new)
 - **Question:** if I read one slide, what should I know?
 - **Message:** it turns a craving into one sized meal and a shopping list, states its estimates, and all 72 benchmark plans now meet the targets.
-- **Content, four highlights:**
-  1. **What it does:** one craving in; one meal, nutrition and shopping list out.
-  2. **How:** four agents, with retrieval from 34 curated recipes, so it needs no LLM key.
-  3. **Measured quality:** 72 of 72 plans meet the targets, up from 10, on its own offline benchmark.
-  4. **Honest limits:** nutrition and prices can be estimates, and the app labels them. Not medical advice.
-- **Visual:** focal 72/72 panel beside the four highlights. No takeaway column or markers.
+- **Content:** row 1, the product as one real example: you crave "chicken fried rice"; you get 694 kcal, target 691; you shop, estimated $24.50. Row 2: 72 of 72 with its 10, 41, 47, 72 trend; how it works (four agents, 34 curated recipes, no LLM key); honest limits (estimates are labelled; not medical advice).
+- **Visual:** three linked example cards, an ink evidence panel with bars, a panel and a limit card. No takeaway column or markers.
 - **Source:** fact sheet.
 
 **Slide 3. Agenda** (new)

@@ -19,9 +19,12 @@ Values are the real local run of 6 November 2026: slides/captures/2026-11-06-pla
 ## Slide 2 — p2
 
 If you read one slide, read this one.
-The app turns a craving into one meal sized to your body and goal, with a shopping list.
+[Point: You crave]
+Here is the whole product as one real example: a craving becomes one sized meal and a priced shopping list.
 [Point: 72 of 72]
 All 72 plans in the project's own benchmark now meet the targets, up from 10. That's a measure of the plans, not of real users.
+[Point: Honest limits]
+Nutrition and prices can be estimates, and the app labels them.
 The rest of the deck shows how it works and how that number was reached.
 Reference — not read aloud
 Fact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2.

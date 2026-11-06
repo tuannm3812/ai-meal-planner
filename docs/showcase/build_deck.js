@@ -158,19 +158,32 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 // 2 — executive summary
 {
   const s = slide("EXECUTIVE SUMMARY", "One meal sized to you, with measured quality", "A craving becomes one meal and a shopping list, and a fixed benchmark checks the result.",
-    "If you read one slide, read this one.\n\nThe app turns a craving into one meal sized to your body and goal, with a shopping list.\n\n[Point: 72 of 72]\nAll 72 plans in the project's own benchmark now meet the targets, up from 10. That's a measure of the plans, not of real users.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\nFact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2.", OPEN);
-  card(s, [
-    { text: "72", options: { fontFace: HEAD, fontSize: 54, bold: true, color: WHITE } },
-    { text: " of 72", options: { fontFace: HEAD, fontSize: 24, bold: true, color: ON_INK, breakLine: true } },
-    { text: "benchmark plans meet the targets, up from 10", options: { fontSize: 12, color: ON_INK, breakLine: true, paraSpaceAfter: 8 } },
-    { text: "The project's own offline benchmark.", options: { fontSize: 8, color: ON_INK } },
-  ], X0, TOP, 260, 356, { fill: INK, margin: 16, valign: "middle" });
-  [
-    ["What it does", "One craving in; one meal, nutrition and a shopping list out."],
-    ["How it works", "Four agents, with retrieval from 34 curated recipes, so it needs no LLM key."],
-    ["Measured quality", "Calories within 10% of target, and all three macros inside recommended ranges."],
-    ["Honest limits", "Nutrition and prices can be estimates, and the app labels them. Not medical advice."],
-  ].forEach(([h, b], i) => card(s, hb(h, b), 321.5, TOP + i * 92, 595, 80, { margin: 12 }));
+    "If you read one slide, read this one.\n\n[Point: You crave]\nHere is the whole product as one real example: a craving becomes one sized meal and a priced shopping list.\n\n[Point: 72 of 72]\nAll 72 plans in the project's own benchmark now meet the targets, up from 10. That's a measure of the plans, not of real users.\n\n[Point: Honest limits]\nNutrition and prices can be estimates, and the app labels them.\n\nThe rest of the deck shows how it works and how that number was reached.\n\nReference — not read aloud\nFact sheet, docs/showcase/README.md; docs/7_meal_quality.md §2.", OPEN);
+  // Row 1: the product, as one real example.
+  [["You crave", "chicken fried rice", "One line, in your own words"], ["You get", "694 kcal, target 691", "Chicken Fried Rice, sized to you"], ["You shop", "Estimated $24.50", "Six items, already listed"]].forEach(([l, v, n], i) => {
+    const x = X0 + i * 297;
+    card(s, [
+      { text: l, options: { fontSize: 10, bold: true, color: MUTED, breakLine: true, paraSpaceAfter: 3 } },
+      { text: v, options: { fontFace: HEAD, fontSize: 16, bold: true, color: GREEN, breakLine: true, paraSpaceAfter: 3 } },
+      { text: n, options: { fontSize: 12, color: MUTED } },
+    ], x, TOP, 279, 92, { margin: 12, valign: "middle" });
+    if (i < 2) arrow(s, x + 281, TOP + 46, x + 295, TOP + 46);
+  });
+  // Row 2: the evidence, with its trend, beside how it works and its limits.
+  const py = 238, ph = 248;
+  card(s, "", X0, py, 428, ph, { fill: INK });
+  text(s, [{ text: "72", options: { fontSize: 54, bold: true, color: WHITE } }, { text: " of 72", options: { fontSize: 24, bold: true, color: ON_INK } }], X0 + 20, py + 24, 190, 70, { valign: "middle" });
+  text(s, "benchmark plans meet the targets, up from 10", X0 + 20, py + 100, 160, 52, { color: ON_INK });
+  text(s, "The project's own offline benchmark.", X0 + 20, py + 206, 170, 14, { fontSize: 8, color: ON_INK });
+  const base = py + ph - 44, unit = 138 / 72;
+  [["First run", 10], ["Balancing", 41], ["Fallback", 47], ["Fat, retry", 72]].forEach(([n, v], i) => {
+    const x = X0 + 200 + i * 54, bh = v * unit;
+    s.addShape(pres.ShapeType.rect, { ...box(x + 6, base - bh, 36, bh), fill: { color: i ? WHITE : BASELINE }, line: { color: i ? WHITE : BASELINE, width: 0.5 }, objectName: `Bar ${n}` });
+    text(s, String(v), x, base - bh - 18, 48, 16, { bold: true, color: WHITE, align: "center", valign: "bottom" });
+    text(s, n, x - 3, base + 6, 54, 14, { fontSize: 9, color: ON_INK, align: "center" });
+  });
+  card(s, hb("How it works", "Four agents and retrieval from 34 curated recipes, so it needs no LLM key."), 489.5, py, 427, 118, { margin: 14, valign: "middle" });
+  card(s, hb("Honest limits", "Nutrition and prices can be estimates, and the app labels them. Not medical advice.", { hc: WARN, bc: INK }), 489.5, py + 130, 427, 118, { fill: TINT_WARN, margin: 14, valign: "middle" });
 }
 
 // 3 — agenda
