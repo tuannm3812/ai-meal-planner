@@ -100,9 +100,7 @@ def salmon_scene():
         parts.append(
             f'<rect x="{x - 4}" y="{y + 6}" width="8" height="24" rx="4" fill="#8DBB5E" transform="rotate({a} {x} {y})"/>'
         )
-    fillet = '<g transform="translate({} {}) rotate(-14)"><rect x="-96" y="-54" width="192" height="108" rx="40" fill="#F08A6C"/><rect x="-96" y="-54" width="192" height="30" rx="15" fill="#D96B4E"/>'.format(
-        CX + 8, CY - 44
-    )
+    fillet = f'<g transform="translate({CX + 8} {CY - 44}) rotate(-14)"><rect x="-96" y="-54" width="192" height="108" rx="40" fill="#F08A6C"/><rect x="-96" y="-54" width="192" height="30" rx="15" fill="#D96B4E"/>'
     stripes = "".join(
         f'<path d="M{-70 + i * 28} -36q12 42 -4 84" stroke="#FBC3AE" stroke-width="5" fill="none"/>'
         for i in range(6)
