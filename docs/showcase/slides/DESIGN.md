@@ -66,6 +66,13 @@ live on the layout, never on a slide. No bars, stripes, rules under titles or de
 Default content width beside a takeaway column is x 43.5 to 652. One dominant figure or
 diagram leads each content slide. Leave at least 12 pt between neighbouring components.
 
+## Cover and close
+
+The cover sells the app, so it carries no author name and no QR code; both go on the close.
+Read order: question, search bar, labelled plate, receipt. Keep to three plate labels and one
+calorie tag, using values from a real plan. The receipt uses Google Sans Code, tilted 3°. The
+close keeps the cover's `ink` background and carries the credit, links and QR code.
+
 ## Typography
 
 Google Sans for all editable text. Google Sans Code for code spans, filenames and endpoints,

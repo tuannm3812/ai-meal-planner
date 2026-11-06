@@ -141,16 +141,6 @@ def call2(x1, y1, x2, y2):
     )
 
 
-def note_list(rows):
-    items = "".join(
-        f'<div style="display:flex;justify-content:space-between;margin-top:1px"><span>{a}</span><span>{b}</span></div>'
-        for a, b in rows
-    )
-    return f"""<div class=a style="left:752px;top:58px;width:176px;height:224px;background:#FFFDF4;color:#15291F;padding:12px 15px;font:700 19px/1.2 C;transform:rotate(3deg);border-top:7px solid #C8431F">
-<div style="font:700 25px C">Shopping list</div>{items}
-<div style="display:flex;justify-content:space-between;margin-top:5px;padding-top:3px;border-top:1.5px solid #15291F"><span>About</span><span>$24.50</span></div></div>"""
-
-
 def receipt_list(rows):
     items = "".join(
         f'<div style="display:flex;justify-content:space-between;margin-top:6px"><span>{a}</span><span>{b}</span></div>'
@@ -161,7 +151,7 @@ def receipt_list(rows):
 <div style="display:flex;justify-content:space-between;margin-top:12px;padding-top:8px;border-top:1px dashed #15291F;font:700 11.5px M"><span>ESTIMATED</span><span>$24.50</span></div></div>"""
 
 
-def combined(style):
+def combined():
     """The question leads, the craving answers it, the plate proves it, the list finishes it."""
     rows = [
         ("Chicken breast", "$7.80"),
@@ -171,8 +161,7 @@ def combined(style):
         ("Sesame oil", "$3.50"),
         ("Soy sauce", "$3.00"),
     ]
-    if style == "receipt":
-        rows = [(a.upper(), b) for a, b in rows]
+    rows = [(a.upper(), b) for a, b in rows]
     lines = call2(560, 215, 508, 118) + call2(530, 400, 366, 470) + call2(690, 420, 800, 470)
     labels = (
         label(352, 88, "Chicken breast, 100 g", "Estimated", "right")
@@ -180,7 +169,6 @@ def combined(style):
         + label(806, 458, "Vegetables, 115 g", "Reference")
     )
     extra = f"""<style>
-@font-face{{font-family:C;font-weight:700;src:url({FONTS}/caveat-latin-700-normal.woff2)}}
 @font-face{{font-family:M;font-weight:400;src:url({FONTS}/google-sans-code-latin-400-normal.woff2)}}
 @font-face{{font-family:M;font-weight:700;src:url({FONTS}/google-sans-code-latin-700-normal.woff2)}}
 </style>"""
@@ -189,8 +177,7 @@ def combined(style):
 <div class=a style="left:43.5px;top:262px;width:300px;height:50px;background:#fff;border-radius:26px;color:#15291F;display:flex;align-items:center;padding:0 22px;font:400 18px G">chicken fried rice<span style="color:#C8431F">|</span></div>
 <div class="a s" style="left:43.5px;top:328px;width:280px;font-size:14px">One meal sized to you, every number explained, the shopping list ready.</div>
 <div class=a style="left:540px;top:86px;width:150px;background:#1B5E3F;color:#fff;border-radius:16px;padding:6px 0;text-align:center;font:700 13px G">694 kcal, target 691</div>
-<div class="a s" style="left:43.5px;top:496px;font-size:12px">A multi-agent meal planner, a portfolio project by Mike</div>
-{note_list(rows) if style == "note" else receipt_list(rows)}"""
+{receipt_list(rows)}"""
 
 
 with sync_playwright() as p:
@@ -200,8 +187,7 @@ with sync_playwright() as p:
         ("image-1-annotated", annotated()),
         ("image-2-checkout", checkout()),
         ("image-3-question", question()),
-        ("image-4-combined-note", combined("note")),
-        ("image-5-combined-receipt", combined("receipt")),
+        ("image-4-combined", combined()),
     ):
         path = HERE / f"{name}.html"
         path.write_text(f"<!doctype html><meta charset=utf-8>{html}")

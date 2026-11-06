@@ -1,6 +1,6 @@
 # Showcase deck brief
 
-**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: Google Sans, Garden green and the logo chosen; cover next, then the deck is restyled.** Stage 5 items are in §5.
+**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: Google Sans, Garden green, the logo and the cover layout chosen; the cover image is next, then the deck is restyled.** Stage 5 items are in §5.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
 [live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
@@ -81,10 +81,11 @@ Titles are working titles.
 ### Opening
 
 **Slide 1. Cover** (`p1`)
-- **Message:** the name and the promise, nothing else.
-- **Content:** AI Meal Planner. "Say what you crave. Get a meal that fits you." A multi-agent meal planner, a portfolio project by Mike. Demo QR code.
-- **Visual:** `ink` background, plate mark, QR card.
-- **Elsewhere:** everything else.
+- **Message:** the question, the app's answer, and proof that it works. The app leads, not the author.
+- **Content:** "What should I eat tonight?" A search bar reading "chicken fried rice". "One meal sized to you, every number explained, the shopping list ready." Three plate labels: Chicken breast, 100 g, Estimated; Cooked rice, 220 g, Estimated; Vegetables, 115 g, Reference. A tag: 694 kcal, target 691. A receipt: the six items and Estimated $24.50.
+- **Visual:** `ink` background, calendar plate logo with the name top left, a large top-down plate cropped at the bottom, a tilted receipt in Google Sans Code. Mockup: `cover-concepts/concept-image-4-combined.png`.
+- **Open:** the image source.
+- **Elsewhere:** Mike's name and the QR code go on slide 14.
 
 **Slide 2. Executive summary: "One meal sized to you, with measured quality"** (new)
 - **Question:** if I read one slide, what should I know?
@@ -196,7 +197,7 @@ Titles are working titles.
 ### Close
 
 **Slide 14. "Try it and read the code"** (`p12`)
-- **Content:** live demo link, GitHub link, QR code, "A study project. Not medical advice."
+- **Content:** live demo link, GitHub link, QR code, "A multi-agent meal planner, a portfolio project by Mike", "A study project. Not medical advice."
 - **Visual:** matches the cover.
 
 ## 5. Open items for the design pass

@@ -33,7 +33,7 @@ Three questions, three kinds of file. Each has one owner, so nothing is decided 
 | Folder or file | Holds |
 | --- | --- |
 | `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py`, `cover-concepts/`, `palette-trials/` |
-| `fonts/` | Bundled Google Sans (showcase), Bricolage Grotesque and Inter (current drafts), with OFL licences |
+| `fonts/` | Bundled Google Sans and Google Sans Code (showcase), Bricolage Grotesque and Inter (current drafts), with OFL licences |
 | `poster.html`, `linkedin.html`, `showcase.css`, `render.py` | Poster and LinkedIn source and renderer |
 | `ai-meal-planner-*.png`, `.pdf`, `linkedin_post.md` | First poster outputs and post text |
 
@@ -88,7 +88,7 @@ on 2026-11-05.
 | Meal target | Exercise calories + BMR-based estimate, goal +250 or −400 kcal (subject to the floor), then 28% of the daily budget, kept to 350–850 kcal | calorie_expenditure_agent.md, meal_recommendation_agent.py |
 | Recipe library | 34 curated recipes | meals.json |
 | Example plan, design | Chicken Fried Rice: 629 kcal against 625; 42 g protein, 71 g carbs, 18 g fat (27/46/27%) | 8_design.md §2 |
-| Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated | Local run, 2026-11-06, no provider keys; slides/captures/2026-11-06-plan.json |
+| Example plan, real run | Chicken Fried Rice: 694 kcal against 691; 48 g protein, 78 g carbs, 19 g fat (28/46/26%); 3 of 6 ingredients estimated; estimated shopping total $24.50 | Local run, 2026-11-06, no provider keys; slides/captures/2026-11-06-plan.json |
 | Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
 | Tests | 598 Python tests, 95% coverage (Claude's full run logged 2026-11-02) | 5_agent_log.md |
 | Benchmark split | 61 matched and 11 fallback plans; 68 of 72 include an estimated ingredient | 7_meal_quality.md §2 |
