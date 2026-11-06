@@ -113,6 +113,7 @@ and tomato, so real screenshots sit naturally in the deck. Canvas is white, like
 | Limitation strips; estimate badges | #7A4A0C on #FBEBD6 |
 | Positive badges with a label | #1B5E3F on #E3EFE6 |
 | Neutral tracks and reference badges | #ECEFE8 |
+| Feature cards, one each | #E3EFE6 with #1B5E3F; #FBE4DC with #C8431F; #FFF3C9 with #A67C00; #EEF2D6 with #66791C |
 | Macro data only | Protein #2F6FAB, carbs #9A6A12, fat #7A4E9C |
 
 Most of each slide stays white. One ink focal panel at most per slide. Colour is never the
@@ -187,10 +188,13 @@ Project-specific claim rules:
 
 ## Icons and images
 
-The calendar plate mark is the only icon; use `assets/logo-mark-dark.svg` on ink. Numbered chips do the job of icons. If a diagram needs
-pictograms, use Material Symbols Rounded, unfilled, 24 pt, in `ink`, with a text label. No
-emoji or clip art. Keep the licence with any asset added. No stock imagery of food or bodies; the
-cover plate is our own illustration.
+Use Material Symbols Rounded (`assets/icons/`, Apache-2.0), one style only, with a text label.
+Card icons are white glyphs in a 30 pt coloured circle. No emoji or clip art. Keep the licence
+with any asset added. No stock imagery of food or bodies; the plates are our own flat illustration.
+
+Background icons are a quiet food motif, never content: a loose cluster at 13% green in the
+top right corner of the content layout (`assets/bg-corner.png`), and a 7% white pattern inside
+ink bands (`assets/bg-band.png`). They stay clear of titles, data and text.
 
 ## Speaker notes
 

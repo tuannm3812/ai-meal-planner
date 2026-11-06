@@ -89,7 +89,7 @@ Titles are working titles.
 **Slide 2. Executive summary: "One craving, sized to four different people"** (new)
 - **Question:** if I read one slide, what should I know?
 - **Message:** what it does, the features behind it, and the numbers that prove it.
-- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal for four benchmark profiles. Key features: sized to you; safe for your diet; balanced and checked; ready to shop. Key numbers: 72 of 72 plans on target, up from 10; 0.3% median calorie deviation; 34 curated recipes; 4 agents, no LLM key.
+- **Content:** chicken fried rice at 363, 694, 809 and 850 kcal for four benchmark profiles. Key features, with icons: sized to you (a trained model and your goal set the budget, then the meal target); safe for your diet (allergies, diets and conditions rule out recipes first); balanced and checked (portions resized toward healthy ranges, each ingredient shows its source); ready to shop (products with an estimated total). Key numbers: 72 of 72 plans on target, up from 10; 0.3% median calorie deviation; 34 curated recipes; 4 agents, no LLM key.
 - **Visual:** three rows: four plates on an ink band, area to scale with calories; four feature cards; four key numbers. No takeaway column or markers.
 - **Source:** fact sheet; `docs/meal_quality/baseline.json`.
 
