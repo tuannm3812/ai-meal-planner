@@ -5,7 +5,8 @@ Why rules changed. The current rules are in [DESIGN.md](DESIGN.md). Newest first
 ## 6 November 2026
 
 - **The cover became image-led, and the author's name moved to the close.** Mike wants the app to
-  lead. Question, search bar, labelled plate and receipt replace the name, tagline and QR card.
+  lead. Question, search bar, an illustrated labelled plate and a receipt replace the name and
+  tagline, and the QR code shrinks to the bottom left.
 - **The plate on a calendar replaced the plate mark for the showcase.** Mike chose it from seven
   options because it says meal planner directly. The app keeps the old mark for now.
 - **Garden green on white replaced the `ground` canvas.** Mike chose theme A from four trials. Green

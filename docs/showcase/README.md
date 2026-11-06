@@ -4,7 +4,7 @@ Everything for the project's showcase, laid out like the Text-to-SQL showcase fo
 
 ## Editable deck
 
-[Open the live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit),
+[Open the live Google Slides deck](https://docs.google.com/presentation/d/1oKs5FFUak7_AIuMEWYxDS_IAvSTtoh97GfAsB3vXlik/edit),
 in Drive at `06_Projects/AI Meal Planner`. Created 6 November 2026 with 14 editable slides.
 Access is private; no sharing was changed.
 

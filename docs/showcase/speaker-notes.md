@@ -5,12 +5,16 @@ Pattern: slides/DESIGN.md, Speaker notes.
 
 ## Slide 1 — p1
 
-This is AI Meal Planner, a portfolio project I built end to end.
-It turns a craving into one meal sized to you, and it says how each number was produced.
-[Point: QR code]
-You can try the live demo while you read.
+Everyone asks this question, so that's where this project starts.
+[Point: search bar]
+You type a craving.
+[Point: plate labels]
+You get one meal sized to you, and each ingredient says where its number came from.
+[Point: shopping list]
+The shopping list is already written.
+The rest of this deck shows how it works and how I measured it.
 Reference — not read aloud
-README.md.
+Values are the real local run of 6 November 2026: slides/captures/2026-11-06-plan.json. The plate is an illustration, slides/build_cover_art.py.
 
 ## Slide 2 — p2
 

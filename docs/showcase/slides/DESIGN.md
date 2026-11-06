@@ -6,7 +6,7 @@ colours, fonts, logos and claims do not.
 
 ## Authority and maintenance
 
-The [live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
+The [live Google Slides deck](https://docs.google.com/presentation/d/1oKs5FFUak7_AIuMEWYxDS_IAvSTtoh97GfAsB3vXlik/edit)
 is the formatting source of truth. Read its current objects before editing and keep
 Mike's changes. `../build_deck.js` and the `.pptx` are the first seed only; never
 reimport them over the live deck.
@@ -68,10 +68,12 @@ diagram leads each content slide. Leave at least 12 pt between neighbouring comp
 
 ## Cover and close
 
-The cover sells the app, so it carries no author name and no QR code; both go on the close.
-Read order: question, search bar, labelled plate, receipt. Keep to three plate labels and one
-calorie tag, using values from a real plan. The receipt uses Google Sans Code, tilted 3°. The
-close keeps the cover's `ink` background and carries the credit, links and QR code.
+The cover sells the app, so it carries no author name; that goes on the close. Read order:
+question, search bar, labelled plate, receipt, then a small QR code at bottom left for laptop
+viewers. Keep to three plate labels and one calorie tag, using values from a real plan. The
+plate is `assets/cover-art.png`, from `build_cover_art.py`; every word over it stays editable.
+The receipt uses Google Sans Code, tilted 3°. The close keeps the `ink` background and carries
+the credit, links and a larger QR code.
 
 ## Typography
 
@@ -187,7 +189,8 @@ Project-specific claim rules:
 
 The calendar plate mark is the only icon; use `assets/logo-mark-dark.svg` on ink. Numbered chips do the job of icons. If a diagram needs
 pictograms, use Material Symbols Rounded, unfilled, 24 pt, in `ink`, with a text label. No
-emoji or clip art. Keep the licence with any asset added. No stock imagery of food or bodies.
+emoji or clip art. Keep the licence with any asset added. No stock imagery of food or bodies; the
+cover plate is our own illustration.
 
 ## Speaker notes
 

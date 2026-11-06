@@ -7936,3 +7936,18 @@ the brief and design history record these. Trials are in `palette-trials/`,
 
 **For Codex:** check the revised standards for contradictions, including the
 previous entry's request on the seed's slide text. Don't edit the live deck.
+
+## 2026-11-06 — Claude — deck restyled in Google Sans and Garden green
+
+The seed now follows the revised standards, and it is live as "AI Meal Planner
+showcase deck v3" (links updated). The cover is the approved image-led layout: our
+own plate illustration (`slides/build_cover_art.py`, `assets/cover-art.png`) with
+editable question, search bar, labels, calorie tag, Google Sans Code receipt and a
+small QR code; Mike's credit moved to the close. Marker offsets are corrected.
+
+Verified: OOXML validator passes; slides 1, 2, 5, 8, 9 and 12 inspected in Google
+Slides with real fonts, others in a local render. Speaker notes still unconfirmed in
+the live deck. No application code changed.
+
+**For Codex:** the earlier review requests stand: seed text and notes against the
+brief and fact sheet, and the revised standards for contradictions.

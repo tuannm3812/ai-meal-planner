@@ -8,10 +8,10 @@ const { applyTheme } = require(process.env.PPTX_SKILL + "/scripts/apply_theme.js
 
 const THEME = {
   name: "Kitchen green",
-  headFontFace: "Bricolage Grotesque",
-  bodyFontFace: "Inter",
+  headFontFace: "Google Sans",
+  bodyFontFace: "Google Sans",
   colors: {
-    dk1: "15291F", lt1: "FFFFFF", dk2: "4B5B52", lt2: "F6F7F2",
+    dk1: "15291F", lt1: "FFFFFF", dk2: "4B5B52", lt2: "EEF4EF",
     accent1: "C8431F", accent2: "1B5E3F", accent3: "2F6FAB",
     accent4: "9A6A12", accent5: "7A4E9C", accent6: "DDE3DA",
     hlink: "B23A17", folHlink: "4B5B52",
@@ -24,10 +24,11 @@ const pres = new pptxgen();
 pres.layout = "LAYOUT_WIDE"; // 960 x 540 pt
 pres.title = "AI Meal Planner showcase";
 pres.author = "Mike";
-pres.theme = { headFontFace: HEAD, bodyFontFace: "Inter" };
+pres.theme = { headFontFace: HEAD, bodyFontFace: HEAD };
 const C = pres.SchemeColor;
-const INK = C.text1, MUTED = C.text2, WHITE = C.background1, GROUND = C.background2;
+const INK = C.text1, MUTED = C.text2, WHITE = C.background1, PANEL = C.background2;
 const TOMATO = C.accent1, GREEN = C.accent2, LINE = C.accent6;
+const MONO = "Google Sans Code", BASELINE = "9AA5A0";
 
 const pt = (n) => n / 72; // positions in DESIGN.md are points
 const box = (x, y, w, h) => ({ x: pt(x), y: pt(y), w: pt(w), h: pt(h) });
@@ -39,11 +40,16 @@ pres.defineSlideMaster({
   objects: [{ placeholder: { options: { name: "title", type: "title", ...box(X0, 158, 590, 72), fontFace: HEAD, fontSize: 46, bold: true, color: WHITE, align: "left", valign: "top", margin: 0 }, text: "" } }],
 });
 pres.defineSlideMaster({
+  title: "COVER",
+  background: { color: INK },
+  objects: [{ placeholder: { options: { name: "title", type: "title", ...box(X0, 92, 300, 112), fontFace: HEAD, fontSize: 46, bold: true, color: WHITE, align: "left", valign: "top", margin: 0 }, text: "" } }],
+});
+pres.defineSlideMaster({
   title: "LIGHT",
-  background: { color: GROUND },
+  background: { color: WHITE },
   objects: [
     { placeholder: { options: { name: "label", type: "body", ...box(X0, 21.7, W, 18), fontSize: 10, bold: true, color: INK, align: "left", valign: "top", margin: 0 }, text: "" } },
-    { placeholder: { options: { name: "title", type: "title", ...box(X0, 48.4, W, 36), fontFace: HEAD, fontSize: 24, bold: true, color: INK, align: "left", valign: "top", margin: 0 }, text: "" } },
+    { placeholder: { options: { name: "title", type: "title", ...box(X0, 48.4, W, 36), fontFace: HEAD, fontSize: 24, bold: true, color: GREEN, align: "left", valign: "top", margin: 0 }, text: "" } },
     { placeholder: { options: { name: "subtitle", type: "body", ...box(X0, 90.9, W, 22), fontSize: 12, color: MUTED, align: "left", valign: "top", margin: 0 }, text: "" } },
     { image: { path: "slides/assets/mark.png", ...box(X0, 501, 18, 18) } },
     { text: { text: "AI Meal Planner", options: { ...box(68, 500, 200, 20), fontSize: 10, color: MUTED, margin: 0, valign: "middle" } } },
@@ -54,10 +60,11 @@ pres.defineSlideMaster({
 const text = (s, t, x, y, w, h, o = {}) =>
   s.addText(t, { isTextBox: true, margin: 0, color: INK, fontSize: 12, valign: "top", ...box(x, y, w, h), ...o });
 // A card holds its own text, as DESIGN.md requires.
+// Empty cards frame a figure, so they stay white with a border; text cards use the panel fill.
 const card = (s, runs, x, y, w, h, o = {}) =>
   s.addText(runs, {
     shape: pres.ShapeType.roundRect, rectRadius: pt(12), ...box(x, y, w, h),
-    fill: { color: o.fill || WHITE }, line: { color: o.fill || LINE, width: 1 },
+    fill: { color: o.fill || (runs === "" ? WHITE : PANEL) }, line: { color: o.fill || (runs === "" ? LINE : PANEL), width: 1 },
     margin: o.margin ?? 8, valign: o.valign || "top", color: o.color || INK, fontSize: 12,
   });
 const hb = (h, b, o = {}) => [
@@ -110,12 +117,42 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
 
 // 1 — cover
 {
-  const s = dark("AI Meal Planner",
-    "This is AI Meal Planner, a portfolio project I built end to end.\n\nIt turns a craving into one meal sized to you, and it says how each number was produced.\n\n[Point: QR code]\nYou can try the live demo while you read.\n\nReference — not read aloud\nREADME.md.", OPEN);
-  s.addImage({ path: "slides/assets/mark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner plate mark" });
-  text(s, [{ text: "Say what you crave.", options: { breakLine: true } }, { text: "Get a meal that " }, { text: "fits you", options: { color: TOMATO, bold: true } }, { text: "." }],
-    X0, 236, 590, 76, { fontFace: HEAD, fontSize: 24, color: WHITE });
-  text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 20, { color: ON_INK });
+  const s = pres.addSlide({ masterName: "COVER", sectionTitle: OPEN });
+  s.addText("What should I eat tonight?", { placeholder: "title" });
+  s.addNotes("Everyone asks this question, so that's where this project starts.\n\n[Point: search bar]\nYou type a craving.\n\n[Point: plate labels]\nYou get one meal sized to you, and each ingredient says where its number came from.\n\n[Point: shopping list]\nThe shopping list is already written.\n\nThe rest of this deck shows how it works and how I measured it.\n\nReference — not read aloud\nValues are the real local run of 6 November 2026: slides/captures/2026-11-06-plan.json. The plate is an illustration, slides/build_cover_art.py.");
+  s.addImage({ path: "slides/assets/cover-art.png", ...box(0, 0, 960, 540), altText: "Illustration of chicken fried rice on a plate, seen from above" });
+  s.addImage({ path: "slides/assets/mark-dark.png", ...box(X0, 34, 28, 28), altText: "AI Meal Planner logo" });
+  text(s, "AI Meal Planner", 80, 36, 240, 24, { fontSize: 16, bold: true, color: WHITE, valign: "middle" });
+  s.addText([{ text: "chicken fried rice", options: { color: INK } }, { text: "|", options: { color: TOMATO } }], {
+    shape: pres.ShapeType.roundRect, rectRadius: pt(25), ...box(X0, 262, 300, 50), fill: { color: WHITE }, line: { color: WHITE, width: 1 }, fontSize: 18, margin: 14, valign: "middle",
+  });
+  text(s, "One meal sized to you, every number explained, the shopping list ready.", X0, 328, 280, 44, { fontSize: 14, color: ON_INK });
+  const callout = (x1, y1, x2, y2, flipV) => {
+    const geo = { ...box(Math.min(x1, x2), Math.min(y1, y2), Math.abs(x2 - x1), Math.abs(y2 - y1)), flipV };
+    s.addShape(pres.ShapeType.line, { ...geo, line: { color: INK, width: 3 } });
+    s.addShape(pres.ShapeType.line, { ...geo, line: { color: WHITE, width: 1.25 } });
+    s.addShape(pres.ShapeType.ellipse, { ...box(x1 - 5.5, y1 - 5.5, 11, 11), fill: { color: WHITE }, line: { color: INK, width: 1.5 } });
+  };
+  callout(560, 215, 508, 118, false);
+  callout(530, 400, 366, 470, true);
+  callout(690, 420, 800, 470, false);
+  const tag = (a, b, x, y, align) =>
+    text(s, [{ text: a, options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } }, { text: b, options: { fontSize: 10, color: ON_INK } }], x, y, 160, 34, { align });
+  tag("Chicken breast, 100 g", "Estimated", 342, 86, "right");
+  tag("Cooked rice, 220 g", "Estimated", 202, 456, "right");
+  tag("Vegetables, 115 g", "Reference", 806, 456, "left");
+  s.addText("694 kcal, target 691", { shape: pres.ShapeType.roundRect, rectRadius: pt(14), ...box(540, 84, 150, 28), fill: { color: GREEN }, line: { color: GREEN, width: 1 }, color: WHITE, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
+  const row = (a, b) => a + " ".repeat(23 - a.length - b.length) + b;
+  const items = [["CHICKEN BREAST", "$7.80"], ["COOKED RICE", "$3.20"], ["WHOLE EGG", "$3.50"], ["VEGETABLES", "$3.50"], ["SESAME OIL", "$3.50"], ["SOY SAUCE", "$3.00"]];
+  s.addText([
+    { text: "SHOPPING LIST", options: { bold: true, fontSize: 12, breakLine: true, paraSpaceAfter: 8 } },
+    ...items.map(([a, b]) => ({ text: row(a, b), options: { breakLine: true, paraSpaceAfter: 5 } })),
+    { text: "-".repeat(23), options: { breakLine: true, paraSpaceAfter: 5 } },
+    { text: row("ESTIMATED", "$24.50"), options: { bold: true } },
+  ], { shape: pres.ShapeType.rect, ...box(748, 60, 182, 218), rotate: 3, fill: { color: WHITE }, line: { color: WHITE, width: 1 }, color: INK, fontFace: MONO, fontSize: 10, margin: 14, valign: "top", objectName: "Shopping list" });
+  s.addShape(pres.ShapeType.roundRect, { ...box(X0, 404, 84, 84), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
+  s.addImage({ path: "slides/assets/qr.png", ...box(X0 + 6, 410, 72, 72), altText: "QR code to the live demo" });
+  text(s, [{ text: "Try the live demo", options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } }, { text: "Scan with your phone", options: { fontSize: 10, color: ON_INK } }], 139, 428, 110, 36);
 }
 
 // 2 — executive summary
@@ -142,7 +179,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     "The deck has four sections.\n\nFirst why this is worth solving, then how it works, then what was measured, and last how it's built and what isn't proven yet.\n\nEach range is a link, so you can jump straight to a section.", OPEN);
   [["01", "Problem", "Why is this worth solving?", "Page 4", 4], ["02", "Solution", "What does it do, and how?", "Pages 5–9", 5], ["03", "Evidence", "What is a good meal, and did we get there?", "Pages 10–11", 10], ["04", "Build and limits", "How is it built, and what is unproven?", "Pages 12–13", 12]].forEach(([n, h, q, r, p], i) => {
     const x = X0 + i * 224;
-    text(s, n, x, 150, 200, 60, { fontFace: HEAD, fontSize: 46, bold: true });
+    text(s, n, x, 150, 200, 60, { fontFace: HEAD, fontSize: 46, bold: true, color: GREEN });
     text(s, h, x, 224, 200, 24, { fontFace: HEAD, fontSize: 16, bold: true });
     text(s, q, x, 254, 190, 54, { color: MUTED });
     text(s, [{ text: r, options: { hyperlink: { slide: p }, color: INK, bold: true } }], x, 318, 200, 18);
@@ -239,7 +276,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     ...[["Chicken breast", "100 g", 0], ["Cooked white rice", "220 g", 0], ["Whole egg", "50 g", 1], ["Mixed vegetables", "115 g", 1], ["Soy sauce", "15 g", 0], ["Sesame oil", "10 g", 1]].map(([n, a, ok]) => [cell(n), cell(a, { align: "right" }), badge(ok)]),
   ];
   card(s, "", X0, TOP, 372, 276);
-  s.addTable(rows, { ...box(X0 + 12, TOP + 12, 348, 252), colW: [pt(170), pt(78), pt(100)], rowH: pt(36), fontSize: 12, color: INK, fontFace: "Inter", valign: "middle", border: { type: "none" } });
+  s.addTable(rows, { ...box(X0 + 12, TOP + 12, 348, 252), colW: [pt(170), pt(78), pt(100)], rowH: pt(36), fontSize: 12, color: INK, fontFace: HEAD, valign: "middle", border: { type: "none" } });
   marker(s, 1, 410, 134);
   text(s, "Lookup order", 432, TOP, 220, 22, { fontFace: HEAD, fontSize: 16, bold: true });
   ["Trusted local reference", "Cached or provider lookup: USDA, then FatSecret if configured", "Local or category estimate"].forEach((t, i) => {
@@ -282,7 +319,7 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
   const base = 342, unit = 158 / 72;
   [["First run", 10], ["Portion balancing", 41], ["Honest fallback", 47], ["Cooking fat and rounding retry", 72]].forEach(([n, v], i) => {
     const x = X0 + 20 + i * 144, bh = v * unit;
-    s.addShape(pres.ShapeType.rect, { ...box(x + 22, base - bh, 92, bh), fill: { color: i ? GREEN : MUTED }, line: { color: i ? GREEN : MUTED, width: 0.5 }, objectName: `Bar ${n}` });
+    s.addShape(pres.ShapeType.rect, { ...box(x + 22, base - bh, 92, bh), fill: { color: i ? GREEN : BASELINE }, line: { color: i ? GREEN : BASELINE, width: 0.5 }, objectName: `Bar ${n}` });
     text(s, String(v), x, base - bh - 24, 136, 22, { fontFace: HEAD, fontSize: 16, bold: true, align: "center", valign: "bottom" });
     text(s, n, x, base + 6, 136, 32, { align: "center", color: MUTED, fontSize: 10 });
   });
@@ -329,7 +366,9 @@ const OPEN = "Opening", PROBLEM = "01 Problem", SOLUTION = "02 Solution", EVIDEN
     "That's AI Meal Planner: one craving in, one meal sized to you, and every number showing how it was produced.\n\n[Point: QR code]\nThe demo and code are here.\n\nReference — not read aloud\nREADME.md.", CLOSE);
   text(s, "tuannm3812-ai-meal-planner.streamlit.app", X0, 248, 590, 22, { fontSize: 16, bold: true, color: WHITE, hyperlink: { url: "https://tuannm3812-ai-meal-planner.streamlit.app/" } });
   text(s, "github.com/tuannm3812/ai-meal-planner", X0, 282, 590, 22, { fontSize: 16, color: ON_INK, hyperlink: { url: "https://github.com/tuannm3812/ai-meal-planner" } });
-  text(s, "A study project. Not medical advice.", X0, 330, 590, 18, { color: ON_INK });
+  text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 18, { color: WHITE });
+  text(s, "A study project. Not medical advice.", X0, 352, 590, 18, { color: ON_INK });
+  s.addImage({ path: "slides/assets/mark-dark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner logo" });
 }
 
 (async () => {

@@ -1,9 +1,9 @@
 # Showcase deck brief
 
-**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: Google Sans, Garden green, the logo and the cover layout chosen; the cover image is next, then the deck is restyled.** Stage 5 items are in §5.
+**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: all choices made and applied in the restyled live deck; awaiting Mike's flip-through, then the deck is restyled.** Stage 5 items are in §5.
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
-[live Google Slides deck](https://docs.google.com/presentation/d/1RCroJQywRWTQTnjhNhHvX5xTdKcQ3SD4p8JEYfMENUg/edit)
+[live Google Slides deck](https://docs.google.com/presentation/d/1oKs5FFUak7_AIuMEWYxDS_IAvSTtoh97GfAsB3vXlik/edit)
 follows both. A design agent can work from this file alone: find the slide, read its fields,
 then edit the live slide. When the story changes, change this file first, then the slide.
 Numbers and sources are in the [fact sheet](../README.md#fact-sheet).
@@ -83,9 +83,8 @@ Titles are working titles.
 **Slide 1. Cover** (`p1`)
 - **Message:** the question, the app's answer, and proof that it works. The app leads, not the author.
 - **Content:** "What should I eat tonight?" A search bar reading "chicken fried rice". "One meal sized to you, every number explained, the shopping list ready." Three plate labels: Chicken breast, 100 g, Estimated; Cooked rice, 220 g, Estimated; Vegetables, 115 g, Reference. A tag: 694 kcal, target 691. A receipt: the six items and Estimated $24.50.
-- **Visual:** `ink` background, calendar plate logo with the name top left, a large top-down plate cropped at the bottom, a tilted receipt in Google Sans Code. Mockup: `cover-concepts/concept-image-4-combined.png`.
-- **Open:** the image source.
-- **Elsewhere:** Mike's name and the QR code go on slide 14.
+- **Visual:** `ink` background, calendar plate logo with the name top left, our own plate illustration cropped at the bottom (`assets/cover-art.png`), a tilted receipt in Google Sans Code, a small QR code at bottom left with "Try the live demo".
+- **Elsewhere:** Mike's name goes on slide 14.
 
 **Slide 2. Executive summary: "One meal sized to you, with measured quality"** (new)
 - **Question:** if I read one slide, what should I know?
@@ -200,12 +199,12 @@ Titles are working titles.
 - **Content:** live demo link, GitHub link, QR code, "A multi-agent meal planner, a portfolio project by Mike", "A study project. Not medical advice."
 - **Visual:** matches the cover.
 
-## 5. Open items for the design pass
+## 5. Open items
 
-- Takeaway markers sit below their heading line and need moving up: slide 7 marker 2, slide 9 marker 2, slide 11 markers 2 and 3. The seed is already corrected.
 - Confirm speaker notes came through conversion, then apply the note typography in DESIGN.md.
 - Slide 3's lower half is empty; consider a taller layout.
 - The app's own step 1 panel says a trained model "estimates the energy you burn in a day". That is loose against the exercise-calorie claim rule, and is an app copy decision, not a deck one.
+- Rebuild the poster and LinkedIn image to the new standards once the deck's content is approved.
 
 ## 6. Decisions
 
