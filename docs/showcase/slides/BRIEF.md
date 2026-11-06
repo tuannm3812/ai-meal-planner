@@ -66,8 +66,8 @@ These names appear in the agenda and slide labels, so the two always match.
 | 5 | `p3` | SOLUTION > THE FLOW | Real captures if available |
 | 6 | `p4` | SOLUTION > FOUR AGENTS | **Fix agent 1 wording** |
 | 7 | `p5` | SOLUTION > CALORIE TARGET | **Rewrite: claim is wrong today** |
-| 8 | `p6` | SOLUTION > CHOOSING THE MEAL | Add takeaways |
-| 9 | `p7` | SOLUTION > NUTRITION | **Soften title** |
+| 8 | `p6` | SOLUTION > CHOOSING THE MEAL | **Reword title**, add takeaways |
+| 9 | `p7` | SOLUTION > NUTRITION | **Soften title, fix lookup order** |
 | 10 | `p8` | EVIDENCE > WHAT GOOD MEANS | Add limits |
 | 11 | `p9` | EVIDENCE > RESULTS | Add fallback split, guardrails |
 | 12 | `p10` | BUILD AND LIMITS > ENGINEERING | **Update test count** |
@@ -91,7 +91,7 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Message:** it turns a craving into one sized meal and a shopping list, states its estimates, and all 72 benchmark plans now meet the targets.
 - **Content, four highlights:**
   1. **What it does:** one craving in; one meal, nutrition and shopping list out.
-  2. **How:** four agents, with retrieval from 34 tested recipes, so it needs no LLM key.
+  2. **How:** four agents, with retrieval from 34 curated recipes, so it needs no LLM key.
   3. **Measured quality:** 72 of 72 plans meet the targets, up from 10, on its own offline benchmark.
   4. **Honest limits:** nutrition and prices can be estimates, and the app labels them. Not medical advice.
 - **Visual:** focal 72/72 panel beside the four highlights. No takeaway column or markers.
@@ -121,13 +121,13 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Content:** three screens with short captions.
 - **Visual:** real captures of the current React app.
 - **Live:** uses prototype screens with no such caption.
-- **Source:** `docs/8_design.md`, `docs/assets/design/`, `scripts/capture_screenshots.py`.
+- **Source:** `docs/8_design.md`; capture target `frontend/src/features/flow/MealFlow.jsx`. `scripts/capture_screenshots.py` drives the old dashboard and is legacy, so fresh captures are pending.
 
 **Slide 6. "Four agents, one typed answer"** (`p4`)
-- **Subtitle:** Each agent does one job and hands on.
+- **Subtitle:** Each agent does one job, and a planning service runs them in order.
 - **Question:** what happens behind the screen?
 - **Message:** the four steps, and the core path works with no LLM key.
-- **Content:** Calorie expenditure: estimates daily needs and sets the meal target. Meal recommendation: removes conflicting meals, finds the closest recipe, resizes portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: maps ingredients to products with an estimated cost. Output: one typed JSON response with meal, nutrition, shopping list and warnings.
+- **Content:** Calorie expenditure: estimates daily expenditure and sets the daily budget. Meal recommendation: sets the meal target, excludes conflicting meals, picks a relevant recipe and sizes its portions. Nutrition verification: looks up each ingredient and labels estimates. Supermarket: maps ingredients to products with an estimated cost. The service balances portions after verification. Output: one typed JSON response with meal, nutrition, shopping list and warnings.
 - **Live:** agent 1 says the model "predicts your daily burn". **Wrong: fix.**
 - **Source:** `docs/2_architecture.md`, `docs/agents/`.
 - **Elsewhere:** how each agent works (slides 7–9).
@@ -136,30 +136,31 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Subtitle:** A trained exercise-calorie model feeds a daily budget, then one meal's target.
 - **Question:** how does it decide how much?
 - **Message:** a four-step calculation with a safety floor.
-- **Content, as a flow:** model predicts exercise calories → added to a BMR-based daily estimate → goal adjusts it (−400 kcal to lose, +250 to gain) → meal target is 28% of the daily budget, kept between 350 and 850 kcal.
-- **Evidence:** model R² 0.996 and mean error 2.2 kcal, labelled as exercise calories on validation data, 750,000 Kaggle Playground rows.
-- **Takeaways:** 1. The score is for exercise calories, not daily needs. 2. Weight-loss budgets never drop below 1,200 kcal a day for women or 1,500 for men, and a warning says when that applied.
+- **Content, as a flow:** model predicts exercise calories → added to a BMR-based daily estimate → goal adjusts it (+250 kcal to gain, −400 to lose, subject to the floor) → meal target is 28% of the daily budget, kept between 350 and 850 kcal.
+- **Evidence:** exercise-calorie model, validation R² 0.996 and MAE 2.2 kcal; Kaggle Playground dataset of 750,000 rows.
+- **Takeaways:** 1. The score is for exercise calories, not daily needs. 2. Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure, and a warning explains when it applies.
 - **Note:** in the meal flow, exercise inputs use defaults (30 minutes, 100 bpm).
 - **Live:** title says the 750,000-row model "sets each meal's calorie target", and the metrics are unlabelled. **Rewrite the slide.**
-- **Source:** `docs/agents/calorie_expenditure_agent.md`, `metrics.json`, `meal_recommendation_agent.py`, DEC-24, `docs/8_design.md` §3.1.
+- **Source:** `docs/agents/calorie_expenditure_agent.md`, `metrics.json`, `calorie_expenditure_agent.py`, `meal_recommendation_agent.py`, DEC-24, `docs/8_design.md` §3.1.
 
-**Slide 8. "Safety first, then the closest tested recipe"** (`p6`)
-- **Subtitle:** Filters run before search, across 34 recipes.
+**Slide 8. "Hard limits first, then a relevant recipe"** (`p6`)
+- **Subtitle:** Incompatible recipes are excluded before selection, across 34 curated recipes.
 - **Question:** how does it choose the meal?
 - **Message:** three honest outcomes: close match, standard meal with a note, or refusal.
-- **Content:** craving and profile → safety filters → vector search → three outcomes.
-- **Takeaways:** 1. Relevance alone decides a match, so an off-menu craving falls back with a warning. 2. If nothing is safe, it refuses.
-- **Source:** `docs/agents/meal_recommendation_agent.md`, DEC-27, `docs/7_meal_quality.md`.
+- **Content:** craving and profile → vector relevance and hard constraints → ranking → three outcomes.
+- **Takeaways:** 1. Relevance alone decides whether a recipe qualifies, so an off-menu craving falls back with a warning; the profile only influences ranking. 2. If nothing is safe, it refuses.
+- **Live:** title says filters run first and search finds the "closest tested recipe". **Reword.**
+- **Source:** `docs/agents/meal_recommendation_agent.md`, `backend/app/rag/retriever.py`, DEC-27, `docs/7_meal_quality.md`.
 - **Elsewhere:** results (slide 11).
 
 **Slide 9. "Each ingredient is looked up, and estimates are labelled"** (`p7`)
 - **Subtitle:** Example: Chicken Fried Rice, from the approved design.
 - **Question:** can I trust the numbers?
 - **Message:** every value shows its source, and estimates are visible.
-- **Content:** ingredient table with badges; lookup order USDA, then FatSecret if configured, then local tables.
+- **Content:** ingredient table with badges; lookup order: trusted local reference first; otherwise cached or provider lookup (USDA, then FatSecret if configured); then local or category estimates.
 - **Takeaways:** 1. 3 of 6 ingredients here are estimates, and the app says so. 2. With no provider keys, values come from local tables.
-- **Live:** title says every ingredient "is checked against USDA". **Soften.**
-- **Source:** `docs/8_design.md` §2, `docs/agents/nutrition_verification_agent.md`.
+- **Live:** title says every ingredient "is checked against USDA", and the chain starts at USDA. **Fix both.**
+- **Source:** `docs/8_design.md` §2, `docs/design/prototype/3-plan.html`, `backend/app/agents/nutrition_verification_agent.py`.
 
 ### 03 Evidence
 
@@ -174,12 +175,13 @@ Titles are working titles. **Live** lists what differs from the deck today.
 **Slide 11. "Three fixes took the planner from 10 to 72 of 72"** (`p9`)
 - **Subtitle:** Plans meeting the targets on the project's own benchmark.
 - **Question:** did it get better, and why?
-- **Message:** each change is measured; meals stayed the same while balance improved.
-- **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat 72.
+- **Message:** each change is measured. Balancing and the final step kept the served meals; the relevance gate moved 11 off-menu scenarios to fallback meals, which accounts for the rise to 47.
+- **Figure values:** First run 10. Portion balancing 41. Honest fallback 47. Cooking fat and rounding retry 72.
 - **Content:** median calorie deviation 0.3%, worst 9.9%. 5 of 5 guardrail cases hold.
 - **Takeaways:** 1. 61 plans match the craving; 11 are honest fallbacks, and both pass. 2. 68 of 72 plans include an estimated ingredient, because the benchmark runs without provider keys. 3. This shows plans meet targets, not that users prefer them.
 - **Live:** missing all three takeaways. **Add.**
-- **Source:** `docs/7_meal_quality.md` §2, `docs/meal_quality/baseline.md`.
+- **Live:** names the last step "Cooking fat" only. **Update.**
+- **Source:** `docs/7_meal_quality.md` §2, `docs/meal_quality/baseline.md`, DEC-26 to DEC-28.
 
 ### 04 Build and limits
 
@@ -189,7 +191,7 @@ Titles are working titles. **Live** lists what differs from the deck today.
 - **Message:** six habits, each with a file behind it.
 - **Content:** typed API contract checked in CI; 598 Python tests at 95% coverage; API keys and rate limits; containers and a Cloud Run workflow; tracing that keeps health data out; two clients.
 - **Limit:** the Cloud Run workflow is ready but not yet deployed to a GCP project.
-- **Live:** says 596 tests. **Update.** If #43 merges first, use 618.
+- **Live:** says 596 tests. **Update.** After #43 merges, recheck the dated test run before changing this.
 - **Source:** `docs/openapi.json`, `.github/workflows/`, `docs/6_deployment.md`, `docs/5_agent_log.md`.
 
 **Slide 13. "What comes next, and what it is not yet"** (`p11`)

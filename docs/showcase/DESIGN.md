@@ -23,7 +23,7 @@ Four numbered sections, about 90 words in total. A one-page poster needs no agen
 1. **Promise.** Logo bar, then "Say what you crave. Get a meal that fits you." One subtitle:
    one meal sized to your body and goal, plus the shopping list.
 2. **Proof.** The Chicken Fried Rice plan card: 629 kcal against a 625 kcal target, macro bars.
-   This is the largest element and the only highlighted block.
+   This is the largest element and the focal block.
 3. **How it works.** Four numbered steps in one row: Estimate your calories, Find a matching
    recipe, Check the nutrition, Build the shopping list.
 4. **Result.** "72 of 72 test meal plans hit their calorie target and healthy macro ranges, up
@@ -50,12 +50,13 @@ Bricolage Grotesque and Inter only, loaded and verified before rendering.
 | Role | Poster | LinkedIn |
 | --- | --- | --- |
 | Headline | 64–76 px, 800 | 76–84 px, 800 |
-| Result number | 96–112 px, 800 | 84 px, 800 |
+| Result number | 64–72 px, 800 | 64 px, 800 |
 | Section heading | 28–32 px, 700 | not used |
 | Body | 16–20 px | 18–22 px |
 | Section label, caption | 14 px | 14 px |
 
-`ground` canvas, white cards, one `ink` result panel, `ink` footer. Tomato appears on the logo
+`ground` canvas, white cards, `ink` footer. The result sits in a smaller `ink` panel that
+supports the plan card and never outweighs it. Tomato appears on the logo
 and on the words "fits you" only. Macro colours appear on macro bars only. At most four sizes
 of body-level text on a surface. Adjust spacing or cut words before shrinking type.
 

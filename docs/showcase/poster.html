@@ -92,7 +92,7 @@
     <h2>Four agents, one typed response</h2>
     <div class="agents">
       <div class="card agent"><div class="n">1</div><h4>Calorie expenditure</h4><p>A gradient-boosted model trained on 750,000 Kaggle rows predicts exercise calories, which feed a daily budget and the meal's target.</p><span class="chip">Exercise model R² 0.996</span></div>
-      <div class="card agent"><div class="n">2</div><h4>Meal recommendation</h4><p>Allergy, diet and health filters run first, then local vector RAG retrieves from 34 tested recipes and rescales portions.</p><span class="chip">Works with no LLM key</span></div>
+      <div class="card agent"><div class="n">2</div><h4>Meal recommendation</h4><p>Allergy, diet and health filters run first, then local vector RAG retrieves from 34 curated recipes and rescales portions.</p><span class="chip">Works with no LLM key</span></div>
       <div class="card agent"><div class="n">3</div><h4>Nutrition verification</h4><p>Each ingredient is checked against USDA FoodData Central, with FatSecret and local tables as cached fallbacks.</p><span class="chip">Estimates are labelled</span></div>
       <div class="card agent"><div class="n">4</div><h4>Supermarket</h4><p>Ingredients map to grocery products with an estimated cost and a tick-off list, marked as estimates.</p><span class="chip">Shopping list included</span></div>
     </div>
@@ -110,7 +110,7 @@
         <div class="row"><b>Baseline</b><div class="t base"><div style="width:13.9%"></div></div><div class="v">10</div></div>
         <div class="row"><b>Per-ingredient balancing</b><div class="t"><div style="width:56.9%"></div></div><div class="v">41</div></div>
         <div class="row"><b>Honest fallback gate</b><div class="t"><div style="width:65.3%"></div></div><div class="v">47</div></div>
-        <div class="row"><b>A cooking fat in six recipes</b><div class="t"><div style="width:100%"></div></div><div class="v">72</div></div>
+        <div class="row"><b>Cooking fat + rounding retry</b><div class="t"><div style="width:100%"></div></div><div class="v">72</div></div>
         <div class="facts">
           <div><b>0.3%</b>median calorie deviation</div>
           <div><b>5 / 5</b>guardrail cases hold, including refusals</div>

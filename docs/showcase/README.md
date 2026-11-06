@@ -35,7 +35,7 @@ uv run --no-project --with "playwright==1.60.0" python docs/showcase/render.py
 | Meal quality | [7_meal_quality.md](../7_meal_quality.md) | Method, targets, the 10 → 72 of 72 table | Yes | Yes |
 | Benchmark report | [baseline.md](../meal_quality/baseline.md), [meal_quality_baseline.py](../../scripts/meal_quality_baseline.py) | Every plan's row; the script that reproduces it | | Yes |
 | Calorie model | [metrics.json](../../models/calorie_expenditure/metrics.json), [training notebook](../../notebooks/calorie_expenditure_kaggle_training.ipynb) | R², MAE, training rows | | Yes |
-| Recipes | [meals.json](../../data/meal_corpus/meals.json) | The 34 tested recipes | | Yes |
+| Recipes | [meals.json](../../data/meal_corpus/meals.json) | The 34 curated recipes | | Yes |
 | App design | [8_design.md](../8_design.md), [design screens](../assets/design/), [prototype](../design/prototype/) | You → Craving → Your plan; the Chicken Fried Rice plan | Yes | Yes |
 | Brand assets | [tailwind.config.js](../../frontend/tailwind.config.js), [logo-mark.svg](../../frontend/src/assets/brand/logo-mark.svg), [logo-wordmark.svg](../../frontend/src/assets/brand/logo-wordmark.svg), [palette.svg](../assets/design/palette.svg) | Colours, fonts, the plate mark | Yes | Yes |
 | Screenshots | [assets/screenshots/](../assets/screenshots/) | React and Streamlit captures (React ones show the older dashboard) | | Yes |
@@ -51,19 +51,19 @@ on 2026-11-05.
 | Claim | Number | Source |
 | --- | --- | --- |
 | Test plans meeting the quality targets | 72 of 72, up from 10 | 7_meal_quality.md §2 |
-| How it got there | 10 → 41 (portion balancing) → 47 (honest fallback) → 72 (cooking fat in six recipes) | same |
+| How it got there | 10 → 41 (portion balancing) → 47 (honest fallback) → 72 (cooking fat in six recipes, plus a rounding retry) | same |
 | The targets | Calories within 10%; protein 10–35%, carbs 45–65%, fat 20–35% of energy (adult AMDR) | same, §1 (DEC-25) |
 | Calorie accuracy | Median deviation 0.3%, worst 9.9% | same, §2 |
 | Safety checks | 5 of 5 guardrail cases behave as designed, including refusals | same |
 | Benchmark limits | Project's own offline benchmark, no provider keys; AMDR is a daily reference applied to one meal | 7_meal_quality.md §1 |
 | Benchmark size | 72 requests: 12 cravings × 4 body profiles, plus 6 cravings × 4 diet or health limits | same, §1 |
-| Calorie model | Predicts exercise calories: R² 0.996, mean error 2.2 kcal on validation data, 750,000 training rows | metrics.json, agents/calorie_expenditure_agent.md |
-| Meal target | Exercise calories + BMR-based estimate, goal −400 or +250 kcal, then 28% of the daily budget, kept to 350–850 kcal | calorie_expenditure_agent.md, meal_recommendation_agent.py |
-| Recipe library | 34 tested recipes | meals.json |
+| Calorie model | Predicts exercise calories: validation R² 0.996, MAE 2.2 kcal; dataset of 750,000 rows (20% held out, then refit on all) | metrics.json, agents/calorie_expenditure_agent.md |
+| Meal target | Exercise calories + BMR-based estimate, goal +250 or −400 kcal (subject to the floor), then 28% of the daily budget, kept to 350–850 kcal | calorie_expenditure_agent.md, meal_recommendation_agent.py |
+| Recipe library | 34 curated recipes | meals.json |
 | Example plan | Chicken Fried Rice: 629 kcal against 625; 42 g protein, 71 g carbs, 18 g fat (27/46/27%) | 8_design.md §2 |
-| Safety floor | Weight-loss plans never below 1,200 kcal a day for women or 1,500 for men | AGENTS.md (DEC-24) |
+| Safety floor | Weight-loss budgets apply a floor of 1,200 kcal for women or 1,500 for men, capped at estimated expenditure; a warning explains when it applies | DEC-24, calorie_expenditure_agent.py |
 | Tests | 598 Python tests, 95% coverage (Claude's full run logged 2026-11-02) | 5_agent_log.md |
 | Benchmark split | 61 matched and 11 fallback plans; 68 of 72 include an estimated ingredient | 7_meal_quality.md §2 |
 
-If PR #43 merges, two numbers change: the wider by-name recipe check goes from
-49 to 68 of 68, and the test count to 618. Use them only after it merges.
+After PR #43 merges, recheck the wider report and a dated test run, then update
+this sheet. Until then the wider by-name check stands at 49 of 68.

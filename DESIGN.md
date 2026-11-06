@@ -20,7 +20,8 @@ say is in [`docs/showcase/`](docs/showcase/README.md), which also holds the stri
    repo, with its unit, and says how it was produced.
 4. **Say what is estimated.** Never hide that nutrition or prices are estimates,
    and never imply medical advice.
-5. **Quiet page, one loud thing.** Tomato marks the single place the eye should land.
+5. **Quiet page, one loud thing.** Tomato marks the single place the eye should land. The
+   logo and paired reference markers on slides don't count toward this.
 
 ## 2. Voice
 
@@ -48,7 +49,8 @@ crave. Get a meal that fits you.**
 
 Aim for about 70% ground and white, 20% ink, under 10% tomato. Macro colours
 never mean anything but their macro. Green never means medically safe. Tomato
-never means an error. Estimate badges use #FBEBD6 with #7A4A0C text.
+never means an error. Estimate badges use #FBEBD6 with #7A4A0C text. Outside the app,
+#ECEFE8 is allowed for neutral tracks and badges and #C9D3CC for secondary text on `ink`.
 
 ## 4. Type
 
@@ -111,5 +113,5 @@ the app works by keyboard and screen reader.
 - [ ] Every number traces to the [fact sheet](docs/showcase/README.md#fact-sheet) or to the service.
 - [ ] Estimates and "not medical advice" are stated where they apply.
 - [ ] Only the tokens, typefaces and plate mark above are used.
-- [ ] Tomato marks one thing per surface.
+- [ ] Tomato marks one focal point per surface, not counting the logo and paired markers.
 - [ ] It reads at a glance: headline first, detail second.

@@ -52,8 +52,8 @@ Canvas 960 × 540 pt (13⅓ × 7½ in), background `ground` #F6F7F2. All positio
 | Content area | x 43.5 to 916.5, y 130 to 486 | Left and right rails are fixed |
 | Takeaway column | x 684, y 130; 232.5 × 356 | See Takeaways |
 | Takeaway marker | x 668 | Aligned to the rendered heading line |
-| Footer mark | x 43.5, y 502; 16 × 16 | Plate mark |
-| Footer name | x 66, y 500 | Inter 10 pt, `muted`: AI Meal Planner |
+| Footer mark | x 43.5, y 501; 18 × 18 | Plate mark |
+| Footer name | x 68, y 500 | Inter 10 pt, `muted`: AI Meal Planner |
 | Page number | Right edge at x 916.5, y 500 | Inter 10 pt, `muted`, automatic field |
 
 Section label format is one text box: `MAIN SECTION > SUBSECTION`. Main in `ink`, separator
@@ -69,8 +69,8 @@ diagram leads each content slide. Leave at least 12 pt between neighbouring comp
 ## Typography
 
 Bricolage Grotesque for titles, headings and focal numbers. Inter for everything read.
-Code spans, filenames and endpoints use Roboto Mono at the role's size, for the span only.
-Screenshots keep their own type. No other faces, and no sizes outside these roles.
+Code spans, filenames and endpoints stay in Inter. Screenshots keep their own type.
+No other faces, and no sizes outside these roles.
 
 | Role | Size | Treatment |
 | --- | --- | --- |
@@ -142,8 +142,7 @@ never shrink the text or stretch the frame to fit.
 Number each interpretation in reading order. A marker is one 12 pt `accent` ellipse with a
 centred white 8 pt bold number, zero padding. Align it to the centre of its heading's
 rendered first line, and repeat the same number beside its evidence, clear of data and text.
-Markers are a reference, not a judgment, and don't count as the surface's single tomato
-highlight. Use them only in pairs. Step chips are `ink` so the two never read as one system.
+Markers are a reference, not a judgment. Use them only in pairs. Step chips are `ink` so the two never read as one system.
 
 Use small `muted` superscripts (¹ ²) for qualifications, restarted per slide, with a matching
 8 pt note. With no superscript, use a bold `Note:` or `Scope:` prefix.
