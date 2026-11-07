@@ -105,18 +105,19 @@ the hand-offs by watching the log; its header says how to run it.
   stays 72 of 72. The corpus has no low-carb meal now.
 - 2026-11-07: gluten limits now swap soy sauce for coconut aminos (DEC-31). 72 of 72
   still meet the targets; the median calorie deviation rounds to 0.4%.
+- 2026-11-07: Alembic migrations replace `create_all` (P2, DEC-32). A pre-G4
+  database is now upgraded with its records instead of being refused.
 
 ## Open risks
 
 - `.streamlit/secrets.toml` is now gitignored (PR #7). Local
   `database/meal_history.json` still holds 75 records, most of them likely
-  synthetic (see the agent log); cleanup is an owner decision and must happen
-  before `scripts/migrate_json_to_sqlite.py` is ever run.
+  synthetic (see the agent log). The 2026-11-07 entry recommends not importing
+  them; deleting them is an owner decision.
 - Storage defaults to `STORAGE_BACKEND=sqlite` and starts empty; JSON history
-  is invisible until `scripts/migrate_json_to_sqlite.py` runs once, and that
-  script is **not idempotent** (a second run duplicates rows). Schema creation
-  is `create_all`, which cannot alter an existing table, so there is no
-  migration path once a deployment holds real data.
+  is invisible until `scripts/migrate_json_to_sqlite.py` runs, which skips
+  records already stored. Alembic owns the schema and upgrades at startup
+  (DEC-32). That suits one SQLite file per instance; Postgres should revisit it.
 - `ProfileNotFound` in `core/exceptions.py` is wired to a handler but never
   raised. The other three are raised:
   - `NutritionProviderError` (502, code `unverified_required`) only when
@@ -137,8 +138,6 @@ the hand-offs by watching the log; its header says how to run it.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production
     refuses to start in it.
   - The React dashboard cannot call a keyed API in v1.
-  - A pre-G4 `database/ai_meal_planner.db` is refused at startup. Delete it
-    (stateless v1).
 - **Telemetry limits (DEC-17, DEC-18).** Three things the allowlist does not
   cover:
   - unexpected 500s log a traceback, including that exception's message;

@@ -4,10 +4,11 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-from sqlalchemy import Engine, inspect
-from sqlmodel import Session, SQLModel, col, create_engine, desc, select
+from sqlalchemy import Engine
+from sqlmodel import Session, col, create_engine, desc, select
 
 from ..base import owner_of_feedback, owner_of_meal_plan
+from .migrate import migrate_to_head
 from .models import MealFeedbackRow, MealPlanRow
 
 DEFAULT_PROFILE: dict[str, Any] = {
@@ -21,7 +22,7 @@ DEFAULT_PROFILE: dict[str, Any] = {
 
 
 def build_engine(path: Path) -> Engine:
-    """Create the SQLite engine and ensure the schema exists.
+    """Migrate the SQLite file to the current schema and return its engine.
 
     Args:
         path: Filesystem location of the database file.
@@ -30,47 +31,11 @@ def build_engine(path: Path) -> Engine:
         A ready-to-use SQLAlchemy engine.
     """
     path.parent.mkdir(parents=True, exist_ok=True)
-    engine = create_engine(
+    migrate_to_head(path)
+    return create_engine(
         f"sqlite:///{path}",
         connect_args={"check_same_thread": False},
     )
-    _refuse_a_pre_g4_schema(engine, path)
-    SQLModel.metadata.create_all(engine)
-    return engine
-
-
-_REQUIRED_COLUMNS = {
-    "meal_plans": {"client_id", "request_id"},
-    "meal_feedback": {"client_id"},
-}
-
-
-def _refuse_a_pre_g4_schema(engine: Engine, path: Path) -> None:
-    """Stop at startup if an existing table predates G4's client_id column.
-
-    ``create_all`` creates missing tables but cannot add columns to existing
-    ones, and there are no migrations (next steps §7.1). Without this check an
-    old database would fail on its first query instead of at startup.
-
-    Args:
-        engine: The engine for the database file.
-        path: The database file, named in the error.
-
-    Raises:
-        RuntimeError: If an existing table lacks a required column.
-    """
-    inspector = inspect(engine)
-    existing = set(inspector.get_table_names())
-    for table, required in _REQUIRED_COLUMNS.items():
-        if table not in existing:
-            continue
-        missing = required - {column["name"] for column in inspector.get_columns(table)}
-        if missing:
-            raise RuntimeError(
-                f"{path} has a pre-G4 schema: table {table!r} lacks {sorted(missing)}. "
-                "There are no migrations, so delete this file (or migrate it by "
-                "hand) and restart. Stateless v1 does not keep history across restarts."
-            )
 
 
 def _now() -> str:

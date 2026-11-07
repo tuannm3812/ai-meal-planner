@@ -95,6 +95,7 @@ change rather than a rewrite (DEC-4). The items below are kept for traceability.
    distribution from `pydantic`; Phase 2 added it to `pyproject.toml` and
    `uv.lock` and re-exported `backend/requirements.txt` to match.
 5. Schema creation via `create_all`. **Alembic is out of scope** — see §7.1.
+   *Closed 2026-11-07: Alembic now owns the schema (DEC-32).*
 
 ## 3. Phase 3 — Tests and CI — **DONE 2026-09-11**
 
@@ -243,7 +244,7 @@ unit of work.
 Deliberately out of scope, recorded so they are known gaps rather than oversights.
 From spec §12.
 
-1. **Alembic migrations — first, and the most consequential.** Phase 2 creates its
+1. **Done 2026-11-07 (DEC-32).** **Alembic migrations — first, and the most consequential.** Phase 2 creates its
    schema with `create_all` and ships no migration path, so the first schema change
    after data exists has no supported route forward. Acceptable only while the data
    is disposable local development state. This must be closed before any deployment

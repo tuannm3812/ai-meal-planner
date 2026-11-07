@@ -30,7 +30,7 @@ update when a task is done.
 
 ## Product, in priority order
 
-- [ ] **P2 Storage:** add database migrations (Alembic). Needed before any deployment holds real data. `docs/4_next_steps.md` §7.1.
+- [x] **P2 Storage:** add database migrations (Alembic). Done 7 November 2026, DEC-32.
 - [ ] **P3 Hosting:** create the GCP project and deploy to Cloud Run, then confirm a real trace arrives. `docs/6_deployment.md` §1.
 - [ ] **P4 Data:** run the benchmark with USDA keys, so nutrition is checked independently of the local tables.
 - [ ] **P7 Recipes:** grow the library from 34 to 75–100 recipes. It gates the vector database. `docs/4_next_steps.md` §7.9.
@@ -47,7 +47,7 @@ update when a task is done.
 
 ## Repo clean-up
 
-- [ ] Decide what to do with the 75 records in local `database/meal_history.json` before ever running `scripts/migrate_json_to_sqlite.py`, which isn't idempotent.
+- [ ] Decide what to do with the 75 records in local `database/meal_history.json`. They look like test output, so the recommendation is not to import them (agent log, 7 November 2026).
 - [ ] Raise `ProfileNotFound` or remove it. An unknown `user_id` silently gets the default profile.
 - [ ] Add accounts. Endpoints that take a `user_id` take it on trust. `docs/4_next_steps.md` §7.7.
 - [ ] Reword the app's step 1 panel, which says a trained model "estimates the energy you burn in a day".
