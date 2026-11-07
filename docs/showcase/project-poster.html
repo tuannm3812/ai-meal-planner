@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>AI Meal Planner project poster</title>
+<style>
+@font-face { font-family: "Google Sans"; font-weight: 400; src: url("fonts/google-sans-latin-400-normal.woff2"); }
+@font-face { font-family: "Google Sans"; font-weight: 500; src: url("fonts/google-sans-latin-500-normal.woff2"); }
+@font-face { font-family: "Google Sans"; font-weight: 700; src: url("fonts/google-sans-latin-700-normal.woff2"); }
+@font-face { font-family: "Google Sans Code"; font-weight: 400; src: url("fonts/google-sans-code-latin-400-normal.woff2"); }
+:root { --ink:#15291F; --muted:#4B5B52; --green:#1B5E3F; --tomato:#C8431F; --warn:#7A4A0C; --line:#DDE3DA; --panel:#EEF4EF;
+  --tg:#E3EFE6; --tt:#FBE4DC; --ta:#FBEBD6; --tk:#DDE3DA; --base:#9AA5A0; --on:#C9D3CC; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+@page { size: 1684px 2384px; margin: 0; }
+html, body { width: 1684px; height: 2384px; }
+body { font-family: "Google Sans", sans-serif; color: var(--ink); background: #fff; font-size: 22px; line-height: 1.32; -webkit-print-color-adjust: exact; print-color-adjust: exact; display: flex; flex-direction: column; }
+b { font-weight: 700; }
+.hero { background: var(--ink); color: #fff; padding: 34px 56px 26px; }
+.top { display: flex; align-items: center; gap: 28px; }
+.top img.mark { width: 88px; height: 88px; }
+.top h1 { font-size: 84px; line-height: 1; font-weight: 700; letter-spacing: -0.01em; }
+.top .sub { font-size: 30px; color: var(--on); margin-top: 8px; }
+.top .sub em { color: #fff; font-style: normal; font-weight: 700; }
+.top .right { margin-left: auto; display: flex; align-items: center; gap: 18px; }
+.top .credit { text-align: right; font-size: 20px; color: var(--on); white-space: nowrap; }
+.top .credit b { color: #fff; display: block; font-size: 24px; }
+.qr { background: #fff; border-radius: 14px; padding: 8px; width: 132px; height: 132px; }
+.qr img { width: 116px; height: 116px; display: block; }
+.plates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 18px; align-items: center; }
+.pl { display: flex; align-items: center; gap: 18px; }
+.pl .w { width: 170px; height: 170px; display: flex; align-items: center; justify-content: center; flex: none; }
+.pl b { font-size: 40px; display: block; line-height: 1.1; white-space: nowrap; }
+.pl span { color: var(--on); font-size: 20px; display: block; }
+.pl i { font-style: normal; font-weight: 700; font-size: 22px; display: block; }
+.main { flex: 1; min-height: 0; padding: 20px 56px 16px; display: grid; gap: 16px; grid-template-rows: auto auto auto auto; }
+.row { display: grid; gap: 16px; min-width: 0; }
+.row > * { min-width: 0; }
+.c { border: 1px solid var(--line); border-radius: 20px; padding: 14px 22px; min-width: 0; }
+h2 { font-size: 32px; color: var(--green); line-height: 1.15; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; }
+h2 u { text-decoration: none; background: var(--ink); color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.small { font-size: 18px; color: var(--muted); }
+.dot { border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; flex: none; }
+.dot img { width: 66%; height: 66%; }
+/* problem */
+.q { display: flex; gap: 12px; align-items: center; border-radius: 14px; padding: 13px 14px; margin-top: 11px; line-height: 1.22; font-size: 21px; }
+.q .dot { width: 44px; height: 44px; }
+.q b { display: block; }
+/* stations */
+.st { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.s { border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; }
+.s img { height: 104px; object-fit: contain; align-self: center; }
+.s small { font-size: 15px; font-weight: 700; letter-spacing: .03em; margin-top: 6px; }
+.s b { font-size: 23px; line-height: 1.15; }
+.s p { font-size: 18px; line-height: 1.25; margin: 4px 0 8px; flex: 1; }
+.chip { background: #fff; border-radius: 10px; text-align: center; font-weight: 700; font-size: 19px; padding: 6px 4px; }
+/* bars */
+.lbl { display: flex; justify-content: space-between; font-size: 19px; margin-top: 8px; }
+.barr { display: flex; height: 40px; margin-top: 4px; color: #fff; font-weight: 700; font-size: 19px; }
+.barr div { display: flex; align-items: center; padding-left: 10px; white-space: nowrap; overflow: hidden; }
+/* results */
+.chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; align-items: end; height: 334px; border-bottom: 2px solid var(--line); }
+.col { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; }
+.col b { font-size: 44px; line-height: 1.1; }
+.col div { width: 74%; }
+.cl { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; text-align: center; font-size: 18px; margin-top: 6px; line-height: 1.2; }
+.cl b { display: block; }
+.mets { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+.met { border-radius: 14px; padding: 8px 14px; }
+.met b { font-size: 34px; display: block; line-height: 1.15; }
+.met span { font-size: 18px; }
+/* funnel */
+.fn { display: grid; grid-template-columns: 200px 1fr; align-items: center; row-gap: 9px; font-size: 20px; }
+.fn .b { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.fn .b i { display: block; height: 24px; }
+/* architecture */
+.ar { display: grid; grid-template-columns: 210px 210px 1fr; gap: 14px; align-items: stretch; }
+.box { border-radius: 14px; padding: 14px 14px; }
+.lg { display: flex; gap: 8px; align-items: center; height: 36px; margin-bottom: 4px; }
+.lg img { height: 32px; width: 32px; }
+.box p { font-size: 18px; line-height: 1.22; margin-top: 4px; }
+.ag { display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; border-radius: 10px; padding: 11px 12px; margin-bottom: 8px; font-size: 19px; line-height: 1.18; }
+.ag .dot { width: 32px; height: 32px; }
+.ag b { display: block; font-size: 21px; }
+.ag img.l { width: 26px; height: 26px; }
+.stack { display: flex; gap: 10px; margin-top: 12px; align-items: center; background: var(--ink); border-radius: 12px; padding: 8px 10px; }
+.tech { background: #fff; border-radius: 8px; display: flex; align-items: center; gap: 6px; padding: 5px 9px; font-size: 16px; font-weight: 700; white-space: nowrap; }
+.tech img { width: 22px; height: 22px; }
+/* limits */
+.stair { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; align-items: end; }
+.step { border-radius: 14px; padding: 12px 14px; font-size: 20px; line-height: 1.22; }
+.step b { display: block; font-size: 24px; margin-bottom: 2px; }
+/* board */
+.bd { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.bd h3 { color: #fff; border-radius: 8px; text-align: center; font-size: 19px; padding: 4px; margin-bottom: 6px; }
+.bd p { border-radius: 6px; padding: 12px 12px; font-size: 20px; line-height: 1.25; font-weight: 500; }
+.tag { display: inline-flex; align-items: center; gap: 5px; background: var(--warn); color: #fff; font-size: 15px; font-weight: 700; padding: 3px 9px 3px 5px; border-radius: 6px; }
+.tag img { width: 17px; height: 17px; }
+.foot { background: var(--ink); color: var(--on); padding: 16px 56px; display: flex; justify-content: space-between; align-items: center; font-size: 20px; }
+.foot b { color: #fff; }
+.mono { font-family: "Google Sans Code", monospace; }
+</style>
+</head>
+<body>
+<section class="hero">
+  <div class="top">
+    <img class="mark" src="slides/assets/mark-dark.png" alt="AI Meal Planner logo">
+    <div>
+      <h1>AI Meal Planner</h1>
+      <div class="sub">Say what you crave. Get <em>one meal sized to you</em> and a shopping list.</div>
+    </div>
+    <div class="right">
+      <div class="credit"><b>Personal project</b>by Mike</div>
+      <div class="qr"><img src="slides/assets/qr.png" alt="QR code to the live demo"></div>
+    </div>
+  </div>
+  <div class="plates">
+    <div class="pl"><div class="w"><img src="slides/assets/plate-363.png" style="width:110px" alt="Plate, 363 kcal"></div><div><b>363 kcal</b><i>26 g protein</i><span>Older woman, losing weight</span></div></div>
+    <div class="pl"><div class="w"><img src="slides/assets/plate-694.png" style="width:152px" alt="Plate, 694 kcal"></div><div><b>694 kcal</b><i>48 g protein</i><span>Active woman, maintaining</span></div></div>
+    <div class="pl"><div class="w"><img src="slides/assets/plate-809.png" style="width:166px" alt="Plate, 809 kcal"></div><div><b>809 kcal</b><i>60 g protein</i><span>Average man, maintaining</span></div></div>
+    <div class="pl"><div class="w"><img src="slides/assets/plate-850.png" style="width:170px" alt="Plate, 850 kcal"></div><div><b>850 kcal</b><i>63 g protein</i><span>Large athlete, gaining</span></div></div>
+  </div>
+</section>
+
+<main class="main">
+  <div class="row" style="grid-template-columns: 500px 1fr">
+    <section class="c">
+      <h2><u>1</u>The problem</h2>
+      <p>Picking a meal is easy. Sizing it to you is not.</p>
+      <div class="q" style="background:var(--tg);color:var(--green)"><span class="dot" style="background:var(--green)"><img src="slides/assets/glyph-monitor_weight.png" alt=""></span><div><b>How much?</b>Daily budgets run from 1,200 to 4,521 kcal.</div></div>
+      <div class="q" style="background:var(--tt);color:var(--tomato)"><span class="dot" style="background:var(--tomato)"><img src="slides/assets/glyph-no_food.png" alt=""></span><div><b>Is it right for me?</b>A limit can change the recipe or swap an ingredient.</div></div>
+      <div class="q" style="background:var(--ta);color:var(--warn)"><span class="dot" style="background:var(--warn)"><img src="slides/assets/glyph-shopping_cart.png" alt=""></span><div><b>What do I buy?</b>Even one pasta means five ingredients to price.</div></div>
+    </section>
+    <section class="c">
+      <h2><u>2</u>Four agents work like one kitchen</h2>
+      <p class="small" style="margin-bottom:10px"><span class="mono">ORDER</span> chicken fried rice, active woman, maintaining</p>
+      <div class="st">
+        <div class="s" style="background:var(--tg);color:var(--green)"><img src="slides/assets/station-scale.png" alt=""><small>THE PORTION PLANNER</small><b>Calorie expenditure</b><p>Estimates a day's burn and sets the budget.</p><div class="chip">2,469 kcal budget</div></div>
+        <div class="s" style="background:var(--tt);color:var(--tomato)"><img src="slides/assets/station-pan.png" alt=""><small>THE CHEF</small><b>Meal recommendation</b><p>Rules out conflicts, picks a recipe, sizes it.</p><div class="chip">691 kcal target</div></div>
+        <div class="s" style="background:var(--ta);color:var(--warn)"><img src="slides/assets/station-taster.png" alt=""><small>THE TASTER</small><b>Nutrition verification</b><p>Looks up each ingredient, labels estimates.</p><div class="chip">694 kcal, 3 of 6 estimated</div></div>
+        <div class="s" style="background:var(--tk);color:var(--ink)"><img src="slides/assets/station-basket.png" alt=""><small>THE SHOPPER</small><b>Supermarket</b><p>Matches items to store or category prices.</p><div class="chip">$24.50 estimated</div></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr 640px">
+    <section class="c">
+      <h2><u>3</u>Results: three fixes, from 10 to 72 of 72</h2>
+      <div class="chart">
+        <div class="col"><b style="color:var(--muted)">10</b><div style="height:11.7%;background:var(--base)"></div></div>
+        <div class="col"><b style="color:var(--green)">41</b><div style="height:47.8%;background:var(--green)"></div></div>
+        <div class="col"><b style="color:var(--warn)">47</b><div style="height:54.8%;background:var(--warn)"></div></div>
+        <div class="col"><b style="color:var(--green)">72</b><div style="height:84%;background:var(--green)"></div></div>
+      </div>
+      <div class="cl"><div><b>First run</b>Before any fix</div><div><b>Portion balancing</b>Ingredients resized</div><div><b>Honest fallback</b>Off-menu cravings moved</div><div><b>Cooking fat, retry</b>Oil added to 6 recipes</div></div>
+      <div class="mets">
+        <div class="met" style="background:var(--tg);color:var(--green)"><b>0.4%</b><span>median calorie gap, worst 9.9%</span></div>
+        <div class="met" style="background:var(--tt);color:var(--tomato)"><b>5 of 5</b><span>guardrail cases hold</span></div>
+        <div class="met" style="background:var(--ta);color:var(--warn)"><b>68 of 68</b><span>wider check, every recipe by name</span></div>
+      </div>
+      <p class="small" style="margin-top:8px">Plans meeting calorie and macro targets on the project's own offline benchmark of 72 requests. 11 are fallback meals.</p>
+    </section>
+    <div style="display:grid;gap:16px;min-width:0">
+      <section class="c">
+        <h2><u>4</u>From body to meal target</h2>
+        <div class="lbl"><span>Daily budget: 2,469 kcal</span><b style="color:var(--tomato)">+125 from the model</b></div>
+        <div class="barr"><div style="width:94.9%;background:var(--green)">2,344 kcal from body and activity</div><div style="width:5.1%;background:var(--tomato)"></div></div>
+        <div class="lbl"><span>This meal: 28% of the day</span></div>
+        <div class="barr"><div style="width:28%;background:var(--ink)">691 kcal</div></div>
+        <p class="small" style="margin-top:6px">The model scores R² 0.996 on exercise calories, but adds only 3–10% of the day.</p>
+      </section>
+      <section class="c">
+        <h2><u>5</u>Hard limits first, then relevance</h2>
+        <div class="fn">
+          <span>All recipes</span><span class="b"><i style="width:340px;background:var(--base)"></i>34</span>
+          <span>Safe for a vegan</span><span class="b" style="color:var(--tomato)"><i style="width:130px;background:var(--tomato)"></i>13</span>
+          <span>Relevant to craving</span><span class="b" style="color:var(--warn)"><i style="width:50px;background:var(--warn)"></i>5</span>
+          <span>Served</span><span class="b" style="color:var(--green)"><i style="width:10px;background:var(--green)"></i>1: Tofu Fried Rice</span>
+        </div>
+      </section>
+      <section class="c">
+        <h2><u>6</u>Where the 694 kcal come from</h2>
+        <div class="barr" style="margin-top:0"><div style="width:66%;background:var(--warn)">459 estimated, 66%</div><div style="width:34%;background:var(--green)">235 reference</div></div>
+        <p class="small" style="margin-top:8px">Only 3 of 6 ingredients are estimates, but they include the biggest items.</p>
+      </section>
+    </div>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr">
+    <section class="c">
+      <h2><u>7</u>Architecture and tech stack</h2>
+      <div class="ar">
+        <div style="display:grid;gap:10px">
+          <div class="box" style="background:var(--tg);color:var(--green)"><div class="lg"><img src="slides/assets/logos/streamlit.png" alt="Streamlit"><b>Streamlit</b></div><p>Live, public demo</p></div>
+          <div class="box" style="background:var(--tt);color:var(--tomato)"><div class="lg"><img src="slides/assets/logos/react.png" alt="React"><img src="slides/assets/logos/vite.png" alt="Vite"><img src="slides/assets/logos/tailwindcss.png" alt="Tailwind CSS"><b>React</b></div><p>Guided flow, run locally</p></div>
+        </div>
+        <div style="display:grid;gap:10px">
+          <div class="box" style="border:1px solid var(--line)"><div class="lg"><img src="slides/assets/logos/fastapi.png" alt="FastAPI"><img src="slides/assets/logos/pydantic.png" alt="Pydantic"><b>FastAPI</b></div><p>Typed JSON, keys, rate limits</p></div>
+          <div class="box" style="background:var(--tk)"><div class="lg"><img src="slides/assets/logos/sqlite.png" alt="SQLite"><b>SQLite</b></div><p>Local history, via SQLModel</p></div>
+        </div>
+        <div class="box" style="background:var(--panel)">
+          <p class="mono" style="margin-bottom:6px"><b>MealPlanningService</b></p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 10px">
+            <div class="ag" style="background:var(--tg);color:var(--green)"><span class="dot" style="background:var(--green)"><img src="slides/assets/glyph-monitor_weight.png" alt=""></span><span><b>Calorie expenditure</b>HistGradientBoosting model</span><img class="l" src="slides/assets/logos/scikitlearn.png" alt="scikit-learn"></div>
+            <div class="ag" style="background:var(--tt);color:var(--tomato)"><span class="dot" style="background:var(--tomato)"><img src="slides/assets/glyph-skillet.png" alt=""></span><span><b>Meal recommendation</b>TF-IDF search, diet rules</span><img class="l" src="slides/assets/logos/scikitlearn.png" alt="scikit-learn"></div>
+            <div class="ag" style="background:var(--ta);color:var(--warn)"><span class="dot" style="background:var(--warn)"><img src="slides/assets/glyph-fact_check.png" alt=""></span><span><b>Nutrition verification</b>Local tables; USDA, FatSecret with keys</span><span></span></div>
+            <div class="ag" style="background:#fff"><span class="dot" style="background:var(--ink)"><img src="slides/assets/glyph-balance.png" alt=""></span><span><b>Balance and reconcile</b>Linear programme for portions</span><img class="l" src="slides/assets/logos/scipy.png" alt="SciPy"></div>
+            <div class="ag" style="background:var(--tk);grid-column:1 / span 2"><span class="dot" style="background:var(--ink)"><img src="slides/assets/glyph-shopping_basket.png" alt=""></span><span><b>Supermarket</b>Local store items and category prices</span><span></span></div>
+          </div>
+        </div>
+      </div>
+      <div class="stack" style="margin-top:10px">
+        <span style="color:#fff;font-weight:700;font-size:17px;padding:0 6px">Built with</span>
+        <span class="tech"><img src="slides/assets/logos/python.png" alt="">Python</span>
+        <span class="tech"><img src="slides/assets/logos/docker.png" alt="">Docker</span>
+        <span class="tech"><img src="slides/assets/logos/githubactions.png" alt="">GitHub Actions</span>
+        <span class="tech"><img src="slides/assets/logos/googlecloud.png" alt="">Cloud Run, not yet deployed</span>
+        <span class="tech"><img src="slides/assets/logos/opentelemetry.png" alt="">OpenTelemetry</span>
+        <span class="tech"><img src="slides/assets/logos/googlegemini.png" alt="">Gemini, optional</span>
+        <span style="color:var(--on);font-size:17px;margin-left:auto;padding-right:6px">630 Python tests, 95% coverage</span>
+      </div>
+    </section>
+  </div>
+
+  <div class="row" style="grid-template-columns: 1fr 1fr">
+    <section class="c">
+      <h2><u>8</u>What it does not prove yet</h2>
+      <div class="stair">
+        <div class="step" style="background:var(--tg);color:var(--green)"><b>Measured</b>Targets met offline, but checks guided the fixes.</div>
+        <div class="step" style="background:var(--ta);color:var(--warn)"><b>Estimated</b>68 of 72 plans include an estimate. AMDR is a daily range used on one meal.</div>
+        <div class="step" style="background:var(--tt);color:var(--tomato)"><b>Not tested</b>No users, no clinical review, not deployed. Taste and health outcomes are unknown.</div>
+      </div>
+    </section>
+    <section class="c">
+      <h2><u>9</u>What comes next</h2>
+      <div class="bd">
+        <div><h3 style="background:var(--tomato)">NOW</h3><p style="background:var(--tt);color:var(--tomato)">Migrations, deployment, user accounts</p></div>
+        <div><h3 style="background:var(--warn)">NEXT</h3><p style="background:var(--ta);color:var(--warn)">USDA benchmark, real exercise data, allergen tags</p></div>
+        <div><h3 style="background:var(--green)">LATER</h3><p style="background:var(--tg);color:var(--green)">75–100 recipes, live prices, testing with people</p></div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="foot">
+  <span><b>tuannm3812-ai-meal-planner.streamlit.app</b> &nbsp;·&nbsp; github.com/tuannm3812/ai-meal-planner</span>
+  <span>A study project. Not medical advice.</span>
+</footer>
+</body>
+</html>

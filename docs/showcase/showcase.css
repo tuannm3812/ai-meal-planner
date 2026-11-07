@@ -1,0 +1,49 @@
+/* Shared styles for the showcase posters. Kitchen green tokens from
+   frontend/tailwind.config.js; fonts are the app's bundled @fontsource files. */
+@font-face { font-family: "Bricolage"; font-weight: 600; src: url("fonts/bricolage-grotesque-latin-600-normal.woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 700; src: url("fonts/bricolage-grotesque-latin-700-normal.woff2"); }
+@font-face { font-family: "Bricolage"; font-weight: 800; src: url("fonts/bricolage-grotesque-latin-800-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 400; src: url("fonts/inter-latin-400-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 500; src: url("fonts/inter-latin-500-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 600; src: url("fonts/inter-latin-600-normal.woff2"); }
+@font-face { font-family: "Inter"; font-weight: 700; src: url("fonts/inter-latin-700-normal.woff2"); }
+
+:root {
+  --ink: #15291F; --muted: #4B5B52; --ground: #F6F7F2; --surface: #FFFFFF;
+  --line: #DDE3DA; --accent: #C8431F; --accent-text: #B23A17;
+  --success-bg: #E3EFE6; --success-fg: #1B5E3F;
+  --warn-bg: #FBEBD6; --warn-fg: #7A4A0C;
+  --protein: #2F6FAB; --carbs: #9A6A12; --fat: #7A4E9C;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--ground); color: var(--ink); font-family: "Inter", sans-serif;
+  -webkit-font-smoothing: antialiased; }
+.display { font-family: "Bricolage", sans-serif; letter-spacing: -0.02em; }
+
+.brand { display: flex; align-items: center; gap: 14px; }
+.brand svg { flex: none; }
+.brand b { font-family: "Bricolage", sans-serif; font-weight: 700; font-size: 26px; }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; }
+.badge { display: inline-block; border-radius: 999px; padding: 6px 13px; font-size: 14px; font-weight: 600; }
+.badge.ok { background: var(--success-bg); color: var(--success-fg); }
+.badge.warn { background: var(--warn-bg); color: var(--warn-fg); }
+.eyebrow { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); }
+
+/* Plan card, rebuilt from the approved design prototype (docs/8_design.md §2). */
+.plan { padding: 30px 32px; }
+.plan .for { font-size: 15px; color: var(--muted); }
+.plan h3 { font-family: "Bricolage", sans-serif; font-weight: 700; font-size: 44px; letter-spacing: -0.02em; margin: 4px 0 12px; }
+.plan .badges { display: flex; gap: 8px; flex-wrap: wrap; }
+.stats { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+.stat { border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px; }
+.stat.dark { background: var(--ink); color: #fff; border-color: var(--ink); }
+.stat small { font-size: 13px; color: var(--muted); }
+.stat.dark small { color: #C9D3CC; }
+.stat div { font-family: "Bricolage", sans-serif; font-weight: 700; font-size: 28px; white-space: nowrap; margin-top: 2px; }
+.bar-row { margin-top: 12px; }
+.bar-row .lbl { display: flex; justify-content: space-between; font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+.bar-row .lbl span { color: var(--muted); font-weight: 500; }
+.track { position: relative; height: 9px; background: #ECEFE8; border-radius: 99px; }
+.track .band { position: absolute; top: 0; bottom: 0; background: #CFE2D5; border-radius: 99px; }
+.track .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 99px; }

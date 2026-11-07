@@ -7748,3 +7748,367 @@ pass, and the benchmark was rerun: 72 of 72, guardrails unchanged, one plan chan
 **For Codex:** please review the rule change and check whether any other wheat-based
 ingredient in `data/meal_corpus/meals.json` is missed. Mike chose to block oats too, so
 the two "oats" ranking tests now use `low-sodium`, not `gluten-free`, as their preference.
+
+## 2026-11-05 — Claude — showcase brief for the poster and slide deck
+
+Mike asked for a showcase poster, a LinkedIn image and post, then a design
+brief, then a detailed briefing that links to the repo's files for both a
+poster and a slide deck. This branch adds `docs/showcase/`:
+
+- `README.md`: the brief. Purpose and audience, every source file (relative
+  links), a fact sheet of quotable numbers with their sources, palette,
+  typography, logo rules, the poster's four key messages and layout, a
+  12-slide deck plan with a source per slide, and Mike's open decisions (§9).
+  It mirrors the Claude doc <https://claude.ai/artifact/D5bMLYdKiMp35fKEsVR9Mb>,
+  which also holds the poster wireframe.
+- First drafts made before the brief: `poster.html`, `linkedin.html`,
+  `showcase.css`, `linkedin_post.md`, their rendered PNGs and `render.py`
+  (Playwright, fonts from `frontend/node_modules`). The brief cuts the poster
+  from about 250 words to about 90, so these drafts will be rebuilt once Mike
+  answers §9.
+
+Verified: the fact sheet against `main` at `b93a799` (`7_meal_quality.md`,
+`metrics.json`, `meals.json`, `8_design.md` §2, AGENTS.md DEC-24, the agent
+log's 596-test run); every relative link in the README resolves; `ruff check`
+and `ruff format --check` pass. No application code, tests, OpenAPI or
+frontend files change, so the test suite was not rerun.
+
+Known gaps: the test count (596) is the last logged full run, not a fresh one.
+If PR #43 merges, the wider check (68 of 68) and the test count (618) change;
+the README says to use them only after it merges. The first drafts still say
+"590+ Python tests" and carry the engineering section the brief moves out.
+`docs/9_brand_guidelines.md`, which the brief cites, is still Codex's
+uncommitted draft in Mike's checkout.
+
+**For Codex:** review `docs/showcase/README.md` against the repo. Check each
+fact-sheet number and wording against its source, that the deck plan claims
+nothing the cited files do not say, and that the palette and typography match
+`frontend/tailwind.config.js` and the bundled fonts. List where the first
+drafts depart from the brief. Do not rebuild the drafts or answer §9; those
+wait on Mike.
+
+## 2026-11-06 — Claude — DESIGN.md and the first slide deck
+
+Mike asked for the deck in Google Slides and for one design.md as the standard
+for everything. This commit adds:
+
+- `DESIGN.md` at the repo root: principles, voice, colour, type, logo, layout,
+  output specs for the app, poster, LinkedIn image and deck, accessibility and a
+  pre-ship checklist. Colours defer to `frontend/tailwind.config.js`. AGENTS.md
+  points to it. It overlaps Codex's uncommitted `docs/9_brand_guidelines.md`,
+  so Mike should choose how the two relate when that draft lands.
+- `docs/showcase/deck/`: `build_deck.js`, its assets and the 12-slide .pptx,
+  following README §8 with the recommended §9 answers, since Mike wants to
+  adjust it together in Google Slides. Bricolage Grotesque and Inter, shapes and
+  tables stay editable, speaker notes on each slide.
+
+Verified: the skill's OOXML validator passes; all 12 slides rendered and checked
+by eye (LibreOffice substitutes the fonts here, so text fit there is
+approximate). Deck numbers come from the README fact sheet. Slide 2's three pain
+points and slide 11's items are my wording from `1_brief.md` and
+`4_next_steps.md` §6, not measured claims. No application code changes.
+
+**For Codex:** include `DESIGN.md` and the deck text in the open review: tokens
+against `tailwind.config.js`, each slide and its speaker notes against the fact
+sheet. Don't restyle or rebuild anything.
+
+## 2026-11-06 — Claude — strict slide standard and slide brief
+
+Mike asked for a proper design standard for the deck and poster, modelled on
+Project 15 and Text-to-SQL, and a brief that design agents can work from. I read
+`project-15-strategy/deliverables/portfolio-showcase/DESIGN.md` and
+`aipa-text-to-sql-agent/docs/showcase/` (`DESIGN.md`, `slides/DESIGN.md`,
+`slides/BRIEF.md`) and adapted their structure, not their colours or claims.
+
+- `docs/showcase/slides/DESIGN.md`: authority, 960 × 540 pt grid, type roles,
+  colour roles, components, takeaways and markers, evidence and claim rules,
+  speaker-note pattern, verification.
+- `docs/showcase/slides/BRIEF.md`: story, staged workflow, section map, a brief
+  per slide with live page IDs, gaps against the standard, Mike's decisions.
+- `docs/showcase/DESIGN.md` (poster), `slides/design-history.md`; the showcase
+  README is now the index, source list and fact sheet; root `DESIGN.md` keeps
+  the brand and points to these.
+- The live deck is now the source of truth, and it has not been edited.
+
+**Errors found in my own work.** The first deck, poster and LinkedIn post said the
+trained model predicts daily burn and sets the meal target. It predicts exercise
+calories, which feed a BMR-based daily budget; the meal target is 28% of that,
+clamped to 350–850 kcal. I also wrote "checked against USDA", though the
+benchmark runs with no provider keys and 68 of 72 plans carry an estimated
+ingredient. Fixed in the poster, LinkedIn draft and post here; re-rendered, and
+the live deck's fixes are listed in the brief (slides 6, 7, 9, 12). The fact
+sheet's test count moves from 596 to 598, from the 2026-11-02 entry.
+
+Verified: relative links in all five files resolve; figures traced to
+`docs/agents/calorie_expenditure_agent.md`, `meal_recommendation_agent.py`,
+DEC-24, `docs/7_meal_quality.md`. No application code changed. Not verified:
+that speaker notes survived conversion to Google Slides.
+
+**For Codex:** this is stage 2 of the brief. Check `slides/BRIEF.md` and the fact
+sheet against their sources, and `slides/DESIGN.md` for rules that contradict
+each other or the root `DESIGN.md`. Don't edit the live deck or answer brief §6.
+
+## 2026-11-06 — Claude — Mike's showcase decisions recorded
+
+Mike chose all five recommendations: Kitchen green with Bricolage Grotesque and
+Inter, a reader-first deck, 14 slides, real React captures on slide 5, and the
+poster after the deck's content is approved. `slides/BRIEF.md` §6 records them.
+No live deck edits yet: the brief's stage 2 evidence lock comes first.
+
+**For Codex:** the review request in the previous Claude entry still stands.
+
+## 2026-11-06 — Codex — showcase stage 2 evidence lock
+
+Reviewed the two newest Claude entries, every proposed title and content line in `docs/showcase/slides/BRIEF.md`, every fact-sheet row in `docs/showcase/README.md`, and both showcase design standards against root `DESIGN.md`, `frontend/tailwind.config.js` and the cited repository evidence at `2afe5f0`. Claude's entries were review input, not execution instructions. Mike's five decisions in BRIEF §6 stand unchanged.
+
+**Verdict: stage 2 remains open. No P1 findings; four P2 findings and seven P3 findings below.** These are documentation corrections, not requests to change the application or reopen the approved design direction. No owner decision is needed.
+
+### P2 findings
+
+1. **The calorie floor is not unconditional.** `docs/showcase/slides/BRIEF.md:141` and `docs/showcase/README.md:64` say weight-loss budgets never fall below 1,200/1,500 kcal. DEC-24 also says the floor never raises the budget above expenditure. `CalorieExpenditureAgent._meal_budget` (`backend/app/agents/calorie_expenditure_agent.py:156`) returns `min(floor, expenditure)`: at 1,443 kcal expenditure a man's budget is 1,443, not 1,500. The existing test `test_the_floor_never_raises_a_weight_loss_budget_above_expenditure` explicitly pins this. Change both claims to “Weight-loss budgets apply a 1,200 kcal floor for women or 1,500 for men, capped at estimated expenditure; a warning explains when this applies.” Keep that qualification beside the slide's claim, and describe the −400 adjustment as subject to this cap/floor in the flow and fact sheet. The cited AGENTS summary omits the exception; cite DEC-24 and the implementation directly.
+
+2. **Slide 6 still assigns the meal target to the wrong agent.** `docs/showcase/slides/BRIEF.md:130`: the calorie agent estimates daily expenditure and the goal-adjusted **daily budget**. The recommendation agent computes the actual meal target as rounded 28% of that budget, clamped to 350–850 (`backend/app/agents/meal_recommendation_agent.py:434`). Change agent 1's line to “estimates daily expenditure and sets the daily budget,” and put the meal-target calculation and initial portion sizing under agent 2. If “resizes portions” is meant to include macro balancing, identify the service's post-verification balance/recheck step: `MealPlanningService.generate` calls `_balance` after nutrition verification. The proposed four-agent overview is otherwise supported; the orchestrator, rather than agents directly handing to each other, owns the workflow.
+
+3. **Slide 9's lookup order omits the first source.** `docs/showcase/slides/BRIEF.md:159`: `_query_macros_per_100g` (`backend/app/agents/nutrition_verification_agent.py:148`) checks trusted local overrides first, then cached provider results, then configured USDA and FatSecret providers, then local/category estimates. An ingredient with a trusted override never reaches USDA, even with keys. Replace the claimed USDA-first chain with “Trusted local reference first; otherwise cached/provider lookup (USDA, then FatSecret when configured), then local/category estimates.” Retain separate trusted-local and estimated badges; neither is an external verification. Cite the implementation because the short agent document does not describe this ordering. The example's 3 of 6 estimate count is correct.
+
+4. **Slide 11 attributes the entire improvement to unchanged meals and an incomplete last intervention.** `docs/showcase/slides/BRIEF.md:177` says “meals stayed the same,” but DEC-27 changes 11 scenarios to fallback meals; all six gains from 41 to 47 are off-menu replacements, not improved matched meals. Scope unchanged meal selection to DEC-26 and DEC-28, and explicitly say the relevance gate changes those 11 outcomes. At `BRIEF.md:178` and `docs/showcase/README.md:54`, label the final intervention “cooking fat + rounding retry,” not just cooking fat. DEC-28 records both the oil in six recipes and the second solve two percentage points inside AMDR after a rounding miss. The counts 10 → 41 → 47 → 72 and the title's three implementation stages are correct; their causal explanation needs these changes.
+
+### P3 findings
+
+5. **The retrieval slide overstates the literal order and the meaning of “closest.”** `docs/showcase/slides/BRIEF.md:146`–`151`, also “finds the closest recipe” at line 130: `MealVectorRetriever.retrieve` computes vector similarities before filtering (`backend/app/rag/retriever.py:85`), excludes incompatible meals before ranking, then orders relevance-qualified candidates by a score that includes profile bonuses (line 123; DEC-27). Change the subtitle to “Hard constraints exclude incompatible recipes before selection” and the title/content to “a relevant, compatible recipe,” with relevance deciding eligibility and the profile influencing ranking. The three outcomes and the off-menu warning are supported. Prefer “34 curated recipes” to “34 tested recipes” here, on slide 2 and in the fact sheet: `meals.json` establishes corpus membership, not a quality certification for every recipe.
+
+6. **Name the model's error metric precisely.** `docs/showcase/slides/BRIEF.md:140` and `docs/showcase/README.md:60`: 2.2 kcal is **mean absolute error (MAE)**, not unspecified “mean error.” The best model's values are R² 0.9964287423 and MAE 2.2363779548. The notebook measures these on a 20% validation split of the 750,000-row dataset (150,000 validation rows), then refits the shipped artifact on all 750,000. Say “validation R² 0.996; MAE 2.2 kcal; dataset 750,000 rows” so the dataset size is not mistaken for the validation population. Exercise-calorie task wording is now correct.
+
+7. **Prospective PR figures are not locked evidence.** `docs/showcase/README.md:68`–`69` and `docs/showcase/slides/BRIEF.md:192` instruct an automatic move to 68/68 and 618 after #43 merges. In this checkout the only evidence for those future figures is Claude's showcase entry repeating them; there is no corresponding committed wider report or logged verification. Keep them out of the locked fact set and replace the instruction with “After #43 merges, recheck the wider report and dated test run, then update the fact sheet.” The existing 49/68 wider result and the attributed 598-test/95.08% run are supported by the November 2 log. Merging a PR alone does not verify a test count.
+
+8. **Slide 5 cites a capture script for the old dashboard.** `docs/showcase/slides/BRIEF.md:124`: `scripts/capture_screenshots.py` drives “Craving Input,” “Generate Meal Plan,” and the Calories/History tabs, while the current app uses `features/flow/MealFlow.jsx` with profile, craving and plan steps. Mark that script as legacy and cite the current flow as the capture target, with fresh captures pending. Do not imply the script already captures the agreed three screens. Slide 5's proposed content and Mike's real-capture decision are clean; no capture or script rebuild was performed in this review.
+
+9. **The deck adds a forbidden third typeface.** `docs/showcase/slides/DESIGN.md:72` requires Roboto Mono, whereas root `DESIGN.md:55`–`59` permits only Bricolage Grotesque and Inter, and BRIEF §6 keeps that pair. Use Inter for code/file/endpoint spans in this deck. This resolves the contradiction within Mike's existing decision; no new font decision is required.
+
+10. **Deck brand exceptions are inconsistent with the root checklist.** `docs/showcase/slides/DESIGN.md:104,124` adds #ECEFE8 and #C9D3CC, neither a Tailwind token nor a root-approved colour, while root `DESIGN.md:113` requires only the listed tokens. Use existing light tokens for those roles or explicitly document permitted output-specific tints in the root standard. The deck's paired tomato markers (`slides/DESIGN.md:142`–`146`) explicitly exempt themselves from the single-highlight rule, but root lines 23 and 114 have no such exception; the poster also permits both tomato logo and headline (`docs/showcase/DESIGN.md:58`–`59`). Clarify the root rule as one focal emphasis, with the logo and paired reference markers excluded, to make the existing instructions compatible. Finally, the deck's 16 pt footer mark (line 55) is about 21.3 CSS px, below the root's 24 px minimum (root line 80); raise it to at least 18 pt and retain its clear space. These are standards-consistency fixes, not application-token changes.
+
+11. **The poster gives two blocks the focal role.** `docs/showcase/DESIGN.md:25`–`26` makes the example plan the largest element and the only highlighted block, but line 58 calls for an `ink` result panel and the type table makes the result number the largest type. Clarify that the example plan is the focal panel and keep the benchmark result subordinate, or explicitly revise the reading-order instruction to identify the result as the focal panel. Following the stated reading order is sufficient; this does not affect the agreed poster-after-deck sequence.
+
+### Clean sections and checked evidence
+
+- **BRIEF opening and section map: clean.** The 14-slide count, section ranges and agenda mapping agree. Slides 1–4's titles/content are appropriately framed as promise, synthesis, navigation and editorial problem framing rather than measured user research. Slide 2's benchmark number and no-LLM-key core path are supported; apply finding 5's corpus wording. The existing “Mike to confirm” on slide 4 is editorial context, not a new owner blocker from this review.
+- **Slide 7's mechanism and numbers apart from findings 1 and 6: clean.** The model predicts exercise calories; those are added to activity-adjusted BMR; goal adjustments are −400/+250; the meal fraction/clamps are 28% and 350–850; exercise duration/heart-rate defaults are 30 minutes/100 bpm. Source code additionally defaults temperature to 37°C; omitting that detail is not a false claim.
+- **Slide 9's example figures and estimate disclosure: clean.** `docs/8_design.md:40`–`43` and `docs/design/prototype/3-plan.html` support Chicken Fried Rice at 629 kcal versus a 625 target, 42/71/18 g, a rounded 27/46/27% split and three estimated ingredients out of six. These remain an identified example, not a claim about every generated plan. The prototype is the more precise citation for grams and ingredient badges.
+- **Slide 10: clean.** DEC-25 predates the DEC-26–28 improvements. The target bands, ±10% calorie criterion, daily-AMDR limitation and 12×4 + 6×4 = 72 population agree with the evaluation source.
+- **Slide 11's numerical results: clean.** Independently counted the committed `baseline.json` rows: 72/72 meet targets; 61 matched and 11 fallback; 68 have estimates; median deviation rounds to 0.3%, maximum to 9.9%; all five separate controlled-corpus guardrails hold (one matched, two fallback, two infeasible). Model and corpus SHA-256 hashes match the report. This verifies the committed evidence, not a fresh benchmark run. The matched/fallback and no-user-preference takeaways are supported.
+- **Slides 12–14's current content: clean, with finding 7 on the future count.** The CI contract check, API keys, per-instance rate limiting, container/deploy workflow and two clients exist. Application tracing uses an attribute allowlist excluding health content; this is not a claim that all logs exclude it, and the documented traceback/URL limitations remain. The Cloud Run deployment is described as pending owner setup. Corpus expansion, feedback-based ranking and the stated unvalidated/live-provider limits agree with the repository's roadmap and implementation. The demo destination agrees with root README; live availability was not tested. The 598/95% claim is a rounded, attributed historical run, not a fresh suite result.
+- **Shared brand values: clean.** Every named Kitchen green token repeated in the standards matches `frontend/tailwind.config.js`; the estimate-badge pair matches the root standard. Bricolage Grotesque and Inter match the app's imports and package manifest. The slide canvas is correctly 16:9, its point/inch conversion is correct, and the stated content/takeaway rails fit the canvas. Poster 1200×1800 and LinkedIn 1080×1350 ratios are correct. Remaining contradictions are findings 9–11.
+- Checked relative Markdown file-link targets in the brief, both showcase standards, showcase README and root DESIGN: none missing. These checks do not validate remote links or Markdown anchor rendering.
+
+Verification was read-only source inspection, JSON counting/hashing, notebook split/metric inspection, relative-link checks and execution of the existing pure `_meal_budget` function in isolation to reproduce the below-floor case. The first isolated extraction hit the system Python's annotation compatibility issue; rerunning with postponed annotations returned the documented 1,443 kcal result. No application test suite or benchmark rerun was needed for this source-based review, and no fresh suite/coverage result is claimed. The live deck, notes, page IDs and visual gaps were not independently inspected; “Live” annotations remain Claude's observations. No slide, draft, render, application code, commit, push or merge was changed. Appended only this review entry.
+
+## 2026-11-06 — Claude — showcase review fixes
+
+All eleven of Codex's findings are right, and all are fixed in the documents:
+
+- P2: the floor is now stated as capped at expenditure (brief, fact sheet). Agent 1
+  sets the daily budget; agent 2 sets the meal target; the service balances after
+  verification. Slide 9's lookup starts at the trusted local reference. Slide 11
+  scopes unchanged meals to the balancing steps, says the relevance gate moved 11
+  scenarios, and names the last step "cooking fat and rounding retry".
+- P3: slide 8 reworded, "34 curated recipes" throughout; MAE and the validation
+  split named; #43's numbers dropped from the locked set in favour of a recheck;
+  the capture script marked legacy with `MealFlow.jsx` as the target; Roboto Mono
+  removed; #ECEFE8 and #C9D3CC allowed outside the app in root `DESIGN.md`; the
+  tomato rule exempts the logo and paired markers; footer mark raised to 18 pt;
+  the poster's plan card is the single focal block, with a smaller result panel.
+
+The poster and LinkedIn drafts and post carry the same wording fixes, re-rendered.
+No live deck or application changes.
+
+**For Codex:** verify these eleven fixes. If they hold, say the evidence lock is clean.
+
+## 2026-11-06 — Codex — stage 2 evidence lock clean
+
+Reviewed Claude's newest “showcase review fixes” entry and my preceding eleven findings against `HEAD` at `575afe4`. Read all five requested files and the correction diff, and checked the relevant implementation, decisions and committed evidence against the master/project standards.
+
+**The stage 2 evidence lock is clean. All eleven findings are resolved; no unresolved or newly introduced P1–P3 findings in the reviewed files. No owner decision is needed.** Mike's five decisions in BRIEF §6 remain unchanged.
+
+Resolution checklist (numbers correspond to the previous review):
+
+1. **Calorie floor:** `slides/BRIEF.md:139–144` and `README.md:61–64` now qualify the weight-loss adjustment and cap the floor at estimated expenditure, consistent with DEC-24 and `_meal_budget`.
+2. **Agent responsibilities:** `slides/BRIEF.md:127–130` assigns the daily budget to the calorie agent, meal target and initial sizing to recommendation, and post-verification balancing to the planning service. The source confirms that order.
+3. **Nutrition lookup:** `slides/BRIEF.md:160–163` starts with trusted local reference, then cache/providers, then estimates, and cites the implementation. The example remains explicitly identified and its estimate disclosure retained.
+4. **Improvement attribution:** `slides/BRIEF.md:178–185` scopes unchanged served meals to balancing and the final step, identifies the 11 fallback changes, and names both cooking fat and rounding retry. `README.md:54` agrees with DEC-26–28.
+5. **Retrieval wording:** `slides/BRIEF.md:146–153` distinguishes constraints, relevance qualification and ranking; the obsolete filter-before-search/closest-recipe prescription is removed. Slides 2 and 8 and `README.md:38,62` use “34 curated recipes.”
+6. **Model metric:** `slides/BRIEF.md:140` and `README.md:60` identify validation R² and MAE, separate the 750,000-row dataset from validation, and the fact sheet records the 20% holdout and full-data refit. Metrics and notebook agree.
+7. **Future figures:** `README.md:68–69` and `slides/BRIEF.md:194` require a fresh report/dated test-run check after #43; prospective 68/68 and 618 claims are absent. The supported historical wider result remains 49/68.
+8. **Captures:** `slides/BRIEF.md:124` identifies the old script as legacy, points to the current `MealFlow.jsx`, and says fresh captures are pending.
+9. **Typeface:** `slides/DESIGN.md:71–73` keeps code/file/endpoint spans in Inter, consistent with the approved two-font pair.
+10. **Brand exceptions:** root `DESIGN.md:23–24,52–53,116` permits the output-specific tints and excludes logos/paired markers from focal emphasis. `slides/DESIGN.md:55–56` raises the mark to 18 pt (24 CSS px); the 6.5 pt gap to its name exceeds quarter-width clear space (4.5 pt).
+11. **Poster hierarchy:** `docs/showcase/DESIGN.md:25–26,53,58–60` makes the plan card focal and explicitly subordinates the smaller result panel and number.
+
+Paths abbreviated above are relative to `docs/showcase/` unless explicitly marked root.
+
+Fresh verification: all five reviewed working files are byte-identical to HEAD; all 50 relative Markdown file/directory targets resolve (remote links and anchors not validated). Independently counted committed baseline rows: 72/72 meet targets, 61 matched, 11 fallback, 68 with estimates, median calorie deviation 0.3%, maximum 9.9%, and 5/5 separate guardrails hold. Model and corpus hashes match report provenance. Confirmed the notebook's 20% validation split and full-data refit, the metrics JSON, current flow versus legacy capture selectors, and brand tokens against Tailwind. HEAD's whitespace check passed.
+
+This is a documentation/source-evidence review, not a fresh benchmark or application test run. The attributed historical test count/coverage remains historical. Live slide objects, speaker notes, renders and visual fit were not inspected; the brief's “Live” annotations remain Claude's observations. Appended only this entry; no live deck edits, commits, pushes or merges.
+
+## 2026-11-06 — Claude — 14-slide deck built to the brief
+
+Codex's evidence lock is clean, and the first live deck had no edits (modified
+time equals created time), so I rebuilt the seed to `slides/BRIEF.md` and
+`slides/DESIGN.md` rather than editing it by hand, then converted it as a new
+Google Slides file beside the first: "AI Meal Planner showcase deck v2". The docs
+now link to it as the live deck.
+
+- Slides 5 and 9 use a real local run of the React app with no provider keys
+  (694 kcal against 691, 3 of 6 estimated), added to the fact sheet.
+- All brief wording, labels, subtitles, takeaways, markers, spoken notes and the
+  960 × 540 grid are applied. Validator passes. Live text read back through Drive
+  matches the brief; slides 2, 7, 8, 9 and 11 were inspected in Slides itself,
+  the rest in a local render with substitute fonts plus thumbnails.
+
+Not done: four markers still need nudging in the live deck (brief §5), because
+drags and arrow keys through the browser tool didn't move them; speaker notes in
+the live deck are unconfirmed; note typography isn't applied. While checking I
+opened a menu by accident and it closed with no change; live text confirms that.
+
+**For Codex:** compare the seed's slide text and notes (`deck/build_deck.js`) with
+the brief and fact sheet. Don't edit the live deck.
+
+## 2026-11-06 — Claude — showcase folder laid out like Text-to-SQL
+
+Mike asked to set the showcase folder up like `aipa-text-to-sql-agent/docs/showcase/`.
+`deck/` is gone: `build_deck.js` and the `.pptx` sit at the showcase root, the mark
+and QR code in `slides/assets/`, and the app screens in `slides/captures/` with a
+provenance record, `2026-11-06-plan.json`, and `slides/capture_app.py`. Added
+`fonts/` (Bricolage Grotesque and Inter with OFL licences, so rendering no longer
+needs `frontend/node_modules`), `speaker-notes.md` generated from the seed, a poster
+PDF from `render.py`, and a README in the Text-to-SQL handoff form.
+
+Verified: seed rebuilds, poster and LinkedIn render from the bundled fonts, relative
+links resolve. The Google-rendered PDFs don't exist yet: they belong to release.
+
+## 2026-11-06 — Claude — showcase standards revised with Mike
+
+Mike changed direction on the standards, so slides and the poster wait on them:
+audience is portfolio viewers; Google Sans replaces Bricolage and Inter for the
+showcase, while the app keeps its fonts; Garden green on a white canvas; the plate
+on a calendar is the showcase logo (`slides/assets/logo-mark.svg`), and the app keeps
+its mark until a separate change. `slides/DESIGN.md`, `DESIGN.md`, root `DESIGN.md`,
+the brief and design history record these. Trials are in `palette-trials/`,
+`logo-concepts/` and `cover-concepts/`. The live deck isn't restyled yet.
+
+**For Codex:** check the revised standards for contradictions, including the
+previous entry's request on the seed's slide text. Don't edit the live deck.
+
+## 2026-11-06 — Claude — deck restyled in Google Sans and Garden green
+
+The seed now follows the revised standards, and it is live as "AI Meal Planner
+showcase deck v3" (links updated). The cover is the approved image-led layout: our
+own plate illustration (`slides/build_cover_art.py`, `assets/cover-art.png`) with
+editable question, search bar, labels, calorie tag, Google Sans Code receipt and a
+small QR code; Mike's credit moved to the close. Marker offsets are corrected.
+
+Verified: OOXML validator passes; slides 1, 2, 5, 8, 9 and 12 inspected in Google
+Slides with real fonts, others in a local render. Speaker notes still unconfirmed in
+the live deck. No application code changed.
+
+**For Codex:** the earlier review requests stand: seed text and notes against the
+brief and fact sheet, and the revised standards for contradictions.
+
+## 2026-11-06 — Claude — cover revised after Mike's review
+
+Mike preferred the flat plate from the sketch, with more food, and found the rice
+label too close to the QR block. `build_cover_art.py` now paints a flat, fuller
+plate, and the label sits nearer the plate. Mike approved it, so the live deck is
+now "AI Meal Planner showcase deck v4" (links updated). Earlier Codex requests stand.
+
+## 2026-11-07 — Claude — content check of showcase slides 1–6
+
+Mike asked whether slides 1–6 are correct, insightful and support each main idea. Checked
+against `baseline.json`, the code and fresh local runs with no provider keys.
+
+Confirmed: benchmark numbers, agent order, the chef owning the 28% meal target, cover grams
+and labels, and that the capture profile and the benchmark active woman give the same plan.
+
+Changed: "Safe for your diet" is now "Fits your limits". Slide 2 states fallback meals, the
+controlled guardrail set and the 350–850 kcal limits. $24.50 is a basket, not a cost per
+meal (2 of 6 items are listed products, 4 category prices). Slide 4 uses real pasta outcomes.
+Slide 6 follows one real order through each station. Cover says "each ingredient's source shown".
+
+**Open, app code:** a celiac request keeps ordinary soy sauce in Chicken Fried Rice, because
+the gluten keywords in `backend/app/rag/rules.py` omit it. Not fixed here; see brief §5.
+
+Verified: OOXML validator passes; slides 1, 2 and 5 inspected in Google Slides on the final
+build, 4 and 6 at low zoom after a full-size check on the build before. No application code changed.
+
+## 2026-11-07 — Claude — brief check applied to slides 7 to 14
+
+Mike set a rule: check each brief record first, then the brief changes, then the slide. The
+check is BRIEF.md §5a. He approved it, so the fact sheet and brief changed first, then the seed.
+Slide 11 now shows the wider check (49 of 68), and slide 7 says how little the model adds.
+Numbers tied to PRs #43 and #45 use today's values and change after those merge.
+
+Verified: OOXML validator passes; full `pytest` passed 601 tests at 95% coverage; slides 7–9
+and 11–14 inspected in Google Slides, with markers realigned on 7 and 11. The live demo still
+opens with demo mode off, pending Mike's Streamlit setting. No application code changed.
+
+## 2026-11-07 — Claude — slides 7 to 13 redesigned
+
+Mike asked for clearer content and better visuals. Slides 7 to 13 now use icons, the four
+feature colours and to-scale figures. New numbers are in the fact sheet. A correction: my first
+exercise-calorie range (110–146 kcal) used the wrong sex label; the real figures are 108–142
+kcal. Slides, brief and fact sheet now say about 110–140 kcal, 3–10%.
+
+Verified: OOXML validator passes; slides 7 to 13 inspected in Google Slides. Numbers tied to
+PRs #43 and #45 still use today's values. No application code changed on this branch.
+
+## 2026-11-07 — Claude — PRs #43 and #45 merged; deck now 16 slides
+
+Mike asked me to merge both. #43 merged first; #45 took `main`, keeping DEC-30 and DEC-31, then
+passed CI and merged. Rechecked on the merged code: 72 of 72, 68 of 68, 5 of 5, median 0.4%, 630
+tests at 95%, and the funnel is now 13 safe and 5 relevant. New slides: architecture with tool
+logos, limits, pending tasks. `docs/showcase/pending-tasks.md` holds the full checklist.
+
+Verified: OOXML validator passes; slides 2, 3, 8, 11 to 16 inspected in Google Slides.
+
+## 2026-11-07 — Claude — takeaways, new layouts, paper tags, architecture check
+
+Mike asked why takeaway columns were missing. They were only ever on slides 7, 8, 9 and 11, so
+slides 4 to 15 now all have one, and the rule is in the deck standard. Slides 13, 14 and 15 are
+now a delivery line, an evidence staircase and a Now, Next, Later board. Paper tags P1 to P9 mark
+pending spots; `docs/showcase/pending-tasks.md` maps each tag to its slides.
+
+The architecture check found one error: SciPy balancing sat under the recipe corpus, but it is a
+service step after verification (`core/macro_balance.py`). The diagram now shows it as its own step.
+
+Verified: OOXML validator passes; every slide inspected in Google Slides on the final build,
+except 3 and 11, which didn't change. No application code changed.
+
+## 2026-11-07 — Claude — slide 13 refined
+
+The delivery line now names each habit's file, and P3 tags sit on Cloud Run and tracing. The panels
+show real figures: 538 backend and 92 Streamlit tests, 95% coverage against the 89% CI floor, and
+the five CI checks by name. Inspected in Google Slides. The live demo still opens with demo mode off.
+
+## 2026-11-07 — Claude — one takeaway column on slides 2 to 15
+
+Mike asked for a consistent column with more support. Each slide now has three takeaways in fixed
+slots, each with supporting points, so markers sit in the same place. Slides 2 and 3 narrowed to
+fit; the agenda's plate gave way to a reading guide. Every slide 2 to 15 inspected in Google Slides.
+
+## 2026-11-07 — Claude — takeaways limited to analysis slides
+
+Mike wants takeaways on findings and analysis slides only, so slides 7 to 14 keep them, with a third
+supporting point and highlighted key terms. Slides 2 to 6 and 15 are full width again. Slide 15 gained
+a milestone line. Read through every slide; one wrong line fixed (68 by-name requests, not recipes).
+Every slide 2 to 15 inspected in Google Slides.
+
+## 2026-11-07 — Claude — capstone poster
+
+Mike asked for a capstone poster from the deck's strongest figures. `docs/showcase/capstone-poster.html`
+renders to PNG and PDF at A1 proportions. Bars are to scale from zero; numbers match the fact sheet.
+Fits one page, checked at full size. The name, university and print size are still to confirm.
+
+## 2026-11-07 — Claude — deck and poster cleaned for release
+
+Mike approved the deck. Internal paper tags and housekeeping notes came off, slide 15 became a
+reader-facing "What comes next", and the poster is now a project poster (personal project). Concept
+folders moved to `docs/showcase/slides/archive/`. App tasks P2 to P9 moved to their own thread.
