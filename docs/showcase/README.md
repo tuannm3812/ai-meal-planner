@@ -4,8 +4,8 @@ Everything for the project's showcase, laid out like the Text-to-SQL showcase fo
 
 ## Editable deck
 
-[Open the live Google Slides deck](https://docs.google.com/presentation/d/1KpI1000mDr8I143nNIUvZvncuwm51mZvPYzZvAm7hGM/edit),
-in Drive at `06_Projects/AI Meal Planner`. Created 6 November 2026; the seed now has 16 editable slides.
+[Open the live Google Slides deck](https://docs.google.com/presentation/d/1KGb2_smqGofSohDuDjxM5hCyvOZyz5uDUbWdUn2US_4/edit),
+in Drive at `06_Projects/AI Meal Planner`. Finalised 7 November 2026 with 16 editable slides.
 Access is private; no sharing was changed.
 
 **The live Google deck is the formatting source of truth.** Read its current objects before
@@ -33,10 +33,10 @@ Three questions, three kinds of file. Each has one owner, so nothing is decided 
 
 | Folder or file | Holds |
 | --- | --- |
-| `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py`, `cover-concepts/`, `palette-trials/` |
+| `slides/` | Brief, standard, history, `assets/` (mark, QR), `captures/`, `capture_app.py`, `archive/` (cover, palette and logo explorations) |
 | `fonts/` | Bundled Google Sans and Google Sans Code (showcase), Bricolage Grotesque and Inter (current drafts), with OFL licences |
 | `poster.html`, `linkedin.html`, `showcase.css`, `render.py` | Poster and LinkedIn source and renderer |
-| `capstone-poster.html`, `ai-meal-planner-capstone-poster.png`, `.pdf` | Capstone poster source and A1 outputs |
+| `project-poster.html`, `ai-meal-planner-project-poster.png`, `.pdf` | Project poster source and A1 outputs |
 | `ai-meal-planner-*.png`, `.pdf`, `linkedin_post.md` | First poster outputs and post text |
 
 **For design agents:** read the slide's entry in the brief, then the deck standard, then the

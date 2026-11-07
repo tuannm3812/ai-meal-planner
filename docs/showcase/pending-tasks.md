@@ -3,34 +3,29 @@
 Everything not finished yet, so the app and the deck can be built side by side. Started 7 November 2026.
 Tick a box when the work is merged or done, and add a date.
 
-## Paper tags in the deck
+## Task numbers
 
-A brown paper tag such as `P1 pending` marks a spot that will change when its task is done.
-When a task finishes, update that slide and delete its tag. Every tag object is named "Pending",
-and all of them come off before release.
+P1 to P9 name the tasks. The deck stays free of internal notes, so this table says which slides to
+update when a task is done.
 
-| Tag | Task | Slides | Change on the slide when done |
-| --- | --- | --- | --- |
-| P1 | Turn on demo mode in Streamlit | 1, 15, 16 | Remove the wake-up line on 16 if it stays awake |
-| P2 | Add database migrations | 12, 15 | Remove from the limits on 14 |
-| P3 | Deploy to Cloud Run | 12, 13, 15 | Turn the line on 13 green; update the limits on 14 |
-| P4 | Run the benchmark with USDA keys | 9, 15 | Update the bar on 9 and the estimate counts on 2, 11, 14 |
-| P5 | Ask for real exercise details | 7, 15 | Rewrite the worked example and the note on 7 |
-| P6 | Tag allergens on ingredients | 8, 15 | Update the diet rule limit on 14 |
-| P7 | Grow to 75–100 recipes | 15 | Update "34 recipes" across the deck |
-| P8 | Connect live store prices | 2, 15 | Update $24.50 on 1, 2, 6 |
-| P9 | Use feedback, then test with people | 14, 15 | Update the "Not tested" step on 14 |
+| Task | What | Slides to update |
+| --- | --- | --- |
+| P1 | Turn on demo mode in Streamlit | Remove the wake-up line on 16 if it stays awake |
+| P2 | Add database migrations | 14, 15 |
+| P3 | Deploy to Cloud Run | Turn the line on 13 green; 12, 14, 15 |
+| P4 | Run the benchmark with USDA keys | The bar on 9; estimate counts on 2, 11, 14 |
+| P5 | Ask for real exercise details | The worked example and note on 7 |
+| P6 | Tag allergens on ingredients | The diet rule limit on 14 |
+| P7 | Grow to 75–100 recipes | "34 recipes" across the deck |
+| P8 | Connect live store prices | $24.50 on 1, 2, 6 |
+| P9 | Use feedback, then test with people | The "Not tested" step on 14 |
 
 ## Showcase
 
-- [ ] **Mike:** confirm the capstone poster's full name, university, supervisor and print size, then delete its P1 tag once the demo works.
 - [ ] **P1, Mike:** add `STREAMLIT_DEMO_MODE = "1"` to the demo's Secrets in Streamlit, then scan the QR code from a phone. Today the demo opens with demo mode off and shows "Could not connect to the API".
-- [ ] Bring the approved slides into the live v4 deck with File > Import slides, then confirm the speaker notes came across.
-- [ ] Merge PR #44 once the deck is approved.
 - [ ] Rebuild the poster and LinkedIn image to the new standards, and fix the LinkedIn post wording ("filters run first", "590+").
-- [ ] Delete every paper tag, then export the release PDF from the live deck.
+- [ ] Export the release PDF from the live deck.
 - [ ] Run Codex's review of the seed text, notes and revised standards (requests are in `docs/5_agent_log.md`).
-- [ ] **Mike:** delete the old Drive copies, keeping the v4 Slides deck and the v4 `.pptx`.
 - [ ] Update the design brief doc, which lags this repo.
 
 ## Product, in priority order

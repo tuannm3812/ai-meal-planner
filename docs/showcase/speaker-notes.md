@@ -39,7 +39,7 @@ Then what it does and how it works.
 [Point: Taste test]
 Then what a good meal means, and whether it got there.
 [Point: The bill]
-Last, how it's built, what isn't proven yet and what's still pending.
+Last, how it's built, what isn't proven yet and what comes next.
 Each page is a link, so you can jump straight to it.
 
 ## Slide 4 — p4
@@ -206,13 +206,13 @@ This is where the project has been, and the work still open.
 [Point: Timeline]
 The milestones run from the refactor to the wider recipe check.
 [Point: Now]
-First, make the demo work on first use, add migrations and deploy.
+First, the foundations: migrations, a real deployment and user accounts.
 [Point: Next]
 Then better inputs: real nutrition data, real exercise details and proper allergen tags.
 [Point: Later]
 Then scale: more recipes, live prices, and testing with people.
 Reference — not read aloud
-docs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7; AGENTS.md, Current state.
+docs/4_next_steps.md §6 and §7; AGENTS.md, Current state.
 
 ## Slide 16 — p16
 

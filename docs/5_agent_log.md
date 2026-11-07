@@ -8106,3 +8106,9 @@ Every slide 2 to 15 inspected in Google Slides.
 Mike asked for a capstone poster from the deck's strongest figures. `docs/showcase/capstone-poster.html`
 renders to PNG and PDF at A1 proportions. Bars are to scale from zero; numbers match the fact sheet.
 Fits one page, checked at full size. The name, university and print size are still to confirm.
+
+## 2026-11-07 — Claude — deck and poster cleaned for release
+
+Mike approved the deck. Internal paper tags and housekeeping notes came off, slide 15 became a
+reader-facing "What comes next", and the poster is now a project poster (personal project). Concept
+folders moved to `docs/showcase/slides/archive/`. App tasks P2 to P9 moved to their own thread.

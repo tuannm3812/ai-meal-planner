@@ -36,3 +36,5 @@ Mike asked for the takeaway column back. It was only ever on slides 7, 8, 9 and 
 Mike asked for the same takeaway column on every slide, with more support in it. It now has three fixed slots with supporting points on slides 2 to 15, replacing one flowing text box. Slides 2 and 3 narrowed to fit, and the agenda's salmon plate made way for a reading guide.
 
 Mike then limited takeaways to findings and analysis slides. Slides 2 to 6 and 15 went back to full width, and the agenda's plate returned. The remaining columns gained a third supporting point and highlighted key terms. Slide 15 gained a milestone line.
+
+Paper tags came off: Mike wants the deck free of internal notes, so tasks live only in `../pending-tasks.md`. This is a personal project, so the fuller poster is the project poster, not a capstone poster. Concept folders moved to `archive/`.

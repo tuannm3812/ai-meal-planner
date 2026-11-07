@@ -137,14 +137,6 @@ const bar = (s, x, y, w, h, fill, label, colour = WHITE) => s.addText(label || "
   shape: pres.ShapeType.rect, ...box(x, y, w, h), fill: { color: fill }, line: { color: fill, width: 0.5 }, color: colour, fontSize: 12, bold: true, margin: 8, valign: "middle",
 });
 
-// A paper tag marks pending work; ids match docs/showcase/pending-tasks.md.
-// Delete every object named "Pending" before release.
-const pend = (s, id, x, y) => {
-  s.addShape(pres.ShapeType.roundRect, { ...box(x, y, 66, 16), rectRadius: pt(4), fill: { color: WARN }, line: { color: WHITE, width: 0.75 }, objectName: `Pending ${id}` });
-  s.addImage({ path: "slides/assets/glyph-description.png", ...box(x + 3, y + 2, 12, 12), altText: `Pending task ${id}`, objectName: `Pending ${id} icon` });
-  text(s, `${id} pending`, x + 17, y, 48, 16, { fontSize: 8, bold: true, color: WHITE, valign: "middle", objectName: `Pending ${id} label` });
-};
-
 // 1 — cover
 {
   const s = pres.addSlide({ masterName: "COVER", sectionTitle: OPEN });
@@ -183,7 +175,6 @@ const pend = (s, id, x, y) => {
   s.addShape(pres.ShapeType.roundRect, { ...box(X0, 404, 84, 84), rectRadius: pt(8), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
   s.addImage({ path: "slides/assets/qr.png", ...box(X0 + 6, 410, 72, 72), altText: "QR code to the live demo" });
   text(s, [{ text: "Try the live demo", options: { fontSize: 12, bold: true, color: WHITE, breakLine: true } }, { text: "Scan with your phone", options: { fontSize: 10, color: ON_INK } }], 139, 428, 110, 36);
-  pend(s, "P1", 139, 466);
 }
 
 // 2 — executive summary
@@ -221,21 +212,20 @@ const pend = (s, id, x, y) => {
     s.addImage({ path: `slides/assets/glyph-${icon}.png`, ...box(x + 17, y + 17, 20, 20), altText: "" });
     text(s, [{ text: v, options: { fontSize: 24, bold: true, color: deep, breakLine: true } }, { text: l, options: { fontSize: 10, color: MUTED } }], x + 12, 432, 192, 46);
   });
-  pend(s, "P8", X0 + 3 * 223 + 134, 436);
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the project's own offline test, not real users. 11 of the 72 are fallback meals; guardrails use a controlled recipe set. Meal targets stay within 350–850 kcal. Plate area shows calories." }], X0, 482, W, 14, { fontSize: 8, color: MUTED });
 }
 
 // 3 — agenda
 {
   const s = slide("AGENDA", "Today's menu: four courses, from the problem to the limits", "Each course lists its pages by label. Select one to jump to it.",
-    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built, what isn't proven yet and what's still pending.\n\nEach page is a link, so you can jump straight to it.", OPEN);
+    "This deck is served as a four-course menu.\n\n[Point: Starter]\nFirst, why this is worth solving.\n\n[Point: Main]\nThen what it does and how it works.\n\n[Point: Taste test]\nThen what a good meal means, and whether it got there.\n\n[Point: The bill]\nLast, how it's built, what isn't proven yet and what comes next.\n\nEach page is a link, so you can jump straight to it.", OPEN);
   s.addImage({ path: "slides/assets/plate-salmon.png", ...box(668, 196, 248, 248), altText: "Plate of salmon and quinoa" });
   let y = TOP;
   [
     ["soup_kitchen", "E3EFE6", GREEN, "STARTER", "Problem", "Why is this worth solving?", [["Why it matters", 4]], 56],
     ["lunch_dining", "FBE4DC", TOMATO, "MAIN", "Solution", "What does it do, and how?", [["The flow", 5], ["Four agents", 6], ["Calorie target", 7], ["Choosing the meal", 8], ["Nutrition", 9]], 104],
     ["restaurant", TINT_WARN, WARN, "TASTE TEST", "Evidence", "Did we get there?", [["What good means", 10], ["Results", 11]], 62],
-    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "What is unproven?", [["Architecture", 12], ["Engineering", 13], ["Limits", 14], ["Pending tasks", 15]], 104],
+    ["receipt_long", "DDE3DA", INK, "THE BILL", "Build and limits", "What is unproven?", [["Architecture", 12], ["Engineering", 13], ["Limits", 14], ["Next steps", 15]], 104],
   ].forEach(([icon, tint, deep, course, h, q, pages, ch]) => {
     card(s, "", X0, y, 608, ch, { fill: tint });
     s.addShape(pres.ShapeType.ellipse, { ...box(X0 + 14, y + ch / 2 - 17, 34, 34), fill: { color: deep }, line: { color: deep, width: 0.5 } });
@@ -348,7 +338,6 @@ const pend = (s, id, x, y) => {
   });
   marker(s, 2, X0 + 312 + 124, TOP + 4);
   marker(s, 3, X0 + 468 + 124, TOP + 4);
-  pend(s, "P5", X0 + 156 + 68, TOP + 84);
   card(s, "", X0, 276, 608, 186);
   text(s, "Her day and this meal, on one scale", X0 + 16, 286, 400, 18, { bold: true });
   const x0 = X0 + 16, k = 576 / 2469.2, w1 = 2344.3 * k, w2 = 124.9 * k;
@@ -393,7 +382,6 @@ const pend = (s, id, x, y) => {
   marker(s, 2, X0 + 208 + 174, 316);
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "refusals were tested on a controlled recipe set. None of the 72 benchmark plans was refused." }], X0, 470, 608, 14, { fontSize: 8, color: MUTED });
   takeaways(s, [["Safety comes before taste", "A conflicting recipe is out **before relevance counts**.", ["Vegan: **34 recipes become 13**", "Relevance can't rescue a conflict", "A refusal beats a risky guess"]], ["Relevance decides what qualifies", "Below a **0.16 score**, a craving falls back with a warning.", ["Your profile **only changes the order**", "**8 of 11** fallbacks: pizza, dessert", "All 68 by-name requests match"]], ["A limit can be a swap", "It doesn't always **cost you the meal**.", ["Coeliac: **gluten-free pasta**", "Hypertension: **coconut aminos**", "Each swap is checked against all limits"]]]);
-  pend(s, "P6", X0 + 168 + 13 * k + 58, TOP + 72);
   marker(s, 3, X0 + 174, 316);
 }
 
@@ -427,7 +415,6 @@ const pend = (s, id, x, y) => {
   });
   marker(s, 2, rx + rw - 16, 300);
   marker(s, 3, rx + rw - 16, 362);
-  pend(s, "P4", rx + rw - 72, 340);
   takeaways(s, [["Estimates carry 66% of the calories", "Only **3 of 6** ingredients are estimates, but they're the big ones.", ["Rice **286 kcal**, chicken **165 kcal**", "Reference items total **235 kcal**", "The app labels each one"]], ["Reference still means local", "With **no provider keys**, nothing here is externally verified.", ["Totals match local tables only", "**68 of 72** plans include an estimate", "A USDA run is pending"]], ["Order sets the trust", "The **best available source** wins for each ingredient.", ["**Trusted local** values first", "USDA and FatSecret with keys", "Estimates only as a **last resort**"]]]);
 }
 
@@ -511,14 +498,12 @@ const pend = (s, id, x, y) => {
     text(s, [{ text: h, options: { bold: true, color: deep, breakLine: true } }, { text: b, options: { fontSize: 10, color: deep } }], X0 + 8, y + 46, 84, 74);
     arrow(s, X0 + 97, y + 62, 152, y + 62);
   });
-  pend(s, "P1", X0 + 15, top + 100);
   card(s, "", 153, top, 96, 258);
   logo("fastapi", 161, top + 10); logo("pydantic", 187, top + 10);
   text(s, [{ text: "FastAPI", options: { bold: true, breakLine: true } }, { text: "Typed JSON, API keys, rate limits", options: { fontSize: 10, color: MUTED } }], 161, top + 36, 82, 76);
   card(s, "", 159, top + 136, 84, 114, { fill: "DDE3DA" });
   logo("sqlite", 166, top + 142);
   text(s, [{ text: "SQLite", options: { bold: true, breakLine: true } }, { text: "Local history, via SQLModel", options: { fontSize: 10 } }], 166, top + 166, 74, 60);
-  pend(s, "P2", 168, top + 230);
   arrow(s, 201, top + 116, 201, top + 135);
   arrow(s, 250, top + 129, 262, top + 129);
   card(s, "", 263, top, 388.5, 258, { fill: PANEL });
@@ -545,7 +530,6 @@ const pend = (s, id, x, y) => {
     s.addShape(pres.ShapeType.roundRect, { ...box(cx, 431, w, 30), rectRadius: pt(6), fill: { color: WHITE }, line: { color: WHITE, width: 1 } });
     logo(n, cx + 5, 437, 18);
     text(s, t, cx + 27, 431, w - 28, 30, { fontSize: 10, bold: true, valign: "middle" });
-    if (n === "googlecloud") pend(s, "P3", cx + 14, 410);
     cx += w + 4;
   });
   text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the hosted demo runs the same service inside Streamlit. Gemini is optional and off by default. Logos belong to their owners." }], X0, 472, 608, 14, { fontSize: 8, color: MUTED });
@@ -580,7 +564,6 @@ const pend = (s, id, x, y) => {
     iconDot(s, icon, c, x - 20, ly - 20, 40);
     text(s, [{ text: h, options: { bold: true, color: c, breakLine: true } }, { text: b, options: { fontSize: 10, color: MUTED } }], x - 49, ly + 24, 98, 34, { align: "center" });
     text(s, f, x - 49, ly + 60, 98, 12, { fontFace: MONO, fontSize: 8, color: c, align: "center" });
-    if (i > 3) pend(s, "P3", x - 33, ly + 76 - 2);
   });
   marker(s, 2, sx + 4 * step + 16, ly - 30);
   marker(s, 3, sx + 5 * step + 16, ly - 30);
@@ -631,7 +614,6 @@ const pend = (s, id, x, y) => {
     text(s, h, x + 50, y + 10, 136, 30, { fontSize: 16, bold: true, color: deep, valign: "middle" });
     text(s, items.map((t, k) => ({ text: t, options: { color: deep, bullet: { indent: 10 }, breakLine: k < items.length - 1, paraSpaceAfter: 6 } })), x + 12, y + 50, 172, ht - 58);
   });
-  pend(s, "P9", X0 + 416 + 12, 442);
   text(s, [{ text: "How far the evidence goes", options: { fontSize: 14, bold: true, breakLine: true } }, { text: "Each step up is less proven.", options: { color: MUTED } }], X0, TOP + 4, 340, 44);
   text(s, "A planning aid, not medical advice.", X0, 472, 608, 14, { fontSize: 9, bold: true, color: WARN });
   marker(s, 1, X0 + 172, 468 - 178 + 6);
@@ -642,9 +624,9 @@ const pend = (s, id, x, y) => {
 
 // 15 — pending tasks
 {
-  const s = slide("BUILD AND LIMITS > PENDING TASKS", "Pending tasks, in priority order", "How the project got here, what's still open, and what each paper tag points to.",
-    "This is where the project has been, and the work still open.\n\n[Point: Timeline]\nThe milestones run from the refactor to the wider recipe check.\n\n[Point: Now]\nFirst, make the demo work on first use, add migrations and deploy.\n\n[Point: Next]\nThen better inputs: real nutrition data, real exercise details and proper allergen tags.\n\n[Point: Later]\nThen scale: more recipes, live prices, and testing with people.\n\nReference — not read aloud\ndocs/showcase/pending-tasks.md; docs/4_next_steps.md §6 and §7; AGENTS.md, Current state.", BUILD);
-  const ms = [["8 Oct", "Refactor on main"], ["11 Oct", "API keys, deploy workflow, tracing"], ["18 Oct", "72 of 72 plans on target"], ["21 Oct", "React design approved"], ["7 Nov", "68 of 68, gluten fix"], ["Now", "Nine tasks open"]];
+  const s = slide("BUILD AND LIMITS > NEXT STEPS", "What comes next, in priority order", "How the project got here, and the work still ahead.",
+    "This is where the project has been, and the work still open.\n\n[Point: Timeline]\nThe milestones run from the refactor to the wider recipe check.\n\n[Point: Now]\nFirst, the foundations: migrations, a real deployment and user accounts.\n\n[Point: Next]\nThen better inputs: real nutrition data, real exercise details and proper allergen tags.\n\n[Point: Later]\nThen scale: more recipes, live prices, and testing with people.\n\nReference — not read aloud\ndocs/4_next_steps.md §6 and §7; AGENTS.md, Current state.", BUILD);
+  const ms = [["8 Oct", "Refactor on main"], ["11 Oct", "API keys, deploy workflow, tracing"], ["18 Oct", "72 of 72 plans on target"], ["21 Oct", "React design approved"], ["7 Nov", "68 of 68, gluten fix"], ["Now", "Next steps"]];
   const lx = X0 + 40, step = 158;
   s.addShape(pres.ShapeType.line, { ...box(lx, TOP + 9, step * 4, 0), line: { color: GREEN, width: 3 } });
   s.addShape(pres.ShapeType.line, { ...box(lx + step * 4, TOP + 9, step, 0), line: { color: WARN, width: 3, dashType: "dash" } });
@@ -654,21 +636,19 @@ const pend = (s, id, x, y) => {
     text(s, [{ text: d, options: { bold: true, color: c, breakLine: true } }, { text: e, options: { fontSize: 10, color: MUTED } }], x - 72, TOP + 20, 144, 44, { align: "center" });
   });
   [
-    ["NOW", T, [["P1", "Turn on demo mode"], ["P2", "Add database migrations"], ["P3", "Deploy to Cloud Run"]]],
-    ["NEXT", A, [["P4", "Run the benchmark with USDA keys"], ["P5", "Ask for real exercise details"], ["P6", "Tag allergens on ingredients"]]],
-    ["LATER", G, [["P7", "Grow to 75–100 recipes"], ["P8", "Connect live store prices"], ["P9", "Use feedback, test with people"]]],
+    ["NOW", T, ["Add database migrations", "Deploy to Cloud Run", "Add user accounts"]],
+    ["NEXT", A, ["Run the benchmark with USDA keys", "Ask for real exercise details", "Tag allergens on ingredients"]],
+    ["LATER", G, ["Grow to 75–100 recipes", "Connect live store prices", "Use feedback, test with people"]],
   ].forEach(([h, [tint, deep], notes], i) => {
     const x = X0 + i * 296, y0 = 198;
     card(s, "", x, y0, 281, 270, { fill: PANEL });
     s.addText(h, { shape: pres.ShapeType.roundRect, rectRadius: pt(8), ...box(x + 10, y0 + 8, 261, 24), fill: { color: deep }, line: { color: deep, width: 1 }, color: WHITE, fontSize: 12, bold: true, align: "center", valign: "middle", margin: 0 });
-    notes.forEach(([id, t2], k) => {
+    notes.forEach((t2, k) => {
       const y = y0 + 40 + k * 76;
       s.addShape(pres.ShapeType.rect, { ...box(x + 12, y, 257, 68), fill: { color: tint }, line: { color: tint, width: 1 }, rotate: [-0.6, 0.6, 0][(i + k) % 3], shadow: { type: "outer", color: "15291F", opacity: 0.18, blur: 4, offset: 2, angle: 90 } });
-      pend(s, id, x + 20, y + 8);
-      text(s, t2, x + 20, y + 28, 240, 36, { bold: true, color: deep });
+      text(s, t2, x + 22, y, 238, 68, { fontSize: 14, bold: true, color: deep, valign: "middle" });
     });
   });
-  text(s, [{ text: "Note: ", options: { bold: true } }, { text: "the full checklist is in " }, { text: "docs/showcase/pending-tasks.md", options: { fontFace: MONO } }, { text: "." }], X0, 474, W, 12, { fontSize: 8, color: MUTED });
 }
 
 // 16 — close
@@ -680,7 +660,6 @@ const pend = (s, id, x, y) => {
   text(s, "A multi-agent meal planner, a portfolio project by Mike", X0, 330, 590, 18, { color: WHITE });
   text(s, "A study project. Not medical advice.", X0, 352, 590, 18, { color: ON_INK });
   text(s, "The demo is the Streamlit client and may take a minute to wake.", X0, 374, 590, 18, { color: ON_INK });
-  pend(s, "P1", X0, 400);
   s.addImage({ path: "slides/assets/mark-dark.png", ...box(X0, 92, 52, 52), altText: "AI Meal Planner logo" });
 }
 

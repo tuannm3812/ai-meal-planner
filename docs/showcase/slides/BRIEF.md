@@ -1,9 +1,9 @@
 # Showcase deck brief
 
-**Status: evidence lock clean; stages 3 and 4 applied in a 14-slide live deck, 6 November 2026. Standards revised: all choices made and applied in the restyled live deck; awaiting Mike's flip-through, then the deck is restyled.** Stage 5 items are in §5.
+**Status: deck approved by Mike on 7 November 2026: 16 slides, in the live Google Slides deck.**
 
 This file decides what the deck says. [DESIGN.md](DESIGN.md) decides how it looks. The
-[live Google Slides deck](https://docs.google.com/presentation/d/1KpI1000mDr8I143nNIUvZvncuwm51mZvPYzZvAm7hGM/edit)
+[live Google Slides deck](https://docs.google.com/presentation/d/1KGb2_smqGofSohDuDjxM5hCyvOZyz5uDUbWdUn2US_4/edit)
 follows both. A design agent can work from this file alone: find the slide, read its fields,
 then edit the live slide. When the story changes, change this file first, then the slide.
 Numbers and sources are in the [fact sheet](../README.md#fact-sheet).
@@ -204,11 +204,11 @@ Titles are working titles.
 - **Takeaways:** what is solid, what is soft, what is unknown.
 - **Source:** `docs/4_next_steps.md` §7, `docs/7_meal_quality.md`, DEC-31, AGENTS.md.
 
-**Slide 15. "Pending tasks, in priority order"** (`p11`)
-- **Subtitle:** Each paper tag in this deck points to one of these notes.
+**Slide 15. "What comes next, in priority order"** (`p11`)
+- **Subtitle:** How the project got here, and the work still ahead.
 - **Question:** what comes next?
 - **Message:** nine open tasks, in the order they should be done.
-- **Content:** a milestone line (8 Oct refactor, 11 Oct keys, deploy workflow and tracing, 18 Oct 72 of 72, 21 Oct React design, 7 Nov 68 of 68 and the gluten fix), above a Now, Next, Later board of nine notes, P1 to P9, matching `pending-tasks.md`.
+- **Content:** a milestone line (8 Oct refactor, 11 Oct keys, deploy workflow and tracing, 18 Oct 72 of 72, 21 Oct React design, 7 Nov 68 of 68 and the gluten fix), above a Now, Next, Later board of nine notes: migrations, Cloud Run, accounts; USDA benchmark, exercise details, allergen tags; recipes, live prices, feedback and user testing.
 - **Takeaways:** fix what visitors see first; accuracy before scale; people matter most.
 - **Source:** [../pending-tasks.md](../pending-tasks.md), `docs/4_next_steps.md` §6, §7.
 

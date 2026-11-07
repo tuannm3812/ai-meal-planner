@@ -6,7 +6,7 @@ colours, fonts, logos and claims do not.
 
 ## Authority and maintenance
 
-The [live Google Slides deck](https://docs.google.com/presentation/d/1KpI1000mDr8I143nNIUvZvncuwm51mZvPYzZvAm7hGM/edit)
+The [live Google Slides deck](https://docs.google.com/presentation/d/1KGb2_smqGofSohDuDjxM5hCyvOZyz5uDUbWdUn2US_4/edit)
 is the formatting source of truth. Read its current objects before editing and keep
 Mike's changes. `../build_deck.js` and the `.pptx` are the first seed only; never
 reimport them over the live deck.
@@ -98,7 +98,7 @@ whole sentences.
 
 ## Colour
 
-The theme is Garden green, chosen by Mike from `palette-trials/`. It uses the app's own green
+The theme is Garden green, chosen by Mike from `archive/palette-trials/`. It uses the app's own green
 and tomato, so real screenshots sit naturally in the deck. Canvas is white, like his other decks.
 
 | Role | Colour |
@@ -136,7 +136,6 @@ converted to Slides, so draw charts from shapes and keep their values in the bri
 | Limit strip | #FBEBD6 fill, 8 pt text, bold #7A4A0C `Limit:` prefix |
 | Badge | Short text on tint, never colour alone: `Estimated`, `Reference`, `On target` |
 | Table | No outer border, 1 pt `line` row rules, 12 pt headings, right-aligned numbers |
-| Pending tag | #7A4A0C pill, 66 × 16 pt, white paper icon and 8 pt bold `P1 pending`. Marks a spot tied to `../pending-tasks.md`. Objects are named "Pending"; all are deleted before release |
 | Arrow | Native connector, 1 pt `muted`, one arrowhead, attached to shape edges |
 
 Arrows show a real sequence or dependency. Don't imply causes the evidence doesn't support.

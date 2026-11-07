@@ -1,6 +1,6 @@
 # Slide review
 
-All 16 slides from the current seed, as rendered in Google Slides. These are not yet in the live deck. Brown paper tags mark pending work.
+All 16 slides from the current seed, as rendered in Google Slides. These are not yet in the live deck.
 
 ## Slide 1. Cover
 
@@ -58,9 +58,9 @@ All 16 slides from the current seed, as rendered in Google Slides. These are not
 
 ![Slide 14: Limits](slide-14.png)
 
-## Slide 15. Pending tasks
+## Slide 15. Next steps
 
-![Slide 15: Pending tasks](slide-15.png)
+![Slide 15: Next steps](slide-15.png)
 
 ## Slide 16. Close
 
