@@ -8112,3 +8112,23 @@ Fits one page, checked at full size. The name, university and print size are sti
 Mike approved the deck. Internal paper tags and housekeeping notes came off, slide 15 became a
 reader-facing "What comes next", and the poster is now a project poster (personal project). Concept
 folders moved to `docs/showcase/slides/archive/`. App tasks P2 to P9 moved to their own thread.
+
+## 2026-11-07 — Claude — P2: Alembic migrations
+
+Mike asked for P2. Alembic now owns the SQLite schema (DEC-32). `0001` is the original layout and
+`0002` adds the G4 columns, so a pre-G4 file is upgraded, not refused. `build_engine` calls
+`migrate_to_head`, which runs in one `BEGIN IMMEDIATE` transaction. The JSON importer now skips
+stored records.
+
+The 75 records: 65 belong to `user_123`, 54 are the same burger request, and the 19 feedback
+records are 17 `pytest_user` and 2 `user_123`, all from one day. I read them as test output and
+recommend not importing them. I deleted and imported nothing in Mike's checkout.
+
+Verified: 644 tests pass (552 backend, 92 Streamlit); ruff is clean; `scripts/container_smoke.sh`
+passes on the new image. Removing the write lock fails
+the four-process test on 3 of 3 runs, and adding a model field fails the drift test. On copies,
+Mike's real pre-G4 file upgraded with both plans kept and their request ids filled, and importing
+the JSON twice gave 75 + 19, then 0 + 0.
+
+Please review the rollback claim, the stamping of unversioned files, and startup upgrades for
+hosted mode.

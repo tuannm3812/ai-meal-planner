@@ -39,6 +39,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
 | 30 | Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy | 2026-11-04 |
 | 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
+| 32 | Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal | 2026-11-07 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -543,3 +544,28 @@ benchmark's constrained cravings do not include oats, so its numbers do not move
 
 Rules out a gluten-free soy sauce as the replacement, because the keyword rules
 would flag it and it would need a new nutrition entry.
+
+## 2026-11-07 — Storage: database migrations
+
+### DEC-32 — Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal
+
+`create_all` could not change an existing table, so a schema change after data
+existed had no route forward. Alembic now owns the schema. Revision `0001` is the
+original table layout and `0002` adds the G4 columns, so an old file is upgraded
+with its records kept instead of being refused, which replaces that part of DEC-9.
+The `client_id` column itself stands.
+
+The app applies revisions when it opens the database, as `create_all` did, so the
+API, scripts and tests need no extra step. The upgrade is one transaction holding
+SQLite's write lock: a failed revision leaves the file as it was, and a second
+process waits rather than racing. A file with no version table is matched to the
+revision that describes it. A shape no revision describes, or a revision newer
+than the code, stops startup and leaves the file alone. A test fails when the
+models and revisions disagree.
+
+`scripts/migrate_json_to_sqlite.py` now skips records already stored, so running
+it twice is safe.
+
+Rules out a separate migration step before each deploy for now: with one SQLite
+file per instance there is nothing shared to run it against. Postgres (§7.3 of the
+next steps) should revisit this, because many instances would share one schema.
