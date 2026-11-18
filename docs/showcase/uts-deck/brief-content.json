@@ -1,0 +1,783 @@
+{
+  "title": "AI Meal Planner",
+  "identity": "none",
+  "author": "Mike",
+  "affiliation": "Personal portfolio project",
+  "date": "November 2026",
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "cover",
+      "cover_style": "report",
+      "section": "Personal project | Multi-agent meal planner",
+      "title": "What should I eat tonight?",
+      "subtitle": "One meal sized to your body and goal, each ingredient's source shown, and the shopping list ready.",
+      "image": {
+        "path": "assets/figures/cover-plate.png",
+        "alt": "Flat illustration of a plate of chicken fried rice seen from above."
+      },
+      "accent": "slate",
+      "question": "What is this project, and why should a reader care?",
+      "notes": {
+        "purpose": "Introduce the app through the question everyone asks.",
+        "script": [
+          "Everyone asks this question, so that's where this project starts. You type a craving, and you get one meal sized to you, with each ingredient's source shown and the shopping list already written.",
+          "The rest of this deck shows how it works and how I measured it."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "agenda",
+      "layout": "agenda",
+      "agenda_style": "kaggle",
+      "page_position": "right",
+      "chapter_fill": "accent_pale",
+      "section": "AGENDA",
+      "title": "Agenda",
+      "subtitle": "From the problem, through how it works, to what was measured and what is still open.",
+      "accent": "slate",
+      "question": "Which sections are in this deck, and where do they begin?",
+      "contents": [
+        {
+          "title": "Overview",
+          "accent": "slate",
+          "entries": [
+            {
+              "title": "One-page summary",
+              "from": "summary",
+              "through": "summary"
+            },
+            {
+              "title": "Why it matters",
+              "from": "problem",
+              "through": "problem"
+            }
+          ]
+        },
+        {
+          "title": "How it works",
+          "accent": "blue",
+          "entries": [
+            {
+              "title": "The flow",
+              "from": "flow",
+              "through": "flow"
+            },
+            {
+              "title": "Four agents",
+              "from": "agents",
+              "through": "agents"
+            },
+            {
+              "title": "Calorie target",
+              "from": "calories",
+              "through": "calories"
+            },
+            {
+              "title": "Choosing the meal",
+              "from": "choosing",
+              "through": "choosing"
+            },
+            {
+              "title": "Nutrition",
+              "from": "nutrition",
+              "through": "nutrition"
+            }
+          ]
+        },
+        {
+          "title": "Evidence",
+          "accent": "plum",
+          "entries": [
+            {
+              "title": "What good means",
+              "from": "good",
+              "through": "good"
+            },
+            {
+              "title": "Results",
+              "from": "results",
+              "through": "results"
+            },
+            {
+              "title": "Architecture",
+              "from": "architecture",
+              "through": "architecture"
+            },
+            {
+              "title": "Engineering",
+              "from": "engineering",
+              "through": "engineering"
+            }
+          ]
+        },
+        {
+          "title": "Limits and next steps",
+          "accent": "ochre",
+          "entries": [
+            {
+              "title": "Limits",
+              "from": "limits",
+              "through": "limits"
+            },
+            {
+              "title": "Next steps",
+              "from": "next",
+              "through": "next"
+            }
+          ]
+        }
+      ],
+      "notes": {
+        "purpose": "Locate each section by its page number.",
+        "script": [
+          "The deck runs from the problem, through how the planner works, to what was measured and what is still open."
+        ],
+        "references": []
+      }
+    },
+    {
+      "id": "summary",
+      "layout": "research_summary",
+      "section": "Overview",
+      "topic": "One-page summary",
+      "accent": "slate",
+      "title": "One craving, sized to four different people",
+      "subtitle": "Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
+      "problem": "A recipe gives one size for everyone. Daily needs differ, diets rule meals out, and the shopping is left to you.",
+      "approach": "Four agents turn one craving into one meal: a calorie budget, a safe recipe, a nutrition lookup and a priced shopping list.",
+      "findings": [
+        {
+          "headline": "Sized to you: 363 to 850 kcal",
+          "text": "The same chicken fried rice runs from **363 kcal** for an older woman losing weight to **850 kcal** for a large athlete gaining.",
+          "accent": "slate"
+        },
+        {
+          "headline": "On target: 72 of 72 plans",
+          "text": "Every plan in the project's own **offline benchmark** meets the calorie and macro targets, up from **10**. Median calorie gap **0.4%**.",
+          "accent": "blue"
+        },
+        {
+          "headline": "Fits your limits: 5 of 5",
+          "text": "Diets, allergies and conditions **rule out recipes or swap ingredients** first. All five guardrail cases behave as designed.",
+          "accent": "plum"
+        },
+        {
+          "headline": "Honest about gaps: 68 of 72",
+          "text": "**68 of 72** plans include an estimated ingredient, and **11 of 72** are fallback meals. The app labels both.",
+          "accent": "ochre"
+        }
+      ],
+      "takeaway": "The meal fits the person, and every number says where it came from; the benchmark is the project's own, not a user study.",
+      "question": "What does the planner do, and how well does it work?",
+      "notes": {
+        "purpose": "If you read one slide, read this one.",
+        "script": [
+          "This is the same craving for four people, so the meal fits the person.",
+          "That quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.",
+          "It stays honest: estimates are labelled, and it says so when nothing matches."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "problem",
+      "layout": "panels",
+      "section": "Overview",
+      "topic": "Why it matters",
+      "accent": "slate",
+      "title": "Picking a meal is easy; sizing it to you is not",
+      "subtitle": "Three questions sit between a craving and a meal you can trust.",
+      "items": [
+        {
+          "title": "How much?",
+          "bullets": [
+            "Daily budgets in the benchmark run from **1,200 to 4,521 kcal**.",
+            "Today: guess from \"serves 4\".",
+            "With the app: a budget, then a meal target."
+          ]
+        },
+        {
+          "title": "Is it right for me?",
+          "bullets": [
+            "Asked for pasta, a vegan gets **lentil bolognese** and a coeliac gets **gluten-free pasta**.",
+            "Today: read every label.",
+            "With the app: conflicts ruled out or swapped first."
+          ]
+        },
+        {
+          "title": "What do I buy?",
+          "bullets": [
+            "This one pasta means **five ingredients** to find and price.",
+            "Today: write a list, guess the cost.",
+            "With the app: a list with an estimated total."
+          ]
+        }
+      ],
+      "takeaway": "One request answers all three; the Today lines are this project's framing, not survey results.",
+      "question": "Why is this worth solving?",
+      "notes": {
+        "purpose": "Show the work that sits between a craving and a meal.",
+        "script": [
+          "Most of us know what we feel like eating. The hard part comes after that.",
+          "The right amount depends on the person. Diets and conditions change the meal. And even one meal means several ingredients to find and price.",
+          "The next section shows how one request answers all three.",
+          "Sources: Benchmark budgets: docs/meal_quality/baseline.json; pasta examples: local run, 7 November 2026, no provider keys."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "flow",
+      "layout": "figure_evidence",
+      "section": "How it works",
+      "topic": "The flow",
+      "accent": "blue",
+      "title": "One craving in, one meal and a shopping list out",
+      "subtitle": "Three steps in the React app, captured from a local run with no provider keys.",
+      "figures": [
+        {
+          "id": "you",
+          "path": "assets/figures/app-1-profile.jpg",
+          "alt": "Step 1 of the React app: the profile form with goal, body details, activity and limits.",
+          "title": "1. You"
+        },
+        {
+          "id": "craving",
+          "path": "assets/figures/app-2-craving.jpg",
+          "alt": "Step 2: the craving field reading chicken fried rice and the store location.",
+          "title": "2. Craving"
+        },
+        {
+          "id": "plan",
+          "path": "assets/figures/app-3-plan.jpg",
+          "alt": "Step 3: the plan page for Chicken Fried Rice, 694 kcal, with macro balance bars.",
+          "title": "3. Your plan"
+        }
+      ],
+      "annotations": [
+        {
+          "figure": "you",
+          "x": 0.62,
+          "y": 0.2,
+          "title": "Body, goal and limits first",
+          "text": "The planner asks only what it needs to size a meal."
+        },
+        {
+          "figure": "craving",
+          "x": 0.35,
+          "y": 0.4,
+          "title": "Then the craving and the store",
+          "text": "One free-text craving, such as **chicken fried rice**."
+        },
+        {
+          "figure": "plan",
+          "x": 0.3,
+          "y": 0.55,
+          "title": "The plan shows its working",
+          "text": "**694 kcal** against a 691 kcal target, the macro balance and each ingredient's source."
+        }
+      ],
+      "takeaway": "Two short screens lead to one plan page that shows how it was made.",
+      "question": "What does a person actually do?",
+      "notes": {
+        "purpose": "Walk through the real app in three steps.",
+        "script": [
+          "You enter your body, goal and anything to avoid. Then you say what you feel like eating and where you shop.",
+          "You get one meal, its balance, each ingredient's source and a shopping list.",
+          "Sources: Captures: docs/showcase/slides/captures/2026-11-06-plan.json; React app, local run, 6 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "caption": "Real captures of the React app, 6 November 2026.",
+      "source": {
+        "label": "AI Meal Planner React app, local run with no provider keys, 6 November 2026",
+        "url": "https://github.com/tuannm3812/ai-meal-planner/tree/main/docs/showcase/slides/captures"
+      }
+    },
+    {
+      "id": "agents",
+      "layout": "process",
+      "section": "How it works",
+      "topic": "Four agents",
+      "accent": "blue",
+      "title": "Four agents work like one kitchen",
+      "subtitle": "A planning service runs them in order for one request: chicken fried rice, active woman, maintaining.",
+      "items": [
+        {
+          "title": "Calorie expenditure",
+          "text": "Estimates a day's burn and sets the budget: **2,469 kcal**."
+        },
+        {
+          "title": "Meal recommendation",
+          "text": "Sets the meal target, rules out conflicts, picks a recipe and sizes it: **691 kcal**."
+        },
+        {
+          "title": "Nutrition verification",
+          "text": "Looks up each ingredient and labels estimates: **694 kcal**, 3 of 6 estimated."
+        },
+        {
+          "title": "Supermarket",
+          "text": "Matches ingredients to store items or category prices: **$24.50** estimated."
+        }
+      ],
+      "takeaway": "Meals come from 34 curated recipes, not generation, so the core path needs no LLM key.",
+      "question": "How does one request become one plan?",
+      "notes": {
+        "purpose": "Show the four agents and their real outputs.",
+        "script": [
+          "The calorie agent sets a daily budget, the recommendation agent picks and sizes the meal, the nutrition agent labels estimates, and the supermarket agent prices the list.",
+          "The service balances portions after verification.",
+          "Sources: backend/app/services/meal_planning_service.py; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "calories",
+      "layout": "chart",
+      "section": "How it works",
+      "topic": "Calorie target",
+      "accent": "blue",
+      "title": "The trained model adds only 125 kcal to her day",
+      "subtitle": "Worked example: an active woman keeping her weight. Her meal target is 28% of the daily budget.",
+      "unit": "kcal",
+      "maximum": 2500,
+      "bars": [
+        {
+          "label": "Body and activity (BMR)",
+          "value": 2344
+        },
+        {
+          "label": "Exercise (trained model)¹",
+          "value": 125
+        },
+        {
+          "label": "Daily budget",
+          "value": 2469
+        },
+        {
+          "label": "This meal (28%)",
+          "value": 691
+        }
+      ],
+      "takeaway": "The model's R² of 0.996 is for exercise calories, which add 3–10% of the day in these plans.",
+      "note": "¹ Exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise.",
+      "question": "How does it decide how much?",
+      "notes": {
+        "purpose": "Follow one person from body to meal target.",
+        "script": [
+          "Body size and activity give about 2,344 kcal a day. The trained model adds 125. Her goal is to maintain, so her budget is 2,469, and one meal gets 28%: 691 kcal.",
+          "A weight-loss floor of 1,200 kcal for women and 1,500 for men protects low budgets.",
+          "Sources: calorie_expenditure_agent.py; models/calorie_expenditure/metrics.json; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "choosing",
+      "layout": "chart",
+      "section": "How it works",
+      "topic": "Choosing the meal",
+      "accent": "blue",
+      "title": "Hard limits come first, then a relevant recipe",
+      "subtitle": "A vegan asks for chicken fried rice: the recipes narrow down to one.",
+      "unit": "recipes",
+      "maximum": 34,
+      "bars": [
+        {
+          "label": "All recipes",
+          "value": 34
+        },
+        {
+          "label": "Safe for a vegan",
+          "value": 13
+        },
+        {
+          "label": "Relevant to the craving",
+          "value": 5
+        },
+        {
+          "label": "Served: Tofu Fried Rice",
+          "value": 1
+        }
+      ],
+      "takeaway": "Safety comes before relevance; across the benchmark, 61 of 72 plans match the craving and 11 fall back with a note.",
+      "question": "How does it choose the meal?",
+      "notes": {
+        "purpose": "Show the funnel from one real request.",
+        "script": [
+          "Of 34 recipes, 13 are safe for a vegan, 5 are relevant to the craving, and one is served.",
+          "If nothing is close, you get a standard meal and a note. If nothing is safe, it refuses.",
+          "Sources: backend/app/rag/retriever.py; local run, 7 November 2026; docs/meal_quality/baseline.json."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "nutrition",
+      "layout": "comparison",
+      "section": "How it works",
+      "topic": "Nutrition",
+      "accent": "blue",
+      "title": "Three of six ingredients are estimates, carrying 66% of the calories",
+      "subtitle": "Chicken fried rice from a local run with no USDA or FatSecret keys: 694 kcal against a 691 kcal target.",
+      "columns": [
+        "Source",
+        "Ingredients, amount and kcal",
+        "Share of 694 kcal"
+      ],
+      "rows": [
+        [
+          "Estimated",
+          [
+            "Chicken breast, 100 g: 165 kcal",
+            "Cooked rice, 220 g: 286 kcal",
+            "Soy sauce, 15 g: 8 kcal"
+          ],
+          "459 kcal, 66%"
+        ],
+        [
+          "Reference",
+          [
+            "Whole egg, 50 g: 72 kcal",
+            "Mixed vegetables, 115 g: 75 kcal",
+            "Sesame oil, 10 g: 88 kcal"
+          ],
+          "235 kcal, 34%"
+        ]
+      ],
+      "takeaway": "Lookup order is trusted local values, then USDA and FatSecret with keys, then estimates; here nothing is externally verified.",
+      "question": "Can you trust the numbers?",
+      "notes": {
+        "purpose": "Show where each number came from.",
+        "script": [
+          "Three of the six ingredients are estimates, but they include chicken and rice, the biggest items, so they carry 459 of the 694 kcal.",
+          "Sources: nutrition_verification_agent.py; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "good",
+      "layout": "panels",
+      "section": "Evidence",
+      "topic": "What good means",
+      "accent": "plum",
+      "title": "We defined a good meal before improving one",
+      "subtitle": "A plan passes only if it clears both tests, on a fixed set of 72 requests run offline.",
+      "items": [
+        {
+          "title": "Test 1: calories",
+          "text": "Within **10%** of the meal's calorie target."
+        },
+        {
+          "title": "Test 2: macros",
+          "bullets": [
+            "Protein **10–35%** of energy",
+            "Carbs **45–65%**",
+            "Fat **20–35%**"
+          ]
+        },
+        {
+          "title": "72 fixed requests",
+          "bullets": [
+            "12 cravings × 4 body profiles",
+            "6 cravings × 4 diet or health limits"
+          ]
+        }
+      ],
+      "takeaway": "At the first run 68 of 72 plans hit calories, but only 10 cleared both tests.",
+      "note": "AMDR is a daily reference, applied here to one meal.",
+      "question": "What counts as good?",
+      "notes": {
+        "purpose": "Fix what good means before changing anything.",
+        "script": [
+          "Calories had to land within 10% of the target, and each macro inside the adult AMDR range. The same 72 requests run every time.",
+          "Sources: docs/7_meal_quality.md §1; DEC-25."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "results",
+      "layout": "chart",
+      "section": "Evidence",
+      "topic": "Results",
+      "accent": "plum",
+      "title": "Three fixes took the planner from 10 to 72 of 72",
+      "subtitle": "Plans meeting both targets on the project's own offline benchmark of 72 requests.",
+      "unit": "plans meeting both targets¹",
+      "maximum": 72,
+      "bars": [
+        {
+          "label": "First run",
+          "value": 10
+        },
+        {
+          "label": "Portion balancing",
+          "value": 41
+        },
+        {
+          "label": "Honest fallback",
+          "value": 47
+        },
+        {
+          "label": "Cooking fat, rounding retry",
+          "value": 72
+        }
+      ],
+      "takeaway": "The 41 to 47 step moved 11 off-menu requests to fallback meals; a wider check of every recipe by name passes 68 of 68.",
+      "note": "¹ Out of 72 benchmark requests. Median calorie gap 0.4%, worst 9.9%; 5 of 5 guardrail cases hold. This shows plans meet targets, not that users prefer them.",
+      "question": "Did it get better, and why?",
+      "notes": {
+        "purpose": "Show what each fix changed.",
+        "script": [
+          "Resizing each ingredient took it to 41. The relevance gate moved 11 off-menu requests to fallback meals, giving 47. Adding a fat to six recipes and a rounding retry took it to 72.",
+          "The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after.",
+          "Sources: docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "architecture",
+      "layout": "process",
+      "section": "Evidence",
+      "topic": "Architecture",
+      "accent": "plum",
+      "title": "One service, two clients, four agents",
+      "subtitle": "Streamlit and React share one FastAPI contract and one planning service.",
+      "items": [
+        {
+          "title": "Clients",
+          "text": "A live **Streamlit** demo and a **React** app (Vite, Tailwind)."
+        },
+        {
+          "title": "FastAPI",
+          "text": "Typed JSON with Pydantic, API keys and rate limits; local history in **SQLite**."
+        },
+        {
+          "title": "Planning service",
+          "text": "Four agents plus a balance step: **scikit-learn** model, TF-IDF search, **SciPy** portions."
+        },
+        {
+          "title": "Delivery",
+          "text": "Python, Docker, GitHub Actions; Cloud Run ready but **not yet deployed**."
+        }
+      ],
+      "takeaway": "The one trained model is 0.64 MB and TF-IDF suits 34 recipes, so the core path needs no GPU.",
+      "question": "What is it made of?",
+      "notes": {
+        "purpose": "Show the whole system on one page.",
+        "script": [
+          "Both clients use the same planning service, so the logic lives in one place.",
+          "The hosted demo runs the same service inside Streamlit.",
+          "Sources: docs/2_architecture.md; pyproject.toml; frontend/package.json."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "engineering",
+      "layout": "panels",
+      "section": "Evidence",
+      "topic": "Engineering",
+      "accent": "plum",
+      "title": "Built like a product, not a notebook",
+      "subtitle": "Production habits on a portfolio project, each with a file behind it.",
+      "items": [
+        {
+          "title": "Tested",
+          "bullets": [
+            "**630** Python tests, all passing",
+            "**95%** coverage, 89% floor in CI"
+          ]
+        },
+        {
+          "title": "Checked on every change",
+          "bullets": [
+            "**5** CI checks per pull request",
+            "API contract fails CI on drift"
+          ]
+        },
+        {
+          "title": "Ready to ship",
+          "bullets": [
+            "One Docker image",
+            "Cloud Run workflow, not yet live"
+          ]
+        }
+      ],
+      "takeaway": "Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.",
+      "question": "Is the engineering real?",
+      "notes": {
+        "purpose": "Show the production habits.",
+        "script": [
+          "The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.",
+          "The deployment workflow and tracing are built, but they wait for a GCP project.",
+          "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "limits",
+      "layout": "evidence",
+      "section": "Limits and next steps",
+      "topic": "Limits",
+      "accent": "ochre",
+      "title": "What this project does not prove yet",
+      "subtitle": "Results measured offline, with estimated inputs and no users.",
+      "items": [
+        {
+          "id": "measured",
+          "title": "Measured: targets met offline",
+          "text": "**72 of 72** and **68 of 68**, but the same checks guided the fixes; 11 of 72 fall back."
+        },
+        {
+          "id": "estimated",
+          "title": "Estimated: inputs",
+          "text": "**68 of 72** plans include an estimate; exercise inputs are defaults; diet rules match ingredient names."
+        },
+        {
+          "id": "untested",
+          "title": "Not tested: people",
+          "text": "No users, no clinical review, not deployed, no database migrations."
+        }
+      ],
+      "insights": [
+        {
+          "evidence": "measured",
+          "title": "Solid, within its scope",
+          "text": "The run is repeatable, but it measures plans against targets, not taste or health."
+        },
+        {
+          "evidence": "estimated",
+          "title": "Soft where inputs are guessed",
+          "text": "Name matching missed **soy sauce** until this review; it is now fixed."
+        },
+        {
+          "evidence": "untested",
+          "title": "Unknown until people use it",
+          "text": "Only testing with people can show that the plans help."
+        }
+      ],
+      "takeaway": "A planning aid, not medical advice.",
+      "question": "What is unproven?",
+      "notes": {
+        "purpose": "Put the limits in one place.",
+        "script": [
+          "Plans hit their targets on fixed requests. Most lean on estimates. Nobody has used it yet.",
+          "Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "next",
+      "layout": "comparison",
+      "section": "Limits and next steps",
+      "topic": "Next steps",
+      "accent": "ochre",
+      "title": "What comes next, in priority order",
+      "subtitle": "Foundations first, then better inputs, then scale and people.",
+      "columns": [
+        "Now",
+        "Next",
+        "Later"
+      ],
+      "rows": [
+        [
+          "Add database migrations",
+          "Run the benchmark with USDA keys",
+          "Grow to 75–100 recipes"
+        ],
+        [
+          "Deploy to Cloud Run",
+          "Ask for real exercise details",
+          "Connect live store prices"
+        ],
+        [
+          "Add user accounts",
+          "Tag allergens on ingredients",
+          "Use feedback, then test with people"
+        ]
+      ],
+      "takeaway": "Each step answers a limit on the previous page.",
+      "question": "What comes next?",
+      "notes": {
+        "purpose": "Pair the limits with the work that answers them.",
+        "script": [
+          "Foundations first: migrations, a real deployment and accounts. Then better inputs. Then scale and testing with people.",
+          "Sources: docs/4_next_steps.md §6 and §7."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "close",
+      "layout": "close",
+      "section": "THANK YOU",
+      "accent": "slate",
+      "title": "Try it and read the code",
+      "subtitle": "tuannm3812-ai-meal-planner.streamlit.app · github.com/tuannm3812/ai-meal-planner",
+      "items": [
+        "A multi-agent meal planner, a personal project by Mike",
+        "A study project. Not medical advice."
+      ],
+      "question": "Where do I try it?",
+      "notes": {
+        "purpose": "Point to the demo and code.",
+        "script": [
+          "That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    }
+  ]
+}
