@@ -8112,3 +8112,11 @@ Fits one page, checked at full size. The name, university and print size are sti
 Mike approved the deck. Internal paper tags and housekeeping notes came off, slide 15 became a
 reader-facing "What comes next", and the poster is now a project poster (personal project). Concept
 folders moved to `docs/showcase/slides/archive/`. App tasks P2 to P9 moved to their own thread.
+
+## 2026-11-18 — Claude — showcase deck on the UTS deck kit
+
+Mike asked to apply the UTS deck kit 0.6.0. The deck is now a kit consumer in `docs/showcase/uts-deck`
+(identity none, palette A, HTML and PDF). Slides 3–15 use project layouts (`project_layouts.py`) that
+bring back the plates, stations, funnel, architecture logos and staircase within kit rules. Every slide
+number is in `claims-register.md`. Build, export, check_deck, audit_layout and check_markers report 0
+findings. The Google Slides deck is unchanged and now the previous version.

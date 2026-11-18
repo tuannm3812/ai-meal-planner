@@ -67,7 +67,7 @@ References:
 - sources.md
 - claims-register.md
 
-## 7. The trained model adds only 125 kcal to her day
+## 7. From your body to a meal target
 
 Follow one person from body to meal target.
 
@@ -91,7 +91,7 @@ References:
 - sources.md
 - claims-register.md
 
-## 9. Three of six ingredients are estimates, carrying 66% of the calories
+## 9. Each ingredient is looked up, and estimates are labelled
 
 Show where each number came from.
 

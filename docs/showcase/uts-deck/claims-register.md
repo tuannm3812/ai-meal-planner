@@ -34,3 +34,10 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Exercise defaults | 30 minutes, 100 bpm | calorie_expenditure_agent.py | |
 | Calorie split | 459 and 235 kcal; 66% and 34% | Local run, 7 November 2026 | |
 | Chart axis | 2,500 kcal maximum on the calorie chart | Layout scale | Not a claim |
+| Plate proteins | 26, 48, 60, 63 g | docs/meal_quality/baseline.json | |
+| Capture profile | 34, male, 165 cm, 65 kg | slides/captures/2026-11-06-plan.json | |
+| Goal adjustments | +250, −400 kcal; meal 350–850 kcal | calorie_expenditure_agent.py; meal_recommendation_agent.py | |
+| Benchmark counts | 2 of 5 guardrail refusals; 6 recipes given oil | baseline.json; DEC-28 | |
+| Test split | 538 backend, 92 Streamlit | Local full run, 7 November 2026 | |
+| Milestones | 8 Oct, 11 Oct, 18 Oct, 21 Oct, 7 Nov 2026 | AGENTS.md, Current state | |
+| Recipe example | Tofu Fried Rice from 34 → 13 → 5 → 1 | Local run | |

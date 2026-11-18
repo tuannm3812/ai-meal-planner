@@ -12,10 +12,12 @@ Chapter accents (structure only): Overview slate, How it works blue, Evidence pl
 
 Summary themes: Sized to you slate, On target blue, Fits your limits plum, Honest about gaps ochre.
 
-Data colours: charts use the kit's Viridis order per bar. Estimated and Reference are written in words.
+Data colours (Viridis, one meaning each): body and activity #3B528B, model exercise #21918C; estimated #440154, reference #21918C; protein #3B528B, carbs #21918C, fat #5EC962; counts and plan bars #3B528B; running today #21918C, waiting grey #89949D. Estimated and Reference are also written in words.
 
 Assets: plate illustrations are the project's own flat artwork (docs/showcase/slides/build_cover_art.py); app captures are real React screens from a local run, 6 November 2026.
 
 Glossary: plan, meal target (28% of the daily budget, 350–850 kcal), daily budget, benchmark (72 offline requests), wider check (68 by-name requests), fallback meal, estimated, reference.
 
-Batch 1 (18 November 2026): whole deck ported onto built-in layouts; cover, agenda, summary and problem up for review. Slides 5–16 are a first pass awaiting richer project layouts.
+Layouts: cover, agenda and close are the kit's own; slides 3–15 use project layouts in project_layouts.py (mp_*), with neutral cards, chapter-accent rules, and wording only from slide fields.
+
+Review log: 18 November 2026, batch 1 ported on built-in layouts; then Mike asked for the whole deck, so slides 3–15 moved to project layouts. Build, export, check_deck, audit_layout and check_markers all report 0.

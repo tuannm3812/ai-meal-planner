@@ -69,11 +69,11 @@ Exact face text:
 
 ## 3. One craving, sized to four different people
 
-Layout: research_summary
+Layout: mp_summary
 
 Reader question: What does the planner do, and how well does it work?
 
-Message: The meal fits the person, and every number says where it came from; the benchmark is the project's own, not a user study.
+Message: Plate area shows calories. All figures come from the project's own offline benchmark, not a user study.
 
 Exact face text:
 
@@ -87,28 +87,40 @@ Exact face text:
 - Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.
 - AI Meal Planner
 - 3
-- The problem
-- A recipe gives one size for everyone. Daily needs differ, diets rule meals out, and the shopping / is left to you.
-- The approach
-- Four agents turn one craving into one meal: a calorie budget, a safe recipe, a nutrition lookup / and a priced shopping list.
-- Sized to you: 363 to 850 kcal
-- The same chicken fried rice runs from 363 kcal for an older woman losing weight to 850 / kcal for a large athlete gaining.
-- On target: 72 of 72 plans
-- Every plan in the project's own offline benchmark meets the calorie and macro targets, / up from 10. Median calorie gap 0.4%.
-- Fits your limits: 5 of 5
-- Diets, allergies and conditions rule out recipes or swap ingredients first. All five / guardrail cases behave as designed.
-- Honest about gaps: 68 of 72
-- 68 of 72 plans include an estimated ingredient, and 11 of 72 are fallback meals. The app / labels both.
 - TAKEAWAY
-- The meal fits the person, and every number says where it came from; the benchmark is the project's own, not a user study.
+- Plate area shows calories. All figures come from the project's own offline benchmark, not a user study.
+- 363 kcal
+- 26 g protein
+- Older woman, losing / weight
+- 694 kcal
+- 48 g protein
+- Active woman, / maintaining
+- 809 kcal
+- 60 g protein
+- Average man, / maintaining
+- 850 kcal
+- 63 g protein
+- Large athlete, gaining
+- Sized to you
+- 0.4%
+- Median gap between each meal and its / target, worst 9.9%.
+- On target
+- 72 of 72
+- Benchmark plans meet the calorie and / macro targets, up from 10.
+- Fits your limits
+- 5 of 5
+- Guardrail cases hold: limits rule out / recipes or swap ingredients.
+- Honest about gaps
+- 68 of 72
+- Plans include an estimated ingredient, / and the app labels each one.
 
 ## 4. Picking a meal is easy; sizing it to you is not
 
-Layout: panels
+Layout: mp_problem
 
 Reader question: Why is this worth solving?
 
-Message: One request answers all three; the Today lines are this project's framing, not survey results.
+Message: The Today lines are this project's framing of the problem, not survey results.
 
 Exact face text:
 
@@ -122,24 +134,32 @@ Exact face text:
 - Three questions sit between a craving and a meal you can trust.
 - AI Meal Planner
 - 4
+- TAKEAWAY
+- The Today lines are this project's framing of the problem, not survey results.
+- I feel like pasta tonight.
+- One request answers all three.
 - How much?
 - Daily budgets in the benchmark run from 1,200 to / 4,521 kcal.
-- Today: guess from "serves 4".
-- With the app: a budget, then a meal target.
+- TODAY
+- Guess from "serves 4"
+- WITH THE APP
+- A budget, then a meal / target
 - Is it right for me?
 - Asked for pasta, a vegan gets lentil bolognese and a / coeliac gets gluten-free pasta.
-- Today: read every label.
-- With the app: conflicts ruled out or swapped first.
+- TODAY
+- Read every label
+- WITH THE APP
+- Conflicts ruled out or / swapped first
 - What do I buy?
 - This one pasta means five ingredients to find and / price.
-- Today: write a list, guess the cost.
-- With the app: a list with an estimated total.
-- TAKEAWAY
-- One request answers all three; the Today lines are this project's framing, not survey results.
+- TODAY
+- Write a list, guess the cost
+- WITH THE APP
+- A list with an estimated / total
 
 ## 5. One craving in, one meal and a shopping list out
 
-Layout: figure_evidence
+Layout: mp_flow
 
 Reader question: What does a person actually do?
 
@@ -157,29 +177,21 @@ Exact face text:
 - Three steps in the React app, captured from a local run with no provider keys.
 - AI Meal Planner
 - 5
-- 1. You
-- 2. Craving
-- 3. Your plan
-- Real captures of the React app, 6 November 2026.
-- Source: AI Meal Planner React app, local run with no provider keys, 6 November 2026
 - TAKEAWAY
-- Two short screens lead to one plan page / that shows how it was made.
-- 1
-- 1
-- Body, goal and limits first
-- The planner asks only what it needs to size a meal.
-- 2
-- 2
-- Then the craving and the store
-- One free-text craving, such as chicken fried rice.
-- 3
-- 3
-- The plan shows its working
-- 694 kcal against a 691 kcal target, the macro / balance and each ingredient's source.
+- Two short screens lead to one plan page that shows how it was made.
+- 1. You
+- Goal, body details, activity and anything to avoid.
+- 34, male, 165 cm, 65 kg
+- 2. Craving
+- Say what you feel like eating and where you shop.
+- chicken fried rice
+- 3. Your plan
+- One meal, its balance, sources and a shopping list.
+- 694 kcal, target 691
 
 ## 6. Four agents work like one kitchen
 
-Layout: process
+Layout: mp_agents
 
 Reader question: How does one request become one plan?
 
@@ -194,27 +206,36 @@ Exact face text:
 - HOW IT WORKS
 - Four agents
 - Four agents work like one kitchen
-- A planning service runs them in order for one request: chicken fried rice, active woman, maintaining.
+- An order comes in, each station does one job, and a planning service runs them in order.
 - AI Meal Planner
 - 6
-- Calorie expenditure
-- Estimates a day's burn and sets the / budget: 2,469 kcal.
-- Meal recommendation
-- Sets the meal target, rules out conflicts, / picks a recipe and sizes it: 691 kcal.
-- Nutrition verification
-- Looks up each ingredient and labels / estimates: 694 kcal, 3 of 6 estimated.
-- Supermarket
-- Matches ingredients to store items or / category prices: $24.50 estimated.
 - TAKEAWAY
 - Meals come from 34 curated recipes, not generation, so the core path needs no LLM key.
+- ORDER   chicken fried rice, active woman, maintaining
+- THE PORTION PLANNER
+- Calorie expenditure
+- Estimates a day's burn and sets the / daily budget.
+- 2,469 kcal budget
+- THE CHEF
+- Meal recommendation
+- Sets the meal target, rules out / conflicts, picks a recipe and sizes it.
+- 691 kcal target
+- THE TASTER
+- Nutrition verification
+- Looks up each ingredient and labels / estimates.
+- 694 kcal, 3 of 6 estimated
+- THE SHOPPER
+- Supermarket
+- Matches ingredients to store items or / category prices.
+- $24.50 estimated
 
-## 7. The trained model adds only 125 kcal to her day
+## 7. From your body to a meal target
 
-Layout: chart
+Layout: mp_calories
 
 Reader question: How does it decide how much?
 
-Message: The model's R² of 0.996 is for exercise calories, which add 3–10% of the day in these plans.
+Message: The model's R² of 0.996 is for exercise calories only, which add just 3–10% of the day in these plans.
 
 Exact face text:
 
@@ -224,32 +245,39 @@ Exact face text:
 - 4
 - HOW IT WORKS
 - Calorie target
-- The trained model adds only 125 kcal to her day
+- From your body to a meal target
 - Worked example: an active woman keeping her weight. Her meal target is 28% of the daily budget.
 - AI Meal Planner
 - 7
-- kcal
-- Body and activity (BMR)
-- 2344
-- Exercise (trained model)¹
-- 125
-- Daily budget
-- 2469
-- This meal (28%)
-- 691
-- 0
-- 2500
-- Note: ¹ Exercise inputs use defaults (30 minutes, 100 bpm), and the activity multiplier may already count that exercise.
 - TAKEAWAY
-- The model's R² of 0.996 is for exercise calories, which add 3–10% of the day in these plans.
+- The model's R² of 0.996 is for exercise calories only, which add just 3–10% of the day in these plans.
+- Body and activity
+- Size and activity give a daily estimate.
+- 2,344 kcal
+- Exercise
+- A trained model adds exercise / calories.
+- +125 kcal
+- Goal
+- Gain +250, lose −400, with a safety / floor.
+- 2,469 kcal budget
+- This meal
+- 28% of the budget, within 350–850 / kcal.
+- 691 kcal target
+- Her day and this meal, on one scale
+- Daily budget: 2,469 kcal
+- 2,344 kcal from body and activity
+- +125 kcal from the trained model
+- This meal: 28% of the day
+- 691 kcal
+- Scale: full width is 2,469 kcal. Exercise inputs use defaults (30 minutes, 100 bpm).
 
 ## 8. Hard limits come first, then a relevant recipe
 
-Layout: chart
+Layout: mp_choosing
 
 Reader question: How does it choose the meal?
 
-Message: Safety comes before relevance; across the benchmark, 61 of 72 plans match the craving and 11 fall back with a note.
+Message: Safety comes before relevance, and the profile only changes the order of safe, relevant recipes.
 
 Exact face text:
 
@@ -263,27 +291,37 @@ Exact face text:
 - A vegan asks for chicken fried rice: the recipes narrow down to one.
 - AI Meal Planner
 - 8
-- recipes
+- TAKEAWAY
+- Safety comes before relevance, and the profile only changes the order of safe, relevant recipes.
+- Recipes left at each step
 - All recipes
 - 34
 - Safe for a vegan
 - 13
 - Relevant to the craving
 - 5
-- Served: Tofu Fried Rice
-- 1
-- 0
-- 34
-- TAKEAWAY
-- Safety comes before relevance; across the benchmark, 61 of 72 plans match the craving and 11 fall back with a note.
+- Served
+- 1: Tofu Fried Rice
+- Close match
+- "chicken fried rice" gets that recipe, / sized to you.
+- 61 of 72 benchmark plans
+- No close match
+- "pizza" gets a standard meal and a / note saying so.
+- 11 of 72 benchmark plans
+- Nothing safe
+- Too many limits: the plan is refused, / not guessed.
+- 2 of 5 guardrail cases
+- Or a safe swap
+- A coeliac who asks for pasta keeps the / recipe with gluten-free pasta.
+- Each swap checked against all / limits
 
-## 9. Three of six ingredients are estimates, carrying 66% of the calories
+## 9. Each ingredient is looked up, and estimates are labelled
 
-Layout: comparison
+Layout: mp_nutrition
 
 Reader question: Can you trust the numbers?
 
-Message: Lookup order is trusted local values, then USDA and FatSecret with keys, then estimates; here nothing is externally verified.
+Message: Only 3 of 6 ingredients are estimates, but they carry 66% of the calories; with no keys, nothing here is externally verified.
 
 Exact face text:
 
@@ -293,29 +331,54 @@ Exact face text:
 - 4
 - HOW IT WORKS
 - Nutrition
-- Three of six ingredients are estimates, carrying 66% of the calories
+- Each ingredient is looked up, and estimates are labelled
 - Chicken fried rice from a local run with no USDA or FatSecret keys: 694 kcal against a 691 kcal target.
 - AI Meal Planner
 - 9
-- Source
-- Ingredients, amount and kcal
-- Share of 694 kcal
-- Estimated
-- Chicken breast, 100 g: 165 kcal
-- Cooked rice, 220 g: 286 kcal
-- Soy sauce, 15 g: 8 kcal
-- 459 kcal, 66%
-- Reference
-- Whole egg, 50 g: 72 kcal
-- Mixed vegetables, 115 g: 75 kcal
-- Sesame oil, 10 g: 88 kcal
-- 235 kcal, 34%
 - TAKEAWAY
-- Lookup order is trusted local values, then USDA and FatSecret with keys, then estimates; here nothing is externally verified.
+- Only 3 of 6 ingredients are estimates, but they carry 66% of the calories; with no keys, nothing here is externally verified.
+- Ingredient
+- Amount
+- kcal
+- Source
+- Chicken breast
+- 100 g
+- 165
+- Estimated
+- Cooked rice
+- 220 g
+- 286
+- Estimated
+- Whole egg
+- 50 g
+- 72
+- Reference
+- Mixed vegetables
+- 115 g
+- 75
+- Reference
+- Soy sauce
+- 15 g
+- 8
+- Estimated
+- Sesame oil
+- 10 g
+- 88
+- Reference
+- Where the 694 kcal come from
+- 459 kcal estimated, 66%
+- 235 reference
+- Lookup order
+- 1. Trusted local reference
+- Checked local values come first.
+- 2. USDA, then FatSecret
+- Used only when provider keys are set.
+- 3. Local or category estimate
+- The last resort, always labelled.
 
 ## 10. We defined a good meal before improving one
 
-Layout: panels
+Layout: mp_good
 
 Reader question: What counts as good?
 
@@ -333,26 +396,33 @@ Exact face text:
 - A plan passes only if it clears both tests, on a fixed set of 72 requests run offline.
 - AI Meal Planner
 - 10
-- Test 1: calories
-- Within 10% of the meal's calorie target.
-- Test 2: macros
-- Protein 10–35% of energy
-- Carbs 45–65%
-- Fat 20–35%
-- 72 fixed requests
-- 12 cravings × 4 body profiles
-- 6 cravings × 4 diet or health limits
-- Note: AMDR is a daily reference, applied here to one meal.
 - TAKEAWAY
 - At the first run 68 of 72 plans hit calories, but only 10 cleared both tests.
+- Test 2: share of the meal's energy
+- Protein
+- Allowed 10–35%
+- 28%
+- Carbs
+- Allowed 45–65%
+- 46%
+- Fat
+- Allowed 20–35%
+- 26%
+- Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.
+- TEST 1
+- Within 10%
+- of the meal's calorie target
+- 72 fixed requests
+- 12 cravings × 4 body profiles
+- 6 cravings × 4 diet or / health limits
 
 ## 11. Three fixes took the planner from 10 to 72 of 72
 
-Layout: chart
+Layout: mp_results
 
 Reader question: Did it get better, and why?
 
-Message: The 41 to 47 step moved 11 off-menu requests to fallback meals; a wider check of every recipe by name passes 68 of 68.
+Message: The 41 to 47 step moved 11 off-menu requests to fallback meals; the fixes were tuned on these 72, so the wider check matters.
 
 Exact face text:
 
@@ -366,28 +436,35 @@ Exact face text:
 - Plans meeting both targets on the project's own offline benchmark of 72 requests.
 - AI Meal Planner
 - 11
-- plans meeting both targets¹
-- First run
-- 10
-- Portion balancing
-- 41
-- Honest fallback
-- 47
-- Cooking fat, rounding retry
-- 72
-- 0
-- 72
-- Note: ¹ Out of 72 benchmark requests. Median calorie gap 0.4%, worst 9.9%; 5 of 5 guardrail cases hold. This shows plans meet targets, not that users prefer them.
 - TAKEAWAY
-- The 41 to 47 step moved 11 off-menu requests to fallback meals; a wider check of every recipe by name passes 68 of 68.
+- The 41 to 47 step moved 11 off-menu requests to fallback meals; the fixes were tuned on these 72, so the wider check matters.
+- Plans meeting both targets, out of 72
+- 10
+- First run
+- Before any fix
+- 41
+- Portion balancing
+- Ingredients resized
+- 47
+- Honest fallback
+- Off-menu cravings moved
+- 72
+- Cooking fat, retry
+- Oil added to 6 recipes
+- 0.4%
+- median calorie gap, worst 9.9%
+- 5 of 5
+- guardrail cases hold
+- 68 of 68
+- wider check, every recipe by name
 
 ## 12. One service, two clients, four agents
 
-Layout: process
+Layout: mp_architecture
 
 Reader question: What is it made of?
 
-Message: The one trained model is 0.64 MB and TF-IDF suits 34 recipes, so the core path needs no GPU.
+Message: Both clients use the same planning service, and the one trained model is 0.64 MB, so the core path needs no GPU.
 
 Exact face text:
 
@@ -398,23 +475,44 @@ Exact face text:
 - EVIDENCE
 - Architecture
 - One service, two clients, four agents
-- Streamlit and React share one FastAPI contract and one planning service.
+- A request flows left to right. Each box names the model, data or tool behind it.
 - AI Meal Planner
 - 12
-- Clients
-- A live Streamlit demo and a React app / (Vite, Tailwind).
-- FastAPI
-- Typed JSON with Pydantic, API keys / and rate limits; local history in SQLite.
-- Planning service
-- Four agents plus a balance step: / scikit-learn model, TF-IDF search, / SciPy portions.
-- Delivery
-- Python, Docker, GitHub Actions; Cloud / Run ready but not yet deployed.
 - TAKEAWAY
-- The one trained model is 0.64 MB and TF-IDF suits 34 recipes, so the core path needs no GPU.
+- Both clients use the same planning service, and the one trained model is 0.64 MB, so the core path needs no GPU.
+- CLIENTS
+- API
+- PLANNING SERVICE
+- Streamlit
+- Live, public demo
+- React
+- Guided flow, run / locally
+- FastAPI
+- Typed JSON, API / keys, rate limits
+- SQLite
+- Local history, via / SQLModel
+- MealPlanningService
+- Calorie expenditure
+- Trained HistGradientBoosting model
+- Meal recommendation
+- TF-IDF search of 34 recipes, diet rules
+- Nutrition verification
+- Local tables; USDA, FatSecret with keys
+- Balance and reconcile
+- A service step: linear programme for portions
+- Supermarket
+- Local store items and category prices
+- BUILT WITH
+- Python
+- Docker
+- GitHub Actions
+- Cloud Run, not yet live
+- OpenTelemetry
+- Gemini, optional
 
 ## 13. Built like a product, not a notebook
 
-Layout: panels
+Layout: mp_engineering
 
 Reader question: Is the engineering real?
 
@@ -429,28 +527,45 @@ Exact face text:
 - EVIDENCE
 - Engineering
 - Built like a product, not a notebook
-- Production habits on a portfolio project, each with a file behind it.
+- Six production habits, in the order a change travels through them.
 - AI Meal Planner
 - 13
-- Tested
-- 630 Python tests, all passing
-- 95% coverage, 89% floor in CI
-- Checked on every change
-- 5 CI checks per pull request
-- API contract fails CI on drift
-- Ready to ship
-- One Docker image
-- Cloud Run workflow, not yet live
 - TAKEAWAY
 - Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.
+- From a change to production
+- Teal: runs today. Grey: built, waiting for a GCP project.
+- Contract
+- CI fails on any drift
+- docs/openapi.json
+- Tests
+- 630 Python tests
+- backend/tests/
+- Security
+- API keys, rate limits
+- api/auth.py
+- Container
+- One Docker image
+- Dockerfile
+- Cloud Run
+- Ready, not live
+- deploy.yml
+- Tracing
+- Health data kept out
+- core/telemetry.py
+- 630
+- Python tests, all passing: 538 backend, 92 Streamlit
+- 95%
+- coverage, and CI fails below an 89% floor
+- 5
+- CI checks on every pull request
 
 ## 14. What this project does not prove yet
 
-Layout: evidence
+Layout: mp_limits
 
 Reader question: What is unproven?
 
-Message: A planning aid, not medical advice.
+Message: A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
 
 Exact face text:
 
@@ -461,37 +576,36 @@ Exact face text:
 - LIMITS AND NEXT STEPS
 - Limits
 - What this project does not prove yet
-- Results measured offline, with estimated inputs and no users.
+- The further right, the less has been shown.
 - AI Meal Planner
 - 14
 - TAKEAWAY
-- A planning aid, not medical advice.
-- 1
-- Measured: targets met offline
-- 72 of 72 and 68 of 68, but the same checks guided the fixes; 11 of 72 fall back.
-- 1
-- Solid, within its scope
-- The run is repeatable, but it measures plans against / targets, not taste or health.
-- 2
-- Estimated: inputs
-- 68 of 72 plans include an estimate; exercise inputs are defaults; diet rules match ingredient names.
-- 2
-- Soft where inputs are guessed
-- Name matching missed soy sauce until this review; / it is now fixed.
-- 3
-- Not tested: people
-- No users, no clinical review, not deployed, no database migrations.
-- 3
-- Unknown until people use it
-- Only testing with people can show that the plans / help.
+- A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
+- How far the evidence goes
+- Each step up is less proven.
+- Measured
+- •  72 of 72 and 68 of 68, offline
+- •  But the checks guided the fixes
+- •  11 of 72 fall back
+- Estimated
+- •  68 of 72 plans include an estimate
+- •  AMDR is a daily range on one meal
+- •  Default exercise inputs
+- •  Diet rules match ingredient names
+- Not tested
+- •  No user testing
+- •  No clinical review
+- •  Not deployed
+- •  No database migrations
+- •  Taste and health outcomes unknown
 
 ## 15. What comes next, in priority order
 
-Layout: comparison
+Layout: mp_next
 
 Reader question: What comes next?
 
-Message: Each step answers a limit on the previous page.
+Message: Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.
 
 Exact face text:
 
@@ -502,23 +616,35 @@ Exact face text:
 - LIMITS AND NEXT STEPS
 - Next steps
 - What comes next, in priority order
-- Foundations first, then better inputs, then scale and people.
+- How the project got here, and the work still ahead.
 - AI Meal Planner
 - 15
-- Now
-- Next
-- Later
-- Add database migrations
-- Run the benchmark with USDA keys
-- Grow to 75–100 recipes
-- Deploy to Cloud Run
-- Ask for real exercise details
-- Connect live store prices
-- Add user accounts
-- Tag allergens on ingredients
-- Use feedback, then test with people
 - TAKEAWAY
-- Each step answers a limit on the previous page.
+- Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.
+- 8 Oct
+- Refactor on main
+- 11 Oct
+- API keys, deploy workflow, tracing
+- 18 Oct
+- 72 of 72 plans on target
+- 21 Oct
+- React design approved
+- 7 Nov
+- 68 of 68, gluten fix
+- Now
+- Next steps
+- NOW
+- Add database migrations
+- Deploy to Cloud Run
+- Add user accounts
+- NEXT
+- Run the benchmark with USDA keys
+- Ask for real exercise details
+- Tag allergens on ingredients
+- LATER
+- Grow to 75–100 recipes
+- Connect live store prices
+- Use feedback, then test with people
 
 ## 16. Try it and read the code
 
