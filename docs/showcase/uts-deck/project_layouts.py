@@ -17,6 +17,11 @@ ACCENT = {'slate': ('#526174', '#EDF0F3'), 'blue': ('#32658A', '#EAF0F6'), 'plum
 # Data colours (Viridis), one meaning each across the deck: see DESIGN.project.md.
 V_DARK, V_BLUE, V_TEAL, V_GREEN = '#440154', '#3B528B', '#21918C', '#5EC962'
 ESTIMATED, REFERENCE = V_DARK, V_TEAL
+VIRIDIS4 = [V_DARK, V_BLUE, V_TEAL, V_GREEN]
+
+
+def pale(slide):
+    return ACCENT[slide.get('accent', 'slate')][1]
 PROTEIN, CARBS, FAT = V_BLUE, V_TEAL, V_GREEN
 
 
@@ -48,8 +53,8 @@ def inked(L, p, raw, x, y, w, size=10, h=None, align=None):
     return used
 
 
-def card(p, x, y, w, h, accent=None, fill=CARD, rule='top'):
-    p.rect(x, y, w, h, fill)
+def card(p, x, y, w, h, accent=None, fill=None, rule='top'):
+    p.rect(x, y, w, h, fill or (ACCENT[accent][1] if accent else CARD))
     if accent:
         colour = ACCENT[accent][0]
         if rule == 'top':
@@ -90,7 +95,7 @@ def accent(slide):
 def mp_summary(L, p, slide):
     bottom = band(L, p, slide) - 14
     plates = slide['plates']
-    p.rect(LEFT, TOP, W, 104, CARD)
+    p.rect(LEFT, TOP, W, 104, pale(slide))
     biggest = max(pl['kcal'] for pl in plates)
     for i, pl in enumerate(plates):
         x = LEFT + 14 + i * (W - 28) / 4
@@ -118,7 +123,7 @@ def mp_summary(L, p, slide):
 def mp_problem(L, p, slide):
     bottom = band(L, p, slide) - 14
     lw = 236
-    p.rect(LEFT, TOP, lw, bottom - TOP, CARD)
+    p.rect(LEFT, TOP, lw, bottom - TOP, pale(slide))
     p.rect(LEFT + 16, TOP + 16, lw - 32, 40, WHITE)
     put(L, p, slide['craving'], LEFT + 20, TOP + 26, lw - 40, 12, 'ink', True, 'center')
     d = min(lw - 70, bottom - TOP - 120)
@@ -203,7 +208,7 @@ def mp_calories(L, p, slide):
             p.connector(x + w + 2, TOP + ch / 2, x + w + gap - 2, TOP + ch / 2)
     chart = slide['chart']
     y = TOP + ch + 18
-    p.rect(LEFT, y, W, bottom - y, CARD)
+    p.rect(LEFT, y, W, bottom - y, pale(slide))
     put(L, p, chart['title'], LEFT + 14, y + 10, 500, 12, 'ink', True)
     scale = (W - 28) / chart['total']
     x0 = LEFT + 14
@@ -231,7 +236,7 @@ def mp_choosing(L, p, slide):
     bottom = band(L, p, slide) - 14
     f = slide['funnel']
     fh = 150
-    p.rect(LEFT, TOP, W, fh, CARD)
+    p.rect(LEFT, TOP, W, fh, pale(slide))
     put(L, p, f['title'], LEFT + 14, TOP + 10, 400, 12, 'ink', True)
     top = max(r['value'] for r in f['rows'])
     bw = W - 28 - 200 - 180
@@ -239,7 +244,7 @@ def mp_choosing(L, p, slide):
         y = TOP + 36 + i * 27
         put(L, p, r['label'], LEFT + 14, y + 3, 190, 10, 'ink')
         w = bw * r['value'] / top
-        p.rect(LEFT + 214, y, w, 20, V_BLUE)
+        p.rect(LEFT + 214, y, w, 20, VIRIDIS4[i % 4])
         put(L, p, r['text'], LEFT + 232 + w, y + 3, 260, 10, 'ink', True)
     outcomes = slide['outcomes']
     gap = 16
@@ -336,7 +341,7 @@ def mp_good(L, p, slide):
 def mp_results(L, p, slide):
     bottom = band(L, p, slide) - 14
     lw = 560
-    p.rect(LEFT, TOP, lw, bottom - TOP, CARD)
+    p.rect(LEFT, TOP, lw, bottom - TOP, pale(slide))
     put(L, p, slide['chart_title'], LEFT + 14, TOP + 10, lw - 28, 10, 'body')
     base = bottom - 50
     top = TOP + 50
@@ -345,7 +350,7 @@ def mp_results(L, p, slide):
     for i, b in enumerate(bars):
         x = LEFT + 14 + i * slot
         h = (base - top) * b['value'] / slide['maximum']
-        p.rect(x + slot * .2, base - h, slot * .6, h, V_BLUE)
+        p.rect(x + slot * .2, base - h, slot * .6, h, VIRIDIS4[i % 4])
         put(L, p, str(b['value']), x, base - h - 22, slot, 16, 'ink', True, 'center')
         put(L, p, b['label'], x, base + 6, slot, 10, 'ink', True, 'center')
         put(L, p, b['change'], x, base + 20, slot, 8, 'body', False, 'center')
@@ -399,7 +404,7 @@ def mp_architecture(L, p, slide):
     sx = ax + aw + 16
     p.connector(ax + aw + 2, (y0 + y1) / 2, sx - 2, (y0 + y1) / 2)
     sw = RIGHT - sx
-    p.rect(sx, y0, sw, y1 - y0, CARD)
+    p.rect(sx, y0, sw, y1 - y0, pale(slide))
     logo(L, p, 'python', sx + 10, y0 + 8, 14)
     put(L, p, a['service'], sx + 30, y0 + 8, sw - 40, 10, 'ink', True)
     rows = a['agents']
@@ -427,7 +432,7 @@ def mp_architecture(L, p, slide):
 def mp_engineering(L, p, slide):
     bottom = band(L, p, slide) - 14
     lh = 168
-    p.rect(LEFT, TOP, W, lh, CARD)
+    p.rect(LEFT, TOP, W, lh, pale(slide))
     put(L, p, slide['line_title'], LEFT + 14, TOP + 10, 400, 12, 'ink', True)
     put(L, p, slide['legend'], LEFT + 420, TOP + 12, W - 434, 8, 'body', False, 'right')
     steps = slide['steps']
@@ -508,5 +513,93 @@ def mp_next(L, p, slide):
             put(L, p, item, x + 20, y + (nh - need(L, item, w - 40, 12, True)) / 2, w - 40, 12, 'ink', True)
 
 
-LAYOUTS = {f.__name__: f for f in (mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
+
+# -- 1: cover, 2: agenda, 16: close (cover-like pages clear the kit's header and footer) ----------
+def logos(L, p, x, y, size):
+    """UTS mark, a hairline, then the AI Meal Planner mark, at the same height."""
+    img(L, p, 'assets/brand/uts-logo.svg', 'University of Technology Sydney', x, y, size, size)
+    p.line(x + size + 8, y + 4, x + size + 8, y + size - 4, HAIR)
+    img(L, p, 'assets/brand/ai-meal-planner-mark.svg', 'AI Meal Planner logo', x + size + 16, y, size, size)
+
+
+def mp_cover(L, p, slide):
+    p.ops.clear()
+    slide.pop('chapter_badges', None)
+    logos(L, p, LEFT, 39, 62)
+    title_h = need(L, slide['title'], 490, 30, True)
+    sub_h = need(L, slide['subtitle'], 490, 12)
+    panel_h = 14 + 17 + 6 + title_h + 10 + sub_h + 18
+    y = 150
+    p.rect(0, y, 560, panel_h, ACCENT['slate'][1])
+    p.rect(0, y, 8, panel_h, ACCENT['slate'][0])
+    put(L, p, slide['section'].upper(), LEFT, y + 14, 490, 9, 'secondary', True)
+    put(L, p, slide['title'], LEFT, y + 37, 490, 30, 'ink', True)
+    put(L, p, slide['subtitle'], LEFT, y + 37 + title_h + 10, 490, 12, 'ink')
+    ay = y + panel_h + 18
+    put(L, p, L.content['author'], LEFT, ay, 490, 12, 'ink', True)
+    put(L, p, L.content['affiliation'], LEFT, ay + 19, 490, 10, 'body')
+    put(L, p, L.content['date'], LEFT, ay + 35, 490, 10, 'body')
+    img(L, p, slide['motif']['path'], slide['motif']['alt'], LEFT, 440, 478, 46)
+    # The labelled plate: the cover's own illustration, with native tags and a native receipt.
+    art = slide['art']
+    p.rect(560, 0, 400, 540, ACCENT['slate'][1])
+    img(L, p, art['image'], art['alt'], 600, 146, 320, 320)
+    for tag in art['tags']:
+        tx, ty, side = tag['x'], tag['y'], tag['side']
+        w = 132
+        bx = tx - w - 6 if side == 'left' else tx + 6
+        p.line(tag['dot'][0], tag['dot'][1], tx, ty, INK, .75)
+        p.rect(tag['dot'][0] - 3, tag['dot'][1] - 3, 6, 6, INK, 'ELLIPSE')
+        p.rect(bx, ty - 16, w, 32, WHITE)
+        put(L, p, tag['name'], bx + 8, ty - 13, w - 16, 10, 'ink', True)
+        paint(L, p, tag['source'], bx + 8, ty + 1, w - 16, 8, ESTIMATED if tag['source'] == 'Estimated' else REFERENCE, True)
+    target = art['target']
+    p.rect(586, 112, 160, 26, INK)
+    paint(L, p, target, 590, 118, 152, 10, WHITE, True, 'center')
+    r = art['receipt']
+    rx, ry, rw = 732, 20, 176
+    lines = r['items']
+    rh = 34 + len(lines) * 14 + 26
+    p.rect(rx, ry, rw, rh, WHITE)
+    put(L, p, r['title'], rx + 10, ry + 9, rw - 20, 9, 'ink', True)
+    for i, (name, price) in enumerate(lines):
+        put(L, p, f'`{name}`', rx + 10, ry + 28 + i * 14, 110, 8, 'body')
+        put(L, p, f'`{price}`', rx + rw - 60, ry + 28 + i * 14, 50, 8, 'body', False, 'right')
+    yy = ry + 28 + len(lines) * 14 + 4
+    p.line(rx + 10, yy, rx + rw - 10, yy, HAIR)
+    put(L, p, f"`{r['total_label']}`", rx + 10, yy + 5, 110, 9, 'ink', True)
+    put(L, p, f"`{r['total']}`", rx + rw - 60, yy + 5, 50, 9, 'ink', True, 'right')
+
+
+def mp_agenda(L, p, slide):
+    p.ops.clear()
+    slide.pop('chapter_badges', None)
+    L.chapter_agenda(p, slide)
+    p.line(851, 48, 851, 100, HAIR)
+    img(L, p, 'assets/brand/ai-meal-planner-mark.svg', 'AI Meal Planner logo', 783, 44, 60, 60)
+    L.footer(p, slide['n'])
+
+
+def mp_close(L, p, slide):
+    p.ops.clear()
+    slide.pop('chapter_badges', None)
+    logos(L, p, LEFT, 39, 62)
+    y = 160
+    p.rect(0, y, 505, 124, ACCENT['slate'][1])
+    p.rect(0, y, 8, 124, ACCENT['slate'][0])
+    put(L, p, slide['title'], LEFT, y + 18, 420, 36, 'ink', True)
+    put(L, p, slide['thanks'], LEFT, y + 80, 430, 12, 'ink')
+    put(L, p, L.content['author'], LEFT, 306, 420, 12, 'ink', True)
+    put(L, p, L.content['affiliation'], LEFT, 324, 420, 10, 'body')
+    for i, (label, url) in enumerate(slide['links']):
+        put(L, p, f'**{label}** {url}', LEFT, 344 + i * 16, 330, 10, 'body')
+    p.rect(LEFT + 340, 300, 96, 96, WHITE)
+    img(L, p, 'assets/figures/qr.png', 'QR code to the live demo', LEFT + 344, 304, 88, 88)
+    put(L, p, slide['qr_label'], LEFT + 340, 402, 96, 8, 'body', False, 'center')
+    img(L, p, 'assets/figures/cover-motif.svg', 'A row of plates and grains in palette A', LEFT, 440, 430, 41)
+    p.rect(505, 0, 455, 540, ACCENT['slate'][1])
+    img(L, p, slide['image']['path'], slide['image']['alt'], 540, 100, 385, 385)
+    put(L, p, slide['image_caption'], 540, 500, 385, 8, 'body', False, 'center')
+
+LAYOUTS = {f.__name__: f for f in (mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
                                    mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next)}

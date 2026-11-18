@@ -4,7 +4,7 @@ Edit brief-content.json, then rebuild.
 
 ## 1. What should I eat tonight?
 
-Layout: cover
+Layout: mp_cover
 
 Reader question: What is this project, and why should a reader care?
 
@@ -15,13 +15,35 @@ Exact face text:
 - PERSONAL PROJECT | MULTI-AGENT MEAL PLANNER
 - What should I eat tonight?
 - One meal sized to your body and goal, each ingredient's source shown, and the shopping / list ready.
-- Mike
-- Personal portfolio project
+- Manh Tuan (Mike) Nguyen
+- University of Technology Sydney
 - November 2026
+- Chicken breast, 100 g
+- Estimated
+- Cooked rice, 220 g
+- Estimated
+- Vegetables, 115 g
+- Reference
+- 694 kcal, target 691
+- SHOPPING LIST
+- CHICKEN BREAST
+- $7.80
+- COOKED RICE
+- $3.20
+- WHOLE EGG
+- $3.50
+- VEGETABLES
+- $3.50
+- SESAME OIL
+- $3.50
+- SOY SAUCE
+- $3.00
+- ESTIMATED
+- $24.50
 
 ## 2. Agenda
 
-Layout: agenda
+Layout: mp_agenda
 
 Reader question: Which sections are in this deck, and where do they begin?
 
@@ -29,8 +51,6 @@ Message: Locate each section by its page number.
 
 Exact face text:
 
-- AI Meal Planner
-- 2
 - Agenda
 - 1
 - Overview
@@ -66,6 +86,8 @@ Exact face text:
 - Limits
 - 15
 - Next steps
+- AI Meal Planner
+- 2
 
 ## 3. One craving, sized to four different people
 
@@ -646,18 +668,21 @@ Exact face text:
 - Connect live store prices
 - Use feedback, then test with people
 
-## 16. Try it and read the code
+## 16. Thank you
 
-Layout: close
+Layout: mp_close
 
 Reader question: Where do I try it?
 
-Message: Point to the demo and code.
+Message: Thank the audience and point to the demo and code.
 
 Exact face text:
 
-- THANK YOU
-- Try it and read the code
-- tuannm3812-ai-meal-planner.streamlit.app · github.com/tuannm3812/ai-meal-planner
-- A multi-agent meal planner, a personal project by Mike
-- A study project. Not medical advice.
+- Thank you
+- Try the live demo, read the code, and send me your feedback.
+- Manh Tuan (Mike) Nguyen
+- University of Technology Sydney
+- Demo tuannm3812-ai-meal-planner.streamlit.app
+- Code github.com/tuannm3812/ai-meal-planner
+- Scan for the live demo
+- Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.

@@ -1,9 +1,11 @@
 {
-  "pdf_sha256": "856aa19c87bd4c0065009be8666eaab6ea8aee03e1d421fd16a3f9ea9aaf9078",
+  "pdf_sha256": "8e33b7190cc559b59b0217f93e96005096031c02c77f378521b6d9c51612bc99",
   "pages": 16,
   "fonts": [
     "AAAAAA+GoogleSans-Bold",
-    "BAAAAA+GoogleSans-Regular"
+    "BAAAAA+GoogleSans-Regular",
+    "CAAAAA+GoogleSansCodeMonospace-Regular",
+    "DAAAAA+GoogleSansCodeMonospace-Bold"
   ],
   "problems": [],
   "marker_adjustments": {}

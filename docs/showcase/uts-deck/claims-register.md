@@ -41,3 +41,5 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Test split | 538 backend, 92 Streamlit | Local full run, 7 November 2026 | |
 | Milestones | 8 Oct, 11 Oct, 18 Oct, 21 Oct, 7 Nov 2026 | AGENTS.md, Current state | |
 | Recipe example | Tofu Fried Rice from 34 → 13 → 5 → 1 | Local run | |
+| Cover receipt | $7.80, $3.20, $3.50, $3.50, $3.50, $3.00; total $24.50 | slides/captures/2026-11-06-plan.json | Category prices for 4 of 6 |
+| Cover tags | Chicken breast 100 g, cooked rice 220 g, vegetables 115 g | Local run, 6 November 2026 | |

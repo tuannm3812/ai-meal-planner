@@ -171,11 +171,12 @@ References:
 - sources.md
 - claims-register.md
 
-## 16. Try it and read the code
+## 16. Thank you
 
-Point to the demo and code.
+Thank the audience and point to the demo and code.
 
-That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.
+Thank you. That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.
+The demo and the code are linked here.
 
 References:
 - sources.md

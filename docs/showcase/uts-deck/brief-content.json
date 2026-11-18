@@ -1,21 +1,16 @@
 {
   "title": "AI Meal Planner",
-  "identity": "none",
-  "author": "Mike",
-  "affiliation": "Personal portfolio project",
+  "identity": "uts",
+  "author": "Manh Tuan (Mike) Nguyen",
+  "affiliation": "University of Technology Sydney",
   "date": "November 2026",
   "slides": [
     {
       "id": "cover",
-      "layout": "cover",
-      "cover_style": "report",
+      "layout": "mp_cover",
       "section": "Personal project | Multi-agent meal planner",
       "title": "What should I eat tonight?",
       "subtitle": "One meal sized to your body and goal, each ingredient's source shown, and the shopping list ready.",
-      "image": {
-        "path": "assets/figures/cover-plate.png",
-        "alt": "Flat illustration of a plate of chicken fried rice seen from above."
-      },
       "accent": "slate",
       "question": "What is this project, and why should a reader care?",
       "notes": {
@@ -27,11 +22,87 @@
         "references": [
           "sources.md"
         ]
-      }
+      },
+      "motif": {
+        "path": "assets/figures/cover-motif.svg",
+        "alt": "A row of plates, rice grains and diced vegetables in palette A."
+      },
+      "art": {
+        "image": "assets/figures/cover-plate.png",
+        "alt": "Flat illustration of chicken fried rice seen from above, labelled with three ingredients and a shopping list.",
+        "target": "694 kcal, target 691",
+        "tags": [
+          {
+            "name": "Chicken breast, 100 g",
+            "source": "Estimated",
+            "dot": [
+              722,
+              240
+            ],
+            "x": 700,
+            "y": 200,
+            "side": "left"
+          },
+          {
+            "name": "Cooked rice, 220 g",
+            "source": "Estimated",
+            "dot": [
+              705,
+              390
+            ],
+            "x": 690,
+            "y": 436,
+            "side": "left"
+          },
+          {
+            "name": "Vegetables, 115 g",
+            "source": "Reference",
+            "dot": [
+              812,
+              396
+            ],
+            "x": 776,
+            "y": 448,
+            "side": "right"
+          }
+        ],
+        "receipt": {
+          "title": "SHOPPING LIST",
+          "items": [
+            [
+              "CHICKEN BREAST",
+              "$7.80"
+            ],
+            [
+              "COOKED RICE",
+              "$3.20"
+            ],
+            [
+              "WHOLE EGG",
+              "$3.50"
+            ],
+            [
+              "VEGETABLES",
+              "$3.50"
+            ],
+            [
+              "SESAME OIL",
+              "$3.50"
+            ],
+            [
+              "SOY SAUCE",
+              "$3.00"
+            ]
+          ],
+          "total_label": "ESTIMATED",
+          "total": "$24.50"
+        }
+      },
+      "header_style": "appendix"
     },
     {
       "id": "agenda",
-      "layout": "agenda",
+      "layout": "mp_agenda",
       "agenda_style": "kaggle",
       "page_position": "right",
       "chapter_fill": "accent_pale",
@@ -137,7 +208,8 @@
           "The deck runs from the problem, through how the planner works, to what was measured and what is still open."
         ],
         "references": []
-      }
+      },
+      "header_style": "appendix"
     },
     {
       "id": "summary",
@@ -1084,26 +1156,46 @@
     },
     {
       "id": "close",
-      "layout": "close",
-      "section": "THANK YOU",
+      "layout": "mp_close",
       "accent": "slate",
-      "title": "Try it and read the code",
-      "subtitle": "tuannm3812-ai-meal-planner.streamlit.app · github.com/tuannm3812/ai-meal-planner",
-      "items": [
-        "A multi-agent meal planner, a personal project by Mike",
-        "A study project. Not medical advice."
+      "section": "",
+      "title": "Thank you",
+      "subtitle": "",
+      "thanks": "Try the live demo, read the code, and send me your feedback.",
+      "links": [
+        [
+          "Demo",
+          "tuannm3812-ai-meal-planner.streamlit.app"
+        ],
+        [
+          "Code",
+          "github.com/tuannm3812/ai-meal-planner"
+        ]
       ],
+      "qr_label": "Scan for the live demo",
+      "image": {
+        "path": "assets/figures/close-salmon.png",
+        "alt": "Flat illustration of a salmon and quinoa plate from the recipe library."
+      },
+      "image_caption": "Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.",
       "question": "Where do I try it?",
       "notes": {
-        "purpose": "Point to the demo and code.",
+        "purpose": "Thank the audience and point to the demo and code.",
         "script": [
-          "That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown."
+          "Thank you. That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.",
+          "The demo and the code are linked here."
         ],
         "references": [
           "sources.md"
         ]
-      }
+      },
+      "header_style": "appendix"
     }
   ],
-  "project_layouts": "project_layouts.py"
+  "project_layouts": "project_layouts.py",
+  "tracker_align": "logos",
+  "partner_logo": {
+    "path": "assets/brand/ai-meal-planner-mark.svg",
+    "alt": "AI Meal Planner logo"
+  }
 }
