@@ -72,6 +72,7 @@ References:
 Follow one person from body to meal target.
 
 Body size and activity give about 2,344 kcal a day. The trained model adds 125. Her goal is to maintain, so her budget is 2,469, and one meal gets 28%: 691 kcal.
+Exercise adds only 5% here because the run uses default exercise inputs: 30 minutes at 100 bpm.
 A weight-loss floor of 1,200 kcal for women and 1,500 for men protects low budgets.
 Sources: calorie_expenditure_agent.py; models/calorie_expenditure/metrics.json; local run, 7 November 2026.
 
@@ -141,6 +142,7 @@ References:
 
 Show the production habits.
 
+On the line, teal steps run today; the grey ones are built and wait for a GCP project.
 The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.
 The deployment workflow and tracing are built, but they wait for a GCP project.
 Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026.

@@ -246,7 +246,7 @@
             "kind": "dots",
             "total": 72,
             "first": 10,
-            "label": "Dark: the 10 that passed at the first run"
+            "label": ""
           }
         },
         {
@@ -270,7 +270,7 @@
             "kind": "dots",
             "total": 72,
             "first": 68,
-            "label": "Dark: plans with an estimated ingredient"
+            "label": ""
           }
         }
       ],
@@ -566,6 +566,7 @@
         "purpose": "Follow one person from body to meal target.",
         "script": [
           "Body size and activity give about 2,344 kcal a day. The trained model adds 125. Her goal is to maintain, so her budget is 2,469, and one meal gets 28%: 691 kcal.",
+          "Exercise adds only 5% here because the run uses default exercise inputs: 30 minutes at 100 bpm.",
           "A weight-loss floor of 1,200 kcal for women and 1,500 for men protects low budgets.",
           "Sources: calorie_expenditure_agent.py; models/calorie_expenditure/metrics.json; local run, 7 November 2026."
         ],
@@ -584,57 +585,41 @@
         {
           "icon": "fitness_center",
           "title": "Exercise",
-          "text": "A trained model adds **exercise calories**.",
+          "text": "A trained model adds exercise calories.",
           "value": "+125 kcal"
         },
         {
           "icon": "flag",
           "title": "Goal",
-          "text": "Gain +250, lose −400, with a **safety floor**.",
+          "text": "Gain +250, lose −400, with a safety floor.",
           "value": "2,469 kcal budget"
         },
         {
           "icon": "rice_bowl",
           "title": "This meal",
-          "text": "28% of the budget, within **350–850 kcal**.",
+          "text": "28% of the budget, within 350–850 kcal.",
           "value": "691 kcal target"
         }
       ],
       "chart": {
-        "title": "Her day and this meal, as two rings",
-        "image": "assets/figures/shapes/calorie-ring.svg",
-        "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
-        "centre": "691 kcal",
-        "centre_label": "this meal",
-        "groups": [
+        "rings": [
           {
-            "title": "Outer ring: her 2,469 kcal day",
-            "items": [
-              [
-                "#1B2430",
-                "This meal: 691 kcal, 28% of the day"
-              ],
-              [
-                "#D8DEE3",
-                "The rest of her day: 1,778 kcal"
-              ]
-            ]
+            "image": "assets/figures/shapes/ring-day.svg",
+            "alt": "Ring of her 2,469 kcal budget: 2,344 kcal from body and activity, 125 kcal from exercise.",
+            "centre": "2,469",
+            "centre_label": "kcal budget",
+            "headline": "Exercise adds only 5%",
+            "text": "The trained model moves her budget by 125 kcal."
           },
           {
-            "title": "Inner ring: where the budget comes from",
-            "items": [
-              [
-                "#3B528B",
-                "2,344 kcal from body and activity"
-              ],
-              [
-                "#21918C",
-                "+125 kcal from the trained exercise model"
-              ]
-            ]
+            "image": "assets/figures/shapes/ring-meal.svg",
+            "alt": "Ring of the same budget: this 691 kcal meal is 28%, the rest of her day 1,778 kcal.",
+            "centre": "691",
+            "centre_label": "kcal meal",
+            "headline": "One meal, 28% of her day",
+            "text": "The rest of the budget stays for her other meals."
           }
-        ],
-        "scale": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm)."
+        ]
       }
     },
     {
@@ -1067,6 +1052,7 @@
       "notes": {
         "purpose": "Show the production habits.",
         "script": [
+          "On the line, teal steps run today; the grey ones are built and wait for a GCP project.",
           "The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.",
           "The deployment workflow and tracing are built, but they wait for a GCP project.",
           "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
@@ -1077,7 +1063,6 @@
         ]
       },
       "line_title": "From a change to production",
-      "legend": "Teal: runs today. Grey: built, waiting for a GCP project.",
       "steps": [
         {
           "icon": "fact_check",

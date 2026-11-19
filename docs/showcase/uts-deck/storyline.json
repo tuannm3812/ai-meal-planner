@@ -2890,7 +2890,7 @@
             "kind": "dots",
             "total": 72,
             "first": 10,
-            "label": "Dark: the 10 that passed at the first run"
+            "label": ""
           }
         },
         {
@@ -2914,7 +2914,7 @@
             "kind": "dots",
             "total": 72,
             "first": 68,
-            "label": "Dark: plans with an estimated ingredient"
+            "label": ""
           }
         }
       ],
@@ -3818,10 +3818,10 @@
           "id": "im46",
           "path": "assets/icons/kit/person-slate.svg",
           "alt": "",
-          "x": 57.5,
-          "y": 266.0,
-          "width": 24,
-          "height": 24
+          "x": 51.739999999999995,
+          "y": 262.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -4102,10 +4102,10 @@
           "id": "im61",
           "path": "assets/icons/kit/balance-blue.svg",
           "alt": "",
-          "x": 280.375,
-          "y": 266.0,
-          "width": 24,
-          "height": 24
+          "x": 274.615,
+          "y": 262.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -4985,30 +4985,9 @@
           "background_color": "#5EC962"
         },
         {
-          "op": "add-textbox",
-          "slide": "summary",
-          "id": "t137",
-          "text": "Dark: the 10 that passed at the first run",
-          "x": 273.175,
-          "y": 391.159375,
-          "width": 193.275,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t137",
-          "start": 0,
-          "end": 41,
-          "line_spacing": 135
-        },
-        {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r138",
+          "id": "r137",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 252.0,
@@ -5019,7 +4998,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r139",
+          "id": "r138",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 252.0,
@@ -5029,18 +5008,18 @@
         },
         {
           "op": "add-image",
-          "id": "im140",
+          "id": "im139",
           "path": "assets/icons/kit/check_circle-plum.svg",
           "alt": "",
-          "x": 503.25,
-          "y": 266.0,
-          "width": 24,
-          "height": 24
+          "x": 497.49,
+          "y": 262.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t141",
+          "id": "t140",
           "text": "Fits your limits",
           "x": 526.05,
           "y": 263.8,
@@ -5053,14 +5032,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t141",
+          "element": "t140",
           "start": 0,
           "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t141",
+          "element": "t140",
           "start": 0,
           "end": 16,
           "bold": true
@@ -5068,7 +5047,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t142",
+          "id": "t141",
           "text": "5 of 5",
           "x": 496.05,
           "y": 292.8,
@@ -5081,14 +5060,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t142",
+          "element": "t141",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t142",
+          "element": "t141",
           "start": 0,
           "end": 6,
           "bold": true
@@ -5096,7 +5075,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t143",
+          "id": "t142",
           "text": "Guardrail cases hold: limits rule out\nrecipes or swap ingredients.",
           "x": 496.05,
           "y": 324.8,
@@ -5109,14 +5088,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t143",
+          "element": "t142",
           "start": 0,
           "end": 66,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t143",
+          "element": "t142",
           "start": 29,
           "end": 37,
           "bold": true,
@@ -5124,7 +5103,7 @@
         },
         {
           "op": "style-text",
-          "element": "t143",
+          "element": "t142",
           "start": 38,
           "end": 65,
           "bold": true,
@@ -5132,58 +5111,58 @@
         },
         {
           "op": "add-image",
+          "id": "im143",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 497.49,
+          "y": 370.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
+        },
+        {
+          "op": "add-image",
           "id": "im144",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 503.25,
-          "y": 374.0,
-          "width": 24,
-          "height": 24
+          "x": 525.49,
+          "y": 370.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-image",
           "id": "im145",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 531.25,
-          "y": 374.0,
-          "width": 24,
-          "height": 24
+          "x": 553.49,
+          "y": 370.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-image",
           "id": "im146",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 559.25,
-          "y": 374.0,
-          "width": 24,
-          "height": 24
+          "x": 581.49,
+          "y": 370.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-image",
           "id": "im147",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 587.25,
-          "y": 374.0,
-          "width": 24,
-          "height": 24
-        },
-        {
-          "op": "add-image",
-          "id": "im148",
-          "path": "assets/icons/kit/check_circle-teal.svg",
-          "alt": "",
-          "x": 615.25,
-          "y": 374.0,
-          "width": 24,
-          "height": 24
+          "x": 609.49,
+          "y": 370.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r149",
+          "id": "r148",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 252.0,
@@ -5194,7 +5173,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r150",
+          "id": "r149",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 252.0,
@@ -5204,18 +5183,18 @@
         },
         {
           "op": "add-image",
-          "id": "im151",
+          "id": "im150",
           "path": "assets/icons/kit/fact_check-ochre.svg",
           "alt": "",
-          "x": 726.125,
-          "y": 266.0,
-          "width": 24,
-          "height": 24
+          "x": 720.365,
+          "y": 262.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t152",
+          "id": "t151",
           "text": "Honest about gaps",
           "x": 748.925,
           "y": 263.8,
@@ -5228,14 +5207,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t152",
+          "element": "t151",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t152",
+          "element": "t151",
           "start": 0,
           "end": 17,
           "bold": true
@@ -5243,7 +5222,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t153",
+          "id": "t152",
           "text": "68 of 72",
           "x": 718.925,
           "y": 292.8,
@@ -5256,14 +5235,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t153",
+          "element": "t152",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t153",
+          "element": "t152",
           "start": 0,
           "end": 8,
           "bold": true
@@ -5271,7 +5250,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t154",
+          "id": "t153",
           "text": "Plans include an estimated ingredient,\nand the app labels each one.",
           "x": 718.925,
           "y": 324.8,
@@ -5284,14 +5263,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t154",
+          "element": "t153",
           "start": 0,
           "end": 67,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t154",
+          "element": "t153",
           "start": 17,
           "end": 26,
           "bold": true,
@@ -5300,9 +5279,20 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r155",
+          "id": "r154",
           "shape_type": "ELLIPSE",
           "x": 727.1684375,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r155",
+          "shape_type": "ELLIPSE",
+          "x": 734.6215625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5313,7 +5303,7 @@
           "slide": "summary",
           "id": "r156",
           "shape_type": "ELLIPSE",
-          "x": 734.6215625,
+          "x": 742.0746875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5324,7 +5314,7 @@
           "slide": "summary",
           "id": "r157",
           "shape_type": "ELLIPSE",
-          "x": 742.0746875,
+          "x": 749.5278125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5335,7 +5325,7 @@
           "slide": "summary",
           "id": "r158",
           "shape_type": "ELLIPSE",
-          "x": 749.5278125,
+          "x": 756.9809375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5346,7 +5336,7 @@
           "slide": "summary",
           "id": "r159",
           "shape_type": "ELLIPSE",
-          "x": 756.9809375,
+          "x": 764.4340625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5357,7 +5347,7 @@
           "slide": "summary",
           "id": "r160",
           "shape_type": "ELLIPSE",
-          "x": 764.4340625,
+          "x": 771.8871875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5368,7 +5358,7 @@
           "slide": "summary",
           "id": "r161",
           "shape_type": "ELLIPSE",
-          "x": 771.8871875,
+          "x": 779.3403125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5379,7 +5369,7 @@
           "slide": "summary",
           "id": "r162",
           "shape_type": "ELLIPSE",
-          "x": 779.3403125,
+          "x": 786.7934375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5390,7 +5380,7 @@
           "slide": "summary",
           "id": "r163",
           "shape_type": "ELLIPSE",
-          "x": 786.7934375,
+          "x": 794.2465625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5401,7 +5391,7 @@
           "slide": "summary",
           "id": "r164",
           "shape_type": "ELLIPSE",
-          "x": 794.2465625,
+          "x": 801.6996875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5412,7 +5402,7 @@
           "slide": "summary",
           "id": "r165",
           "shape_type": "ELLIPSE",
-          "x": 801.6996875,
+          "x": 809.1528125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5423,7 +5413,7 @@
           "slide": "summary",
           "id": "r166",
           "shape_type": "ELLIPSE",
-          "x": 809.1528125,
+          "x": 816.6059375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5434,7 +5424,7 @@
           "slide": "summary",
           "id": "r167",
           "shape_type": "ELLIPSE",
-          "x": 816.6059375,
+          "x": 824.0590625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5445,7 +5435,7 @@
           "slide": "summary",
           "id": "r168",
           "shape_type": "ELLIPSE",
-          "x": 824.0590625,
+          "x": 831.5121875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5456,7 +5446,7 @@
           "slide": "summary",
           "id": "r169",
           "shape_type": "ELLIPSE",
-          "x": 831.5121875,
+          "x": 838.9653125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5467,7 +5457,7 @@
           "slide": "summary",
           "id": "r170",
           "shape_type": "ELLIPSE",
-          "x": 838.9653125,
+          "x": 846.4184375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5478,7 +5468,7 @@
           "slide": "summary",
           "id": "r171",
           "shape_type": "ELLIPSE",
-          "x": 846.4184375,
+          "x": 853.8715625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5489,7 +5479,7 @@
           "slide": "summary",
           "id": "r172",
           "shape_type": "ELLIPSE",
-          "x": 853.8715625,
+          "x": 861.3246875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5500,7 +5490,7 @@
           "slide": "summary",
           "id": "r173",
           "shape_type": "ELLIPSE",
-          "x": 861.3246875,
+          "x": 868.7778125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5511,7 +5501,7 @@
           "slide": "summary",
           "id": "r174",
           "shape_type": "ELLIPSE",
-          "x": 868.7778125,
+          "x": 876.2309375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5522,7 +5512,7 @@
           "slide": "summary",
           "id": "r175",
           "shape_type": "ELLIPSE",
-          "x": 876.2309375,
+          "x": 883.6840625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5533,7 +5523,7 @@
           "slide": "summary",
           "id": "r176",
           "shape_type": "ELLIPSE",
-          "x": 883.6840625,
+          "x": 891.1371875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5544,7 +5534,7 @@
           "slide": "summary",
           "id": "r177",
           "shape_type": "ELLIPSE",
-          "x": 891.1371875,
+          "x": 898.5903125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5555,8 +5545,8 @@
           "slide": "summary",
           "id": "r178",
           "shape_type": "ELLIPSE",
-          "x": 898.5903125,
-          "y": 373.0434375,
+          "x": 727.1684375,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5566,7 +5556,7 @@
           "slide": "summary",
           "id": "r179",
           "shape_type": "ELLIPSE",
-          "x": 727.1684375,
+          "x": 734.6215625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5577,7 +5567,7 @@
           "slide": "summary",
           "id": "r180",
           "shape_type": "ELLIPSE",
-          "x": 734.6215625,
+          "x": 742.0746875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5588,7 +5578,7 @@
           "slide": "summary",
           "id": "r181",
           "shape_type": "ELLIPSE",
-          "x": 742.0746875,
+          "x": 749.5278125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5599,7 +5589,7 @@
           "slide": "summary",
           "id": "r182",
           "shape_type": "ELLIPSE",
-          "x": 749.5278125,
+          "x": 756.9809375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5610,7 +5600,7 @@
           "slide": "summary",
           "id": "r183",
           "shape_type": "ELLIPSE",
-          "x": 756.9809375,
+          "x": 764.4340625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5621,7 +5611,7 @@
           "slide": "summary",
           "id": "r184",
           "shape_type": "ELLIPSE",
-          "x": 764.4340625,
+          "x": 771.8871875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5632,7 +5622,7 @@
           "slide": "summary",
           "id": "r185",
           "shape_type": "ELLIPSE",
-          "x": 771.8871875,
+          "x": 779.3403125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5643,7 +5633,7 @@
           "slide": "summary",
           "id": "r186",
           "shape_type": "ELLIPSE",
-          "x": 779.3403125,
+          "x": 786.7934375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5654,7 +5644,7 @@
           "slide": "summary",
           "id": "r187",
           "shape_type": "ELLIPSE",
-          "x": 786.7934375,
+          "x": 794.2465625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5665,7 +5655,7 @@
           "slide": "summary",
           "id": "r188",
           "shape_type": "ELLIPSE",
-          "x": 794.2465625,
+          "x": 801.6996875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5676,7 +5666,7 @@
           "slide": "summary",
           "id": "r189",
           "shape_type": "ELLIPSE",
-          "x": 801.6996875,
+          "x": 809.1528125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5687,7 +5677,7 @@
           "slide": "summary",
           "id": "r190",
           "shape_type": "ELLIPSE",
-          "x": 809.1528125,
+          "x": 816.6059375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5698,7 +5688,7 @@
           "slide": "summary",
           "id": "r191",
           "shape_type": "ELLIPSE",
-          "x": 816.6059375,
+          "x": 824.0590625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5709,7 +5699,7 @@
           "slide": "summary",
           "id": "r192",
           "shape_type": "ELLIPSE",
-          "x": 824.0590625,
+          "x": 831.5121875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5720,7 +5710,7 @@
           "slide": "summary",
           "id": "r193",
           "shape_type": "ELLIPSE",
-          "x": 831.5121875,
+          "x": 838.9653125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5731,7 +5721,7 @@
           "slide": "summary",
           "id": "r194",
           "shape_type": "ELLIPSE",
-          "x": 838.9653125,
+          "x": 846.4184375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5742,7 +5732,7 @@
           "slide": "summary",
           "id": "r195",
           "shape_type": "ELLIPSE",
-          "x": 846.4184375,
+          "x": 853.8715625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5753,7 +5743,7 @@
           "slide": "summary",
           "id": "r196",
           "shape_type": "ELLIPSE",
-          "x": 853.8715625,
+          "x": 861.3246875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5764,7 +5754,7 @@
           "slide": "summary",
           "id": "r197",
           "shape_type": "ELLIPSE",
-          "x": 861.3246875,
+          "x": 868.7778125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5775,7 +5765,7 @@
           "slide": "summary",
           "id": "r198",
           "shape_type": "ELLIPSE",
-          "x": 868.7778125,
+          "x": 876.2309375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5786,7 +5776,7 @@
           "slide": "summary",
           "id": "r199",
           "shape_type": "ELLIPSE",
-          "x": 876.2309375,
+          "x": 883.6840625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5797,7 +5787,7 @@
           "slide": "summary",
           "id": "r200",
           "shape_type": "ELLIPSE",
-          "x": 883.6840625,
+          "x": 891.1371875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5808,7 +5798,7 @@
           "slide": "summary",
           "id": "r201",
           "shape_type": "ELLIPSE",
-          "x": 891.1371875,
+          "x": 898.5903125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5819,17 +5809,6 @@
           "slide": "summary",
           "id": "r202",
           "shape_type": "ELLIPSE",
-          "x": 898.5903125,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r203",
-          "shape_type": "ELLIPSE",
           "x": 727.1684375,
           "y": 387.9496875,
           "width": 5.36625,
@@ -5839,7 +5818,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r204",
+          "id": "r203",
           "shape_type": "ELLIPSE",
           "x": 734.6215625,
           "y": 387.9496875,
@@ -5850,7 +5829,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r205",
+          "id": "r204",
           "shape_type": "ELLIPSE",
           "x": 742.0746875,
           "y": 387.9496875,
@@ -5861,7 +5840,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r206",
+          "id": "r205",
           "shape_type": "ELLIPSE",
           "x": 749.5278125,
           "y": 387.9496875,
@@ -5872,7 +5851,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r207",
+          "id": "r206",
           "shape_type": "ELLIPSE",
           "x": 756.9809375,
           "y": 387.9496875,
@@ -5883,7 +5862,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r208",
+          "id": "r207",
           "shape_type": "ELLIPSE",
           "x": 764.4340625,
           "y": 387.9496875,
@@ -5894,7 +5873,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r209",
+          "id": "r208",
           "shape_type": "ELLIPSE",
           "x": 771.8871875,
           "y": 387.9496875,
@@ -5905,7 +5884,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r210",
+          "id": "r209",
           "shape_type": "ELLIPSE",
           "x": 779.3403125,
           "y": 387.9496875,
@@ -5916,7 +5895,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r211",
+          "id": "r210",
           "shape_type": "ELLIPSE",
           "x": 786.7934375,
           "y": 387.9496875,
@@ -5927,7 +5906,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r212",
+          "id": "r211",
           "shape_type": "ELLIPSE",
           "x": 794.2465625,
           "y": 387.9496875,
@@ -5938,7 +5917,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r213",
+          "id": "r212",
           "shape_type": "ELLIPSE",
           "x": 801.6996875,
           "y": 387.9496875,
@@ -5949,7 +5928,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r214",
+          "id": "r213",
           "shape_type": "ELLIPSE",
           "x": 809.1528125,
           "y": 387.9496875,
@@ -5960,7 +5939,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r215",
+          "id": "r214",
           "shape_type": "ELLIPSE",
           "x": 816.6059375,
           "y": 387.9496875,
@@ -5971,7 +5950,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r216",
+          "id": "r215",
           "shape_type": "ELLIPSE",
           "x": 824.0590625,
           "y": 387.9496875,
@@ -5982,7 +5961,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r217",
+          "id": "r216",
           "shape_type": "ELLIPSE",
           "x": 831.5121875,
           "y": 387.9496875,
@@ -5993,7 +5972,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r218",
+          "id": "r217",
           "shape_type": "ELLIPSE",
           "x": 838.9653125,
           "y": 387.9496875,
@@ -6004,7 +5983,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r219",
+          "id": "r218",
           "shape_type": "ELLIPSE",
           "x": 846.4184375,
           "y": 387.9496875,
@@ -6015,7 +5994,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r220",
+          "id": "r219",
           "shape_type": "ELLIPSE",
           "x": 853.8715625,
           "y": 387.9496875,
@@ -6026,7 +6005,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r221",
+          "id": "r220",
           "shape_type": "ELLIPSE",
           "x": 861.3246875,
           "y": 387.9496875,
@@ -6037,7 +6016,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r222",
+          "id": "r221",
           "shape_type": "ELLIPSE",
           "x": 868.7778125,
           "y": 387.9496875,
@@ -6048,7 +6027,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r223",
+          "id": "r222",
           "shape_type": "ELLIPSE",
           "x": 876.2309375,
           "y": 387.9496875,
@@ -6059,7 +6038,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r224",
+          "id": "r223",
           "shape_type": "ELLIPSE",
           "x": 883.6840625,
           "y": 387.9496875,
@@ -6070,7 +6049,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r225",
+          "id": "r224",
           "shape_type": "ELLIPSE",
           "x": 891.1371875,
           "y": 387.9496875,
@@ -6081,34 +6060,13 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r226",
+          "id": "r225",
           "shape_type": "ELLIPSE",
           "x": 898.5903125,
           "y": 387.9496875,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#5EC962"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "summary",
-          "id": "t227",
-          "text": "Dark: plans with an estimated ingredient",
-          "x": 718.925,
-          "y": 391.159375,
-          "width": 193.275,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t227",
-          "start": 0,
-          "end": 40,
-          "line_spacing": 135
         }
       ]
     },
@@ -8789,10 +8747,10 @@
           "id": "im31",
           "path": "assets/icons/kit/person-blue.svg",
           "alt": "",
-          "x": 57.5,
-          "y": 336.8203125,
-          "width": 24,
-          "height": 24
+          "x": 51.739999999999995,
+          "y": 333.2203125,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -8943,10 +8901,10 @@
           "id": "im41",
           "path": "assets/icons/kit/search-blue.svg",
           "alt": "",
-          "x": 356.6666666666667,
-          "y": 336.8203125,
-          "width": 24,
-          "height": 24
+          "x": 350.9066666666667,
+          "y": 333.2203125,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -9097,10 +9055,10 @@
           "id": "im51",
           "path": "assets/icons/kit/rice_bowl-blue.svg",
           "alt": "",
-          "x": 655.8333333333334,
-          "y": 336.8203125,
-          "width": 24,
-          "height": 24
+          "x": 650.0733333333334,
+          "y": 333.2203125,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -12077,6 +12035,7 @@
         "purpose": "Follow one person from body to meal target.",
         "script": [
           "Body size and activity give about 2,344 kcal a day. The trained model adds 125. Her goal is to maintain, so her budget is 2,469, and one meal gets 28%: 691 kcal.",
+          "Exercise adds only 5% here because the run uses default exercise inputs: 30 minutes at 100 bpm.",
           "A weight-loss floor of 1,200 kcal for women and 1,500 for men protects low budgets.",
           "Sources: calorie_expenditure_agent.py; models/calorie_expenditure/metrics.json; local run, 7 November 2026."
         ],
@@ -12095,57 +12054,41 @@
         {
           "icon": "fitness_center",
           "title": "Exercise",
-          "text": "A trained model adds **exercise calories**.",
+          "text": "A trained model adds exercise calories.",
           "value": "+125 kcal"
         },
         {
           "icon": "flag",
           "title": "Goal",
-          "text": "Gain +250, lose \u2212400, with a **safety floor**.",
+          "text": "Gain +250, lose \u2212400, with a safety floor.",
           "value": "2,469 kcal budget"
         },
         {
           "icon": "rice_bowl",
           "title": "This meal",
-          "text": "28% of the budget, within **350\u2013850 kcal**.",
+          "text": "28% of the budget, within 350\u2013850 kcal.",
           "value": "691 kcal target"
         }
       ],
       "chart": {
-        "title": "Her day and this meal, as two rings",
-        "image": "assets/figures/shapes/calorie-ring.svg",
-        "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
-        "centre": "691 kcal",
-        "centre_label": "this meal",
-        "groups": [
+        "rings": [
           {
-            "title": "Outer ring: her 2,469 kcal day",
-            "items": [
-              [
-                "#1B2430",
-                "This meal: 691 kcal, 28% of the day"
-              ],
-              [
-                "#D8DEE3",
-                "The rest of her day: 1,778 kcal"
-              ]
-            ]
+            "image": "assets/figures/shapes/ring-day.svg",
+            "alt": "Ring of her 2,469 kcal budget: 2,344 kcal from body and activity, 125 kcal from exercise.",
+            "centre": "2,469",
+            "centre_label": "kcal budget",
+            "headline": "Exercise adds only 5%",
+            "text": "The trained model moves her budget by 125 kcal."
           },
           {
-            "title": "Inner ring: where the budget comes from",
-            "items": [
-              [
-                "#3B528B",
-                "2,344 kcal from body and activity"
-              ],
-              [
-                "#21918C",
-                "+125 kcal from the trained exercise model"
-              ]
-            ]
+            "image": "assets/figures/shapes/ring-meal.svg",
+            "alt": "Ring of the same budget: this 691 kcal meal is 28%, the rest of her day 1,778 kcal.",
+            "centre": "691",
+            "centre_label": "kcal meal",
+            "headline": "One meal, 28% of her day",
+            "text": "The rest of the budget stays for her other meals."
           }
-        ],
-        "scale": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm)."
+        ]
       },
       "n": 7,
       "takeaways": [],
@@ -12630,25 +12573,25 @@
         {
           "op": "add-image",
           "id": "im28",
-          "path": "assets/icons/kit/person-blue.svg",
+          "path": "assets/icons/kit/person-white.svg",
           "alt": "",
-          "x": 57.5,
-          "y": 144.0,
-          "width": 22,
-          "height": 22
+          "x": 54.22,
+          "y": 142.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t29",
           "text": "Body and activity",
-          "x": 78.3,
-          "y": 139.8,
-          "width": 171.275,
+          "x": 84.3,
+          "y": 141.8,
+          "width": 165.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12670,13 +12613,13 @@
           "slide": "calories",
           "id": "t30",
           "text": "Size and activity give a daily estimate.",
-          "x": 50.3,
-          "y": 166.8,
-          "width": 199.275,
+          "x": 52.3,
+          "y": 168.8,
+          "width": 197.275,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#5A6370",
+          "color": "#FFFFFF",
           "bold": false
         },
         {
@@ -12691,13 +12634,13 @@
           "slide": "calories",
           "id": "t31",
           "text": "2,344 kcal",
-          "x": 50.3,
+          "x": 52.3,
           "y": 204.8,
-          "width": 199.275,
+          "width": 197.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12727,25 +12670,25 @@
         {
           "op": "add-image",
           "id": "im33",
-          "path": "assets/icons/kit/fitness_center-blue.svg",
+          "path": "assets/icons/kit/fitness_center-white.svg",
           "alt": "",
-          "x": 288.375,
-          "y": 144.0,
-          "width": 22,
-          "height": 22
+          "x": 285.095,
+          "y": 142.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t34",
           "text": "Exercise",
-          "x": 309.175,
-          "y": 139.8,
-          "width": 157.275,
+          "x": 315.175,
+          "y": 141.8,
+          "width": 151.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12767,13 +12710,13 @@
           "slide": "calories",
           "id": "t35",
           "text": "A trained model adds exercise\ncalories.",
-          "x": 281.175,
-          "y": 166.8,
-          "width": 185.275,
+          "x": 283.175,
+          "y": 168.8,
+          "width": 183.275,
           "height": 41.4,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#5A6370",
+          "color": "#FFFFFF",
           "bold": false
         },
         {
@@ -12788,13 +12731,13 @@
           "slide": "calories",
           "id": "t36",
           "text": "+125 kcal",
-          "x": 281.175,
+          "x": 283.175,
           "y": 204.8,
-          "width": 185.275,
+          "width": 183.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12824,25 +12767,25 @@
         {
           "op": "add-image",
           "id": "im38",
-          "path": "assets/icons/kit/flag-blue.svg",
+          "path": "assets/icons/kit/flag-white.svg",
           "alt": "",
-          "x": 505.25,
-          "y": 144.0,
-          "width": 22,
-          "height": 22
+          "x": 501.97,
+          "y": 142.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t39",
           "text": "Goal",
-          "x": 526.05,
-          "y": 139.8,
-          "width": 157.275,
+          "x": 532.05,
+          "y": 141.8,
+          "width": 151.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12864,13 +12807,13 @@
           "slide": "calories",
           "id": "t40",
           "text": "Gain +250, lose \u2212400, with a safety\nfloor.",
-          "x": 498.05,
-          "y": 166.8,
-          "width": 185.275,
+          "x": 500.05,
+          "y": 168.8,
+          "width": 183.275,
           "height": 41.4,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#5A6370",
+          "color": "#FFFFFF",
           "bold": false
         },
         {
@@ -12885,13 +12828,13 @@
           "slide": "calories",
           "id": "t41",
           "text": "2,469 kcal budget",
-          "x": 498.05,
+          "x": 500.05,
           "y": 204.8,
-          "width": 185.275,
+          "width": 183.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#FFFFFF",
           "bold": true
         },
         {
@@ -12921,25 +12864,25 @@
         {
           "op": "add-image",
           "id": "im43",
-          "path": "assets/icons/kit/rice_bowl-teal.svg",
+          "path": "assets/icons/kit/rice_bowl-ink.svg",
           "alt": "",
-          "x": 722.125,
-          "y": 144.0,
-          "width": 22,
-          "height": 22
+          "x": 718.845,
+          "y": 142.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t44",
           "text": "This meal",
-          "x": 742.925,
-          "y": 139.8,
-          "width": 157.275,
+          "x": 748.925,
+          "y": 141.8,
+          "width": 151.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#FFFFFF",
+          "color": "#1B2430",
           "bold": true
         },
         {
@@ -12961,13 +12904,13 @@
           "slide": "calories",
           "id": "t45",
           "text": "28% of the budget, within 350\u2013850\nkcal.",
-          "x": 714.925,
-          "y": 166.8,
-          "width": 185.275,
+          "x": 716.925,
+          "y": 168.8,
+          "width": 183.275,
           "height": 41.4,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#FFFFFF",
+          "color": "#1B2430",
           "bold": false
         },
         {
@@ -12982,13 +12925,13 @@
           "slide": "calories",
           "id": "t46",
           "text": "691 kcal target",
-          "x": 714.925,
+          "x": 716.925,
           "y": 204.8,
-          "width": 185.275,
+          "width": 183.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
-          "color": "#FFFFFF",
+          "color": "#1B2430",
           "bold": true
         },
         {
@@ -13019,8 +12962,8 @@
         {
           "op": "add-image",
           "id": "im48",
-          "path": "assets/figures/shapes/calorie-ring.svg",
-          "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
+          "path": "assets/figures/shapes/ring-day.svg",
+          "alt": "Ring of her 2,469 kcal budget: 2,344 kcal from body and activity, 125 kcal from exercise.",
           "x": 67.5,
           "y": 268.0,
           "width": 142.0,
@@ -13030,10 +12973,10 @@
           "op": "add-textbox",
           "slide": "calories",
           "id": "t49",
-          "text": "691 kcal",
-          "x": 95.8,
-          "y": 317.8,
-          "width": 85.4,
+          "text": "2,469",
+          "x": 88.7,
+          "y": 316.8,
+          "width": 99.60000000000001,
           "height": 38.7,
           "font_size": 18,
           "font_family": "Google Sans",
@@ -13045,24 +12988,24 @@
           "op": "style-paragraph",
           "element": "t49",
           "start": 0,
-          "end": 8,
+          "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t49",
           "start": 0,
-          "end": 8,
+          "end": 5,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t50",
-          "text": "this meal",
-          "x": 95.8,
-          "y": 340.8,
-          "width": 85.4,
+          "text": "kcal budget",
+          "x": 88.7,
+          "y": 339.8,
+          "width": 99.60000000000001,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -13074,17 +13017,17 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 9,
+          "end": 11,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t51",
-          "text": "Her day and this meal, as two rings",
-          "x": 238.3,
-          "y": 262.8,
-          "width": 514.4,
+          "text": "Exercise adds only 5%",
+          "x": 222.3,
+          "y": 309.8,
+          "width": 250.15,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -13095,155 +13038,134 @@
           "op": "style-paragraph",
           "element": "t51",
           "start": 0,
-          "end": 35,
+          "end": 21,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t51",
           "start": 0,
-          "end": 35,
+          "end": 21,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t52",
-          "text": "Outer ring: her 2,469 kcal day",
-          "x": 238.3,
-          "y": 292.8,
-          "width": 332.15,
+          "text": "The trained model moves her budget by 125 kcal.",
+          "x": 222.3,
+          "y": 331.8,
+          "width": 250.15,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
+          "color": "#5A6370",
+          "bold": false
         },
         {
           "op": "style-paragraph",
           "element": "t52",
           "start": 0,
-          "end": 30,
+          "end": 47,
           "line_spacing": 135
         },
         {
-          "op": "style-text",
-          "element": "t52",
-          "start": 0,
-          "end": 30,
-          "bold": true
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r53",
-          "shape_type": "RECTANGLE",
-          "x": 245.5,
-          "y": 327.0,
-          "width": 12,
-          "height": 12,
-          "background_color": "#1B2430"
+          "op": "add-image",
+          "id": "im53",
+          "path": "assets/figures/shapes/ring-meal.svg",
+          "alt": "Ring of the same budget: this 691 kcal meal is 28%, the rest of her day 1,778 kcal.",
+          "x": 505.25,
+          "y": 268.0,
+          "width": 142.0,
+          "height": 142.0
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t54",
-          "text": "This meal: 691 kcal, 28% of the day",
-          "x": 258.3,
-          "y": 318.8,
-          "width": 312.15,
-          "height": 27.9,
-          "font_size": 10,
+          "text": "691",
+          "x": 526.4499999999999,
+          "y": 316.8,
+          "width": 99.60000000000001,
+          "height": 38.7,
+          "font_size": 18,
           "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
         },
         {
           "op": "style-paragraph",
           "element": "t54",
           "start": 0,
-          "end": 35,
+          "end": 3,
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 3,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
           "slide": "calories",
-          "id": "r55",
-          "shape_type": "RECTANGLE",
-          "x": 245.5,
-          "y": 353.0,
-          "width": 12,
-          "height": 12,
-          "background_color": "#D8DEE3"
+          "id": "t55",
+          "text": "kcal meal",
+          "x": 526.4499999999999,
+          "y": 339.8,
+          "width": 99.60000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t55",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t56",
-          "text": "The rest of her day: 1,778 kcal",
-          "x": 258.3,
-          "y": 344.8,
-          "width": 312.15,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t56",
-          "start": 0,
-          "end": 31,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t57",
-          "text": "Inner ring: where the budget comes from",
-          "x": 580.05,
-          "y": 292.8,
-          "width": 332.15,
-          "height": 27.9,
-          "font_size": 10,
+          "text": "One meal, 28% of her day",
+          "x": 660.05,
+          "y": 309.8,
+          "width": 250.15,
+          "height": 30.6,
+          "font_size": 12,
           "font_family": "Google Sans",
           "color": "#1B2430",
           "bold": true
         },
         {
           "op": "style-paragraph",
-          "element": "t57",
+          "element": "t56",
           "start": 0,
-          "end": 39,
+          "end": 24,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t57",
+          "element": "t56",
           "start": 0,
-          "end": 39,
+          "end": 24,
           "bold": true
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r58",
-          "shape_type": "RECTANGLE",
-          "x": 587.25,
-          "y": 327.0,
-          "width": 12,
-          "height": 12,
-          "background_color": "#3B528B"
-        },
-        {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t59",
-          "text": "2,344 kcal from body and activity",
-          "x": 600.05,
-          "y": 318.8,
-          "width": 312.15,
+          "id": "t57",
+          "text": "The rest of the budget stays for her other meals.",
+          "x": 660.05,
+          "y": 331.8,
+          "width": 250.15,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13252,62 +13174,9 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t59",
+          "element": "t57",
           "start": 0,
-          "end": 33,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r60",
-          "shape_type": "RECTANGLE",
-          "x": 587.25,
-          "y": 353.0,
-          "width": 12,
-          "height": 12,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t61",
-          "text": "+125 kcal from the trained exercise model",
-          "x": 600.05,
-          "y": 344.8,
-          "width": 312.15,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t61",
-          "start": 0,
-          "end": 41,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t62",
-          "text": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm).",
-          "x": 238.3,
-          "y": 390.8,
-          "width": 673.9,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t62",
-          "start": 0,
-          "end": 91,
+          "end": 49,
           "line_spacing": 135
         }
       ]
@@ -15779,10 +15648,10 @@
           "id": "im175",
           "path": "assets/icons/kit/check_circle-blue.svg",
           "alt": "",
-          "x": 57.5,
-          "y": 308.0,
-          "width": 22,
-          "height": 22
+          "x": 52.22,
+          "y": 304.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -15896,10 +15765,10 @@
           "id": "im181",
           "path": "assets/icons/kit/flag-blue.svg",
           "alt": "",
-          "x": 280.375,
-          "y": 308.0,
-          "width": 22,
-          "height": 22
+          "x": 275.095,
+          "y": 304.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -16013,10 +15882,10 @@
           "id": "im187",
           "path": "assets/icons/kit/block-blue.svg",
           "alt": "",
-          "x": 503.25,
-          "y": 308.0,
-          "width": 22,
-          "height": 22
+          "x": 497.97,
+          "y": 304.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -16130,10 +15999,10 @@
           "id": "im193",
           "path": "assets/icons/kit/balance-blue.svg",
           "alt": "",
-          "x": 726.125,
-          "y": 308.0,
-          "width": 22,
-          "height": 22
+          "x": 720.845,
+          "y": 304.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -17759,10 +17628,10 @@
           "id": "im76",
           "path": "assets/icons/kit/verified-blue.svg",
           "alt": "",
-          "x": 477.5,
-          "y": 246.0,
-          "width": 22,
-          "height": 22
+          "x": 472.22,
+          "y": 242.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -17840,10 +17709,10 @@
           "id": "im81",
           "path": "assets/icons/kit/search-blue.svg",
           "alt": "",
-          "x": 477.5,
-          "y": 314.0,
-          "width": 22,
-          "height": 22
+          "x": 472.22,
+          "y": 310.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -17929,10 +17798,10 @@
           "id": "im86",
           "path": "assets/icons/kit/calculate-blue.svg",
           "alt": "",
-          "x": 477.5,
-          "y": 382.0,
-          "width": 22,
-          "height": 22
+          "x": 472.22,
+          "y": 378.7,
+          "width": 28.6,
+          "height": 28.6
         },
         {
           "op": "add-textbox",
@@ -20940,10 +20809,10 @@
           "id": "im48",
           "path": "assets/icons/kit/balance-plum.svg",
           "alt": "",
-          "x": 635.5,
-          "y": 164.33333333333334,
-          "width": 24,
-          "height": 24
+          "x": 629.74,
+          "y": 160.73333333333335,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -21021,10 +20890,10 @@
           "id": "im53",
           "path": "assets/icons/kit/check_circle-plum.svg",
           "alt": "",
-          "x": 635.5,
-          "y": 265.0,
-          "width": 24,
-          "height": 24
+          "x": 629.74,
+          "y": 261.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -21102,10 +20971,10 @@
           "id": "im58",
           "path": "assets/icons/kit/search-plum.svg",
           "alt": "",
-          "x": 635.5,
-          "y": 365.6666666666667,
-          "width": 24,
-          "height": 24
+          "x": 629.74,
+          "y": 362.06666666666666,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -22280,10 +22149,10 @@
           "id": "im59",
           "path": "assets/icons/kit/monitor_weight-plum.svg",
           "alt": "",
-          "x": 331.5,
-          "y": 184.4,
-          "width": 20,
-          "height": 20
+          "x": 326.7,
+          "y": 181.4,
+          "width": 26.0,
+          "height": 26.0
         },
         {
           "op": "add-textbox",
@@ -22360,10 +22229,10 @@
           "id": "im64",
           "path": "assets/icons/kit/skillet-plum.svg",
           "alt": "",
-          "x": 331.5,
-          "y": 223.20000000000002,
-          "width": 20,
-          "height": 20
+          "x": 326.7,
+          "y": 220.20000000000002,
+          "width": 26.0,
+          "height": 26.0
         },
         {
           "op": "add-textbox",
@@ -22440,10 +22309,10 @@
           "id": "im69",
           "path": "assets/icons/kit/fact_check-plum.svg",
           "alt": "",
-          "x": 331.5,
-          "y": 262.0,
-          "width": 20,
-          "height": 20
+          "x": 326.7,
+          "y": 259.0,
+          "width": 26.0,
+          "height": 26.0
         },
         {
           "op": "add-textbox",
@@ -22510,10 +22379,10 @@
           "id": "im73",
           "path": "assets/icons/kit/balance-plum.svg",
           "alt": "",
-          "x": 331.5,
-          "y": 300.79999999999995,
-          "width": 20,
-          "height": 20
+          "x": 326.7,
+          "y": 297.79999999999995,
+          "width": 26.0,
+          "height": 26.0
         },
         {
           "op": "add-textbox",
@@ -22590,10 +22459,10 @@
           "id": "im78",
           "path": "assets/icons/kit/shopping_basket-plum.svg",
           "alt": "",
-          "x": 331.5,
-          "y": 339.59999999999997,
-          "width": 20,
-          "height": 20
+          "x": 326.7,
+          "y": 336.59999999999997,
+          "width": 26.0,
+          "height": 26.0
         },
         {
           "op": "add-textbox",
@@ -22992,6 +22861,7 @@
       "notes": {
         "purpose": "Show the production habits.",
         "script": [
+          "On the line, teal steps run today; the grey ones are built and wait for a GCP project.",
           "The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.",
           "The deployment workflow and tracing are built, but they wait for a GCP project.",
           "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
@@ -23002,7 +22872,6 @@
         ]
       },
       "line_title": "From a change to production",
-      "legend": "Teal: runs today. Grey: built, waiting for a GCP project.",
       "steps": [
         {
           "icon": "fact_check",
@@ -23571,33 +23440,22 @@
           "bold": true
         },
         {
-          "op": "add-textbox",
+          "op": "add-line",
           "slide": "engineering",
-          "id": "t29",
-          "text": "Teal: runs today. Grey: built, waiting for a GCP project.",
-          "x": 456.3,
-          "y": 136.8,
-          "width": 455.9,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t29",
-          "start": 0,
-          "end": 57,
-          "line_spacing": 135
+          "id": "l29",
+          "x": 103.5,
+          "y": 206.0,
+          "width": 151.1,
+          "height": 0.0,
+          "color": "#21918C",
+          "line_weight": 3
         },
         {
           "op": "add-line",
           "slide": "engineering",
           "id": "l30",
-          "x": 103.5,
-          "y": 198.0,
+          "x": 254.6,
+          "y": 206.0,
           "width": 151.1,
           "height": 0.0,
           "color": "#21918C",
@@ -23607,19 +23465,8 @@
           "op": "add-line",
           "slide": "engineering",
           "id": "l31",
-          "x": 254.6,
-          "y": 198.0,
-          "width": 151.1,
-          "height": 0.0,
-          "color": "#21918C",
-          "line_weight": 3
-        },
-        {
-          "op": "add-line",
-          "slide": "engineering",
-          "id": "l32",
           "x": 405.7,
-          "y": 198.0,
+          "y": 206.0,
           "width": 151.09999999999997,
           "height": 0.0,
           "color": "#21918C",
@@ -23628,9 +23475,9 @@
         {
           "op": "add-line",
           "slide": "engineering",
-          "id": "l33",
+          "id": "l32",
           "x": 556.8,
-          "y": 198.0,
+          "y": 206.0,
           "width": 151.10000000000002,
           "height": 0.0,
           "color": "#89949D",
@@ -23640,9 +23487,9 @@
         {
           "op": "add-line",
           "slide": "engineering",
-          "id": "l34",
+          "id": "l33",
           "x": 707.9,
-          "y": 198.0,
+          "y": 206.0,
           "width": 151.10000000000002,
           "height": 0.0,
           "color": "#89949D",
@@ -23650,14 +23497,25 @@
           "dash_style": "DASH"
         },
         {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r34",
+          "shape_type": "ELLIPSE",
+          "x": 97.5,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#21918C"
+        },
+        {
           "op": "add-image",
           "id": "im35",
           "path": "assets/icons/kit/fact_check-teal.svg",
           "alt": "",
-          "x": 85.5,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
+          "x": 84.25999999999999,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
         },
         {
           "op": "add-textbox",
@@ -23665,7 +23523,7 @@
           "id": "t36",
           "text": "Contract",
           "x": 36.3,
-          "y": 216.8,
+          "y": 224.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -23694,7 +23552,7 @@
           "id": "t37",
           "text": "CI fails on any drift",
           "x": 36.3,
-          "y": 231.8,
+          "y": 239.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23716,7 +23574,7 @@
           "id": "t38",
           "text": "docs/openapi.json",
           "x": 36.3,
-          "y": 246.8,
+          "y": 254.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23733,22 +23591,33 @@
           "line_spacing": 135
         },
         {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r39",
+          "shape_type": "ELLIPSE",
+          "x": 248.6,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#21918C"
+        },
+        {
           "op": "add-image",
-          "id": "im39",
+          "id": "im40",
           "path": "assets/icons/kit/science-teal.svg",
           "alt": "",
-          "x": 236.6,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
+          "x": 235.35999999999999,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t40",
+          "id": "t41",
           "text": "Tests",
           "x": 187.4,
-          "y": 216.8,
+          "y": 224.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -23759,14 +23628,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t40",
+          "element": "t41",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t40",
+          "element": "t41",
           "start": 0,
           "end": 5,
           "bold": true
@@ -23774,32 +23643,10 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t41",
+          "id": "t42",
           "text": "630 Python tests",
           "x": 187.4,
-          "y": 231.8,
-          "width": 134.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t41",
-          "start": 0,
-          "end": 16,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t42",
-          "text": "backend/tests/",
-          "x": 187.4,
-          "y": 246.8,
+          "y": 239.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23812,55 +23659,16 @@
           "op": "style-paragraph",
           "element": "t42",
           "start": 0,
-          "end": 14,
+          "end": 16,
           "line_spacing": 135
-        },
-        {
-          "op": "add-image",
-          "id": "im43",
-          "path": "assets/icons/kit/lock-teal.svg",
-          "alt": "",
-          "x": 387.7,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t44",
-          "text": "Security",
-          "x": 338.5,
-          "y": 216.8,
-          "width": 134.4,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t44",
-          "start": 0,
-          "end": 8,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t44",
-          "start": 0,
-          "end": 8,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t45",
-          "text": "API keys, rate limits",
-          "x": 338.5,
-          "y": 231.8,
+          "id": "t43",
+          "text": "backend/tests/",
+          "x": 187.4,
+          "y": 254.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23871,7 +23679,79 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t45",
+          "element": "t43",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r44",
+          "shape_type": "ELLIPSE",
+          "x": 399.7,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-image",
+          "id": "im45",
+          "path": "assets/icons/kit/lock-teal.svg",
+          "alt": "",
+          "x": 386.46,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t46",
+          "text": "Security",
+          "x": 338.5,
+          "y": 224.8,
+          "width": 134.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t46",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t46",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t47",
+          "text": "API keys, rate limits",
+          "x": 338.5,
+          "y": 239.8,
+          "width": 134.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t47",
           "start": 0,
           "end": 21,
           "line_spacing": 135
@@ -23879,10 +23759,10 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t46",
+          "id": "t48",
           "text": "api/auth.py",
           "x": 338.5,
-          "y": 246.8,
+          "y": 254.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23893,28 +23773,39 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t46",
+          "element": "t48",
           "start": 0,
           "end": 11,
           "line_spacing": 135
         },
         {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r49",
+          "shape_type": "ELLIPSE",
+          "x": 550.8,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#21918C"
+        },
+        {
           "op": "add-image",
-          "id": "im47",
+          "id": "im50",
           "path": "assets/icons/kit/inventory_2-teal.svg",
           "alt": "",
-          "x": 538.8,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
+          "x": 537.56,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t48",
+          "id": "t51",
           "text": "Container",
           "x": 489.59999999999997,
-          "y": 216.8,
+          "y": 224.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -23925,14 +23816,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t48",
+          "element": "t51",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t48",
+          "element": "t51",
           "start": 0,
           "end": 9,
           "bold": true
@@ -23940,10 +23831,10 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t49",
+          "id": "t52",
           "text": "One Docker image",
           "x": 489.59999999999997,
-          "y": 231.8,
+          "y": 239.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -23954,7 +23845,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t52",
           "start": 0,
           "end": 16,
           "line_spacing": 135
@@ -23962,71 +23853,10 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t50",
+          "id": "t53",
           "text": "Dockerfile",
           "x": 489.59999999999997,
-          "y": 246.8,
-          "width": 134.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t50",
-          "start": 0,
-          "end": 10,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-image",
-          "id": "im51",
-          "path": "assets/icons/kit/cloud_upload-grey.svg",
-          "alt": "",
-          "x": 689.9,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t52",
-          "text": "Cloud Run",
-          "x": 640.6999999999999,
-          "y": 216.8,
-          "width": 134.4,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t52",
-          "start": 0,
-          "end": 9,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t52",
-          "start": 0,
-          "end": 9,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t53",
-          "text": "Ready, not live",
-          "x": 640.6999999999999,
-          "y": 231.8,
+          "y": 254.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -24039,48 +23869,37 @@
           "op": "style-paragraph",
           "element": "t53",
           "start": 0,
-          "end": 15,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t54",
-          "text": "deploy.yml",
-          "x": 640.6999999999999,
-          "y": 246.8,
-          "width": 134.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t54",
-          "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r54",
+          "shape_type": "ELLIPSE",
+          "x": 701.9,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#89949D"
+        },
+        {
           "op": "add-image",
           "id": "im55",
-          "path": "assets/icons/kit/visibility-grey.svg",
+          "path": "assets/icons/kit/cloud_upload-grey.svg",
           "alt": "",
-          "x": 841.0,
-          "y": 180.0,
-          "width": 36,
-          "height": 36
+          "x": 688.66,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t56",
-          "text": "Tracing",
-          "x": 791.8,
-          "y": 216.8,
+          "text": "Cloud Run",
+          "x": 640.6999999999999,
+          "y": 224.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -24093,23 +23912,23 @@
           "op": "style-paragraph",
           "element": "t56",
           "start": 0,
-          "end": 7,
+          "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t56",
           "start": 0,
-          "end": 7,
+          "end": 9,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t57",
-          "text": "Health data kept out",
-          "x": 791.8,
-          "y": 231.8,
+          "text": "Ready, not live",
+          "x": 640.6999999999999,
+          "y": 239.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -24122,16 +23941,16 @@
           "op": "style-paragraph",
           "element": "t57",
           "start": 0,
-          "end": 20,
+          "end": 15,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t58",
-          "text": "core/telemetry.py",
-          "x": 791.8,
-          "y": 246.8,
+          "text": "deploy.yml",
+          "x": 640.6999999999999,
+          "y": 254.8,
           "width": 134.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -24144,13 +23963,107 @@
           "op": "style-paragraph",
           "element": "t58",
           "start": 0,
-          "end": 17,
+          "end": 10,
           "line_spacing": 135
         },
         {
           "op": "add-shape",
           "slide": "engineering",
           "id": "r59",
+          "shape_type": "ELLIPSE",
+          "x": 853.0,
+          "y": 200.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#89949D"
+        },
+        {
+          "op": "add-image",
+          "id": "im60",
+          "path": "assets/icons/kit/visibility-grey.svg",
+          "alt": "",
+          "x": 839.76,
+          "y": 162.1,
+          "width": 33.800000000000004,
+          "height": 33.800000000000004
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t61",
+          "text": "Tracing",
+          "x": 791.8,
+          "y": 224.8,
+          "width": 134.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 7,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 7,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t62",
+          "text": "Health data kept out",
+          "x": 791.8,
+          "y": 239.8,
+          "width": 134.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 20,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t63",
+          "text": "core/telemetry.py",
+          "x": 791.8,
+          "y": 254.8,
+          "width": 134.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t63",
+          "start": 0,
+          "end": 17,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r64",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 314.0,
@@ -24161,7 +24074,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r60",
+          "id": "r65",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 314.0,
@@ -24172,7 +24085,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t61",
+          "id": "t66",
           "text": "630",
           "x": 50.3,
           "y": 318.8,
@@ -24185,14 +24098,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t61",
+          "element": "t66",
           "start": 0,
           "end": 3,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t61",
+          "element": "t66",
           "start": 0,
           "end": 3,
           "bold": true
@@ -24200,7 +24113,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t62",
+          "id": "t67",
           "text": "Python tests, all passing: 538 backend, 92 Streamlit",
           "x": 50.3,
           "y": 362.8,
@@ -24213,7 +24126,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t62",
+          "element": "t67",
           "start": 0,
           "end": 52,
           "line_spacing": 135
@@ -24221,7 +24134,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r63",
+          "id": "r68",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
@@ -24232,7 +24145,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r64",
+          "id": "r69",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
@@ -24243,7 +24156,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t65",
+          "id": "t70",
           "text": "95%",
           "x": 347.4666666666667,
           "y": 318.8,
@@ -24256,14 +24169,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t65",
+          "element": "t70",
           "start": 0,
           "end": 3,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t65",
+          "element": "t70",
           "start": 0,
           "end": 3,
           "bold": true
@@ -24271,7 +24184,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t66",
+          "id": "t71",
           "text": "coverage, and CI fails below an 89% floor",
           "x": 347.4666666666667,
           "y": 362.8,
@@ -24284,7 +24197,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t66",
+          "element": "t71",
           "start": 0,
           "end": 41,
           "line_spacing": 135
@@ -24292,7 +24205,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r67",
+          "id": "r72",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24303,7 +24216,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r68",
+          "id": "r73",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24314,7 +24227,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t69",
+          "id": "t74",
           "text": "5",
           "x": 644.6333333333333,
           "y": 318.8,
@@ -24327,14 +24240,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t69",
+          "element": "t74",
           "start": 0,
           "end": 1,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t69",
+          "element": "t74",
           "start": 0,
           "end": 1,
           "bold": true
@@ -24342,7 +24255,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t70",
+          "id": "t75",
           "text": "CI checks on every pull request",
           "x": 644.6333333333333,
           "y": 362.8,
@@ -24355,7 +24268,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t70",
+          "element": "t75",
           "start": 0,
           "end": 31,
           "line_spacing": 135
@@ -24963,10 +24876,10 @@
           "id": "im31",
           "path": "assets/icons/kit/check_circle-ochre.svg",
           "alt": "",
-          "x": 57.5,
-          "y": 265.8,
-          "width": 24,
-          "height": 24
+          "x": 51.739999999999995,
+          "y": 262.2,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -25102,10 +25015,10 @@
           "id": "im38",
           "path": "assets/icons/kit/calculate-ochre.svg",
           "alt": "",
-          "x": 354.6666666666667,
-          "y": 204.90000000000003,
-          "width": 24,
-          "height": 24
+          "x": 348.9066666666667,
+          "y": 201.30000000000004,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",
@@ -25254,10 +25167,10 @@
           "id": "im46",
           "path": "assets/icons/kit/group-ochre.svg",
           "alt": "",
-          "x": 651.8333333333334,
-          "y": 144.0,
-          "width": 24,
-          "height": 24
+          "x": 646.0733333333334,
+          "y": 140.4,
+          "width": 31.200000000000003,
+          "height": 31.200000000000003
         },
         {
           "op": "add-textbox",

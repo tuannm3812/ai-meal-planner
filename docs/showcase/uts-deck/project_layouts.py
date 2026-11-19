@@ -68,12 +68,13 @@ def img(L, p, path, alt, x, y, w, h):
 
 
 TONE = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'ochre', '#21918C': 'teal',
-        '#89949D': 'grey'}
+        '#89949D': 'grey', '#FFFFFF': 'white', '#1B2430': 'ink'}
 
 
 def dot_icon(L, p, glyph, colour, x, y, d=24):
-    """An icon from the deck's kit (build_icon_kit.py): a white rounded tile, glyph in the tone."""
-    img(L, p, f'assets/icons/kit/{glyph}-{TONE[colour]}.svg', '', x, y, d, d)
+    """A bare glyph from the deck's kit (build_icon_kit.py), drawn a third larger than its slot."""
+    big = d * 1.3
+    img(L, p, f'assets/icons/kit/{glyph}-{TONE[colour]}.svg', '', x - (big - d) * .8, y - (big - d) / 2, big, big)
 
 
 def chip(L, p, text, x, y, w, h, colour=INK, fill=WHITE, size=10):
@@ -120,7 +121,8 @@ def mini_chart(L, p, c, x, y, w, ink):
         cx, cy = x + (k % per_row) * step + step / 2, y + (k // per_row) * step + step / 2
         colour = V_DARK if k < c['first'] else V_GREEN
         p.rect(cx - step * .36, cy - step * .36, step * .72, step * .72, colour, 'ELLIPSE')
-    paint(L, p, c['label'], x, y + 3 * step + 4, w, 8, BODY)
+    if c.get('label'):
+        paint(L, p, c['label'], x, y + 3 * step + 4, w, 8, BODY)
 
 
 def mp_summary(L, p, slide):
@@ -293,39 +295,31 @@ def mp_calories(L, p, slide):
     overlap, notch, ch = 8, 18, 108
     cw = (W + 3 * overlap) / 4
     for i, s in enumerate(steps):
+        # Each chevron wears the colour of its part in the rings below.
         x = LEFT + i * (cw - overlap)
-        last = i == len(steps) - 1
+        ink = INK if i == 3 else WHITE
         img(L, p, f'assets/figures/shapes/chevron-{i + 1}.svg', '', x, TOP, cw, ch)
-        tx = x + (14 if i == 0 else notch + 10)
+        tx = x + (16 if i == 0 else notch + 12)
         tw = cw - (tx - x) - notch - 8
-        ink = WHITE if last else INK
-        sub = WHITE if last else BODY
-        accent_ink = ACCENT[accent(slide)][0]
-        dot_icon(L, p, s['icon'], V_TEAL if last else accent_ink, tx, TOP + 12, 22)
-        paint(L, p, s['title'], tx + 28, TOP + 15, tw - 28, 12, ink, True)
-        text = s['text'].replace('**', '')
-        paint(L, p, text, tx, TOP + 42, tw, 10, sub)
+        dot_icon(L, p, s['icon'], ink, tx, TOP + 14, 22)
+        paint(L, p, s['title'], tx + 32, TOP + 17, tw - 32, 12, ink, True)
+        paint(L, p, s['text'], tx, TOP + 44, tw, 10, ink)
         paint(L, p, s['value'], tx, TOP + ch - 28, tw, 12, ink, True)
-    chart = slide['chart']
     y = TOP + ch + 16
     p.rect(LEFT, y, W, bottom - y, pale(slide))
-    d = min(bottom - y - 24, 170)
-    dx, dy = LEFT + 24, y + (bottom - y - d) / 2
-    img(L, p, chart['image'], chart['alt'], dx, dy, d, d)
-    paint(L, p, chart['centre'], dx + d * .25, dy + d / 2 - 14, d * .5, 18, INK, True, 'center')
-    paint(L, p, chart['centre_label'], dx + d * .25, dy + d / 2 + 9, d * .5, 8, BODY, False, 'center')
-    gx = dx + d + 36
-    put(L, p, chart['title'], gx, y + 14, 500, 12, 'ink', True)
-    colw = (RIGHT - 14 - gx - 24) / 2
-    for k, g in enumerate(chart['groups']):
-        cx = gx + k * (colw + 24)
-        cy = y + 44
-        put(L, p, g['title'], cx, cy, colw, 10, 'ink', True)
-        for j, (colour, text) in enumerate(g['items']):
-            iy = cy + 26 + j * 26
-            p.rect(cx, iy + 1, 12, 12, colour)
-            put(L, p, text, cx + 20, iy, colw - 20, 10, 'body')
-    put(L, p, chart['scale'], gx, bottom - 24, RIGHT - 14 - gx, 8, 'body')
+    rings = slide['chart']['rings']
+    half = W / 2
+    d = min(bottom - y - 24, 150)
+    for k, r in enumerate(rings):
+        x = LEFT + k * half
+        dx, dy = x + 24, y + (bottom - y - d) / 2
+        img(L, p, r['image'], r['alt'], dx, dy, d, d)
+        paint(L, p, r['centre'], dx + d * .2, dy + d / 2 - 15, d * .6, 18, INK, True, 'center')
+        paint(L, p, r['centre_label'], dx + d * .2, dy + d / 2 + 8, d * .6, 8, BODY, False, 'center')
+        gx = dx + d + 20
+        hy = y + (bottom - y) / 2 - 22
+        put(L, p, r['headline'], gx, hy, x + half - 16 - gx, 12, 'ink', True)
+        put(L, p, r['text'], gx, hy + 22, x + half - 16 - gx, 10, 'body')
 
 
 # -- 8: choosing --------------------------------------------------------------------------------
@@ -536,10 +530,11 @@ def mp_engineering(L, p, slide):
     lh = 168
     p.rect(LEFT, TOP, W, lh, pale(slide))
     put(L, p, slide['line_title'], LEFT + 14, TOP + 10, 400, 12, 'ink', True)
-    put(L, p, slide['legend'], LEFT + 420, TOP + 12, W - 434, 8, 'body', False, 'right')
+    if slide.get('legend'):
+        put(L, p, slide['legend'], LEFT + 420, TOP + 12, W - 434, 8, 'body', False, 'right')
     steps = slide['steps']
     step = (W - 120) / (len(steps) - 1)
-    ly = TOP + 66
+    ly = TOP + 74
     for i, s in enumerate(steps):
         x = LEFT + 60 + i * step
         colour = V_TEAL if s['live'] else '#89949D'
@@ -549,7 +544,8 @@ def mp_engineering(L, p, slide):
     for i, s in enumerate(steps):
         x = LEFT + 60 + i * step
         colour = V_TEAL if s['live'] else '#89949D'
-        dot_icon(L, p, s['icon'], colour, x - 18, ly - 18, 36)
+        p.rect(x - 6, ly - 6, 12, 12, colour, 'ELLIPSE')
+        dot_icon(L, p, s['icon'], colour, x - 13, ly - 40, 26)
         put(L, p, s['title'], x - 60, ly + 26, 120, 10, 'ink', True, 'center')
         put(L, p, s['text'], x - 60, ly + 41, 120, 8, 'body', False, 'center')
         put(L, p, s['file'], x - 60, ly + 56, 120, 8, 'body', False, 'center')

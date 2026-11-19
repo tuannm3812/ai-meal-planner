@@ -134,14 +134,12 @@ Exact face text:
 - On target
 - 72 of 72
 - Benchmark plans meet the calorie and / macro targets, up from 10.
-- Dark: the 10 that passed at the first run
 - Fits your limits
 - 5 of 5
 - Guardrail cases hold: limits rule out / recipes or swap ingredients.
 - Honest about gaps
 - 68 of 72
 - Plans include an estimated ingredient, / and the app labels each one.
-- Dark: plans with an estimated ingredient
 
 ## 4. Picking a meal is easy; sizing it to you is not
 
@@ -324,16 +322,14 @@ Exact face text:
 - This meal
 - 28% of the budget, within 350–850 / kcal.
 - 691 kcal target
-- 691 kcal
-- this meal
-- Her day and this meal, as two rings
-- Outer ring: her 2,469 kcal day
-- This meal: 691 kcal, 28% of the day
-- The rest of her day: 1,778 kcal
-- Inner ring: where the budget comes from
-- 2,344 kcal from body and activity
-- +125 kcal from the trained exercise model
-- Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm).
+- 2,469
+- kcal budget
+- Exercise adds only 5%
+- The trained model moves her budget by 125 kcal.
+- 691
+- kcal meal
+- One meal, 28% of her day
+- The rest of the budget stays for her other meals.
 
 ## 8. Hard limits come first, then a relevant recipe
 
@@ -597,7 +593,6 @@ Exact face text:
 - TAKEAWAY
 - Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.
 - From a change to production
-- Teal: runs today. Grey: built, waiting for a GCP project.
 - Contract
 - CI fails on any drift
 - docs/openapi.json
