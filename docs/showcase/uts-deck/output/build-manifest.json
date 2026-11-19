@@ -50,18 +50,21 @@
     }
   },
   "inputs": {
-    "brief-content.json": "964f927840dcba582b835c9b0a63870c57f663ac0d854a349510a33c867c4f5b",
+    "brief-content.json": "7705b9e265dda655d52515aa7ec8ee87ace1044e8942b16818c4847066d8d9c9",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
     "claims-register.md": "08056355304272cd4d14373d1c7d82291004159ec29ccf7eda2a6e5e4b4d067a",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
-    "project_layouts.py": "28d6ab5a13a160e4f9c50db26b6fe1ebe040708efe7ec7f0eb5d5bd8e09b191a"
+    "project_layouts.py": "ec4e895a17353b57727de9ecb9c9e89ea5659dad99ade81c5fefed09edc830c5"
   },
   "assets": {
     "assets/PROVENANCE.md": "5fca3195bdc91ba0f25ad38c2ab9a87f11523d9ed939e66c43699ac33d323f96",
     "assets/brand/ai-meal-planner-mark.svg": "542c1933dc61ce200a547ec748e4ae5f860406b15db28a5d288e4f1dfd7fda82",
     "assets/brand/uts-logo.svg": "9090430197b651e341224af5212ed9bbc86ec72d5779f35c9ab6d3376df244e4",
+    "assets/figures/app-1-profile-zoom.jpg": "b3099fea6a25b21d22dbcaf1379f563c4a3d49dde501da437d997c4e827c69cd",
     "assets/figures/app-1-profile.jpg": "e15d6de379651d674e0a8b5d6a491bb5eb5384bb3b4be311b2d2d5c8a9fabb7f",
+    "assets/figures/app-2-craving-zoom.jpg": "5e59ee8d03ce428e1c10cacd560b2dfe9f41f7080cdf39c5e161d090e5b270ea",
     "assets/figures/app-2-craving.jpg": "e2cfc9223a8a8a3aa1d99025c3b2aaac3a64e1cd9b7927963449e0ee5fdc0d35",
+    "assets/figures/app-3-plan-zoom.jpg": "3c052bedd97d6a21ae59dccca91177c9588cb02a5cc94651fba8a1b33de2035e",
     "assets/figures/app-3-plan.jpg": "b535399400d9f0d29b2de0a1155013f0fc70f7fbbe3243d605344c1ac678eea6",
     "assets/figures/close-salmon.png": "7a0de20a5cf2482b914d77f01099b545408a6639cae6dc7e8a7d279099ec1171",
     "assets/figures/cover-motif.svg": "b1d809022b9af62be902d0d1e7e76c7b866e302960a5de6328b4f8f994834094",
@@ -131,8 +134,8 @@
     "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "8f27783065b9b908a73888e96803db8b269b3bb286215d58275f197cd70c7b42",
-    "deck.pdf": "a2c65ccf52ee84d0a5f1f42f9b1da831c4797a959f962056e42ba3d56bf73dfd"
+    "deck.html": "e161241a7ba3336602f3c01e5c1836f378b2e1bbc8d6f6a28f922a0012671408",
+    "deck.pdf": "7674db46013955d2e528b9378f936fe60a48f448c15a0cc62a034fe6c3998758"
   },
   "slide_count": 16
 }

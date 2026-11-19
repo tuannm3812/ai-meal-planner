@@ -225,7 +225,7 @@ Exact face text:
 - HOW IT WORKS
 - The flow
 - One craving in, one meal and a shopping list out
-- Three steps in the React app, captured from a local run with no provider keys.
+- Three steps in the React app, shown close up from a local run with no provider keys.
 - AI Meal Planner
 - 5
 - TAKEAWAY
@@ -266,19 +266,29 @@ Exact face text:
 - THE PORTION PLANNER
 - Calorie expenditure
 - Estimates a day's burn and sets the / daily budget.
-- 2,469 kcal budget
+- ORDER TICKET
+- Budget: 2,469 kcal
 - THE CHEF
 - Meal recommendation
 - Sets the meal target, rules out / conflicts, picks a recipe and sizes it.
-- 691 kcal target
+- ORDER TICKET
+- Budget: 2,469 kcal
+- Chicken Fried Rice, 691 kcal target
 - THE TASTER
 - Nutrition verification
 - Looks up each ingredient and labels / estimates.
-- 694 kcal, 3 of 6 estimated
+- ORDER TICKET
+- Budget: 2,469 kcal
+- Chicken Fried Rice, 691 kcal target
+- Checked: 694 kcal, 3 of 6 estimated
 - THE SHOPPER
 - Supermarket
 - Matches ingredients to store items or / category prices.
-- $24.50 estimated
+- ORDER TICKET
+- Budget: 2,469 kcal
+- Chicken Fried Rice, 691 kcal target
+- Checked: 694 kcal, 3 of 6 estimated
+- Shopping list: $24.50 estimated
 
 ## 7. From your body to a meal target
 

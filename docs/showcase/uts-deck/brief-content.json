@@ -443,7 +443,7 @@
       "topic": "The flow",
       "accent": "blue",
       "title": "One craving in, one meal and a shopping list out",
-      "subtitle": "Three steps in the React app, captured from a local run with no provider keys.",
+      "subtitle": "Three steps in the React app, shown close up from a local run with no provider keys.",
       "takeaway": "Two short screens lead to one plan page that shows how it was made.",
       "question": "What does a person actually do?",
       "notes": {
@@ -460,24 +460,24 @@
       },
       "steps": [
         {
-          "image": "assets/figures/app-1-profile.jpg",
-          "alt": "Step 1 of the React app: the profile form.",
+          "image": "assets/figures/app-1-profile-zoom.jpg",
+          "alt": "Close-up of step 1 in the React app: goal, age, sex, height, weight, activity and things to avoid.",
           "icon": "person",
           "title": "1. You",
           "text": "Goal, body details, activity and anything to avoid.",
           "value": "34, male, 165 cm, 65 kg"
         },
         {
-          "image": "assets/figures/app-2-craving.jpg",
-          "alt": "Step 2: the craving field reading chicken fried rice.",
+          "image": "assets/figures/app-2-craving-zoom.jpg",
+          "alt": "Close-up of step 2: the craving field reading chicken fried rice, suggestions and where you shop.",
           "icon": "search",
           "title": "2. Craving",
           "text": "Say what you feel like eating and where you shop.",
           "value": "chicken fried rice"
         },
         {
-          "image": "assets/figures/app-3-plan.jpg",
-          "alt": "Step 3: the plan page for Chicken Fried Rice, 694 kcal.",
+          "image": "assets/figures/app-3-plan-zoom.jpg",
+          "alt": "Close-up of step 3: Chicken Fried Rice, 694 kcal against a 691 kcal target, with its macro balance.",
           "icon": "rice_bowl",
           "title": "3. Your plan",
           "text": "One meal, its **balance**, sources and a shopping list.",
@@ -541,7 +541,16 @@
           "text": "Matches ingredients to **store items** or category prices.",
           "value": "$24.50 estimated"
         }
-      ]
+      ],
+      "ticket": {
+        "title": "Order ticket",
+        "lines": [
+          "Budget: 2,469 kcal",
+          "Chicken Fried Rice, 691 kcal target",
+          "Checked: 694 kcal, 3 of 6 estimated",
+          "Shopping list: $24.50 estimated"
+        ]
+      }
     },
     {
       "id": "calories",

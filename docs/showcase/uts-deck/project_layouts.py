@@ -235,6 +235,7 @@ def mp_flow(L, p, slide):
         x = LEFT + i * (w + gap)
         card(p, x, TOP, w, bottom - TOP, accent(slide))
         ih = w * 900 / 1280 - 20 * 900 / 1280
+        p.rect(x + 9.5, TOP + 11.5, w - 19, ih + 1, HAIR)
         img(L, p, s['image'], s['alt'], x + 10, TOP + 12, w - 20, ih)
         y = TOP + 12 + ih + 12
         dot_icon(L, p, s['icon'], ACCENT[accent(slide)][0], x + 14, y, 24)
@@ -263,7 +264,21 @@ def mp_agents(L, p, slide):
         put(L, p, s['role'].upper(), x + 14, y + 82, w - 28, 8, 'accent', True)
         put(L, p, s['title'], x + 14, y + 96, w - 28, 12, 'ink', True)
         inked(L, p, s['text'], x + 14, y + 116, w - 28, 10)
-        chip(L, p, s['value'], x + 14, bottom - 36, w - 28, 24)
+        # The order ticket fills up as it passes each station; the newest line is this station's output.
+        tk = slide['ticket']
+        lines = tk['lines'][:i + 1]
+        th = 22 + 4 * 12 + 6
+        ty = bottom - 12 - th
+        p.rect(x + 12, ty, w - 24, th, WHITE)
+        for k in range(int((w - 24) / 6)):
+            p.rect(x + 12 + k * 6 + 1, ty - 2, 3, 2, WHITE)
+        paint(L, p, tk['title'].upper(), x + 20, ty + 7, w - 40, 8, BODY, True)
+        for k, line in enumerate(lines):
+            ly = ty + 22 + k * 12
+            new_line = k == i
+            if new_line:
+                p.rect(x + 12, ly, 3, 11, V_TEAL)
+            paint(L, p, line, x + 20, ly, w - 40, 8, INK if new_line else BODY, new_line)
         if i < 3:
             p.connector(x + w + 2, y + 42, x + w + gap - 2, y + 42)
 
@@ -317,13 +332,18 @@ def mp_choosing(L, p, slide):
     p.rect(LEFT, TOP, W, fh, pale(slide))
     put(L, p, f['title'], LEFT + 14, TOP + 10, 400, 12, 'ink', True)
     top = max(r['value'] for r in f['rows'])
-    bw = W - 28 - 200 - 180
+    step = (W - 28 - 200 - 190) / top
     for i, r in enumerate(f['rows']):
         y = TOP + 36 + i * 27
         put(L, p, r['label'], LEFT + 14, y + 3, 190, 10, 'ink')
-        w = bw * r['value'] / top
-        p.rect(LEFT + 214, y, w, 20, VIRIDIS4[i % 4])
-        put(L, p, r['text'], LEFT + 232 + w, y + 3, 260, 10, 'ink', True)
+        # One dot per recipe: kept recipes in colour, the ones this step removed as faint rings.
+        for k in range(top):
+            cx, cy = LEFT + 214 + k * step + step / 2, y + 10
+            if k < r['value']:
+                p.rect(cx - 5, cy - 5, 10, 10, VIRIDIS4[i % 4], 'ELLIPSE')
+            else:
+                L.outlined(p, cx - 5, cy - 5, 10, 10, 'transparent', HAIR, 1.2, 'ELLIPSE')
+        put(L, p, r['text'], LEFT + 214 + top * step + 18, y + 3, 164, 10, 'ink', True)
     outcomes = slide['outcomes']
     gap = 16
     w = (W - gap * (len(outcomes) - 1)) / len(outcomes)
