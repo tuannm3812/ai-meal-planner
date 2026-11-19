@@ -354,21 +354,71 @@
           "question": "How much?",
           "fact": "Daily budgets in the benchmark run from **1,200 to 4,521 kcal**.",
           "today": "Guess from \"serves 4\"",
-          "app": "A budget, then a meal target"
+          "visual": {
+            "kind": "range",
+            "low": 1200,
+            "high": 4521,
+            "mark": 2889,
+            "meal": 809,
+            "axis": 4600,
+            "day_label": "Day budgets",
+            "mark_label": "Average man: 2,889",
+            "meal_label": "His pasta: 809"
+          }
         },
         {
           "icon": "no_food",
           "question": "Is it right for me?",
-          "fact": "Asked for pasta, a vegan gets **lentil bolognese** and a coeliac gets **gluten-free pasta**.",
+          "fact": "The same request needs a **different meal** or a **swapped ingredient**.",
           "today": "Read every label",
-          "app": "Conflicts ruled out or swapped first"
+          "visual": {
+            "kind": "swaps",
+            "items": [
+              [
+                "Vegan",
+                "Turkey pasta",
+                "Lentil Bolognese Pasta"
+              ],
+              [
+                "Coeliac",
+                "Wholemeal pasta",
+                "Gluten-free pasta"
+              ]
+            ]
+          }
         },
         {
           "icon": "shopping_cart",
           "question": "What do I buy?",
-          "fact": "This one pasta means **five ingredients** to find and price.",
+          "fact": "**Five ingredients** to find and price at the store.",
           "today": "Write a list, guess the cost",
-          "app": "A list with an estimated total"
+          "visual": {
+            "kind": "receipt",
+            "items": [
+              [
+                "Turkey mince",
+                "$6.50"
+              ],
+              [
+                "Pasta",
+                "$2.80"
+              ],
+              [
+                "Passata",
+                "$2.30"
+              ],
+              [
+                "Spinach",
+                "$3.50"
+              ],
+              [
+                "Olive oil",
+                "$3.50"
+              ]
+            ],
+            "total": "$18.60",
+            "total_label": "Estimated"
+          }
         }
       ],
       "pins": [

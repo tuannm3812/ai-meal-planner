@@ -156,6 +156,49 @@ def pin(L, p, n, x, y, r=9):
     paint(L, p, str(n), x - r, y - 6.5, 2 * r, 10, WHITE, True, 'center')
 
 
+def row_visual(L, p, v, x, y, w, h):
+    """The answer to a row's question, drawn from the offline run."""
+    if v['kind'] == 'range':
+        # One kcal scale from zero for both lines, so the meal reads as a share of a day.
+        lab = 72
+        sx = lambda k: x + lab + k / v['axis'] * (w - lab)
+        y1, y2 = y + 10, y + 38
+        for yy, word in ((y1, v['day_label']), (y2, 'One meal')):
+            paint(L, p, word, x, yy - 1, lab - 6, 8, BODY, True)
+            p.rect(sx(0), yy, sx(v['axis']) - sx(0), 8, WHITE)
+        p.rect(sx(v['low']), y1, sx(v['high']) - sx(v['low']), 8, V_BLUE)
+        p.rect(sx(v['mark']) - 4, y1 - 2, 8, 12, INK)
+        paint(L, p, v['mark_label'], sx(v['mark']) - 60, y1 + 12, 120, 8, INK, True, 'center')
+        p.rect(sx(0), y2, sx(v['meal']) - sx(0), 8, V_TEAL)
+        paint(L, p, v['meal_label'], sx(v['meal']) + 6, y2 - 1, 80, 8, V_TEAL, True)
+        paint(L, p, '0', sx(0), y2 + 12, 20, 8, BODY)
+        paint(L, p, f"{v['low']:,}", sx(v['low']) - 20, y1 - 12, 40, 8, BODY, False, 'center')
+        paint(L, p, f"{v['high']:,} kcal", sx(v['high']) - 50, y1 - 12, 60, 8, BODY, False, 'right')
+        return
+    if v['kind'] == 'swaps':
+        ch = (h - 8) / 2
+        for k, (who, was, now) in enumerate(v['items']):
+            cy = y + k * (ch + 8)
+            p.rect(x, cy, w, ch, WHITE)
+            p.rect(x, cy, 3, ch, V_TEAL)
+            paint(L, p, who.upper(), x + 10, cy + ch / 2 - 6, 52, 8, BODY, True)
+            paint(L, p, was, x + 62, cy + ch / 2 - 7, 84, 10, BODY)
+            p.connector(x + 150, cy + ch / 2, x + 166, cy + ch / 2)
+            paint(L, p, now, x + 170, cy + ch / 2 - 7, w - 176, 10, INK, True)
+        return
+    p.rect(x, y, w, h, WHITE)
+    items = v['items']
+    col = (w - 116) / 2
+    for k, (name, price) in enumerate(items):
+        cx, cy = x + 10 + (k // 3) * (col + 6), y + 8 + (k % 3) * 15
+        put(L, p, f'`{name.upper()}`', cx, cy, col - 40, 8, 'body')
+        put(L, p, f'`{price}`', cx + col - 40, cy, 34, 8, 'body', False, 'right')
+    tx = x + w - 96
+    p.line(tx - 6, y + 8, tx - 6, y + h - 8, HAIR)
+    put(L, p, f"`{v['total_label'].upper()}`", tx, y + h / 2 - 16, 88, 8, 'body', True)
+    paint(L, p, v['total'], tx, y + h / 2 - 4, 88, 18, INK, True)
+
+
 def mp_problem(L, p, slide):
     bottom = band(L, p, slide) - 14
     lw = 250
@@ -171,22 +214,15 @@ def mp_problem(L, p, slide):
     x0 = LEFT + lw + 16
     rows = slide['rows']
     rh = (bottom - TOP - 10 * (len(rows) - 1)) / len(rows)
-    tone = ACCENT[accent(slide)]
     for i, r in enumerate(rows):
         y = TOP + i * (rh + 10)
         card(p, x0, y, RIGHT - x0, rh, accent(slide), rule='left')
-        pin(L, p, i + 1, x0 + 26, y + rh / 2, 11)
-        put(L, p, r['question'], x0 + 50, y + 12, 220, 12, 'ink', True)
-        inked(L, p, r['fact'], x0 + 50, y + 32, 220, 10)
-        bw, cx = 140, x0 + 284
-        for k, (label, text) in enumerate((('TODAY', r['today']), ('WITH THE APP', r['app']))):
-            bx = cx + k * (bw + 24)
-            p.rect(bx, y + 10, bw, rh - 20, WHITE if k == 0 else tone[1])
-            if k:
-                p.rect(bx, y + 10, 3, rh - 20, V_TEAL)
-            put(L, p, label, bx + 10, y + 18, bw - 20, 8, 'body', True)
-            put(L, p, text, bx + 10, y + 32, bw - 20, 10, 'ink', True)
-        p.connector(cx + bw + 3, y + rh / 2, cx + bw + 21, y + rh / 2)
+        pin(L, p, i + 1, x0 + 24, y + 22, 11)
+        put(L, p, r['question'], x0 + 44, y + 13, 210, 12, 'ink', True)
+        inked(L, p, r['fact'], x0 + 44, y + 33, 210, 10)
+        paint(L, p, f"Today: {r['today']}", x0 + 44, y + rh - 20, 210, 8, BODY)
+        vx = x0 + 270
+        row_visual(L, p, r['visual'], vx, y + 12, RIGHT - 14 - vx, rh - 24)
 
 
 # -- 5: flow ------------------------------------------------------------------------------------

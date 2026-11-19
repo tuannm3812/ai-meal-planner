@@ -172,25 +172,41 @@ Exact face text:
 - One request answers all three.
 - 1
 - How much?
-- Daily budgets in the benchmark run from 1,200 / to 4,521 kcal.
-- TODAY
-- Guess from "serves 4"
-- WITH THE APP
-- A budget, then a meal / target
+- Daily budgets in the benchmark run from / 1,200 to 4,521 kcal.
+- Today: Guess from "serves 4"
+- Day budgets
+- One meal
+- Average man: 2,889
+- His pasta: 809
+- 0
+- 1,200
+- 4,521 kcal
 - 2
 - Is it right for me?
-- Asked for pasta, a vegan gets lentil bolognese / and a coeliac gets gluten-free pasta.
-- TODAY
-- Read every label
-- WITH THE APP
-- Conflicts ruled out or / swapped first
+- The same request needs a different meal or a / swapped ingredient.
+- Today: Read every label
+- VEGAN
+- Turkey pasta
+- Lentil Bolognese Pasta
+- COELIAC
+- Wholemeal pasta
+- Gluten-free pasta
 - 3
 - What do I buy?
-- This one pasta means five ingredients to find / and price.
-- TODAY
-- Write a list, guess the / cost
-- WITH THE APP
-- A list with an estimated / total
+- Five ingredients to find and price at the store.
+- Today: Write a list, guess the cost
+- TURKEY MINCE
+- $6.50
+- PASTA
+- $2.80
+- PASSATA
+- $2.30
+- SPINACH
+- $3.50
+- OLIVE OIL
+- $3.50
+- ESTIMATED
+- $18.60
 
 ## 5. One craving in, one meal and a shopping list out
 

@@ -43,3 +43,6 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Recipe example | Tofu Fried Rice from 34 → 13 → 5 → 1 | Local run | |
 | Cover receipt | $7.80, $3.20, $3.50, $3.50, $3.50, $3.00; total $24.50 | slides/captures/2026-11-06-plan.json | Category prices for 4 of 6 |
 | Cover tags | Chicken breast 100 g, cooked rice 220 g, vegetables 115 g | Local run, 6 November 2026 | |
+| Pasta for the average man | 2,889 kcal a day; 809 kcal meal target | Local offline run of "pasta", average man, 19 November 2026 (scripts/meal_quality_baseline.py service) | Same as docs/meal_quality/baseline.json "creamy pasta / average man" |
+| Pasta swaps | Vegan: Lentil Bolognese Pasta; coeliac: gluten-free pasta | Same run | Coeliac swap is DEC-31 |
+| Pasta shopping list | $6.50, $2.80, $2.30, $3.50, $3.50; $18.60 estimated | Same run, Coles Earlwood local reference | Olive oil is a category price estimate |
