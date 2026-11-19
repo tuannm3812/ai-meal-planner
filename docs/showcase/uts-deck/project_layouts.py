@@ -67,9 +67,13 @@ def img(L, p, path, alt, x, y, w, h):
     L.image(p, {'path': path, 'alt': alt}, x, y, w, h)
 
 
+TONE = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'ochre', '#21918C': 'teal',
+        '#89949D': 'grey'}
+
+
 def dot_icon(L, p, glyph, colour, x, y, d=24):
-    p.rect(x, y, d, d, colour, 'ELLIPSE')
-    img(L, p, f'assets/icons/glyph-{glyph}.png', '', x + d * .17, y + d * .17, d * .66, d * .66)
+    """An icon from the deck's kit (build_icon_kit.py): a white rounded tile, glyph in the tone."""
+    img(L, p, f'assets/icons/kit/{glyph}-{TONE[colour]}.svg', '', x, y, d, d)
 
 
 def chip(L, p, text, x, y, w, h, colour=INK, fill=WHITE, size=10):
@@ -109,8 +113,7 @@ def mini_chart(L, p, c, x, y, w, ink):
         return
     if c['kind'] == 'checks':
         for k in range(c['total']):
-            p.rect(x + k * 26, y + 4, 20, 20, V_TEAL, 'ELLIPSE')
-            img(L, p, 'assets/icons/glyph-check_circle.png', '', x + k * 26 + 3, y + 7, 14, 14)
+            dot_icon(L, p, 'check_circle', V_TEAL, x + k * 28, y + 2, 24)
         return
     per_row, step = 24, w / 24
     for k in range(c['total']):

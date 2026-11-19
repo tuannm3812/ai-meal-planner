@@ -3814,30 +3814,19 @@
           "background_color": "#526174"
         },
         {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r46",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im46",
+          "path": "assets/icons/kit/person-slate.svg",
+          "alt": "",
           "x": 57.5,
           "y": 266.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#526174"
-        },
-        {
-          "op": "add-image",
-          "id": "im47",
-          "path": "assets/icons/glyph-person.png",
-          "alt": "",
-          "x": 61.58,
-          "y": 270.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t48",
+          "id": "t47",
           "text": "Sized to you",
           "x": 80.3,
           "y": 263.8,
@@ -3850,14 +3839,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t48",
+          "element": "t47",
           "start": 0,
           "end": 12,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t48",
+          "element": "t47",
           "start": 0,
           "end": 12,
           "bold": true
@@ -3865,7 +3854,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t49",
+          "id": "t48",
           "text": "0.4%",
           "x": 50.3,
           "y": 292.8,
@@ -3878,14 +3867,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t48",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t49",
+          "element": "t48",
           "start": 0,
           "end": 4,
           "bold": true
@@ -3893,7 +3882,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t50",
+          "id": "t49",
           "text": "Median gap between each meal and its\ntarget, worst 9.9%.",
           "x": 50.3,
           "y": 324.8,
@@ -3906,14 +3895,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t50",
+          "element": "t49",
           "start": 0,
           "end": 56,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t50",
+          "element": "t49",
           "start": 51,
           "end": 55,
           "bold": true,
@@ -3922,7 +3911,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r51",
+          "id": "r50",
           "shape_type": "RECTANGLE",
           "x": 57.5,
           "y": 380.0,
@@ -3933,7 +3922,7 @@
         {
           "op": "add-line",
           "slide": "summary",
-          "id": "l52",
+          "id": "l51",
           "x": 146.9375,
           "y": 376.0,
           "width": 0.0,
@@ -3944,7 +3933,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r53",
+          "id": "r52",
           "shape_type": "ELLIPSE",
           "x": 228.520625,
           "y": 383.0,
@@ -3955,7 +3944,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t54",
+          "id": "t53",
           "text": "worst",
           "x": 204.320625,
           "y": 356.8,
@@ -3969,14 +3958,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t53",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t54",
+          "element": "t53",
           "start": 0,
           "end": 5,
           "bold": true
@@ -3984,7 +3973,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r55",
+          "id": "r54",
           "shape_type": "ELLIPSE",
           "x": 145.355,
           "y": 381.0,
@@ -3995,7 +3984,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t56",
+          "id": "t55",
           "text": "median",
           "x": 123.15499999999999,
           "y": 356.8,
@@ -4009,14 +3998,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t55",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t55",
           "start": 0,
           "end": 6,
           "bold": true
@@ -4024,7 +4013,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t57",
+          "id": "t56",
           "text": "-10%",
           "x": 50.3,
           "y": 390.8,
@@ -4037,7 +4026,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t57",
+          "element": "t56",
           "start": 0,
           "end": 4,
           "line_spacing": 135
@@ -4045,7 +4034,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t58",
+          "id": "t57",
           "text": "target",
           "x": 119.7375,
           "y": 390.8,
@@ -4059,7 +4048,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t58",
+          "element": "t57",
           "start": 0,
           "end": 6,
           "line_spacing": 135
@@ -4067,7 +4056,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t59",
+          "id": "t58",
           "text": "+10%",
           "x": 189.175,
           "y": 390.8,
@@ -4081,7 +4070,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t59",
+          "element": "t58",
           "start": 0,
           "end": 4,
           "line_spacing": 135
@@ -4089,7 +4078,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r60",
+          "id": "r59",
           "shape_type": "RECTANGLE",
           "x": 266.375,
           "y": 252.0,
@@ -4100,7 +4089,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r61",
+          "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 266.375,
           "y": 252.0,
@@ -4109,30 +4098,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r62",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im61",
+          "path": "assets/icons/kit/balance-blue.svg",
+          "alt": "",
           "x": 280.375,
           "y": 266.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im63",
-          "path": "assets/icons/glyph-balance.png",
-          "alt": "",
-          "x": 284.455,
-          "y": 270.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t64",
+          "id": "t62",
           "text": "On target",
           "x": 303.175,
           "y": 263.8,
@@ -4145,14 +4123,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t64",
+          "element": "t62",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t64",
+          "element": "t62",
           "start": 0,
           "end": 9,
           "bold": true
@@ -4160,7 +4138,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t65",
+          "id": "t63",
           "text": "72 of 72",
           "x": 273.175,
           "y": 292.8,
@@ -4173,14 +4151,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t65",
+          "element": "t63",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t65",
+          "element": "t63",
           "start": 0,
           "end": 8,
           "bold": true
@@ -4188,7 +4166,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t66",
+          "id": "t64",
           "text": "Benchmark plans meet the calorie and\nmacro targets, up from 10.",
           "x": 273.175,
           "y": 324.8,
@@ -4201,14 +4179,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t66",
+          "element": "t64",
           "start": 0,
           "end": 63,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t66",
+          "element": "t64",
           "start": 60,
           "end": 62,
           "bold": true,
@@ -4217,9 +4195,31 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r67",
+          "id": "r65",
           "shape_type": "ELLIPSE",
           "x": 281.4184375,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r66",
+          "shape_type": "ELLIPSE",
+          "x": 288.8715625,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r67",
+          "shape_type": "ELLIPSE",
+          "x": 296.3246875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4230,7 +4230,7 @@
           "slide": "summary",
           "id": "r68",
           "shape_type": "ELLIPSE",
-          "x": 288.8715625,
+          "x": 303.7778125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4241,7 +4241,7 @@
           "slide": "summary",
           "id": "r69",
           "shape_type": "ELLIPSE",
-          "x": 296.3246875,
+          "x": 311.2309375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4252,7 +4252,7 @@
           "slide": "summary",
           "id": "r70",
           "shape_type": "ELLIPSE",
-          "x": 303.7778125,
+          "x": 318.6840625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4263,7 +4263,7 @@
           "slide": "summary",
           "id": "r71",
           "shape_type": "ELLIPSE",
-          "x": 311.2309375,
+          "x": 326.1371875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4274,7 +4274,7 @@
           "slide": "summary",
           "id": "r72",
           "shape_type": "ELLIPSE",
-          "x": 318.6840625,
+          "x": 333.5903125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4285,7 +4285,7 @@
           "slide": "summary",
           "id": "r73",
           "shape_type": "ELLIPSE",
-          "x": 326.1371875,
+          "x": 341.0434375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4296,7 +4296,7 @@
           "slide": "summary",
           "id": "r74",
           "shape_type": "ELLIPSE",
-          "x": 333.5903125,
+          "x": 348.4965625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4307,29 +4307,29 @@
           "slide": "summary",
           "id": "r75",
           "shape_type": "ELLIPSE",
-          "x": 341.0434375,
+          "x": 355.9496875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
-          "background_color": "#440154"
+          "background_color": "#5EC962"
         },
         {
           "op": "add-shape",
           "slide": "summary",
           "id": "r76",
           "shape_type": "ELLIPSE",
-          "x": 348.4965625,
+          "x": 363.4028125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
-          "background_color": "#440154"
+          "background_color": "#5EC962"
         },
         {
           "op": "add-shape",
           "slide": "summary",
           "id": "r77",
           "shape_type": "ELLIPSE",
-          "x": 355.9496875,
+          "x": 370.8559375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4340,7 +4340,7 @@
           "slide": "summary",
           "id": "r78",
           "shape_type": "ELLIPSE",
-          "x": 363.4028125,
+          "x": 378.3090625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4351,7 +4351,7 @@
           "slide": "summary",
           "id": "r79",
           "shape_type": "ELLIPSE",
-          "x": 370.8559375,
+          "x": 385.7621875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4362,7 +4362,7 @@
           "slide": "summary",
           "id": "r80",
           "shape_type": "ELLIPSE",
-          "x": 378.3090625,
+          "x": 393.2153125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4373,7 +4373,7 @@
           "slide": "summary",
           "id": "r81",
           "shape_type": "ELLIPSE",
-          "x": 385.7621875,
+          "x": 400.6684375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4384,7 +4384,7 @@
           "slide": "summary",
           "id": "r82",
           "shape_type": "ELLIPSE",
-          "x": 393.2153125,
+          "x": 408.1215625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4395,7 +4395,7 @@
           "slide": "summary",
           "id": "r83",
           "shape_type": "ELLIPSE",
-          "x": 400.6684375,
+          "x": 415.5746875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4406,7 +4406,7 @@
           "slide": "summary",
           "id": "r84",
           "shape_type": "ELLIPSE",
-          "x": 408.1215625,
+          "x": 423.0278125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4417,7 +4417,7 @@
           "slide": "summary",
           "id": "r85",
           "shape_type": "ELLIPSE",
-          "x": 415.5746875,
+          "x": 430.4809375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4428,7 +4428,7 @@
           "slide": "summary",
           "id": "r86",
           "shape_type": "ELLIPSE",
-          "x": 423.0278125,
+          "x": 437.9340625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4439,7 +4439,7 @@
           "slide": "summary",
           "id": "r87",
           "shape_type": "ELLIPSE",
-          "x": 430.4809375,
+          "x": 445.3871875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4450,7 +4450,7 @@
           "slide": "summary",
           "id": "r88",
           "shape_type": "ELLIPSE",
-          "x": 437.9340625,
+          "x": 452.8403125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -4461,8 +4461,8 @@
           "slide": "summary",
           "id": "r89",
           "shape_type": "ELLIPSE",
-          "x": 445.3871875,
-          "y": 373.0434375,
+          "x": 281.4184375,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#5EC962"
@@ -4472,8 +4472,8 @@
           "slide": "summary",
           "id": "r90",
           "shape_type": "ELLIPSE",
-          "x": 452.8403125,
-          "y": 373.0434375,
+          "x": 288.8715625,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#5EC962"
@@ -4483,7 +4483,7 @@
           "slide": "summary",
           "id": "r91",
           "shape_type": "ELLIPSE",
-          "x": 281.4184375,
+          "x": 296.3246875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4494,7 +4494,7 @@
           "slide": "summary",
           "id": "r92",
           "shape_type": "ELLIPSE",
-          "x": 288.8715625,
+          "x": 303.7778125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4505,7 +4505,7 @@
           "slide": "summary",
           "id": "r93",
           "shape_type": "ELLIPSE",
-          "x": 296.3246875,
+          "x": 311.2309375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4516,7 +4516,7 @@
           "slide": "summary",
           "id": "r94",
           "shape_type": "ELLIPSE",
-          "x": 303.7778125,
+          "x": 318.6840625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4527,7 +4527,7 @@
           "slide": "summary",
           "id": "r95",
           "shape_type": "ELLIPSE",
-          "x": 311.2309375,
+          "x": 326.1371875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4538,7 +4538,7 @@
           "slide": "summary",
           "id": "r96",
           "shape_type": "ELLIPSE",
-          "x": 318.6840625,
+          "x": 333.5903125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4549,7 +4549,7 @@
           "slide": "summary",
           "id": "r97",
           "shape_type": "ELLIPSE",
-          "x": 326.1371875,
+          "x": 341.0434375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4560,7 +4560,7 @@
           "slide": "summary",
           "id": "r98",
           "shape_type": "ELLIPSE",
-          "x": 333.5903125,
+          "x": 348.4965625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4571,7 +4571,7 @@
           "slide": "summary",
           "id": "r99",
           "shape_type": "ELLIPSE",
-          "x": 341.0434375,
+          "x": 355.9496875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4582,7 +4582,7 @@
           "slide": "summary",
           "id": "r100",
           "shape_type": "ELLIPSE",
-          "x": 348.4965625,
+          "x": 363.4028125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4593,7 +4593,7 @@
           "slide": "summary",
           "id": "r101",
           "shape_type": "ELLIPSE",
-          "x": 355.9496875,
+          "x": 370.8559375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4604,7 +4604,7 @@
           "slide": "summary",
           "id": "r102",
           "shape_type": "ELLIPSE",
-          "x": 363.4028125,
+          "x": 378.3090625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4615,7 +4615,7 @@
           "slide": "summary",
           "id": "r103",
           "shape_type": "ELLIPSE",
-          "x": 370.8559375,
+          "x": 385.7621875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4626,7 +4626,7 @@
           "slide": "summary",
           "id": "r104",
           "shape_type": "ELLIPSE",
-          "x": 378.3090625,
+          "x": 393.2153125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4637,7 +4637,7 @@
           "slide": "summary",
           "id": "r105",
           "shape_type": "ELLIPSE",
-          "x": 385.7621875,
+          "x": 400.6684375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4648,7 +4648,7 @@
           "slide": "summary",
           "id": "r106",
           "shape_type": "ELLIPSE",
-          "x": 393.2153125,
+          "x": 408.1215625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4659,7 +4659,7 @@
           "slide": "summary",
           "id": "r107",
           "shape_type": "ELLIPSE",
-          "x": 400.6684375,
+          "x": 415.5746875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4670,7 +4670,7 @@
           "slide": "summary",
           "id": "r108",
           "shape_type": "ELLIPSE",
-          "x": 408.1215625,
+          "x": 423.0278125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4681,7 +4681,7 @@
           "slide": "summary",
           "id": "r109",
           "shape_type": "ELLIPSE",
-          "x": 415.5746875,
+          "x": 430.4809375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4692,7 +4692,7 @@
           "slide": "summary",
           "id": "r110",
           "shape_type": "ELLIPSE",
-          "x": 423.0278125,
+          "x": 437.9340625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4703,7 +4703,7 @@
           "slide": "summary",
           "id": "r111",
           "shape_type": "ELLIPSE",
-          "x": 430.4809375,
+          "x": 445.3871875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4714,7 +4714,7 @@
           "slide": "summary",
           "id": "r112",
           "shape_type": "ELLIPSE",
-          "x": 437.9340625,
+          "x": 452.8403125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -4725,28 +4725,6 @@
           "slide": "summary",
           "id": "r113",
           "shape_type": "ELLIPSE",
-          "x": 445.3871875,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#5EC962"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r114",
-          "shape_type": "ELLIPSE",
-          "x": 452.8403125,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#5EC962"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r115",
-          "shape_type": "ELLIPSE",
           "x": 281.4184375,
           "y": 387.9496875,
           "width": 5.36625,
@@ -4756,7 +4734,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r116",
+          "id": "r114",
           "shape_type": "ELLIPSE",
           "x": 288.8715625,
           "y": 387.9496875,
@@ -4767,7 +4745,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r117",
+          "id": "r115",
           "shape_type": "ELLIPSE",
           "x": 296.3246875,
           "y": 387.9496875,
@@ -4778,7 +4756,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r118",
+          "id": "r116",
           "shape_type": "ELLIPSE",
           "x": 303.7778125,
           "y": 387.9496875,
@@ -4789,7 +4767,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r119",
+          "id": "r117",
           "shape_type": "ELLIPSE",
           "x": 311.2309375,
           "y": 387.9496875,
@@ -4800,7 +4778,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r120",
+          "id": "r118",
           "shape_type": "ELLIPSE",
           "x": 318.6840625,
           "y": 387.9496875,
@@ -4811,7 +4789,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r121",
+          "id": "r119",
           "shape_type": "ELLIPSE",
           "x": 326.1371875,
           "y": 387.9496875,
@@ -4822,7 +4800,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r122",
+          "id": "r120",
           "shape_type": "ELLIPSE",
           "x": 333.5903125,
           "y": 387.9496875,
@@ -4833,7 +4811,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r123",
+          "id": "r121",
           "shape_type": "ELLIPSE",
           "x": 341.0434375,
           "y": 387.9496875,
@@ -4844,7 +4822,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r124",
+          "id": "r122",
           "shape_type": "ELLIPSE",
           "x": 348.4965625,
           "y": 387.9496875,
@@ -4855,7 +4833,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r125",
+          "id": "r123",
           "shape_type": "ELLIPSE",
           "x": 355.9496875,
           "y": 387.9496875,
@@ -4866,7 +4844,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r126",
+          "id": "r124",
           "shape_type": "ELLIPSE",
           "x": 363.4028125,
           "y": 387.9496875,
@@ -4877,7 +4855,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r127",
+          "id": "r125",
           "shape_type": "ELLIPSE",
           "x": 370.8559375,
           "y": 387.9496875,
@@ -4888,7 +4866,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r128",
+          "id": "r126",
           "shape_type": "ELLIPSE",
           "x": 378.3090625,
           "y": 387.9496875,
@@ -4899,7 +4877,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r129",
+          "id": "r127",
           "shape_type": "ELLIPSE",
           "x": 385.7621875,
           "y": 387.9496875,
@@ -4910,7 +4888,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r130",
+          "id": "r128",
           "shape_type": "ELLIPSE",
           "x": 393.2153125,
           "y": 387.9496875,
@@ -4921,7 +4899,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r131",
+          "id": "r129",
           "shape_type": "ELLIPSE",
           "x": 400.6684375,
           "y": 387.9496875,
@@ -4932,7 +4910,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r132",
+          "id": "r130",
           "shape_type": "ELLIPSE",
           "x": 408.1215625,
           "y": 387.9496875,
@@ -4943,7 +4921,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r133",
+          "id": "r131",
           "shape_type": "ELLIPSE",
           "x": 415.5746875,
           "y": 387.9496875,
@@ -4954,7 +4932,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r134",
+          "id": "r132",
           "shape_type": "ELLIPSE",
           "x": 423.0278125,
           "y": 387.9496875,
@@ -4965,7 +4943,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r135",
+          "id": "r133",
           "shape_type": "ELLIPSE",
           "x": 430.4809375,
           "y": 387.9496875,
@@ -4976,7 +4954,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r136",
+          "id": "r134",
           "shape_type": "ELLIPSE",
           "x": 437.9340625,
           "y": 387.9496875,
@@ -4987,7 +4965,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r137",
+          "id": "r135",
           "shape_type": "ELLIPSE",
           "x": 445.3871875,
           "y": 387.9496875,
@@ -4998,7 +4976,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r138",
+          "id": "r136",
           "shape_type": "ELLIPSE",
           "x": 452.8403125,
           "y": 387.9496875,
@@ -5009,7 +4987,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t139",
+          "id": "t137",
           "text": "Dark: the 10 that passed at the first run",
           "x": 273.175,
           "y": 391.159375,
@@ -5022,7 +5000,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t139",
+          "element": "t137",
           "start": 0,
           "end": 41,
           "line_spacing": 135
@@ -5030,7 +5008,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r140",
+          "id": "r138",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 252.0,
@@ -5041,7 +5019,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r141",
+          "id": "r139",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 252.0,
@@ -5050,30 +5028,19 @@
           "background_color": "#825578"
         },
         {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r142",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im140",
+          "path": "assets/icons/kit/check_circle-plum.svg",
+          "alt": "",
           "x": 503.25,
           "y": 266.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im143",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 507.33,
-          "y": 270.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t144",
+          "id": "t141",
           "text": "Fits your limits",
           "x": 526.05,
           "y": 263.8,
@@ -5086,14 +5053,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t144",
+          "element": "t141",
           "start": 0,
           "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t144",
+          "element": "t141",
           "start": 0,
           "end": 16,
           "bold": true
@@ -5101,7 +5068,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t145",
+          "id": "t142",
           "text": "5 of 5",
           "x": 496.05,
           "y": 292.8,
@@ -5114,14 +5081,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t145",
+          "element": "t142",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t145",
+          "element": "t142",
           "start": 0,
           "end": 6,
           "bold": true
@@ -5129,7 +5096,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t146",
+          "id": "t143",
           "text": "Guardrail cases hold: limits rule out\nrecipes or swap ingredients.",
           "x": 496.05,
           "y": 324.8,
@@ -5142,14 +5109,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t146",
+          "element": "t143",
           "start": 0,
           "end": 66,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t146",
+          "element": "t143",
           "start": 29,
           "end": 37,
           "bold": true,
@@ -5157,121 +5124,66 @@
         },
         {
           "op": "style-text",
-          "element": "t146",
+          "element": "t143",
           "start": 38,
           "end": 65,
           "bold": true,
           "color": "#1B2430"
         },
         {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r147",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im144",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
           "x": 503.25,
-          "y": 376.0,
-          "width": 20,
-          "height": 20,
-          "background_color": "#21918C"
+          "y": 374.0,
+          "width": 24,
+          "height": 24
+        },
+        {
+          "op": "add-image",
+          "id": "im145",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 531.25,
+          "y": 374.0,
+          "width": 24,
+          "height": 24
+        },
+        {
+          "op": "add-image",
+          "id": "im146",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 559.25,
+          "y": 374.0,
+          "width": 24,
+          "height": 24
+        },
+        {
+          "op": "add-image",
+          "id": "im147",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 587.25,
+          "y": 374.0,
+          "width": 24,
+          "height": 24
         },
         {
           "op": "add-image",
           "id": "im148",
-          "path": "assets/icons/glyph-check_circle.png",
+          "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 506.25,
-          "y": 379.0,
-          "width": 14,
-          "height": 14
+          "x": 615.25,
+          "y": 374.0,
+          "width": 24,
+          "height": 24
         },
         {
           "op": "add-shape",
           "slide": "summary",
           "id": "r149",
-          "shape_type": "ELLIPSE",
-          "x": 529.25,
-          "y": 376.0,
-          "width": 20,
-          "height": 20,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im150",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 532.25,
-          "y": 379.0,
-          "width": 14,
-          "height": 14
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r151",
-          "shape_type": "ELLIPSE",
-          "x": 555.25,
-          "y": 376.0,
-          "width": 20,
-          "height": 20,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im152",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 558.25,
-          "y": 379.0,
-          "width": 14,
-          "height": 14
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r153",
-          "shape_type": "ELLIPSE",
-          "x": 581.25,
-          "y": 376.0,
-          "width": 20,
-          "height": 20,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im154",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 584.25,
-          "y": 379.0,
-          "width": 14,
-          "height": 14
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r155",
-          "shape_type": "ELLIPSE",
-          "x": 607.25,
-          "y": 376.0,
-          "width": 20,
-          "height": 20,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im156",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 610.25,
-          "y": 379.0,
-          "width": 14,
-          "height": 14
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r157",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 252.0,
@@ -5282,7 +5194,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r158",
+          "id": "r150",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 252.0,
@@ -5291,30 +5203,19 @@
           "background_color": "#896521"
         },
         {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r159",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im151",
+          "path": "assets/icons/kit/fact_check-ochre.svg",
+          "alt": "",
           "x": 726.125,
           "y": 266.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#896521"
-        },
-        {
-          "op": "add-image",
-          "id": "im160",
-          "path": "assets/icons/glyph-fact_check.png",
-          "alt": "",
-          "x": 730.205,
-          "y": 270.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t161",
+          "id": "t152",
           "text": "Honest about gaps",
           "x": 748.925,
           "y": 263.8,
@@ -5327,14 +5228,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t161",
+          "element": "t152",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t161",
+          "element": "t152",
           "start": 0,
           "end": 17,
           "bold": true
@@ -5342,7 +5243,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t162",
+          "id": "t153",
           "text": "68 of 72",
           "x": 718.925,
           "y": 292.8,
@@ -5355,14 +5256,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t162",
+          "element": "t153",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t162",
+          "element": "t153",
           "start": 0,
           "end": 8,
           "bold": true
@@ -5370,7 +5271,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t163",
+          "id": "t154",
           "text": "Plans include an estimated ingredient,\nand the app labels each one.",
           "x": 718.925,
           "y": 324.8,
@@ -5383,14 +5284,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t163",
+          "element": "t154",
           "start": 0,
           "end": 67,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t163",
+          "element": "t154",
           "start": 17,
           "end": 26,
           "bold": true,
@@ -5399,9 +5300,108 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r164",
+          "id": "r155",
           "shape_type": "ELLIPSE",
           "x": 727.1684375,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r156",
+          "shape_type": "ELLIPSE",
+          "x": 734.6215625,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r157",
+          "shape_type": "ELLIPSE",
+          "x": 742.0746875,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r158",
+          "shape_type": "ELLIPSE",
+          "x": 749.5278125,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r159",
+          "shape_type": "ELLIPSE",
+          "x": 756.9809375,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r160",
+          "shape_type": "ELLIPSE",
+          "x": 764.4340625,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r161",
+          "shape_type": "ELLIPSE",
+          "x": 771.8871875,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r162",
+          "shape_type": "ELLIPSE",
+          "x": 779.3403125,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r163",
+          "shape_type": "ELLIPSE",
+          "x": 786.7934375,
+          "y": 373.0434375,
+          "width": 5.36625,
+          "height": 5.36625,
+          "background_color": "#440154"
+        },
+        {
+          "op": "add-shape",
+          "slide": "summary",
+          "id": "r164",
+          "shape_type": "ELLIPSE",
+          "x": 794.2465625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5412,7 +5412,7 @@
           "slide": "summary",
           "id": "r165",
           "shape_type": "ELLIPSE",
-          "x": 734.6215625,
+          "x": 801.6996875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5423,7 +5423,7 @@
           "slide": "summary",
           "id": "r166",
           "shape_type": "ELLIPSE",
-          "x": 742.0746875,
+          "x": 809.1528125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5434,7 +5434,7 @@
           "slide": "summary",
           "id": "r167",
           "shape_type": "ELLIPSE",
-          "x": 749.5278125,
+          "x": 816.6059375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5445,7 +5445,7 @@
           "slide": "summary",
           "id": "r168",
           "shape_type": "ELLIPSE",
-          "x": 756.9809375,
+          "x": 824.0590625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5456,7 +5456,7 @@
           "slide": "summary",
           "id": "r169",
           "shape_type": "ELLIPSE",
-          "x": 764.4340625,
+          "x": 831.5121875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5467,7 +5467,7 @@
           "slide": "summary",
           "id": "r170",
           "shape_type": "ELLIPSE",
-          "x": 771.8871875,
+          "x": 838.9653125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5478,7 +5478,7 @@
           "slide": "summary",
           "id": "r171",
           "shape_type": "ELLIPSE",
-          "x": 779.3403125,
+          "x": 846.4184375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5489,7 +5489,7 @@
           "slide": "summary",
           "id": "r172",
           "shape_type": "ELLIPSE",
-          "x": 786.7934375,
+          "x": 853.8715625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5500,7 +5500,7 @@
           "slide": "summary",
           "id": "r173",
           "shape_type": "ELLIPSE",
-          "x": 794.2465625,
+          "x": 861.3246875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5511,7 +5511,7 @@
           "slide": "summary",
           "id": "r174",
           "shape_type": "ELLIPSE",
-          "x": 801.6996875,
+          "x": 868.7778125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5522,7 +5522,7 @@
           "slide": "summary",
           "id": "r175",
           "shape_type": "ELLIPSE",
-          "x": 809.1528125,
+          "x": 876.2309375,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5533,7 +5533,7 @@
           "slide": "summary",
           "id": "r176",
           "shape_type": "ELLIPSE",
-          "x": 816.6059375,
+          "x": 883.6840625,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5544,7 +5544,7 @@
           "slide": "summary",
           "id": "r177",
           "shape_type": "ELLIPSE",
-          "x": 824.0590625,
+          "x": 891.1371875,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5555,7 +5555,7 @@
           "slide": "summary",
           "id": "r178",
           "shape_type": "ELLIPSE",
-          "x": 831.5121875,
+          "x": 898.5903125,
           "y": 373.0434375,
           "width": 5.36625,
           "height": 5.36625,
@@ -5566,8 +5566,8 @@
           "slide": "summary",
           "id": "r179",
           "shape_type": "ELLIPSE",
-          "x": 838.9653125,
-          "y": 373.0434375,
+          "x": 727.1684375,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5577,8 +5577,8 @@
           "slide": "summary",
           "id": "r180",
           "shape_type": "ELLIPSE",
-          "x": 846.4184375,
-          "y": 373.0434375,
+          "x": 734.6215625,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5588,8 +5588,8 @@
           "slide": "summary",
           "id": "r181",
           "shape_type": "ELLIPSE",
-          "x": 853.8715625,
-          "y": 373.0434375,
+          "x": 742.0746875,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5599,8 +5599,8 @@
           "slide": "summary",
           "id": "r182",
           "shape_type": "ELLIPSE",
-          "x": 861.3246875,
-          "y": 373.0434375,
+          "x": 749.5278125,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5610,8 +5610,8 @@
           "slide": "summary",
           "id": "r183",
           "shape_type": "ELLIPSE",
-          "x": 868.7778125,
-          "y": 373.0434375,
+          "x": 756.9809375,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5621,8 +5621,8 @@
           "slide": "summary",
           "id": "r184",
           "shape_type": "ELLIPSE",
-          "x": 876.2309375,
-          "y": 373.0434375,
+          "x": 764.4340625,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5632,8 +5632,8 @@
           "slide": "summary",
           "id": "r185",
           "shape_type": "ELLIPSE",
-          "x": 883.6840625,
-          "y": 373.0434375,
+          "x": 771.8871875,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5643,8 +5643,8 @@
           "slide": "summary",
           "id": "r186",
           "shape_type": "ELLIPSE",
-          "x": 891.1371875,
-          "y": 373.0434375,
+          "x": 779.3403125,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5654,8 +5654,8 @@
           "slide": "summary",
           "id": "r187",
           "shape_type": "ELLIPSE",
-          "x": 898.5903125,
-          "y": 373.0434375,
+          "x": 786.7934375,
+          "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
           "background_color": "#440154"
@@ -5665,7 +5665,7 @@
           "slide": "summary",
           "id": "r188",
           "shape_type": "ELLIPSE",
-          "x": 727.1684375,
+          "x": 794.2465625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5676,7 +5676,7 @@
           "slide": "summary",
           "id": "r189",
           "shape_type": "ELLIPSE",
-          "x": 734.6215625,
+          "x": 801.6996875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5687,7 +5687,7 @@
           "slide": "summary",
           "id": "r190",
           "shape_type": "ELLIPSE",
-          "x": 742.0746875,
+          "x": 809.1528125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5698,7 +5698,7 @@
           "slide": "summary",
           "id": "r191",
           "shape_type": "ELLIPSE",
-          "x": 749.5278125,
+          "x": 816.6059375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5709,7 +5709,7 @@
           "slide": "summary",
           "id": "r192",
           "shape_type": "ELLIPSE",
-          "x": 756.9809375,
+          "x": 824.0590625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5720,7 +5720,7 @@
           "slide": "summary",
           "id": "r193",
           "shape_type": "ELLIPSE",
-          "x": 764.4340625,
+          "x": 831.5121875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5731,7 +5731,7 @@
           "slide": "summary",
           "id": "r194",
           "shape_type": "ELLIPSE",
-          "x": 771.8871875,
+          "x": 838.9653125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5742,7 +5742,7 @@
           "slide": "summary",
           "id": "r195",
           "shape_type": "ELLIPSE",
-          "x": 779.3403125,
+          "x": 846.4184375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5753,7 +5753,7 @@
           "slide": "summary",
           "id": "r196",
           "shape_type": "ELLIPSE",
-          "x": 786.7934375,
+          "x": 853.8715625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5764,7 +5764,7 @@
           "slide": "summary",
           "id": "r197",
           "shape_type": "ELLIPSE",
-          "x": 794.2465625,
+          "x": 861.3246875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5775,7 +5775,7 @@
           "slide": "summary",
           "id": "r198",
           "shape_type": "ELLIPSE",
-          "x": 801.6996875,
+          "x": 868.7778125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5786,7 +5786,7 @@
           "slide": "summary",
           "id": "r199",
           "shape_type": "ELLIPSE",
-          "x": 809.1528125,
+          "x": 876.2309375,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5797,7 +5797,7 @@
           "slide": "summary",
           "id": "r200",
           "shape_type": "ELLIPSE",
-          "x": 816.6059375,
+          "x": 883.6840625,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5808,7 +5808,7 @@
           "slide": "summary",
           "id": "r201",
           "shape_type": "ELLIPSE",
-          "x": 824.0590625,
+          "x": 891.1371875,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5819,7 +5819,7 @@
           "slide": "summary",
           "id": "r202",
           "shape_type": "ELLIPSE",
-          "x": 831.5121875,
+          "x": 898.5903125,
           "y": 380.4965625,
           "width": 5.36625,
           "height": 5.36625,
@@ -5830,105 +5830,6 @@
           "slide": "summary",
           "id": "r203",
           "shape_type": "ELLIPSE",
-          "x": 838.9653125,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r204",
-          "shape_type": "ELLIPSE",
-          "x": 846.4184375,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r205",
-          "shape_type": "ELLIPSE",
-          "x": 853.8715625,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r206",
-          "shape_type": "ELLIPSE",
-          "x": 861.3246875,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r207",
-          "shape_type": "ELLIPSE",
-          "x": 868.7778125,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r208",
-          "shape_type": "ELLIPSE",
-          "x": 876.2309375,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r209",
-          "shape_type": "ELLIPSE",
-          "x": 883.6840625,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r210",
-          "shape_type": "ELLIPSE",
-          "x": 891.1371875,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r211",
-          "shape_type": "ELLIPSE",
-          "x": 898.5903125,
-          "y": 380.4965625,
-          "width": 5.36625,
-          "height": 5.36625,
-          "background_color": "#440154"
-        },
-        {
-          "op": "add-shape",
-          "slide": "summary",
-          "id": "r212",
-          "shape_type": "ELLIPSE",
           "x": 727.1684375,
           "y": 387.9496875,
           "width": 5.36625,
@@ -5938,7 +5839,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r213",
+          "id": "r204",
           "shape_type": "ELLIPSE",
           "x": 734.6215625,
           "y": 387.9496875,
@@ -5949,7 +5850,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r214",
+          "id": "r205",
           "shape_type": "ELLIPSE",
           "x": 742.0746875,
           "y": 387.9496875,
@@ -5960,7 +5861,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r215",
+          "id": "r206",
           "shape_type": "ELLIPSE",
           "x": 749.5278125,
           "y": 387.9496875,
@@ -5971,7 +5872,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r216",
+          "id": "r207",
           "shape_type": "ELLIPSE",
           "x": 756.9809375,
           "y": 387.9496875,
@@ -5982,7 +5883,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r217",
+          "id": "r208",
           "shape_type": "ELLIPSE",
           "x": 764.4340625,
           "y": 387.9496875,
@@ -5993,7 +5894,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r218",
+          "id": "r209",
           "shape_type": "ELLIPSE",
           "x": 771.8871875,
           "y": 387.9496875,
@@ -6004,7 +5905,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r219",
+          "id": "r210",
           "shape_type": "ELLIPSE",
           "x": 779.3403125,
           "y": 387.9496875,
@@ -6015,7 +5916,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r220",
+          "id": "r211",
           "shape_type": "ELLIPSE",
           "x": 786.7934375,
           "y": 387.9496875,
@@ -6026,7 +5927,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r221",
+          "id": "r212",
           "shape_type": "ELLIPSE",
           "x": 794.2465625,
           "y": 387.9496875,
@@ -6037,7 +5938,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r222",
+          "id": "r213",
           "shape_type": "ELLIPSE",
           "x": 801.6996875,
           "y": 387.9496875,
@@ -6048,7 +5949,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r223",
+          "id": "r214",
           "shape_type": "ELLIPSE",
           "x": 809.1528125,
           "y": 387.9496875,
@@ -6059,7 +5960,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r224",
+          "id": "r215",
           "shape_type": "ELLIPSE",
           "x": 816.6059375,
           "y": 387.9496875,
@@ -6070,7 +5971,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r225",
+          "id": "r216",
           "shape_type": "ELLIPSE",
           "x": 824.0590625,
           "y": 387.9496875,
@@ -6081,7 +5982,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r226",
+          "id": "r217",
           "shape_type": "ELLIPSE",
           "x": 831.5121875,
           "y": 387.9496875,
@@ -6092,7 +5993,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r227",
+          "id": "r218",
           "shape_type": "ELLIPSE",
           "x": 838.9653125,
           "y": 387.9496875,
@@ -6103,7 +6004,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r228",
+          "id": "r219",
           "shape_type": "ELLIPSE",
           "x": 846.4184375,
           "y": 387.9496875,
@@ -6114,7 +6015,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r229",
+          "id": "r220",
           "shape_type": "ELLIPSE",
           "x": 853.8715625,
           "y": 387.9496875,
@@ -6125,7 +6026,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r230",
+          "id": "r221",
           "shape_type": "ELLIPSE",
           "x": 861.3246875,
           "y": 387.9496875,
@@ -6136,7 +6037,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r231",
+          "id": "r222",
           "shape_type": "ELLIPSE",
           "x": 868.7778125,
           "y": 387.9496875,
@@ -6147,7 +6048,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r232",
+          "id": "r223",
           "shape_type": "ELLIPSE",
           "x": 876.2309375,
           "y": 387.9496875,
@@ -6158,7 +6059,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r233",
+          "id": "r224",
           "shape_type": "ELLIPSE",
           "x": 883.6840625,
           "y": 387.9496875,
@@ -6169,7 +6070,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r234",
+          "id": "r225",
           "shape_type": "ELLIPSE",
           "x": 891.1371875,
           "y": 387.9496875,
@@ -6180,7 +6081,7 @@
         {
           "op": "add-shape",
           "slide": "summary",
-          "id": "r235",
+          "id": "r226",
           "shape_type": "ELLIPSE",
           "x": 898.5903125,
           "y": 387.9496875,
@@ -6191,7 +6092,7 @@
         {
           "op": "add-textbox",
           "slide": "summary",
-          "id": "t236",
+          "id": "t227",
           "text": "Dark: plans with an estimated ingredient",
           "x": 718.925,
           "y": 391.159375,
@@ -6204,7 +6105,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t236",
+          "element": "t227",
           "start": 0,
           "end": 40,
           "line_spacing": 135
@@ -8884,30 +8785,19 @@
           "height": 180.82031250000003
         },
         {
-          "op": "add-shape",
-          "slide": "flow",
-          "id": "r31",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im31",
+          "path": "assets/icons/kit/person-blue.svg",
+          "alt": "",
           "x": 57.5,
           "y": 336.8203125,
           "width": 24,
-          "height": 24,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im32",
-          "path": "assets/icons/glyph-person.png",
-          "alt": "",
-          "x": 61.58,
-          "y": 340.9003125,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t33",
+          "id": "t32",
           "text": "1. You",
           "x": 80.3,
           "y": 333.6203125,
@@ -8920,14 +8810,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 6,
           "bold": true
@@ -8935,7 +8825,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t34",
+          "id": "t33",
           "text": "Goal, body details, activity and anything to avoid.",
           "x": 50.3,
           "y": 361.6203125,
@@ -8948,7 +8838,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t34",
+          "element": "t33",
           "start": 0,
           "end": 51,
           "line_spacing": 135
@@ -8956,7 +8846,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r35",
+          "id": "r34",
           "shape_type": "RECTANGLE",
           "x": 57.5,
           "y": 392.0,
@@ -8967,7 +8857,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t36",
+          "id": "t35",
           "text": "34, male, 165 cm, 65 kg",
           "x": 54.3,
           "y": 389.05,
@@ -8981,14 +8871,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t36",
+          "element": "t35",
           "start": 0,
           "end": 23,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t36",
+          "element": "t35",
           "start": 0,
           "end": 23,
           "bold": true
@@ -8996,7 +8886,7 @@
         {
           "op": "add-line",
           "slide": "flow",
-          "id": "l37",
+          "id": "l36",
           "x": 323.6666666666667,
           "y": 212.0,
           "width": 16.0,
@@ -9008,7 +8898,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r38",
+          "id": "r37",
           "shape_type": "RECTANGLE",
           "x": 342.6666666666667,
           "y": 132.0,
@@ -9019,7 +8909,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r39",
+          "id": "r38",
           "shape_type": "RECTANGLE",
           "x": 342.6666666666667,
           "y": 132.0,
@@ -9030,7 +8920,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r40",
+          "id": "r39",
           "shape_type": "RECTANGLE",
           "x": 352.1666666666667,
           "y": 143.5,
@@ -9040,7 +8930,7 @@
         },
         {
           "op": "add-image",
-          "id": "im41",
+          "id": "im40",
           "path": "assets/figures/app-2-craving-zoom.jpg",
           "alt": "Close-up of step 2: the craving field reading chicken fried rice, suggestions and where you shop.",
           "x": 352.6666666666667,
@@ -9049,30 +8939,19 @@
           "height": 180.82031250000003
         },
         {
-          "op": "add-shape",
-          "slide": "flow",
-          "id": "r42",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im41",
+          "path": "assets/icons/kit/search-blue.svg",
+          "alt": "",
           "x": 356.6666666666667,
           "y": 336.8203125,
           "width": 24,
-          "height": 24,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im43",
-          "path": "assets/icons/glyph-search.png",
-          "alt": "",
-          "x": 360.74666666666667,
-          "y": 340.9003125,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t44",
+          "id": "t42",
           "text": "2. Craving",
           "x": 379.4666666666667,
           "y": 333.6203125,
@@ -9085,14 +8964,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t44",
+          "element": "t42",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t44",
+          "element": "t42",
           "start": 0,
           "end": 10,
           "bold": true
@@ -9100,7 +8979,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t45",
+          "id": "t43",
           "text": "Say what you feel like eating and where you shop.",
           "x": 349.4666666666667,
           "y": 361.6203125,
@@ -9113,7 +8992,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t45",
+          "element": "t43",
           "start": 0,
           "end": 49,
           "line_spacing": 135
@@ -9121,7 +9000,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r46",
+          "id": "r44",
           "shape_type": "RECTANGLE",
           "x": 356.6666666666667,
           "y": 392.0,
@@ -9132,7 +9011,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t47",
+          "id": "t45",
           "text": "chicken fried rice",
           "x": 353.4666666666667,
           "y": 389.05,
@@ -9146,14 +9025,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t45",
           "start": 0,
           "end": 18,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
+          "element": "t45",
           "start": 0,
           "end": 18,
           "bold": true
@@ -9161,7 +9040,7 @@
         {
           "op": "add-line",
           "slide": "flow",
-          "id": "l48",
+          "id": "l46",
           "x": 622.8333333333334,
           "y": 212.0,
           "width": 16.0,
@@ -9173,7 +9052,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r49",
+          "id": "r47",
           "shape_type": "RECTANGLE",
           "x": 641.8333333333334,
           "y": 132.0,
@@ -9184,7 +9063,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r50",
+          "id": "r48",
           "shape_type": "RECTANGLE",
           "x": 641.8333333333334,
           "y": 132.0,
@@ -9195,7 +9074,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r51",
+          "id": "r49",
           "shape_type": "RECTANGLE",
           "x": 651.3333333333334,
           "y": 143.5,
@@ -9205,7 +9084,7 @@
         },
         {
           "op": "add-image",
-          "id": "im52",
+          "id": "im50",
           "path": "assets/figures/app-3-plan-zoom.jpg",
           "alt": "Close-up of step 3: Chicken Fried Rice, 694 kcal against a 691 kcal target, with its macro balance.",
           "x": 651.8333333333334,
@@ -9214,30 +9093,19 @@
           "height": 180.82031250000003
         },
         {
-          "op": "add-shape",
-          "slide": "flow",
-          "id": "r53",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im51",
+          "path": "assets/icons/kit/rice_bowl-blue.svg",
+          "alt": "",
           "x": 655.8333333333334,
           "y": 336.8203125,
           "width": 24,
-          "height": 24,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im54",
-          "path": "assets/icons/glyph-rice_bowl.png",
-          "alt": "",
-          "x": 659.9133333333334,
-          "y": 340.9003125,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t55",
+          "id": "t52",
           "text": "3. Your plan",
           "x": 678.6333333333333,
           "y": 333.6203125,
@@ -9250,14 +9118,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t55",
+          "element": "t52",
           "start": 0,
           "end": 12,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t55",
+          "element": "t52",
           "start": 0,
           "end": 12,
           "bold": true
@@ -9265,7 +9133,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t56",
+          "id": "t53",
           "text": "One meal, its balance, sources and a shopping list.",
           "x": 648.6333333333333,
           "y": 361.6203125,
@@ -9278,14 +9146,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t53",
           "start": 0,
           "end": 51,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t53",
           "start": 14,
           "end": 21,
           "bold": true,
@@ -9294,7 +9162,7 @@
         {
           "op": "add-shape",
           "slide": "flow",
-          "id": "r57",
+          "id": "r54",
           "shape_type": "RECTANGLE",
           "x": 655.8333333333334,
           "y": 392.0,
@@ -9305,7 +9173,7 @@
         {
           "op": "add-textbox",
           "slide": "flow",
-          "id": "t58",
+          "id": "t55",
           "text": "694 kcal, target 691",
           "x": 652.6333333333333,
           "y": 389.05,
@@ -9319,14 +9187,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t58",
+          "element": "t55",
           "start": 0,
           "end": 20,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t58",
+          "element": "t55",
           "start": 0,
           "end": 20,
           "bold": true
@@ -12760,30 +12628,19 @@
           "height": 108
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r28",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im28",
+          "path": "assets/icons/kit/person-blue.svg",
+          "alt": "",
           "x": 57.5,
           "y": 144.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im29",
-          "path": "assets/icons/glyph-person.png",
-          "alt": "",
-          "x": 61.24,
-          "y": 147.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t30",
+          "id": "t29",
           "text": "Body and activity",
           "x": 78.3,
           "y": 139.8,
@@ -12796,14 +12653,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t30",
+          "element": "t29",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t30",
+          "element": "t29",
           "start": 0,
           "end": 17,
           "bold": true
@@ -12811,7 +12668,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t31",
+          "id": "t30",
           "text": "Size and activity give a daily estimate.",
           "x": 50.3,
           "y": 166.8,
@@ -12824,7 +12681,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t31",
+          "element": "t30",
           "start": 0,
           "end": 40,
           "line_spacing": 135
@@ -12832,7 +12689,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t32",
+          "id": "t31",
           "text": "2,344 kcal",
           "x": 50.3,
           "y": 204.8,
@@ -12845,21 +12702,21 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t32",
+          "element": "t31",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t32",
+          "element": "t31",
           "start": 0,
           "end": 10,
           "bold": true
         },
         {
           "op": "add-image",
-          "id": "im33",
+          "id": "im32",
           "path": "assets/figures/shapes/chevron-2.svg",
           "alt": "",
           "x": 260.375,
@@ -12868,30 +12725,19 @@
           "height": 108
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r34",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im33",
+          "path": "assets/icons/kit/fitness_center-blue.svg",
+          "alt": "",
           "x": 288.375,
           "y": 144.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im35",
-          "path": "assets/icons/glyph-fitness_center.png",
-          "alt": "",
-          "x": 292.115,
-          "y": 147.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t36",
+          "id": "t34",
           "text": "Exercise",
           "x": 309.175,
           "y": 139.8,
@@ -12904,14 +12750,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t36",
+          "element": "t34",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t36",
+          "element": "t34",
           "start": 0,
           "end": 8,
           "bold": true
@@ -12919,7 +12765,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t37",
+          "id": "t35",
           "text": "A trained model adds exercise\ncalories.",
           "x": 281.175,
           "y": 166.8,
@@ -12932,7 +12778,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t37",
+          "element": "t35",
           "start": 0,
           "end": 39,
           "line_spacing": 135
@@ -12940,7 +12786,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t38",
+          "id": "t36",
           "text": "+125 kcal",
           "x": 281.175,
           "y": 204.8,
@@ -12953,21 +12799,21 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t38",
+          "element": "t36",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t38",
+          "element": "t36",
           "start": 0,
           "end": 9,
           "bold": true
         },
         {
           "op": "add-image",
-          "id": "im39",
+          "id": "im37",
           "path": "assets/figures/shapes/chevron-3.svg",
           "alt": "",
           "x": 477.25,
@@ -12976,30 +12822,19 @@
           "height": 108
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r40",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im38",
+          "path": "assets/icons/kit/flag-blue.svg",
+          "alt": "",
           "x": 505.25,
           "y": 144.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im41",
-          "path": "assets/icons/glyph-flag.png",
-          "alt": "",
-          "x": 508.99,
-          "y": 147.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t42",
+          "id": "t39",
           "text": "Goal",
           "x": 526.05,
           "y": 139.8,
@@ -13012,14 +12847,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t42",
+          "element": "t39",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t42",
+          "element": "t39",
           "start": 0,
           "end": 4,
           "bold": true
@@ -13027,7 +12862,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t43",
+          "id": "t40",
           "text": "Gain +250, lose \u2212400, with a safety\nfloor.",
           "x": 498.05,
           "y": 166.8,
@@ -13040,7 +12875,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t43",
+          "element": "t40",
           "start": 0,
           "end": 42,
           "line_spacing": 135
@@ -13048,7 +12883,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t44",
+          "id": "t41",
           "text": "2,469 kcal budget",
           "x": 498.05,
           "y": 204.8,
@@ -13061,21 +12896,21 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t44",
+          "element": "t41",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t44",
+          "element": "t41",
           "start": 0,
           "end": 17,
           "bold": true
         },
         {
           "op": "add-image",
-          "id": "im45",
+          "id": "im42",
           "path": "assets/figures/shapes/chevron-4.svg",
           "alt": "",
           "x": 694.125,
@@ -13084,30 +12919,19 @@
           "height": 108
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r46",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im43",
+          "path": "assets/icons/kit/rice_bowl-teal.svg",
+          "alt": "",
           "x": 722.125,
           "y": 144.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im47",
-          "path": "assets/icons/glyph-rice_bowl.png",
-          "alt": "",
-          "x": 725.865,
-          "y": 147.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t48",
+          "id": "t44",
           "text": "This meal",
           "x": 742.925,
           "y": 139.8,
@@ -13120,14 +12944,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t48",
+          "element": "t44",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t48",
+          "element": "t44",
           "start": 0,
           "end": 9,
           "bold": true
@@ -13135,7 +12959,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t49",
+          "id": "t45",
           "text": "28% of the budget, within 350\u2013850\nkcal.",
           "x": 714.925,
           "y": 166.8,
@@ -13148,7 +12972,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t45",
           "start": 0,
           "end": 39,
           "line_spacing": 135
@@ -13156,7 +12980,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t50",
+          "id": "t46",
           "text": "691 kcal target",
           "x": 714.925,
           "y": 204.8,
@@ -13169,14 +12993,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t50",
+          "element": "t46",
           "start": 0,
           "end": 15,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t50",
+          "element": "t46",
           "start": 0,
           "end": 15,
           "bold": true
@@ -13184,7 +13008,7 @@
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r51",
+          "id": "r47",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 256.0,
@@ -13194,7 +13018,7 @@
         },
         {
           "op": "add-image",
-          "id": "im52",
+          "id": "im48",
           "path": "assets/figures/shapes/calorie-ring.svg",
           "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
           "x": 67.5,
@@ -13205,7 +13029,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t53",
+          "id": "t49",
           "text": "691 kcal",
           "x": 95.8,
           "y": 317.8,
@@ -13219,14 +13043,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t53",
+          "element": "t49",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t53",
+          "element": "t49",
           "start": 0,
           "end": 8,
           "bold": true
@@ -13234,7 +13058,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t54",
+          "id": "t50",
           "text": "this meal",
           "x": 95.8,
           "y": 340.8,
@@ -13248,7 +13072,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t50",
           "start": 0,
           "end": 9,
           "line_spacing": 135
@@ -13256,7 +13080,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t55",
+          "id": "t51",
           "text": "Her day and this meal, as two rings",
           "x": 238.3,
           "y": 262.8,
@@ -13269,14 +13093,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t55",
+          "element": "t51",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t55",
+          "element": "t51",
           "start": 0,
           "end": 35,
           "bold": true
@@ -13284,7 +13108,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t56",
+          "id": "t52",
           "text": "Outer ring: her 2,469 kcal day",
           "x": 238.3,
           "y": 292.8,
@@ -13297,14 +13121,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t52",
           "start": 0,
           "end": 30,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t52",
           "start": 0,
           "end": 30,
           "bold": true
@@ -13312,7 +13136,7 @@
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r57",
+          "id": "r53",
           "shape_type": "RECTANGLE",
           "x": 245.5,
           "y": 327.0,
@@ -13323,7 +13147,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t58",
+          "id": "t54",
           "text": "This meal: 691 kcal, 28% of the day",
           "x": 258.3,
           "y": 318.8,
@@ -13336,7 +13160,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t58",
+          "element": "t54",
           "start": 0,
           "end": 35,
           "line_spacing": 135
@@ -13344,7 +13168,7 @@
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r59",
+          "id": "r55",
           "shape_type": "RECTANGLE",
           "x": 245.5,
           "y": 353.0,
@@ -13355,7 +13179,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t60",
+          "id": "t56",
           "text": "The rest of her day: 1,778 kcal",
           "x": 258.3,
           "y": 344.8,
@@ -13368,7 +13192,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t60",
+          "element": "t56",
           "start": 0,
           "end": 31,
           "line_spacing": 135
@@ -13376,7 +13200,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t61",
+          "id": "t57",
           "text": "Inner ring: where the budget comes from",
           "x": 580.05,
           "y": 292.8,
@@ -13389,14 +13213,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t61",
+          "element": "t57",
           "start": 0,
           "end": 39,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t61",
+          "element": "t57",
           "start": 0,
           "end": 39,
           "bold": true
@@ -13404,7 +13228,7 @@
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r62",
+          "id": "r58",
           "shape_type": "RECTANGLE",
           "x": 587.25,
           "y": 327.0,
@@ -13415,7 +13239,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t63",
+          "id": "t59",
           "text": "2,344 kcal from body and activity",
           "x": 600.05,
           "y": 318.8,
@@ -13428,7 +13252,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t63",
+          "element": "t59",
           "start": 0,
           "end": 33,
           "line_spacing": 135
@@ -13436,7 +13260,7 @@
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r64",
+          "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 587.25,
           "y": 353.0,
@@ -13447,7 +13271,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t65",
+          "id": "t61",
           "text": "+125 kcal from the trained exercise model",
           "x": 600.05,
           "y": 344.8,
@@ -13460,7 +13284,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t65",
+          "element": "t61",
           "start": 0,
           "end": 41,
           "line_spacing": 135
@@ -13468,7 +13292,7 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t66",
+          "id": "t62",
           "text": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm).",
           "x": 238.3,
           "y": 390.8,
@@ -13481,7 +13305,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t66",
+          "element": "t62",
           "start": 0,
           "end": 91,
           "line_spacing": 135
@@ -15951,30 +15775,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "choosing",
-          "id": "r175",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im175",
+          "path": "assets/icons/kit/check_circle-blue.svg",
+          "alt": "",
           "x": 57.5,
           "y": 308.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im176",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 61.24,
-          "y": 311.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t177",
+          "id": "t176",
           "text": "Close match",
           "x": 76.3,
           "y": 303.8,
@@ -15987,14 +15800,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t177",
+          "element": "t176",
           "start": 0,
           "end": 11,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t177",
+          "element": "t176",
           "start": 0,
           "end": 11,
           "bold": true
@@ -16002,7 +15815,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t178",
+          "id": "t177",
           "text": "\"chicken fried rice\" gets that recipe,\nsized to you.",
           "x": 50.3,
           "y": 330.8,
@@ -16015,14 +15828,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t178",
+          "element": "t177",
           "start": 0,
           "end": 52,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t178",
+          "element": "t177",
           "start": 39,
           "end": 51,
           "bold": true,
@@ -16031,7 +15844,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t179",
+          "id": "t178",
           "text": "61 of 72 benchmark plans",
           "x": 50.3,
           "y": 386.6,
@@ -16044,14 +15857,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t179",
+          "element": "t178",
           "start": 0,
           "end": 24,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t179",
+          "element": "t178",
           "start": 0,
           "end": 24,
           "bold": true
@@ -16059,7 +15872,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r180",
+          "id": "r179",
           "shape_type": "RECTANGLE",
           "x": 266.375,
           "y": 296.0,
@@ -16070,7 +15883,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r181",
+          "id": "r180",
           "shape_type": "RECTANGLE",
           "x": 266.375,
           "y": 296.0,
@@ -16079,30 +15892,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "choosing",
-          "id": "r182",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im181",
+          "path": "assets/icons/kit/flag-blue.svg",
+          "alt": "",
           "x": 280.375,
           "y": 308.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im183",
-          "path": "assets/icons/glyph-flag.png",
-          "alt": "",
-          "x": 284.115,
-          "y": 311.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t184",
+          "id": "t182",
           "text": "No close match",
           "x": 299.175,
           "y": 303.8,
@@ -16115,14 +15917,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t184",
+          "element": "t182",
           "start": 0,
           "end": 14,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t184",
+          "element": "t182",
           "start": 0,
           "end": 14,
           "bold": true
@@ -16130,7 +15932,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t185",
+          "id": "t183",
           "text": "\"pizza\" gets a standard meal and a\nnote saying so.",
           "x": 273.175,
           "y": 330.8,
@@ -16143,14 +15945,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t185",
+          "element": "t183",
           "start": 0,
           "end": 50,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t185",
+          "element": "t183",
           "start": 15,
           "end": 28,
           "bold": true,
@@ -16159,7 +15961,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t186",
+          "id": "t184",
           "text": "11 of 72 benchmark plans",
           "x": 273.175,
           "y": 386.6,
@@ -16172,14 +15974,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t186",
+          "element": "t184",
           "start": 0,
           "end": 24,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t186",
+          "element": "t184",
           "start": 0,
           "end": 24,
           "bold": true
@@ -16187,7 +15989,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r187",
+          "id": "r185",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 296.0,
@@ -16198,7 +16000,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r188",
+          "id": "r186",
           "shape_type": "RECTANGLE",
           "x": 489.25,
           "y": 296.0,
@@ -16207,30 +16009,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "choosing",
-          "id": "r189",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im187",
+          "path": "assets/icons/kit/block-blue.svg",
+          "alt": "",
           "x": 503.25,
           "y": 308.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im190",
-          "path": "assets/icons/glyph-block.png",
-          "alt": "",
-          "x": 506.99,
-          "y": 311.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t191",
+          "id": "t188",
           "text": "Nothing safe",
           "x": 522.05,
           "y": 303.8,
@@ -16243,14 +16034,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t191",
+          "element": "t188",
           "start": 0,
           "end": 12,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t191",
+          "element": "t188",
           "start": 0,
           "end": 12,
           "bold": true
@@ -16258,7 +16049,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t192",
+          "id": "t189",
           "text": "Too many limits: the plan is refused,\nnot guessed.",
           "x": 496.05,
           "y": 330.8,
@@ -16271,14 +16062,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t192",
+          "element": "t189",
           "start": 0,
           "end": 50,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t192",
+          "element": "t189",
           "start": 29,
           "end": 36,
           "bold": true,
@@ -16287,7 +16078,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t193",
+          "id": "t190",
           "text": "2 of 5 guardrail cases",
           "x": 496.05,
           "y": 386.6,
@@ -16300,14 +16091,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t193",
+          "element": "t190",
           "start": 0,
           "end": 22,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t193",
+          "element": "t190",
           "start": 0,
           "end": 22,
           "bold": true
@@ -16315,7 +16106,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r194",
+          "id": "r191",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 296.0,
@@ -16326,7 +16117,7 @@
         {
           "op": "add-shape",
           "slide": "choosing",
-          "id": "r195",
+          "id": "r192",
           "shape_type": "RECTANGLE",
           "x": 712.125,
           "y": 296.0,
@@ -16335,30 +16126,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "choosing",
-          "id": "r196",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im193",
+          "path": "assets/icons/kit/balance-blue.svg",
+          "alt": "",
           "x": 726.125,
           "y": 308.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im197",
-          "path": "assets/icons/glyph-balance.png",
-          "alt": "",
-          "x": 729.865,
-          "y": 311.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t198",
+          "id": "t194",
           "text": "Or a safe swap",
           "x": 744.925,
           "y": 303.8,
@@ -16371,14 +16151,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t198",
+          "element": "t194",
           "start": 0,
           "end": 14,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t198",
+          "element": "t194",
           "start": 0,
           "end": 14,
           "bold": true
@@ -16386,7 +16166,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t199",
+          "id": "t195",
           "text": "A coeliac who asks for pasta keeps the\nrecipe with gluten-free pasta.",
           "x": 718.925,
           "y": 330.8,
@@ -16399,14 +16179,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t199",
+          "element": "t195",
           "start": 0,
           "end": 69,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t199",
+          "element": "t195",
           "start": 51,
           "end": 68,
           "bold": true,
@@ -16415,7 +16195,7 @@
         {
           "op": "add-textbox",
           "slide": "choosing",
-          "id": "t200",
+          "id": "t196",
           "text": "Each swap checked against all\nlimits",
           "x": 718.925,
           "y": 370.40000000000003,
@@ -16428,21 +16208,21 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t200",
+          "element": "t196",
           "start": 0,
           "end": 36,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t200",
+          "element": "t196",
           "start": 0,
           "end": 29,
           "bold": true
         },
         {
           "op": "style-text",
-          "element": "t200",
+          "element": "t196",
           "start": 30,
           "end": 36,
           "bold": true
@@ -17975,30 +17755,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "nutrition",
-          "id": "r76",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im76",
+          "path": "assets/icons/kit/verified-blue.svg",
+          "alt": "",
           "x": 477.5,
           "y": 246.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im77",
-          "path": "assets/icons/glyph-verified.png",
-          "alt": "",
-          "x": 481.24,
-          "y": 249.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t78",
+          "id": "t77",
           "text": "1. Trusted local reference",
           "x": 502.3,
           "y": 230.8,
@@ -18011,14 +17780,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t78",
+          "element": "t77",
           "start": 0,
           "end": 26,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t78",
+          "element": "t77",
           "start": 0,
           "end": 26,
           "bold": true
@@ -18026,7 +17795,7 @@
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t79",
+          "id": "t78",
           "text": "Checked local values come first.",
           "x": 502.3,
           "y": 248.8,
@@ -18039,7 +17808,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t79",
+          "element": "t78",
           "start": 0,
           "end": 32,
           "line_spacing": 135
@@ -18047,7 +17816,7 @@
         {
           "op": "add-shape",
           "slide": "nutrition",
-          "id": "r80",
+          "id": "r79",
           "shape_type": "RECTANGLE",
           "x": 463.5,
           "y": 296.0,
@@ -18058,7 +17827,7 @@
         {
           "op": "add-shape",
           "slide": "nutrition",
-          "id": "r81",
+          "id": "r80",
           "shape_type": "RECTANGLE",
           "x": 463.5,
           "y": 296.0,
@@ -18067,30 +17836,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "nutrition",
-          "id": "r82",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im81",
+          "path": "assets/icons/kit/search-blue.svg",
+          "alt": "",
           "x": 477.5,
           "y": 314.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im83",
-          "path": "assets/icons/glyph-search.png",
-          "alt": "",
-          "x": 481.24,
-          "y": 317.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t84",
+          "id": "t82",
           "text": "2. USDA, then FatSecret",
           "x": 502.3,
           "y": 298.8,
@@ -18103,14 +17861,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t84",
+          "element": "t82",
           "start": 0,
           "end": 23,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t84",
+          "element": "t82",
           "start": 0,
           "end": 23,
           "bold": true
@@ -18118,7 +17876,7 @@
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t85",
+          "id": "t83",
           "text": "Used only when provider keys are set.",
           "x": 502.3,
           "y": 316.8,
@@ -18131,14 +17889,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t85",
+          "element": "t83",
           "start": 0,
           "end": 37,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t85",
+          "element": "t83",
           "start": 15,
           "end": 28,
           "bold": true,
@@ -18147,7 +17905,7 @@
         {
           "op": "add-shape",
           "slide": "nutrition",
-          "id": "r86",
+          "id": "r84",
           "shape_type": "RECTANGLE",
           "x": 463.5,
           "y": 364.0,
@@ -18158,7 +17916,7 @@
         {
           "op": "add-shape",
           "slide": "nutrition",
-          "id": "r87",
+          "id": "r85",
           "shape_type": "RECTANGLE",
           "x": 463.5,
           "y": 364.0,
@@ -18167,30 +17925,19 @@
           "background_color": "#32658A"
         },
         {
-          "op": "add-shape",
-          "slide": "nutrition",
-          "id": "r88",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im86",
+          "path": "assets/icons/kit/calculate-blue.svg",
+          "alt": "",
           "x": 477.5,
           "y": 382.0,
           "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-image",
-          "id": "im89",
-          "path": "assets/icons/glyph-calculate.png",
-          "alt": "",
-          "x": 481.24,
-          "y": 385.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "height": 22
         },
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t90",
+          "id": "t87",
           "text": "3. Local or category estimate",
           "x": 502.3,
           "y": 366.8,
@@ -18203,14 +17950,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t90",
+          "element": "t87",
           "start": 0,
           "end": 29,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t90",
+          "element": "t87",
           "start": 0,
           "end": 29,
           "bold": true
@@ -18218,7 +17965,7 @@
         {
           "op": "add-textbox",
           "slide": "nutrition",
-          "id": "t91",
+          "id": "t88",
           "text": "The last resort, always labelled.",
           "x": 502.3,
           "y": 384.8,
@@ -18231,14 +17978,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t91",
+          "element": "t88",
           "start": 0,
           "end": 33,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t91",
+          "element": "t88",
           "start": 4,
           "end": 15,
           "bold": true,
@@ -21189,30 +20936,19 @@
           "background_color": "#825578"
         },
         {
-          "op": "add-shape",
-          "slide": "results",
-          "id": "r48",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im48",
+          "path": "assets/icons/kit/balance-plum.svg",
+          "alt": "",
           "x": 635.5,
           "y": 164.33333333333334,
           "width": 24,
-          "height": 24,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im49",
-          "path": "assets/icons/glyph-balance.png",
-          "alt": "",
-          "x": 639.58,
-          "y": 168.41333333333336,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t50",
+          "id": "t49",
           "text": "0.4%",
           "x": 664.3,
           "y": 147.13333333333335,
@@ -21225,14 +20961,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t50",
+          "element": "t49",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t50",
+          "element": "t49",
           "start": 0,
           "end": 4,
           "bold": true
@@ -21240,7 +20976,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t51",
+          "id": "t50",
           "text": "median calorie gap, worst 9.9%",
           "x": 664.3,
           "y": 173.13333333333335,
@@ -21253,7 +20989,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t51",
+          "element": "t50",
           "start": 0,
           "end": 30,
           "line_spacing": 135
@@ -21261,7 +20997,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r52",
+          "id": "r51",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -21272,7 +21008,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r53",
+          "id": "r52",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -21281,30 +21017,19 @@
           "background_color": "#825578"
         },
         {
-          "op": "add-shape",
-          "slide": "results",
-          "id": "r54",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im53",
+          "path": "assets/icons/kit/check_circle-plum.svg",
+          "alt": "",
           "x": 635.5,
           "y": 265.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im55",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 639.58,
-          "y": 269.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t56",
+          "id": "t54",
           "text": "5 of 5",
           "x": 664.3,
           "y": 247.8,
@@ -21317,14 +21042,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t54",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t54",
           "start": 0,
           "end": 6,
           "bold": true
@@ -21332,7 +21057,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t57",
+          "id": "t55",
           "text": "guardrail cases hold",
           "x": 664.3,
           "y": 273.8,
@@ -21345,7 +21070,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t57",
+          "element": "t55",
           "start": 0,
           "end": 20,
           "line_spacing": 135
@@ -21353,7 +21078,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r58",
+          "id": "r56",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -21364,7 +21089,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r59",
+          "id": "r57",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -21373,30 +21098,19 @@
           "background_color": "#825578"
         },
         {
-          "op": "add-shape",
-          "slide": "results",
-          "id": "r60",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im58",
+          "path": "assets/icons/kit/search-plum.svg",
+          "alt": "",
           "x": 635.5,
           "y": 365.6666666666667,
           "width": 24,
-          "height": 24,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im61",
-          "path": "assets/icons/glyph-search.png",
-          "alt": "",
-          "x": 639.58,
-          "y": 369.74666666666667,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t62",
+          "id": "t59",
           "text": "68 of 68",
           "x": 664.3,
           "y": 348.4666666666667,
@@ -21409,14 +21123,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t62",
+          "element": "t59",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t62",
+          "element": "t59",
           "start": 0,
           "end": 8,
           "bold": true
@@ -21424,7 +21138,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t63",
+          "id": "t60",
           "text": "wider check, every recipe by name",
           "x": 664.3,
           "y": 374.4666666666667,
@@ -21437,7 +21151,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t63",
+          "element": "t60",
           "start": 0,
           "end": 33,
           "line_spacing": 135
@@ -22562,30 +22276,19 @@
           "background_color": "#FFFFFF"
         },
         {
-          "op": "add-shape",
-          "slide": "architecture",
-          "id": "r59",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im59",
+          "path": "assets/icons/kit/monitor_weight-plum.svg",
+          "alt": "",
           "x": 331.5,
           "y": 184.4,
           "width": 20,
-          "height": 20,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im60",
-          "path": "assets/icons/glyph-monitor_weight.png",
-          "alt": "",
-          "x": 334.9,
-          "y": 187.8,
-          "width": 13.200000000000001,
-          "height": 13.200000000000001
+          "height": 20
         },
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t61",
+          "id": "t60",
           "text": "Calorie expenditure",
           "x": 352.3,
           "y": 174.20000000000002,
@@ -22598,14 +22301,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t61",
+          "element": "t60",
           "start": 0,
           "end": 19,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t61",
+          "element": "t60",
           "start": 0,
           "end": 19,
           "bold": true
@@ -22613,7 +22316,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t62",
+          "id": "t61",
           "text": "Trained HistGradientBoosting model",
           "x": 352.3,
           "y": 188.20000000000002,
@@ -22626,14 +22329,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t62",
+          "element": "t61",
           "start": 0,
           "end": 34,
           "line_spacing": 135
         },
         {
           "op": "add-image",
-          "id": "im63",
+          "id": "im62",
           "path": "assets/logos/scikitlearn.png",
           "alt": "scikitlearn logo",
           "x": 885.0,
@@ -22644,7 +22347,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r64",
+          "id": "r63",
           "shape_type": "RECTANGLE",
           "x": 323.5,
           "y": 216.8,
@@ -22653,30 +22356,19 @@
           "background_color": "#FFFFFF"
         },
         {
-          "op": "add-shape",
-          "slide": "architecture",
-          "id": "r65",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im64",
+          "path": "assets/icons/kit/skillet-plum.svg",
+          "alt": "",
           "x": 331.5,
           "y": 223.20000000000002,
           "width": 20,
-          "height": 20,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im66",
-          "path": "assets/icons/glyph-skillet.png",
-          "alt": "",
-          "x": 334.9,
-          "y": 226.60000000000002,
-          "width": 13.200000000000001,
-          "height": 13.200000000000001
+          "height": 20
         },
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t67",
+          "id": "t65",
           "text": "Meal recommendation",
           "x": 352.3,
           "y": 213.00000000000003,
@@ -22689,14 +22381,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t67",
+          "element": "t65",
           "start": 0,
           "end": 19,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t67",
+          "element": "t65",
           "start": 0,
           "end": 19,
           "bold": true
@@ -22704,7 +22396,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t68",
+          "id": "t66",
           "text": "TF-IDF search of 34 recipes, diet rules",
           "x": 352.3,
           "y": 227.00000000000003,
@@ -22717,14 +22409,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t68",
+          "element": "t66",
           "start": 0,
           "end": 39,
           "line_spacing": 135
         },
         {
           "op": "add-image",
-          "id": "im69",
+          "id": "im67",
           "path": "assets/logos/scikitlearn.png",
           "alt": "scikitlearn logo",
           "x": 885.0,
@@ -22735,7 +22427,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r70",
+          "id": "r68",
           "shape_type": "RECTANGLE",
           "x": 323.5,
           "y": 255.6,
@@ -22744,30 +22436,19 @@
           "background_color": "#FFFFFF"
         },
         {
-          "op": "add-shape",
-          "slide": "architecture",
-          "id": "r71",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im69",
+          "path": "assets/icons/kit/fact_check-plum.svg",
+          "alt": "",
           "x": 331.5,
           "y": 262.0,
           "width": 20,
-          "height": 20,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im72",
-          "path": "assets/icons/glyph-fact_check.png",
-          "alt": "",
-          "x": 334.9,
-          "y": 265.4,
-          "width": 13.200000000000001,
-          "height": 13.200000000000001
+          "height": 20
         },
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t73",
+          "id": "t70",
           "text": "Nutrition verification",
           "x": 352.3,
           "y": 251.8,
@@ -22780,14 +22461,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t73",
+          "element": "t70",
           "start": 0,
           "end": 22,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t73",
+          "element": "t70",
           "start": 0,
           "end": 22,
           "bold": true
@@ -22795,7 +22476,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t74",
+          "id": "t71",
           "text": "Local tables; USDA, FatSecret with keys",
           "x": 352.3,
           "y": 265.8,
@@ -22808,7 +22489,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t74",
+          "element": "t71",
           "start": 0,
           "end": 39,
           "line_spacing": 135
@@ -22816,7 +22497,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r75",
+          "id": "r72",
           "shape_type": "RECTANGLE",
           "x": 323.5,
           "y": 294.4,
@@ -22825,30 +22506,19 @@
           "background_color": "#FFFFFF"
         },
         {
-          "op": "add-shape",
-          "slide": "architecture",
-          "id": "r76",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im73",
+          "path": "assets/icons/kit/balance-plum.svg",
+          "alt": "",
           "x": 331.5,
           "y": 300.79999999999995,
           "width": 20,
-          "height": 20,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im77",
-          "path": "assets/icons/glyph-balance.png",
-          "alt": "",
-          "x": 334.9,
-          "y": 304.19999999999993,
-          "width": 13.200000000000001,
-          "height": 13.200000000000001
+          "height": 20
         },
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t78",
+          "id": "t74",
           "text": "Balance and reconcile",
           "x": 352.3,
           "y": 290.59999999999997,
@@ -22861,14 +22531,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t78",
+          "element": "t74",
           "start": 0,
           "end": 21,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t78",
+          "element": "t74",
           "start": 0,
           "end": 21,
           "bold": true
@@ -22876,7 +22546,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t79",
+          "id": "t75",
           "text": "A service step: linear programme for portions",
           "x": 352.3,
           "y": 304.59999999999997,
@@ -22889,14 +22559,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t79",
+          "element": "t75",
           "start": 0,
           "end": 45,
           "line_spacing": 135
         },
         {
           "op": "add-image",
-          "id": "im80",
+          "id": "im76",
           "path": "assets/logos/scipy.png",
           "alt": "scipy logo",
           "x": 885.0,
@@ -22907,7 +22577,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r81",
+          "id": "r77",
           "shape_type": "RECTANGLE",
           "x": 323.5,
           "y": 333.2,
@@ -22916,30 +22586,19 @@
           "background_color": "#FFFFFF"
         },
         {
-          "op": "add-shape",
-          "slide": "architecture",
-          "id": "r82",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im78",
+          "path": "assets/icons/kit/shopping_basket-plum.svg",
+          "alt": "",
           "x": 331.5,
           "y": 339.59999999999997,
           "width": 20,
-          "height": 20,
-          "background_color": "#825578"
-        },
-        {
-          "op": "add-image",
-          "id": "im83",
-          "path": "assets/icons/glyph-shopping_basket.png",
-          "alt": "",
-          "x": 334.9,
-          "y": 342.99999999999994,
-          "width": 13.200000000000001,
-          "height": 13.200000000000001
+          "height": 20
         },
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t84",
+          "id": "t79",
           "text": "Supermarket",
           "x": 352.3,
           "y": 329.4,
@@ -22952,14 +22611,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t84",
+          "element": "t79",
           "start": 0,
           "end": 11,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t84",
+          "element": "t79",
           "start": 0,
           "end": 11,
           "bold": true
@@ -22967,7 +22626,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t85",
+          "id": "t80",
           "text": "Local store items and category prices",
           "x": 352.3,
           "y": 343.4,
@@ -22980,7 +22639,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t85",
+          "element": "t80",
           "start": 0,
           "end": 37,
           "line_spacing": 135
@@ -22988,7 +22647,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r86",
+          "id": "r81",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 382.0,
@@ -22999,7 +22658,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t87",
+          "id": "t82",
           "text": "BUILT WITH",
           "x": 46.3,
           "y": 383.8,
@@ -23012,14 +22671,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t87",
+          "element": "t82",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t87",
+          "element": "t82",
           "start": 0,
           "end": 10,
           "bold": true
@@ -23027,7 +22686,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r88",
+          "id": "r83",
           "shape_type": "RECTANGLE",
           "x": 127.5,
           "y": 387.0,
@@ -23037,7 +22696,7 @@
         },
         {
           "op": "add-image",
-          "id": "im89",
+          "id": "im84",
           "path": "assets/logos/python.png",
           "alt": "python logo",
           "x": 132.5,
@@ -23048,7 +22707,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t90",
+          "id": "t85",
           "text": "Python",
           "x": 145.3,
           "y": 383.8,
@@ -23061,14 +22720,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t90",
+          "element": "t85",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t90",
+          "element": "t85",
           "start": 0,
           "end": 6,
           "bold": true
@@ -23076,7 +22735,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r91",
+          "id": "r86",
           "shape_type": "RECTANGLE",
           "x": 198.175,
           "y": 387.0,
@@ -23086,7 +22745,7 @@
         },
         {
           "op": "add-image",
-          "id": "im92",
+          "id": "im87",
           "path": "assets/logos/docker.png",
           "alt": "docker logo",
           "x": 203.175,
@@ -23097,7 +22756,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t93",
+          "id": "t88",
           "text": "Docker",
           "x": 215.97500000000002,
           "y": 383.8,
@@ -23110,14 +22769,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t93",
+          "element": "t88",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t93",
+          "element": "t88",
           "start": 0,
           "end": 6,
           "bold": true
@@ -23125,7 +22784,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r94",
+          "id": "r89",
           "shape_type": "RECTANGLE",
           "x": 269.525,
           "y": 387.0,
@@ -23135,7 +22794,7 @@
         },
         {
           "op": "add-image",
-          "id": "im95",
+          "id": "im90",
           "path": "assets/logos/githubactions.png",
           "alt": "githubactions logo",
           "x": 274.525,
@@ -23146,7 +22805,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t96",
+          "id": "t91",
           "text": "GitHub Actions",
           "x": 287.325,
           "y": 383.8,
@@ -23159,14 +22818,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t96",
+          "element": "t91",
           "start": 0,
           "end": 14,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t96",
+          "element": "t91",
           "start": 0,
           "end": 14,
           "bold": true
@@ -23174,7 +22833,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r97",
+          "id": "r92",
           "shape_type": "RECTANGLE",
           "x": 375.825,
           "y": 387.0,
@@ -23184,7 +22843,7 @@
         },
         {
           "op": "add-image",
-          "id": "im98",
+          "id": "im93",
           "path": "assets/logos/googlecloud.png",
           "alt": "googlecloud logo",
           "x": 380.825,
@@ -23195,7 +22854,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t99",
+          "id": "t94",
           "text": "Cloud Run, not yet live",
           "x": 393.625,
           "y": 383.8,
@@ -23208,14 +22867,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t99",
+          "element": "t94",
           "start": 0,
           "end": 23,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t99",
+          "element": "t94",
           "start": 0,
           "end": 23,
           "bold": true
@@ -23223,7 +22882,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r100",
+          "id": "r95",
           "shape_type": "RECTANGLE",
           "x": 512.8,
           "y": 387.0,
@@ -23233,7 +22892,7 @@
         },
         {
           "op": "add-image",
-          "id": "im101",
+          "id": "im96",
           "path": "assets/logos/opentelemetry.png",
           "alt": "opentelemetry logo",
           "x": 517.8,
@@ -23244,7 +22903,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t102",
+          "id": "t97",
           "text": "OpenTelemetry",
           "x": 530.5999999999999,
           "y": 383.8,
@@ -23257,14 +22916,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t102",
+          "element": "t97",
           "start": 0,
           "end": 13,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t102",
+          "element": "t97",
           "start": 0,
           "end": 13,
           "bold": true
@@ -23272,7 +22931,7 @@
         {
           "op": "add-shape",
           "slide": "architecture",
-          "id": "r103",
+          "id": "r98",
           "shape_type": "RECTANGLE",
           "x": 620.75,
           "y": 387.0,
@@ -23282,7 +22941,7 @@
         },
         {
           "op": "add-image",
-          "id": "im104",
+          "id": "im99",
           "path": "assets/logos/googlegemini.png",
           "alt": "googlegemini logo",
           "x": 625.75,
@@ -23293,7 +22952,7 @@
         {
           "op": "add-textbox",
           "slide": "architecture",
-          "id": "t105",
+          "id": "t100",
           "text": "Gemini, optional",
           "x": 638.55,
           "y": 383.8,
@@ -23306,14 +22965,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t105",
+          "element": "t100",
           "start": 0,
           "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t105",
+          "element": "t100",
           "start": 0,
           "end": 16,
           "bold": true
@@ -23991,30 +23650,19 @@
           "dash_style": "DASH"
         },
         {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r35",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im35",
+          "path": "assets/icons/kit/fact_check-teal.svg",
+          "alt": "",
           "x": 85.5,
           "y": 180.0,
           "width": 36,
-          "height": 36,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im36",
-          "path": "assets/icons/glyph-fact_check.png",
-          "alt": "",
-          "x": 91.62,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
+          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t37",
+          "id": "t36",
           "text": "Contract",
           "x": 36.3,
           "y": 216.8,
@@ -24028,14 +23676,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t37",
+          "element": "t36",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t37",
+          "element": "t36",
           "start": 0,
           "end": 8,
           "bold": true
@@ -24043,7 +23691,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t38",
+          "id": "t37",
           "text": "CI fails on any drift",
           "x": 36.3,
           "y": 231.8,
@@ -24057,7 +23705,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t38",
+          "element": "t37",
           "start": 0,
           "end": 21,
           "line_spacing": 135
@@ -24065,7 +23713,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t39",
+          "id": "t38",
           "text": "docs/openapi.json",
           "x": 36.3,
           "y": 246.8,
@@ -24079,36 +23727,25 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t39",
+          "element": "t38",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r40",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im39",
+          "path": "assets/icons/kit/science-teal.svg",
+          "alt": "",
           "x": 236.6,
           "y": 180.0,
           "width": 36,
-          "height": 36,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im41",
-          "path": "assets/icons/glyph-science.png",
-          "alt": "",
-          "x": 242.72,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
+          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t42",
+          "id": "t40",
           "text": "Tests",
           "x": 187.4,
           "y": 216.8,
@@ -24122,14 +23759,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t42",
+          "element": "t40",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t42",
+          "element": "t40",
           "start": 0,
           "end": 5,
           "bold": true
@@ -24137,7 +23774,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t43",
+          "id": "t41",
           "text": "630 Python tests",
           "x": 187.4,
           "y": 231.8,
@@ -24151,7 +23788,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t43",
+          "element": "t41",
           "start": 0,
           "end": 16,
           "line_spacing": 135
@@ -24159,7 +23796,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t44",
+          "id": "t42",
           "text": "backend/tests/",
           "x": 187.4,
           "y": 246.8,
@@ -24173,36 +23810,25 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t44",
+          "element": "t42",
           "start": 0,
           "end": 14,
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r45",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im43",
+          "path": "assets/icons/kit/lock-teal.svg",
+          "alt": "",
           "x": 387.7,
           "y": 180.0,
           "width": 36,
-          "height": 36,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-image",
-          "id": "im46",
-          "path": "assets/icons/glyph-lock.png",
-          "alt": "",
-          "x": 393.82,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
+          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t47",
+          "id": "t44",
           "text": "Security",
           "x": 338.5,
           "y": 216.8,
@@ -24216,14 +23842,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t44",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
+          "element": "t44",
           "start": 0,
           "end": 8,
           "bold": true
@@ -24231,7 +23857,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t48",
+          "id": "t45",
           "text": "API keys, rate limits",
           "x": 338.5,
           "y": 231.8,
@@ -24245,7 +23871,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t48",
+          "element": "t45",
           "start": 0,
           "end": 21,
           "line_spacing": 135
@@ -24253,7 +23879,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t49",
+          "id": "t46",
           "text": "api/auth.py",
           "x": 338.5,
           "y": 246.8,
@@ -24267,38 +23893,110 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t46",
           "start": 0,
           "end": 11,
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r50",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im47",
+          "path": "assets/icons/kit/inventory_2-teal.svg",
+          "alt": "",
           "x": 538.8,
           "y": 180.0,
           "width": 36,
-          "height": 36,
-          "background_color": "#21918C"
+          "height": 36
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t48",
+          "text": "Container",
+          "x": 489.59999999999997,
+          "y": 216.8,
+          "width": 134.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t49",
+          "text": "One Docker image",
+          "x": 489.59999999999997,
+          "y": 231.8,
+          "width": 134.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 16,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "engineering",
+          "id": "t50",
+          "text": "Dockerfile",
+          "x": 489.59999999999997,
+          "y": 246.8,
+          "width": 134.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
         },
         {
           "op": "add-image",
           "id": "im51",
-          "path": "assets/icons/glyph-inventory_2.png",
+          "path": "assets/icons/kit/cloud_upload-grey.svg",
           "alt": "",
-          "x": 544.92,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
+          "x": 689.9,
+          "y": 180.0,
+          "width": 36,
+          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t52",
-          "text": "Container",
-          "x": 489.59999999999997,
+          "text": "Cloud Run",
+          "x": 640.6999999999999,
           "y": 216.8,
           "width": 134.4,
           "height": 27.9,
@@ -24326,8 +24024,8 @@
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t53",
-          "text": "One Docker image",
-          "x": 489.59999999999997,
+          "text": "Ready, not live",
+          "x": 640.6999999999999,
           "y": 231.8,
           "width": 134.4,
           "height": 25.200000000000003,
@@ -24341,15 +24039,15 @@
           "op": "style-paragraph",
           "element": "t53",
           "start": 0,
-          "end": 16,
+          "end": 15,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t54",
-          "text": "Dockerfile",
-          "x": 489.59999999999997,
+          "text": "deploy.yml",
+          "x": 640.6999999999999,
           "y": 246.8,
           "width": 134.4,
           "height": 25.200000000000003,
@@ -24367,124 +24065,19 @@
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r55",
-          "shape_type": "ELLIPSE",
-          "x": 689.9,
-          "y": 180.0,
-          "width": 36,
-          "height": 36,
-          "background_color": "#89949D"
-        },
-        {
           "op": "add-image",
-          "id": "im56",
-          "path": "assets/icons/glyph-cloud_upload.png",
+          "id": "im55",
+          "path": "assets/icons/kit/visibility-grey.svg",
           "alt": "",
-          "x": 696.02,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t57",
-          "text": "Cloud Run",
-          "x": 640.6999999999999,
-          "y": 216.8,
-          "width": 134.4,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t57",
-          "start": 0,
-          "end": 9,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t57",
-          "start": 0,
-          "end": 9,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t58",
-          "text": "Ready, not live",
-          "x": 640.6999999999999,
-          "y": 231.8,
-          "width": 134.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t58",
-          "start": 0,
-          "end": 15,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "engineering",
-          "id": "t59",
-          "text": "deploy.yml",
-          "x": 640.6999999999999,
-          "y": 246.8,
-          "width": 134.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t59",
-          "start": 0,
-          "end": 10,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-shape",
-          "slide": "engineering",
-          "id": "r60",
-          "shape_type": "ELLIPSE",
           "x": 841.0,
           "y": 180.0,
           "width": 36,
-          "height": 36,
-          "background_color": "#89949D"
-        },
-        {
-          "op": "add-image",
-          "id": "im61",
-          "path": "assets/icons/glyph-visibility.png",
-          "alt": "",
-          "x": 847.12,
-          "y": 186.12,
-          "width": 23.76,
-          "height": 23.76
+          "height": 36
         },
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t62",
+          "id": "t56",
           "text": "Tracing",
           "x": 791.8,
           "y": 216.8,
@@ -24498,14 +24091,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t62",
+          "element": "t56",
           "start": 0,
           "end": 7,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t62",
+          "element": "t56",
           "start": 0,
           "end": 7,
           "bold": true
@@ -24513,7 +24106,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t63",
+          "id": "t57",
           "text": "Health data kept out",
           "x": 791.8,
           "y": 231.8,
@@ -24527,7 +24120,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t63",
+          "element": "t57",
           "start": 0,
           "end": 20,
           "line_spacing": 135
@@ -24535,7 +24128,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t64",
+          "id": "t58",
           "text": "core/telemetry.py",
           "x": 791.8,
           "y": 246.8,
@@ -24549,7 +24142,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t64",
+          "element": "t58",
           "start": 0,
           "end": 17,
           "line_spacing": 135
@@ -24557,7 +24150,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r65",
+          "id": "r59",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 314.0,
@@ -24568,7 +24161,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r66",
+          "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 43.5,
           "y": 314.0,
@@ -24579,7 +24172,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t67",
+          "id": "t61",
           "text": "630",
           "x": 50.3,
           "y": 318.8,
@@ -24592,14 +24185,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t67",
+          "element": "t61",
           "start": 0,
           "end": 3,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t67",
+          "element": "t61",
           "start": 0,
           "end": 3,
           "bold": true
@@ -24607,7 +24200,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t68",
+          "id": "t62",
           "text": "Python tests, all passing: 538 backend, 92 Streamlit",
           "x": 50.3,
           "y": 362.8,
@@ -24620,7 +24213,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t68",
+          "element": "t62",
           "start": 0,
           "end": 52,
           "line_spacing": 135
@@ -24628,7 +24221,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r69",
+          "id": "r63",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
@@ -24639,7 +24232,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r70",
+          "id": "r64",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
@@ -24650,7 +24243,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t71",
+          "id": "t65",
           "text": "95%",
           "x": 347.4666666666667,
           "y": 318.8,
@@ -24663,14 +24256,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t71",
+          "element": "t65",
           "start": 0,
           "end": 3,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t71",
+          "element": "t65",
           "start": 0,
           "end": 3,
           "bold": true
@@ -24678,7 +24271,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t72",
+          "id": "t66",
           "text": "coverage, and CI fails below an 89% floor",
           "x": 347.4666666666667,
           "y": 362.8,
@@ -24691,7 +24284,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t72",
+          "element": "t66",
           "start": 0,
           "end": 41,
           "line_spacing": 135
@@ -24699,7 +24292,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r73",
+          "id": "r67",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24710,7 +24303,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r74",
+          "id": "r68",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24721,7 +24314,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t75",
+          "id": "t69",
           "text": "5",
           "x": 644.6333333333333,
           "y": 318.8,
@@ -24734,14 +24327,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t75",
+          "element": "t69",
           "start": 0,
           "end": 1,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t75",
+          "element": "t69",
           "start": 0,
           "end": 1,
           "bold": true
@@ -24749,7 +24342,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t76",
+          "id": "t70",
           "text": "CI checks on every pull request",
           "x": 644.6333333333333,
           "y": 362.8,
@@ -24762,7 +24355,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t76",
+          "element": "t70",
           "start": 0,
           "end": 31,
           "line_spacing": 135
@@ -25366,30 +24959,19 @@
           "background_color": "#896521"
         },
         {
-          "op": "add-shape",
-          "slide": "limits",
-          "id": "r31",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im31",
+          "path": "assets/icons/kit/check_circle-ochre.svg",
+          "alt": "",
           "x": 57.5,
           "y": 265.8,
           "width": 24,
-          "height": 24,
-          "background_color": "#896521"
-        },
-        {
-          "op": "add-image",
-          "id": "im32",
-          "path": "assets/icons/glyph-check_circle.png",
-          "alt": "",
-          "x": 61.58,
-          "y": 269.88,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t33",
+          "id": "t32",
           "text": "Measured",
           "x": 80.3,
           "y": 262.6,
@@ -25402,14 +24984,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 8,
           "bold": true
@@ -25417,7 +24999,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t34",
+          "id": "t33",
           "text": "\u2022  72 of 72 and 68 of 68, offline",
           "x": 50.3,
           "y": 292.6,
@@ -25430,14 +25012,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t34",
+          "element": "t33",
           "start": 0,
           "end": 33,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t34",
+          "element": "t33",
           "start": 3,
           "end": 11,
           "bold": true,
@@ -25445,7 +25027,7 @@
         },
         {
           "op": "style-text",
-          "element": "t34",
+          "element": "t33",
           "start": 16,
           "end": 24,
           "bold": true,
@@ -25454,7 +25036,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t35",
+          "id": "t34",
           "text": "\u2022  But the checks guided the fixes",
           "x": 50.3,
           "y": 310.1,
@@ -25467,7 +25049,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t35",
+          "element": "t34",
           "start": 0,
           "end": 34,
           "line_spacing": 135
@@ -25475,7 +25057,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t36",
+          "id": "t35",
           "text": "\u2022  11 of 72 fall back",
           "x": 50.3,
           "y": 327.6,
@@ -25488,7 +25070,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t36",
+          "element": "t35",
           "start": 0,
           "end": 21,
           "line_spacing": 135
@@ -25496,7 +25078,7 @@
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r37",
+          "id": "r36",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 192.90000000000003,
@@ -25507,7 +25089,7 @@
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r38",
+          "id": "r37",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 192.90000000000003,
@@ -25516,30 +25098,19 @@
           "background_color": "#896521"
         },
         {
-          "op": "add-shape",
-          "slide": "limits",
-          "id": "r39",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im38",
+          "path": "assets/icons/kit/calculate-ochre.svg",
+          "alt": "",
           "x": 354.6666666666667,
           "y": 204.90000000000003,
           "width": 24,
-          "height": 24,
-          "background_color": "#896521"
-        },
-        {
-          "op": "add-image",
-          "id": "im40",
-          "path": "assets/icons/glyph-calculate.png",
-          "alt": "",
-          "x": 358.74666666666667,
-          "y": 208.98000000000005,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t41",
+          "id": "t39",
           "text": "Estimated",
           "x": 377.4666666666667,
           "y": 201.70000000000005,
@@ -25552,14 +25123,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t41",
+          "element": "t39",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t41",
+          "element": "t39",
           "start": 0,
           "end": 9,
           "bold": true
@@ -25567,7 +25138,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t42",
+          "id": "t40",
           "text": "\u2022  68 of 72 plans include an estimate",
           "x": 347.4666666666667,
           "y": 231.70000000000005,
@@ -25580,14 +25151,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t42",
+          "element": "t40",
           "start": 0,
           "end": 37,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t42",
+          "element": "t40",
           "start": 3,
           "end": 11,
           "bold": true,
@@ -25596,10 +25167,52 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t43",
+          "id": "t41",
           "text": "\u2022  AMDR is a daily range on one meal",
           "x": 347.4666666666667,
           "y": 249.20000000000005,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t41",
+          "start": 0,
+          "end": 36,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t42",
+          "text": "\u2022  Default exercise inputs",
+          "x": 347.4666666666667,
+          "y": 266.70000000000005,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 26,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t43",
+          "text": "\u2022  Diet rules match ingredient names",
+          "x": 347.4666666666667,
+          "y": 284.20000000000005,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -25615,51 +25228,9 @@
           "line_spacing": 135
         },
         {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t44",
-          "text": "\u2022  Default exercise inputs",
-          "x": 347.4666666666667,
-          "y": 266.70000000000005,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t44",
-          "start": 0,
-          "end": 26,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t45",
-          "text": "\u2022  Diet rules match ingredient names",
-          "x": 347.4666666666667,
-          "y": 284.20000000000005,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t45",
-          "start": 0,
-          "end": 36,
-          "line_spacing": 135
-        },
-        {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r46",
+          "id": "r44",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 132.0,
@@ -25670,7 +25241,7 @@
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r47",
+          "id": "r45",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 132.0,
@@ -25679,30 +25250,19 @@
           "background_color": "#896521"
         },
         {
-          "op": "add-shape",
-          "slide": "limits",
-          "id": "r48",
-          "shape_type": "ELLIPSE",
+          "op": "add-image",
+          "id": "im46",
+          "path": "assets/icons/kit/group-ochre.svg",
+          "alt": "",
           "x": 651.8333333333334,
           "y": 144.0,
           "width": 24,
-          "height": 24,
-          "background_color": "#896521"
-        },
-        {
-          "op": "add-image",
-          "id": "im49",
-          "path": "assets/icons/glyph-group.png",
-          "alt": "",
-          "x": 655.9133333333334,
-          "y": 148.08,
-          "width": 15.84,
-          "height": 15.84
+          "height": 24
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t50",
+          "id": "t47",
           "text": "Not tested",
           "x": 674.6333333333333,
           "y": 140.8,
@@ -25715,14 +25275,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t50",
+          "element": "t47",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t50",
+          "element": "t47",
           "start": 0,
           "end": 10,
           "bold": true
@@ -25730,7 +25290,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t51",
+          "id": "t48",
           "text": "\u2022  No user testing",
           "x": 644.6333333333333,
           "y": 170.8,
@@ -25743,7 +25303,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t51",
+          "element": "t48",
           "start": 0,
           "end": 18,
           "line_spacing": 135
@@ -25751,7 +25311,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t52",
+          "id": "t49",
           "text": "\u2022  No clinical review",
           "x": 644.6333333333333,
           "y": 188.3,
@@ -25764,7 +25324,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t52",
+          "element": "t49",
           "start": 0,
           "end": 21,
           "line_spacing": 135
@@ -25772,7 +25332,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t53",
+          "id": "t50",
           "text": "\u2022  Not deployed",
           "x": 644.6333333333333,
           "y": 205.8,
@@ -25785,7 +25345,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t53",
+          "element": "t50",
           "start": 0,
           "end": 15,
           "line_spacing": 135
@@ -25793,7 +25353,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t54",
+          "id": "t51",
           "text": "\u2022  No database migrations",
           "x": 644.6333333333333,
           "y": 223.3,
@@ -25806,7 +25366,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t51",
           "start": 0,
           "end": 25,
           "line_spacing": 135
@@ -25814,7 +25374,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t55",
+          "id": "t52",
           "text": "\u2022  Taste and health outcomes unknown",
           "x": 644.6333333333333,
           "y": 240.8,
@@ -25827,7 +25387,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t55",
+          "element": "t52",
           "start": 0,
           "end": 36,
           "line_spacing": 135
