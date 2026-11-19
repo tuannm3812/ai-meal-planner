@@ -170,7 +170,7 @@ def row_visual(L, p, v, x, y, w, h):
         p.rect(sx(v['mark']) - 4, y1 - 2, 8, 12, INK)
         paint(L, p, v['mark_label'], sx(v['mark']) - 60, y1 + 12, 120, 8, INK, True, 'center')
         p.rect(sx(0), y2, sx(v['meal']) - sx(0), 8, V_TEAL)
-        paint(L, p, v['meal_label'], sx(v['meal']) + 6, y2 - 1, 80, 8, V_TEAL, True)
+        paint(L, p, v['meal_label'], sx(v['meal']) + 8, y2 - 1, 70, 8, V_TEAL, True)
         paint(L, p, '0', sx(0), y2 + 12, 20, 8, BODY)
         paint(L, p, f"{v['low']:,}", sx(v['low']) - 20, y1 - 12, 40, 8, BODY, False, 'center')
         paint(L, p, f"{v['high']:,} kcal", sx(v['high']) - 50, y1 - 12, 60, 8, BODY, False, 'right')
