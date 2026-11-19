@@ -50,11 +50,11 @@
     }
   },
   "inputs": {
-    "brief-content.json": "7705b9e265dda655d52515aa7ec8ee87ace1044e8942b16818c4847066d8d9c9",
+    "brief-content.json": "7e81bc747c16abce5964302d0e49444680c272d4724415f99e4bf3b3112c5a20",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
-    "claims-register.md": "08056355304272cd4d14373d1c7d82291004159ec29ccf7eda2a6e5e4b4d067a",
+    "claims-register.md": "019f038a0b815d74bb7400635baf56c38130a1d6ab5a71e8395a38c5cac07f68",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
-    "project_layouts.py": "ec4e895a17353b57727de9ecb9c9e89ea5659dad99ade81c5fefed09edc830c5"
+    "project_layouts.py": "bb0ef279b5e7c4b2a85866b51b65ec826213f0d820e939714bceef02599ddf66"
   },
   "assets": {
     "assets/PROVENANCE.md": "5fca3195bdc91ba0f25ad38c2ab9a87f11523d9ed939e66c43699ac33d323f96",
@@ -75,6 +75,11 @@
     "assets/figures/plates/plate-850.png": "80ea33308a6a46d2d25f00951d3551ab48b6fb56a918afa19cd41949850111ab",
     "assets/figures/problem-pasta.png": "b73b6fa1819535898a59ead3516699d7723d29dbe564e663bc0b094fabee7e88",
     "assets/figures/qr.png": "be88c06af939158448484acb93d1e2ec68aff9d217a79398a93499c49f703964",
+    "assets/figures/shapes/calorie-ring.svg": "303a2beb597939c6ad8e3e3f7401e0707af53efb1d9b72d456f703c7fc0eabad",
+    "assets/figures/shapes/chevron-1.svg": "f386a0a78be8332e04e530f0ec96c3a328c3c9ac1fc6fd7309c322df977f9383",
+    "assets/figures/shapes/chevron-2.svg": "eb4e1034cb801cd1d05d31df98af6e387c8768e569f12abd1dc6c0f28ccb7ae1",
+    "assets/figures/shapes/chevron-3.svg": "1b0076dc40fcac5a7655dcda70e1276c181869432613d925566ae48d5d4f113a",
+    "assets/figures/shapes/chevron-4.svg": "d31e4d368b5dd54d6616d0a0450b672484bca295be6670929071d61d305aa191",
     "assets/figures/stations/station-basket.png": "3a589351c15c3cd6c1d9911cf7ff185f12a632d82830de8d4411f9c32931ba75",
     "assets/figures/stations/station-pan.png": "96c39b66599b84a5eacd20e3114237b0ffea17aeb7e2b35e1948f3301d53b8a6",
     "assets/figures/stations/station-scale.png": "bd57e88e2076ce6086adad820f2e85fda4515cccb792fcdecb241988613af096",
@@ -134,8 +139,8 @@
     "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "e161241a7ba3336602f3c01e5c1836f378b2e1bbc8d6f6a28f922a0012671408",
-    "deck.pdf": "7674db46013955d2e528b9378f936fe60a48f448c15a0cc62a034fe6c3998758"
+    "deck.html": "bb5449782aecc527f851400796fd46a3e96767b365ac976f04b1d5989addf674",
+    "deck.pdf": "9a6dfb4be24e1a377ab30c24f1201256ab20b4d0e34234c04c6576442c4322da"
   },
   "slide_count": 16
 }

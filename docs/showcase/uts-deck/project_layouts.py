@@ -287,41 +287,42 @@ def mp_agents(L, p, slide):
 def mp_calories(L, p, slide):
     bottom = band(L, p, slide) - 14
     steps = slide['steps']
-    gap = 18
-    w = (W - gap * 3) / 4
-    ch = 100
+    overlap, notch, ch = 8, 18, 108
+    cw = (W + 3 * overlap) / 4
     for i, s in enumerate(steps):
-        x = LEFT + i * (w + gap)
-        card(p, x, TOP, w, ch, accent(slide))
-        dot_icon(L, p, s['icon'], ACCENT[accent(slide)][0], x + 14, TOP + 12, 22)
-        put(L, p, s['title'], x + 40, TOP + 15, w - 52, 12, 'ink', True)
-        inked(L, p, s['text'], x + 14, TOP + 42, w - 28, 10)
-        paint(L, p, s['value'], x + 14, TOP + ch - 26, w - 28, 12, INK, True)
-        if i < 3:
-            p.connector(x + w + 2, TOP + ch / 2, x + w + gap - 2, TOP + ch / 2)
+        x = LEFT + i * (cw - overlap)
+        last = i == len(steps) - 1
+        img(L, p, f'assets/figures/shapes/chevron-{i + 1}.svg', '', x, TOP, cw, ch)
+        tx = x + (14 if i == 0 else notch + 10)
+        tw = cw - (tx - x) - notch - 8
+        ink = WHITE if last else INK
+        sub = WHITE if last else BODY
+        accent_ink = ACCENT[accent(slide)][0]
+        dot_icon(L, p, s['icon'], V_TEAL if last else accent_ink, tx, TOP + 12, 22)
+        paint(L, p, s['title'], tx + 28, TOP + 15, tw - 28, 12, ink, True)
+        text = s['text'].replace('**', '')
+        paint(L, p, text, tx, TOP + 42, tw, 10, sub)
+        paint(L, p, s['value'], tx, TOP + ch - 28, tw, 12, ink, True)
     chart = slide['chart']
-    y = TOP + ch + 18
+    y = TOP + ch + 16
     p.rect(LEFT, y, W, bottom - y, pale(slide))
-    put(L, p, chart['title'], LEFT + 14, y + 10, 500, 12, 'ink', True)
-    scale = (W - 28) / chart['total']
-    x0 = LEFT + 14
-    by = y + 52
-    put(L, p, chart['day_label'], x0, by - 16, 300, 10, 'body')
-    run = x0
-    for part in chart['parts']:
-        wpart = part['value'] * scale
-        p.rect(run, by, wpart, 26, part['color'])
-        if part.get('inside'):
-            paint(L, p, part['inside'], run + 8, by + 6, wpart - 16, 10, WHITE, True)
-        run += wpart
-    last = chart['parts'][-1]
-    paint(L, p, last['outside'], x0, by - 16, W - 28, 10, last['color'], True, 'right')
-    my = by + 52
-    put(L, p, chart['meal_label'], x0, my - 16, 300, 10, 'body')
-    mw = chart['meal'] * scale
-    p.rect(x0, my, mw, 26, INK)
-    paint(L, p, chart['meal_inside'], x0 + 8, my + 6, mw - 16, 10, WHITE, True)
-    put(L, p, chart['scale'], x0, bottom - 22, 500, 8, 'body')
+    d = min(bottom - y - 24, 170)
+    dx, dy = LEFT + 24, y + (bottom - y - d) / 2
+    img(L, p, chart['image'], chart['alt'], dx, dy, d, d)
+    paint(L, p, chart['centre'], dx + d * .25, dy + d / 2 - 14, d * .5, 18, INK, True, 'center')
+    paint(L, p, chart['centre_label'], dx + d * .25, dy + d / 2 + 9, d * .5, 8, BODY, False, 'center')
+    gx = dx + d + 36
+    put(L, p, chart['title'], gx, y + 14, 500, 12, 'ink', True)
+    colw = (RIGHT - 14 - gx - 24) / 2
+    for k, g in enumerate(chart['groups']):
+        cx = gx + k * (colw + 24)
+        cy = y + 44
+        put(L, p, g['title'], cx, cy, colw, 10, 'ink', True)
+        for j, (colour, text) in enumerate(g['items']):
+            iy = cy + 26 + j * 26
+            p.rect(cx, iy + 1, 12, 12, colour)
+            put(L, p, text, cx + 20, iy, colw - 20, 10, 'body')
+    put(L, p, chart['scale'], gx, bottom - 24, RIGHT - 14 - gx, 8, 'body')
 
 
 # -- 8: choosing --------------------------------------------------------------------------------

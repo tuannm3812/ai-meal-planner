@@ -601,25 +601,40 @@
         }
       ],
       "chart": {
-        "title": "Her day and this meal, on one scale",
-        "total": 2469.2,
-        "day_label": "Daily budget: 2,469 kcal",
-        "parts": [
+        "title": "Her day and this meal, as two rings",
+        "image": "assets/figures/shapes/calorie-ring.svg",
+        "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
+        "centre": "691 kcal",
+        "centre_label": "this meal",
+        "groups": [
           {
-            "value": 2344.3,
-            "color": "#3B528B",
-            "inside": "2,344 kcal from body and activity"
+            "title": "Outer ring: her 2,469 kcal day",
+            "items": [
+              [
+                "#1B2430",
+                "This meal: 691 kcal, 28% of the day"
+              ],
+              [
+                "#D8DEE3",
+                "The rest of her day: 1,778 kcal"
+              ]
+            ]
           },
           {
-            "value": 124.9,
-            "color": "#21918C",
-            "outside": "+125 kcal from the trained model"
+            "title": "Inner ring: where the budget comes from",
+            "items": [
+              [
+                "#3B528B",
+                "2,344 kcal from body and activity"
+              ],
+              [
+                "#21918C",
+                "+125 kcal from the trained exercise model"
+              ]
+            ]
           }
         ],
-        "meal": 691.3,
-        "meal_label": "This meal: 28% of the day",
-        "meal_inside": "691 kcal",
-        "scale": "Scale: full width is 2,469 kcal. Exercise inputs use defaults (30 minutes, 100 bpm)."
+        "scale": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm)."
       }
     },
     {

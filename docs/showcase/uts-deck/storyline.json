@@ -12244,25 +12244,40 @@
         }
       ],
       "chart": {
-        "title": "Her day and this meal, on one scale",
-        "total": 2469.2,
-        "day_label": "Daily budget: 2,469 kcal",
-        "parts": [
+        "title": "Her day and this meal, as two rings",
+        "image": "assets/figures/shapes/calorie-ring.svg",
+        "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
+        "centre": "691 kcal",
+        "centre_label": "this meal",
+        "groups": [
           {
-            "value": 2344.3,
-            "color": "#3B528B",
-            "inside": "2,344 kcal from body and activity"
+            "title": "Outer ring: her 2,469 kcal day",
+            "items": [
+              [
+                "#1B2430",
+                "This meal: 691 kcal, 28% of the day"
+              ],
+              [
+                "#D8DEE3",
+                "The rest of her day: 1,778 kcal"
+              ]
+            ]
           },
           {
-            "value": 124.9,
-            "color": "#21918C",
-            "outside": "+125 kcal from the trained model"
+            "title": "Inner ring: where the budget comes from",
+            "items": [
+              [
+                "#3B528B",
+                "2,344 kcal from body and activity"
+              ],
+              [
+                "#21918C",
+                "+125 kcal from the trained exercise model"
+              ]
+            ]
           }
         ],
-        "meal": 691.3,
-        "meal_label": "This meal: 28% of the day",
-        "meal_inside": "691 kcal",
-        "scale": "Scale: full width is 2,469 kcal. Exercise inputs use defaults (30 minutes, 100 bpm)."
+        "scale": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm)."
       },
       "n": 7,
       "takeaways": [],
@@ -12735,31 +12750,19 @@
           "line_spacing": 135
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r27",
-          "shape_type": "RECTANGLE",
+          "op": "add-image",
+          "id": "im27",
+          "path": "assets/figures/shapes/chevron-1.svg",
+          "alt": "",
           "x": 43.5,
           "y": 132.0,
-          "width": 205.375,
-          "height": 100,
-          "background_color": "#EAF0F6"
+          "width": 224.875,
+          "height": 108
         },
         {
           "op": "add-shape",
           "slide": "calories",
           "id": "r28",
-          "shape_type": "RECTANGLE",
-          "x": 43.5,
-          "y": 132.0,
-          "width": 205.375,
-          "height": 2.5,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r29",
           "shape_type": "ELLIPSE",
           "x": 57.5,
           "y": 144.0,
@@ -12769,7 +12772,7 @@
         },
         {
           "op": "add-image",
-          "id": "im30",
+          "id": "im29",
           "path": "assets/icons/glyph-person.png",
           "alt": "",
           "x": 61.24,
@@ -12780,11 +12783,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t31",
+          "id": "t30",
           "text": "Body and activity",
-          "x": 76.3,
+          "x": 78.3,
           "y": 139.8,
-          "width": 167.775,
+          "width": 171.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -12793,14 +12796,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t31",
+          "element": "t30",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t31",
+          "element": "t30",
           "start": 0,
           "end": 17,
           "bold": true
@@ -12808,11 +12811,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t32",
+          "id": "t31",
           "text": "Size and activity give a daily estimate.",
           "x": 50.3,
           "y": 166.8,
-          "width": 191.775,
+          "width": 199.275,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -12821,7 +12824,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t32",
+          "element": "t31",
           "start": 0,
           "end": 40,
           "line_spacing": 135
@@ -12829,11 +12832,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t33",
+          "id": "t32",
           "text": "2,344 kcal",
           "x": 50.3,
-          "y": 198.8,
-          "width": 191.775,
+          "y": 204.8,
+          "width": 199.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -12842,58 +12845,34 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t33",
+          "element": "t32",
           "start": 0,
           "end": 10,
           "bold": true
         },
         {
-          "op": "add-line",
-          "slide": "calories",
-          "id": "l34",
-          "x": 250.875,
-          "y": 182.0,
-          "width": 14.0,
-          "height": 0.0,
-          "color": "#5A6370",
-          "line_weight": 0.75,
-          "end_arrow": "FILL_ARROW"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r35",
-          "shape_type": "RECTANGLE",
-          "x": 266.875,
+          "op": "add-image",
+          "id": "im33",
+          "path": "assets/figures/shapes/chevron-2.svg",
+          "alt": "",
+          "x": 260.375,
           "y": 132.0,
-          "width": 205.375,
-          "height": 100,
-          "background_color": "#EAF0F6"
+          "width": 224.875,
+          "height": 108
         },
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r36",
-          "shape_type": "RECTANGLE",
-          "x": 266.875,
-          "y": 132.0,
-          "width": 205.375,
-          "height": 2.5,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r37",
+          "id": "r34",
           "shape_type": "ELLIPSE",
-          "x": 280.875,
+          "x": 288.375,
           "y": 144.0,
           "width": 22,
           "height": 22,
@@ -12901,10 +12880,10 @@
         },
         {
           "op": "add-image",
-          "id": "im38",
+          "id": "im35",
           "path": "assets/icons/glyph-fitness_center.png",
           "alt": "",
-          "x": 284.615,
+          "x": 292.115,
           "y": 147.74,
           "width": 14.520000000000001,
           "height": 14.520000000000001
@@ -12912,11 +12891,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t39",
+          "id": "t36",
           "text": "Exercise",
-          "x": 299.675,
+          "x": 309.175,
           "y": 139.8,
-          "width": 167.775,
+          "width": 157.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -12925,14 +12904,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t39",
+          "element": "t36",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t39",
+          "element": "t36",
           "start": 0,
           "end": 8,
           "bold": true
@@ -12940,11 +12919,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t40",
+          "id": "t37",
           "text": "A trained model adds exercise\ncalories.",
-          "x": 273.675,
+          "x": 281.175,
           "y": 166.8,
-          "width": 191.775,
+          "width": 185.275,
           "height": 41.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -12953,35 +12932,19 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t40",
+          "element": "t37",
           "start": 0,
           "end": 39,
           "line_spacing": 135
         },
         {
-          "op": "style-text",
-          "element": "t40",
-          "start": 21,
-          "end": 29,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "style-text",
-          "element": "t40",
-          "start": 30,
-          "end": 38,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t41",
+          "id": "t38",
           "text": "+125 kcal",
-          "x": 273.675,
-          "y": 198.8,
-          "width": 191.775,
+          "x": 281.175,
+          "y": 204.8,
+          "width": 185.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -12990,58 +12953,34 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t41",
+          "element": "t38",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t41",
+          "element": "t38",
           "start": 0,
           "end": 9,
           "bold": true
         },
         {
-          "op": "add-line",
-          "slide": "calories",
-          "id": "l42",
-          "x": 474.25,
-          "y": 182.0,
-          "width": 14.0,
-          "height": 0.0,
-          "color": "#5A6370",
-          "line_weight": 0.75,
-          "end_arrow": "FILL_ARROW"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r43",
-          "shape_type": "RECTANGLE",
-          "x": 490.25,
+          "op": "add-image",
+          "id": "im39",
+          "path": "assets/figures/shapes/chevron-3.svg",
+          "alt": "",
+          "x": 477.25,
           "y": 132.0,
-          "width": 205.375,
-          "height": 100,
-          "background_color": "#EAF0F6"
+          "width": 224.875,
+          "height": 108
         },
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r44",
-          "shape_type": "RECTANGLE",
-          "x": 490.25,
-          "y": 132.0,
-          "width": 205.375,
-          "height": 2.5,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r45",
+          "id": "r40",
           "shape_type": "ELLIPSE",
-          "x": 504.25,
+          "x": 505.25,
           "y": 144.0,
           "width": 22,
           "height": 22,
@@ -13049,10 +12988,10 @@
         },
         {
           "op": "add-image",
-          "id": "im46",
+          "id": "im41",
           "path": "assets/icons/glyph-flag.png",
           "alt": "",
-          "x": 507.99,
+          "x": 508.99,
           "y": 147.74,
           "width": 14.520000000000001,
           "height": 14.520000000000001
@@ -13060,11 +12999,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t47",
+          "id": "t42",
           "text": "Goal",
-          "x": 523.05,
+          "x": 526.05,
           "y": 139.8,
-          "width": 167.775,
+          "width": 157.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -13073,14 +13012,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t42",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
+          "element": "t42",
           "start": 0,
           "end": 4,
           "bold": true
@@ -13088,11 +13027,11 @@
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t48",
+          "id": "t43",
           "text": "Gain +250, lose \u2212400, with a safety\nfloor.",
-          "x": 497.05,
+          "x": 498.05,
           "y": 166.8,
-          "width": 191.775,
+          "width": 185.275,
           "height": 41.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13101,35 +13040,19 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t48",
+          "element": "t43",
           "start": 0,
           "end": 42,
           "line_spacing": 135
         },
         {
-          "op": "style-text",
-          "element": "t48",
-          "start": 29,
-          "end": 35,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "style-text",
-          "element": "t48",
-          "start": 36,
-          "end": 41,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t49",
+          "id": "t44",
           "text": "2,469 kcal budget",
-          "x": 497.05,
-          "y": 198.8,
-          "width": 191.775,
+          "x": 498.05,
+          "y": 204.8,
+          "width": 185.275,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -13138,184 +13061,205 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t44",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t49",
+          "element": "t44",
           "start": 0,
           "end": 17,
           "bold": true
         },
         {
-          "op": "add-line",
+          "op": "add-image",
+          "id": "im45",
+          "path": "assets/figures/shapes/chevron-4.svg",
+          "alt": "",
+          "x": 694.125,
+          "y": 132.0,
+          "width": 224.875,
+          "height": 108
+        },
+        {
+          "op": "add-shape",
           "slide": "calories",
-          "id": "l50",
-          "x": 697.625,
-          "y": 182.0,
-          "width": 14.0,
-          "height": 0.0,
-          "color": "#5A6370",
-          "line_weight": 0.75,
-          "end_arrow": "FILL_ARROW"
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 722.125,
+          "y": 144.0,
+          "width": 22,
+          "height": 22,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-image",
+          "id": "im47",
+          "path": "assets/icons/glyph-rice_bowl.png",
+          "alt": "",
+          "x": 725.865,
+          "y": 147.74,
+          "width": 14.520000000000001,
+          "height": 14.520000000000001
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t48",
+          "text": "This meal",
+          "x": 742.925,
+          "y": 139.8,
+          "width": 157.275,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t49",
+          "text": "28% of the budget, within 350\u2013850\nkcal.",
+          "x": 714.925,
+          "y": 166.8,
+          "width": 185.275,
+          "height": 41.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 39,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t50",
+          "text": "691 kcal target",
+          "x": 714.925,
+          "y": 204.8,
+          "width": 185.275,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t50",
+          "start": 0,
+          "end": 15,
+          "bold": true
         },
         {
           "op": "add-shape",
           "slide": "calories",
           "id": "r51",
           "shape_type": "RECTANGLE",
-          "x": 713.625,
-          "y": 132.0,
-          "width": 205.375,
-          "height": 100,
+          "x": 43.5,
+          "y": 256.0,
+          "width": 875.5,
+          "height": 166.0,
           "background_color": "#EAF0F6"
         },
         {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r52",
-          "shape_type": "RECTANGLE",
-          "x": 713.625,
-          "y": 132.0,
-          "width": 205.375,
-          "height": 2.5,
-          "background_color": "#32658A"
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r53",
-          "shape_type": "ELLIPSE",
-          "x": 727.625,
-          "y": 144.0,
-          "width": 22,
-          "height": 22,
-          "background_color": "#32658A"
-        },
-        {
           "op": "add-image",
-          "id": "im54",
-          "path": "assets/icons/glyph-rice_bowl.png",
-          "alt": "",
-          "x": 731.365,
-          "y": 147.74,
-          "width": 14.520000000000001,
-          "height": 14.520000000000001
+          "id": "im52",
+          "path": "assets/figures/shapes/calorie-ring.svg",
+          "alt": "Two-ring donut: the outer ring is her 2,469 kcal day with this 691 kcal meal as a 28% arc; the inner ring splits the budget into 2,344 kcal from body and activity and 125 kcal from exercise.",
+          "x": 67.5,
+          "y": 268.0,
+          "width": 142.0,
+          "height": 142.0
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t53",
+          "text": "691 kcal",
+          "x": 95.8,
+          "y": 317.8,
+          "width": 85.4,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t53",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t53",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t54",
+          "text": "this meal",
+          "x": 95.8,
+          "y": 340.8,
+          "width": 85.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "calories",
           "id": "t55",
-          "text": "This meal",
-          "x": 746.425,
-          "y": 139.8,
-          "width": 167.775,
-          "height": 30.6,
-          "font_size": 12,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t55",
-          "start": 0,
-          "end": 9,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t55",
-          "start": 0,
-          "end": 9,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t56",
-          "text": "28% of the budget, within 350\u2013850\nkcal.",
-          "x": 720.425,
-          "y": 166.8,
-          "width": 191.775,
-          "height": 41.4,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t56",
-          "start": 0,
-          "end": 39,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t56",
-          "start": 26,
-          "end": 33,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "style-text",
-          "element": "t56",
-          "start": 34,
-          "end": 38,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t57",
-          "text": "691 kcal target",
-          "x": 720.425,
-          "y": 198.8,
-          "width": 191.775,
-          "height": 30.6,
-          "font_size": 12,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t57",
-          "start": 0,
-          "end": 15,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t57",
-          "start": 0,
-          "end": 15,
-          "bold": true
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r58",
-          "shape_type": "RECTANGLE",
-          "x": 43.5,
-          "y": 250.0,
-          "width": 875.5,
-          "height": 172.0,
-          "background_color": "#EAF0F6"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t59",
-          "text": "Her day and this meal, on one scale",
-          "x": 50.3,
-          "y": 252.8,
+          "text": "Her day and this meal, as two rings",
+          "x": 238.3,
+          "y": 262.8,
           "width": 514.4,
           "height": 30.6,
           "font_size": 12,
@@ -13325,14 +13269,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t59",
+          "element": "t55",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t59",
+          "element": "t55",
           "start": 0,
           "end": 35,
           "bold": true
@@ -13340,11 +13284,82 @@
         {
           "op": "add-textbox",
           "slide": "calories",
+          "id": "t56",
+          "text": "Outer ring: her 2,469 kcal day",
+          "x": 238.3,
+          "y": 292.8,
+          "width": 332.15,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t56",
+          "start": 0,
+          "end": 30,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t56",
+          "start": 0,
+          "end": 30,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "calories",
+          "id": "r57",
+          "shape_type": "RECTANGLE",
+          "x": 245.5,
+          "y": 327.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t58",
+          "text": "This meal: 691 kcal, 28% of the day",
+          "x": 258.3,
+          "y": 318.8,
+          "width": 312.15,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t58",
+          "start": 0,
+          "end": 35,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "calories",
+          "id": "r59",
+          "shape_type": "RECTANGLE",
+          "x": 245.5,
+          "y": 353.0,
+          "width": 12,
+          "height": 12,
+          "background_color": "#D8DEE3"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
           "id": "t60",
-          "text": "Daily budget: 2,469 kcal",
-          "x": 50.3,
-          "y": 278.8,
-          "width": 314.4,
+          "text": "The rest of her day: 1,778 kcal",
+          "x": 258.3,
+          "y": 344.8,
+          "width": 312.15,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13355,96 +13370,88 @@
           "op": "style-paragraph",
           "element": "t60",
           "start": 0,
-          "end": 24,
+          "end": 31,
           "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "calories",
+          "id": "t61",
+          "text": "Inner ring: where the budget comes from",
+          "x": 580.05,
+          "y": 292.8,
+          "width": 332.15,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 39,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 39,
+          "bold": true
         },
         {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r61",
+          "id": "r62",
           "shape_type": "RECTANGLE",
-          "x": 57.5,
-          "y": 302.0,
-          "width": 804.6307508504781,
-          "height": 26,
+          "x": 587.25,
+          "y": 327.0,
+          "width": 12,
+          "height": 12,
           "background_color": "#3B528B"
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t62",
+          "id": "t63",
           "text": "2,344 kcal from body and activity",
-          "x": 58.3,
-          "y": 300.8,
-          "width": 803.0307508504781,
+          "x": 600.05,
+          "y": 318.8,
+          "width": 312.15,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#FFFFFF",
-          "bold": true
+          "color": "#5A6370",
+          "bold": false
         },
         {
           "op": "style-paragraph",
-          "element": "t62",
+          "element": "t63",
           "start": 0,
           "end": 33,
           "line_spacing": 135
         },
         {
-          "op": "style-text",
-          "element": "t62",
-          "start": 0,
-          "end": 33,
-          "bold": true
-        },
-        {
           "op": "add-shape",
           "slide": "calories",
-          "id": "r63",
+          "id": "r64",
           "shape_type": "RECTANGLE",
-          "x": 862.1307508504781,
-          "y": 302.0,
-          "width": 42.86924914952212,
-          "height": 26,
+          "x": 587.25,
+          "y": 353.0,
+          "width": 12,
+          "height": 12,
           "background_color": "#21918C"
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t64",
-          "text": "+125 kcal from the trained model",
-          "x": 50.3,
-          "y": 278.8,
-          "width": 861.9,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#21918C",
-          "bold": true,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t64",
-          "start": 0,
-          "end": 32,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t64",
-          "start": 0,
-          "end": 32,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
           "id": "t65",
-          "text": "This meal: 28% of the day",
-          "x": 50.3,
-          "y": 330.8,
-          "width": 314.4,
+          "text": "+125 kcal from the trained exercise model",
+          "x": 600.05,
+          "y": 344.8,
+          "width": 312.15,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13455,56 +13462,17 @@
           "op": "style-paragraph",
           "element": "t65",
           "start": 0,
-          "end": 25,
+          "end": 41,
           "line_spacing": 135
-        },
-        {
-          "op": "add-shape",
-          "slide": "calories",
-          "id": "r66",
-          "shape_type": "RECTANGLE",
-          "x": 57.5,
-          "y": 354.0,
-          "width": 237.27391462821967,
-          "height": 26,
-          "background_color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "calories",
-          "id": "t67",
-          "text": "691 kcal",
-          "x": 58.3,
-          "y": 352.8,
-          "width": 235.67391462821968,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#FFFFFF",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t67",
-          "start": 0,
-          "end": 8,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t67",
-          "start": 0,
-          "end": 8,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "calories",
-          "id": "t68",
-          "text": "Scale: full width is 2,469 kcal. Exercise inputs use defaults (30 minutes, 100 bpm).",
-          "x": 50.3,
-          "y": 392.8,
-          "width": 514.4,
+          "id": "t66",
+          "text": "Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm).",
+          "x": 238.3,
+          "y": 390.8,
+          "width": 673.9,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -13513,9 +13481,9 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t68",
+          "element": "t66",
           "start": 0,
-          "end": 84,
+          "end": 91,
           "line_spacing": 135
         }
       ]

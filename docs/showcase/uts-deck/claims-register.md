@@ -17,7 +17,7 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Daily budgets | 1,200 to 4,521 kcal | docs/meal_quality/baseline.json | 1,200 is the weight-loss floor |
 | Pasta ingredients | five (5) | Local run of "pasta", average man, 7 November 2026 | High-Protein Tomato Turkey Pasta |
 | Example meal | chicken fried rice, 694 kcal against a 691 kcal target | docs/showcase/slides/captures/2026-11-06-plan.json | Local run, no provider keys |
-| Daily budget example | 2,469 kcal: 2,344 body and activity + 125 exercise; meal 691 kcal (28%) | Local run, 7 November 2026 | Active woman maintaining |
+| Daily budget example | 2,469 kcal: 2,344 body and activity + 125 exercise; meal 691 kcal (28%); rest of the day 1,778 kcal | Local run, 7 November 2026 | Active woman maintaining |
 | Exercise share | 3–10% of the day | Local run, 7 November 2026 | Default exercise inputs: 30 minutes, 100 bpm |
 | Model score | R² 0.996 | models/calorie_expenditure/metrics.json | Exercise calories only |
 | Recipe funnel | 34, 13, 5, 1 | Local run, 7 November 2026 | Vegan asks for chicken fried rice |

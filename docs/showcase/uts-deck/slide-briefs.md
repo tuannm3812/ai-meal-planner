@@ -324,13 +324,16 @@ Exact face text:
 - This meal
 - 28% of the budget, within 350–850 / kcal.
 - 691 kcal target
-- Her day and this meal, on one scale
-- Daily budget: 2,469 kcal
-- 2,344 kcal from body and activity
-- +125 kcal from the trained model
-- This meal: 28% of the day
 - 691 kcal
-- Scale: full width is 2,469 kcal. Exercise inputs use defaults (30 minutes, 100 bpm).
+- this meal
+- Her day and this meal, as two rings
+- Outer ring: her 2,469 kcal day
+- This meal: 691 kcal, 28% of the day
+- The rest of her day: 1,778 kcal
+- Inner ring: where the budget comes from
+- 2,344 kcal from body and activity
+- +125 kcal from the trained exercise model
+- Both rings are her full 2,469 kcal day. Exercise inputs use defaults (30 minutes, 100 bpm).
 
 ## 8. Hard limits come first, then a relevant recipe
 
