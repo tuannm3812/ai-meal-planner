@@ -228,28 +228,50 @@
           "value": "0.4%",
           "icon": "person",
           "accent": "slate",
-          "text": "Median gap between each meal and its target, worst **9.9%**."
+          "text": "Median gap between each meal and its target, worst **9.9%**.",
+          "chart": {
+            "kind": "gap",
+            "median": 0.4,
+            "worst": 9.9,
+            "limit": 10
+          }
         },
         {
           "label": "On target",
           "value": "72 of 72",
           "icon": "balance",
           "accent": "blue",
-          "text": "Benchmark plans meet the calorie and macro targets, up from **10**."
+          "text": "Benchmark plans meet the calorie and macro targets, up from **10**.",
+          "chart": {
+            "kind": "dots",
+            "total": 72,
+            "first": 10,
+            "label": "Dark: the 10 that passed at the first run"
+          }
         },
         {
           "label": "Fits your limits",
           "value": "5 of 5",
           "icon": "check_circle",
           "accent": "plum",
-          "text": "Guardrail cases hold: limits **rule out recipes or swap ingredients**."
+          "text": "Guardrail cases hold: limits **rule out recipes or swap ingredients**.",
+          "chart": {
+            "kind": "checks",
+            "total": 5
+          }
         },
         {
           "label": "Honest about gaps",
           "value": "68 of 72",
           "icon": "fact_check",
           "accent": "ochre",
-          "text": "Plans include an **estimated** ingredient, and the app labels each one."
+          "text": "Plans include an **estimated** ingredient, and the app labels each one.",
+          "chart": {
+            "kind": "dots",
+            "total": 72,
+            "first": 68,
+            "label": "Dark: plans with an estimated ingredient"
+          }
         }
       ],
       "takeaway": "Plate area shows calories. All figures come from the project's own offline benchmark, not a user study.",
@@ -323,8 +345,8 @@
       "craving": "I feel like pasta tonight.",
       "answer": "One request answers all three.",
       "image": {
-        "path": "assets/figures/problem-pasta.png",
-        "alt": "Flat illustration of a plate of tomato turkey pasta."
+        "path": "assets/photos/problem-spaghetti-bolognese.jpg",
+        "alt": "Photo of spaghetti bolognese with three numbered pins, one for each question"
       },
       "rows": [
         {
@@ -348,6 +370,20 @@
           "today": "Write a list, guess the cost",
           "app": "A list with an estimated total"
         }
+      ],
+      "pins": [
+        [
+          520,
+          650
+        ],
+        [
+          895,
+          345
+        ],
+        [
+          430,
+          440
+        ]
       ]
     },
     {

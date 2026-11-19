@@ -126,15 +126,22 @@ Exact face text:
 - Sized to you
 - 0.4%
 - Median gap between each meal and its / target, worst 9.9%.
+- worst
+- median
+- -10%
+- target
+- +10%
 - On target
 - 72 of 72
 - Benchmark plans meet the calorie and / macro targets, up from 10.
+- Dark: the 10 that passed at the first run
 - Fits your limits
 - 5 of 5
 - Guardrail cases hold: limits rule out / recipes or swap ingredients.
 - Honest about gaps
 - 68 of 72
 - Plans include an estimated ingredient, / and the app labels each one.
+- Dark: plans with an estimated ingredient
 
 ## 4. Picking a meal is easy; sizing it to you is not
 
@@ -159,23 +166,29 @@ Exact face text:
 - TAKEAWAY
 - The Today lines are this project's framing of the problem, not survey results.
 - I feel like pasta tonight.
+- 1
+- 2
+- 3
 - One request answers all three.
+- 1
 - How much?
-- Daily budgets in the benchmark run from 1,200 to / 4,521 kcal.
+- Daily budgets in the benchmark run from 1,200 / to 4,521 kcal.
 - TODAY
 - Guess from "serves 4"
 - WITH THE APP
 - A budget, then a meal / target
+- 2
 - Is it right for me?
-- Asked for pasta, a vegan gets lentil bolognese and a / coeliac gets gluten-free pasta.
+- Asked for pasta, a vegan gets lentil bolognese / and a coeliac gets gluten-free pasta.
 - TODAY
 - Read every label
 - WITH THE APP
 - Conflicts ruled out or / swapped first
+- 3
 - What do I buy?
-- This one pasta means five ingredients to find and / price.
+- This one pasta means five ingredients to find / and price.
 - TODAY
-- Write a list, guess the cost
+- Write a list, guess the / cost
 - WITH THE APP
 - A list with an estimated / total
 

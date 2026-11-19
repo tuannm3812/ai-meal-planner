@@ -92,6 +92,34 @@ def accent(slide):
 
 
 # -- 3: summary ---------------------------------------------------------------------------------
+def mini_chart(L, p, c, x, y, w, ink):
+    """A small unit chart under a finding: what the number looks like, not a second claim."""
+    if c['kind'] == 'gap':
+        lim = c['limit']
+        mid = x + w / 2
+        scale = (w / 2 - 4) / lim
+        p.rect(x, y + 8, w, 12, WHITE)
+        p.line(mid, y + 4, mid, y + 24, ink, .75)
+        for v, colour, r, word in ((c['worst'], V_DARK, 3, 'worst'), (c['median'], V_TEAL, 5, 'median')):
+            p.rect(mid + v * scale - r, y + 14 - r, 2 * r, 2 * r, colour, 'ELLIPSE')
+            paint(L, p, word, mid + v * scale - 20, y - 8, 40, 8, colour, True, 'center')
+        paint(L, p, f"-{lim}%", x, y + 26, 40, 8, BODY)
+        paint(L, p, 'target', mid - 20, y + 26, 40, 8, BODY, False, 'center')
+        paint(L, p, f"+{lim}%", x + w - 40, y + 26, 40, 8, BODY, False, 'right')
+        return
+    if c['kind'] == 'checks':
+        for k in range(c['total']):
+            p.rect(x + k * 26, y + 4, 20, 20, V_TEAL, 'ELLIPSE')
+            img(L, p, 'assets/icons/glyph-check_circle.png', '', x + k * 26 + 3, y + 7, 14, 14)
+        return
+    per_row, step = 24, w / 24
+    for k in range(c['total']):
+        cx, cy = x + (k % per_row) * step + step / 2, y + (k // per_row) * step + step / 2
+        colour = V_DARK if k < c['first'] else V_GREEN
+        p.rect(cx - step * .36, cy - step * .36, step * .72, step * .72, colour, 'ELLIPSE')
+    paint(L, p, c['label'], x, y + 3 * step + 4, w, 8, BODY)
+
+
 def mp_summary(L, p, slide):
     bottom = band(L, p, slide) - 14
     plates = slide['plates']
@@ -115,36 +143,50 @@ def mp_summary(L, p, slide):
         card(p, x, y, w, h, f['accent'], fill)
         dot_icon(L, p, f['icon'], ink, x + 14, y + 14, 24)
         paint(L, p, f['label'], x + 44, y + 19, w - 56, 12, ink, True)
-        paint(L, p, f['value'], x + 14, y + 50, w - 28, 24, ink, True)
-        inked(L, p, f['text'], x + 14, y + 84, w - 28, 10)
+        paint(L, p, f['value'], x + 14, y + 48, w - 28, 24, ink, True)
+        inked(L, p, f['text'], x + 14, y + 80, w - 28, 10)
+        if f.get('chart'):
+            mini_chart(L, p, f['chart'], x + 14, bottom - 50, w - 28, ink)
 
 
 # -- 4: problem ---------------------------------------------------------------------------------
+def pin(L, p, n, x, y, r=9):
+    p.rect(x - r - 2, y - r - 2, 2 * r + 4, 2 * r + 4, WHITE, 'ELLIPSE')
+    p.rect(x - r, y - r, 2 * r, 2 * r, INK, 'ELLIPSE')
+    paint(L, p, str(n), x - r, y - 6.5, 2 * r, 10, WHITE, True, 'center')
+
+
 def mp_problem(L, p, slide):
     bottom = band(L, p, slide) - 14
-    lw = 236
+    lw = 250
     p.rect(LEFT, TOP, lw, bottom - TOP, pale(slide))
-    p.rect(LEFT + 16, TOP + 16, lw - 32, 40, WHITE)
-    put(L, p, slide['craving'], LEFT + 20, TOP + 26, lw - 40, 12, 'ink', True, 'center')
-    d = min(lw - 70, bottom - TOP - 120)
-    img(L, p, slide['image']['path'], slide['image']['alt'], LEFT + (lw - d) / 2, TOP + 68, d, d)
-    put(L, p, slide['answer'], LEFT + 16, bottom - 36, lw - 32, 12, 'ink', True, 'center')
-    x0 = LEFT + lw + 18
+    p.rect(LEFT + 14, TOP + 12, lw - 28, 28, WHITE)
+    put(L, p, slide['craving'], LEFT + 18, TOP + 18, lw - 36, 12, 'ink', True, 'center')
+    d = bottom - TOP - 82
+    px, py = LEFT + (lw - d) / 2, TOP + 48
+    img(L, p, slide['image']['path'], slide['image']['alt'], px, py, d, d)
+    for n, (ix, iy) in enumerate(slide['pins'], 1):
+        pin(L, p, n, px + ix / 1000 * d, py + iy / 1000 * d)
+    put(L, p, slide['answer'], LEFT + 14, bottom - 26, lw - 28, 12, 'ink', True, 'center')
+    x0 = LEFT + lw + 16
     rows = slide['rows']
-    rh = (bottom - TOP - 12 * (len(rows) - 1)) / len(rows)
+    rh = (bottom - TOP - 10 * (len(rows) - 1)) / len(rows)
+    tone = ACCENT[accent(slide)]
     for i, r in enumerate(rows):
-        y = TOP + i * (rh + 12)
+        y = TOP + i * (rh + 10)
         card(p, x0, y, RIGHT - x0, rh, accent(slide), rule='left')
-        dot_icon(L, p, r['icon'], ACCENT[accent(slide)][0], x0 + 14, y + rh / 2 - 13, 26)
-        put(L, p, r['question'], x0 + 50, y + 12, 240, 12, 'ink', True)
-        inked(L, p, r['fact'], x0 + 50, y + 32, 240, 10)
-        cx = x0 + 310
+        pin(L, p, i + 1, x0 + 26, y + rh / 2, 11)
+        put(L, p, r['question'], x0 + 50, y + 12, 220, 12, 'ink', True)
+        inked(L, p, r['fact'], x0 + 50, y + 32, 220, 10)
+        bw, cx = 140, x0 + 284
         for k, (label, text) in enumerate((('TODAY', r['today']), ('WITH THE APP', r['app']))):
-            bx = cx + k * 170
-            p.rect(bx, y + 12, 150, rh - 24, WHITE if k == 0 else ACCENT[accent(slide)][1])
-            put(L, p, label, bx + 10, y + 18, 130, 8, 'body', True)
-            put(L, p, text, bx + 10, y + 32, 130, 10, 'ink', True)
-        p.connector(cx + 152, y + rh / 2, cx + 168, y + rh / 2)
+            bx = cx + k * (bw + 24)
+            p.rect(bx, y + 10, bw, rh - 20, WHITE if k == 0 else tone[1])
+            if k:
+                p.rect(bx, y + 10, 3, rh - 20, V_TEAL)
+            put(L, p, label, bx + 10, y + 18, bw - 20, 8, 'body', True)
+            put(L, p, text, bx + 10, y + 32, bw - 20, 10, 'ink', True)
+        p.connector(cx + bw + 3, y + rh / 2, cx + bw + 21, y + rh / 2)
 
 
 # -- 5: flow ------------------------------------------------------------------------------------

@@ -50,11 +50,11 @@
     }
   },
   "inputs": {
-    "brief-content.json": "e829b283884c5d1e1d596fbd511d4d8395df1a4d9ca3f48cb23edc535362dd32",
+    "brief-content.json": "ed86639ced505cdb46de6e9af8f9109df7e2f1e008fc8a4291ab390d86a20a89",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
     "claims-register.md": "ad5d6c2ea17f946e3ff238220ca8119675d13416d17f0555422576328c8e179c",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
-    "project_layouts.py": "cab63ee9f3f52469dd033c4cd111f4bf3706d4c277ce97c900c262369787e5bc"
+    "project_layouts.py": "72ebf607bda1731c9086eac86e2ff04412332875704b12f7f860512d0b298101"
   },
   "assets": {
     "assets/PROVENANCE.md": "5fca3195bdc91ba0f25ad38c2ab9a87f11523d9ed939e66c43699ac33d323f96",
@@ -126,11 +126,13 @@
     "assets/logos/vite.png": "fbc0355127a37f2cc2cc3895e7aadb5e0b3221ccd4320fd56611202cedad3af4",
     "assets/manifest.json": "b4c216f9d77efbb356324dc92b9480121da8bec53db9639bb9f4f90765bc2e27",
     "assets/photos/cover-chicken-fried-rice.jpg": "06dcee78337b203927a8e1d300d0fa07fdc4eeaf244f9f31e83f29e385691dcf",
-    "assets/photos/cover-chicken-fried-rice.provenance.json": "a6a74fa98829ae9b354da69938ae46b05585e23e8937ba189650dce078b0cbe3"
+    "assets/photos/cover-chicken-fried-rice.provenance.json": "a6a74fa98829ae9b354da69938ae46b05585e23e8937ba189650dce078b0cbe3",
+    "assets/photos/problem-spaghetti-bolognese.jpg": "8ed8363704749495a4610693f3582a5d12e6b50d576d6af60ccf2e5902f36acf",
+    "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "208408bc8b41249f2016a3744bc522731f69b76c50f733934cd4d83548242ee1",
-    "deck.pdf": "45a5584f9d7ea4233be960b47357b61dcef5f18f6c94ac309990998291e0ea2a"
+    "deck.html": "af9c4c3b6b9813fd3caf4ae7646b575c0983dd998615145207d678873d7e0f78",
+    "deck.pdf": "e6a53eb4a815f3dfeda9b94c4e3cb319fefcc849fd7919e6b5af2b2f59a0940c"
   },
   "slide_count": 16
 }
