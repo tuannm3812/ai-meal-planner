@@ -71,10 +71,13 @@ TONE = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'oc
         '#89949D': 'grey', '#FFFFFF': 'white', '#1B2430': 'ink'}
 
 
-def dot_icon(L, p, glyph, colour, x, y, d=24):
-    """A bare glyph from the deck's kit (build_icon_kit.py), drawn a third larger than its slot."""
-    big = d * 1.3
-    img(L, p, f'assets/icons/kit/{glyph}-{TONE[colour]}.svg', '', x - (big - d) * .8, y - (big - d) / 2, big, big)
+def dot_icon(L, p, glyph, colour, x, y, d=24, size=18):
+    """A bare glyph from the deck's kit (build_icon_kit.py), sized to sit beside 12 pt text.
+
+    The slot (x, y, d) is kept so callers' text offsets stay put; the glyph is centred in it.
+    """
+    s = min(size, d * 1.3)
+    img(L, p, f'assets/icons/kit/{glyph}-{TONE[colour]}.svg', '', x + (d - s) / 2, y + (d - s) / 2, s, s)
 
 
 def chip(L, p, text, x, y, w, h, colour=INK, fill=WHITE, size=10):
@@ -114,7 +117,7 @@ def mini_chart(L, p, c, x, y, w, ink):
         return
     if c['kind'] == 'checks':
         for k in range(c['total']):
-            dot_icon(L, p, 'check_circle', V_TEAL, x + k * 28, y + 2, 24)
+            dot_icon(L, p, 'check_circle', V_TEAL, x + k * 26, y + 2, 24, 22)
         return
     per_row, step = 24, w / 24
     for k in range(c['total']):
@@ -545,7 +548,7 @@ def mp_engineering(L, p, slide):
         x = LEFT + 60 + i * step
         colour = V_TEAL if s['live'] else '#89949D'
         p.rect(x - 6, ly - 6, 12, 12, colour, 'ELLIPSE')
-        dot_icon(L, p, s['icon'], colour, x - 13, ly - 40, 26)
+        dot_icon(L, p, s['icon'], colour, x - 13, ly - 38, 26, 22)
         put(L, p, s['title'], x - 60, ly + 26, 120, 10, 'ink', True, 'center')
         put(L, p, s['text'], x - 60, ly + 41, 120, 8, 'body', False, 'center')
         put(L, p, s['file'], x - 60, ly + 56, 120, 8, 'body', False, 'center')

@@ -3818,10 +3818,10 @@
           "id": "im46",
           "path": "assets/icons/kit/person-slate.svg",
           "alt": "",
-          "x": 51.739999999999995,
-          "y": 262.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 60.5,
+          "y": 269.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -4102,10 +4102,10 @@
           "id": "im61",
           "path": "assets/icons/kit/balance-blue.svg",
           "alt": "",
-          "x": 274.615,
-          "y": 262.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 283.375,
+          "y": 269.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -5011,10 +5011,10 @@
           "id": "im139",
           "path": "assets/icons/kit/check_circle-plum.svg",
           "alt": "",
-          "x": 497.49,
-          "y": 262.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 506.25,
+          "y": 269.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -5114,50 +5114,50 @@
           "id": "im143",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 497.49,
-          "y": 370.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 504.25,
+          "y": 375.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-image",
           "id": "im144",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 525.49,
-          "y": 370.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 530.25,
+          "y": 375.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-image",
           "id": "im145",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 553.49,
-          "y": 370.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 556.25,
+          "y": 375.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-image",
           "id": "im146",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 581.49,
-          "y": 370.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 582.25,
+          "y": 375.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-image",
           "id": "im147",
           "path": "assets/icons/kit/check_circle-teal.svg",
           "alt": "",
-          "x": 609.49,
-          "y": 370.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 608.25,
+          "y": 375.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-shape",
@@ -5186,10 +5186,10 @@
           "id": "im150",
           "path": "assets/icons/kit/fact_check-ochre.svg",
           "alt": "",
-          "x": 720.365,
-          "y": 262.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 729.125,
+          "y": 269.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -8747,10 +8747,10 @@
           "id": "im31",
           "path": "assets/icons/kit/person-blue.svg",
           "alt": "",
-          "x": 51.739999999999995,
-          "y": 333.2203125,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 60.5,
+          "y": 339.8203125,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -8901,10 +8901,10 @@
           "id": "im41",
           "path": "assets/icons/kit/search-blue.svg",
           "alt": "",
-          "x": 350.9066666666667,
-          "y": 333.2203125,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 359.6666666666667,
+          "y": 339.8203125,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -9055,10 +9055,10 @@
           "id": "im51",
           "path": "assets/icons/kit/rice_bowl-blue.svg",
           "alt": "",
-          "x": 650.0733333333334,
-          "y": 333.2203125,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 658.8333333333334,
+          "y": 339.8203125,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -12575,10 +12575,10 @@
           "id": "im28",
           "path": "assets/icons/kit/person-white.svg",
           "alt": "",
-          "x": 54.22,
-          "y": 142.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 61.5,
+          "y": 148.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -12672,10 +12672,10 @@
           "id": "im33",
           "path": "assets/icons/kit/fitness_center-white.svg",
           "alt": "",
-          "x": 285.095,
-          "y": 142.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 292.375,
+          "y": 148.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -12769,10 +12769,10 @@
           "id": "im38",
           "path": "assets/icons/kit/flag-white.svg",
           "alt": "",
-          "x": 501.97,
-          "y": 142.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 509.25,
+          "y": 148.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -12866,10 +12866,10 @@
           "id": "im43",
           "path": "assets/icons/kit/rice_bowl-ink.svg",
           "alt": "",
-          "x": 718.845,
-          "y": 142.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 726.125,
+          "y": 148.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -15648,10 +15648,10 @@
           "id": "im175",
           "path": "assets/icons/kit/check_circle-blue.svg",
           "alt": "",
-          "x": 52.22,
-          "y": 304.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 59.5,
+          "y": 310.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -15765,10 +15765,10 @@
           "id": "im181",
           "path": "assets/icons/kit/flag-blue.svg",
           "alt": "",
-          "x": 275.095,
-          "y": 304.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 282.375,
+          "y": 310.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -15882,10 +15882,10 @@
           "id": "im187",
           "path": "assets/icons/kit/block-blue.svg",
           "alt": "",
-          "x": 497.97,
-          "y": 304.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 505.25,
+          "y": 310.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -15999,10 +15999,10 @@
           "id": "im193",
           "path": "assets/icons/kit/balance-blue.svg",
           "alt": "",
-          "x": 720.845,
-          "y": 304.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 728.125,
+          "y": 310.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -17628,10 +17628,10 @@
           "id": "im76",
           "path": "assets/icons/kit/verified-blue.svg",
           "alt": "",
-          "x": 472.22,
-          "y": 242.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 479.5,
+          "y": 248.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -17709,10 +17709,10 @@
           "id": "im81",
           "path": "assets/icons/kit/search-blue.svg",
           "alt": "",
-          "x": 472.22,
-          "y": 310.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 479.5,
+          "y": 316.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -17798,10 +17798,10 @@
           "id": "im86",
           "path": "assets/icons/kit/calculate-blue.svg",
           "alt": "",
-          "x": 472.22,
-          "y": 378.7,
-          "width": 28.6,
-          "height": 28.6
+          "x": 479.5,
+          "y": 384.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -20809,10 +20809,10 @@
           "id": "im48",
           "path": "assets/icons/kit/balance-plum.svg",
           "alt": "",
-          "x": 629.74,
-          "y": 160.73333333333335,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 638.5,
+          "y": 167.33333333333334,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -20890,10 +20890,10 @@
           "id": "im53",
           "path": "assets/icons/kit/check_circle-plum.svg",
           "alt": "",
-          "x": 629.74,
-          "y": 261.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 638.5,
+          "y": 268.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -20971,10 +20971,10 @@
           "id": "im58",
           "path": "assets/icons/kit/search-plum.svg",
           "alt": "",
-          "x": 629.74,
-          "y": 362.06666666666666,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 638.5,
+          "y": 368.6666666666667,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -22149,10 +22149,10 @@
           "id": "im59",
           "path": "assets/icons/kit/monitor_weight-plum.svg",
           "alt": "",
-          "x": 326.7,
-          "y": 181.4,
-          "width": 26.0,
-          "height": 26.0
+          "x": 332.5,
+          "y": 185.4,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -22229,10 +22229,10 @@
           "id": "im64",
           "path": "assets/icons/kit/skillet-plum.svg",
           "alt": "",
-          "x": 326.7,
-          "y": 220.20000000000002,
-          "width": 26.0,
-          "height": 26.0
+          "x": 332.5,
+          "y": 224.20000000000002,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -22309,10 +22309,10 @@
           "id": "im69",
           "path": "assets/icons/kit/fact_check-plum.svg",
           "alt": "",
-          "x": 326.7,
-          "y": 259.0,
-          "width": 26.0,
-          "height": 26.0
+          "x": 332.5,
+          "y": 263.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -22379,10 +22379,10 @@
           "id": "im73",
           "path": "assets/icons/kit/balance-plum.svg",
           "alt": "",
-          "x": 326.7,
-          "y": 297.79999999999995,
-          "width": 26.0,
-          "height": 26.0
+          "x": 332.5,
+          "y": 301.79999999999995,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -22459,10 +22459,10 @@
           "id": "im78",
           "path": "assets/icons/kit/shopping_basket-plum.svg",
           "alt": "",
-          "x": 326.7,
-          "y": 336.59999999999997,
-          "width": 26.0,
-          "height": 26.0
+          "x": 332.5,
+          "y": 340.59999999999997,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -23512,10 +23512,10 @@
           "id": "im35",
           "path": "assets/icons/kit/fact_check-teal.svg",
           "alt": "",
-          "x": 84.25999999999999,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 92.5,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -23606,10 +23606,10 @@
           "id": "im40",
           "path": "assets/icons/kit/science-teal.svg",
           "alt": "",
-          "x": 235.35999999999999,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 243.6,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -23700,10 +23700,10 @@
           "id": "im45",
           "path": "assets/icons/kit/lock-teal.svg",
           "alt": "",
-          "x": 386.46,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 394.7,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -23794,10 +23794,10 @@
           "id": "im50",
           "path": "assets/icons/kit/inventory_2-teal.svg",
           "alt": "",
-          "x": 537.56,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 545.8,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -23888,10 +23888,10 @@
           "id": "im55",
           "path": "assets/icons/kit/cloud_upload-grey.svg",
           "alt": "",
-          "x": 688.66,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 696.9,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -23982,10 +23982,10 @@
           "id": "im60",
           "path": "assets/icons/kit/visibility-grey.svg",
           "alt": "",
-          "x": 839.76,
-          "y": 162.1,
-          "width": 33.800000000000004,
-          "height": 33.800000000000004
+          "x": 848.0,
+          "y": 170.0,
+          "width": 22,
+          "height": 22
         },
         {
           "op": "add-textbox",
@@ -24876,10 +24876,10 @@
           "id": "im31",
           "path": "assets/icons/kit/check_circle-ochre.svg",
           "alt": "",
-          "x": 51.739999999999995,
-          "y": 262.2,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 60.5,
+          "y": 268.8,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -25015,10 +25015,10 @@
           "id": "im38",
           "path": "assets/icons/kit/calculate-ochre.svg",
           "alt": "",
-          "x": 348.9066666666667,
-          "y": 201.30000000000004,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 357.6666666666667,
+          "y": 207.90000000000003,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
@@ -25167,10 +25167,10 @@
           "id": "im46",
           "path": "assets/icons/kit/group-ochre.svg",
           "alt": "",
-          "x": 646.0733333333334,
-          "y": 140.4,
-          "width": 31.200000000000003,
-          "height": 31.200000000000003
+          "x": 654.8333333333334,
+          "y": 147.0,
+          "width": 18,
+          "height": 18
         },
         {
           "op": "add-textbox",
