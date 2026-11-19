@@ -21,3 +21,5 @@ Glossary: plan, meal target (28% of the daily budget, 350–850 kcal), daily bud
 Layouts: cover, agenda and close are the kit's own; slides 3–15 use project layouts in project_layouts.py (mp_*), with neutral cards, chapter-accent rules, and wording only from slide fields.
 
 Review log: 18 November 2026, batch 1 ported on built-in layouts; then Mike asked for the whole deck, so slides 3–15 moved to project layouts. Build, export, check_deck, audit_layout and check_markers all report 0.
+
+- 2026-11-19: cover uses a real CC0 photo of chicken fried rice (Andy Li, Wikimedia Commons; see `assets/photos/cover-chicken-fried-rice.provenance.json`). Tags pin to the real chicken, rice and carrot, and each leader meets its tag edge. Tag weights are the app's plan, not the photo's portions. Affiliation reads TD School, University of Technology Sydney.

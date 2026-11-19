@@ -542,17 +542,19 @@ def mp_cover(L, p, slide):
     img(L, p, slide['motif']['path'], slide['motif']['alt'], LEFT, 440, 478, 46)
     # The labelled plate: the cover's own illustration, with native tags and a native receipt.
     art = slide['art']
-    p.rect(560, 0, 400, 540, ACCENT['slate'][1])
-    img(L, p, art['image'], art['alt'], 600, 146, 320, 320)
+    img(L, p, art['image'], art['alt'], 560, 0, 400, 540)
     for tag in art['tags']:
-        tx, ty, side = tag['x'], tag['y'], tag['side']
-        w = 132
-        bx = tx - w - 6 if side == 'left' else tx + 6
-        p.line(tag['dot'][0], tag['dot'][1], tx, ty, INK, .75)
-        p.rect(tag['dot'][0] - 3, tag['dot'][1] - 3, 6, 6, INK, 'ELLIPSE')
-        p.rect(bx, ty - 16, w, 32, WHITE)
-        put(L, p, tag['name'], bx + 8, ty - 13, w - 16, 10, 'ink', True)
-        paint(L, p, tag['source'], bx + 8, ty + 1, w - 16, 8, ESTIMATED if tag['source'] == 'Estimated' else REFERENCE, True)
+        (dx, dy), (bx, by), w, h = tag['dot'], tag['box'], 132, 32
+        # The leader runs from the dot to the nearest point on the tag's edge.
+        ex, ey = min(max(dx, bx), bx + w), min(max(dy, by), by + h)
+        p.line(dx, dy, ex, ey, WHITE, 2.5)
+        p.line(dx, dy, ex, ey, INK, 1)
+        p.rect(dx - 5, dy - 5, 10, 10, WHITE, 'ELLIPSE')
+        p.rect(dx - 3, dy - 3, 6, 6, INK, 'ELLIPSE')
+        p.rect(bx, by, w, h, WHITE)
+        p.rect(bx, by, 3, h, ESTIMATED if tag['source'] == 'Estimated' else REFERENCE)
+        put(L, p, tag['name'], bx + 10, by + 3, w - 16, 10, 'ink', True)
+        paint(L, p, tag['source'], bx + 10, by + 17, w - 16, 8, ESTIMATED if tag['source'] == 'Estimated' else REFERENCE, True)
     target = art['target']
     p.rect(586, 112, 160, 26, INK)
     paint(L, p, target, 590, 118, 152, 10, WHITE, True, 'center')

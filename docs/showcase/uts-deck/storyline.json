@@ -2,7 +2,7 @@
   "title": "AI Meal Planner",
   "identity": "uts",
   "author": "Manh Tuan (Mike) Nguyen",
-  "affiliation": "University of Technology Sydney",
+  "affiliation": "TD School, University of Technology Sydney",
   "date": "November 2026",
   "slides": [
     {
@@ -28,42 +28,45 @@
         "alt": "A row of plates, rice grains and diced vegetables in palette A."
       },
       "art": {
-        "image": "assets/figures/cover-plate.png",
-        "alt": "Flat illustration of chicken fried rice seen from above, labelled with three ingredients and a shopping list.",
+        "image": "assets/photos/cover-chicken-fried-rice.jpg",
+        "alt": "Photo of a plate of chicken fried rice with peas, carrot and green beans, each ingredient tagged",
         "target": "694 kcal, target 691",
         "tags": [
           {
             "name": "Chicken breast, 100 g",
             "source": "Estimated",
             "dot": [
-              722,
-              240
+              644,
+              368
             ],
-            "x": 700,
-            "y": 200,
-            "side": "left"
+            "box": [
+              572,
+              440
+            ]
           },
           {
             "name": "Cooked rice, 220 g",
             "source": "Estimated",
             "dot": [
-              705,
-              390
+              820,
+              282
             ],
-            "x": 690,
-            "y": 436,
-            "side": "left"
+            "box": [
+              787,
+              196
+            ]
           },
           {
             "name": "Vegetables, 115 g",
             "source": "Reference",
             "dot": [
-              812,
-              396
+              780,
+              413
             ],
-            "x": 776,
-            "y": 448,
-            "side": "right"
+            "box": [
+              760,
+              440
+            ]
           }
         ],
         "receipt": {
@@ -265,7 +268,7 @@
           "op": "add-textbox",
           "slide": "cover",
           "id": "t23",
-          "text": "University of Technology Sydney",
+          "text": "TD School, University of Technology Sydney",
           "x": 36.3,
           "y": 317.7,
           "width": 504.4,
@@ -279,7 +282,7 @@
           "op": "style-paragraph",
           "element": "t23",
           "start": 0,
-          "end": 31,
+          "end": 42,
           "line_spacing": 135
         },
         {
@@ -314,133 +317,55 @@
           "height": 46
         },
         {
-          "op": "add-shape",
-          "slide": "cover",
-          "id": "r26",
-          "shape_type": "RECTANGLE",
+          "op": "add-image",
+          "id": "im26",
+          "path": "assets/photos/cover-chicken-fried-rice.jpg",
+          "alt": "Photo of a plate of chicken fried rice with peas, carrot and green beans, each ingredient tagged",
           "x": 560,
           "y": 0,
           "width": 400,
-          "height": 540,
-          "background_color": "#EDF0F3"
+          "height": 540
         },
         {
-          "op": "add-image",
-          "id": "im27",
-          "path": "assets/figures/cover-plate.png",
-          "alt": "Flat illustration of chicken fried rice seen from above, labelled with three ingredients and a shopping list.",
-          "x": 600,
-          "y": 146,
-          "width": 320,
-          "height": 320
+          "op": "add-line",
+          "slide": "cover",
+          "id": "l27",
+          "x": 644,
+          "y": 368,
+          "width": 0,
+          "height": 72,
+          "color": "#FFFFFF",
+          "line_weight": 2.5
         },
         {
           "op": "add-line",
           "slide": "cover",
           "id": "l28",
-          "x": 700,
-          "y": 200,
-          "width": 22,
-          "height": 40,
+          "x": 644,
+          "y": 368,
+          "width": 0,
+          "height": 72,
           "color": "#1B2430",
-          "line_weight": 0.75
+          "line_weight": 1
         },
         {
           "op": "add-shape",
           "slide": "cover",
           "id": "r29",
           "shape_type": "ELLIPSE",
-          "x": 719,
-          "y": 237,
-          "width": 6,
-          "height": 6,
-          "background_color": "#1B2430"
+          "x": 639,
+          "y": 363,
+          "width": 10,
+          "height": 10,
+          "background_color": "#FFFFFF"
         },
         {
           "op": "add-shape",
           "slide": "cover",
           "id": "r30",
-          "shape_type": "RECTANGLE",
-          "x": 562,
-          "y": 184,
-          "width": 132,
-          "height": 32,
-          "background_color": "#FFFFFF"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t31",
-          "text": "Chicken breast, 100 g",
-          "x": 562.8,
-          "y": 179.8,
-          "width": 130.4,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t31",
-          "start": 0,
-          "end": 21,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t31",
-          "start": 0,
-          "end": 21,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t32",
-          "text": "Estimated",
-          "x": 562.8,
-          "y": 193.8,
-          "width": 130.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#440154",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t32",
-          "start": 0,
-          "end": 9,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t32",
-          "start": 0,
-          "end": 9,
-          "bold": true
-        },
-        {
-          "op": "add-line",
-          "slide": "cover",
-          "id": "l33",
-          "x": 690,
-          "y": 390,
-          "width": 15,
-          "height": 46,
-          "color": "#1B2430",
-          "line_weight": 0.75
-        },
-        {
-          "op": "add-shape",
-          "slide": "cover",
-          "id": "r34",
           "shape_type": "ELLIPSE",
-          "x": 702,
-          "y": 387,
+          "x": 641,
+          "y": 365,
           "width": 6,
           "height": 6,
           "background_color": "#1B2430"
@@ -448,21 +373,32 @@
         {
           "op": "add-shape",
           "slide": "cover",
-          "id": "r35",
+          "id": "r31",
           "shape_type": "RECTANGLE",
-          "x": 552,
-          "y": 420,
+          "x": 572,
+          "y": 440,
           "width": 132,
           "height": 32,
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r32",
+          "shape_type": "RECTANGLE",
+          "x": 572,
+          "y": 440,
+          "width": 3,
+          "height": 32,
+          "background_color": "#440154"
+        },
+        {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t36",
-          "text": "Cooked rice, 220 g",
-          "x": 552.8,
-          "y": 415.8,
+          "id": "t33",
+          "text": "Chicken breast, 100 g",
+          "x": 574.8,
+          "y": 435.8,
           "width": 130.4,
           "height": 27.9,
           "font_size": 10,
@@ -472,25 +408,25 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t36",
+          "element": "t33",
           "start": 0,
-          "end": 18,
+          "end": 21,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t36",
+          "element": "t33",
           "start": 0,
-          "end": 18,
+          "end": 21,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t37",
+          "id": "t34",
           "text": "Estimated",
-          "x": 552.8,
-          "y": 429.8,
+          "x": 574.8,
+          "y": 449.8,
           "width": 130.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -500,14 +436,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t37",
+          "element": "t34",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t37",
+          "element": "t34",
           "start": 0,
           "end": 9,
           "bold": true
@@ -515,43 +451,76 @@
         {
           "op": "add-line",
           "slide": "cover",
-          "id": "l38",
-          "x": 776,
-          "y": 396,
-          "width": 36,
-          "height": 52,
+          "id": "l35",
+          "x": 820,
+          "y": 228,
+          "width": 0,
+          "height": 54,
+          "color": "#FFFFFF",
+          "line_weight": 2.5
+        },
+        {
+          "op": "add-line",
+          "slide": "cover",
+          "id": "l36",
+          "x": 820,
+          "y": 228,
+          "width": 0,
+          "height": 54,
           "color": "#1B2430",
-          "line_weight": 0.75
+          "line_weight": 1
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r37",
+          "shape_type": "ELLIPSE",
+          "x": 815,
+          "y": 277,
+          "width": 10,
+          "height": 10,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r38",
+          "shape_type": "ELLIPSE",
+          "x": 817,
+          "y": 279,
+          "width": 6,
+          "height": 6,
+          "background_color": "#1B2430"
         },
         {
           "op": "add-shape",
           "slide": "cover",
           "id": "r39",
-          "shape_type": "ELLIPSE",
-          "x": 809,
-          "y": 393,
-          "width": 6,
-          "height": 6,
-          "background_color": "#1B2430"
+          "shape_type": "RECTANGLE",
+          "x": 787,
+          "y": 196,
+          "width": 132,
+          "height": 32,
+          "background_color": "#FFFFFF"
         },
         {
           "op": "add-shape",
           "slide": "cover",
           "id": "r40",
           "shape_type": "RECTANGLE",
-          "x": 782,
-          "y": 432,
-          "width": 132,
+          "x": 787,
+          "y": 196,
+          "width": 3,
           "height": 32,
-          "background_color": "#FFFFFF"
+          "background_color": "#440154"
         },
         {
           "op": "add-textbox",
           "slide": "cover",
           "id": "t41",
-          "text": "Vegetables, 115 g",
-          "x": 782.8,
-          "y": 427.8,
+          "text": "Cooked rice, 220 g",
+          "x": 789.8,
+          "y": 191.8,
           "width": 130.4,
           "height": 27.9,
           "font_size": 10,
@@ -563,12 +532,134 @@
           "op": "style-paragraph",
           "element": "t41",
           "start": 0,
-          "end": 17,
+          "end": 18,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t41",
+          "start": 0,
+          "end": 18,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t42",
+          "text": "Estimated",
+          "x": 789.8,
+          "y": 205.8,
+          "width": 130.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t42",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "cover",
+          "id": "l43",
+          "x": 780,
+          "y": 413,
+          "width": 0,
+          "height": 27,
+          "color": "#FFFFFF",
+          "line_weight": 2.5
+        },
+        {
+          "op": "add-line",
+          "slide": "cover",
+          "id": "l44",
+          "x": 780,
+          "y": 413,
+          "width": 0,
+          "height": 27,
+          "color": "#1B2430",
+          "line_weight": 1
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r45",
+          "shape_type": "ELLIPSE",
+          "x": 775,
+          "y": 408,
+          "width": 10,
+          "height": 10,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 777,
+          "y": 410,
+          "width": 6,
+          "height": 6,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r47",
+          "shape_type": "RECTANGLE",
+          "x": 760,
+          "y": 440,
+          "width": 132,
+          "height": 32,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "cover",
+          "id": "r48",
+          "shape_type": "RECTANGLE",
+          "x": 760,
+          "y": 440,
+          "width": 3,
+          "height": 32,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t49",
+          "text": "Vegetables, 115 g",
+          "x": 762.8,
+          "y": 435.8,
+          "width": 130.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 17,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t49",
           "start": 0,
           "end": 17,
           "bold": true
@@ -576,10 +667,10 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t42",
+          "id": "t50",
           "text": "Reference",
-          "x": 782.8,
-          "y": 441.8,
+          "x": 762.8,
+          "y": 449.8,
           "width": 130.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -589,14 +680,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t42",
+          "element": "t50",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t42",
+          "element": "t50",
           "start": 0,
           "end": 9,
           "bold": true
@@ -604,7 +695,7 @@
         {
           "op": "add-shape",
           "slide": "cover",
-          "id": "r43",
+          "id": "r51",
           "shape_type": "RECTANGLE",
           "x": 586,
           "y": 112,
@@ -615,7 +706,7 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t44",
+          "id": "t52",
           "text": "694 kcal, target 691",
           "x": 582.8,
           "y": 110.8,
@@ -629,14 +720,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t44",
+          "element": "t52",
           "start": 0,
           "end": 20,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t44",
+          "element": "t52",
           "start": 0,
           "end": 20,
           "bold": true
@@ -644,7 +735,7 @@
         {
           "op": "add-shape",
           "slide": "cover",
-          "id": "r45",
+          "id": "r53",
           "shape_type": "RECTANGLE",
           "x": 732,
           "y": 20,
@@ -655,7 +746,7 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t46",
+          "id": "t54",
           "text": "SHOPPING LIST",
           "x": 734.8,
           "y": 21.8,
@@ -668,14 +759,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t46",
+          "element": "t54",
           "start": 0,
           "end": 13,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t46",
+          "element": "t54",
           "start": 0,
           "end": 13,
           "bold": true
@@ -683,7 +774,7 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t47",
+          "id": "t55",
           "text": "CHICKEN BREAST",
           "x": 734.8,
           "y": 40.8,
@@ -696,253 +787,25 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t55",
           "start": 0,
           "end": 14,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
+          "element": "t55",
           "start": 0,
           "end": 14,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t48",
-          "text": "$7.80",
-          "x": 840.8,
-          "y": 40.8,
-          "width": 64.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t48",
-          "start": 0,
-          "end": 5,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t48",
-          "start": 0,
-          "end": 5,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t49",
-          "text": "COOKED RICE",
-          "x": 734.8,
-          "y": 54.8,
-          "width": 124.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t49",
-          "start": 0,
-          "end": 11,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t49",
-          "start": 0,
-          "end": 11,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t50",
-          "text": "$3.20",
-          "x": 840.8,
-          "y": 54.8,
-          "width": 64.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t50",
-          "start": 0,
-          "end": 5,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t50",
-          "start": 0,
-          "end": 5,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t51",
-          "text": "WHOLE EGG",
-          "x": 734.8,
-          "y": 68.8,
-          "width": 124.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t51",
-          "start": 0,
-          "end": 9,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t51",
-          "start": 0,
-          "end": 9,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t52",
-          "text": "$3.50",
-          "x": 840.8,
-          "y": 68.8,
-          "width": 64.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t52",
-          "start": 0,
-          "end": 5,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t52",
-          "start": 0,
-          "end": 5,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t53",
-          "text": "VEGETABLES",
-          "x": 734.8,
-          "y": 82.8,
-          "width": 124.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t53",
-          "start": 0,
-          "end": 10,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t53",
-          "start": 0,
-          "end": 10,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t54",
-          "text": "$3.50",
-          "x": 840.8,
-          "y": 82.8,
-          "width": 64.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false,
-          "alignment": "right"
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t54",
-          "start": 0,
-          "end": 5,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t54",
-          "start": 0,
-          "end": 5,
-          "font_family": "Google Sans Code"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "cover",
-          "id": "t55",
-          "text": "SESAME OIL",
-          "x": 734.8,
-          "y": 96.8,
-          "width": 124.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t55",
-          "start": 0,
-          "end": 10,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t55",
-          "start": 0,
-          "end": 10,
           "font_family": "Google Sans Code"
         },
         {
           "op": "add-textbox",
           "slide": "cover",
           "id": "t56",
-          "text": "$3.50",
+          "text": "$7.80",
           "x": 840.8,
-          "y": 96.8,
+          "y": 40.8,
           "width": 64.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -969,9 +832,9 @@
           "op": "add-textbox",
           "slide": "cover",
           "id": "t57",
-          "text": "SOY SAUCE",
+          "text": "COOKED RICE",
           "x": 734.8,
-          "y": 110.8,
+          "y": 54.8,
           "width": 124.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -983,23 +846,23 @@
           "op": "style-paragraph",
           "element": "t57",
           "start": 0,
-          "end": 9,
+          "end": 11,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t57",
           "start": 0,
-          "end": 9,
+          "end": 11,
           "font_family": "Google Sans Code"
         },
         {
           "op": "add-textbox",
           "slide": "cover",
           "id": "t58",
-          "text": "$3.00",
+          "text": "$3.20",
           "x": 840.8,
-          "y": 110.8,
+          "y": 54.8,
           "width": 64.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -1023,9 +886,237 @@
           "font_family": "Google Sans Code"
         },
         {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t59",
+          "text": "WHOLE EGG",
+          "x": 734.8,
+          "y": 68.8,
+          "width": 124.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t59",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t59",
+          "start": 0,
+          "end": 9,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t60",
+          "text": "$3.50",
+          "x": 840.8,
+          "y": 68.8,
+          "width": 64.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t60",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t60",
+          "start": 0,
+          "end": 5,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t61",
+          "text": "VEGETABLES",
+          "x": 734.8,
+          "y": 82.8,
+          "width": 124.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 10,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t62",
+          "text": "$3.50",
+          "x": 840.8,
+          "y": 82.8,
+          "width": 64.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t62",
+          "start": 0,
+          "end": 5,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t63",
+          "text": "SESAME OIL",
+          "x": 734.8,
+          "y": 96.8,
+          "width": 124.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t63",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t63",
+          "start": 0,
+          "end": 10,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t64",
+          "text": "$3.50",
+          "x": 840.8,
+          "y": 96.8,
+          "width": 64.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t64",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t64",
+          "start": 0,
+          "end": 5,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t65",
+          "text": "SOY SAUCE",
+          "x": 734.8,
+          "y": 110.8,
+          "width": 124.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t65",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t65",
+          "start": 0,
+          "end": 9,
+          "font_family": "Google Sans Code"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "cover",
+          "id": "t66",
+          "text": "$3.00",
+          "x": 840.8,
+          "y": 110.8,
+          "width": 64.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t66",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t66",
+          "start": 0,
+          "end": 5,
+          "font_family": "Google Sans Code"
+        },
+        {
           "op": "add-line",
           "slide": "cover",
-          "id": "l59",
+          "id": "l67",
           "x": 742,
           "y": 136,
           "width": 156,
@@ -1036,7 +1127,7 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t60",
+          "id": "t68",
           "text": "ESTIMATED",
           "x": 734.8,
           "y": 133.8,
@@ -1049,14 +1140,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t60",
+          "element": "t68",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t60",
+          "element": "t68",
           "start": 0,
           "end": 9,
           "bold": true,
@@ -1065,7 +1156,7 @@
         {
           "op": "add-textbox",
           "slide": "cover",
-          "id": "t61",
+          "id": "t69",
           "text": "$24.50",
           "x": 840.8,
           "y": 133.8,
@@ -1079,14 +1170,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t61",
+          "element": "t69",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t61",
+          "element": "t69",
           "start": 0,
           "end": 6,
           "bold": true,
@@ -21523,7 +21614,7 @@
           "op": "add-textbox",
           "slide": "close",
           "id": "t20",
-          "text": "University of Technology Sydney",
+          "text": "TD School, University of Technology Sydney",
           "x": 36.3,
           "y": 316.8,
           "width": 434.4,
@@ -21537,7 +21628,7 @@
           "op": "style-paragraph",
           "element": "t20",
           "start": 0,
-          "end": 31,
+          "end": 42,
           "line_spacing": 135
         },
         {

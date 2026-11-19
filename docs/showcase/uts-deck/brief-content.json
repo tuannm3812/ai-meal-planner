@@ -2,7 +2,7 @@
   "title": "AI Meal Planner",
   "identity": "uts",
   "author": "Manh Tuan (Mike) Nguyen",
-  "affiliation": "University of Technology Sydney",
+  "affiliation": "TD School, University of Technology Sydney",
   "date": "November 2026",
   "slides": [
     {
@@ -28,42 +28,45 @@
         "alt": "A row of plates, rice grains and diced vegetables in palette A."
       },
       "art": {
-        "image": "assets/figures/cover-plate.png",
-        "alt": "Flat illustration of chicken fried rice seen from above, labelled with three ingredients and a shopping list.",
+        "image": "assets/photos/cover-chicken-fried-rice.jpg",
+        "alt": "Photo of a plate of chicken fried rice with peas, carrot and green beans, each ingredient tagged",
         "target": "694 kcal, target 691",
         "tags": [
           {
             "name": "Chicken breast, 100 g",
             "source": "Estimated",
             "dot": [
-              722,
-              240
+              644,
+              368
             ],
-            "x": 700,
-            "y": 200,
-            "side": "left"
+            "box": [
+              572,
+              440
+            ]
           },
           {
             "name": "Cooked rice, 220 g",
             "source": "Estimated",
             "dot": [
-              705,
-              390
+              820,
+              282
             ],
-            "x": 690,
-            "y": 436,
-            "side": "left"
+            "box": [
+              787,
+              196
+            ]
           },
           {
             "name": "Vegetables, 115 g",
             "source": "Reference",
             "dot": [
-              812,
-              396
+              780,
+              413
             ],
-            "x": 776,
-            "y": 448,
-            "side": "right"
+            "box": [
+              760,
+              440
+            ]
           }
         ],
         "receipt": {

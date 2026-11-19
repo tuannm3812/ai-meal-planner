@@ -50,11 +50,11 @@
     }
   },
   "inputs": {
-    "brief-content.json": "ac2c29101f154430e9d6bf88581ec979e1c86393d73cd2bd7a0cf1887a095ae1",
+    "brief-content.json": "e829b283884c5d1e1d596fbd511d4d8395df1a4d9ca3f48cb23edc535362dd32",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
     "claims-register.md": "ad5d6c2ea17f946e3ff238220ca8119675d13416d17f0555422576328c8e179c",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
-    "project_layouts.py": "6f4eef7cfc0fdc8f50cc3476cd3486db29d19c904a0226b667ec8180ffeff538"
+    "project_layouts.py": "cab63ee9f3f52469dd033c4cd111f4bf3706d4c277ce97c900c262369787e5bc"
   },
   "assets": {
     "assets/PROVENANCE.md": "5fca3195bdc91ba0f25ad38c2ab9a87f11523d9ed939e66c43699ac33d323f96",
@@ -124,11 +124,13 @@
     "assets/logos/streamlit.png": "093b708dd38fbdc66c70b006c99db18137b55ab6dbe23e205fa16a4215e3b941",
     "assets/logos/tailwindcss.png": "6b316828c0007590a5fbb6bcecf8082a3b8a61db8f38689664f85d00621d2d38",
     "assets/logos/vite.png": "fbc0355127a37f2cc2cc3895e7aadb5e0b3221ccd4320fd56611202cedad3af4",
-    "assets/manifest.json": "b4c216f9d77efbb356324dc92b9480121da8bec53db9639bb9f4f90765bc2e27"
+    "assets/manifest.json": "b4c216f9d77efbb356324dc92b9480121da8bec53db9639bb9f4f90765bc2e27",
+    "assets/photos/cover-chicken-fried-rice.jpg": "06dcee78337b203927a8e1d300d0fa07fdc4eeaf244f9f31e83f29e385691dcf",
+    "assets/photos/cover-chicken-fried-rice.provenance.json": "a6a74fa98829ae9b354da69938ae46b05585e23e8937ba189650dce078b0cbe3"
   },
   "outputs": {
-    "deck.html": "f049139b7beca247f28e0bbe2e383b270923a7266728884d0a8c11217c463259",
-    "deck.pdf": "8e33b7190cc559b59b0217f93e96005096031c02c77f378521b6d9c51612bc99"
+    "deck.html": "208408bc8b41249f2016a3744bc522731f69b76c50f733934cd4d83548242ee1",
+    "deck.pdf": "45a5584f9d7ea4233be960b47357b61dcef5f18f6c94ac309990998291e0ea2a"
   },
   "slide_count": 16
 }

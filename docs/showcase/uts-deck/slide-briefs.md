@@ -16,7 +16,7 @@ Exact face text:
 - What should I eat tonight?
 - One meal sized to your body and goal, each ingredient's source shown, and the shopping / list ready.
 - Manh Tuan (Mike) Nguyen
-- University of Technology Sydney
+- TD School, University of Technology Sydney
 - November 2026
 - Chicken breast, 100 g
 - Estimated
@@ -681,7 +681,7 @@ Exact face text:
 - Thank you
 - Try the live demo, read the code, and send me your feedback.
 - Manh Tuan (Mike) Nguyen
-- University of Technology Sydney
+- TD School, University of Technology Sydney
 - Demo tuannm3812-ai-meal-planner.streamlit.app
 - Code github.com/tuannm3812/ai-meal-planner
 - Scan for the live demo
