@@ -17875,6 +17875,7 @@
       "notes": {
         "purpose": "Fix what good means before changing anything.",
         "script": [
+          "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
           "Calories had to land within 10% of the target, and each macro inside the adult AMDR range. The same 72 requests run every time.",
           "Sources: docs/7_meal_quality.md \u00a71; DEC-25."
         ],
@@ -17907,7 +17908,6 @@
           "range_label": "Allowed 20\u201335%"
         }
       ],
-      "macro_caption": "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
       "calorie_label": "TEST 1",
       "calorie_value": "Within 10%",
       "calorie_text": "of the meal's calorie target",
@@ -17916,6 +17916,11 @@
         "12 cravings \u00d7 4 body profiles",
         "6 cravings \u00d7 4 diet or health limits"
       ],
+      "calorie_example": {
+        "value": 0.4,
+        "label": "694 kcal vs 691 target",
+        "limit": 10
+      },
       "n": 10,
       "takeaways": [],
       "marker_pairs": [],
@@ -18442,7 +18447,7 @@
           "id": "t30",
           "text": "Protein",
           "x": 50.3,
-          "y": 174.8,
+          "y": 180.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -18470,7 +18475,7 @@
           "id": "t31",
           "text": "Allowed 10\u201335%",
           "x": 342.3,
-          "y": 174.8,
+          "y": 180.8,
           "width": 214.4,
           "height": 27.9,
           "font_size": 10,
@@ -18499,7 +18504,7 @@
           "id": "r32",
           "shape_type": "RECTANGLE",
           "x": 57.5,
-          "y": 202.0,
+          "y": 208.0,
           "width": 492,
           "height": 10,
           "background_color": "#FFFFFF"
@@ -18510,7 +18515,7 @@
           "id": "r33",
           "shape_type": "RECTANGLE",
           "x": 106.7,
-          "y": 202.0,
+          "y": 208.0,
           "width": 123.0,
           "height": 10,
           "background_color": "#3B528B"
@@ -18521,7 +18526,7 @@
           "id": "r34",
           "shape_type": "ELLIPSE",
           "x": 187.26,
-          "y": 199.0,
+          "y": 205.0,
           "width": 16,
           "height": 16,
           "background_color": "#FFFFFF"
@@ -18532,7 +18537,7 @@
           "id": "r35",
           "shape_type": "ELLIPSE",
           "x": 190.26,
-          "y": 202.0,
+          "y": 208.0,
           "width": 10,
           "height": 10,
           "background_color": "#1B2430"
@@ -18543,7 +18548,7 @@
           "id": "t36",
           "text": "28%",
           "x": 158.06,
-          "y": 210.8,
+          "y": 216.8,
           "width": 74.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -18572,7 +18577,7 @@
           "id": "t37",
           "text": "Carbs",
           "x": 50.3,
-          "y": 236.8,
+          "y": 262.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -18600,7 +18605,7 @@
           "id": "t38",
           "text": "Allowed 45\u201365%",
           "x": 342.3,
-          "y": 236.8,
+          "y": 262.8,
           "width": 214.4,
           "height": 27.9,
           "font_size": 10,
@@ -18629,7 +18634,7 @@
           "id": "r39",
           "shape_type": "RECTANGLE",
           "x": 57.5,
-          "y": 264.0,
+          "y": 290.0,
           "width": 492,
           "height": 10,
           "background_color": "#FFFFFF"
@@ -18640,7 +18645,7 @@
           "id": "r40",
           "shape_type": "RECTANGLE",
           "x": 278.9,
-          "y": 264.0,
+          "y": 290.0,
           "width": 98.4,
           "height": 10,
           "background_color": "#21918C"
@@ -18651,7 +18656,7 @@
           "id": "r41",
           "shape_type": "ELLIPSE",
           "x": 275.82,
-          "y": 261.0,
+          "y": 287.0,
           "width": 16,
           "height": 16,
           "background_color": "#FFFFFF"
@@ -18662,7 +18667,7 @@
           "id": "r42",
           "shape_type": "ELLIPSE",
           "x": 278.82,
-          "y": 264.0,
+          "y": 290.0,
           "width": 10,
           "height": 10,
           "background_color": "#1B2430"
@@ -18673,7 +18678,7 @@
           "id": "t43",
           "text": "46%",
           "x": 246.62,
-          "y": 272.8,
+          "y": 298.8,
           "width": 74.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -18702,7 +18707,7 @@
           "id": "t44",
           "text": "Fat",
           "x": 50.3,
-          "y": 298.8,
+          "y": 344.8,
           "width": 134.4,
           "height": 27.9,
           "font_size": 10,
@@ -18730,7 +18735,7 @@
           "id": "t45",
           "text": "Allowed 20\u201335%",
           "x": 342.3,
-          "y": 298.8,
+          "y": 344.8,
           "width": 214.4,
           "height": 27.9,
           "font_size": 10,
@@ -18759,7 +18764,7 @@
           "id": "r46",
           "shape_type": "RECTANGLE",
           "x": 57.5,
-          "y": 326.0,
+          "y": 372.0,
           "width": 492,
           "height": 10,
           "background_color": "#FFFFFF"
@@ -18770,7 +18775,7 @@
           "id": "r47",
           "shape_type": "RECTANGLE",
           "x": 155.9,
-          "y": 326.0,
+          "y": 372.0,
           "width": 73.8,
           "height": 10,
           "background_color": "#5EC962"
@@ -18781,7 +18786,7 @@
           "id": "r48",
           "shape_type": "ELLIPSE",
           "x": 177.42000000000002,
-          "y": 323.0,
+          "y": 369.0,
           "width": 16,
           "height": 16,
           "background_color": "#FFFFFF"
@@ -18792,7 +18797,7 @@
           "id": "r49",
           "shape_type": "ELLIPSE",
           "x": 180.42000000000002,
-          "y": 326.0,
+          "y": 372.0,
           "width": 10,
           "height": 10,
           "background_color": "#1B2430"
@@ -18803,7 +18808,7 @@
           "id": "t50",
           "text": "26%",
           "x": 148.22000000000003,
-          "y": 334.8,
+          "y": 380.8,
           "width": 74.4,
           "height": 25.200000000000003,
           "font_size": 8,
@@ -18827,41 +18832,20 @@
           "bold": true
         },
         {
-          "op": "add-textbox",
-          "slide": "good",
-          "id": "t51",
-          "text": "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
-          "x": 50.3,
-          "y": 392.8,
-          "width": 506.4,
-          "height": 25.200000000000003,
-          "font_size": 8,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t51",
-          "start": 0,
-          "end": 99,
-          "line_spacing": 135
-        },
-        {
           "op": "add-shape",
           "slide": "good",
-          "id": "r52",
+          "id": "r51",
           "shape_type": "RECTANGLE",
           "x": 581.5,
           "y": 132.0,
           "width": 337.5,
-          "height": 104,
+          "height": 132,
           "background_color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t53",
+          "id": "t52",
           "text": "TEST 1",
           "x": 588.3,
           "y": 138.8,
@@ -18874,14 +18858,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t53",
+          "element": "t52",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t53",
+          "element": "t52",
           "start": 0,
           "end": 6,
           "bold": true
@@ -18889,10 +18873,10 @@
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t54",
+          "id": "t53",
           "text": "Within 10%",
           "x": 588.3,
-          "y": 156.8,
+          "y": 154.8,
           "width": 323.9,
           "height": 54.9,
           "font_size": 30,
@@ -18902,14 +18886,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t53",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t54",
+          "element": "t53",
           "start": 0,
           "end": 10,
           "bold": true
@@ -18917,10 +18901,10 @@
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t55",
+          "id": "t54",
           "text": "of the meal's calorie target",
           "x": 588.3,
-          "y": 198.8,
+          "y": 194.8,
           "width": 323.9,
           "height": 27.9,
           "font_size": 10,
@@ -18930,7 +18914,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t55",
+          "element": "t54",
           "start": 0,
           "end": 28,
           "line_spacing": 135
@@ -18938,21 +18922,126 @@
         {
           "op": "add-shape",
           "slide": "good",
+          "id": "r55",
+          "shape_type": "RECTANGLE",
+          "x": 595.5,
+          "y": 232.0,
+          "width": 309.5,
+          "height": 8,
+          "background_color": "#3A4452"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
           "id": "r56",
           "shape_type": "RECTANGLE",
-          "x": 581.5,
-          "y": 250.0,
-          "width": 337.5,
-          "height": 172.0,
-          "background_color": "#F3EDF3"
+          "x": 647.0833333333334,
+          "y": 232.0,
+          "width": 206.33333333333337,
+          "height": 8,
+          "background_color": "#5EC962"
         },
         {
           "op": "add-shape",
           "slide": "good",
           "id": "r57",
+          "shape_type": "ELLIPSE",
+          "x": 749.3766666666667,
+          "y": 231.0,
+          "width": 10,
+          "height": 10,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "good",
+          "id": "t58",
+          "text": "-10%",
+          "x": 619.8833333333333,
+          "y": 235.8,
+          "width": 54.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#C9D3CC",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t58",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "good",
+          "id": "t59",
+          "text": "+10%",
+          "x": 826.2166666666667,
+          "y": 235.8,
+          "width": 54.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#C9D3CC",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t59",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "good",
+          "id": "t60",
+          "text": "694 kcal vs 691 target",
+          "x": 755.1766666666666,
+          "y": 210.8,
+          "width": 154.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t60",
+          "start": 0,
+          "end": 22,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t60",
+          "start": 0,
+          "end": 22,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r61",
           "shape_type": "RECTANGLE",
           "x": 581.5,
-          "y": 250.0,
+          "y": 278.0,
+          "width": 337.5,
+          "height": 144.0,
+          "background_color": "#F3EDF3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r62",
+          "shape_type": "RECTANGLE",
+          "x": 581.5,
+          "y": 278.0,
           "width": 337.5,
           "height": 2.5,
           "background_color": "#825578"
@@ -18960,10 +19049,10 @@
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t58",
+          "id": "t63",
           "text": "72 fixed requests",
           "x": 588.3,
-          "y": 254.8,
+          "y": 282.8,
           "width": 323.9,
           "height": 30.6,
           "font_size": 12,
@@ -18973,14 +19062,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t58",
+          "element": "t63",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t58",
+          "element": "t63",
           "start": 0,
           "end": 17,
           "bold": true
@@ -18988,67 +19077,12 @@
         {
           "op": "add-shape",
           "slide": "good",
-          "id": "r59",
-          "shape_type": "ELLIPSE",
-          "x": 595.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#3B528B"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r60",
-          "shape_type": "ELLIPSE",
-          "x": 595.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#3B528B"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r61",
-          "shape_type": "ELLIPSE",
-          "x": 595.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#3B528B"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r62",
-          "shape_type": "ELLIPSE",
-          "x": 595.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#3B528B"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r63",
-          "shape_type": "ELLIPSE",
-          "x": 609.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#3B528B"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
           "id": "r64",
           "shape_type": "ELLIPSE",
-          "x": 609.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 595.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19056,10 +19090,10 @@
           "slide": "good",
           "id": "r65",
           "shape_type": "ELLIPSE",
-          "x": 609.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 595.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19067,10 +19101,10 @@
           "slide": "good",
           "id": "r66",
           "shape_type": "ELLIPSE",
-          "x": 609.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 595.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19078,10 +19112,10 @@
           "slide": "good",
           "id": "r67",
           "shape_type": "ELLIPSE",
-          "x": 623.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 595.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19089,10 +19123,10 @@
           "slide": "good",
           "id": "r68",
           "shape_type": "ELLIPSE",
-          "x": 623.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 609.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19100,10 +19134,10 @@
           "slide": "good",
           "id": "r69",
           "shape_type": "ELLIPSE",
-          "x": 623.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 609.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19111,10 +19145,10 @@
           "slide": "good",
           "id": "r70",
           "shape_type": "ELLIPSE",
-          "x": 623.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 609.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19122,10 +19156,10 @@
           "slide": "good",
           "id": "r71",
           "shape_type": "ELLIPSE",
-          "x": 637.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 609.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19133,10 +19167,10 @@
           "slide": "good",
           "id": "r72",
           "shape_type": "ELLIPSE",
-          "x": 637.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 623.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19144,10 +19178,10 @@
           "slide": "good",
           "id": "r73",
           "shape_type": "ELLIPSE",
-          "x": 637.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 623.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19155,10 +19189,10 @@
           "slide": "good",
           "id": "r74",
           "shape_type": "ELLIPSE",
-          "x": 637.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 623.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19166,10 +19200,10 @@
           "slide": "good",
           "id": "r75",
           "shape_type": "ELLIPSE",
-          "x": 651.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 623.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19177,10 +19211,10 @@
           "slide": "good",
           "id": "r76",
           "shape_type": "ELLIPSE",
-          "x": 651.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 637.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19188,10 +19222,10 @@
           "slide": "good",
           "id": "r77",
           "shape_type": "ELLIPSE",
-          "x": 651.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 637.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19199,10 +19233,10 @@
           "slide": "good",
           "id": "r78",
           "shape_type": "ELLIPSE",
-          "x": 651.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 637.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19210,10 +19244,10 @@
           "slide": "good",
           "id": "r79",
           "shape_type": "ELLIPSE",
-          "x": 665.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 637.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19221,10 +19255,10 @@
           "slide": "good",
           "id": "r80",
           "shape_type": "ELLIPSE",
-          "x": 665.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 651.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19232,10 +19266,10 @@
           "slide": "good",
           "id": "r81",
           "shape_type": "ELLIPSE",
-          "x": 665.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 651.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19243,10 +19277,10 @@
           "slide": "good",
           "id": "r82",
           "shape_type": "ELLIPSE",
-          "x": 665.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 651.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19254,10 +19288,10 @@
           "slide": "good",
           "id": "r83",
           "shape_type": "ELLIPSE",
-          "x": 679.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 651.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19265,10 +19299,10 @@
           "slide": "good",
           "id": "r84",
           "shape_type": "ELLIPSE",
-          "x": 679.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 665.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19276,10 +19310,10 @@
           "slide": "good",
           "id": "r85",
           "shape_type": "ELLIPSE",
-          "x": 679.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 665.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19287,10 +19321,10 @@
           "slide": "good",
           "id": "r86",
           "shape_type": "ELLIPSE",
-          "x": 679.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 665.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19298,10 +19332,10 @@
           "slide": "good",
           "id": "r87",
           "shape_type": "ELLIPSE",
-          "x": 693.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 665.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19309,10 +19343,10 @@
           "slide": "good",
           "id": "r88",
           "shape_type": "ELLIPSE",
-          "x": 693.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 679.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19320,10 +19354,10 @@
           "slide": "good",
           "id": "r89",
           "shape_type": "ELLIPSE",
-          "x": 693.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 679.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19331,10 +19365,10 @@
           "slide": "good",
           "id": "r90",
           "shape_type": "ELLIPSE",
-          "x": 693.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 679.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19342,10 +19376,10 @@
           "slide": "good",
           "id": "r91",
           "shape_type": "ELLIPSE",
-          "x": 707.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 679.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19353,10 +19387,10 @@
           "slide": "good",
           "id": "r92",
           "shape_type": "ELLIPSE",
-          "x": 707.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 693.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19364,10 +19398,10 @@
           "slide": "good",
           "id": "r93",
           "shape_type": "ELLIPSE",
-          "x": 707.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 693.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19375,10 +19409,10 @@
           "slide": "good",
           "id": "r94",
           "shape_type": "ELLIPSE",
-          "x": 707.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 693.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19386,10 +19420,10 @@
           "slide": "good",
           "id": "r95",
           "shape_type": "ELLIPSE",
-          "x": 721.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 693.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19397,10 +19431,10 @@
           "slide": "good",
           "id": "r96",
           "shape_type": "ELLIPSE",
-          "x": 721.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 707.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19408,10 +19442,10 @@
           "slide": "good",
           "id": "r97",
           "shape_type": "ELLIPSE",
-          "x": 721.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 707.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19419,10 +19453,10 @@
           "slide": "good",
           "id": "r98",
           "shape_type": "ELLIPSE",
-          "x": 721.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 707.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19430,10 +19464,10 @@
           "slide": "good",
           "id": "r99",
           "shape_type": "ELLIPSE",
-          "x": 735.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 707.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19441,10 +19475,10 @@
           "slide": "good",
           "id": "r100",
           "shape_type": "ELLIPSE",
-          "x": 735.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 721.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19452,10 +19486,10 @@
           "slide": "good",
           "id": "r101",
           "shape_type": "ELLIPSE",
-          "x": 735.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 721.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19463,10 +19497,10 @@
           "slide": "good",
           "id": "r102",
           "shape_type": "ELLIPSE",
-          "x": 735.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 721.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19474,10 +19508,10 @@
           "slide": "good",
           "id": "r103",
           "shape_type": "ELLIPSE",
-          "x": 749.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 721.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19485,10 +19519,10 @@
           "slide": "good",
           "id": "r104",
           "shape_type": "ELLIPSE",
-          "x": 749.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 735.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19496,10 +19530,10 @@
           "slide": "good",
           "id": "r105",
           "shape_type": "ELLIPSE",
-          "x": 749.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 735.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
@@ -19507,19 +19541,74 @@
           "slide": "good",
           "id": "r106",
           "shape_type": "ELLIPSE",
+          "x": 735.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r107",
+          "shape_type": "ELLIPSE",
+          "x": 735.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r108",
+          "shape_type": "ELLIPSE",
           "x": 749.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r109",
+          "shape_type": "ELLIPSE",
+          "x": 749.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r110",
+          "shape_type": "ELLIPSE",
+          "x": 749.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r111",
+          "shape_type": "ELLIPSE",
+          "x": 749.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#3B528B"
         },
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t107",
+          "id": "t112",
           "text": "12 cravings \u00d7 4 body profiles",
           "x": 588.3,
-          "y": 346.8,
+          "y": 362.8,
           "width": 182.4,
           "height": 27.9,
           "font_size": 10,
@@ -19529,14 +19618,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t107",
+          "element": "t112",
           "start": 0,
           "end": 29,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t107",
+          "element": "t112",
           "start": 0,
           "end": 29,
           "bold": true
@@ -19544,67 +19633,12 @@
         {
           "op": "add-shape",
           "slide": "good",
-          "id": "r108",
-          "shape_type": "ELLIPSE",
-          "x": 791.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r109",
-          "shape_type": "ELLIPSE",
-          "x": 791.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r110",
-          "shape_type": "ELLIPSE",
-          "x": 791.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r111",
-          "shape_type": "ELLIPSE",
-          "x": 791.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
-          "id": "r112",
-          "shape_type": "ELLIPSE",
-          "x": 805.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
-          "background_color": "#21918C"
-        },
-        {
-          "op": "add-shape",
-          "slide": "good",
           "id": "r113",
           "shape_type": "ELLIPSE",
-          "x": 805.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 791.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19612,10 +19646,10 @@
           "slide": "good",
           "id": "r114",
           "shape_type": "ELLIPSE",
-          "x": 805.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 791.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19623,10 +19657,10 @@
           "slide": "good",
           "id": "r115",
           "shape_type": "ELLIPSE",
-          "x": 805.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 791.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19634,10 +19668,10 @@
           "slide": "good",
           "id": "r116",
           "shape_type": "ELLIPSE",
-          "x": 819.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 791.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19645,10 +19679,10 @@
           "slide": "good",
           "id": "r117",
           "shape_type": "ELLIPSE",
-          "x": 819.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 805.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19656,10 +19690,10 @@
           "slide": "good",
           "id": "r118",
           "shape_type": "ELLIPSE",
-          "x": 819.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 805.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19667,10 +19701,10 @@
           "slide": "good",
           "id": "r119",
           "shape_type": "ELLIPSE",
-          "x": 819.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 805.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19678,10 +19712,10 @@
           "slide": "good",
           "id": "r120",
           "shape_type": "ELLIPSE",
-          "x": 833.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 805.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19689,10 +19723,10 @@
           "slide": "good",
           "id": "r121",
           "shape_type": "ELLIPSE",
-          "x": 833.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 819.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19700,10 +19734,10 @@
           "slide": "good",
           "id": "r122",
           "shape_type": "ELLIPSE",
-          "x": 833.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 819.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19711,10 +19745,10 @@
           "slide": "good",
           "id": "r123",
           "shape_type": "ELLIPSE",
-          "x": 833.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 819.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19722,10 +19756,10 @@
           "slide": "good",
           "id": "r124",
           "shape_type": "ELLIPSE",
-          "x": 847.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 819.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19733,10 +19767,10 @@
           "slide": "good",
           "id": "r125",
           "shape_type": "ELLIPSE",
-          "x": 847.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 833.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19744,10 +19778,10 @@
           "slide": "good",
           "id": "r126",
           "shape_type": "ELLIPSE",
-          "x": 847.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 833.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19755,10 +19789,10 @@
           "slide": "good",
           "id": "r127",
           "shape_type": "ELLIPSE",
-          "x": 847.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "x": 833.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19766,10 +19800,10 @@
           "slide": "good",
           "id": "r128",
           "shape_type": "ELLIPSE",
-          "x": 861.5,
-          "y": 290.0,
-          "width": 10,
-          "height": 10,
+          "x": 833.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19777,10 +19811,10 @@
           "slide": "good",
           "id": "r129",
           "shape_type": "ELLIPSE",
-          "x": 861.5,
-          "y": 304.0,
-          "width": 10,
-          "height": 10,
+          "x": 847.5,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19788,10 +19822,10 @@
           "slide": "good",
           "id": "r130",
           "shape_type": "ELLIPSE",
-          "x": 861.5,
-          "y": 318.0,
-          "width": 10,
-          "height": 10,
+          "x": 847.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
@@ -19799,19 +19833,74 @@
           "slide": "good",
           "id": "r131",
           "shape_type": "ELLIPSE",
+          "x": 847.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r132",
+          "shape_type": "ELLIPSE",
+          "x": 847.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r133",
+          "shape_type": "ELLIPSE",
           "x": 861.5,
-          "y": 332.0,
-          "width": 10,
-          "height": 10,
+          "y": 314.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r134",
+          "shape_type": "ELLIPSE",
+          "x": 861.5,
+          "y": 327.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r135",
+          "shape_type": "ELLIPSE",
+          "x": 861.5,
+          "y": 340.0,
+          "width": 9,
+          "height": 9,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "good",
+          "id": "r136",
+          "shape_type": "ELLIPSE",
+          "x": 861.5,
+          "y": 353.0,
+          "width": 9,
+          "height": 9,
           "background_color": "#21918C"
         },
         {
           "op": "add-textbox",
           "slide": "good",
-          "id": "t132",
+          "id": "t137",
           "text": "6 cravings \u00d7 4 diet or\nhealth limits",
           "x": 784.3,
-          "y": 346.8,
+          "y": 362.8,
           "width": 127.9,
           "height": 41.4,
           "font_size": 10,
@@ -19821,21 +19910,21 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t132",
+          "element": "t137",
           "start": 0,
           "end": 36,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t132",
+          "element": "t137",
           "start": 0,
           "end": 22,
           "bold": true
         },
         {
           "op": "style-text",
-          "element": "t132",
+          "element": "t137",
           "start": 23,
           "end": 36,
           "bold": true
@@ -20783,9 +20872,165 @@
           "line_weight": 0.75
         },
         {
+          "op": "add-line",
+          "slide": "results",
+          "id": "l46",
+          "x": 163.9,
+          "y": 345.6111111111111,
+          "width": 53.19999999999999,
+          "height": 0.0,
+          "color": "#5A6370",
+          "line_weight": 0.75,
+          "dash_style": "DASH"
+        },
+        {
           "op": "add-shape",
           "slide": "results",
-          "id": "r46",
+          "id": "r47",
+          "shape_type": "RECTANGLE",
+          "x": 168.5,
+          "y": 321.6111111111111,
+          "width": 36,
+          "height": 18,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "results",
+          "id": "t48",
+          "text": "+31",
+          "x": 165.3,
+          "y": 316.6611111111111,
+          "width": 42.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 3,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 3,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "results",
+          "id": "l49",
+          "x": 296.9,
+          "y": 263.80555555555554,
+          "width": 53.200000000000045,
+          "height": 0.0,
+          "color": "#5A6370",
+          "line_weight": 0.75,
+          "dash_style": "DASH"
+        },
+        {
+          "op": "add-shape",
+          "slide": "results",
+          "id": "r50",
+          "shape_type": "RECTANGLE",
+          "x": 301.5,
+          "y": 239.80555555555554,
+          "width": 36,
+          "height": 18,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "results",
+          "id": "t51",
+          "text": "+6",
+          "x": 298.3,
+          "y": 234.85555555555555,
+          "width": 42.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t51",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t51",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "results",
+          "id": "l52",
+          "x": 429.9,
+          "y": 247.97222222222223,
+          "width": 53.200000000000045,
+          "height": 0.0,
+          "color": "#5A6370",
+          "line_weight": 0.75,
+          "dash_style": "DASH"
+        },
+        {
+          "op": "add-shape",
+          "slide": "results",
+          "id": "r53",
+          "shape_type": "RECTANGLE",
+          "x": 434.5,
+          "y": 223.97222222222223,
+          "width": 36,
+          "height": 18,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "results",
+          "id": "t54",
+          "text": "+25",
+          "x": 431.3,
+          "y": 219.02222222222224,
+          "width": 42.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 3,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 3,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "results",
+          "id": "r55",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 132.0,
@@ -20796,7 +21041,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r47",
+          "id": "r56",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 132.0,
@@ -20806,7 +21051,7 @@
         },
         {
           "op": "add-image",
-          "id": "im48",
+          "id": "im57",
           "path": "assets/icons/kit/balance-plum.svg",
           "alt": "",
           "x": 638.5,
@@ -20817,7 +21062,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t49",
+          "id": "t58",
           "text": "0.4%",
           "x": 664.3,
           "y": 147.13333333333335,
@@ -20830,14 +21075,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t49",
+          "element": "t58",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t49",
+          "element": "t58",
           "start": 0,
           "end": 4,
           "bold": true
@@ -20845,7 +21090,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t50",
+          "id": "t59",
           "text": "median calorie gap, worst 9.9%",
           "x": 664.3,
           "y": 173.13333333333335,
@@ -20858,7 +21103,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t50",
+          "element": "t59",
           "start": 0,
           "end": 30,
           "line_spacing": 135
@@ -20866,7 +21111,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r51",
+          "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -20877,7 +21122,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r52",
+          "id": "r61",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -20887,7 +21132,7 @@
         },
         {
           "op": "add-image",
-          "id": "im53",
+          "id": "im62",
           "path": "assets/icons/kit/check_circle-plum.svg",
           "alt": "",
           "x": 638.5,
@@ -20898,7 +21143,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t54",
+          "id": "t63",
           "text": "5 of 5",
           "x": 664.3,
           "y": 247.8,
@@ -20911,14 +21156,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t63",
           "start": 0,
           "end": 6,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t54",
+          "element": "t63",
           "start": 0,
           "end": 6,
           "bold": true
@@ -20926,7 +21171,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t55",
+          "id": "t64",
           "text": "guardrail cases hold",
           "x": 664.3,
           "y": 273.8,
@@ -20939,7 +21184,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t55",
+          "element": "t64",
           "start": 0,
           "end": 20,
           "line_spacing": 135
@@ -20947,7 +21192,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r56",
+          "id": "r65",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -20958,7 +21203,7 @@
         {
           "op": "add-shape",
           "slide": "results",
-          "id": "r57",
+          "id": "r66",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -20968,7 +21213,7 @@
         },
         {
           "op": "add-image",
-          "id": "im58",
+          "id": "im67",
           "path": "assets/icons/kit/search-plum.svg",
           "alt": "",
           "x": 638.5,
@@ -20979,7 +21224,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t59",
+          "id": "t68",
           "text": "68 of 68",
           "x": 664.3,
           "y": 348.4666666666667,
@@ -20992,14 +21237,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t59",
+          "element": "t68",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t59",
+          "element": "t68",
           "start": 0,
           "end": 8,
           "bold": true
@@ -21007,7 +21252,7 @@
         {
           "op": "add-textbox",
           "slide": "results",
-          "id": "t60",
+          "id": "t69",
           "text": "wider check, every recipe by name",
           "x": 664.3,
           "y": 374.4666666666667,
@@ -21020,7 +21265,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t60",
+          "element": "t69",
           "start": 0,
           "end": 33,
           "line_spacing": 135
@@ -22919,15 +23164,37 @@
       "stats": [
         {
           "value": "630",
-          "label": "Python tests, all passing: 538 backend, 92 Streamlit"
+          "label": "Python tests, all passing: 538 backend, 92 Streamlit",
+          "viz": {
+            "kind": "split",
+            "parts": [
+              [
+                538,
+                "#3B528B"
+              ],
+              [
+                92,
+                "#21918C"
+              ]
+            ]
+          }
         },
         {
           "value": "95%",
-          "label": "coverage, and CI fails below an 89% floor"
+          "label": "coverage, and CI fails below an 89% floor",
+          "viz": {
+            "kind": "floor",
+            "value": 95,
+            "floor": 89
+          }
         },
         {
           "value": "5",
-          "label": "CI checks on every pull request"
+          "label": "CI checks on every pull request",
+          "viz": {
+            "kind": "checks",
+            "total": 5
+          }
         }
       ],
       "n": 13,
@@ -24136,6 +24403,28 @@
           "slide": "engineering",
           "id": "r68",
           "shape_type": "RECTANGLE",
+          "x": 57.5,
+          "y": 392.0,
+          "width": 216.19629629629634,
+          "height": 12,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r69",
+          "shape_type": "RECTANGLE",
+          "x": 273.69629629629634,
+          "y": 392.0,
+          "width": 36.970370370370375,
+          "height": 12,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r70",
+          "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
           "width": 281.1666666666667,
@@ -24145,7 +24434,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r69",
+          "id": "r71",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 314.0,
@@ -24156,7 +24445,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t70",
+          "id": "t72",
           "text": "95%",
           "x": 347.4666666666667,
           "y": 318.8,
@@ -24169,14 +24458,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t70",
+          "element": "t72",
           "start": 0,
           "end": 3,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t70",
+          "element": "t72",
           "start": 0,
           "end": 3,
           "bold": true
@@ -24184,7 +24473,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t71",
+          "id": "t73",
           "text": "coverage, and CI fails below an 89% floor",
           "x": 347.4666666666667,
           "y": 362.8,
@@ -24197,7 +24486,7 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t71",
+          "element": "t73",
           "start": 0,
           "end": 41,
           "line_spacing": 135
@@ -24205,7 +24494,40 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r72",
+          "id": "r74",
+          "shape_type": "RECTANGLE",
+          "x": 354.6666666666667,
+          "y": 392.0,
+          "width": 253.16666666666669,
+          "height": 12,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r75",
+          "shape_type": "RECTANGLE",
+          "x": 354.6666666666667,
+          "y": 392.0,
+          "width": 240.50833333333335,
+          "height": 12,
+          "background_color": "#5EC962"
+        },
+        {
+          "op": "add-line",
+          "slide": "engineering",
+          "id": "l76",
+          "x": 579.985,
+          "y": 387.0,
+          "width": 0.0,
+          "height": 22.0,
+          "color": "#1B2430",
+          "line_weight": 1.5
+        },
+        {
+          "op": "add-shape",
+          "slide": "engineering",
+          "id": "r77",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24216,7 +24538,7 @@
         {
           "op": "add-shape",
           "slide": "engineering",
-          "id": "r73",
+          "id": "r78",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 314.0,
@@ -24227,7 +24549,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t74",
+          "id": "t79",
           "text": "5",
           "x": 644.6333333333333,
           "y": 318.8,
@@ -24240,14 +24562,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t74",
+          "element": "t79",
           "start": 0,
           "end": 1,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t74",
+          "element": "t79",
           "start": 0,
           "end": 1,
           "bold": true
@@ -24255,7 +24577,7 @@
         {
           "op": "add-textbox",
           "slide": "engineering",
-          "id": "t75",
+          "id": "t80",
           "text": "CI checks on every pull request",
           "x": 644.6333333333333,
           "y": 362.8,
@@ -24268,10 +24590,60 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t75",
+          "element": "t80",
           "start": 0,
           "end": 31,
           "line_spacing": 135
+        },
+        {
+          "op": "add-image",
+          "id": "im81",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 652.8333333333334,
+          "y": 387.0,
+          "width": 22,
+          "height": 22
+        },
+        {
+          "op": "add-image",
+          "id": "im82",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 680.8333333333334,
+          "y": 387.0,
+          "width": 22,
+          "height": 22
+        },
+        {
+          "op": "add-image",
+          "id": "im83",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 708.8333333333334,
+          "y": 387.0,
+          "width": 22,
+          "height": 22
+        },
+        {
+          "op": "add-image",
+          "id": "im84",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 736.8333333333334,
+          "y": 387.0,
+          "width": 22,
+          "height": 22
+        },
+        {
+          "op": "add-image",
+          "id": "im85",
+          "path": "assets/icons/kit/check_circle-teal.svg",
+          "alt": "",
+          "x": 764.8333333333334,
+          "y": 387.0,
+          "width": 22,
+          "height": 22
         }
       ]
     },

@@ -107,6 +107,7 @@ References:
 
 Fix what good means before changing anything.
 
+Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.
 Calories had to land within 10% of the target, and each macro inside the adult AMDR range. The same 72 requests run every time.
 Sources: docs/7_meal_quality.md §1; DEC-25.
 

@@ -468,10 +468,12 @@ Exact face text:
 - Fat
 - Allowed 20–35%
 - 26%
-- Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.
 - TEST 1
 - Within 10%
 - of the meal's calorie target
+- -10%
+- +10%
+- 694 kcal vs 691 target
 - 72 fixed requests
 - 12 cravings × 4 body profiles
 - 6 cravings × 4 diet or / health limits
@@ -511,6 +513,9 @@ Exact face text:
 - 72
 - Cooking fat, retry
 - Oil added to 6 recipes
+- +31
+- +6
+- +25
 - 0.4%
 - median calorie gap, worst 9.9%
 - 5 of 5

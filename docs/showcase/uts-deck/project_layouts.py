@@ -408,7 +408,7 @@ def mp_good(L, p, slide):
     put(L, p, slide['macro_title'], LEFT + 14, TOP + 14, lw - 28, 12, 'ink', True)
     bx, bw = LEFT + 14, lw - 28
     for i, m in enumerate(slide['macros']):
-        y = TOP + 50 + i * 62
+        y = TOP + 56 + i * 82
         colour = {'Protein': PROTEIN, 'Carbs': CARBS, 'Fat': FAT}[m['name']]
         put(L, p, m['name'], bx, y, 120, 10, 'ink', True)
         put(L, p, m['range_label'], bx + bw - 200, y, 200, 10, 'ink', True, 'right')
@@ -418,22 +418,33 @@ def mp_good(L, p, slide):
         p.rect(cx - 8, y + 17, 16, 16, WHITE, 'ELLIPSE')
         p.rect(cx - 5, y + 20, 10, 10, INK, 'ELLIPSE')
         put(L, p, f"{m['value']}%", cx - 30, y + 36, 60, 8, 'ink', True, 'center')
-    put(L, p, slide['macro_caption'], LEFT + 14, bottom - 22, lw - 28, 8, 'body')
     x0 = LEFT + lw + 18
     w = RIGHT - x0
-    p.rect(x0, TOP, w, 104, INK)
+    bh = 132
+    p.rect(x0, TOP, w, bh, INK)
     paint(L, p, slide['calorie_label'], x0 + 14, TOP + 14, w - 28, 10, '#C9D3CC', True)
-    paint(L, p, slide['calorie_value'], x0 + 14, TOP + 32, w - 28, 30, WHITE, True)
-    paint(L, p, slide['calorie_text'], x0 + 14, TOP + 74, w - 28, 10, '#C9D3CC')
-    y = TOP + 118
+    paint(L, p, slide['calorie_value'], x0 + 14, TOP + 30, w - 28, 30, WHITE, True)
+    paint(L, p, slide['calorie_text'], x0 + 14, TOP + 70, w - 28, 10, '#C9D3CC')
+    # The pass band, with the worked example's meal on it.
+    ex = slide['calorie_example']
+    tx, tw, ty = x0 + 14, w - 28, TOP + 100
+    span = ex['limit'] * 1.5
+    sx = lambda v: tx + (v + span) / (2 * span) * tw
+    p.rect(tx, ty, tw, 8, '#3A4452')
+    p.rect(sx(-ex['limit']), ty, sx(ex['limit']) - sx(-ex['limit']), 8, V_GREEN)
+    p.rect(sx(ex['value']) - 5, ty - 1, 10, 10, WHITE, 'ELLIPSE')
+    paint(L, p, f"-{ex['limit']}%", sx(-ex['limit']) - 20, ty + 11, 40, 8, '#C9D3CC', False, 'center')
+    paint(L, p, f"+{ex['limit']}%", sx(ex['limit']) - 20, ty + 11, 40, 8, '#C9D3CC', False, 'center')
+    paint(L, p, ex['label'], sx(ex['value']) + 8, ty - 14, 140, 8, WHITE, True)
+    y = TOP + bh + 14
     card(p, x0, y, w, bottom - y, accent(slide))
     put(L, p, slide['grid_title'], x0 + 14, y + 12, w - 28, 12, 'ink', True)
     for g, (cols, colour, label) in enumerate(((12, V_BLUE, slide['grid_labels'][0]), (6, V_TEAL, slide['grid_labels'][1]))):
         gx = x0 + 14 + g * 196
         for c in range(cols):
             for r in range(4):
-                p.rect(gx + c * 14, y + 40 + r * 14, 10, 10, colour, 'ELLIPSE')
-        paint(L, p, label, gx, y + 104, 12 * 14 if g == 0 else w - 28 - 196, 10, colour, True)
+                p.rect(gx + c * 14, y + 36 + r * 13, 9, 9, colour, 'ELLIPSE')
+        paint(L, p, label, gx, y + 92, 12 * 14 if g == 0 else w - 28 - 196, 10, colour, True)
 
 
 # -- 11: results --------------------------------------------------------------------------------
@@ -454,6 +465,15 @@ def mp_results(L, p, slide):
         put(L, p, b['label'], x, base + 6, slot, 10, 'ink', True, 'center')
         put(L, p, b['change'], x, base + 20, slot, 8, 'body', False, 'center')
     p.line(LEFT + 14, base, LEFT + lw - 14, base, HAIR)
+    # Each fix's gain, on a dashed step between bar tops.
+    for i in range(len(bars) - 1):
+        a, b = bars[i], bars[i + 1]
+        ya = base - (base - top) * a['value'] / slide['maximum']
+        yb = base - (base - top) * b['value'] / slide['maximum']
+        xa = LEFT + 14 + i * slot + slot * .8
+        xb = LEFT + 14 + (i + 1) * slot + slot * .2
+        p.line(xa, ya, xb, ya, BODY, .75, dash='DASH')
+        chip(L, p, f"+{b['value'] - a['value']}", (xa + xb) / 2 - 22, ya - 24, 36, 18, INK, WHITE, 10)
     x0 = LEFT + lw + 18
     w = RIGHT - x0
     mets = slide['metrics']
@@ -561,6 +581,23 @@ def mp_engineering(L, p, slide):
         card(p, x, y, w, bottom - y, accent(slide))
         put(L, p, s['value'], x + 14, y + 12, w - 28, 30, 'ink', True)
         put(L, p, s['label'], x + 14, y + 56, w - 28, 10, 'body')
+        v, vy, vw = s.get('viz'), bottom - 30, w - 28
+        if not v:
+            continue
+        if v['kind'] == 'split':
+            total = sum(n for n, _ in v['parts'])
+            run = x + 14
+            for n, colour in v['parts']:
+                p.rect(run, vy, vw * n / total, 12, colour)
+                run += vw * n / total
+        elif v['kind'] == 'floor':
+            p.rect(x + 14, vy, vw, 12, WHITE)
+            p.rect(x + 14, vy, vw * v['value'] / 100, 12, V_GREEN)
+            fx = x + 14 + vw * v['floor'] / 100
+            p.line(fx, vy - 5, fx, vy + 17, INK, 1.5)
+        else:
+            for k in range(v['total']):
+                dot_icon(L, p, 'check_circle', V_TEAL, x + 14 + k * 28, vy - 6, 24, 22)
 
 
 # -- 14: limits ---------------------------------------------------------------------------------

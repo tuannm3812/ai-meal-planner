@@ -808,6 +808,7 @@
       "notes": {
         "purpose": "Fix what good means before changing anything.",
         "script": [
+          "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
           "Calories had to land within 10% of the target, and each macro inside the adult AMDR range. The same 72 requests run every time.",
           "Sources: docs/7_meal_quality.md §1; DEC-25."
         ],
@@ -840,7 +841,6 @@
           "range_label": "Allowed 20–35%"
         }
       ],
-      "macro_caption": "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
       "calorie_label": "TEST 1",
       "calorie_value": "Within 10%",
       "calorie_text": "of the meal's calorie target",
@@ -848,7 +848,12 @@
       "grid_labels": [
         "12 cravings × 4 body profiles",
         "6 cravings × 4 diet or health limits"
-      ]
+      ],
+      "calorie_example": {
+        "value": 0.4,
+        "label": "694 kcal vs 691 target",
+        "limit": 10
+      }
     },
     {
       "id": "results",
@@ -1110,15 +1115,37 @@
       "stats": [
         {
           "value": "630",
-          "label": "Python tests, all passing: 538 backend, 92 Streamlit"
+          "label": "Python tests, all passing: 538 backend, 92 Streamlit",
+          "viz": {
+            "kind": "split",
+            "parts": [
+              [
+                538,
+                "#3B528B"
+              ],
+              [
+                92,
+                "#21918C"
+              ]
+            ]
+          }
         },
         {
           "value": "95%",
-          "label": "coverage, and CI fails below an 89% floor"
+          "label": "coverage, and CI fails below an 89% floor",
+          "viz": {
+            "kind": "floor",
+            "value": 95,
+            "floor": 89
+          }
         },
         {
           "value": "5",
-          "label": "CI checks on every pull request"
+          "label": "CI checks on every pull request",
+          "viz": {
+            "kind": "checks",
+            "total": 5
+          }
         }
       ]
     },

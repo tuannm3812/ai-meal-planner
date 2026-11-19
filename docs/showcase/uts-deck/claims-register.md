@@ -25,7 +25,7 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Ingredients | 3 of 6 estimated; 165, 286, 72, 75, 8, 88 kcal; 100, 220, 50, 115, 15, 10 g; 66% | Local run, 7 November 2026 | 459 kcal estimated |
 | Targets | 10%; protein 10–35%, carbs 45–65%, fat 20–35% | docs/7_meal_quality.md §1, DEC-25 | AMDR daily reference |
 | Benchmark design | 12 × 4 profiles, 6 × 4 limits, 72 requests | docs/7_meal_quality.md §1 | |
-| Results | 10, 41, 47, 72; 49 of 68 then 68 of 68 | docs/7_meal_quality.md §2 | Fixes tuned on the same set |
+| Results | 10, 41, 47, 72 (gains +31, +6, +25); 49 of 68 then 68 of 68 | docs/7_meal_quality.md §2 | Fixes tuned on the same set |
 | Model size | 0.64 MB | models/calorie_expenditure/metrics.json | |
 | Tests | 630, 95%, 89% floor, 5 CI checks | Local full run, 7 November 2026; ci.yml | |
 | Plan cost | $24.50 | Local run, 7 November 2026 | Category prices for 4 of 6 items |
