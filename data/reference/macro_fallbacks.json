@@ -38,5 +38,20 @@
   "oat milk": {"calories": 43, "protein": 0.8, "carbs": 6.7, "fat": 1.5},
   "olive oil": {"calories": 884, "protein": 0, "carbs": 0, "fat": 100},
   "soy yogurt": {"calories": 54, "protein": 3.5, "carbs": 5.7, "fat": 1.8},
-  "sunflower seed butter": {"calories": 617, "protein": 17.3, "carbs": 23.0, "fat": 55.0}
+  "sunflower seed butter": {"calories": 617, "protein": 17.3, "carbs": 23.0, "fat": 55.0},
+  "cod fillet": {"calories": 82, "protein": 17.8, "carbs": 0.0, "fat": 0.7},
+  "pork tenderloin": {"calories": 121, "protein": 21.0, "carbs": 0.0, "fat": 3.5},
+  "chicken thigh": {"calories": 121, "protein": 19.9, "carbs": 0.0, "fat": 4.1},
+  "tempeh": {"calories": 192, "protein": 20.3, "carbs": 7.6, "fat": 10.8},
+  "edamame": {"calories": 121, "protein": 11.9, "carbs": 8.9, "fat": 5.2},
+  "almonds": {"calories": 579, "protein": 21.2, "carbs": 21.6, "fat": 49.9},
+  "cashews": {"calories": 553, "protein": 18.2, "carbs": 30.2, "fat": 43.9},
+  "potato": {"calories": 77, "protein": 2.0, "carbs": 17.5, "fat": 0.1},
+  "cooked couscous": {"calories": 112, "protein": 3.8, "carbs": 23.2, "fat": 0.2},
+  "mushrooms": {"calories": 22, "protein": 3.1, "carbs": 3.3, "fat": 0.3},
+  "red capsicum": {"calories": 31, "protein": 1.0, "carbs": 6.0, "fat": 0.3},
+  "zucchini": {"calories": 17, "protein": 1.2, "carbs": 3.1, "fat": 0.3},
+  "pumpkin": {"calories": 26, "protein": 1.0, "carbs": 6.5, "fat": 0.1},
+  "hummus": {"calories": 166, "protein": 7.9, "carbs": 14.3, "fat": 9.6},
+  "carrot": {"calories": 41, "protein": 0.9, "carbs": 9.6, "fat": 0.2}
 }

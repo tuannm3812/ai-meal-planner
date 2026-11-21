@@ -178,7 +178,7 @@ def wider_scenarios(config: "BenchmarkConfig | None" = None) -> list[Scenario]:
 
     Returns:
         One scenario per recipe for each of ``WIDER_PROFILES``, in corpus order:
-        68 for the shipped 34-recipe corpus.
+        152 for the shipped 76-recipe corpus.
     """
     config = config or BenchmarkConfig.canonical()
     names = [meal.name for meal in load_meal_corpus(config.meal_corpus_path)]

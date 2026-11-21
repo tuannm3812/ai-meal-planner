@@ -15,7 +15,8 @@ CORPUS_PATH = Path("data/meal_corpus/meals.json")
         ("salmon", "salmon_quinoa_plate"),
         ("breakfast oats", "banana_oat_protein_bowl"),
         ("curry", "chickpea_curry_bowl"),
-        ("burrito bowl", "vegan_burrito_bowl"),
+        # Vegan Burrito Bowl until P7: the high-protein preference now favours pork.
+        ("burrito bowl", "pork_burrito_bowl"),
         ("soup", "chicken_soup_bowl"),
     ],
 )

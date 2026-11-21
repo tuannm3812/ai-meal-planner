@@ -400,7 +400,7 @@ The full prioritised backlog, including the deliberate gaps, is in
 [`docs/4_next_steps.md`](docs/4_next_steps.md). Highlights:
 
 - Consume the budget from `/calorie-expenditure/predict` in `/generate-meal-plan`
-- Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
+- ~~Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates~~ Done 2026-11-22: 76 (DEC-35)
 - Use saved meals, likes, dislikes, and ratings as ranking features in retrieval
 - Move local JSON stores for history, feedback, and profiles to a managed database
 - Improve macro-target balancing, serving-size normalization, and ingredient matching

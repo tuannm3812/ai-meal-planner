@@ -280,7 +280,7 @@ From spec §12.
 8. **Postgres.** Phase 2's Protocol boundary reduces this to a config change plus one
    class, which is exactly why it need not be done now — no current user justifies
    adding managed infrastructure to every dev setup and to CI (DEC-4).
-9. **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
+9. **Done 2026-11-22 (DEC-35): 76 templates.** **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
    targets 75–100 curated templates. It is content work, not engineering, and it
    gates the vector-database item in §6.
 10. **Using feedback signals as retrieval ranking features.** README roadmap item:

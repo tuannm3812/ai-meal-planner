@@ -42,6 +42,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 32 | Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal | 2026-11-07 |
 | 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
 | 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
+| 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -619,3 +620,30 @@ kidney beans do not. A dietitian should review those two (P9).
 
 Rules out tags on each recipe instead of each ingredient. Swaps change a meal's
 ingredients, so a recipe-level tag would go stale.
+
+## 2026-11-22 — Recipes: a larger corpus
+
+### DEC-35 — The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them
+
+The corpus grows from 34 recipes to 76, inside the README's target of 75 to 100.
+The 42 new recipes add cuisines and proteins the corpus lacked: white fish, pork,
+chicken thigh, tempeh and edamame. They also add potato, couscous and nut dishes,
+so a tree-nut allergy has something to refuse. Each recipe has a protein, a
+carbohydrate and a cooking fat, so portion balancing (DEC-26, DEC-28) can bring it
+inside AMDR.
+
+Fifteen ingredients are new. Each is tagged (DEC-34) and has typical per-100 g
+values from USDA FoodData Central in `macro_fallbacks` and `ingredient_calories`.
+They go there rather than `trusted_overrides` because they were not checked against
+a live lookup, so plans label them estimated until P4's USDA run confirms them. None
+has a store price, so the shopping list uses category prices for them (P8).
+
+Measured: the wider check asks for every recipe by name for two profiles, and 152 of
+152 plans meet the targets, each served the recipe it named. Six recipes needed more
+oil or carbohydrate before they did. The fixed baseline stays at 72 of 72, but
+retrieval picks some new recipes over old ones. "Creamy pasta" now gets Tuna Pasta
+Salad, "salmon dinner" Salmon Noodle Bowl, and the kidney-disease "chicken fried rice"
+Low-Sodium Chicken Rice Bowl. The median calorie deviation moves from 0.4% to 0.5%.
+
+Rules out generating recipes with Gemini. Each recipe here was written and checked
+by hand against the targets, and the corpus stays a curated, reviewable file.
