@@ -109,6 +109,9 @@ the hand-offs by watching the log; its header says how to run it.
   database is now upgraded with its records instead of being refused.
 - 2026-11-22: the meal request takes today's workout (P5, DEC-33). A rest day
   adds no exercise; leaving it out keeps the 30-minute default.
+- 2026-11-22: diet rules read `data/reference/ingredient_allergens.json`, not
+  ingredient names (P6, DEC-34). A new ingredient must be tagged there; an
+  untagged one is refused under any diet rule.
 
 ## Open risks
 
