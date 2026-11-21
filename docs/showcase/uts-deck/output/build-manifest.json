@@ -50,11 +50,11 @@
     }
   },
   "inputs": {
-    "brief-content.json": "a41ccc834604ec62a179259f438feeb2165eb5f0468d9d6b4278bff60eb23fb3",
+    "brief-content.json": "c25b6844dab59f9f360cc7978629ad53e4f67b888f812c9b7ef1784afc70ed3d",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
     "claims-register.md": "8b5a7a143b36217290da2885176fb6ca9dfe1dbee16462f752dfb0130e18aacb",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
-    "project_layouts.py": "8cd55e612d62d8c2f80b4b4d358901cd44c41c3f1d8266e3931c21bb27e84ba2"
+    "project_layouts.py": "be93457fceef410ee82ae897a520123c2cd12aaba93c828966d3ef46ea7c1363"
   },
   "assets": {
     "assets/PROVENANCE.md": "5fca3195bdc91ba0f25ad38c2ab9a87f11523d9ed939e66c43699ac33d323f96",
@@ -222,6 +222,14 @@
     "assets/icons/kit/lock-slate.svg": "6ffe401f74e25678e02887889056170f1c5e0fa79a45c70d32957b8ec23dd629",
     "assets/icons/kit/lock-teal.svg": "ba53dadaa5bad8c35270af60d34ca13ca10b144bd4d141d2a0b01ee67ff30212",
     "assets/icons/kit/lock-white.svg": "676dc367e74c5c5c6b78e05cfc25d9e960d8f678c00cbd0efc5765ba691e3737",
+    "assets/icons/kit/menu_book-blue.svg": "ba4de660ea20851dee20eacf5753d006f53a1ad826fb1902bf08fb32d93551b5",
+    "assets/icons/kit/menu_book-grey.svg": "2b8eb0007d55334bce22f9d3c670a3f19ee8ade1a4cf767c7486ab764a80349b",
+    "assets/icons/kit/menu_book-ink.svg": "6f1f29ca5eb3bddf3cc894faff292ba252fefafd1e71e1d6a61fbd93c5a8db1d",
+    "assets/icons/kit/menu_book-ochre.svg": "3c6a2207d562e767c2c91dba154be2e6eaadef05f82d051a99788dc44062cbf6",
+    "assets/icons/kit/menu_book-plum.svg": "e7f61d9c7f89ac72529a827f7c25dec34fdbf3207dba8fd973106ab465e25b5e",
+    "assets/icons/kit/menu_book-slate.svg": "444fcaa789d4196a211db5338724abb5d76c92f5074849510dcd3793cd67d4e2",
+    "assets/icons/kit/menu_book-teal.svg": "a3dd3401f6e46a40727a3a07722c64200edb70c5fb7c17fd084370fb95befb57",
+    "assets/icons/kit/menu_book-white.svg": "8fc8849d956b48df8a5320d0c5657730ace65074da8fce322044f19b020fdc47",
     "assets/icons/kit/monitor_weight-blue.svg": "2e39c939cfd10c495c093895e9cfaecba0dac89eba40adc323e18537c8d274cf",
     "assets/icons/kit/monitor_weight-grey.svg": "3fe803003358755ef666ba579e7d607be3602de241e681a4417a9d6e09cd9df8",
     "assets/icons/kit/monitor_weight-ink.svg": "d79849baa2601d0e1307e821fdaac6373f58a0524fba1e9ef7917fde8367df9a",
@@ -367,14 +375,16 @@
     "assets/logos/tailwindcss.png": "6b316828c0007590a5fbb6bcecf8082a3b8a61db8f38689664f85d00621d2d38",
     "assets/logos/vite.png": "fbc0355127a37f2cc2cc3895e7aadb5e0b3221ccd4320fd56611202cedad3af4",
     "assets/manifest.json": "b4c216f9d77efbb356324dc92b9480121da8bec53db9639bb9f4f90765bc2e27",
+    "assets/photos/close-chicken-fried-rice.jpg": "b1eb68f5665ed36a52a07ddadf4f3fe4e499cef506e98c71ec1b7305dfcaa622",
+    "assets/photos/close-chicken-fried-rice.provenance.json": "1cc7eb4fc8560566be7433aa43d8f15fb8cb817d8f5a5aa5e48e1a6316c52c00",
     "assets/photos/cover-chicken-fried-rice.jpg": "06dcee78337b203927a8e1d300d0fa07fdc4eeaf244f9f31e83f29e385691dcf",
     "assets/photos/cover-chicken-fried-rice.provenance.json": "a6a74fa98829ae9b354da69938ae46b05585e23e8937ba189650dce078b0cbe3",
     "assets/photos/problem-spaghetti-bolognese.jpg": "8ed8363704749495a4610693f3582a5d12e6b50d576d6af60ccf2e5902f36acf",
     "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "267cb1f6bab23d3e7f34123aacc9840068585166907e8c08a9093c338b26d5c3",
-    "deck.pdf": "e7d0dc739029d5378380c410988e2f87275dc25f687520b23bc0821d3d86c2e3"
+    "deck.html": "d9e1ca2e71adc5b6f55b351fa916ae8ca43f8800cec055dc366e6962af3cd3c1",
+    "deck.pdf": "26f282095a50c1160686c00d42cf034cbc42107444cdab9c43d441fed84c7636"
   },
   "slide_count": 16
 }

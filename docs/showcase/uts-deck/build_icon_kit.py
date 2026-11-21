@@ -12,7 +12,7 @@ OUT = HERE / 'assets/icons/kit'
 GLYPHS = ['balance', 'block', 'calculate', 'check_circle', 'cloud_upload', 'fact_check', 'fitness_center',
           'flag', 'group', 'inventory_2', 'lock', 'monitor_weight', 'no_food', 'person', 'rice_bowl', 'science',
           'search', 'shopping_basket', 'shopping_cart', 'skillet', 'verified', 'visibility', 'receipt_long',
-          'restaurant', 'egg', 'nutrition', 'grocery', 'soup_kitchen', 'storefront']
+          'restaurant', 'menu_book', 'egg', 'nutrition', 'grocery', 'soup_kitchen', 'storefront']
 TONES = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'ochre', '#21918C': 'teal',
          '#89949D': 'grey', '#FFFFFF': 'white', '#1B2430': 'ink'}
 

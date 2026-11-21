@@ -736,17 +736,28 @@ def mp_limits(L, p, slide):
     gap = 16
     w = (W - gap * 2) / 3
     full = bottom - TOP
-    put(L, p, slide['stair_title'], LEFT, TOP, 300, 12, 'ink', True)
-    put(L, p, slide['stair_text'], LEFT, TOP + 18, 300, 10, 'body')
+    ink, tint = ACCENT[accent(slide)]
+    strength_colour = {3: V_GREEN, 2: V_TEAL, 1: V_BLUE}
     for i, s in enumerate(steps):
-        h = full * (0.58 + 0.21 * i)
+        h = full * 0.62 + i * 3 * 17.5   # whole bullet pitches, so rows line up across cards
         x, y = LEFT + i * (w + gap), bottom - h
         card(p, x, y, w, h, accent(slide))
-        dot_icon(L, p, s['icon'], ACCENT[accent(slide)][0], x + 14, y + 12, 24)
-        put(L, p, s['title'], x + 44, y + 16, w - 56, 12, 'ink', True)
+        dot_icon(L, p, s['icon'], ink, x + 14, y + 12, 24)
+        put(L, p, s['title'], x + 44, y + 16, w - 120, 12, 'ink', True)
+        # How strong the evidence is: filled dots out of three.
+        for k in range(3):
+            cx = x + w - 54 + k * 14
+            if k < s['strength']:
+                p.rect(cx, y + 18, 10, 10, strength_colour[s['strength']], 'ELLIPSE')
+            else:
+                L.outlined(p, cx, y + 18, 10, 10, 'transparent', HAIR, 1.2, 'ELLIPSE')
         yy = y + 46
         for item in s['items']:
-            yy += inked(L, p, f'•  {item}', x + 14, yy, w - 28, 10) + 4
+            yy += inked(L, p, f'\u2022  {item}', x + 14, yy, w - 28, 10) + 4
+        p.rect(x + 10, bottom - 50, w - 20, 40, WHITE)
+        p.rect(x + 10, bottom - 50, 3, 40, ink)
+        paint(L, p, 'CLOSES IT', x + 22, bottom - 44, w - 40, 8, ink, True)
+        paint(L, p, s['next'], x + 22, bottom - 31, w - 40, 10, INK, True)
 
 
 # -- 15: next steps -----------------------------------------------------------------------------
@@ -777,7 +788,9 @@ def mp_next(L, p, slide):
         for k, item in enumerate(c['items']):
             y = y0 + 34 + k * (nh + 8)
             p.rect(x + 10, y, w - 20, nh, WHITE)
-            put(L, p, item, x + 20, y + (nh - need(L, item, w - 40, 12, True)) / 2, w - 40, 12, 'ink', True)
+            if c.get('icons'):
+                dot_icon(L, p, c['icons'][k], ACCENT[accent(slide)][0], x + 22, y + nh / 2 - 11, 22, 20)
+            put(L, p, item, x + 52, y + (nh - need(L, item, w - 72, 12, True)) / 2, w - 72, 12, 'ink', True)
 
 
 
@@ -866,9 +879,12 @@ def mp_close(L, p, slide):
     img(L, p, 'assets/figures/qr.png', 'QR code to the live demo', LEFT + 344, 304, 88, 88)
     put(L, p, slide['qr_label'], LEFT + 340, 402, 96, 8, 'body', False, 'center')
     img(L, p, 'assets/figures/cover-motif.svg', 'A row of plates and grains in palette A', LEFT, 440, 430, 41)
-    p.rect(505, 0, 455, 540, ACCENT['slate'][1])
-    img(L, p, slide['image']['path'], slide['image']['alt'], 540, 100, 385, 385)
-    put(L, p, slide['image_caption'], 540, 500, 385, 8, 'body', False, 'center')
+    img(L, p, slide['image']['path'], slide['image']['alt'], 505, 0, 455, 540)
+    cw = 320
+    p.rect(RIGHT - cw, 436, cw, 40, WHITE)
+    p.rect(RIGHT - cw, 436, 3, 40, V_GREEN)
+    paint(L, p, slide['image_caption'], RIGHT - cw + 12, 442, cw - 24, 10, INK, True)
+    paint(L, p, slide['image_note'], RIGHT - cw + 12, 458, cw - 24, 8, BODY)
 
 LAYOUTS = {f.__name__: f for f in (mp_arch_flow, mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
                                    mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next)}

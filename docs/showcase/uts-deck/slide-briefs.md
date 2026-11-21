@@ -665,28 +665,32 @@ Exact face text:
 - LIMITS AND NEXT STEPS
 - Limits
 - What this project does not prove yet
-- The further right, the less has been shown.
+- The numbers are measured offline; how people use it is untested.
 - AI Meal Planner
 - 14
 - TAKEAWAY
 - A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
-- How far the evidence goes
-- Each step up is less proven.
 - Measured
 - •  72 of 72 and 68 of 68, offline
 - •  But the checks guided the fixes
 - •  11 of 72 fall back
+- CLOSES IT
+- Run the benchmark with USDA keys
 - Estimated
 - •  68 of 72 plans include an estimate
 - •  AMDR is a daily range on one meal
 - •  Default exercise inputs
 - •  Diet rules match ingredient names
+- CLOSES IT
+- Real exercise details, allergen tags
 - Not tested
 - •  No user testing
 - •  No clinical review
 - •  Not deployed
 - •  No database migrations
 - •  Taste and health outcomes unknown
+- CLOSES IT
+- Deploy, then test with people
 
 ## 15. What comes next, in priority order
 
@@ -752,4 +756,5 @@ Exact face text:
 - Demo tuannm3812-ai-meal-planner.streamlit.app
 - Code github.com/tuannm3812/ai-meal-planner
 - Scan for the live demo
-- Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.
+- Chicken fried rice: 694 kcal against a 691 kcal target.
+- A study project, not medical advice.

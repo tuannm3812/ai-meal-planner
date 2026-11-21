@@ -25665,7 +25665,7 @@
       "topic": "Limits",
       "accent": "ochre",
       "title": "What this project does not prove yet",
-      "subtitle": "The further right, the less has been shown.",
+      "subtitle": "The numbers are measured offline; how people use it is untested.",
       "takeaway": "A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.",
       "question": "What is unproven?",
       "notes": {
@@ -25679,8 +25679,6 @@
           "claims-register.md"
         ]
       },
-      "stair_title": "How far the evidence goes",
-      "stair_text": "Each step up is less proven.",
       "steps": [
         {
           "icon": "check_circle",
@@ -25689,7 +25687,9 @@
             "**72 of 72** and **68 of 68**, offline",
             "But the checks guided the fixes",
             "11 of 72 fall back"
-          ]
+          ],
+          "strength": 3,
+          "next": "Run the benchmark with USDA keys"
         },
         {
           "icon": "calculate",
@@ -25699,7 +25699,9 @@
             "AMDR is a daily range on one meal",
             "Default exercise inputs",
             "Diet rules match ingredient names"
-          ]
+          ],
+          "strength": 2,
+          "next": "Real exercise details, allergen tags"
         },
         {
           "icon": "group",
@@ -25710,7 +25712,9 @@
             "Not deployed",
             "No database migrations",
             "Taste and health outcomes unknown"
-          ]
+          ],
+          "strength": 1,
+          "next": "Deploy, then test with people"
         }
       ],
       "n": 14,
@@ -26023,7 +26027,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t18",
-          "text": "The further right, the less has been shown.",
+          "text": "The numbers are measured offline; how people use it is untested.",
           "x": 36.3,
           "y": 92.8,
           "width": 889.9,
@@ -26037,7 +26041,7 @@
           "op": "style-paragraph",
           "element": "t18",
           "start": 0,
-          "end": 43,
+          "end": 64,
           "line_spacing": 135
         },
         {
@@ -26184,94 +26188,45 @@
           "line_spacing": 135
         },
         {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t27",
-          "text": "How far the evidence goes",
-          "x": 36.3,
-          "y": 124.8,
-          "width": 314.4,
-          "height": 30.6,
-          "font_size": 12,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t27",
-          "start": 0,
-          "end": 25,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t27",
-          "start": 0,
-          "end": 25,
-          "bold": true
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t28",
-          "text": "Each step up is less proven.",
-          "x": 36.3,
-          "y": 142.8,
-          "width": 314.4,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t28",
-          "start": 0,
-          "end": 28,
-          "line_spacing": 135
-        },
-        {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r29",
+          "id": "r27",
           "shape_type": "RECTANGLE",
           "x": 43.5,
-          "y": 253.8,
+          "y": 242.2,
           "width": 281.1666666666667,
-          "height": 168.2,
+          "height": 179.8,
           "background_color": "#F6F1E5"
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r30",
+          "id": "r28",
           "shape_type": "RECTANGLE",
           "x": 43.5,
-          "y": 253.8,
+          "y": 242.2,
           "width": 281.1666666666667,
           "height": 2.5,
           "background_color": "#896521"
         },
         {
           "op": "add-image",
-          "id": "im31",
+          "id": "im29",
           "path": "assets/icons/kit/check_circle-ochre.svg",
           "alt": "",
           "x": 60.5,
-          "y": 268.8,
+          "y": 257.2,
           "width": 18,
           "height": 18
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t32",
+          "id": "t30",
           "text": "Measured",
           "x": 80.3,
-          "y": 262.6,
-          "width": 239.5666666666667,
+          "y": 251.0,
+          "width": 175.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -26280,62 +26235,58 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t32",
+          "element": "t30",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t32",
+          "element": "t30",
           "start": 0,
           "end": 8,
           "bold": true
         },
         {
-          "op": "add-textbox",
+          "op": "add-shape",
           "slide": "limits",
-          "id": "t33",
-          "text": "\u2022  72 of 72 and 68 of 68, offline",
-          "x": 50.3,
-          "y": 292.6,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
+          "id": "r31",
+          "shape_type": "ELLIPSE",
+          "x": 270.6666666666667,
+          "y": 260.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "#5EC962"
         },
         {
-          "op": "style-paragraph",
-          "element": "t33",
-          "start": 0,
-          "end": 33,
-          "line_spacing": 135
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r32",
+          "shape_type": "ELLIPSE",
+          "x": 284.6666666666667,
+          "y": 260.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "#5EC962"
         },
         {
-          "op": "style-text",
-          "element": "t33",
-          "start": 3,
-          "end": 11,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "style-text",
-          "element": "t33",
-          "start": 16,
-          "end": 24,
-          "bold": true,
-          "color": "#1B2430"
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r33",
+          "shape_type": "ELLIPSE",
+          "x": 298.6666666666667,
+          "y": 260.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "#5EC962"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t34",
-          "text": "\u2022  But the checks guided the fixes",
+          "text": "\u2022  72 of 72 and 68 of 68, offline",
           "x": 50.3,
-          "y": 310.1,
+          "y": 281.0,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26347,16 +26298,32 @@
           "op": "style-paragraph",
           "element": "t34",
           "start": 0,
-          "end": 34,
+          "end": 33,
           "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t34",
+          "start": 3,
+          "end": 11,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "style-text",
+          "element": "t34",
+          "start": 16,
+          "end": 24,
+          "bold": true,
+          "color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t35",
-          "text": "\u2022  11 of 72 fall back",
+          "text": "\u2022  But the checks guided the fixes",
           "x": 50.3,
-          "y": 327.6,
+          "y": 298.5,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26368,53 +26335,64 @@
           "op": "style-paragraph",
           "element": "t35",
           "start": 0,
+          "end": 34,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t36",
+          "text": "\u2022  11 of 72 fall back",
+          "x": 50.3,
+          "y": 316.0,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t36",
+          "start": 0,
           "end": 21,
           "line_spacing": 135
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r36",
+          "id": "r37",
           "shape_type": "RECTANGLE",
-          "x": 340.6666666666667,
-          "y": 192.90000000000003,
-          "width": 281.1666666666667,
-          "height": 229.09999999999997,
-          "background_color": "#F6F1E5"
+          "x": 53.5,
+          "y": 372.0,
+          "width": 261.1666666666667,
+          "height": 40,
+          "background_color": "#FFFFFF"
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r37",
+          "id": "r38",
           "shape_type": "RECTANGLE",
-          "x": 340.6666666666667,
-          "y": 192.90000000000003,
-          "width": 281.1666666666667,
-          "height": 2.5,
+          "x": 53.5,
+          "y": 372.0,
+          "width": 3,
+          "height": 40,
           "background_color": "#896521"
-        },
-        {
-          "op": "add-image",
-          "id": "im38",
-          "path": "assets/icons/kit/calculate-ochre.svg",
-          "alt": "",
-          "x": 357.6666666666667,
-          "y": 207.90000000000003,
-          "width": 18,
-          "height": 18
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t39",
-          "text": "Estimated",
-          "x": 377.4666666666667,
-          "y": 201.70000000000005,
-          "width": 239.5666666666667,
-          "height": 30.6,
-          "font_size": 12,
+          "text": "CLOSES IT",
+          "x": 58.3,
+          "y": 370.8,
+          "width": 255.5666666666667,
+          "height": 25.200000000000003,
+          "font_size": 8,
           "font_family": "Google Sans",
-          "color": "#1B2430",
+          "color": "#896521",
           "bold": true
         },
         {
@@ -26435,134 +26413,70 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t40",
-          "text": "\u2022  68 of 72 plans include an estimate",
-          "x": 347.4666666666667,
-          "y": 231.70000000000005,
-          "width": 267.56666666666666,
+          "text": "Run the benchmark with USDA keys",
+          "x": 58.3,
+          "y": 383.8,
+          "width": 255.5666666666667,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
+          "color": "#1B2430",
+          "bold": true
         },
         {
           "op": "style-paragraph",
           "element": "t40",
           "start": 0,
-          "end": 37,
+          "end": 32,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t40",
-          "start": 3,
-          "end": 11,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t41",
-          "text": "\u2022  AMDR is a daily range on one meal",
-          "x": 347.4666666666667,
-          "y": 249.20000000000005,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t41",
           "start": 0,
-          "end": 36,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t42",
-          "text": "\u2022  Default exercise inputs",
-          "x": 347.4666666666667,
-          "y": 266.70000000000005,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t42",
-          "start": 0,
-          "end": 26,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t43",
-          "text": "\u2022  Diet rules match ingredient names",
-          "x": 347.4666666666667,
-          "y": 284.20000000000005,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t43",
-          "start": 0,
-          "end": 36,
-          "line_spacing": 135
+          "end": 32,
+          "bold": true
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r44",
+          "id": "r41",
           "shape_type": "RECTANGLE",
-          "x": 637.8333333333334,
-          "y": 132.0,
+          "x": 340.6666666666667,
+          "y": 189.7,
           "width": 281.1666666666667,
-          "height": 290.0,
+          "height": 232.3,
           "background_color": "#F6F1E5"
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r45",
+          "id": "r42",
           "shape_type": "RECTANGLE",
-          "x": 637.8333333333334,
-          "y": 132.0,
+          "x": 340.6666666666667,
+          "y": 189.7,
           "width": 281.1666666666667,
           "height": 2.5,
           "background_color": "#896521"
         },
         {
           "op": "add-image",
-          "id": "im46",
-          "path": "assets/icons/kit/group-ochre.svg",
+          "id": "im43",
+          "path": "assets/icons/kit/calculate-ochre.svg",
           "alt": "",
-          "x": 654.8333333333334,
-          "y": 147.0,
+          "x": 357.6666666666667,
+          "y": 204.7,
           "width": 18,
           "height": 18
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t47",
-          "text": "Not tested",
-          "x": 674.6333333333333,
-          "y": 140.8,
-          "width": 239.5666666666667,
+          "id": "t44",
+          "text": "Estimated",
+          "x": 377.4666666666667,
+          "y": 198.5,
+          "width": 175.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -26571,25 +26485,60 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t44",
           "start": 0,
-          "end": 10,
+          "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
+          "element": "t44",
           "start": 0,
-          "end": 10,
+          "end": 9,
           "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r45",
+          "shape_type": "ELLIPSE",
+          "x": 567.8333333333334,
+          "y": 207.7,
+          "width": 10,
+          "height": 10,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 581.8333333333334,
+          "y": 207.7,
+          "width": 10,
+          "height": 10,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r47",
+          "shape_type": "ELLIPSE",
+          "x": 595.8333333333334,
+          "y": 207.7,
+          "width": 10,
+          "height": 10,
+          "background_color": "transparent",
+          "outline": "#D8DEE3",
+          "outline_weight": 1.2
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t48",
-          "text": "\u2022  No user testing",
-          "x": 644.6333333333333,
-          "y": 170.8,
+          "text": "\u2022  68 of 72 plans include an estimate",
+          "x": 347.4666666666667,
+          "y": 228.5,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26601,16 +26550,24 @@
           "op": "style-paragraph",
           "element": "t48",
           "start": 0,
-          "end": 18,
+          "end": 37,
           "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 3,
+          "end": 11,
+          "bold": true,
+          "color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t49",
-          "text": "\u2022  No clinical review",
-          "x": 644.6333333333333,
-          "y": 188.3,
+          "text": "\u2022  AMDR is a daily range on one meal",
+          "x": 347.4666666666667,
+          "y": 246.0,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26622,16 +26579,16 @@
           "op": "style-paragraph",
           "element": "t49",
           "start": 0,
-          "end": 21,
+          "end": 36,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t50",
-          "text": "\u2022  Not deployed",
-          "x": 644.6333333333333,
-          "y": 205.8,
+          "text": "\u2022  Default exercise inputs",
+          "x": 347.4666666666667,
+          "y": 263.5,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26643,16 +26600,16 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 15,
+          "end": 26,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t51",
-          "text": "\u2022  No database migrations",
-          "x": 644.6333333333333,
-          "y": 223.3,
+          "text": "\u2022  Diet rules match ingredient names",
+          "x": 347.4666666666667,
+          "y": 281.0,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26664,16 +26621,191 @@
           "op": "style-paragraph",
           "element": "t51",
           "start": 0,
-          "end": 25,
+          "end": 36,
           "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r52",
+          "shape_type": "RECTANGLE",
+          "x": 350.6666666666667,
+          "y": 372.0,
+          "width": 261.1666666666667,
+          "height": 40,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r53",
+          "shape_type": "RECTANGLE",
+          "x": 350.6666666666667,
+          "y": 372.0,
+          "width": 3,
+          "height": 40,
+          "background_color": "#896521"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t52",
-          "text": "\u2022  Taste and health outcomes unknown",
+          "id": "t54",
+          "text": "CLOSES IT",
+          "x": 355.4666666666667,
+          "y": 370.8,
+          "width": 255.5666666666667,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#896521",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t55",
+          "text": "Real exercise details, allergen tags",
+          "x": 355.4666666666667,
+          "y": 383.8,
+          "width": 255.5666666666667,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t55",
+          "start": 0,
+          "end": 36,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t55",
+          "start": 0,
+          "end": 36,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r56",
+          "shape_type": "RECTANGLE",
+          "x": 637.8333333333334,
+          "y": 137.2,
+          "width": 281.1666666666667,
+          "height": 284.8,
+          "background_color": "#F6F1E5"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r57",
+          "shape_type": "RECTANGLE",
+          "x": 637.8333333333334,
+          "y": 137.2,
+          "width": 281.1666666666667,
+          "height": 2.5,
+          "background_color": "#896521"
+        },
+        {
+          "op": "add-image",
+          "id": "im58",
+          "path": "assets/icons/kit/group-ochre.svg",
+          "alt": "",
+          "x": 654.8333333333334,
+          "y": 152.2,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t59",
+          "text": "Not tested",
+          "x": 674.6333333333333,
+          "y": 146.0,
+          "width": 175.5666666666667,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t59",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t59",
+          "start": 0,
+          "end": 10,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r60",
+          "shape_type": "ELLIPSE",
+          "x": 865.0,
+          "y": 155.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r61",
+          "shape_type": "ELLIPSE",
+          "x": 879.0,
+          "y": 155.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "transparent",
+          "outline": "#D8DEE3",
+          "outline_weight": 1.2
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r62",
+          "shape_type": "ELLIPSE",
+          "x": 893.0,
+          "y": 155.2,
+          "width": 10,
+          "height": 10,
+          "background_color": "transparent",
+          "outline": "#D8DEE3",
+          "outline_weight": 1.2
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t63",
+          "text": "\u2022  No user testing",
           "x": 644.6333333333333,
-          "y": 240.8,
+          "y": 176.0,
           "width": 267.56666666666666,
           "height": 27.9,
           "font_size": 10,
@@ -26683,10 +26815,172 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t52",
+          "element": "t63",
+          "start": 0,
+          "end": 18,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t64",
+          "text": "\u2022  No clinical review",
+          "x": 644.6333333333333,
+          "y": 193.5,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t64",
+          "start": 0,
+          "end": 21,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t65",
+          "text": "\u2022  Not deployed",
+          "x": 644.6333333333333,
+          "y": 211.0,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t65",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t66",
+          "text": "\u2022  No database migrations",
+          "x": 644.6333333333333,
+          "y": 228.5,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t66",
+          "start": 0,
+          "end": 25,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t67",
+          "text": "\u2022  Taste and health outcomes unknown",
+          "x": 644.6333333333333,
+          "y": 246.0,
+          "width": 267.56666666666666,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t67",
           "start": 0,
           "end": 36,
           "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r68",
+          "shape_type": "RECTANGLE",
+          "x": 647.8333333333334,
+          "y": 372.0,
+          "width": 261.1666666666667,
+          "height": 40,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "limits",
+          "id": "r69",
+          "shape_type": "RECTANGLE",
+          "x": 647.8333333333334,
+          "y": 372.0,
+          "width": 3,
+          "height": 40,
+          "background_color": "#896521"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t70",
+          "text": "CLOSES IT",
+          "x": 652.6333333333333,
+          "y": 370.8,
+          "width": 255.5666666666667,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#896521",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t70",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t70",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "limits",
+          "id": "t71",
+          "text": "Deploy, then test with people",
+          "x": 652.6333333333333,
+          "y": 383.8,
+          "width": 255.5666666666667,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t71",
+          "start": 0,
+          "end": 29,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t71",
+          "start": 0,
+          "end": 29,
+          "bold": true
         }
       ]
     },
@@ -26744,6 +27038,11 @@
             "Add database migrations",
             "Deploy to Cloud Run",
             "Add user accounts"
+          ],
+          "icons": [
+            "inventory_2",
+            "cloud_upload",
+            "person"
           ]
         },
         {
@@ -26752,6 +27051,11 @@
             "Run the benchmark with USDA keys",
             "Ask for real exercise details",
             "Tag allergens on ingredients"
+          ],
+          "icons": [
+            "fact_check",
+            "fitness_center",
+            "no_food"
           ]
         },
         {
@@ -26760,6 +27064,11 @@
             "Grow to 75\u2013100 recipes",
             "Connect live store prices",
             "Use feedback, then test with people"
+          ],
+          "icons": [
+            "menu_book",
+            "storefront",
+            "group"
           ]
         }
       ],
@@ -27723,13 +28032,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im54",
+          "path": "assets/icons/kit/inventory_2-ochre.svg",
+          "alt": "",
+          "x": 66.5,
+          "y": 255.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t54",
+          "id": "t55",
           "text": "Add database migrations",
-          "x": 56.3,
+          "x": 88.3,
           "y": 249.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27738,14 +28057,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t54",
+          "element": "t55",
           "start": 0,
           "end": 23,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t54",
+          "element": "t55",
           "start": 0,
           "end": 23,
           "bold": true
@@ -27753,7 +28072,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r55",
+          "id": "r56",
           "shape_type": "RECTANGLE",
           "x": 53.5,
           "y": 300.0,
@@ -27762,13 +28081,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im57",
+          "path": "assets/icons/kit/cloud_upload-ochre.svg",
+          "alt": "",
+          "x": 66.5,
+          "y": 317.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t56",
+          "id": "t58",
           "text": "Deploy to Cloud Run",
-          "x": 56.3,
+          "x": 88.3,
           "y": 311.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27777,14 +28106,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t58",
           "start": 0,
           "end": 19,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t58",
           "start": 0,
           "end": 19,
           "bold": true
@@ -27792,7 +28121,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r57",
+          "id": "r59",
           "shape_type": "RECTANGLE",
           "x": 53.5,
           "y": 362.0,
@@ -27801,13 +28130,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im60",
+          "path": "assets/icons/kit/person-ochre.svg",
+          "alt": "",
+          "x": 66.5,
+          "y": 379.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t58",
+          "id": "t61",
           "text": "Add user accounts",
-          "x": 56.3,
+          "x": 88.3,
           "y": 373.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27816,14 +28155,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t58",
+          "element": "t61",
           "start": 0,
           "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t58",
+          "element": "t61",
           "start": 0,
           "end": 17,
           "bold": true
@@ -27831,7 +28170,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r59",
+          "id": "r62",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 204.0,
@@ -27842,7 +28181,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r60",
+          "id": "r63",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 204.0,
@@ -27853,7 +28192,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t61",
+          "id": "t64",
           "text": "NEXT",
           "x": 347.4666666666667,
           "y": 208.8,
@@ -27866,14 +28205,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t61",
+          "element": "t64",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t61",
+          "element": "t64",
           "start": 0,
           "end": 4,
           "bold": true
@@ -27881,7 +28220,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r62",
+          "id": "r65",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 238.0,
@@ -27890,13 +28229,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im66",
+          "path": "assets/icons/kit/fact_check-ochre.svg",
+          "alt": "",
+          "x": 363.6666666666667,
+          "y": 255.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t63",
+          "id": "t67",
           "text": "Run the benchmark with USDA keys",
-          "x": 353.4666666666667,
+          "x": 385.4666666666667,
           "y": 249.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27905,14 +28254,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t63",
+          "element": "t67",
           "start": 0,
           "end": 32,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t63",
+          "element": "t67",
           "start": 0,
           "end": 32,
           "bold": true
@@ -27920,7 +28269,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r64",
+          "id": "r68",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 300.0,
@@ -27929,13 +28278,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im69",
+          "path": "assets/icons/kit/fitness_center-ochre.svg",
+          "alt": "",
+          "x": 363.6666666666667,
+          "y": 317.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t65",
+          "id": "t70",
           "text": "Ask for real exercise details",
-          "x": 353.4666666666667,
+          "x": 385.4666666666667,
           "y": 311.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27944,14 +28303,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t65",
+          "element": "t70",
           "start": 0,
           "end": 29,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t65",
+          "element": "t70",
           "start": 0,
           "end": 29,
           "bold": true
@@ -27959,7 +28318,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r66",
+          "id": "r71",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 362.0,
@@ -27968,13 +28327,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im72",
+          "path": "assets/icons/kit/no_food-ochre.svg",
+          "alt": "",
+          "x": 363.6666666666667,
+          "y": 379.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t67",
+          "id": "t73",
           "text": "Tag allergens on ingredients",
-          "x": 353.4666666666667,
+          "x": 385.4666666666667,
           "y": 373.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -27983,14 +28352,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t67",
+          "element": "t73",
           "start": 0,
           "end": 28,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t67",
+          "element": "t73",
           "start": 0,
           "end": 28,
           "bold": true
@@ -27998,7 +28367,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r68",
+          "id": "r74",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -28009,7 +28378,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r69",
+          "id": "r75",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -28020,7 +28389,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t70",
+          "id": "t76",
           "text": "LATER",
           "x": 644.6333333333333,
           "y": 208.8,
@@ -28033,14 +28402,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t70",
+          "element": "t76",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t70",
+          "element": "t76",
           "start": 0,
           "end": 5,
           "bold": true
@@ -28048,7 +28417,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r71",
+          "id": "r77",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 238.0,
@@ -28057,13 +28426,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im78",
+          "path": "assets/icons/kit/menu_book-ochre.svg",
+          "alt": "",
+          "x": 660.8333333333334,
+          "y": 255.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t72",
+          "id": "t79",
           "text": "Grow to 75\u2013100 recipes",
-          "x": 650.6333333333333,
+          "x": 682.6333333333333,
           "y": 249.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -28072,14 +28451,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t72",
+          "element": "t79",
           "start": 0,
           "end": 22,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t72",
+          "element": "t79",
           "start": 0,
           "end": 22,
           "bold": true
@@ -28087,7 +28466,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r73",
+          "id": "r80",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 300.0,
@@ -28096,13 +28475,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im81",
+          "path": "assets/icons/kit/storefront-ochre.svg",
+          "alt": "",
+          "x": 660.8333333333334,
+          "y": 317.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t74",
+          "id": "t82",
           "text": "Connect live store prices",
-          "x": 650.6333333333333,
+          "x": 682.6333333333333,
           "y": 311.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -28111,14 +28500,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t74",
+          "element": "t82",
           "start": 0,
           "end": 25,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t74",
+          "element": "t82",
           "start": 0,
           "end": 25,
           "bold": true
@@ -28126,7 +28515,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r75",
+          "id": "r83",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 362.0,
@@ -28135,13 +28524,23 @@
           "background_color": "#FFFFFF"
         },
         {
+          "op": "add-image",
+          "id": "im84",
+          "path": "assets/icons/kit/group-ochre.svg",
+          "alt": "",
+          "x": 660.8333333333334,
+          "y": 379.0,
+          "width": 20,
+          "height": 20
+        },
+        {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t76",
+          "id": "t85",
           "text": "Use feedback, then test with people",
-          "x": 650.6333333333333,
+          "x": 682.6333333333333,
           "y": 373.7,
-          "width": 255.5666666666667,
+          "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -28150,14 +28549,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t76",
+          "element": "t85",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t76",
+          "element": "t85",
           "start": 0,
           "end": 35,
           "bold": true
@@ -28184,10 +28583,10 @@
       ],
       "qr_label": "Scan for the live demo",
       "image": {
-        "path": "assets/figures/close-salmon.png",
-        "alt": "Flat illustration of a salmon and quinoa plate from the recipe library."
+        "path": "assets/photos/close-chicken-fried-rice.jpg",
+        "alt": "Photo of a plate of chicken fried rice, the meal this deck followed."
       },
-      "image_caption": "Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.",
+      "image_caption": "Chicken fried rice: 694 kcal against a 691 kcal target.",
       "question": "Where do I try it?",
       "notes": {
         "purpose": "Thank the audience and point to the demo and code.",
@@ -28200,6 +28599,7 @@
         ]
       },
       "header_style": "appendix",
+      "image_note": "A study project, not medical advice.",
       "n": 16,
       "takeaways": [],
       "marker_pairs": [],
@@ -28465,46 +28865,84 @@
           "height": 41
         },
         {
-          "op": "add-shape",
-          "slide": "close",
-          "id": "r27",
-          "shape_type": "RECTANGLE",
+          "op": "add-image",
+          "id": "im27",
+          "path": "assets/photos/close-chicken-fried-rice.jpg",
+          "alt": "Photo of a plate of chicken fried rice, the meal this deck followed.",
           "x": 505,
           "y": 0,
           "width": 455,
-          "height": 540,
-          "background_color": "#EDF0F3"
+          "height": 540
         },
         {
-          "op": "add-image",
-          "id": "im28",
-          "path": "assets/figures/close-salmon.png",
-          "alt": "Flat illustration of a salmon and quinoa plate from the recipe library.",
-          "x": 540,
-          "y": 100,
-          "width": 385,
-          "height": 385
+          "op": "add-shape",
+          "slide": "close",
+          "id": "r28",
+          "shape_type": "RECTANGLE",
+          "x": 599.0,
+          "y": 436,
+          "width": 320,
+          "height": 40,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "close",
+          "id": "r29",
+          "shape_type": "RECTANGLE",
+          "x": 599.0,
+          "y": 436,
+          "width": 3,
+          "height": 40,
+          "background_color": "#5EC962"
         },
         {
           "op": "add-textbox",
           "slide": "close",
-          "id": "t29",
-          "text": "Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.",
-          "x": 532.8,
-          "y": 492.8,
-          "width": 399.4,
+          "id": "t30",
+          "text": "Chicken fried rice: 694 kcal against a 691 kcal target.",
+          "x": 603.8,
+          "y": 434.8,
+          "width": 310.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 55,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 55,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "close",
+          "id": "t31",
+          "text": "A study project, not medical advice.",
+          "x": 603.8,
+          "y": 450.8,
+          "width": 310.4,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
           "color": "#5A6370",
-          "bold": false,
-          "alignment": "center"
+          "bold": false
         },
         {
           "op": "style-paragraph",
-          "element": "t29",
+          "element": "t31",
           "start": 0,
-          "end": 88,
+          "end": 36,
           "line_spacing": 135
         }
       ]

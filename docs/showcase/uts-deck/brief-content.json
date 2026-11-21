@@ -1321,7 +1321,7 @@
       "topic": "Limits",
       "accent": "ochre",
       "title": "What this project does not prove yet",
-      "subtitle": "The further right, the less has been shown.",
+      "subtitle": "The numbers are measured offline; how people use it is untested.",
       "takeaway": "A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.",
       "question": "What is unproven?",
       "notes": {
@@ -1335,8 +1335,6 @@
           "claims-register.md"
         ]
       },
-      "stair_title": "How far the evidence goes",
-      "stair_text": "Each step up is less proven.",
       "steps": [
         {
           "icon": "check_circle",
@@ -1345,7 +1343,9 @@
             "**72 of 72** and **68 of 68**, offline",
             "But the checks guided the fixes",
             "11 of 72 fall back"
-          ]
+          ],
+          "strength": 3,
+          "next": "Run the benchmark with USDA keys"
         },
         {
           "icon": "calculate",
@@ -1355,7 +1355,9 @@
             "AMDR is a daily range on one meal",
             "Default exercise inputs",
             "Diet rules match ingredient names"
-          ]
+          ],
+          "strength": 2,
+          "next": "Real exercise details, allergen tags"
         },
         {
           "icon": "group",
@@ -1366,7 +1368,9 @@
             "Not deployed",
             "No database migrations",
             "Taste and health outcomes unknown"
-          ]
+          ],
+          "strength": 1,
+          "next": "Deploy, then test with people"
         }
       ]
     },
@@ -1424,6 +1428,11 @@
             "Add database migrations",
             "Deploy to Cloud Run",
             "Add user accounts"
+          ],
+          "icons": [
+            "inventory_2",
+            "cloud_upload",
+            "person"
           ]
         },
         {
@@ -1432,6 +1441,11 @@
             "Run the benchmark with USDA keys",
             "Ask for real exercise details",
             "Tag allergens on ingredients"
+          ],
+          "icons": [
+            "fact_check",
+            "fitness_center",
+            "no_food"
           ]
         },
         {
@@ -1440,6 +1454,11 @@
             "Grow to 75–100 recipes",
             "Connect live store prices",
             "Use feedback, then test with people"
+          ],
+          "icons": [
+            "menu_book",
+            "storefront",
+            "group"
           ]
         }
       ]
@@ -1464,10 +1483,10 @@
       ],
       "qr_label": "Scan for the live demo",
       "image": {
-        "path": "assets/figures/close-salmon.png",
-        "alt": "Flat illustration of a salmon and quinoa plate from the recipe library."
+        "path": "assets/photos/close-chicken-fried-rice.jpg",
+        "alt": "Photo of a plate of chicken fried rice, the meal this deck followed."
       },
-      "image_caption": "Salmon Quinoa Plate, one of the 34 curated recipes. A study project, not medical advice.",
+      "image_caption": "Chicken fried rice: 694 kcal against a 691 kcal target.",
       "question": "Where do I try it?",
       "notes": {
         "purpose": "Thank the audience and point to the demo and code.",
@@ -1479,7 +1498,8 @@
           "sources.md"
         ]
       },
-      "header_style": "appendix"
+      "header_style": "appendix",
+      "image_note": "A study project, not medical advice."
     }
   ],
   "project_layouts": "project_layouts.py",
