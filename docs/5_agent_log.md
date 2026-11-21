@@ -8130,5 +8130,4 @@ the four-process test on 3 of 3 runs, and adding a model field fails the drift t
 Mike's real pre-G4 file upgraded with both plans kept and their request ids filled, and importing
 the JSON twice gave 75 + 19, then 0 + 0.
 
-Please review the rollback claim, the stamping of unversioned files, and startup upgrades for
-hosted mode.
+On 21 November Mike agreed to leave the 75 records out and asked to merge without a Codex review.

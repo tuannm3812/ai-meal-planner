@@ -47,7 +47,7 @@ update when a task is done.
 
 ## Repo clean-up
 
-- [ ] Decide what to do with the 75 records in local `database/meal_history.json`. They look like test output, so the recommendation is not to import them (agent log, 7 November 2026).
+- [x] Decide what to do with the 75 records in local `database/meal_history.json`. Done 21 November 2026: Mike chose not to import them, because they are test output.
 - [ ] Raise `ProfileNotFound` or remove it. An unknown `user_id` silently gets the default profile.
 - [ ] Add accounts. Endpoints that take a `user_id` take it on trust. `docs/4_next_steps.md` §7.7.
 - [ ] Reword the app's step 1 panel, which says a trained model "estimates the energy you burn in a day".

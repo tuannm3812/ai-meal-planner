@@ -112,8 +112,8 @@ the hand-offs by watching the log; its header says how to run it.
 
 - `.streamlit/secrets.toml` is now gitignored (PR #7). Local
   `database/meal_history.json` still holds 75 records, most of them likely
-  synthetic (see the agent log). The 2026-11-07 entry recommends not importing
-  them; deleting them is an owner decision.
+  synthetic. On 2026-11-21 the owner chose not to import them; they are not in
+  any database.
 - Storage defaults to `STORAGE_BACKEND=sqlite` and starts empty; JSON history
   is invisible until `scripts/migrate_json_to_sqlite.py` runs, which skips
   records already stored. Alembic owns the schema and upgrades at startup
