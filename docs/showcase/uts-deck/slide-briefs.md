@@ -525,7 +525,7 @@ Exact face text:
 
 ## 12. One service, two clients, four agents
 
-Layout: mp_architecture
+Layout: mp_arch_flow
 
 Reader question: What is it made of?
 
@@ -540,40 +540,65 @@ Exact face text:
 - EVIDENCE
 - Architecture
 - One service, two clients, four agents
-- A request flows left to right. Each box names the model, data or tool behind it.
+- One request through the system, stage by stage.
 - AI Meal Planner
 - 12
 - TAKEAWAY
 - Both clients use the same planning service, and the one trained model is 0.64 MB, so the core path needs no GPU.
-- CLIENTS
+- Ask
+- two clients
 - API
-- PLANNING SERVICE
-- Streamlit
-- Live, public demo
-- React
-- Guided flow, run / locally
 - FastAPI
-- Typed JSON, API / keys, rate limits
+- Plan
+- MealPlanningService, four agents
+- Answer
+- for the person
+- 1
+- ask
+- profile and craving
+- Streamlit
+- Live public demo
+- React
+- Guided flow, run locally
+- 2
+- validate
+- API key and rate limit
+- typed request and / response
 - SQLite
-- Local history, via / SQLModel
-- MealPlanningService
-- Calorie expenditure
-- Trained HistGradientBoosting model
-- Meal recommendation
-- TF-IDF search of 34 recipes, diet rules
-- Nutrition verification
-- Local tables; USDA, FatSecret with keys
-- Balance and reconcile
-- A service step: linear programme for portions
-- Supermarket
-- Local store items and category prices
-- BUILT WITH
-- Python
-- Docker
-- GitHub Actions
-- Cloud Run, not yet live
-- OpenTelemetry
-- Gemini, optional
+- plan history, local runs
+- 3
+- budget
+- trained model estimates the day; the goal sets the meal target
+- 4
+- choose
+- rules out conflicts, then TF-IDF over 34 recipes; sizes it
+- 5
+- verify
+- local tables first; USDA, FatSecret with keys; estimates labelled
+- 6
+- balance
+- a linear programme keeps macros inside AMDR
+- 7
+- shop
+- store items, else category prices
+- fallback
+- a standard meal and a note
+- refused
+- no plan, not a guess
+- 8
+- show
+- meal, kcal and macro balance
+- sources, estimates marked
+- shopping list
+- optional Gemini note
+- Typed JSON
+- never raw model text
+- Runs with no keys
+- keys only add outside checks
+- Estimates labelled
+- each ingredient shows its source
+- Health data out of traces
+- a test holds traces to an allowlist
 
 ## 13. Built like a product, not a notebook
 

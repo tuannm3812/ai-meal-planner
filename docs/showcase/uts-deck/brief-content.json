@@ -921,17 +921,19 @@
     },
     {
       "id": "architecture",
-      "layout": "mp_architecture",
+      "layout": "mp_arch_flow",
       "section": "Evidence",
       "topic": "Architecture",
       "accent": "plum",
       "title": "One service, two clients, four agents",
-      "subtitle": "A request flows left to right. Each box names the model, data or tool behind it.",
+      "subtitle": "One request through the system, stage by stage.",
       "takeaway": "Both clients use the same planning service, and the one trained model is 0.64 MB, so the core path needs no GPU.",
       "question": "What is it made of?",
       "notes": {
         "purpose": "Show the whole system on one page.",
         "script": [
+          "Read left to right by stage, top to bottom inside a stage. Step 4 is the only exit: no close match falls back to a standard meal; nothing safe is refused.",
+          "Docker, GitHub Actions and the Cloud Run workflow are on the engineering slide. Gemini only writes an optional note, and only with a key.",
           "Both clients use the same planning service, so the logic lives in one place.",
           "The hosted demo runs the same service inside Streamlit.",
           "Sources: docs/2_architecture.md; pyproject.toml; frontend/package.json."
@@ -1041,6 +1043,169 @@
             "googlegemini",
             "Gemini, optional"
           ]
+        ]
+      },
+      "flow": {
+        "lanes": [
+          {
+            "key": "ask",
+            "title": "Ask",
+            "sub": "two clients",
+            "tone": "slate"
+          },
+          {
+            "key": "api",
+            "title": "API",
+            "sub": "FastAPI",
+            "tone": "blue"
+          },
+          {
+            "key": "plan",
+            "title": "Plan",
+            "sub": "MealPlanningService, four agents",
+            "tone": "plum"
+          },
+          {
+            "key": "answer",
+            "title": "Answer",
+            "sub": "for the person",
+            "tone": "teal"
+          }
+        ],
+        "ask": {
+          "step": {
+            "n": 1,
+            "title": "ask",
+            "text": "profile and craving"
+          },
+          "clients": [
+            {
+              "title": "Streamlit",
+              "text": "Live public demo",
+              "logos": [
+                "streamlit"
+              ]
+            },
+            {
+              "title": "React",
+              "text": "Guided flow, run locally",
+              "logos": [
+                "react",
+                "vite",
+                "tailwindcss"
+              ]
+            }
+          ]
+        },
+        "api": {
+          "step": {
+            "n": 2,
+            "title": "validate",
+            "bullets": [
+              "API key and rate limit",
+              "typed request and response"
+            ],
+            "logos": [
+              "fastapi",
+              "pydantic"
+            ]
+          },
+          "store": {
+            "title": "SQLite",
+            "text": "plan history, local runs",
+            "logos": [
+              "sqlite"
+            ]
+          }
+        },
+        "plan": [
+          {
+            "n": 3,
+            "title": "budget",
+            "text": "trained model estimates the day; the goal sets the meal target",
+            "logos": [
+              "scikitlearn"
+            ]
+          },
+          {
+            "n": 4,
+            "title": "choose",
+            "text": "rules out conflicts, then TF-IDF over 34 recipes; sizes it",
+            "logos": [
+              "scikitlearn"
+            ],
+            "exit": true
+          },
+          {
+            "n": 5,
+            "title": "verify",
+            "text": "local tables first; USDA, FatSecret with keys; estimates labelled"
+          },
+          {
+            "n": 6,
+            "title": "balance",
+            "text": "a linear programme keeps macros inside AMDR",
+            "logos": [
+              "scipy"
+            ]
+          },
+          {
+            "n": 7,
+            "title": "shop",
+            "text": "store items, else category prices"
+          }
+        ],
+        "answer": {
+          "step": {
+            "n": 8,
+            "title": "show",
+            "bullets": [
+              "meal, kcal and macro balance",
+              "sources, estimates marked",
+              "shopping list",
+              "optional Gemini note"
+            ],
+            "logos": [
+              "googlegemini"
+            ]
+          },
+          "exits": [
+            {
+              "title": "fallback",
+              "text": "a standard meal and a note",
+              "tone": "ochre"
+            },
+            {
+              "title": "refused",
+              "text": "no plan, not a guess",
+              "tone": "red"
+            }
+          ]
+        },
+        "guarantees": [
+          {
+            "icon": "fact_check",
+            "title": "Typed JSON",
+            "text": "never raw model text"
+          },
+          {
+            "icon": "verified",
+            "title": "Runs with no keys",
+            "text": "keys only add outside checks"
+          },
+          {
+            "icon": "search",
+            "title": "Estimates labelled",
+            "text": "each ingredient shows its source"
+          },
+          {
+            "icon": "lock",
+            "title": "Health data out of traces",
+            "text": "a test holds traces to an allowlist",
+            "logos": [
+              "opentelemetry"
+            ]
+          }
         ]
       }
     },

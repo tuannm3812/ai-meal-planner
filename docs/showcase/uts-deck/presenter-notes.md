@@ -131,6 +131,8 @@ References:
 
 Show the whole system on one page.
 
+Read left to right by stage, top to bottom inside a stage. Step 4 is the only exit: no close match falls back to a standard meal; nothing safe is refused.
+Docker, GitHub Actions and the Cloud Run workflow are on the engineering slide. Gemini only writes an optional note, and only with a key.
 Both clients use the same planning service, so the logic lives in one place.
 The hosted demo runs the same service inside Streamlit.
 Sources: docs/2_architecture.md; pyproject.toml; frontend/package.json.

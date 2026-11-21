@@ -547,6 +547,135 @@ def mp_architecture(L, p, slide):
         x += tw + 6
 
 
+
+# -- 12: architecture as a stage flow ----------------------------------------------------------
+LANE_TONE = {'slate': ACCENT['slate'], 'blue': ACCENT['blue'], 'plum': ACCENT['plum'], 'teal': (V_TEAL, '#E6F2F1'),
+             'ochre': ACCENT['ochre'], 'red': ('#B3261E', '#F9E8E6')}
+
+
+def badge_n(L, p, n, x, y, colour, r=7):
+    p.rect(x, y, 2 * r, 2 * r, colour, 'ELLIPSE')
+    paint(L, p, str(n), x, y + r - 5.5, 2 * r, 8, WHITE, True, 'center')
+
+
+def step_card(L, p, x, y, w, h, colour, n, title, logos_=(), fill=WHITE):
+    L.outlined(p, x, y, w, h, fill, colour, .8)
+    badge_n(L, p, n, x + 7, y + 7, colour)
+    paint(L, p, title, x + 26, y + 6, w - 34, 10, INK, True)
+    for k, lg in enumerate(logos_):
+        logo(L, p, lg, x + w - 20 - k * 17, y + 6, 14)
+
+
+def bullets(L, p, items, x, y, w, size=8):
+    for k, b in enumerate(items):
+        p.rect(x, y + k * 12 + 4.5, 2.5, 2.5, BODY, 'ELLIPSE')
+        paint(L, p, b, x + 7, y + k * 12, w - 7, size, BODY)
+
+
+def mp_arch_flow(L, p, slide):
+    bottom = band(L, p, slide) - 14
+    f = slide['flow']
+    lanes_h = 214
+    gap = 8
+    widths = [128, 132, 420]
+    widths.append(W - sum(widths) - 3 * gap)
+    xs = [LEFT]
+    for wd in widths[:-1]:
+        xs.append(xs[-1] + wd + gap)
+    lane = {}
+    for (x, wd, ln) in zip(xs, widths, f['lanes']):
+        ink, tint = LANE_TONE[ln['tone']]
+        p.rect(x, TOP, wd, lanes_h, tint)
+        tw = L.metrics.fonts[(True, False)].getlength(ln['title']) / 120 * 12
+        paint(L, p, ln['title'], x + 8, TOP + 6, tw + 4, 12, ink, True)
+        paint(L, p, ln['sub'], x + 14 + tw, TOP + 9, wd - tw - 22, 8, BODY)
+        lane[ln['key']] = (x, wd, ink)
+    cy = TOP + 28
+    # 1 ask, then the two clients that send it
+    x, wd, ink = lane['ask']
+    a = f['ask']
+    step_card(L, p, x + 6, cy, wd - 12, 40, ink, a['step']['n'], a['step']['title'])
+    paint(L, p, a['step']['text'], x + 32, cy + 21, wd - 44, 8, BODY)
+    ch = (lanes_h - 28 - 40 - 8 - 6 - 6) / 2
+    for k, c in enumerate(a['clients']):
+        y = cy + 48 + k * (ch + 6)
+        L.outlined(p, x + 6, y, wd - 12, ch, WHITE, HAIR, .8)
+        for j, lg in enumerate(c['logos']):
+            logo(L, p, lg, x + 13 + j * 18, y + 8, 14)
+        paint(L, p, c['title'], x + 18, y + 28, wd - 30, 10, INK, True)
+        paint(L, p, c['text'], x + 18, y + 43, wd - 30, 8, BODY)
+    p.connector(x + wd - 6, cy + 20, lane['api'][0] + 6, cy + 20)
+    # 2 validate, and the local store
+    x, wd, ink = lane['api']
+    a = f['api']
+    vh = 96
+    step_card(L, p, x + 6, cy, wd - 12, vh, ink, a['step']['n'], a['step']['title'], a['step']['logos'])
+    bullets(L, p, a['step']['bullets'], x + 14, cy + 26, wd - 28)
+    st = a['store']
+    sy = cy + vh + 24
+    L.outlined(p, x + 6, sy, wd - 12, TOP + lanes_h - 8 - sy, WHITE, HAIR, .8)
+    logo(L, p, st['logos'][0], x + 13, sy + 8, 14)
+    paint(L, p, st['title'], x + 32, sy + 9, wd - 46, 10, INK, True)
+    paint(L, p, st['text'], x + 13, sy + 28, wd - 26, 8, BODY)
+    p.line(x + wd / 2, cy + vh, x + wd / 2, sy, BODY, .75, dash='DASH')
+    p.connector(x + wd - 6, cy + 20, lane['plan'][0] + 6, cy + 20)
+    # 3 to 7: the planning service, one row per step
+    x, wd, ink = lane['plan']
+    rows = f['plan']
+    rg = 6
+    rh = (lanes_h - 28 - 8 - rg * (len(rows) - 1)) / len(rows)
+    exit_y = None
+    for k, r in enumerate(rows):
+        y = cy + k * (rh + rg)
+        step_card(L, p, x + 6, y, wd - 12, rh, ink, r['n'], r['title'], r.get('logos', ()))
+        paint(L, p, r['text'], x + 92, y + 7, wd - 140, 8, BODY)
+        if k < len(rows) - 1:
+            p.connector(x + 20, y + rh, x + 20, y + rh + rg)
+        if r.get('exit'):
+            exit_y = y + rh / 2
+    # The two exits sit level with step 4; 8 show sits level with step 7, so both arrows run straight.
+    x, wd, ink = lane['answer']
+    a = f['answer']
+    exits = a['exits']
+    eh = 32
+    k4 = next(k for k, r in enumerate(rows) if r.get('exit'))
+    row_mid = lambda k: cy + k * (rh + rg) + rh / 2
+    ey0 = max(cy, row_mid(k4) - eh - 3)
+    for k, e in enumerate(exits):
+        ey = ey0 + k * (eh + 6)
+        e_ink, e_tint = LANE_TONE[e['tone']]
+        L.outlined(p, x + 6, ey, wd - 12, eh, e_tint, e_ink, .8)
+        paint(L, p, e['title'], x + 14, ey + 4, wd - 28, 10, e_ink, True)
+        paint(L, p, e['text'], x + 14, ey + 18, wd - 28, 8, BODY)
+    px = lane['plan'][0] + lane['plan'][1] - 6
+    mx = x - gap / 2
+    exit_ink = LANE_TONE['ochre'][0]
+    p.line(px, row_mid(k4), mx, row_mid(k4), exit_ink, .75, dash='DASH')
+    p.line(mx, ey0 + eh / 2, mx, ey0 + eh + 6 + eh / 2, exit_ink, .75, dash='DASH')
+    for k in range(len(exits)):
+        p.connector(mx, ey0 + k * (eh + 6) + eh / 2, x + 6, ey0 + k * (eh + 6) + eh / 2, color=exit_ink)
+    s8 = a['step']
+    sy8 = ey0 + 2 * (eh + 6) + 4
+    sh = TOP + lanes_h - 8 - sy8
+    step_card(L, p, x + 6, sy8, wd - 12, sh, ink, s8['n'], s8['title'], s8['logos'])
+    bullets(L, p, s8['bullets'], x + 14, sy8 + 26, wd - 28)
+    last = row_mid(len(rows) - 1)
+    p.connector(px, last, x + 6, last)
+    # what the whole flow guarantees
+    gy = TOP + lanes_h + 8
+    gh = bottom - gy
+    p.rect(LEFT, gy, W, gh, CARD)
+    gs = f['guarantees']
+    gw = (W - 16 - 8 * (len(gs) - 1)) / len(gs)
+    for k, g in enumerate(gs):
+        gx = LEFT + 8 + k * (gw + 8)
+        p.rect(gx, gy + 8, gw, gh - 16, WHITE)
+        dot_icon(L, p, g['icon'], ACCENT[accent(slide)][0], gx + 8, gy + 15, 16, 16)
+        paint(L, p, g['title'], gx + 32, gy + 16, gw - 62, 10, INK, True)
+        paint(L, p, g['text'], gx + 32, gy + 31, gw - 40, 8, BODY)
+        for j, lg in enumerate(g.get('logos', [])):
+            logo(L, p, lg, gx + gw - 22 - j * 17, gy + 15, 14)
+
 # -- 13: engineering ----------------------------------------------------------------------------
 def mp_engineering(L, p, slide):
     bottom = band(L, p, slide) - 14
@@ -741,5 +870,5 @@ def mp_close(L, p, slide):
     img(L, p, slide['image']['path'], slide['image']['alt'], 540, 100, 385, 385)
     put(L, p, slide['image_caption'], 540, 500, 385, 8, 'body', False, 'center')
 
-LAYOUTS = {f.__name__: f for f in (mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
+LAYOUTS = {f.__name__: f for f in (mp_arch_flow, mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
                                    mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next)}
