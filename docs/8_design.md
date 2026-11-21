@@ -86,6 +86,10 @@ browser. This screen fixes that gap; it is functional, not cosmetic.
   includes that exercise component. The showcase keeps the defaults and
   says so under "How this plan was made". Whether to add an optional
   "today's workout" input or retire the separate estimate is §7 question 5.
+  *Answered 2026-11-22 (DEC-33):* step 1 asks for today's workout: not
+  sure (the defaults, as before), a rest day (`duration_minutes: 0`), or
+  minutes and an optional heart rate. The plan's note describes the workout
+  from `calorie_budget.exercise`.
 - **Where the details go.** The profile is held in React state only:
   never in the URL (health fields would reach access logs), never in
   `localStorage`; `sessionStorage` would count as persistence and would
@@ -260,7 +264,7 @@ design on 2026-10-21 (DEC-29):
 3. The frozen `App.test.jsx` may be replaced by flow tests that keep
    every guarantee listed in §5: approved.
 4. History stays as a small "past plans" link in local mode (default).
-5. The meal request keeps the service's default workout (default).
+5. The meal request keeps the service's default workout (default). Replaced 2026-11-22: step 1 asks for today's workout (DEC-33).
 6. Local retention is unchanged and disclosed on screen (default); a
    no-retention mode would be a separate backend decision.
 7. The separate calorie estimate stays as a small header link next to

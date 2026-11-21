@@ -24,7 +24,14 @@ export const SAMPLE_PLAN = {
     "meal_calorie_budget_kcal": 2231.4,
     "model_version": "hist_gradient_boosting_deep_v0.1.0",
     "confidence": 0.82,
-    "warnings": []
+    "warnings": [],
+    "exercise": {
+      "duration_minutes": 30.0,
+      "heart_rate_bpm": 100.0,
+      "body_temp_c": 37.0,
+      "kcal": 125.0,
+      "defaulted": ["duration_minutes", "heart_rate_bpm", "body_temp_c"]
+    }
   },
   "meal_plan": {
     "user_context": {

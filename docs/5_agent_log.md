@@ -8131,3 +8131,16 @@ Mike's real pre-G4 file upgraded with both plans kept and their request ids fill
 the JSON twice gave 75 + 19, then 0 + 0.
 
 On 21 November Mike agreed to leave the 75 records out and asked to merge without a Codex review.
+
+## 2026-11-22 — Claude — P5: today's workout in the meal request
+
+Mike asked for P5, without a Codex review. `MealRequest` takes optional workout details
+(DEC-33), and `calorie_budget.exercise` reports what was used. React step 1 asks for today's
+workout: not sure, rest day, or minutes with an optional heart rate. The step 1 panel no longer
+says the model estimates the whole day.
+
+Verified: 652 Python tests and 164 frontend tests pass; ruff, eslint and the build are clean;
+`docs/openapi.json` is regenerated. Leaving the workout out gives the same estimate as an
+explicit 30 minutes at 100 bpm and 37 °C, so the baseline does not move. The sample plan's 125 kcal
+is the model's real figure. Step 1 checked in a browser.
+

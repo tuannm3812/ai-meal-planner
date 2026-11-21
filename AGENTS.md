@@ -107,6 +107,8 @@ the hand-offs by watching the log; its header says how to run it.
   still meet the targets; the median calorie deviation rounds to 0.4%.
 - 2026-11-07: Alembic migrations replace `create_all` (P2, DEC-32). A pre-G4
   database is now upgraded with its records instead of being refused.
+- 2026-11-22: the meal request takes today's workout (P5, DEC-33). A rest day
+  adds no exercise; leaving it out keeps the 30-minute default.
 
 ## Open risks
 

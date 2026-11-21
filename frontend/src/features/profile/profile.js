@@ -26,6 +26,15 @@ export const ACTIVITY_OPTIONS = [
   { value: '1.9', label: 'Extra active (physical job or training twice a day)' },
 ]
 
+// Today's workout (P5, DEC-33). The activity level describes a usual week;
+// the trained model adds today's session on top. "Not sure" sends nothing, so
+// the service assumes its default workout and the plan says so.
+export const WORKOUT_OPTIONS = [
+  { value: 'unsure', label: 'Not sure (assume a 30-minute workout)' },
+  { value: 'rest', label: 'Rest day, no workout' },
+  { value: 'trained', label: 'I worked out' },
+]
+
 // Only values backend/app/rag/rules.py already enforces. Diabetes is not
 // offered: the rules have no diabetes handling, so offering it would imply a
 // filter that does not exist.
@@ -47,6 +56,9 @@ export const DEFAULT_PROFILE = {
   heightCm: '168',
   weightKg: '64',
   activity: '1.55',
+  workout: 'unsure',
+  workoutMinutes: '30',
+  heartRate: '',
   avoid: [],
 }
 
@@ -66,6 +78,8 @@ export const REQUEST_FIELD_TO_PROFILE_KEY = {
   height_cm: 'heightCm',
   weight_kg: 'weightKg',
   activity_multiplier: 'activity',
+  duration_minutes: 'workoutMinutes',
+  heart_rate_bpm: 'heartRate',
   dietary_preferences: 'avoid',
   health_conditions: 'avoid',
 }
@@ -97,6 +111,34 @@ export function validateProfile(profile) {
   if (!ACTIVITY_OPTIONS.some((option) => option.value === profile.activity)) {
     errors.activity = 'Choose how active you are.'
   }
+  if (!WORKOUT_OPTIONS.some((option) => option.value === profile.workout)) {
+    errors.workout = 'Choose what you did today.'
+  } else if (profile.workout === 'trained') {
+    Object.assign(errors, validateWorkout(profile))
+  }
+  return errors
+}
+
+// Mirrors MealRequest.duration_minutes (0 to 600; 0 is the rest-day option)
+// and heart_rate_bpm (> 20 and <= 240, optional).
+function validateWorkout(profile) {
+  const errors = {}
+  const minutes = String(profile.workoutMinutes ?? '').trim()
+  const value = Number(minutes)
+  if (!minutes) {
+    errors.workoutMinutes = 'Enter how many minutes you worked out.'
+  } else if (!Number.isFinite(value)) {
+    errors.workoutMinutes = 'Workout length must be a number.'
+  } else if (value <= 0 || value > 600) {
+    errors.workoutMinutes = 'Workout length must be more than 0 and at most 600 minutes.'
+  }
+  const heartRate = String(profile.heartRate ?? '').trim()
+  const bpm = Number(heartRate)
+  if (heartRate && !Number.isFinite(bpm)) {
+    errors.heartRate = 'Heart rate must be a number.'
+  } else if (heartRate && (bpm <= 20 || bpm > 240)) {
+    errors.heartRate = 'Heart rate must be more than 20 and at most 240 bpm.'
+  }
   return errors
 }
 
@@ -110,12 +152,24 @@ export function profileToRequest(profile) {
     height_cm: Number(profile.heightCm),
     weight_kg: Number(profile.weightKg),
     activity_multiplier: Number(profile.activity),
+    ...workoutToRequest(profile),
     dietary_preferences: chosen
       .filter((option) => option.field === 'dietary_preferences')
       .map((option) => option.value),
     health_conditions: chosen
       .filter((option) => option.field === 'health_conditions')
       .map((option) => option.value),
+  }
+}
+
+// The workout fields, sent only when the person gave them.
+function workoutToRequest(profile) {
+  if (profile.workout === 'rest') return { duration_minutes: 0 }
+  if (profile.workout !== 'trained') return {}
+  const heartRate = String(profile.heartRate ?? '').trim()
+  return {
+    duration_minutes: Number(profile.workoutMinutes),
+    ...(heartRate ? { heart_rate_bpm: Number(heartRate) } : {}),
   }
 }
 

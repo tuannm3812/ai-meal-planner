@@ -399,3 +399,19 @@ def test_a_retry_that_verifies_to_zero_reports_the_full_miss() -> None:
     assert rec.verified_calories_after == 0.0
     assert rec.deviation_after == 1.0
     assert rec.within_tolerance is False
+
+
+def test_the_meal_request_workout_reaches_the_calorie_model() -> None:
+    """P5: the meal flow no longer has to assume a 30-minute workout."""
+    profile = {"age": 34, "sex": "female", "height_cm": 168, "weight_kg": 64}
+    rest = _service().generate(MealRequest(craving="salad", duration_minutes=0, **profile))
+    workout = _service().generate(
+        MealRequest(craving="salad", duration_minutes=60, heart_rate_bpm=130, **profile)
+    )
+
+    assert rest.calorie_budget.exercise.kcal == 0
+    assert workout.calorie_budget.exercise.duration_minutes == 60
+    assert workout.calorie_budget.exercise.heart_rate_bpm == 130
+    assert workout.calorie_budget.estimated_daily_expenditure_kcal > (
+        rest.calorie_budget.estimated_daily_expenditure_kcal
+    )

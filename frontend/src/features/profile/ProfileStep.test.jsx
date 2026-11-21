@@ -72,6 +72,30 @@ describe('Profile step', () => {
     })
   })
 
+  it("sends today's workout only after the person says they worked out", async () => {
+    const user = userEvent.setup()
+    render(<MealFlow />)
+
+    expect(screen.queryByLabelText('Minutes')).not.toBeInTheDocument()
+    await user.selectOptions(screen.getByLabelText("Today's workout"), 'trained')
+    await user.clear(screen.getByLabelText('Minutes'))
+    await user.type(screen.getByLabelText('Minutes'), '50')
+    await user.type(screen.getByLabelText('Average heart rate (optional)'), '140')
+    await planMeal(user)
+
+    expect(axios.post.mock.calls[0][1]).toMatchObject({ duration_minutes: 50, heart_rate_bpm: 140 })
+  })
+
+  it('sends a rest day as 0 minutes', async () => {
+    const user = userEvent.setup()
+    render(<MealFlow />)
+
+    await user.selectOptions(screen.getByLabelText("Today's workout"), 'rest')
+    await planMeal(user)
+
+    expect(axios.post.mock.calls[0][1].duration_minutes).toBe(0)
+  })
+
   it('shows a field message and sends nothing while a detail is out of range', async () => {
     const user = userEvent.setup()
     render(<MealFlow />)
@@ -252,6 +276,7 @@ describe('Profile step', () => {
       screen.getByLabelText('Height (cm)'),
       screen.getByLabelText('Weight (kg)'),
       screen.getByLabelText('How active are you?'),
+      screen.getByLabelText("Today's workout"),
       ...['Vegetarian', 'Vegan', 'Dairy-free', 'Gluten-free', 'Peanut allergy', 'Kidney disease'].map(
         (name) => screen.getByRole('checkbox', { name }),
       ),

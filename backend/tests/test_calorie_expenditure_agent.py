@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from backend.app.agents.calorie_expenditure_agent import (
     CalorieExpenditureAgent,
     CalorieExpenditureRequest,
@@ -103,3 +105,54 @@ def test_the_floor_applies_only_to_weight_loss() -> None:
 
     assert budget == 1243.8
     assert not any("minimum" in warning for warning in warnings)
+
+
+def _model_agent() -> CalorieExpenditureAgent:
+    return CalorieExpenditureAgent(model_path=MODEL_PATH, model_version="test_model")
+
+
+def _person(**workout: float) -> CalorieExpenditureRequest:
+    return CalorieExpenditureRequest(
+        age=34, sex="female", height_cm=168, weight_kg=64, activity_multiplier=1.55, **workout
+    )
+
+
+def test_a_rest_day_adds_no_exercise() -> None:
+    """P5: with 0 minutes the daily estimate is the activity-adjusted BMR alone."""
+    rest = _model_agent().predict(_person(duration_minutes=0))
+
+    bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
+    assert rest.exercise.kcal == 0
+    assert rest.estimated_daily_expenditure_kcal == round(bmr * 1.55, 1)
+
+
+def test_the_workout_given_is_the_workout_used() -> None:
+    short = _model_agent().predict(_person(duration_minutes=15, heart_rate_bpm=95))
+    long = _model_agent().predict(_person(duration_minutes=60, heart_rate_bpm=95))
+
+    assert long.exercise.duration_minutes == 60
+    assert long.exercise.heart_rate_bpm == 95
+    assert long.exercise.defaulted == ["body_temp_c"]
+    assert long.exercise.kcal > short.exercise.kcal > 0
+    assert (
+        long.estimated_daily_expenditure_kcal - short.estimated_daily_expenditure_kcal
+        == pytest.approx(long.exercise.kcal - short.exercise.kcal, abs=0.2)
+    )
+
+
+def test_missing_workout_details_are_named_as_defaults() -> None:
+    """Leaving the workout out keeps the old assumption, and the response says so."""
+    unknown = _model_agent().predict(_person())
+    explicit = _model_agent().predict(
+        _person(duration_minutes=30, heart_rate_bpm=100, body_temp_c=37)
+    )
+
+    assert unknown.exercise.defaulted == ["duration_minutes", "heart_rate_bpm", "body_temp_c"]
+    assert explicit.exercise.defaulted == []
+    assert unknown.estimated_daily_expenditure_kcal == explicit.estimated_daily_expenditure_kcal
+
+
+def test_the_fallback_reports_no_exercise() -> None:
+    response = CalorieExpenditureAgent().predict(_person(duration_minutes=45))
+
+    assert response.exercise is None

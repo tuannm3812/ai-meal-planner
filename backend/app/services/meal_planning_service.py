@@ -385,6 +385,9 @@ class MealPlanningService:
                 if request.activity_multiplier is not None
                 else profile["workout_level"]
             ),
+            duration_minutes=request.duration_minutes,
+            heart_rate_bpm=request.heart_rate_bpm,
+            body_temp_c=request.body_temp_c,
             goal=request.goal,
             health_conditions=request.health_conditions,
         )
