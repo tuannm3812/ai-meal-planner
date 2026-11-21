@@ -149,6 +149,29 @@ export function matchBadge(plan) {
 
 const kcal = (value) => `${Math.round(value).toLocaleString('en-AU')} kcal`
 
+// What the trained model added for today's workout, from the service's own
+// `calorie_budget.exercise` (DEC-33). The rule-based fallback adds none and
+// reports none.
+function workoutNote(budget) {
+  const exercise = budget.exercise
+  if (!exercise || typeof exercise !== 'object') {
+    // A plan saved before DEC-33 says nothing; its model used the defaults.
+    return budget.model_version && !budget.model_version.startsWith('mifflin_st_jeor')
+      ? 'That estimate includes a default 30-minute workout at 100 bpm.'
+      : null
+  }
+  if (!isNumber(exercise.duration_minutes) || !isNumber(exercise.kcal)) return null
+  if (exercise.duration_minutes === 0) return 'No workout was added, because today is a rest day.'
+  const defaulted = Array.isArray(exercise.defaulted) ? exercise.defaulted : []
+  const minutes = Math.round(exercise.duration_minutes)
+  const bpm = isNumber(exercise.heart_rate_bpm) ? Math.round(exercise.heart_rate_bpm) : null
+  const pace = bpm === null ? '' : defaulted.includes('heart_rate_bpm') ? ` at an assumed ${bpm} bpm` : ` at ${bpm} bpm`
+  const added = `adding ${kcal(exercise.kcal)}`
+  return defaulted.includes('duration_minutes')
+    ? `That estimate includes a default ${minutes}-minute workout${pace}, ${added}, because no workout was given.`
+    : `That estimate includes your ${minutes}-minute workout${pace}, ${added}.`
+}
+
 // "How this plan was made": the service's own notes, in its words, plus the
 // daily estimate it sized the meal from. Nothing here is a step the service
 // did not report.
@@ -162,14 +185,8 @@ export function howItWasMade(plan) {
         ? `Your estimated daily energy is ${kcal(budget.estimated_daily_expenditure_kcal)}.`
         : `Your estimated daily energy is ${kcal(budget.estimated_daily_expenditure_kcal)}; this meal is sized to ${kcal(target)}.`,
     )
-    // The trained model adds a workout the meal request cannot describe; the
-    // service fills its defaults (docs/8_design.md §3.1). The rule-based
-    // fallback adds none.
-    if (budget.model_version && !budget.model_version.startsWith('mifflin_st_jeor')) {
-      notes.push(
-        'That estimate includes a default 30-minute workout at 100 bpm, because the meal request has no workout details.',
-      )
-    }
+    const workout = workoutNote(budget)
+    if (workout) notes.push(workout)
   }
   for (const warnings of [
     plan?.meal_plan?.metadata?.warnings,

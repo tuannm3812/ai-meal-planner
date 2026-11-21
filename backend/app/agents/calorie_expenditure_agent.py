@@ -18,11 +18,35 @@ class CalorieExpenditureRequest(BaseModel):
     height_cm: float = Field(gt=80, le=260)
     weight_kg: float = Field(gt=20, le=350)
     activity_multiplier: float = Field(default=1.35, gt=1.0, le=2.5)
-    duration_minutes: float | None = Field(default=None, gt=0, le=600)
+    # 0 is a rest day: no exercise is added. None means not known, so the
+    # model's defaults stand in (EXERCISE_DEFAULTS).
+    duration_minutes: float | None = Field(default=None, ge=0, le=600)
     heart_rate_bpm: float | None = Field(default=None, gt=20, le=240)
     body_temp_c: float | None = Field(default=None, gt=30, le=45)
     goal: str = Field(default="maintain", min_length=3, max_length=40)
     health_conditions: list[str] = Field(default_factory=list)
+
+
+EXERCISE_DEFAULTS = {"duration_minutes": 30.0, "heart_rate_bpm": 100.0, "body_temp_c": 37.0}
+"""What the model assumes for a workout detail the request leaves out."""
+
+
+class ExerciseEstimate(BaseModel):
+    """The workout the trained model added to the daily estimate (DEC-33).
+
+    Attributes:
+        duration_minutes: Minutes of exercise; 0 is a rest day.
+        heart_rate_bpm: Average heart rate during the workout.
+        body_temp_c: Body temperature during the workout.
+        kcal: Calories the workout added to the daily estimate.
+        defaulted: The details the request left out, filled from EXERCISE_DEFAULTS.
+    """
+
+    duration_minutes: float
+    heart_rate_bpm: float
+    body_temp_c: float
+    kcal: float
+    defaulted: list[str] = Field(default_factory=list)
 
 
 class CalorieExpenditureResponse(BaseModel):
@@ -31,6 +55,8 @@ class CalorieExpenditureResponse(BaseModel):
     model_version: str
     confidence: float = Field(ge=0, le=1)
     warnings: list[str] = Field(default_factory=list)
+    # None when the rule-based fallback ran, which adds no exercise.
+    exercise: ExerciseEstimate | None = None
 
 
 class CalorieExpenditureAgent:
@@ -96,14 +122,15 @@ class CalorieExpenditureAgent:
             normalized_sex, sex_warning = self._normalize_sex_category(request.sex)
             if sex_warning:
                 warnings.append(sex_warning)
-            exercise_calories = self._predict_exercise_calories(request, normalized_sex)
-            expenditure = self._estimate_with_bmr(request) + exercise_calories
+            exercise, exercise_kcal = self._estimate_exercise(request, normalized_sex)
+            expenditure = self._estimate_with_bmr(request) + exercise_kcal
             confidence = 0.82
             model_version = self.model_version
         else:
             expenditure = self._estimate_with_bmr(request)
             confidence = 0.55
             model_version = "mifflin_st_jeor_fallback_v0.1.0"
+            exercise = None
             warnings.append("Using rule-based fallback until trained model artifact is available.")
 
         meal_budget, floor_warning = self._meal_budget(expenditure, request.goal, request.sex)
@@ -115,6 +142,7 @@ class CalorieExpenditureAgent:
             model_version=model_version,
             confidence=confidence,
             warnings=warnings,
+            exercise=exercise,
         )
 
     @classmethod
@@ -128,20 +156,40 @@ class CalorieExpenditureAgent:
             f"{sorted(cls._TRAINED_SEX_CATEGORIES)} and may return a degraded prediction."
         )
 
-    def _predict_exercise_calories(
+    def _estimate_exercise(
         self, request: CalorieExpenditureRequest, normalized_sex: str
-    ) -> float:
-        row = {
-            "Sex": normalized_sex,
-            "Age": request.age,
-            "Height": request.height_cm,
-            "Weight": request.weight_kg,
-            "Duration": request.duration_minutes or 30,
-            "Heart_Rate": request.heart_rate_bpm or 100,
-            "Body_Temp": request.body_temp_c or 37,
+    ) -> tuple[ExerciseEstimate, float]:
+        """Predict the calories one workout adds, filling unknown details.
+
+        Args:
+            request: The calorie request; any workout detail may be missing.
+            normalized_sex: The sex category the model was trained on.
+
+        Returns:
+            The workout used, and its unrounded calories for the daily sum
+            (the estimate reports them rounded). A rest day adds none and does
+            not call the model, whose training data has no zero-minute rows.
+        """
+        given = {field: getattr(request, field) for field in EXERCISE_DEFAULTS}
+        defaulted = [field for field, value in given.items() if value is None]
+        used = {
+            field: EXERCISE_DEFAULTS[field] if given[field] is None else given[field]
+            for field in EXERCISE_DEFAULTS
         }
-        prediction = self.model.predict(pd.DataFrame([row]))[0]
-        return max(float(prediction), 0.0)
+        if used["duration_minutes"] == 0:
+            kcal = 0.0
+        else:
+            row = {
+                "Sex": normalized_sex,
+                "Age": request.age,
+                "Height": request.height_cm,
+                "Weight": request.weight_kg,
+                "Duration": used["duration_minutes"],
+                "Heart_Rate": used["heart_rate_bpm"],
+                "Body_Temp": used["body_temp_c"],
+            }
+            kcal = max(float(self.model.predict(pd.DataFrame([row]))[0]), 0.0)
+        return ExerciseEstimate(**used, kcal=round(kcal, 1), defaulted=defaulted), kcal
 
     @staticmethod
     def _estimate_with_bmr(request: CalorieExpenditureRequest) -> float:

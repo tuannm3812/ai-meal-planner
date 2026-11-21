@@ -70,6 +70,20 @@ def test_generate_meal_plan_rejects_a_too_short_craving(client: TestClient) -> N
     assert client.post("/generate-meal-plan", json={"craving": "x"}).status_code == 422
 
 
+@pytest.mark.parametrize("workout", [{"duration_minutes": -1}, {"heart_rate_bpm": 300}])
+def test_generate_meal_plan_rejects_an_impossible_workout(
+    client: TestClient, workout: dict[str, float]
+) -> None:
+    body = {"craving": "salad", **workout}
+    assert client.post("/generate-meal-plan", json=body).status_code == 422
+
+
+def test_generate_meal_plan_reports_the_workout_it_used(client: TestClient) -> None:
+    body = {"craving": "salad", "duration_minutes": 0}
+    budget = client.post("/generate-meal-plan", json=body).json()["calorie_budget"]
+    assert budget["exercise"]["kcal"] == 0
+
+
 def test_predict_calorie_expenditure(client: TestClient) -> None:
     response = client.post(
         "/calorie-expenditure/predict",

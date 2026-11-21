@@ -112,9 +112,35 @@ describe('howItWasMade', () => {
   it('states the daily estimate, the default workout and the service notes', () => {
     const notes = howItWasMade(SAMPLE_PLAN)
     expect(notes[0]).toBe('Your estimated daily energy is 2,231 kcal; this meal is sized to 625 kcal.')
-    expect(notes[1]).toMatch(/default 30-minute workout at 100 bpm/)
+    expect(notes[1]).toBe(
+      'That estimate includes a default 30-minute workout at an assumed 100 bpm, adding 125 kcal, because no workout was given.',
+    )
     expect(notes).toContain('Matched terms: chicken, fried, rice')
     expect(notes).toContain('Estimated nutrition for soy sauce')
+  })
+
+  it('describes the workout the person gave, or a rest day', () => {
+    const withExercise = (exercise) => ({
+      ...SAMPLE_PLAN,
+      calorie_budget: { ...SAMPLE_PLAN.calorie_budget, exercise },
+    })
+    const given = { duration_minutes: 45, heart_rate_bpm: 130, body_temp_c: 37, kcal: 310 }
+    expect(howItWasMade(withExercise({ ...given, defaulted: ['body_temp_c'] }))[1]).toBe(
+      'That estimate includes your 45-minute workout at 130 bpm, adding 310 kcal.',
+    )
+    expect(howItWasMade(withExercise({ ...given, defaulted: ['heart_rate_bpm'] }))[1]).toMatch(
+      /at an assumed 130 bpm/,
+    )
+    expect(howItWasMade(withExercise({ ...given, duration_minutes: 0, kcal: 0 }))[1]).toBe(
+      'No workout was added, because today is a rest day.',
+    )
+  })
+
+  it('keeps the default note for a plan saved before workouts were reported', () => {
+    const oldBudget = { ...SAMPLE_PLAN.calorie_budget }
+    delete oldBudget.exercise
+    const notes = howItWasMade({ ...SAMPLE_PLAN, calorie_budget: oldBudget })
+    expect(notes[1]).toBe('That estimate includes a default 30-minute workout at 100 bpm.')
   })
 
   it('claims no workout when the rule-based fallback made the estimate', () => {
@@ -123,6 +149,7 @@ describe('howItWasMade', () => {
       calorie_budget: {
         ...SAMPLE_PLAN.calorie_budget,
         model_version: 'mifflin_st_jeor_fallback_v0.1.0',
+        exercise: null,
       },
     }
     expect(howItWasMade(plan).some((note) => note.includes('workout'))).toBe(false)

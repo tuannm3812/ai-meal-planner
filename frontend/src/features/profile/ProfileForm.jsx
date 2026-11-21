@@ -1,6 +1,12 @@
 import { useId } from 'react'
 
-import { ACTIVITY_OPTIONS, AVOID_OPTIONS, GOAL_OPTIONS, SEX_OPTIONS } from './profile'
+import {
+  ACTIVITY_OPTIONS,
+  AVOID_OPTIONS,
+  GOAL_OPTIONS,
+  SEX_OPTIONS,
+  WORKOUT_OPTIONS,
+} from './profile'
 
 const fieldClass =
   'mt-1.5 h-12 w-full rounded-[10px] border bg-surface px-3.5 text-base text-ink outline-none focus:ring-2 focus:ring-ink'
@@ -172,6 +178,39 @@ function ProfileForm({ profile, errors = {}, onChange }) {
             value={profile.activity}
           />
 
+          <div>
+            <ChoiceField
+              className="max-w-md"
+              error={errors.workout}
+              label="Today's workout"
+              onChange={set('workout')}
+              options={WORKOUT_OPTIONS}
+              value={profile.workout}
+            />
+            <p className="mt-1.5 text-sm text-muted">
+              Your activity level covers a usual week. Today's workout is added on top of it.
+            </p>
+            {profile.workout === 'trained' && (
+              <div className="mt-4 grid max-w-md grid-cols-2 gap-4">
+                <NumberField
+                  error={errors.workoutMinutes}
+                  label="Minutes"
+                  name="duration_minutes"
+                  onChange={set('workoutMinutes')}
+                  value={profile.workoutMinutes}
+                />
+                <NumberField
+                  error={errors.heartRate}
+                  label="Average heart rate (optional)"
+                  name="heart_rate_bpm"
+                  onChange={set('heartRate')}
+                  placeholder="bpm"
+                  value={profile.heartRate}
+                />
+              </div>
+            )}
+          </div>
+
           <fieldset>
             <legend className="font-semibold text-ink">
               Anything to avoid? <span className="font-normal text-muted">(optional)</span>
@@ -206,7 +245,10 @@ function ProfileForm({ profile, errors = {}, onChange }) {
       >
         <p className="text-sm text-ground/75">How your meal is sized</p>
         <ol className="mt-4 flex list-decimal flex-col gap-3.5 pl-5 text-base leading-6">
-          <li>A trained model estimates the energy you burn in a day.</li>
+          <li>
+            Your body and activity level set the energy you burn in a day, and a trained model adds
+            today's workout.
+          </li>
           <li>Your goal sets the calories for this meal, with a safe floor when losing weight.</li>
           <li>Portions are resized so protein, carbs and fat sit inside recommended ranges.</li>
           <li>Nutrition is checked against food data, and anything estimated is labelled.</li>

@@ -40,6 +40,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 30 | Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy | 2026-11-04 |
 | 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
 | 32 | Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal | 2026-11-07 |
+| 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -569,3 +570,27 @@ it twice is safe.
 Rules out a separate migration step before each deploy for now: with one SQLite
 file per instance there is nothing shared to run it against. Postgres (§7.3 of the
 next steps) should revisit this, because many instances would share one schema.
+
+## 2026-11-22 — Calorie model: real exercise details
+
+### DEC-33 — The meal request takes today's workout; a rest day adds no exercise
+
+The trained model predicts the calories of one workout, and the service adds
+them to BMR times the activity multiplier. The meal request had no workout
+fields, so every plan assumed 30 minutes at 100 bpm, even on a rest day.
+
+`MealRequest` now takes optional `duration_minutes`, `heart_rate_bpm` and
+`body_temp_c`, passed to the calorie model. `duration_minutes: 0` is a rest day:
+no exercise is added and the model is not called, because its training data has
+no zero-minute rows. A detail left out keeps the old default, so plans without
+workout details, including the meal-quality baseline, do not change.
+`calorie_budget.exercise` reports the workout used, its calories and which
+details were defaulted, so the clients describe it from the response.
+
+The React step 1 asks for today's workout (not sure, rest day, or minutes with
+an optional heart rate). Body temperature is not asked.
+
+Still open: the activity levels count exercise days in a usual week, so a
+workout day can still count some exercise twice. Ruled out for now: retiring the
+model's exercise estimate, which would remove the trained model from the meal
+flow.

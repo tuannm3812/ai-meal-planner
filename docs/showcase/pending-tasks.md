@@ -40,7 +40,7 @@ update when a task is done.
 
 ## Accuracy
 
-- [ ] **P5 Calorie model:** ask for real exercise details, or stop adding exercise on top of the activity multiplier. The meal flow uses defaults (30 minutes, 100 bpm), so activity may count twice.
+- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A workout day can still overlap the activity level.
 - [ ] **P6 Diet rules:** move from matching ingredient names to tagged allergens. Name matching missed soy sauce until DEC-31.
 - [ ] **Meal target:** record why it is 28% of the day, and review the cap for large budgets. The large athlete's meal is 19% of the day.
 - [ ] **Low-carb preference:** it favours no meal now, because no recipe is low-carb (DEC-30).
@@ -50,4 +50,4 @@ update when a task is done.
 - [x] Decide what to do with the 75 records in local `database/meal_history.json`. Done 21 November 2026: Mike chose not to import them, because they are test output.
 - [ ] Raise `ProfileNotFound` or remove it. An unknown `user_id` silently gets the default profile.
 - [ ] Add accounts. Endpoints that take a `user_id` take it on trust. `docs/4_next_steps.md` §7.7.
-- [ ] Reword the app's step 1 panel, which says a trained model "estimates the energy you burn in a day".
+- [x] Reword the app's step 1 panel, which said a trained model "estimates the energy you burn in a day". Done 22 November 2026 with P5.

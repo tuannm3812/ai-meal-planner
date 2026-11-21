@@ -41,6 +41,46 @@ describe('profileToRequest', () => {
   })
 })
 
+describe('the workout', () => {
+  it('sends nothing when the person is not sure, so the service default applies', () => {
+    expect(profileToRequest(DEFAULT_PROFILE)).not.toHaveProperty('duration_minutes')
+  })
+
+  it('sends 0 minutes for a rest day', () => {
+    const request = profileToRequest({ ...DEFAULT_PROFILE, workout: 'rest' })
+    expect(request.duration_minutes).toBe(0)
+    expect(request).not.toHaveProperty('heart_rate_bpm')
+  })
+
+  it('sends the minutes, and the heart rate only when given', () => {
+    const trained = { ...DEFAULT_PROFILE, workout: 'trained', workoutMinutes: '45' }
+    expect(profileToRequest(trained)).toMatchObject({ duration_minutes: 45 })
+    expect(profileToRequest(trained)).not.toHaveProperty('heart_rate_bpm')
+    expect(profileToRequest({ ...trained, heartRate: '135' }).heart_rate_bpm).toBe(135)
+  })
+
+  it.each([
+    ['workoutMinutes', '', 'Enter how many minutes you worked out.'],
+    ['workoutMinutes', '0', 'Workout length must be more than 0 and at most 600 minutes.'],
+    ['workoutMinutes', '601', 'Workout length must be more than 0 and at most 600 minutes.'],
+    ['heartRate', '20', 'Heart rate must be more than 20 and at most 240 bpm.'],
+    ['heartRate', 'fast', 'Heart rate must be a number.'],
+  ])('rejects %s = %j after "I worked out"', (key, value, message) => {
+    const trained = { ...DEFAULT_PROFILE, workout: 'trained', [key]: value }
+    expect(validateProfile(trained)[key]).toBe(message)
+  })
+
+  it('ignores the workout fields unless the person worked out', () => {
+    const rest = { ...DEFAULT_PROFILE, workout: 'rest', workoutMinutes: '', heartRate: 'x' }
+    expect(validateProfile(rest)).toEqual({})
+  })
+
+  it('maps a rejected workout field back to its input', () => {
+    const detail = [{ loc: ['body', 'duration_minutes'], msg: 'too long' }]
+    expect(profileErrorsFrom422(detail)).toEqual({ workoutMinutes: 'too long' })
+  })
+})
+
 describe('validateProfile', () => {
   it('accepts the defaults', () => {
     expect(validateProfile(DEFAULT_PROFILE)).toEqual({})
