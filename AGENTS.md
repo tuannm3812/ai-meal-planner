@@ -112,6 +112,9 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-11-22: diet rules read `data/reference/ingredient_allergens.json`, not
   ingredient names (P6, DEC-34). A new ingredient must be tagged there; an
   untagged one is refused under any diet rule.
+- 2026-11-22: the corpus holds 76 recipes (P7, DEC-35); the wider check meets
+  the targets for 152 of 152. New ingredients use estimated nutrition until a
+  USDA run (P4).
 
 ## Open risks
 

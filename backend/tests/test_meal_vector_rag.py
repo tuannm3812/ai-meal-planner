@@ -161,10 +161,10 @@ def test_relevant_meals_rank_ahead_of_profile_boosted_ones() -> None:
     retriever = MealVectorRetriever(CORPUS_PATH)
 
     results = retriever.retrieve(
-        "eggs",
+        "winter",
         dietary_restrictions=["dairy-free", "high-protein"],
-        dietary_preferences=["dairy-free", "low-sodium"],
-        top_k=34,
+        dietary_preferences=["gluten-free", "low-sodium"],
+        top_k=100,
     )
 
     relevant = [r.relevance >= retriever.min_score for r in results]

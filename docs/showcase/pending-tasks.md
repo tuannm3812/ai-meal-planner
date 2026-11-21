@@ -33,7 +33,7 @@ update when a task is done.
 - [x] **P2 Storage:** add database migrations (Alembic). Done 7 November 2026, DEC-32.
 - [ ] **P3 Hosting:** create the GCP project and deploy to Cloud Run, then confirm a real trace arrives. `docs/6_deployment.md` §1.
 - [ ] **P4 Data:** run the benchmark with USDA keys, so nutrition is checked independently of the local tables.
-- [ ] **P7 Recipes:** grow the library from 34 to 75–100 recipes. It gates the vector database. `docs/4_next_steps.md` §7.9.
+- [x] **P7 Recipes:** grow the library from 34 to 75–100 recipes. Done 22 November 2026: 76 recipes, DEC-35. The deck's "34 recipes" now reads 76.
 - [ ] **P8 Prices:** connect live store prices. 4 of 6 items in the example plan use category prices.
 - [ ] **P9 Learning:** use saved meals and ratings in ranking. They are collected but unused. `docs/4_next_steps.md` §7.10.
 - [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets.

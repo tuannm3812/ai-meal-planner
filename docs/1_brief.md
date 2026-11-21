@@ -38,7 +38,7 @@ The MVP is done when all of the following hold. Each is checkable, not aspiratio
       unavailable, falls back to local estimates with the degradation reported in
       `warnings` rather than hidden.
 - [x] RAG retrieval runs over the curated local meal corpus (34 templates as of
-      2026-09-10) with no large recipe database required to get a plan.
+      2026-09-10, 76 since 2026-11-22) with no large recipe database required to get a plan.
 
 As of 2026-09-10 items 1, 3 and 4 are open. The FastAPI backend has no
 `response_model` on any route and all 8 routes return `dict[str, Any]` (item 1);

@@ -8157,3 +8157,16 @@ keywords. No current ingredient holds tree nuts, so no plan changes, but new one
 Verified: 662 Python tests pass; ruff is clean. The meal-quality baseline's report is
 byte-identical before and after.
 
+## 2026-11-22 — Claude — P7: 76 recipes
+
+Mike asked for P7, without a Codex review. The corpus grows from 34 to 76 recipes (DEC-35). There
+are 15 new ingredients, each tagged and given USDA-typical values as estimates. React files are
+untouched.
+
+Verified: the wider check (`--wider`) gives 152 of 152 plans meeting the targets, each served the
+recipe it named. Six recipes were adjusted to get there, and one was renamed so it no longer took
+"Vegetarian Spinach Omelette" requests. The fixed baseline stays at 72 of 72, and the plan changes
+are listed in DEC-35. Three retrieval tests changed: "burrito bowl" now expects Pork Burrito Bowl,
+and the two relevance-over-score tests use "winter", because "eggs" now leads on score. 662 Python
+tests pass and ruff is clean.
+

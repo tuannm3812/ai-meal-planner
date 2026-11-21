@@ -1344,5 +1344,1876 @@
         "base_quantity_grams": 90
       }
     ]
+  },
+  {
+    "meal_id": "lemon_cod_potato_traybake",
+    "name": "Lemon Cod Potato Traybake",
+    "description": "Baked cod with potatoes, zucchini and capsicum.",
+    "tags": [
+      "fish",
+      "white fish",
+      "cod",
+      "traybake",
+      "potato",
+      "dinner",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "cod fillet",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 250
+      },
+      {
+        "item_name": "zucchini",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 12
+      }
+    ]
+  },
+  {
+    "meal_id": "pork_stir_fry_noodles",
+    "name": "Pork Stir Fry Noodles",
+    "description": "Lean pork tossed with rice noodles and crisp vegetables.",
+    "tags": [
+      "pork",
+      "noodles",
+      "noodle",
+      "stir fry",
+      "asian",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "pork tenderloin",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 90
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "low sodium soy sauce",
+        "base_quantity_grams": 15
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "tempeh_quinoa_power_bowl",
+    "name": "Tempeh Quinoa Power Bowl",
+    "description": "Seared tempeh over quinoa with spinach and carrot.",
+    "tags": [
+      "tempeh",
+      "quinoa",
+      "bowl",
+      "vegan",
+      "plant based",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "tempeh",
+        "base_quantity_grams": 130
+      },
+      {
+        "item_name": "cooked quinoa",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "edamame_brown_rice_bowl",
+    "name": "Edamame Brown Rice Bowl",
+    "description": "Edamame, brown rice, cucumber and carrot with a sesame dressing.",
+    "tags": [
+      "edamame",
+      "rice bowl",
+      "rice",
+      "asian",
+      "vegan",
+      "plant based"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "edamame",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 8
+      },
+      {
+        "item_name": "low sodium soy sauce",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "moroccan_chicken_couscous",
+    "name": "Moroccan Chicken Couscous",
+    "description": "Spiced chicken thigh with couscous, pumpkin and chickpeas.",
+    "tags": [
+      "chicken",
+      "couscous",
+      "moroccan",
+      "pumpkin",
+      "dinner",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken thigh",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "cooked couscous",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "pumpkin",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "chickpeas",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "almond_crusted_chicken_plate",
+    "name": "Almond Crusted Chicken Plate",
+    "description": "Almond-crusted chicken with roast sweet potato and broccoli.",
+    "tags": [
+      "chicken",
+      "almond",
+      "nuts",
+      "sweet potato",
+      "dinner",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "tree nut allergy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "almonds",
+        "base_quantity_grams": 20
+      },
+      {
+        "item_name": "sweet potato",
+        "base_quantity_grams": 200
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 6
+      }
+    ]
+  },
+  {
+    "meal_id": "cashew_chicken_stir_fry",
+    "name": "Cashew Chicken Stir Fry",
+    "description": "Chicken, cashews and capsicum stir-fried and served on rice.",
+    "tags": [
+      "chicken",
+      "cashew",
+      "nuts",
+      "stir fry",
+      "asian",
+      "rice",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease",
+      "tree nut allergy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "cashews",
+        "base_quantity_grams": 20
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "low sodium soy sauce",
+        "base_quantity_grams": 12
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 6
+      }
+    ]
+  },
+  {
+    "meal_id": "beef_mushroom_rice_bowl",
+    "name": "Beef Mushroom Rice Bowl",
+    "description": "Lean beef and mushrooms over brown rice with spinach.",
+    "tags": [
+      "beef",
+      "mushroom",
+      "rice bowl",
+      "rice",
+      "dinner",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lean beef mince",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "pumpkin_lentil_soup",
+    "name": "Pumpkin Lentil Soup",
+    "description": "Thick pumpkin and lentil soup with tomato, served with toast.",
+    "tags": [
+      "soup",
+      "pumpkin",
+      "lentil",
+      "vegan",
+      "plant based",
+      "winter"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lentils",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "pumpkin",
+        "base_quantity_grams": 200
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "tomato passata",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "whole wheat bread",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 14
+      }
+    ]
+  },
+  {
+    "meal_id": "salmon_potato_salad",
+    "name": "Salmon Potato Salad",
+    "description": "Warm potato salad with salmon, greens and cucumber.",
+    "tags": [
+      "salmon",
+      "fish",
+      "potato",
+      "salad",
+      "omega 3",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "pregnancy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "salmon fillet",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 220
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 6
+      }
+    ]
+  },
+  {
+    "meal_id": "turkey_zucchini_pasta",
+    "name": "Turkey Zucchini Pasta",
+    "description": "Wholemeal pasta with turkey, zucchini and tomato sauce.",
+    "tags": [
+      "pasta",
+      "turkey",
+      "zucchini",
+      "italian",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "lean turkey mince",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "wholemeal pasta",
+        "base_quantity_grams": 85
+      },
+      {
+        "item_name": "zucchini",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "tomato passata",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "chickpea_hummus_wrap",
+    "name": "Chickpea Hummus Wrap",
+    "description": "Wholemeal wrap with hummus, chickpeas, salad and capsicum.",
+    "tags": [
+      "wrap",
+      "hummus",
+      "chickpea",
+      "lunch",
+      "vegan",
+      "mediterranean"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "whole wheat tortilla",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "hummus",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "chickpeas",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 5
+      }
+    ]
+  },
+  {
+    "meal_id": "tofu_mushroom_noodle_soup",
+    "name": "Tofu Mushroom Noodle Soup",
+    "description": "Rice noodle soup with tofu, mushrooms and spinach.",
+    "tags": [
+      "soup",
+      "noodle",
+      "noodles",
+      "tofu",
+      "mushroom",
+      "asian",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "firm tofu",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "low sodium soy sauce",
+        "base_quantity_grams": 10
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 6
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_pumpkin_soup",
+    "name": "Chicken Pumpkin Soup",
+    "description": "Chicken soup with pumpkin, potato and carrot in a low-sodium broth.",
+    "tags": [
+      "soup",
+      "chicken",
+      "pumpkin",
+      "low sodium",
+      "hypertension",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "low-sodium",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "pumpkin",
+        "base_quantity_grams": 200
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "low sodium chicken broth",
+        "base_quantity_grams": 250
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "pork_sweet_potato_plate",
+    "name": "Pork Sweet Potato Plate",
+    "description": "Roast pork tenderloin with sweet potato and broccoli.",
+    "tags": [
+      "pork",
+      "sweet potato",
+      "dinner",
+      "roast",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "pork tenderloin",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "sweet potato",
+        "base_quantity_grams": 220
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "cod_fish_tacos",
+    "name": "Cod Fish Tacos",
+    "description": "Corn tortillas with cod, avocado, greens and tomato.",
+    "tags": [
+      "taco",
+      "tacos",
+      "fish",
+      "cod",
+      "mexican",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "cod fillet",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "corn tortilla",
+        "base_quantity_grams": 90
+      },
+      {
+        "item_name": "avocado",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      }
+    ]
+  },
+  {
+    "meal_id": "shrimp_couscous_bowl",
+    "name": "Shrimp Couscous Bowl",
+    "description": "Shrimp with couscous, zucchini and capsicum.",
+    "tags": [
+      "shrimp",
+      "prawn",
+      "couscous",
+      "seafood",
+      "mediterranean",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "shellfish allergy",
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "shrimp",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "cooked couscous",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "zucchini",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "beef_potato_hash",
+    "name": "Beef Potato Hash",
+    "description": "Pan-fried beef, potato, capsicum and mushrooms.",
+    "tags": [
+      "beef",
+      "potato",
+      "hash",
+      "brunch",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "high cholesterol",
+      "heart disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lean beef mince",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 230
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "mushroom_egg_toast",
+    "name": "Mushroom Egg Toast",
+    "description": "Scrambled eggs and mushrooms on wholemeal toast.",
+    "tags": [
+      "scrambled eggs",
+      "egg",
+      "mushroom",
+      "toast",
+      "breakfast",
+      "vegetarian"
+    ],
+    "dietary_flags": [
+      "vegetarian",
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "whole egg",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "whole wheat bread",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 4
+      }
+    ]
+  },
+  {
+    "meal_id": "almond_banana_overnight_oats",
+    "name": "Almond Banana Overnight Oats",
+    "description": "Oats soaked in oat milk with banana, almonds and chia.",
+    "tags": [
+      "oats",
+      "overnight oats",
+      "banana",
+      "almond",
+      "breakfast",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "tree nut allergy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "rolled oats",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "oat milk",
+        "base_quantity_grams": 200
+      },
+      {
+        "item_name": "banana",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "almonds",
+        "base_quantity_grams": 15
+      },
+      {
+        "item_name": "chia seeds",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "tempeh_taco_bowl",
+    "name": "Tempeh Taco Bowl",
+    "description": "Spiced tempeh with brown rice, black beans, tomato and avocado.",
+    "tags": [
+      "taco",
+      "tempeh",
+      "mexican",
+      "rice bowl",
+      "vegan",
+      "plant based"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "tempeh",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "black beans",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "avocado",
+        "base_quantity_grams": 40
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_quinoa_salad",
+    "name": "Chicken Quinoa Salad",
+    "description": "Chicken, quinoa, cucumber, tomato and spinach with olive oil.",
+    "tags": [
+      "chicken",
+      "quinoa",
+      "salad",
+      "lunch",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "cooked quinoa",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "tuna_pasta_salad",
+    "name": "Tuna Pasta Salad",
+    "description": "Wholemeal pasta salad with tuna, cucumber and tomato.",
+    "tags": [
+      "tuna",
+      "fish",
+      "pasta",
+      "salad",
+      "lunch",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "pregnancy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "tuna",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "wholemeal pasta",
+        "base_quantity_grams": 85
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 14
+      }
+    ]
+  },
+  {
+    "meal_id": "pork_fried_rice",
+    "name": "Pork Fried Rice",
+    "description": "Fried rice with lean pork, egg and vegetables.",
+    "tags": [
+      "fried rice",
+      "rice",
+      "pork",
+      "asian",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease",
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "pork tenderloin",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "whole egg",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "soy sauce",
+        "base_quantity_grams": 12
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "ginger_cod_rice_bowl",
+    "name": "Ginger Cod Rice Bowl",
+    "description": "Steamed cod over brown rice with broccoli, carrot and coconut aminos.",
+    "tags": [
+      "cod",
+      "fish",
+      "white fish",
+      "rice bowl",
+      "rice",
+      "asian",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "cod fillet",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 170
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 90
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "coconut aminos",
+        "base_quantity_grams": 15
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "edamame_noodle_salad",
+    "name": "Edamame Noodle Salad",
+    "description": "Cold rice noodle salad with edamame, carrot, cucumber and capsicum.",
+    "tags": [
+      "noodle",
+      "noodles",
+      "salad",
+      "edamame",
+      "asian",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "edamame",
+        "base_quantity_grams": 110
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "carrot",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 8
+      },
+      {
+        "item_name": "coconut aminos",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_thigh_rice_bowl",
+    "name": "Glazed Chicken Thigh Rice Bowl",
+    "description": "Glazed chicken thigh with rice and broccoli.",
+    "tags": [
+      "chicken",
+      "rice bowl",
+      "rice",
+      "asian",
+      "teriyaki",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken thigh",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 90
+      },
+      {
+        "item_name": "low sodium soy sauce",
+        "base_quantity_grams": 12
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 5
+      }
+    ]
+  },
+  {
+    "meal_id": "lentil_potato_curry",
+    "name": "Lentil Potato Curry",
+    "description": "Lentil and potato curry with spinach and tomato, served on rice.",
+    "tags": [
+      "curry",
+      "lentil",
+      "potato",
+      "indian",
+      "vegan",
+      "plant based"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lentils",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 180
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "tomato passata",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "black_bean_quinoa_salad",
+    "name": "Black Bean Quinoa Salad",
+    "description": "Black beans, quinoa, capsicum, tomato and avocado.",
+    "tags": [
+      "salad",
+      "black bean",
+      "beans",
+      "quinoa",
+      "mexican",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "black beans",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "cooked quinoa",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "avocado",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 5
+      }
+    ]
+  },
+  {
+    "meal_id": "turkey_couscous_meatballs",
+    "name": "Turkey Couscous Meatballs",
+    "description": "Turkey meatballs in tomato sauce with couscous and zucchini.",
+    "tags": [
+      "meatball",
+      "meatballs",
+      "turkey",
+      "couscous",
+      "dinner",
+      "high protein"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "lean turkey mince",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "cooked couscous",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "tomato passata",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "zucchini",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      }
+    ]
+  },
+  {
+    "meal_id": "steak_potato_wedges",
+    "name": "Steak and Potato Wedges",
+    "description": "Lean steak with roast potato wedges and salad.",
+    "tags": [
+      "steak",
+      "beef",
+      "potato",
+      "wedges",
+      "dinner",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "heart disease",
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "lean beef steak",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 250
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "salmon_noodle_bowl",
+    "name": "Salmon Noodle Bowl",
+    "description": "Glazed salmon with rice noodles and broccoli.",
+    "tags": [
+      "salmon",
+      "fish",
+      "noodle",
+      "noodles",
+      "asian",
+      "omega 3",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "pregnancy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "salmon fillet",
+        "base_quantity_grams": 130
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "broccoli",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "coconut aminos",
+        "base_quantity_grams": 15
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 5
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_sweet_potato_tacos",
+    "name": "Chicken Sweet Potato Tacos",
+    "description": "Corn tortillas with chicken, roast sweet potato and avocado.",
+    "tags": [
+      "taco",
+      "tacos",
+      "chicken",
+      "sweet potato",
+      "mexican",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "corn tortilla",
+        "base_quantity_grams": 90
+      },
+      {
+        "item_name": "sweet potato",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "avocado",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 30
+      }
+    ]
+  },
+  {
+    "meal_id": "tofu_scramble_toast",
+    "name": "Tofu Scramble Toast",
+    "description": "Scrambled tofu with spinach and mushrooms on wholemeal toast.",
+    "tags": [
+      "tofu",
+      "scramble",
+      "breakfast",
+      "toast",
+      "vegan",
+      "plant based"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "firm tofu",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "whole wheat bread",
+        "base_quantity_grams": 110
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 4
+      }
+    ]
+  },
+  {
+    "meal_id": "peanut_banana_toast",
+    "name": "Peanut Butter Banana Toast",
+    "description": "Wholemeal toast with peanut butter, banana and a glass of soy milk.",
+    "tags": [
+      "toast",
+      "peanut",
+      "peanut butter",
+      "banana",
+      "breakfast",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "peanut allergy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "whole wheat bread",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "peanut butter",
+        "base_quantity_grams": 25
+      },
+      {
+        "item_name": "banana",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "soy milk",
+        "base_quantity_grams": 200
+      }
+    ]
+  },
+  {
+    "meal_id": "cashew_tofu_curry",
+    "name": "Cashew Tofu Curry",
+    "description": "Tofu and pumpkin curry with cashews, served on rice.",
+    "tags": [
+      "curry",
+      "tofu",
+      "cashew",
+      "nuts",
+      "pumpkin",
+      "vegan"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease",
+      "tree nut allergy"
+    ],
+    "ingredients": [
+      {
+        "item_name": "firm tofu",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "cashews",
+        "base_quantity_grams": 15
+      },
+      {
+        "item_name": "pumpkin",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "cooked white rice",
+        "base_quantity_grams": 160
+      },
+      {
+        "item_name": "tomato passata",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 5
+      }
+    ]
+  },
+  {
+    "meal_id": "mediterranean_couscous_salad",
+    "name": "Mediterranean Couscous Salad",
+    "description": "Couscous with chickpeas, cucumber, tomato and capsicum.",
+    "tags": [
+      "couscous",
+      "salad",
+      "chickpea",
+      "mediterranean",
+      "vegan",
+      "lunch"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chickpeas",
+        "base_quantity_grams": 120
+      },
+      {
+        "item_name": "cooked couscous",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 10
+      }
+    ]
+  },
+  {
+    "meal_id": "pork_burrito_bowl",
+    "name": "Pork Burrito Bowl",
+    "description": "Pulled pork with brown rice, black beans, tomato and avocado.",
+    "tags": [
+      "burrito bowl",
+      "pork",
+      "mexican",
+      "rice bowl",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [],
+    "ingredients": [
+      {
+        "item_name": "pork tenderloin",
+        "base_quantity_grams": 140
+      },
+      {
+        "item_name": "brown rice",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "black beans",
+        "base_quantity_grams": 70
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "avocado",
+        "base_quantity_grams": 40
+      }
+    ]
+  },
+  {
+    "meal_id": "chicken_hummus_plate",
+    "name": "Chicken Hummus Plate",
+    "description": "Grilled chicken with hummus, quinoa, cucumber and tomato.",
+    "tags": [
+      "chicken",
+      "hummus",
+      "quinoa",
+      "mediterranean",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "chicken breast",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "hummus",
+        "base_quantity_grams": 50
+      },
+      {
+        "item_name": "cooked quinoa",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "cucumber",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "tomato",
+        "base_quantity_grams": 60
+      }
+    ]
+  },
+  {
+    "meal_id": "shrimp_noodle_stir_fry",
+    "name": "Shrimp Noodle Stir Fry",
+    "description": "Shrimp with rice noodles, capsicum and vegetables.",
+    "tags": [
+      "shrimp",
+      "prawn",
+      "noodle",
+      "noodles",
+      "stir fry",
+      "asian",
+      "high protein",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "shellfish allergy",
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "shrimp",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "red capsicum",
+        "base_quantity_grams": 60
+      },
+      {
+        "item_name": "mixed vegetables",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "coconut aminos",
+        "base_quantity_grams": 12
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 15
+      }
+    ]
+  },
+  {
+    "meal_id": "potato_zucchini_frittata",
+    "name": "Potato Zucchini Frittata",
+    "description": "Baked egg frittata with potato and zucchini, with salad.",
+    "tags": [
+      "frittata",
+      "egg",
+      "potato",
+      "brunch",
+      "vegetarian",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "vegetarian",
+      "dairy-free",
+      "gluten-free",
+      "high-protein"
+    ],
+    "avoid_conditions": [
+      "high cholesterol"
+    ],
+    "ingredients": [
+      {
+        "item_name": "whole egg",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "potato",
+        "base_quantity_grams": 150
+      },
+      {
+        "item_name": "zucchini",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "olive oil",
+        "base_quantity_grams": 8
+      },
+      {
+        "item_name": "mixed salad greens",
+        "base_quantity_grams": 40
+      }
+    ]
+  },
+  {
+    "meal_id": "mushroom_tempeh_noodles",
+    "name": "Mushroom Tempeh Noodles",
+    "description": "Rice noodles with tempeh, mushrooms and spinach.",
+    "tags": [
+      "noodle",
+      "noodles",
+      "tempeh",
+      "mushroom",
+      "asian",
+      "vegan",
+      "gluten free"
+    ],
+    "dietary_flags": [
+      "vegan",
+      "vegetarian",
+      "dairy-free",
+      "gluten-free"
+    ],
+    "avoid_conditions": [
+      "kidney disease"
+    ],
+    "ingredients": [
+      {
+        "item_name": "tempeh",
+        "base_quantity_grams": 110
+      },
+      {
+        "item_name": "rice noodles",
+        "base_quantity_grams": 80
+      },
+      {
+        "item_name": "mushrooms",
+        "base_quantity_grams": 100
+      },
+      {
+        "item_name": "baby spinach",
+        "base_quantity_grams": 40
+      },
+      {
+        "item_name": "coconut aminos",
+        "base_quantity_grams": 12
+      },
+      {
+        "item_name": "sesame oil",
+        "base_quantity_grams": 6
+      }
+    ]
   }
 ]
