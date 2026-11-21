@@ -41,6 +41,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
 | 32 | Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal | 2026-11-07 |
 | 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
+| 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -594,3 +595,27 @@ Still open: the activity levels count exercise days in a usual week, so a
 workout day can still count some exercise twice. Ruled out for now: retiring the
 model's exercise estimate, which would remove the trained model from the meal
 flow.
+
+## 2026-11-22 — Diet rules: tagged allergens
+
+### DEC-34 — Diet rules read a tag table of ingredients; an untagged ingredient is refused
+
+The diet rules looked for keywords in ingredient names. That missed soy sauce as
+gluten until DEC-31, read "gluten-free bun" as gluten, and needed a list of plant
+foods so "peanut butter" was not dairy. A tree-nut allergy refused nothing, because
+it had no keywords.
+
+`data/reference/ingredient_allergens.json` now lists all 50 ingredients a meal can
+hold, with what each contains: the nine allergens, `meat`, and `high_sodium` and
+`kidney_caution`. Each constraint group refuses a set of tags (vegan refuses meat,
+fish, shellfish, dairy and egg). A swap must leave the ingredient safe under every
+group in force. An ingredient missing from the table is refused under any diet rule,
+and a test fails until every recipe, fallback and swap ingredient is listed. New
+recipes (P7) have to be tagged.
+
+The meal-quality baseline is unchanged, line for line. The sodium and kidney tags
+copy what the name rules did, so black beans stay allowed for kidney disease while
+kidney beans do not. A dietitian should review those two (P9).
+
+Rules out tags on each recipe instead of each ingredient. Swaps change a meal's
+ingredients, so a recipe-level tag would go stale.

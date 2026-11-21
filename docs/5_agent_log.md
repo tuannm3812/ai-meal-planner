@@ -8144,3 +8144,16 @@ Verified: 652 Python tests and 164 frontend tests pass; ruff, eslint and the bui
 explicit 30 minutes at 100 bpm and 37 °C, so the baseline does not move. The sample plan's 125 kcal
 is the model's real figure. Step 1 checked in a browser.
 
+## 2026-11-22 — Claude — P6: tagged allergens
+
+Mike asked for P6, without a Codex review. The diet rules now read
+`data/reference/ingredient_allergens.json` (DEC-34), which tags all 50 servable ingredients. An
+untagged ingredient is refused under any diet rule, and a test fails if any recipe, fallback,
+guardrail or swap ingredient is missing from the table.
+
+Found on the way: a tree-nut allergy refused nothing, because the name rules had no tree-nut
+keywords. No current ingredient holds tree nuts, so no plan changes, but new ones will be checked.
+
+Verified: 662 Python tests pass; ruff is clean. The meal-quality baseline's report is
+byte-identical before and after.
+

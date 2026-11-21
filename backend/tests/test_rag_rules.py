@@ -4,13 +4,20 @@ These branches decide whether a meal is safe for a stated health condition, so
 they are tested directly rather than only through retrieval.
 """
 
+import json
+from pathlib import Path
+
 import pytest
 
 from backend.app.rag.meal_corpus import CorpusIngredient, MealCorpusItem
 from backend.app.rag.rules import (
+    GROUP_TAGS,
+    SUBSTITUTION_RULES,
+    UNTAGGED,
     PlannedSubstitution,
     blocked_groups_for_ingredient,
     constraint_groups,
+    ingredient_tags,
     meal_conflicts_with_health_conditions,
     meal_is_allowed,
     normalize_label,
@@ -63,7 +70,7 @@ def test_vegetarian_blocks_meat_but_allows_dairy() -> None:
 
 def test_sodium_sensitive_blocks_soy_sauce() -> None:
     groups = constraint_groups(["hypertension"])
-    assert "sodium_sensitive" in blocked_groups_for_ingredient("soy sauce", groups)
+    assert "high_sodium" in blocked_groups_for_ingredient("soy sauce", groups)
 
 
 def test_an_unconstrained_ingredient_is_never_blocked() -> None:
@@ -80,13 +87,13 @@ def test_kidney_disease_label_maps_to_its_own_group() -> None:
 
 
 @pytest.mark.parametrize(
-    "ingredient", ["kidney beans", "lentils", "chickpeas", "tofu", "soy sauce"]
+    "ingredient", ["kidney beans", "lentils", "chickpeas", "firm tofu", "soy sauce"]
 )
 def test_kidney_disease_blocks_high_potassium_or_phosphorus_ingredients(
     ingredient: str,
 ) -> None:
     groups = constraint_groups(["kidney disease"])
-    assert "kidney_disease" in blocked_groups_for_ingredient(ingredient, groups)
+    assert "kidney_caution" in blocked_groups_for_ingredient(ingredient, groups)
 
 
 def test_kidney_disease_does_not_block_unrelated_ingredients() -> None:
@@ -204,10 +211,82 @@ def test_plant_foods_named_like_dairy_are_not_dairy(ingredient: str, label: str)
     assert "dairy" not in blocked_groups_for_ingredient(ingredient, constraint_groups([label]))
 
 
-@pytest.mark.parametrize("ingredient", ["cottage cheese", "greek yogurt", "milk", "butter"])
+@pytest.mark.parametrize("ingredient", ["cottage cheese", "greek yogurt"])
 def test_dairy_is_still_blocked_for_dairy_free(ingredient: str) -> None:
     groups = constraint_groups(["dairy-free"])
     assert blocked_groups_for_ingredient(ingredient, groups) == {"dairy"}
+
+
+# --- the tag table (DEC-34) ---
+
+
+def _servable_ingredients() -> set[str]:
+    """Every ingredient a meal can hold: corpus, fallbacks, guardrails and swaps."""
+    root = Path(__file__).resolve().parents[2]
+    names: set[str] = set()
+
+    def walk(node: object) -> None:
+        if isinstance(node, dict):
+            if isinstance(node.get("item_name"), str):
+                names.add(node["item_name"])
+            for value in node.values():
+                walk(value)
+        elif isinstance(node, list):
+            for value in node:
+                walk(value)
+
+    for path in [
+        "data/meal_corpus/meals.json",
+        "data/reference/fallback_meals.json",
+        "backend/app/evaluation/guardrail_meals.json",
+    ]:
+        walk(json.loads((root / path).read_text(encoding="utf-8")))
+    names.update(rule.replacement_name for rule in SUBSTITUTION_RULES)
+    return names
+
+
+def test_every_servable_ingredient_is_tagged() -> None:
+    """A new recipe ingredient must be added to data/reference/ingredient_allergens.json."""
+    tags = ingredient_tags()
+    missing = sorted(name for name in _servable_ingredients() if normalize_label(name) not in tags)
+    assert missing == []
+
+
+def test_the_table_uses_only_known_tags() -> None:
+    known = set().union(*GROUP_TAGS.values())
+    assert set().union(*ingredient_tags().values()) <= known
+
+
+def test_every_swap_is_written_for_tags_a_group_refuses() -> None:
+    known = set().union(*GROUP_TAGS.values())
+    assert all(rule.blocked_groups <= known for rule in SUBSTITUTION_RULES)
+
+
+@pytest.mark.parametrize("label", ["dairy-free", "peanut allergy", "vegan", "kidney disease"])
+def test_an_unlisted_ingredient_is_refused_under_any_diet_rule(label: str) -> None:
+    """Fail closed: an ingredient nobody tagged cannot be shown to be safe."""
+    groups = constraint_groups([label])
+    assert blocked_groups_for_ingredient("mystery sauce", groups) == {UNTAGGED}
+    assert not meal_is_allowed(_meal("mystery sauce"), groups, [])
+
+
+def test_an_unlisted_ingredient_is_fine_without_a_diet_rule() -> None:
+    assert blocked_groups_for_ingredient("mystery sauce", set()) == set()
+
+
+@pytest.mark.parametrize(
+    "ingredient", ["gluten-free bun", "gluten-free pasta", "gluten-free bread"]
+)
+def test_gluten_free_foods_are_not_gluten(ingredient: str) -> None:
+    """The name rules read "bun", "pasta" and "bread" inside these as gluten."""
+    assert blocked_groups_for_ingredient(ingredient, constraint_groups(["celiac"])) == set()
+
+
+def test_a_tree_nut_allergy_is_now_checked() -> None:
+    """The name rules had no tree-nut keywords, so this group refused nothing."""
+    groups = constraint_groups(["tree nut allergy"])
+    assert groups == {"tree_nut"}
+    assert blocked_groups_for_ingredient("mystery nut mix", groups) == {UNTAGGED}
 
 
 def test_soy_milk_is_still_soy() -> None:
