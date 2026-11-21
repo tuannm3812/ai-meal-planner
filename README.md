@@ -256,13 +256,13 @@ TRACE_SAMPLE_RATIO=1.0
 
 `REQUIRE_VERIFIED_NUTRITION=1` makes a meal fail with `502` (code `unverified_required`) when any ingredient's nutrition could only be estimated. It is off by default so the keyless demo keeps producing plans. `API_KEYS` and `RATE_LIMIT_PER_MINUTE` are described in [8.1 Security](#81-security).
 
-**Existing SQLite databases.** A database created before G4 has no `client_id` column, and there are no migrations, so the API refuses to start against one and names the file. Under stateless v1, delete `database/ai_meal_planner.db` and restart; it is recreated empty.
+**Existing SQLite databases.** Alembic owns the schema, and the API upgrades `database/ai_meal_planner.db` when it starts, keeping its records. A database from before G4 is upgraded too. If the upgrade fails, the file stays as it was. The API refuses to start against a file whose schema it does not recognise, or one written by a newer version, and names the file. After changing a table in `repositories/sql/models.py`, write a revision with `uv run alembic revision --autogenerate -m "what changed"`; a test fails until you do.
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
 
 `HOSTED_MODE=true` marks a hosted, multi-instance deployment. Each instance has its own SQLite file, so history written on one would be invisible on the others. Hosted mode therefore refuses the three history reads and `POST /meal-feedback` with `501 history_disabled_stateless`, and it stores no generated plans. Meal planning and calorie prediction keep working, `/health` stays public and reports `hosted_mode`, and both clients hide history and feedback when it is set. It is off by default.
 
-`STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported once with `uv run python scripts/migrate_json_to_sqlite.py`. That script is not idempotent, so running it twice duplicates every record. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
+`STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported with `uv run python scripts/migrate_json_to_sqlite.py`, which skips any record already stored, so it is safe to run again. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
 
 ## 8. API Overview
 
