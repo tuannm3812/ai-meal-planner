@@ -84,7 +84,7 @@ References:
 
 Show the funnel from one real request.
 
-Of 34 recipes, 13 are safe for a vegan, 5 are relevant to the craving, and one is served.
+Of 76 recipes, 30 are safe for a vegan, 6 are relevant to the craving, and one is served.
 If nothing is close, you get a standard meal and a note. If nothing is safe, it refuses.
 Sources: backend/app/rag/retriever.py; local run, 7 November 2026; docs/meal_quality/baseline.json.
 
@@ -120,7 +120,7 @@ References:
 Show what each fix changed.
 
 Resizing each ingredient took it to 41. The relevance gate moved 11 off-menu requests to fallback meals, giving 47. Adding a fat to six recipes and a rounding retry took it to 72.
-The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after.
+The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after; with 76 recipes it is 152 of 152.
 Sources: docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30.
 
 References:
@@ -146,7 +146,7 @@ References:
 Show the production habits.
 
 On the line, teal steps run today; the grey ones are built and wait for a GCP project.
-The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.
+The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.
 The deployment workflow and tracing are built, but they wait for a GCP project.
 Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026.
 

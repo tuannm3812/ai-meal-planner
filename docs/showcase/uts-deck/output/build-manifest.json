@@ -50,9 +50,9 @@
     }
   },
   "inputs": {
-    "brief-content.json": "c25b6844dab59f9f360cc7978629ad53e4f67b888f812c9b7ef1784afc70ed3d",
+    "brief-content.json": "3cbeddca6ae224b2f87268cc20aa767fc7fcea612d83e7c437d516462c9542b0",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
-    "claims-register.md": "8b5a7a143b36217290da2885176fb6ca9dfe1dbee16462f752dfb0130e18aacb",
+    "claims-register.md": "d62dfbe53864475412c4851f45d18acd37ab017d17042901fbb032e982575012",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
     "project_layouts.py": "be93457fceef410ee82ae897a520123c2cd12aaba93c828966d3ef46ea7c1363"
   },
@@ -375,16 +375,16 @@
     "assets/logos/tailwindcss.png": "6b316828c0007590a5fbb6bcecf8082a3b8a61db8f38689664f85d00621d2d38",
     "assets/logos/vite.png": "fbc0355127a37f2cc2cc3895e7aadb5e0b3221ccd4320fd56611202cedad3af4",
     "assets/manifest.json": "b4c216f9d77efbb356324dc92b9480121da8bec53db9639bb9f4f90765bc2e27",
-    "assets/photos/close-chicken-fried-rice.jpg": "b1eb68f5665ed36a52a07ddadf4f3fe4e499cef506e98c71ec1b7305dfcaa622",
-    "assets/photos/close-chicken-fried-rice.provenance.json": "1cc7eb4fc8560566be7433aa43d8f15fb8cb817d8f5a5aa5e48e1a6316c52c00",
+    "assets/photos/close-two-bowls.jpg": "53dfdd886a5a3f210f706011257ff7b2f214306f795fa0b47f760f9c65a9f26d",
+    "assets/photos/close-two-bowls.provenance.json": "f19b880a258a3e241034f541900d2ba5e0f1e9183fb0bbbfe24da3ae183d9b3e",
     "assets/photos/cover-chicken-fried-rice.jpg": "06dcee78337b203927a8e1d300d0fa07fdc4eeaf244f9f31e83f29e385691dcf",
     "assets/photos/cover-chicken-fried-rice.provenance.json": "a6a74fa98829ae9b354da69938ae46b05585e23e8937ba189650dce078b0cbe3",
     "assets/photos/problem-spaghetti-bolognese.jpg": "8ed8363704749495a4610693f3582a5d12e6b50d576d6af60ccf2e5902f36acf",
     "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "d9e1ca2e71adc5b6f55b351fa916ae8ca43f8800cec055dc366e6962af3cd3c1",
-    "deck.pdf": "26f282095a50c1160686c00d42cf034cbc42107444cdab9c43d441fed84c7636"
+    "deck.html": "a14e0f99689f2c3008d415e925dcd06334a66cb887a2c189a5d71d18d42cde89",
+    "deck.pdf": "788c89a83efeb25186041faa62b8d8ecf1b3e8c68c0bed8abcdb58fb15979010"
   },
   "slide_count": 16
 }

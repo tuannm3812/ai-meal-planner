@@ -221,17 +221,17 @@
       "topic": "One-page summary",
       "accent": "slate",
       "title": "One craving, sized to four different people",
-      "subtitle": "Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
+      "subtitle": "Four agents and 76 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
       "findings": [
         {
           "label": "Sized to you",
-          "value": "0.4%",
+          "value": "0.5%",
           "icon": "person",
           "accent": "slate",
           "text": "Median gap between each meal and its target, worst **9.9%**.",
           "chart": {
             "kind": "gap",
-            "median": 0.4,
+            "median": 0.5,
             "worst": 9.9,
             "limit": 10
           }
@@ -376,7 +376,7 @@
             "items": [
               [
                 "Vegan",
-                "Turkey pasta",
+                "Tuna pasta salad",
                 "Lentil Bolognese Pasta"
               ],
               [
@@ -396,27 +396,27 @@
             "kind": "receipt",
             "items": [
               [
-                "Turkey mince",
-                "$6.50"
+                "Tuna",
+                "$3.50"
               ],
               [
                 "Pasta",
                 "$2.80"
               ],
               [
-                "Passata",
-                "$2.30"
+                "Cucumber",
+                "$3.50"
               ],
               [
-                "Spinach",
-                "$3.50"
+                "Tomato",
+                "$1.40"
               ],
               [
                 "Olive oil",
                 "$3.50"
               ]
             ],
-            "total": "$18.60",
+            "total": "$14.70",
             "total_label": "Estimated"
           }
         }
@@ -493,7 +493,7 @@
       "accent": "blue",
       "title": "Four agents work like one kitchen",
       "subtitle": "An order comes in, each station does one job, and a planning service runs them in order.",
-      "takeaway": "Meals come from 34 curated recipes, not generation, so the core path needs no LLM key.",
+      "takeaway": "Meals come from 76 curated recipes, not generation, so the core path needs no LLM key.",
       "question": "How does one request become one plan?",
       "notes": {
         "purpose": "Show the four agents and their real outputs.",
@@ -635,7 +635,7 @@
       "notes": {
         "purpose": "Show the funnel from one real request.",
         "script": [
-          "Of 34 recipes, 13 are safe for a vegan, 5 are relevant to the craving, and one is served.",
+          "Of 76 recipes, 30 are safe for a vegan, 6 are relevant to the craving, and one is served.",
           "If nothing is close, you get a standard meal and a note. If nothing is safe, it refuses.",
           "Sources: backend/app/rag/retriever.py; local run, 7 November 2026; docs/meal_quality/baseline.json."
         ],
@@ -649,18 +649,18 @@
         "rows": [
           {
             "label": "All recipes",
-            "value": 34,
-            "text": "34"
+            "value": 76,
+            "text": "76"
           },
           {
             "label": "Safe for a vegan",
-            "value": 13,
-            "text": "13"
+            "value": 30,
+            "text": "30"
           },
           {
             "label": "Relevant to the craving",
-            "value": 5,
-            "text": "5"
+            "value": 6,
+            "text": "6"
           },
           {
             "label": "Served",
@@ -869,7 +869,7 @@
         "purpose": "Show what each fix changed.",
         "script": [
           "Resizing each ingredient took it to 41. The relevance gate moved 11 off-menu requests to fallback meals, giving 47. Adding a fat to six recipes and a rounding retry took it to 72.",
-          "The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after.",
+          "The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after; with 76 recipes it is 152 of 152.",
           "Sources: docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30."
         ],
         "references": [
@@ -904,7 +904,7 @@
       "metrics": [
         {
           "icon": "balance",
-          "value": "0.4%",
+          "value": "0.5%",
           "label": "median calorie gap, worst 9.9%"
         },
         {
@@ -914,7 +914,7 @@
         },
         {
           "icon": "search",
-          "value": "68 of 68",
+          "value": "152 of 152",
           "label": "wider check, every recipe by name"
         }
       ]
@@ -993,7 +993,7 @@
           {
             "icon": "skillet",
             "title": "Meal recommendation",
-            "text": "TF-IDF search of 34 recipes, diet rules",
+            "text": "TF-IDF search of 76 recipes, diet rules",
             "logos": [
               "scikitlearn"
             ]
@@ -1130,7 +1130,7 @@
           {
             "n": 4,
             "title": "choose",
-            "text": "rules out conflicts, then TF-IDF over 34 recipes; sizes it",
+            "text": "rules out conflicts, then TF-IDF over 76 recipes; sizes it",
             "logos": [
               "scikitlearn"
             ],
@@ -1223,7 +1223,7 @@
         "purpose": "Show the production habits.",
         "script": [
           "On the line, teal steps run today; the grey ones are built and wait for a GCP project.",
-          "The last full run passed 630 Python tests at 95% coverage. Five checks run on every pull request.",
+          "The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.",
           "The deployment workflow and tracing are built, but they wait for a GCP project.",
           "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
         ],
@@ -1244,7 +1244,7 @@
         {
           "icon": "science",
           "title": "Tests",
-          "text": "630 Python tests",
+          "text": "662 Python tests",
           "file": "backend/tests/",
           "live": true
         },
@@ -1279,13 +1279,13 @@
       ],
       "stats": [
         {
-          "value": "630",
-          "label": "Python tests, all passing: 538 backend, 92 Streamlit",
+          "value": "662",
+          "label": "Python tests, all passing: 570 backend, 92 Streamlit",
           "viz": {
             "kind": "split",
             "parts": [
               [
-                538,
+                570,
                 "#3B528B"
               ],
               [
@@ -1296,11 +1296,11 @@
           }
         },
         {
-          "value": "95%",
+          "value": "97%",
           "label": "coverage, and CI fails below an 89% floor",
           "viz": {
             "kind": "floor",
-            "value": 95,
+            "value": 97,
             "floor": 89
           }
         },
@@ -1340,7 +1340,7 @@
           "icon": "check_circle",
           "title": "Measured",
           "items": [
-            "**72 of 72** and **68 of 68**, offline",
+            "**72 of 72** and **152 of 152**, offline",
             "But the checks guided the fixes",
             "11 of 72 fall back"
           ],
@@ -1353,11 +1353,10 @@
           "items": [
             "**68 of 72** plans include an estimate",
             "AMDR is a daily range on one meal",
-            "Default exercise inputs",
-            "Diet rules match ingredient names"
+            "The benchmark uses default workouts"
           ],
           "strength": 2,
-          "next": "Real exercise details, allergen tags"
+          "next": "Real workouts in the benchmark"
         },
         {
           "icon": "group",
@@ -1417,6 +1416,10 @@
           "text": "68 of 68, gluten fix"
         },
         {
+          "date": "22 Nov",
+          "text": "76 recipes, workouts, allergen tags"
+        },
+        {
           "date": "Now",
           "text": "Next steps"
         }
@@ -1439,25 +1442,23 @@
           "title": "Next",
           "items": [
             "Run the benchmark with USDA keys",
-            "Ask for real exercise details",
-            "Tag allergens on ingredients"
+            "Benchmark with real workouts",
+            "Connect live store prices"
           ],
           "icons": [
             "fact_check",
             "fitness_center",
-            "no_food"
+            "storefront"
           ]
         },
         {
           "title": "Later",
           "items": [
-            "Grow to 75–100 recipes",
-            "Connect live store prices",
+            "Ask a dietitian to review the rules",
             "Use feedback, then test with people"
           ],
           "icons": [
-            "menu_book",
-            "storefront",
+            "verified",
             "group"
           ]
         }
@@ -1483,10 +1484,10 @@
       ],
       "qr_label": "Scan for the live demo",
       "image": {
-        "path": "assets/photos/close-chicken-fried-rice.jpg",
-        "alt": "Photo of a plate of chicken fried rice, the meal this deck followed."
+        "path": "assets/photos/close-two-bowls.jpg",
+        "alt": "Photo of two different poke bowls side by side on a wooden table."
       },
-      "image_caption": "Chicken fried rice: 694 kcal against a 691 kcal target.",
+      "image_caption": "Two people, two cravings, two different plates.",
       "question": "Where do I try it?",
       "notes": {
         "purpose": "Thank the audience and point to the demo and code.",

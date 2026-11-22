@@ -106,7 +106,7 @@ Exact face text:
 - OVERVIEW
 - One-page summary
 - One craving, sized to four different people
-- Four agents and 34 curated recipes size the same chicken fried rice for each person, with no LLM key needed.
+- Four agents and 76 curated recipes size the same chicken fried rice for each person, with no LLM key needed.
 - AI Meal Planner
 - 3
 - TAKEAWAY
@@ -124,7 +124,7 @@ Exact face text:
 - 63 g protein
 - Large athlete, gaining
 - Sized to you
-- 0.4%
+- 0.5%
 - Median gap between each meal and its / target, worst 9.9%.
 - worst
 - median
@@ -184,7 +184,7 @@ Exact face text:
 - The same request needs a different meal or a / swapped ingredient.
 - Today: Read every label
 - VEGAN
-- Turkey pasta
+- Tuna pasta salad
 - Lentil Bolognese Pasta
 - COELIAC
 - Wholemeal pasta
@@ -193,18 +193,18 @@ Exact face text:
 - What do I buy?
 - Five ingredients to find and price at the store.
 - Today: Write a list, guess the cost
-- TURKEY MINCE
-- $6.50
+- TUNA
+- $3.50
 - PASTA
 - $2.80
-- PASSATA
-- $2.30
-- SPINACH
+- CUCUMBER
 - $3.50
+- TOMATO
+- $1.40
 - OLIVE OIL
 - $3.50
 - ESTIMATED
-- $18.60
+- $14.70
 
 ## 5. One craving in, one meal and a shopping list out
 
@@ -244,7 +244,7 @@ Layout: mp_agents
 
 Reader question: How does one request become one plan?
 
-Message: Meals come from 34 curated recipes, not generation, so the core path needs no LLM key.
+Message: Meals come from 76 curated recipes, not generation, so the core path needs no LLM key.
 
 Exact face text:
 
@@ -259,7 +259,7 @@ Exact face text:
 - AI Meal Planner
 - 6
 - TAKEAWAY
-- Meals come from 34 curated recipes, not generation, so the core path needs no LLM key.
+- Meals come from 76 curated recipes, not generation, so the core path needs no LLM key.
 - ORDER   chicken fried rice, active woman, maintaining
 - THE PORTION PLANNER
 - Calorie expenditure
@@ -355,11 +355,11 @@ Exact face text:
 - Safety comes before relevance, and the profile only changes the order of safe, relevant recipes.
 - Recipes left at each step
 - All recipes
-- 34
+- 76
 - Safe for a vegan
-- 13
+- 30
 - Relevant to the craving
-- 5
+- 6
 - Served
 - 1: Tofu Fried Rice
 - Close match
@@ -516,11 +516,11 @@ Exact face text:
 - +31
 - +6
 - +25
-- 0.4%
+- 0.5%
 - median calorie gap, worst 9.9%
 - 5 of 5
 - guardrail cases hold
-- 68 of 68
+- 152 of 152
 - wider check, every recipe by name
 
 ## 12. One service, two clients, four agents
@@ -571,7 +571,7 @@ Exact face text:
 - trained model estimates the day; the goal sets the meal target
 - 4
 - choose
-- rules out conflicts, then TF-IDF over 34 recipes; sizes it
+- rules out conflicts, then TF-IDF over 76 recipes; sizes it
 - 5
 - verify
 - local tables first; USDA, FatSecret with keys; estimates labelled
@@ -627,7 +627,7 @@ Exact face text:
 - CI fails on any drift
 - docs/openapi.json
 - Tests
-- 630 Python tests
+- 662 Python tests
 - backend/tests/
 - Security
 - API keys, rate limits
@@ -641,9 +641,9 @@ Exact face text:
 - Tracing
 - Health data kept out
 - core/telemetry.py
-- 630
-- Python tests, all passing: 538 backend, 92 Streamlit
-- 95%
+- 662
+- Python tests, all passing: 570 backend, 92 Streamlit
+- 97%
 - coverage, and CI fails below an 89% floor
 - 5
 - CI checks on every pull request
@@ -671,7 +671,7 @@ Exact face text:
 - TAKEAWAY
 - A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
 - Measured
-- •  72 of 72 and 68 of 68, offline
+- •  72 of 72 and 152 of 152, offline
 - •  But the checks guided the fixes
 - •  11 of 72 fall back
 - CLOSES IT
@@ -679,10 +679,9 @@ Exact face text:
 - Estimated
 - •  68 of 72 plans include an estimate
 - •  AMDR is a daily range on one meal
-- •  Default exercise inputs
-- •  Diet rules match ingredient names
+- •  The benchmark uses default workouts
 - CLOSES IT
-- Real exercise details, allergen tags
+- Real workouts in the benchmark
 - Not tested
 - •  No user testing
 - •  No clinical review
@@ -724,6 +723,8 @@ Exact face text:
 - React design approved
 - 7 Nov
 - 68 of 68, gluten fix
+- 22 Nov
+- 76 recipes, workouts, allergen tags
 - Now
 - Next steps
 - NOW
@@ -732,11 +733,10 @@ Exact face text:
 - Add user accounts
 - NEXT
 - Run the benchmark with USDA keys
-- Ask for real exercise details
-- Tag allergens on ingredients
-- LATER
-- Grow to 75–100 recipes
+- Benchmark with real workouts
 - Connect live store prices
+- LATER
+- Ask a dietitian to review the rules
 - Use feedback, then test with people
 
 ## 16. Thank you
@@ -756,5 +756,5 @@ Exact face text:
 - Demo tuannm3812-ai-meal-planner.streamlit.app
 - Code github.com/tuannm3812/ai-meal-planner
 - Scan for the live demo
-- Chicken fried rice: 694 kcal against a 691 kcal target.
+- Two people, two cravings, two different plates.
 - A study project, not medical advice.
