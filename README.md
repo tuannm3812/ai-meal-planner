@@ -226,6 +226,8 @@ This serves the API at `http://localhost:8000` (`/health`, `/docs`) and Streamli
 
 ### 6.6 Deploy to Cloud Run
 
+The API has been live on Cloud Run since 22 November 2026, capped at one instance; every planning call needs an API key.
+
 Hosted deployments run on Cloud Run (DEC-16). `.github/workflows/deploy.yml` builds the image, deploys it with `HOSTED_MODE=true` and keys from Secret Manager, and then runs `scripts/live_check.sh` against the new revision. GitHub authenticates through Workload Identity Federation, so no long-lived keys are stored. The workflow does nothing until the one-time setup is done. [`docs/6_deployment.md`](docs/6_deployment.md) gives every command: project, service accounts, federation, secrets, the first deploy, the two-instance and revocation acceptance runs, and rollback. `scripts/new_api_key.py <client_id>` generates a key together with its `API_KEYS` record.
 
 ## 7. Configuration

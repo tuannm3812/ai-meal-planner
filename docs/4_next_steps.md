@@ -8,6 +8,10 @@ README roadmap, and the spec's §12 out-of-scope list. Overlapping entries have 
 merged; each item appears exactly once, in the highest-priority section that claims
 it.
 
+Update 2026-11-22: the API is live on Cloud Run and a real trace reached Cloud
+Trace (`docs/6_deployment.md`). G6's two-instance and revocation runs on the real
+service remain open.
+
 Status as of 2026-10-10: the whole refactor (Phases 0–3, 4a and 4b) is done and
 **merged to `main`** (PRs #1–#7). G3 (#11, #12), G4 (#13), G5b (containers,
 #14), G6's code half (hosted mode, #15) and the README/decision docs (#16) are
