@@ -80,11 +80,11 @@ def test_wider_scenarios_ask_for_every_recipe_by_name_for_two_profiles() -> None
     names = [meal.name for meal in load_meal_corpus(BenchmarkConfig.canonical().meal_corpus_path)]
     scenarios = wider_scenarios()
 
-    assert len(scenarios) == 2 * len(names) == 68
+    assert len(scenarios) == 2 * len(names) == 152
     assert [scenario.craving for scenario in scenarios] == names * 2
     assert {scenario.profile for scenario in scenarios} == set(PROFILES[:2])
     assert not any(s.health_conditions or s.dietary_preferences for s in scenarios)
-    assert len({scenario.label for scenario in scenarios}) == 68
+    assert len({scenario.label for scenario in scenarios}) == 152
 
 
 def test_an_infeasible_result_keeps_only_its_status_and_budget() -> None:
@@ -112,7 +112,7 @@ def test_measure_reads_the_shipped_plan() -> None:
     (quality,), provenance = run([Scenario("chicken fried rice", PROFILES[1])])
 
     assert provenance["retriever"] == "tfidf_vector_retriever_v0.1"
-    assert provenance["meal_count"] == 34
+    assert provenance["meal_count"] == 76
 
     assert quality.plan_status == "matched"
     assert quality.meal_name == "Chicken Fried Rice"
@@ -225,7 +225,7 @@ def test_script_runs_the_wider_check_without_guardrails(tmp_path: Path) -> None:
     )
 
     payload = json.loads(output.read_text(encoding="utf-8"))
-    assert payload["summary"]["plans"] == 68
+    assert payload["summary"]["plans"] == 152
     assert "guardrails" not in payload
     assert "\n## Guardrails\n" not in completed.stdout
 

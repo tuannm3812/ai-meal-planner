@@ -1,20 +1,21 @@
-import SparkleIcon from './SparkleIcon'
+import Icon from '../icons/Icon'
+import { Sparkles } from '../icons/glyphs'
 
 function EmptyState({ isLoading, loadingTitle, loadingBody, idleTitle, idleBody }) {
   return (
-    <section className="flex min-h-[420px] items-center justify-center rounded-2xl border border-gray-100 bg-white p-8 shadow-sm">
+    <section className="flex min-h-[420px] items-center justify-center rounded-3xl border border-transparent bg-surface p-8">
       <div className="mx-auto max-w-md text-center">
-        <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600 shadow-sm">
+        <div className="flex justify-center">
           {isLoading ? (
-            <span className="h-6 w-6 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent" />
+            <span className="h-8 w-8 animate-spin rounded-full border-2 border-leaf border-t-transparent" />
           ) : (
-            <SparkleIcon />
+            <Icon as={Sparkles} size="lg" tone="light" />
           )}
         </div>
-        <h2 className="mt-5 text-xl font-semibold text-gray-900">
+        <h2 className="mt-5 text-xl font-semibold text-ink">
           {isLoading ? loadingTitle : idleTitle}
         </h2>
-        <p className="mt-3 text-sm leading-6 text-gray-500">{isLoading ? loadingBody : idleBody}</p>
+        <p className="mt-3 text-sm leading-6 text-muted">{isLoading ? loadingBody : idleBody}</p>
       </div>
     </section>
   )

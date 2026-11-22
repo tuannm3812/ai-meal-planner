@@ -5,3 +5,19 @@
 body {
   @apply bg-ground font-sans text-ink antialiased;
 }
+
+/* Print only the shopping list (spec §4.3). */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  [data-print='shopping'],
+  [data-print='shopping'] * {
+    visibility: visible;
+  }
+  [data-print='shopping'] {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+  }
+}

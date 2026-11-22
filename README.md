@@ -1,6 +1,6 @@
 # AI Meal Planner
 
-![The meal planning dashboard: a craving becomes a structured meal with portioned ingredients](docs/assets/screenshots/react-hero.png)
+![The React kitchen app: say what you crave and get one meal with clear nutrition and a shopping list](docs/assets/screenshots/react-hero.png)
 
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-Backend-009688?style=flat&logo=fastapi&logoColor=white)
@@ -11,7 +11,7 @@
 
 AI Meal Planner is a multi-agent meal planning application that estimates calorie needs, recommends meals from user preferences, verifies nutrition, and prepares a practical shopping-list estimate.
 
-The current phase focuses on a reliable FastAPI service, ML-ready agent modules, and two client experiences for testing and demonstration: a deployed Streamlit app and a React dashboard, both covering meal planning, calorie prediction, and history/saved-meal review.
+The current phase focuses on a reliable FastAPI service, ML-ready agent modules, and two clients. The React app is the main one: a personal kitchen app where you say what you crave, get one meal with Viridis nutrition charts and a shopping list, and save, rate and revisit your meals. The deployed Streamlit app is the simple backup demo.
 
 **Live Demo:** https://tuannm3812-ai-meal-planner.streamlit.app/
 
@@ -19,7 +19,7 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 
 - Build a dependable API foundation for meal generation, calorie prediction, nutrition verification, feedback, and shopping-list estimates
 - Deploy and validate the product through Streamlit while the core recommendation workflow matures
-- Streamlit and React now cover the same core workflow (meal plan, calorie prediction, history); harden the React dashboard toward a production interface next
+- React is the main app (DEC-37); Streamlit stays as the simple backup demo
 
 ## 2. Features
 
@@ -33,15 +33,15 @@ The current phase focuses on a reliable FastAPI service, ML-ready agent modules,
 - File-backed user profiles and meal history for early pilots
 - Supermarket product mapping with estimated shopping cost and confidence metadata
 - Cached USDA/FatSecret nutrition lookups with automatic per-provider cooldown after repeated failures, so a slow or misconfigured provider degrades gracefully instead of stalling every request
-- Streamlit demo and React dashboard, both covering meal plan generation, calorie prediction, and meal/feedback history
+- A React kitchen app (home, plan page with charts and runners-up, save and rate, My meals, Past plans, profile remembered on the device) and a simpler Streamlit backup demo
 
 ### Screenshots
 
-| React dashboard: meal plan | React dashboard: calorie prediction |
+| React app: your plan | React app: profile and calorie estimate |
 | --- | --- |
-| ![React meal plan: structured meal, verified macros and a priced grocery list](docs/assets/screenshots/react-meal-plan.png) | ![React calorie prediction from the promoted Kaggle model](docs/assets/screenshots/react-calories.png) |
-| **React dashboard: history** | **Streamlit demo (backend in-process, no API server)** |
-| ![React history, labelled as not persisted](docs/assets/screenshots/react-history.png) | ![Streamlit demo with retrieval notes and the RAG retrieval contract](docs/assets/screenshots/streamlit-demo.png) |
+| ![React plan page: the meal, a calorie ring, a Viridis macro donut, where the calories come from and a shopping checklist](docs/assets/screenshots/react-meal-plan.png) | ![React profile page with the calorie estimate from the promoted Kaggle model](docs/assets/screenshots/react-calories.png) |
+| **React app: home with My meals and Past plans** | **Streamlit backup demo (backend in-process, no API server)** |
+| ![React home: a big craving search, saved meals and past plans as cards](docs/assets/screenshots/react-history.png) | ![Streamlit demo with retrieval notes and the RAG retrieval contract](docs/assets/screenshots/streamlit-demo.png) |
 
 Captured from a local stack, keyless and offline, with `scripts/capture_screenshots.py`. Number fields follow the capture machine's region setting.
 
@@ -65,7 +65,7 @@ User profile + craving
 -> Optional Gemini final explanation when ENABLE_GEMINI_ADAPTATION=1
 -> NutritionVerificationAgent verifies ingredients through USDA/FatSecret/local references
 -> SupermarketAgent maps ingredients to local grocery estimates
--> Streamlit renders the response for testing and demos
+-> the React app (main) or Streamlit (backup demo) renders the response
 ```
 
 As of 2026-09-10 the calorie prediction step runs only via `/calorie-expenditure/predict`; `/generate-meal-plan` does not yet consume its budget — see [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/4_next_steps.md`](docs/4_next_steps.md) §1.1.
@@ -122,7 +122,7 @@ See [`docs/2_architecture.md`](docs/2_architecture.md) and [`docs/0_coding_stand
 ### 6.1 Prerequisites
 
 - [uv](https://docs.astral.sh/uv/) — manages the Python version and dependencies
-- Optional: Node.js 20+ and npm for the React dashboard
+- Optional: Node.js 20+ and npm for the React app
 - Optional: Gemini, USDA, and FatSecret API keys for live external integrations
 
 `uv` installs and pins Python 3.11 itself, so no system Python is required.
@@ -187,9 +187,9 @@ The deployed Streamlit Community Cloud demo is available at:
 https://tuannm3812-ai-meal-planner.streamlit.app/
 ```
 
-### 6.4 React Dashboard
+### 6.4 React App (main)
 
-The React dashboard covers the same three workflows as the Streamlit app: meal plan generation, calorie prediction, and meal/feedback history, with the FastAPI backend as its only dependency (no demo mode).
+The React app is the main client (DEC-37): a home page with a craving search, a plan page with nutrition charts, runners-up, a shopping checklist, saving and rating, My meals, Past plans and a profile remembered on this device (DEC-36). The FastAPI backend is its only dependency (no demo mode). Saving, rating and history need a local API; on a hosted API they are hidden and planning still works.
 
 If the backend is not reachable at `localhost:8000`, copy `frontend/.env.example`
 to `frontend/.env.local` and adjust it before starting the dev server.
@@ -256,13 +256,13 @@ TRACE_SAMPLE_RATIO=1.0
 
 `REQUIRE_VERIFIED_NUTRITION=1` makes a meal fail with `502` (code `unverified_required`) when any ingredient's nutrition could only be estimated. It is off by default so the keyless demo keeps producing plans. `API_KEYS` and `RATE_LIMIT_PER_MINUTE` are described in [8.1 Security](#81-security).
 
-**Existing SQLite databases.** A database created before G4 has no `client_id` column, and there are no migrations, so the API refuses to start against one and names the file. Under stateless v1, delete `database/ai_meal_planner.db` and restart; it is recreated empty.
+**Existing SQLite databases.** Alembic owns the schema, and the API upgrades `database/ai_meal_planner.db` when it starts, keeping its records. A database from before G4 is upgraded too. If the upgrade fails, the file stays as it was. The API refuses to start against a file whose schema it does not recognise, or one written by a newer version, and names the file. After changing a table in `repositories/sql/models.py`, write a revision with `uv run alembic revision --autogenerate -m "what changed"`; a test fails until you do.
 
 `GEMINI_API_KEY`, `USDA_API_KEY`, and FatSecret credentials are optional. The backend includes deterministic fallbacks so the core workflow remains usable without external API keys.
 
 `HOSTED_MODE=true` marks a hosted, multi-instance deployment. Each instance has its own SQLite file, so history written on one would be invisible on the others. Hosted mode therefore refuses the three history reads and `POST /meal-feedback` with `501 history_disabled_stateless`, and it stores no generated plans. Meal planning and calorie prediction keep working, `/health` stays public and reports `hosted_mode`, and both clients hide history and feedback when it is set. It is off by default.
 
-`STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported once with `uv run python scripts/migrate_json_to_sqlite.py`. That script is not idempotent, so running it twice duplicates every record. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
+`STORAGE_BACKEND` selects where meal history and feedback are persisted. `sqlite` is the default and starts from an empty database at `database/ai_meal_planner.db`; existing JSON records are imported with `uv run python scripts/migrate_json_to_sqlite.py`, which skips any record already stored, so it is safe to run again. `STORAGE_BACKEND=json` keeps the previous file-backed behaviour, reading and writing `database/*.json` directly.
 
 ## 8. API Overview
 
@@ -328,7 +328,7 @@ Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` 
 
 **Rate limit.** `RATE_LIMIT_PER_MINUTE` (default 60) is a fixed one-minute window per `client_id`, held **in each instance's memory**. With N instances a client can make up to N times the limit. It is a per-instance safeguard, not an account-wide quota. Exceeding it returns `429 rate_limited` with `Retry-After`.
 
-**Open local mode.** With `API_KEYS` empty the API runs unauthenticated under a single `local` namespace and logs a warning at startup; this is how the React dashboard works in development, since a key placed in a `VITE_*` variable would be baked into the public bundle. `APP_ENV=production` with no keys refuses to start, so a hosted deployment cannot be open by accident. Calling a keyed API from the React dashboard is out of scope for v1.
+**Open local mode.** With `API_KEYS` empty the API runs unauthenticated under a single `local` namespace and logs a warning at startup; this is how the React app works in development, since a key placed in a `VITE_*` variable would be baked into the public bundle. `APP_ENV=production` with no keys refuses to start, so a hosted deployment cannot be open by accident. Calling a keyed API from the React app is out of scope for v1.
 
 **Telemetry: allowlisted metadata only.** Traces and logs follow one rule: only allowlisted operational metadata leaves the process.
 - **Spans:** each request is traced as one span plus a child per workflow stage. Spans carry statuses, counts, ids and route templates from a fixed allowlist in `backend/app/core/telemetry.py`. They never carry the `user_id`, craving, health conditions, dietary preferences, location, biometrics or values derived from them, ingredient or meal names, or exception messages.
@@ -355,7 +355,7 @@ uv run ruff format --check .
 uv run pytest
 ```
 
-Build and lint the React dashboard:
+Build and lint the React app:
 
 ```bash
 cd frontend
@@ -400,8 +400,8 @@ The full prioritised backlog, including the deliberate gaps, is in
 [`docs/4_next_steps.md`](docs/4_next_steps.md). Highlights:
 
 - Consume the budget from `/calorie-expenditure/predict` in `/generate-meal-plan`
-- Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates
+- ~~Expand `data/meal_corpus/meals.json` from 34 templates to 75-100 curated templates~~ Done 2026-11-22: 76 (DEC-35)
 - Use saved meals, likes, dislikes, and ratings as ranking features in retrieval
 - Move local JSON stores for history, feedback, and profiles to a managed database
 - Improve macro-target balancing, serving-size normalization, and ingredient matching
-- Add authentication and persistent accounts to the React dashboard as it moves toward a production interface
+- Add authentication and persistent accounts to the React app as it moves toward a production interface

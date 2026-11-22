@@ -1,6 +1,12 @@
 # Product Design — React showcase
 
-**Status: approved by the owner (2026-10-21), DEC-29.** Revised after
+**Status: approved by the owner (2026-10-21), DEC-29; built in six slices.**
+**Superseded in part on 2026-11-22** by the kitchen-app redesign
+([spec](superpowers/specs/2026-11-22-react-kitchen-app-design.md), DEC-36, DEC-37):
+the three-step wizard became a home page, a plan page, My meals, Past plans and a
+Profile page; the profile is remembered on the device; and the look moved to
+"Flat kitchen" (Viridis charts, icons, illustrations). The states in §3.3 and the
+rules in §6 still hold, except where noted. Revised after
 Codex's review; nothing is built yet. §7 records the answers.
 The owner and Codex review it in `docs/5_agent_log.md` first. Once it is
 agreed, the decisions it settles go to `docs/3_decisions.md` and the work
@@ -86,10 +92,14 @@ browser. This screen fixes that gap; it is functional, not cosmetic.
   includes that exercise component. The showcase keeps the defaults and
   says so under "How this plan was made". Whether to add an optional
   "today's workout" input or retire the separate estimate is §7 question 5.
-- **Where the details go.** The profile is held in React state only:
-  never in the URL (health fields would reach access logs), never in
-  `localStorage`; `sessionStorage` would count as persistence and would
-  have to be disclosed. It is not true that nothing is saved: the details
+  *Answered 2026-11-22 (DEC-33):* step 1 asks for today's workout: not
+  sure (the defaults, as before), a rest day (`duration_minutes: 0`), or
+  minutes and an optional heart rate. The plan's note describes the workout
+  from `calorie_budget.exercise`.
+- **Where the details go.** The profile is never in the URL (health
+  fields would reach access logs). *Changed 2026-11-22 (DEC-36):* it is
+  remembered in `localStorage` on this device, disclosed on screen, with
+  "Forget me on this device"; before that it was React state only. It is not true that nothing is saved: the details
   go with every plan request, and a local API (`hosted_mode` off) stores
   the full response, request biometrics and conditions included, in its
   history. The copy says exactly that: "Your details go with each plan
@@ -245,7 +255,8 @@ labels, keyboard use and focus after each step, and the 390 px layout.
 - Do not present "on target" as independent validation while nutrition
   is estimated from local tables.
 - Do not offer an avoid-chip the rules do not enforce (diabetes today).
-- Do not put health fields in a URL or in browser storage.
+- Do not put health fields in a URL. Browser storage holds only the
+  remembered profile, user ID and location (DEC-36).
 - Do not put an API key in the Vite bundle.
 - Do not re-derive targets in the client; the service owns them.
 
@@ -260,7 +271,7 @@ design on 2026-10-21 (DEC-29):
 3. The frozen `App.test.jsx` may be replaced by flow tests that keep
    every guarantee listed in §5: approved.
 4. History stays as a small "past plans" link in local mode (default).
-5. The meal request keeps the service's default workout (default).
+5. The meal request keeps the service's default workout (default). Replaced 2026-11-22: step 1 asks for today's workout (DEC-33).
 6. Local retention is unchanged and disclosed on screen (default); a
    no-retention mode would be a separate backend decision.
 7. The separate calorie estimate stays as a small header link next to

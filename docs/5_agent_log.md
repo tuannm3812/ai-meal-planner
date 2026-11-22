@@ -8113,6 +8113,107 @@ Mike approved the deck. Internal paper tags and housekeeping notes came off, sli
 reader-facing "What comes next", and the poster is now a project poster (personal project). Concept
 folders moved to `docs/showcase/slides/archive/`. App tasks P2 to P9 moved to their own thread.
 
+## 2026-11-07 — Claude — P2: Alembic migrations
+
+Mike asked for P2. Alembic now owns the SQLite schema (DEC-32). `0001` is the original layout and
+`0002` adds the G4 columns, so a pre-G4 file is upgraded, not refused. `build_engine` calls
+`migrate_to_head`, which runs in one `BEGIN IMMEDIATE` transaction. The JSON importer now skips
+stored records.
+
+The 75 records: 65 belong to `user_123`, 54 are the same burger request, and the 19 feedback
+records are 17 `pytest_user` and 2 `user_123`, all from one day. I read them as test output and
+recommend not importing them. I deleted and imported nothing in Mike's checkout.
+
+Verified: 644 tests pass (552 backend, 92 Streamlit); ruff is clean; `scripts/container_smoke.sh`
+passes on the new image. Removing the write lock fails
+the four-process test on 3 of 3 runs, and adding a model field fails the drift test. On copies,
+Mike's real pre-G4 file upgraded with both plans kept and their request ids filled, and importing
+the JSON twice gave 75 + 19, then 0 + 0.
+
+On 21 November Mike agreed to leave the 75 records out and asked to merge without a Codex review.
+
+## 2026-11-22 — Claude — P5: today's workout in the meal request
+
+Mike asked for P5, without a Codex review. `MealRequest` takes optional workout details
+(DEC-33), and `calorie_budget.exercise` reports what was used. React step 1 asks for today's
+workout: not sure, rest day, or minutes with an optional heart rate. The step 1 panel no longer
+says the model estimates the whole day.
+
+Verified: 652 Python tests and 164 frontend tests pass; ruff, eslint and the build are clean;
+`docs/openapi.json` is regenerated. Leaving the workout out gives the same estimate as an
+explicit 30 minutes at 100 bpm and 37 °C, so the baseline does not move. The sample plan's 125 kcal
+is the model's real figure. Step 1 checked in a browser.
+
+## 2026-11-22 — Claude — P6: tagged allergens
+
+Mike asked for P6, without a Codex review. The diet rules now read
+`data/reference/ingredient_allergens.json` (DEC-34), which tags all 50 servable ingredients. An
+untagged ingredient is refused under any diet rule, and a test fails if any recipe, fallback,
+guardrail or swap ingredient is missing from the table.
+
+Found on the way: a tree-nut allergy refused nothing, because the name rules had no tree-nut
+keywords. No current ingredient holds tree nuts, so no plan changes, but new ones will be checked.
+
+Verified: 662 Python tests pass; ruff is clean. The meal-quality baseline's report is
+byte-identical before and after.
+
+## 2026-11-22 — Claude — P7: 76 recipes
+
+Mike asked for P7, without a Codex review. The corpus grows from 34 to 76 recipes (DEC-35). There
+are 15 new ingredients, each tagged and given USDA-typical values as estimates. React files are
+untouched.
+
+Verified: the wider check (`--wider`) gives 152 of 152 plans meeting the targets, each served the
+recipe it named. Six recipes were adjusted to get there, and one was renamed so it no longer took
+"Vegetarian Spinach Omelette" requests. The fixed baseline stays at 72 of 72, and the plan changes
+are listed in DEC-35. Three retrieval tests changed: "burrito bowl" now expects Pork Burrito Bowl,
+and the two relevance-over-score tests use "winter", because "eggs" now leads on score. 662 Python
+tests pass and ruff is clean.
+
+## 2026-11-22 — Claude — React kitchen app: React becomes the main app
+
+Mike asked for a more polished UI than Streamlit, without a Codex review once he approves and
+the tests pass. He rejected a restyle, then brainstormed a full redesign over six questions, with
+mockups on a design canvas: a kitchen app, remembered on this device, with save, rate, shop and
+runners-up on each plan; home layout B; and the "Flat kitchen" look. The spec and build plan are in
+`docs/superpowers/`, and the decisions are DEC-36 and DEC-37. The backend, data and Streamlit are
+untouched.
+
+Changed: `MealFlow`'s request logic moved unchanged into `usePlanner`, behind a context, and
+routed pages replace the three steps. New: Home, Plan, My meals, Past plans, the stored plan view,
+Profile (with Forget me and the calorie estimate), Viridis SVG charts, 12 flat dish illustrations,
+save and rating through `POST /meal-feedback`, and Copy and Print on the shopping list.
+`HistoryTab`, `PlanView`, `StepIndicator` and `BrandBar` are gone. Their tests moved onto the
+pages with every guarantee kept, and the old step navigation became page links. One guarantee
+changed on purpose: a returning visit now reads its own saved meals and history on Home, while a
+first visit still sends nothing until the person plans.
+
+Verified: 224 frontend tests pass (22 files); eslint and the build are clean. 662 Python tests
+pass, and `docs/openapi.json` is untouched. One frontend test failed once while Playwright and pytest
+ran on the same machine, then passed on three reruns; it was not identified. Checked in Chromium at
+1280 and 390 px against the local API: first visit, home, plan, save, home lists and profile. The
+README screenshots are retaken from the new app.
+
+## 2026-11-22 — Claude — React palette and icon system (DEC-38)
+
+Mike asked, alongside merging the kitchen app, for a consistent colour palette with the icons
+refined to follow it. I audited the React code, put a palette and icon sheet on the design canvas,
+and he approved it.
+
+Changed: `frontend/src/theme/tokens.js` holds every colour, and `tailwind.config.js`, the SVG
+charts and the dish drawings read from it. `components/icons/Icon.jsx` and `glyphs.js` are the only
+way to draw a Lucide icon. Every page was re-toned: stock reds, ambers and greys became the
+`danger`, `estimate` and `line`/`muted` tokens, icons on light grounds are leaf and on ink are lime,
+and no icon uses a macro colour or tomato. The calorie ring moved from the fat colour to
+`viridis-2`. `StatCard` lost its coloured dot, the unused `SparkleIcon` and Vite's leftover
+`App.css` are gone, and the empty state's icon lost its tile. DESIGN.md §3 and §5 describe the
+system.
+
+Verified: `tokens.test.js` fails on raw hex outside the tokens file, stock Tailwind colours, macro
+classes outside the plan feature, Lucide imported outside the icon folder, and hand-set icon sizes.
+233 frontend tests pass (23 files); eslint and the build are clean. Checked in Chromium against the
+local API, and the README screenshots are retaken. No backend, data or Streamlit change.
+
 ## 2026-11-18 — Claude — showcase deck on the UTS deck kit
 
 Mike asked to apply the UTS deck kit 0.6.0. The deck is now a kit consumer in `docs/showcase/uts-deck`

@@ -17,6 +17,11 @@ class MealRequest(BaseModel):
     height_cm: float | None = Field(default=None, gt=80, le=260)
     weight_kg: float | None = Field(default=None, gt=20, le=350)
     activity_multiplier: float | None = Field(default=None, gt=1.0, le=2.5)
+    # Today's workout (DEC-33). 0 minutes is a rest day; an omitted detail
+    # falls back to the calorie model's default.
+    duration_minutes: float | None = Field(default=None, ge=0, le=600)
+    heart_rate_bpm: float | None = Field(default=None, gt=20, le=240)
+    body_temp_c: float | None = Field(default=None, gt=30, le=45)
     goal: str = Field(default="maintain", min_length=3, max_length=40)
 
 

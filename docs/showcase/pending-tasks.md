@@ -30,24 +30,24 @@ update when a task is done.
 
 ## Product, in priority order
 
-- [ ] **P2 Storage:** add database migrations (Alembic). Needed before any deployment holds real data. `docs/4_next_steps.md` §7.1.
+- [x] **P2 Storage:** add database migrations (Alembic). Done 7 November 2026, DEC-32.
 - [ ] **P3 Hosting:** create the GCP project and deploy to Cloud Run, then confirm a real trace arrives. `docs/6_deployment.md` §1.
 - [ ] **P4 Data:** run the benchmark with USDA keys, so nutrition is checked independently of the local tables.
-- [ ] **P7 Recipes:** grow the library from 34 to 75–100 recipes. It gates the vector database. `docs/4_next_steps.md` §7.9.
+- [x] **P7 Recipes:** grow the library from 34 to 75–100 recipes. Done 22 November 2026: 76 recipes, DEC-35. The deck's "34 recipes" now reads 76.
 - [ ] **P8 Prices:** connect live store prices. 4 of 6 items in the example plan use category prices.
 - [ ] **P9 Learning:** use saved meals and ratings in ranking. They are collected but unused. `docs/4_next_steps.md` §7.10.
 - [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets.
 
 ## Accuracy
 
-- [ ] **P5 Calorie model:** ask for real exercise details, or stop adding exercise on top of the activity multiplier. The meal flow uses defaults (30 minutes, 100 bpm), so activity may count twice.
-- [ ] **P6 Diet rules:** move from matching ingredient names to tagged allergens. Name matching missed soy sauce until DEC-31.
+- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A workout day can still overlap the activity level.
+- [x] **P6 Diet rules:** move from matching ingredient names to tagged allergens. Done 22 November 2026, DEC-34. New recipes must tag their ingredients.
 - [ ] **Meal target:** record why it is 28% of the day, and review the cap for large budgets. The large athlete's meal is 19% of the day.
 - [ ] **Low-carb preference:** it favours no meal now, because no recipe is low-carb (DEC-30).
 
 ## Repo clean-up
 
-- [ ] Decide what to do with the 75 records in local `database/meal_history.json` before ever running `scripts/migrate_json_to_sqlite.py`, which isn't idempotent.
+- [x] Decide what to do with the 75 records in local `database/meal_history.json`. Done 21 November 2026: Mike chose not to import them, because they are test output.
 - [ ] Raise `ProfileNotFound` or remove it. An unknown `user_id` silently gets the default profile.
 - [ ] Add accounts. Endpoints that take a `user_id` take it on trust. `docs/4_next_steps.md` §7.7.
-- [ ] Reword the app's step 1 panel, which says a trained model "estimates the energy you burn in a day".
+- [x] Reword the app's step 1 panel, which said a trained model "estimates the energy you burn in a day". Done 22 November 2026 with P5.

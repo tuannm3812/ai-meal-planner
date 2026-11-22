@@ -278,18 +278,3 @@ def test_legacy_json_records_without_a_client_id_belong_to_local(tmp_path: Path)
 
     assert [r["request_id"] for r in store.list_for_user("u1", client_id="local")] == ["old"]
     assert store.list_for_user("u1", client_id="app-a") == []
-
-
-def test_an_old_sqlite_schema_is_refused_with_a_clear_message(tmp_path: Path) -> None:
-    """create_all cannot add the client_id column, so a pre-G4 database must not load."""
-    import sqlite3
-
-    path = tmp_path / "old.db"
-    with sqlite3.connect(path) as connection:
-        connection.execute(
-            "CREATE TABLE meal_plans (id INTEGER PRIMARY KEY, user_id TEXT, "
-            "saved_at TEXT, payload JSON)"
-        )
-
-    with pytest.raises(RuntimeError, match=r"old\.db"):
-        build_engine(path)

@@ -95,6 +95,7 @@ change rather than a rewrite (DEC-4). The items below are kept for traceability.
    distribution from `pydantic`; Phase 2 added it to `pyproject.toml` and
    `uv.lock` and re-exported `backend/requirements.txt` to match.
 5. Schema creation via `create_all`. **Alembic is out of scope** — see §7.1.
+   *Closed 2026-11-07: Alembic now owns the schema (DEC-32).*
 
 ## 3. Phase 3 — Tests and CI — **DONE 2026-09-11**
 
@@ -234,6 +235,14 @@ unit of work.
   is the honest scale.
 - **Audit logging** for profile and plan changes. Named in Later Scope alongside the
   managed database; health-adjacent recommendations are the case for it.
+- **Unsave a meal, and edit a rating (kitchen app, DEC-37).** Feedback is
+  append-only, so the React app can save a meal but not unsave it, and it sends one
+  rating per plan per visit. Both need a backend change, such as a delete or
+  "latest record wins" rule on `/meal-feedback`.
+- **Dish illustrations for new kinds of meal.** `dishType()` in
+  `frontend/src/components/illustrations/dishType.js` picks one of 12 drawings by
+  keyword and falls back to a generic bowl. A new kind of dish (a sandwich, a pizza)
+  needs a drawing and a keyword.
 - **User feedback loop for preference learning.** The consuming half — feedback as a
   retrieval ranking feature — is a §7.5 gap; the collection half already works, so
   this is about what the stored signal is used for.
@@ -243,7 +252,7 @@ unit of work.
 Deliberately out of scope, recorded so they are known gaps rather than oversights.
 From spec §12.
 
-1. **Alembic migrations — first, and the most consequential.** Phase 2 creates its
+1. **Done 2026-11-07 (DEC-32).** **Alembic migrations — first, and the most consequential.** Phase 2 creates its
    schema with `create_all` and ships no migration path, so the first schema change
    after data exists has no supported route forward. Acceptable only while the data
    is disposable local development state. This must be closed before any deployment
@@ -279,7 +288,7 @@ From spec §12.
 8. **Postgres.** Phase 2's Protocol boundary reduces this to a config change plus one
    class, which is exactly why it need not be done now — no current user justifies
    adding managed infrastructure to every dev setup and to CI (DEC-4).
-9. **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
+9. **Done 2026-11-22 (DEC-35): 76 templates.** **Expanding the meal corpus** beyond its current 34 templates. The README roadmap
    targets 75–100 curated templates. It is content work, not engineering, and it
    gates the vector-database item in §6.
 10. **Using feedback signals as retrieval ranking features.** README roadmap item:

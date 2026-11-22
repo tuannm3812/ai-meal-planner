@@ -751,7 +751,7 @@
               {
                 "type": "number",
                 "maximum": 600.0,
-                "exclusiveMinimum": 0.0
+                "minimum": 0.0
               },
               {
                 "type": "null"
@@ -835,6 +835,16 @@
             },
             "type": "array",
             "title": "Warnings"
+          },
+          "exercise": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ExerciseEstimate"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
@@ -881,6 +891,42 @@
         ],
         "title": "ErrorResponse",
         "description": "The body of every domain error (``core/exceptions.py``).\n\n``code`` is a stable machine-readable code, sent only by errors that have\none. ``detail`` is the client-safe message; the internal one is never sent."
+      },
+      "ExerciseEstimate": {
+        "properties": {
+          "duration_minutes": {
+            "type": "number",
+            "title": "Duration Minutes"
+          },
+          "heart_rate_bpm": {
+            "type": "number",
+            "title": "Heart Rate Bpm"
+          },
+          "body_temp_c": {
+            "type": "number",
+            "title": "Body Temp C"
+          },
+          "kcal": {
+            "type": "number",
+            "title": "Kcal"
+          },
+          "defaulted": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Defaulted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "duration_minutes",
+          "heart_rate_bpm",
+          "body_temp_c",
+          "kcal"
+        ],
+        "title": "ExerciseEstimate",
+        "description": "The workout the trained model added to the daily estimate (DEC-33).\n\nAttributes:\n    duration_minutes: Minutes of exercise; 0 is a rest day.\n    heart_rate_bpm: Average heart rate during the workout.\n    body_temp_c: Body temperature during the workout.\n    kcal: Calories the workout added to the daily estimate.\n    defaulted: The details the request left out, filled from EXERCISE_DEFAULTS."
       },
       "FeedbackListResponse": {
         "properties": {
@@ -1590,6 +1636,45 @@
               }
             ],
             "title": "Activity Multiplier"
+          },
+          "duration_minutes": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 600.0,
+                "minimum": 0.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Duration Minutes"
+          },
+          "heart_rate_bpm": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 240.0,
+                "exclusiveMinimum": 20.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heart Rate Bpm"
+          },
+          "body_temp_c": {
+            "anyOf": [
+              {
+                "type": "number",
+                "maximum": 45.0,
+                "exclusiveMinimum": 30.0
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Body Temp C"
           },
           "goal": {
             "type": "string",

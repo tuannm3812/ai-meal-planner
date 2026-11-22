@@ -62,9 +62,9 @@ function CaloriesTab() {
 
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-      <aside className="rounded-2xl border border-gray-100 bg-white p-6 shadow-md lg:sticky lg:top-6 lg:self-start">
-        <h2 className="text-lg font-semibold text-gray-900">Calorie Expenditure</h2>
-        <p className="mt-1 text-sm leading-6 text-gray-500">
+      <aside className="rounded-3xl border border-transparent bg-surface p-6 lg:sticky lg:top-6 lg:self-start">
+        <h2 className="text-lg font-semibold text-ink">Calorie Expenditure</h2>
+        <p className="mt-1 text-sm leading-6 text-muted">
           Calls the promoted Kaggle calorie model artifact.
         </p>
 

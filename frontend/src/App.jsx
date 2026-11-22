@@ -1,75 +1,53 @@
-import { useState } from 'react'
+import { Bookmark, History } from './components/icons/glyphs'
+import { Route, Routes } from 'react-router-dom'
 
-import BrandBar from './components/brand/BrandBar'
-import CaloriesTab from './features/calories/CaloriesTab'
-import MealFlow from './features/flow/MealFlow'
-import HistoryTab from './features/history/HistoryTab'
-import { DEFAULT_PROFILE } from './features/profile/profile'
+import AppShell from './app/AppShell'
+import { PlannerProvider } from './app/PlannerContext'
+import HomePage from './pages/HomePage'
+import ListPage from './pages/ListPage'
+import PlanPage from './pages/PlanPage'
+import ProfilePage from './pages/ProfilePage'
+import StoredPlanPage from './pages/StoredPlanPage'
 
-// An opaque ID for this visit, out of sight (docs/8_design.md §3.1). It is in
-// the history URL, which access logs record, so it says nothing about anyone.
-function newUserId() {
-  return `web-${globalThis.crypto.randomUUID()}`
-}
-
-const link =
-  'min-h-[44px] rounded-lg px-3 text-sm font-medium text-ink underline-offset-4 hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-ink'
-
-// One guided flow (DEC-29). Past plans and the separate calorie estimate are
-// small links, not tabs (§7). The flow stays mounted while they are open, so
-// coming back keeps the profile, craving and plan.
+// The kitchen app (spec 2026-11-22): home, the plan, saved meals, past plans
+// and the profile. URLs carry a request ID at most, never a health detail.
 function App() {
-  const [view, setView] = useState('flow')
-  const [profile, setProfile] = useState(DEFAULT_PROFILE)
-  const [userId] = useState(newUserId)
-
   return (
-    <>
-      <BrandBar>
-        <nav aria-label="More" className="flex flex-wrap gap-1">
-          <button
-            aria-pressed={view === 'history'}
-            className={link}
-            onClick={() => setView('history')}
-            type="button"
-          >
-            Past plans
-          </button>
-          <button
-            aria-pressed={view === 'calories'}
-            className={link}
-            onClick={() => setView('calories')}
-            type="button"
-          >
-            Calorie estimate
-          </button>
-        </nav>
-      </BrandBar>
-
-      <main className="min-h-screen bg-ground px-4 py-8 text-ink sm:px-6">
-        <div className="mx-auto max-w-6xl">
-          <div hidden={view !== 'flow'}>
-            <MealFlow onProfileChange={setProfile} profile={profile} userId={userId} />
-          </div>
-
-          {view !== 'flow' && (
-            <div className="flex flex-col gap-6">
-              <div>
-                <button
-                  className="min-h-[44px] rounded-xl border border-ink px-4 text-sm font-semibold text-ink"
-                  onClick={() => setView('flow')}
-                  type="button"
-                >
-                  Back to your meal
-                </button>
-              </div>
-              {view === 'history' && <HistoryTab initialUserId={userId} />}
-              {view === 'calories' && <CaloriesTab />}
-            </div>
-          )}
-        </div>
-      </main>
-    </>
+    <PlannerProvider>
+      <Routes>
+        <Route element={<AppShell />}>
+          <Route element={<HomePage />} index />
+          <Route element={<PlanPage />} path="plan" />
+          <Route element={<StoredPlanPage />} path="plans/:requestId" />
+          <Route
+            element={
+              <ListPage
+                Icon={Bookmark}
+                empty="Meals you save from a plan show up here."
+                intro="Meals you saved on this device, newest first."
+                pick={(lists) => lists.saved}
+                title="My meals"
+              />
+            }
+            path="meals"
+          />
+          <Route
+            element={
+              <ListPage
+                Icon={History}
+                empty="Plans you make show up here."
+                intro="Every meal planned on this device, newest first. History lives on the API you are connected to, and it is lost when that server is replaced."
+                pick={(lists) => lists.history}
+                title="Past plans"
+              />
+            }
+            path="history"
+          />
+          <Route element={<ProfilePage />} path="profile" />
+          <Route element={<HomePage />} path="*" />
+        </Route>
+      </Routes>
+    </PlannerProvider>
   )
 }
 

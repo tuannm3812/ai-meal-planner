@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -10,15 +10,25 @@ vi.mock('axios', () => ({
 }))
 
 import axios from 'axios'
-import App from './App'
 
-// The flow tests that replace the three-tab App.test.jsx (DEC-29). Each
-// guarantee the old file held is kept here or in the test named next to it;
-// docs/5_agent_log.md lists the mapping.
+import { STORAGE_KEY } from './app/storage'
+import {
+  STORED,
+  cravingInput,
+  goHome,
+  goToProfile,
+  planMeal,
+  renderApp,
+  startButton,
+} from './test/renderApp'
+
+// The app-level guarantees (DEC-29, kept through the kitchen-app redesign of
+// 2026-11-22): no network on a first visit's first render, the request
+// payload, the error and retry, the stale mark, and what is remembered.
 
 const PLAN = {
   data: {
-    request_id: 'req-1',
+    request_id: 'req-00000001',
     plan_status: 'matched',
     meal_plan: {
       meal_definition: { structured_meal_name: 'Grilled Chicken Bowl', ingredients: [] },
@@ -28,53 +38,45 @@ const PLAN = {
   },
 }
 
-const next = () => screen.getByRole('button', { name: 'Next: what are you craving?' })
-const cravingInput = () => screen.getByLabelText(/Your craving/i)
-const planButton = () => screen.getByRole('button', { name: 'Plan my meal' })
-
-async function planFromStart(user, craving = 'High-protein burger') {
-  await user.click(next())
-  await user.type(cravingInput(), craving)
-  await user.click(planButton())
-}
-
 describe('App', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
 
-  // Old: "renders without crashing and shows the tab bar" and "shows the meal
-  // plan tab content by default".
-  it('opens on step 1 of the flow, with the brand and the step indicator', () => {
-    render(<App />)
-    expect(screen.getByText('AI Meal Planner')).toBeInTheDocument()
+  it('opens a first visit on the details form, with the brand and the main links', () => {
+    renderApp()
+    expect(screen.getByRole('link', { name: 'AI Meal Planner' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
-    const progress = screen.getByRole('navigation', { name: 'Progress' })
-    expect(within(progress).getByRole('button', { name: '1 · You' })).toHaveAttribute(
-      'aria-current',
-      'step',
-    )
-    // The plan step cannot be opened before a plan has been asked for.
-    expect(within(progress).getByRole('button', { name: '3 · Your plan' })).toBeDisabled()
-    expect(screen.queryByRole('button', { name: 'Meal Plan' })).not.toBeInTheDocument()
-    // Kept from the old default-view test: the calorie estimate is not shown.
+    const nav = screen.getByRole('navigation', { name: 'Main' })
+    for (const name of ['My meals', 'Past plans', 'Profile']) {
+      expect(within(nav).getByRole('link', { name })).toBeInTheDocument()
+    }
+    expect(screen.queryByLabelText(/Your craving/i)).not.toBeInTheDocument()
     expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
   })
 
-  // Old: "never calls the network on first render". Kept as it was.
-  it('never calls the network on first render', () => {
-    render(<App />)
+  it('never calls the network on a first visit', () => {
+    renderApp()
     expect(axios.get).not.toHaveBeenCalled()
     expect(axios.post).not.toHaveBeenCalled()
   })
 
-  // Old: "fires axios.post to /generate-meal-plan when the meal plan form is
-  // submitted". The exact payload is pinned in ProfileStep.test.jsx ("sends
-  // the profile with the meal request").
+  it('asks for nothing but the plan until the person plans', async () => {
+    const user = userEvent.setup()
+    renderApp()
+    await user.click(startButton())
+    expect(axios.post).not.toHaveBeenCalled()
+    // Home loads this device's own lists, read-only.
+    for (const [url] of axios.get.mock.calls) {
+      expect(url).toMatch(/\/(saved-meals|meal-plans)\/web-[0-9a-f-]{36}$/)
+    }
+  })
+
   it('posts the craving, the profile and an opaque user ID to /generate-meal-plan', async () => {
     const user = userEvent.setup()
-    render(<App />)
-    await planFromStart(user)
+    renderApp()
+    await user.click(startButton())
+    await planMeal(user, 'High-protein burger')
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     const [url, payload] = axios.post.mock.calls[0]
@@ -89,25 +91,23 @@ describe('App', () => {
     expect(payload.user_id).toMatch(/^web-[0-9a-f-]{36}$/)
   })
 
-  // Old: "renders part of the returned plan when axios.post resolves".
-  it('moves to the plan step and renders the returned plan', async () => {
+  it('opens the plan page and renders the returned plan', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<App />)
-    await planFromStart(user)
+    renderApp({ stored: STORED })
+    await planMeal(user)
 
-    expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: 'Your plan' })).toHaveFocus()
+    expect(
+      await screen.findByRole('heading', { level: 1, name: 'Grilled Chicken Bowl' }),
+    ).toHaveFocus()
   })
 
-  // Old: "renders the error banner when axios.post rejects". Error and retry
-  // per status are in PlanScreen.test.jsx ("Plan screen failures").
   it('shows the error and retries it', async () => {
     axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Backend exploded' } } })
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<App />)
-    await planFromStart(user)
+    renderApp({ stored: STORED })
+    await planMeal(user)
 
     const alert = await screen.findByRole('alert')
     expect(within(alert).getByText('Backend exploded')).toBeInTheDocument()
@@ -117,105 +117,94 @@ describe('App', () => {
     expect(axios.post).toHaveBeenCalledTimes(2)
   })
 
-  // The stale-result guard, through the whole app. In-flight drops are in
-  // CravingStep.test.jsx; the submitted-craving label in MealFlow.test.jsx.
+  // The stale-result guard, through the whole app.
   it('marks a plan stale after going back and changing the craving', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<App />)
-    await planFromStart(user)
+    renderApp({ stored: STORED })
+    await planMeal(user, 'High-protein burger')
     await screen.findByText('Grilled Chicken Bowl')
 
     await user.click(screen.getByRole('button', { name: 'Try another craving' }))
-    expect(screen.getByRole('heading', { name: 'What are you in the mood for?' })).toHaveFocus()
     expect(cravingInput()).toHaveValue('High-protein burger')
     await user.type(cravingInput(), ' with fries')
-    await user.click(screen.getByRole('button', { name: '3 · Your plan' }))
+    await user.click(screen.getByRole('link', { name: /Back to your plan/ }))
 
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     expect(screen.getByText(/For your craving .High-protein burger./)).toBeInTheDocument()
   })
 
-  it('keeps the profile, craving and plan across the step indicator', async () => {
+  it('keeps the profile, craving and plan across pages', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<App />)
+    renderApp()
 
     await user.clear(screen.getByLabelText('Weight (kg)'))
     await user.type(screen.getByLabelText('Weight (kg)'), '82')
     await user.click(screen.getByRole('checkbox', { name: 'Peanut allergy' }))
-    await planFromStart(user)
+    await user.click(startButton())
+    await planMeal(user, 'High-protein burger')
     await screen.findByText('Grilled Chicken Bowl')
 
-    await user.click(screen.getByRole('button', { name: '1 · You' }))
+    await goToProfile(user)
     expect(screen.getByLabelText('Weight (kg)')).toHaveValue(82)
     expect(screen.getByRole('checkbox', { name: 'Peanut allergy' })).toBeChecked()
-    await user.click(screen.getByRole('button', { name: '2 · Craving' }))
+    await goHome(user)
     expect(cravingInput()).toHaveValue('High-protein burger')
-    await user.click(screen.getByRole('button', { name: '3 · Your plan' }))
-    expect(screen.getByText('Grilled Chicken Bowl')).toBeInTheDocument()
-    expect(screen.queryByRole('status')).not.toBeInTheDocument()
     expect(axios.post.mock.calls[0][1]).toMatchObject({
       weight_kg: 82,
       health_conditions: ['peanut allergy'],
     })
   })
 
-  // Old: "switches to the history tab". History is a small link now (§7).
-  it('opens past plans from a link and comes back with everything kept', async () => {
+  it('remembers only the user ID, profile and location, and no URL holds a detail', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<App />)
-    await planFromStart(user)
+    renderApp()
+    await user.click(screen.getByRole('checkbox', { name: 'Kidney disease' }))
+    await user.click(startButton())
+    await planMeal(user)
     await screen.findByText('Grilled Chicken Bowl')
 
-    await user.click(screen.getByRole('button', { name: 'Past plans' }))
-    expect(screen.getByRole('heading', { name: 'History' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Meal History' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: 'Saved Meals' })).toBeInTheDocument()
-    // History looks up this visit's own user ID first.
-    expect(screen.getByLabelText('User ID')).toHaveValue(axios.post.mock.calls[0][1].user_id)
-    expect(screen.queryByText('Grilled Chicken Bowl')).not.toBeVisible()
-
-    await user.click(screen.getByRole('button', { name: 'Back to your meal' }))
-    expect(screen.getByText('Grilled Chicken Bowl')).toBeVisible()
-    expect(screen.queryByRole('heading', { name: 'Meal History' })).not.toBeInTheDocument()
+    expect(Object.keys(localStorage)).toEqual([STORAGE_KEY])
+    const stored = JSON.parse(localStorage.getItem(STORAGE_KEY))
+    expect(Object.keys(stored)).toEqual(['userId', 'profile', 'location'])
+    expect(stored.profile.avoid).toEqual(['kidney'])
+    for (const [url, options] of axios.get.mock.calls) {
+      expect(url).not.toMatch(/kidney|weight|age|64|168/i)
+      expect(options?.params ?? {}).toEqual({ limit: 50 })
+    }
   })
 
-  // Kept from the deleted ProfileAcrossTabs.test.jsx: details entered before
-  // visiting the calorie estimate survive the visit and reach the request.
-  it('keeps the entered details after visiting the calorie estimate', async () => {
+  it('opens the calorie estimate from the profile page', async () => {
     const user = userEvent.setup()
-    render(<App />)
+    renderApp({ stored: STORED })
+    await goToProfile(user)
 
-    await user.clear(screen.getByLabelText('Weight (kg)'))
-    await user.type(screen.getByLabelText('Weight (kg)'), '82')
-    await user.click(screen.getByRole('checkbox', { name: 'Peanut allergy' }))
-
-    await user.click(screen.getByRole('button', { name: 'Calorie estimate' }))
-    await user.click(screen.getByRole('button', { name: 'Back to your meal' }))
-
-    expect(screen.getByLabelText('Weight (kg)')).toHaveValue(82)
-    expect(screen.getByRole('checkbox', { name: 'Peanut allergy' })).toBeChecked()
-    await planFromStart(user, 'fried rice')
-    expect(axios.post.mock.calls[0][1]).toMatchObject({
-      weight_kg: 82,
-      health_conditions: ['peanut allergy'],
-    })
-  })
-
-  // Old: "switches to the calories tab". The separate estimate stays as a link.
-  it('opens the calorie estimate from a link', async () => {
-    const user = userEvent.setup()
-    render(<App />)
-
-    await user.click(screen.getByRole('button', { name: 'Calorie estimate' }))
+    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Open the calorie estimate' }))
     expect(screen.getByRole('heading', { name: 'Calorie Expenditure' })).toBeInTheDocument()
-    // Hidden, not unmounted: the flow keeps its state while the link is open.
-    expect(
-      screen.getByRole('heading', { name: 'Tell us about you', hidden: true }),
-    ).not.toBeVisible()
-    await user.click(screen.getByRole('button', { name: 'Back to your meal' }))
-    expect(screen.getByRole('heading', { name: 'Tell us about you' })).toBeVisible()
+  })
+
+  it('forgets this device after a confirmation, back to the first visit', async () => {
+    const user = userEvent.setup()
+    renderApp({ stored: STORED })
+    await goToProfile(user)
+
+    await user.click(screen.getByRole('button', { name: 'Forget me on this device' }))
+    expect(screen.getByText(/Plans already on the server are not deleted/)).toBeInTheDocument()
+    await user.click(screen.getByRole('button', { name: 'Keep my details' }))
+    expect(localStorage.getItem(STORAGE_KEY)).not.toBeNull()
+
+    await user.click(screen.getByRole('button', { name: 'Forget me on this device' }))
+    await user.click(screen.getByRole('button', { name: 'Yes, forget me' }))
+    expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
+    expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
+  })
+
+  it('opens a returning visit straight on the craving search', () => {
+    renderApp({ stored: STORED })
+    expect(screen.getByRole('heading', { level: 1, name: /Say what you crave/ })).toBeInTheDocument()
+    expect(cravingInput()).toBeInTheDocument()
   })
 })

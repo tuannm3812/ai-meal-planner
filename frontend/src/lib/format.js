@@ -20,8 +20,8 @@ export const parseCommaList = (value) =>
     .filter(Boolean)
 
 export const macroCards = [
-  { key: 'total_calories', label: 'Calories', unit: ' kcal', dot: 'bg-amber-400' },
-  { key: 'total_protein', label: 'Protein', unit: 'g', dot: 'bg-sky-500' },
-  { key: 'total_carbs', label: 'Carbs', unit: 'g', dot: 'bg-violet-500' },
-  { key: 'total_fat', label: 'Fat', unit: 'g', dot: 'bg-rose-500' },
+  { key: 'total_calories', label: 'Calories', unit: ' kcal' },
+  { key: 'total_protein', label: 'Protein', unit: 'g' },
+  { key: 'total_carbs', label: 'Carbs', unit: 'g' },
+  { key: 'total_fat', label: 'Fat', unit: 'g' },
 ]

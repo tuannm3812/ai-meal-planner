@@ -67,7 +67,7 @@ def test_separate_processes_have_different_instance_ids() -> None:
         "from backend.app.main import app\n"
         "with TestClient(app) as c: print(c.get('/health').headers['X-Instance-Id'])\n"
     )
-    # Isolated: JSON storage (the developer's pre-G4 SQLite file would be refused),
+    # Isolated: JSON storage (so the developer's SQLite file is not touched),
     # no dotenv, no keys, so each process starts in open local mode.
     env = {
         **os.environ,

@@ -39,6 +39,10 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 29 | The React app becomes one guided showcase flow, per `docs/8_design.md` | 2026-10-21 |
 | 30 | Eleven recipes get a carb or fat they plausibly hold; plant milks and nut butters are not dairy | 2026-11-04 |
 | 31 | Soy sauce and oats count as gluten; soy sauce is swapped for coconut aminos | 2026-11-07 |
+| 32 | Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal | 2026-11-07 |
+| 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
+| 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
+| 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -543,3 +547,167 @@ benchmark's constrained cravings do not include oats, so its numbers do not move
 
 Rules out a gluten-free soy sauce as the replacement, because the keyword rules
 would flag it and it would need a new nutrition entry.
+
+## 2026-11-07 — Storage: database migrations
+
+### DEC-32 — Alembic owns the schema and upgrades at startup; supersedes DEC-9's refusal
+
+`create_all` could not change an existing table, so a schema change after data
+existed had no route forward. Alembic now owns the schema. Revision `0001` is the
+original table layout and `0002` adds the G4 columns, so an old file is upgraded
+with its records kept instead of being refused, which replaces that part of DEC-9.
+The `client_id` column itself stands.
+
+The app applies revisions when it opens the database, as `create_all` did, so the
+API, scripts and tests need no extra step. The upgrade is one transaction holding
+SQLite's write lock: a failed revision leaves the file as it was, and a second
+process waits rather than racing. A file with no version table is matched to the
+revision that describes it. A shape no revision describes, or a revision newer
+than the code, stops startup and leaves the file alone. A test fails when the
+models and revisions disagree.
+
+`scripts/migrate_json_to_sqlite.py` now skips records already stored, so running
+it twice is safe.
+
+Rules out a separate migration step before each deploy for now: with one SQLite
+file per instance there is nothing shared to run it against. Postgres (§7.3 of the
+next steps) should revisit this, because many instances would share one schema.
+
+## 2026-11-22 — Calorie model: real exercise details
+
+### DEC-33 — The meal request takes today's workout; a rest day adds no exercise
+
+The trained model predicts the calories of one workout, and the service adds
+them to BMR times the activity multiplier. The meal request had no workout
+fields, so every plan assumed 30 minutes at 100 bpm, even on a rest day.
+
+`MealRequest` now takes optional `duration_minutes`, `heart_rate_bpm` and
+`body_temp_c`, passed to the calorie model. `duration_minutes: 0` is a rest day:
+no exercise is added and the model is not called, because its training data has
+no zero-minute rows. A detail left out keeps the old default, so plans without
+workout details, including the meal-quality baseline, do not change.
+`calorie_budget.exercise` reports the workout used, its calories and which
+details were defaulted, so the clients describe it from the response.
+
+The React step 1 asks for today's workout (not sure, rest day, or minutes with
+an optional heart rate). Body temperature is not asked.
+
+Still open: the activity levels count exercise days in a usual week, so a
+workout day can still count some exercise twice. Ruled out for now: retiring the
+model's exercise estimate, which would remove the trained model from the meal
+flow.
+
+## 2026-11-22 — Diet rules: tagged allergens
+
+### DEC-34 — Diet rules read a tag table of ingredients; an untagged ingredient is refused
+
+The diet rules looked for keywords in ingredient names. That missed soy sauce as
+gluten until DEC-31, read "gluten-free bun" as gluten, and needed a list of plant
+foods so "peanut butter" was not dairy. A tree-nut allergy refused nothing, because
+it had no keywords.
+
+`data/reference/ingredient_allergens.json` now lists all 50 ingredients a meal can
+hold, with what each contains: the nine allergens, `meat`, and `high_sodium` and
+`kidney_caution`. Each constraint group refuses a set of tags (vegan refuses meat,
+fish, shellfish, dairy and egg). A swap must leave the ingredient safe under every
+group in force. An ingredient missing from the table is refused under any diet rule,
+and a test fails until every recipe, fallback and swap ingredient is listed. New
+recipes (P7) have to be tagged.
+
+The meal-quality baseline is unchanged, line for line. The sodium and kidney tags
+copy what the name rules did, so black beans stay allowed for kidney disease while
+kidney beans do not. A dietitian should review those two (P9).
+
+Rules out tags on each recipe instead of each ingredient. Swaps change a meal's
+ingredients, so a recipe-level tag would go stale.
+
+## 2026-11-22 — Recipes: a larger corpus
+
+### DEC-35 — The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them
+
+The corpus grows from 34 recipes to 76, inside the README's target of 75 to 100.
+The 42 new recipes add cuisines and proteins the corpus lacked: white fish, pork,
+chicken thigh, tempeh and edamame. They also add potato, couscous and nut dishes,
+so a tree-nut allergy has something to refuse. Each recipe has a protein, a
+carbohydrate and a cooking fat, so portion balancing (DEC-26, DEC-28) can bring it
+inside AMDR.
+
+Fifteen ingredients are new. Each is tagged (DEC-34) and has typical per-100 g
+values from USDA FoodData Central in `macro_fallbacks` and `ingredient_calories`.
+They go there rather than `trusted_overrides` because they were not checked against
+a live lookup, so plans label them estimated until P4's USDA run confirms them. None
+has a store price, so the shopping list uses category prices for them (P8).
+
+Measured: the wider check asks for every recipe by name for two profiles, and 152 of
+152 plans meet the targets, each served the recipe it named. Six recipes needed more
+oil or carbohydrate before they did. The fixed baseline stays at 72 of 72, but
+retrieval picks some new recipes over old ones. "Creamy pasta" now gets Tuna Pasta
+Salad, "salmon dinner" Salmon Noodle Bowl, and the kidney-disease "chicken fried rice"
+Low-Sodium Chicken Rice Bowl. The median calorie deviation moves from 0.4% to 0.5%.
+
+Rules out generating recipes with Gemini. Each recipe here was written and checked
+by hand against the targets, and the corpus stays a curated, reviewable file.
+
+## 2026-11-22 — React becomes the main app
+
+### DEC-36 — The React app remembers the person on this device
+
+Mike chose a personal kitchen app: you come back to your saved meals and past plans,
+which only works if the app knows you. There are no accounts. The browser now keeps
+one `localStorage` key, `aimp.v1`, holding the opaque user ID, the profile and where
+the person shops. Nothing else is stored: no plans, no ratings, no shopping ticks.
+
+The Profile page says so, and "Forget me on this device" clears the key after a
+confirmation. Server history is not touched, and the confirmation says that too.
+Storage that is blocked or full is caught, and the app works for the visit and says it
+can't remember. Health fields still never go in a URL.
+
+Supersedes the "never in `localStorage`" line of DEC-29 (docs/8_design.md §3.1). Rules
+out accounts for now: they need backend work (docs/4_next_steps.md §7.7).
+
+### DEC-37 — React is the main app, rebuilt as a kitchen app in "Flat kitchen"
+
+Mike judged the React plan screen to look like the Streamlit app. React becomes the main
+app, and Streamlit stays as the simple backup demo, unchanged. Over six questions he
+chose:
+
+- a kitchen app (home, plan page, My meals, Past plans, Profile) over a wizard;
+- save, rate, a shopping checklist and the retrieval's runners-up on every plan;
+- a home page led by one big craving search;
+- the "Flat kitchen" look: Bricolage Grotesque 800 and Inter, flat dish illustrations,
+  a light green ground, and white cards with no border.
+
+He asked for Viridis in charts, less grey, and bigger icons with no tiles. The macro
+colours became Viridis stops #440154, #2A788E and #22A884 (each at least 3:1 on white),
+and the plan page draws a calorie ring, a macro donut, range bars and a stacked bar of
+where the calories come from, all in plain SVG with no chart library. Icons come from
+`lucide-react` (ISC), and routing from `react-router-dom` (MIT).
+
+Constraints kept: feedback is append-only, so a save can't be undone (an unsave is a
+backend change). A stored plan reopens from history as it was, never re-planned. A
+hosted server's 501 hides saving and rating, but planning still works. A first visit
+still makes no network call before the person plans. A returning visit reads its own
+saved meals and history on Home.
+
+Rules out meal photos (the service has none, and a stock photo would show a different
+dish) and a chart library (four small charts don't need one).
+
+### DEC-38 — One tokens file holds every app colour; icons go through one component
+
+After the kitchen app merged, Mike asked for a better design setup: a consistent colour
+palette, with the icons refined to follow it. An audit of the React code found 36 raw
+hex values, Tailwind's stock reds, ambers, greys, sky, violet and rose, and icons in nine
+sizes, three strokes and five colours, including macro colours and tomato used on
+icons. He approved the palette and icon sheet on the design canvas.
+
+`frontend/src/theme/tokens.js` now holds every colour in five groups (neutrals, brand,
+status, data, food). `tailwind.config.js` maps its class names from that file, and the
+charts and dish drawings import it. Icons render through `Icon`: one 1.75 stroke, sizes
+20, 24 and 32, and a colour taken from the surface (leaf on light, lime on ink, the text
+colour in a button). New tokens: `leaf`, `lime`, `ink-raised`, `on-ink-muted`, the
+`danger` pair and `danger-on-ink`, and `band`. Errors move from stock red to `danger`,
+and the calorie ring moves off the fat colour to `viridis-2`, so a macro colour means
+only its macro. A guard test enforces all of it.
+
+Rules out CSS variables for theming (there is one theme, and Tailwind classes plus a JS
+module cover both HTML and SVG) and a second icon set.

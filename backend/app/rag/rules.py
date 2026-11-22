@@ -1,6 +1,8 @@
 from dataclasses import dataclass
+from functools import cache
 
 from .meal_corpus import MealCorpusItem
+from .reference_data import load_reference
 
 
 @dataclass(frozen=True)
@@ -20,37 +22,28 @@ class PlannedSubstitution:
     reason: str
 
 
-ALLERGEN_KEYWORDS = {
-    "dairy": {"milk", "cheese", "yogurt", "cottage cheese", "whey", "butter"},
+INGREDIENT_TAGS = "ingredient_allergens"
+"""Reference table naming what each servable ingredient contains (DEC-34)."""
+
+UNTAGGED = "untagged"
+"""Returned for an ingredient the table does not list, so a diet rule refuses it."""
+
+GROUP_TAGS = {
+    "dairy": {"dairy"},
     "egg": {"egg"},
-    "fish": {"salmon", "tuna", "fish"},
-    "gluten": {"wheat", "wholemeal", "bread", "bun", "pasta", "tortilla", "soy sauce", "oat"},
+    "fish": {"fish"},
+    "gluten": {"gluten"},
     "peanut": {"peanut"},
     "sesame": {"sesame"},
-    "shellfish": {"shrimp", "prawn", "crab", "lobster"},
-    "soy": {"soy", "tofu", "tempeh"},
+    "shellfish": {"shellfish"},
+    "soy": {"soy"},
+    "tree_nut": {"tree_nut"},
+    "vegan": {"meat", "fish", "shellfish", "dairy", "egg"},
+    "vegetarian": {"meat", "fish", "shellfish"},
+    "sodium_sensitive": {"high_sodium"},
+    "kidney_disease": {"kidney_caution"},
 }
-
-PLANT_BASED_DAIRY_NAMES = {
-    "almond butter",
-    "almond milk",
-    "coconut milk",
-    "coconut yogurt",
-    "oat milk",
-    "peanut butter",
-    "soy milk",
-    "soy yogurt",
-    "sunflower seed butter",
-}
-"""Plant foods whose names hold a dairy keyword. The keyword rules would block
-"soy milk" and "peanut butter" for a dairy-free or vegan request, so Vegan Oat
-Bowl and Peanut Tofu Bowl were never served under the default profile."""
-
-ANIMAL_PROTEIN_KEYWORDS = {
-    "meat": {"chicken", "turkey", "beef", "lean beef", "steak"},
-    "fish": {"salmon", "tuna", "fish"},
-    "shellfish": {"shrimp", "prawn", "crab", "lobster"},
-}
+"""The ingredient tags each constraint group refuses."""
 
 CONSTRAINT_ALIASES = {
     "celiac": "gluten",
@@ -79,21 +72,21 @@ SUBSTITUTION_RULES = [
         "whole egg",
         "firm tofu",
         80,
-        {"egg", "vegan"},
+        {"egg"},
         "replaced egg for egg-free or vegan constraint",
     ),
     IngredientSubstitutionRule(
         "greek yogurt",
         "soy yogurt",
         None,
-        {"dairy", "vegan"},
+        {"dairy"},
         "replaced dairy yogurt",
     ),
     IngredientSubstitutionRule(
         "cottage cheese",
         "soy yogurt",
         None,
-        {"dairy", "vegan"},
+        {"dairy"},
         "replaced dairy cheese",
     ),
     IngredientSubstitutionRule(
@@ -128,7 +121,7 @@ SUBSTITUTION_RULES = [
         "soy sauce",
         "coconut aminos",
         None,
-        {"soy", "sodium_sensitive", "gluten"},
+        {"soy", "high_sodium", "gluten"},
         "replaced soy sauce for soy, sodium or gluten constraint",
     ),
     IngredientSubstitutionRule(
@@ -217,37 +210,43 @@ def constraint_groups(labels: list[str]) -> set[str]:
     return groups
 
 
-def blocked_groups_for_ingredient(item_name: str, groups: set[str]) -> set[str]:
-    normalized_name = normalize_label(item_name)
-    blocked = {
-        group
-        for group, keywords in ALLERGEN_KEYWORDS.items()
-        if group in groups and any(keyword in normalized_name for keyword in keywords)
+@cache
+def ingredient_tags() -> dict[str, frozenset[str]]:
+    """Load the tag table, keyed by normalised ingredient name.
+
+    Returns:
+        Each listed ingredient's tags.
+    """
+    table = load_reference(INGREDIENT_TAGS)
+    return {
+        normalize_label(name): frozenset(tags)
+        for name, tags in table.items()
+        if not name.startswith("_")
     }
-    if any(name in normalized_name for name in PLANT_BASED_DAIRY_NAMES):
-        blocked.discard("dairy")
 
-    if "vegan" in groups:
-        blocked.update(
-            group
-            for group, keywords in ANIMAL_PROTEIN_KEYWORDS.items()
-            if any(keyword in normalized_name for keyword in keywords)
-        )
-    if "vegetarian" in groups:
-        blocked.update(
-            group
-            for group in {"meat", "fish", "shellfish"}
-            if any(keyword in normalized_name for keyword in ANIMAL_PROTEIN_KEYWORDS[group])
-        )
-    if "sodium_sensitive" in groups and "soy sauce" in normalized_name:
-        blocked.add("sodium_sensitive")
-    if "kidney_disease" in groups and any(
-        keyword in normalized_name
-        for keyword in {"kidney beans", "lentils", "chickpeas", "tofu", "soy sauce"}
-    ):
-        blocked.add("kidney_disease")
 
-    return blocked
+def blocked_groups_for_ingredient(item_name: str, groups: set[str]) -> set[str]:
+    """Name the tags that make an ingredient unsafe under the constraints.
+
+    Reads the tag table, not the name (DEC-34): matching names flagged
+    "gluten-free bun" as gluten and missed soy sauce until DEC-31.
+
+    Args:
+        item_name: The ingredient.
+        groups: Every constraint group in force, from ``constraint_groups``.
+
+    Returns:
+        The ingredient's tags that a group refuses, ``{"untagged"}`` when a
+        group is in force and the table does not list the ingredient, or an
+        empty set when it is safe.
+    """
+    refused = set().union(*(GROUP_TAGS.get(group, set()) for group in groups))
+    if not refused:
+        return set()
+    tags = ingredient_tags().get(normalize_label(item_name))
+    if tags is None:
+        return {UNTAGGED}
+    return set(tags & refused)
 
 
 def safe_substitution(
@@ -257,11 +256,8 @@ def safe_substitution(
 ) -> PlannedSubstitution | None:
     """Find a substitution that leaves the ingredient safe under every constraint.
 
-    A rule is trusted only for the groups it is written for, so its replacement
-    must be safe under every other group in force: firm tofu -> chickpeas fixes a
-    soy allergy, but chickpeas are blocked for kidney disease. The replacement is
-    not checked against the rule's own groups, because the keyword rules would
-    wrongly flag "gluten-free pasta" as gluten.
+    The replacement must be safe under every group in force: firm tofu ->
+    chickpeas fixes a soy allergy, but chickpeas are refused for kidney disease.
 
     Args:
         item_name: The blocked ingredient.
@@ -276,7 +272,7 @@ def safe_substitution(
     for rule in SUBSTITUTION_RULES:
         if rule.original_name != normalized_name or not rule.blocked_groups & blocked:
             continue
-        if blocked_groups_for_ingredient(rule.replacement_name, groups - rule.blocked_groups):
+        if blocked_groups_for_ingredient(rule.replacement_name, groups):
             continue
         return PlannedSubstitution(
             original_name=item_name,
