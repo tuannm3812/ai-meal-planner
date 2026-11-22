@@ -8,14 +8,14 @@ function FailurePanel({ failure, message, onRetry, canRetry = true, pause }) {
   const offerRetry = described.retry !== null && onRetry
   return (
     <div
-      className="rounded-[14px] border border-red-200 bg-red-50 p-4 text-sm leading-6 text-red-800"
+      className="rounded-2xl bg-danger-bg p-4 text-sm leading-6 text-danger-fg"
       role="alert"
     >
       <p className="font-semibold">{described.title}</p>
       <p>{message ?? described.body}</p>
       {offerRetry && (
         <button
-          className="mt-3 min-h-[44px] rounded-xl bg-ink px-4 font-semibold text-white disabled:cursor-not-allowed disabled:bg-gray-300 disabled:text-gray-600"
+          className="mt-3 min-h-[44px] rounded-xl bg-ink px-4 font-semibold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
           disabled={!canRetry}
           onClick={onRetry}
           type="button"

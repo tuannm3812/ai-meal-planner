@@ -8194,3 +8194,22 @@ ran on the same machine, then passed on three reruns; it was not identified. Che
 1280 and 390 px against the local API: first visit, home, plan, save, home lists and profile. The
 README screenshots are retaken from the new app.
 
+## 2026-11-22 — Claude — React palette and icon system (DEC-38)
+
+Mike asked, alongside merging the kitchen app, for a consistent colour palette with the icons
+refined to follow it. I audited the React code, put a palette and icon sheet on the design canvas,
+and he approved it.
+
+Changed: `frontend/src/theme/tokens.js` holds every colour, and `tailwind.config.js`, the SVG
+charts and the dish drawings read from it. `components/icons/Icon.jsx` and `glyphs.js` are the only
+way to draw a Lucide icon. Every page was re-toned: stock reds, ambers and greys became the
+`danger`, `estimate` and `line`/`muted` tokens, icons on light grounds are leaf and on ink are lime,
+and no icon uses a macro colour or tomato. The calorie ring moved from the fat colour to
+`viridis-2`. `StatCard` lost its coloured dot, the unused `SparkleIcon` and Vite's leftover
+`App.css` are gone, and the empty state's icon lost its tile. DESIGN.md §3 and §5 describe the
+system.
+
+Verified: `tokens.test.js` fails on raw hex outside the tokens file, stock Tailwind colours, macro
+classes outside the plan feature, Lucide imported outside the icon folder, and hand-set icon sizes.
+233 frontend tests pass (23 files); eslint and the build are clean. Checked in Chromium against the
+local API, and the README screenshots are retaken. No backend, data or Streamlit change.

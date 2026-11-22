@@ -692,3 +692,22 @@ saved meals and history on Home.
 Rules out meal photos (the service has none, and a stock photo would show a different
 dish) and a chart library (four small charts don't need one).
 
+### DEC-38 — One tokens file holds every app colour; icons go through one component
+
+After the kitchen app merged, Mike asked for a better design setup: a consistent colour
+palette, with the icons refined to follow it. An audit of the React code found 36 raw
+hex values, Tailwind's stock reds, ambers, greys, sky, violet and rose, and icons in nine
+sizes, three strokes and five colours, including macro colours and tomato used on
+icons. He approved the palette and icon sheet on the design canvas.
+
+`frontend/src/theme/tokens.js` now holds every colour in five groups (neutrals, brand,
+status, data, food). `tailwind.config.js` maps its class names from that file, and the
+charts and dish drawings import it. Icons render through `Icon`: one 1.75 stroke, sizes
+20, 24 and 32, and a colour taken from the surface (leaf on light, lime on ink, the text
+colour in a button). New tokens: `leaf`, `lime`, `ink-raised`, `on-ink-muted`, the
+`danger` pair and `danger-on-ink`, and `band`. Errors move from stock red to `danger`,
+and the calorie ring moves off the fat colour to `viridis-2`, so a macro colour means
+only its macro. A guard test enforces all of it.
+
+Rules out CSS variables for theming (there is one theme, and Tailwind classes plus a JS
+module cover both HTML and SVG) and a second icon set.

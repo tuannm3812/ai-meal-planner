@@ -1,45 +1,32 @@
+import { brand, data, MACRO_COLORS, neutral, status, VIRIDIS } from './src/theme/tokens.js'
+
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
-      // "Kitchen green" tokens, Flat kitchen edition (DESIGN.md, DEC-37).
-      // Components use these names (bg-ink, text-muted, ...) rather than raw hex.
+      // Every colour comes from src/theme/tokens.js (DESIGN.md §3, DEC-38).
+      // Components use these names (bg-ink, text-leaf, ...), never raw hex
+      // or Tailwind's stock palette.
       colors: {
-        ink: '#15291F',
-        muted: '#4B5B52',
-        ground: '#EEF4EF',
-        tint: '#DCEEE1',
-        surface: '#FFFFFF',
-        line: '#DDE3DA',
-        accent: {
-          DEFAULT: '#C8431F',
-          text: '#B23A17',
-        },
-        success: {
-          bg: '#E3EFE6',
-          fg: '#1B5E3F',
-        },
-        estimate: {
-          bg: '#FBEBD6',
-          fg: '#7A4A0C',
-        },
-        // Viridis: macros take three stops, each at least 3:1 on white.
-        protein: '#440154',
-        carbs: '#2A788E',
-        fat: '#22A884',
-        // The six-step ramp for categorical series, always with a text label.
-        viridis: {
-          1: '#440154',
-          2: '#414487',
-          3: '#2A788E',
-          4: '#22A884',
-          5: '#7AD151',
-          6: '#FDE725',
-        },
+        ink: { DEFAULT: neutral.ink, raised: neutral.inkRaised },
+        muted: neutral.muted,
+        'on-ink-muted': neutral.onInkMuted,
+        line: neutral.line,
+        ground: neutral.ground,
+        tint: neutral.tint,
+        surface: neutral.surface,
+        accent: { DEFAULT: brand.tomato, text: brand.tomatoText },
+        leaf: brand.leaf,
+        lime: brand.lime,
+        success: { bg: status.successBg, fg: status.successFg },
+        estimate: { bg: status.estimateBg, fg: status.estimateFg },
+        danger: { bg: status.dangerBg, fg: status.dangerFg, 'on-ink': status.dangerOnInk },
+        protein: MACRO_COLORS.protein,
+        carbs: MACRO_COLORS.carbs,
+        fat: MACRO_COLORS.fat,
+        band: data.band,
+        viridis: Object.fromEntries(VIRIDIS.map((hex, index) => [index + 1, hex])),
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

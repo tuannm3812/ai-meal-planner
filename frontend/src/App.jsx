@@ -1,4 +1,4 @@
-import { Bookmark, History } from 'lucide-react'
+import { Bookmark, History } from './components/icons/glyphs'
 import { Route, Routes } from 'react-router-dom'
 
 import AppShell from './app/AppShell'
@@ -24,7 +24,6 @@ function App() {
               <ListPage
                 Icon={Bookmark}
                 empty="Meals you save from a plan show up here."
-                iconClass="text-protein"
                 intro="Meals you saved on this device, newest first."
                 pick={(lists) => lists.saved}
                 title="My meals"
@@ -37,7 +36,6 @@ function App() {
               <ListPage
                 Icon={History}
                 empty="Plans you make show up here."
-                iconClass="text-carbs"
                 intro="Every meal planned on this device, newest first. History lives on the API you are connected to, and it is lost when that server is replaced."
                 pick={(lists) => lists.history}
                 title="Past plans"

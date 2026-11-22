@@ -11,7 +11,7 @@ function InputField({ error, helperText, label, ...inputProps }) {
       <input
         aria-describedby={describedBy || undefined}
         aria-invalid={error ? 'true' : undefined}
-        className={`mt-2 w-full rounded-lg border bg-white px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-200 placeholder:text-muted focus:border-transparent focus:ring-2 focus:ring-ink ${
+        className={`mt-2 w-full rounded-lg border bg-surface px-3.5 py-2.5 text-sm text-ink outline-none transition-all duration-200 placeholder:text-muted focus:border-transparent focus:ring-2 focus:ring-ink ${
           error ? 'border-accent-text' : 'border-line'
         }`}
         {...inputProps}

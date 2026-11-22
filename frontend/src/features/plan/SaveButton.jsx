@@ -1,7 +1,8 @@
-import { Bookmark } from 'lucide-react'
 import { useState } from 'react'
 
 import { sendFeedback } from '../../api/mealPlanner'
+import Icon from '../../components/icons/Icon'
+import { Bookmark } from '../../components/icons/glyphs'
 import { feedbackErrorMessage, feedbackPayload, isNotImplemented } from './feedback'
 
 // "Save meal" on the plan banner. Saving is one-way: the server's feedback is
@@ -27,18 +28,18 @@ function SaveButton({ plan, userId, saved, onSaved, onHosted }) {
   return (
     <div className="flex flex-col gap-1">
       <button
-        className={`inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl px-6 text-base font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5 disabled:cursor-default ${
-          saved ? 'bg-viridis-5 text-ink' : 'bg-accent text-white'
+        className={`inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl px-6 text-base font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-lime disabled:cursor-default ${
+          saved ? 'bg-lime text-ink' : 'bg-accent text-white'
         }`}
         disabled={saved || sending}
         onClick={save}
         type="button"
       >
-        <Bookmark aria-hidden="true" fill={saved ? 'currentColor' : 'none'} size={24} strokeWidth={1.8} />
+        <Icon as={Bookmark} filled={saved} />
         {saved ? 'Saved to My meals' : sending ? 'Saving…' : 'Save meal'}
       </button>
       {error && (
-        <p className="text-sm text-[#FFD2BC]" role="alert">
+        <p className="text-sm text-danger-on-ink" role="alert">
           {error}
         </p>
       )}

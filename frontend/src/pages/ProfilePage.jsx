@@ -1,8 +1,9 @@
-import { Calculator, Trash2 } from 'lucide-react'
 import { useState } from 'react'
 import { Navigate, useNavigate } from 'react-router-dom'
 
 import { usePlannerContext } from '../app/PlannerContext'
+import Icon from '../components/icons/Icon'
+import { Calculator, Trash2 } from '../components/icons/glyphs'
 import { card, pageShell, secondaryButton, sectionHeading } from '../components/ui/styles'
 import CaloriesTab from '../features/calories/CaloriesTab'
 import LocationField from '../features/profile/LocationField'
@@ -68,7 +69,7 @@ function ProfilePage() {
           </div>
         ) : (
           <button className={`${secondaryButton} mt-4`} onClick={() => setConfirming(true)} type="button">
-            <Trash2 aria-hidden="true" size={22} strokeWidth={1.8} />
+            <Icon as={Trash2} size="sm" />
             Forget me on this device
           </button>
         )}
@@ -76,7 +77,7 @@ function ProfilePage() {
 
       <section aria-labelledby="estimate-heading" className={card}>
         <h2 className={sectionHeading} id="estimate-heading">
-          <Calculator aria-hidden="true" className="text-carbs" size={32} strokeWidth={1.8} />
+          <Icon as={Calculator} size="lg" tone="light" />
           Calorie estimate
         </h2>
         <p className="mt-2 max-w-3xl text-muted">

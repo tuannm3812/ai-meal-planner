@@ -35,22 +35,43 @@ crave. Get a meal that fits you.**
 
 ## 3. Colour
 
+Every app colour lives in one file, [`frontend/src/theme/tokens.js`](frontend/src/theme/tokens.js)
+(DEC-38). Tailwind maps it to the class names below, and the SVG charts and dish drawings
+import it. A guard test (`tokens.test.js`) fails on a raw hex value anywhere else, on
+Tailwind's stock colours (`red-50`, `gray-300` and the like), and on a macro colour used
+outside the plan feature. The tokens fall into five groups.
+
+| Group | What it is for |
+| --- | --- |
+| Neutrals | Text, lines and the grounds pages sit on |
+| Brand | Tomato for the one call to action; leaf and lime for icons |
+| Status | A background and its text for success, estimates and errors |
+| Data | Viridis for charts, its three macro stops, and the range band |
+| Food | Only inside the dish drawings, never in the interface |
+
 | Token | Hex | Role |
 | --- | --- | --- |
 | `ground` | #EEF4EF | App page background (light green) |
 | `tint` | #DCEEE1 | App section tints and illustration grounds |
 | `surface` | #FFFFFF | Cards and readable surfaces |
 | `ink` | #15291F | Text, headings, dark panels |
+| `ink-raised` | #1F3D2E | The blob shape on an `ink` banner |
+| `on-ink-muted` | #C9D3CC | Secondary text on `ink` |
 | `muted` | #4B5B52 | Supporting text |
 | `line` | #DDE3DA | Borders and dividers |
 | `accent` | #C8431F | Tomato: logo, primary action, the one highlight |
 | `accent-text` | #B23A17 | Small tomato text on light backgrounds |
+| `leaf` | #1B5E3F | Icons and small labels on light grounds; hover rings |
+| `lime` | #7AD151 | Icons, focus rings and the saved state on `ink` |
 | `success-bg` / `success-fg` | #E3EFE6 / #1B5E3F | Positive result, always with a text label |
 | `estimate-bg` / `estimate-fg` | #FBEBD6 / #7A4A0C | Estimate badges and notices |
+| `danger-bg` / `danger-fg` | #FBE4DD / #9B2C12 | A failed request or error notice |
+| `danger-on-ink` | #FFD2BC | Error text on `ink` |
 | `protein` | #440154 | Protein data only (Viridis) |
 | `carbs` | #2A788E | Carbohydrate data only (Viridis) |
 | `fat` | #22A884 | Fat data only (Viridis) |
-| `viridis-1` to `viridis-6` | #440154 #414487 #2A788E #22A884 #7AD151 #FDE725 | Categorical chart series, in order |
+| `viridis-1` to `viridis-6` | #440154 #414487 #2A788E #22A884 #7AD151 #FDE725 | Categorical chart series, in order; the calorie ring is `viridis-2` |
+| `band` | #C6E3CF | The recommended range behind the balance bars |
 
 Aim for about 70% ground and white, 20% ink, under 10% tomato. Charts use Viridis,
 the owner's choice: the macro colours are its three darker stops, each at least 3:1
@@ -58,7 +79,7 @@ on white, and a categorical series takes `viridis-1` onward in order, always wit
 text label. `viridis-5` and `viridis-6` are fills on `ink` or next to a label, never
 text on white. On `ink`, protein uses #B9A3C8 so it stays visible. Macro colours never
 mean anything but their macro. Green never means medically safe. Tomato never means an
-error. #C9D3CC is secondary text on `ink`. The showcase keeps its own palette: #F6F7F2
+error; errors use the `danger` pair. Disabled buttons use `line` with `muted` text. The showcase keeps its own palette: #F6F7F2
 for slide grounds, #ECEFE8 for neutral tracks and badges, #9AA5A0 for baseline results,
 and a white canvas.
 
@@ -96,10 +117,21 @@ Put it beside the name "AI Meal Planner". Use it alone only where space is tiny.
 - Leave a quarter of its width clear on every side; never under 24 px.
 - It stands for a planned meal, not a weekly calendar feature, so don't imply one.
 
-**Icons:** the app uses one outline set, [`lucide-react`](https://lucide.dev) (ISC), at
-a 1.6–2 px stroke and 24–36 px. Icons sit on the page with no tile or circle behind
-them, in ink or a Viridis colour, always next to a word unless the control has an
-accessible name. Slides and posters keep numbered ink circles.
+**Icons:** the app uses one outline set, [`lucide-react`](https://lucide.dev) (ISC),
+always through the `Icon` component in `frontend/src/components/icons/` (DEC-38). It
+fixes the rest:
+
+- One stroke, 1.75, with round caps and joins.
+- Three sizes: `sm` 20 px inside buttons and links, `md` 24 px for navigation, field
+  labels and notices, `lg` 32 px beside section headings, list headings and stars.
+- Colour comes from the surface, never from the meaning: `light` is `leaf` on ground,
+  tint and white cards; `ink` is `lime` on the dark banners and top bar; `current` takes
+  the text colour inside a button or notice. Never a macro colour, never tomato.
+- No tile or circle behind an icon. An icon sits next to a word unless the control has
+  an accessible name, and it is hidden from screen readers.
+
+The guard test fails on a Lucide import outside that folder and on a hand-set icon
+size or stroke. Slides and posters keep numbered ink circles.
 
 **Illustrations:** flat food drawings, one for each kind of dish (rice bowl, stir fry,
 noodles, pasta, curry, soup, salad, taco or wrap, eggs and toast, oats, plate, bowl).

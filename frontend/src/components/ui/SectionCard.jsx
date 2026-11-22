@@ -1,9 +1,9 @@
 function SectionCard({ eyebrow, title, children, className = '' }) {
   return (
-    <section className={`rounded-3xl border border-transparent bg-white p-6 ${className}`}>
+    <section className={`rounded-3xl border border-transparent bg-surface p-6 ${className}`}>
       <div>
         {eyebrow && (
-          <p className="text-xs font-semibold uppercase tracking-wider text-carbs">
+          <p className="text-xs font-semibold uppercase tracking-wider text-leaf">
             {eyebrow}
           </p>
         )}
