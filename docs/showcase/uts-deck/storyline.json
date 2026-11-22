@@ -23459,7 +23459,7 @@
           ],
           [
             "googlecloud",
-            "Cloud Run, not yet live"
+            "Cloud Run, live"
           ],
           [
             "opentelemetry",
@@ -26185,15 +26185,15 @@
       "accent": "plum",
       "title": "Built like a product, not a notebook",
       "subtitle": "Six production habits, in the order a change travels through them.",
-      "takeaway": "Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.",
+      "takeaway": "Health data is kept out of traces by a test, and real traces now reach Cloud Trace.",
       "question": "Is the engineering real?",
       "notes": {
         "purpose": "Show the production habits.",
         "script": [
-          "On the line, teal steps run today; the grey ones are built and wait for a GCP project.",
+          "All six steps on the line run today: the API is live on Cloud Run in Sydney, capped at one instance.",
           "The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.",
-          "The deployment workflow and tracing are built, but they wait for a GCP project.",
-          "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
+          "The first real trace reached Cloud Trace on 22 November 2026: one plan request, five stage spans, allowlisted fields only.",
+          "Sources: deploy.yml run 45010039893; ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
         ],
         "references": [
           "sources.md",
@@ -26233,16 +26233,16 @@
         {
           "icon": "cloud_upload",
           "title": "Cloud Run",
-          "text": "Ready, not live",
+          "text": "Live, one instance",
           "file": "deploy.yml",
-          "live": false
+          "live": true
         },
         {
           "icon": "visibility",
           "title": "Tracing",
           "text": "Health data kept out",
           "file": "core/telemetry.py",
-          "live": false
+          "live": true
         }
       ],
       "stats": [
@@ -26734,7 +26734,7 @@
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t26",
-          "text": "Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.",
+          "text": "Health data is kept out of traces by a test, and real traces now reach Cloud Trace.",
           "x": 147.3,
           "y": 442.05,
           "width": 761.9,
@@ -26748,7 +26748,7 @@
           "op": "style-paragraph",
           "element": "t26",
           "start": 0,
-          "end": 86,
+          "end": 83,
           "line_spacing": 135
         },
         {
@@ -26831,9 +26831,8 @@
           "y": 206.0,
           "width": 151.10000000000002,
           "height": 0.0,
-          "color": "#89949D",
-          "line_weight": 3,
-          "dash_style": "DASH"
+          "color": "#21918C",
+          "line_weight": 3
         },
         {
           "op": "add-line",
@@ -26843,9 +26842,8 @@
           "y": 206.0,
           "width": 151.10000000000002,
           "height": 0.0,
-          "color": "#89949D",
-          "line_weight": 3,
-          "dash_style": "DASH"
+          "color": "#21918C",
+          "line_weight": 3
         },
         {
           "op": "add-shape",
@@ -27232,12 +27230,12 @@
           "y": 200.0,
           "width": 12,
           "height": 12,
-          "background_color": "#89949D"
+          "background_color": "#21918C"
         },
         {
           "op": "add-image",
           "id": "im55",
-          "path": "assets/icons/kit/cloud_upload-grey.svg",
+          "path": "assets/icons/kit/cloud_upload-teal.svg",
           "alt": "",
           "x": 696.9,
           "y": 170.0,
@@ -27277,7 +27275,7 @@
           "op": "add-textbox",
           "slide": "engineering",
           "id": "t57",
-          "text": "Ready, not live",
+          "text": "Live, one instance",
           "x": 640.6999999999999,
           "y": 239.8,
           "width": 134.4,
@@ -27292,7 +27290,7 @@
           "op": "style-paragraph",
           "element": "t57",
           "start": 0,
-          "end": 15,
+          "end": 18,
           "line_spacing": 135
         },
         {
@@ -27326,12 +27324,12 @@
           "y": 200.0,
           "width": 12,
           "height": 12,
-          "background_color": "#89949D"
+          "background_color": "#21918C"
         },
         {
           "op": "add-image",
           "id": "im60",
-          "path": "assets/icons/kit/visibility-grey.svg",
+          "path": "assets/icons/kit/visibility-teal.svg",
           "alt": "",
           "x": 848.0,
           "y": 170.0,
@@ -27781,12 +27779,11 @@
           "items": [
             "No user testing",
             "No clinical review",
-            "Not deployed",
             "No database migrations",
             "Taste and health outcomes unknown"
           ],
           "strength": 1,
-          "next": "Deploy, then test with people"
+          "next": "Test with people"
         }
       ],
       "n": 14,
@@ -28896,7 +28893,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t64",
-          "text": "\u2022  Not deployed",
+          "text": "\u2022  No database migrations",
           "x": 644.6333333333333,
           "y": 211.0,
           "width": 267.56666666666666,
@@ -28910,14 +28907,14 @@
           "op": "style-paragraph",
           "element": "t64",
           "start": 0,
-          "end": 15,
+          "end": 25,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t65",
-          "text": "\u2022  No database migrations",
+          "text": "\u2022  Taste and health outcomes unknown",
           "x": 644.6333333333333,
           "y": 228.5,
           "width": 267.56666666666666,
@@ -28931,34 +28928,13 @@
           "op": "style-paragraph",
           "element": "t65",
           "start": 0,
-          "end": 25,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t66",
-          "text": "\u2022  Taste and health outcomes unknown",
-          "x": 644.6333333333333,
-          "y": 246.0,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t66",
-          "start": 0,
           "end": 36,
           "line_spacing": 135
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r67",
+          "id": "r66",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 372.0,
@@ -28969,7 +28945,7 @@
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r68",
+          "id": "r67",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 372.0,
@@ -28980,7 +28956,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t69",
+          "id": "t68",
           "text": "CLOSES IT",
           "x": 652.6333333333333,
           "y": 370.8,
@@ -28993,14 +28969,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t69",
+          "element": "t68",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t69",
+          "element": "t68",
           "start": 0,
           "end": 9,
           "bold": true
@@ -29008,8 +28984,8 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t70",
-          "text": "Deploy, then test with people",
+          "id": "t69",
+          "text": "Test with people",
           "x": 652.6333333333333,
           "y": 383.8,
           "width": 255.5666666666667,
@@ -29021,16 +28997,16 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t70",
+          "element": "t69",
           "start": 0,
-          "end": 29,
+          "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t70",
+          "element": "t69",
           "start": 0,
-          "end": 29,
+          "end": 16,
           "bold": true
         }
       ]
@@ -29048,7 +29024,7 @@
       "notes": {
         "purpose": "Pair the limits with the work that answers them.",
         "script": [
-          "Foundations first: migrations, a real deployment and accounts. Then better inputs. Then scale and testing with people.",
+          "Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.",
           "Sources: docs/4_next_steps.md \u00a76 and \u00a77."
         ],
         "references": [
@@ -29079,7 +29055,7 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, allergen tags, kitchen app"
+          "text": "76 recipes, kitchen app, Cloud Run"
         },
         {
           "date": "Now",
@@ -29091,12 +29067,10 @@
           "title": "Now",
           "items": [
             "Add database migrations",
-            "Deploy to Cloud Run",
             "Add user accounts"
           ],
           "icons": [
             "inventory_2",
-            "cloud_upload",
             "person"
           ]
         },
@@ -30016,7 +29990,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t50",
-          "text": "76 recipes, allergen tags, kitchen app",
+          "text": "76 recipes, kitchen app, Cloud Run",
           "x": 669.2166666666667,
           "y": 159.8,
           "width": 154.4,
@@ -30031,7 +30005,7 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 38,
+          "end": 34,
           "line_spacing": 135
         },
         {
@@ -30154,7 +30128,7 @@
           "x": 53.5,
           "y": 238.0,
           "width": 261.1666666666667,
-          "height": 54.0,
+          "height": 85.0,
           "background_color": "#FFFFFF"
         },
         {
@@ -30163,7 +30137,7 @@
           "path": "assets/icons/kit/inventory_2-ochre.svg",
           "alt": "",
           "x": 66.5,
-          "y": 255.0,
+          "y": 270.5,
           "width": 20,
           "height": 20
         },
@@ -30173,7 +30147,7 @@
           "id": "t59",
           "text": "Add database migrations",
           "x": 88.3,
-          "y": 249.7,
+          "y": 265.2,
           "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
@@ -30201,18 +30175,18 @@
           "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 53.5,
-          "y": 300.0,
+          "y": 331.0,
           "width": 261.1666666666667,
-          "height": 54.0,
+          "height": 85.0,
           "background_color": "#FFFFFF"
         },
         {
           "op": "add-image",
           "id": "im61",
-          "path": "assets/icons/kit/cloud_upload-ochre.svg",
+          "path": "assets/icons/kit/person-ochre.svg",
           "alt": "",
           "x": 66.5,
-          "y": 317.0,
+          "y": 363.5,
           "width": 20,
           "height": 20
         },
@@ -30220,9 +30194,9 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t62",
-          "text": "Deploy to Cloud Run",
+          "text": "Add user accounts",
           "x": 88.3,
-          "y": 311.7,
+          "y": 358.2,
           "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
@@ -30234,69 +30208,20 @@
           "op": "style-paragraph",
           "element": "t62",
           "start": 0,
-          "end": 19,
+          "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t62",
           "start": 0,
-          "end": 19,
+          "end": 17,
           "bold": true
         },
         {
           "op": "add-shape",
           "slide": "next",
           "id": "r63",
-          "shape_type": "RECTANGLE",
-          "x": 53.5,
-          "y": 362.0,
-          "width": 261.1666666666667,
-          "height": 54.0,
-          "background_color": "#FFFFFF"
-        },
-        {
-          "op": "add-image",
-          "id": "im64",
-          "path": "assets/icons/kit/person-ochre.svg",
-          "alt": "",
-          "x": 66.5,
-          "y": 379.0,
-          "width": 20,
-          "height": 20
-        },
-        {
-          "op": "add-textbox",
-          "slide": "next",
-          "id": "t65",
-          "text": "Add user accounts",
-          "x": 88.3,
-          "y": 373.7,
-          "width": 223.5666666666667,
-          "height": 30.6,
-          "font_size": 12,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t65",
-          "start": 0,
-          "end": 17,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t65",
-          "start": 0,
-          "end": 17,
-          "bold": true
-        },
-        {
-          "op": "add-shape",
-          "slide": "next",
-          "id": "r66",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 204.0,
@@ -30307,7 +30232,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r67",
+          "id": "r64",
           "shape_type": "RECTANGLE",
           "x": 340.6666666666667,
           "y": 204.0,
@@ -30318,7 +30243,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t68",
+          "id": "t65",
           "text": "NEXT",
           "x": 347.4666666666667,
           "y": 208.8,
@@ -30331,14 +30256,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t68",
+          "element": "t65",
           "start": 0,
           "end": 4,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t68",
+          "element": "t65",
           "start": 0,
           "end": 4,
           "bold": true
@@ -30346,7 +30271,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r69",
+          "id": "r66",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 238.0,
@@ -30356,7 +30281,7 @@
         },
         {
           "op": "add-image",
-          "id": "im70",
+          "id": "im67",
           "path": "assets/icons/kit/fact_check-ochre.svg",
           "alt": "",
           "x": 363.6666666666667,
@@ -30367,7 +30292,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t71",
+          "id": "t68",
           "text": "Run the benchmark with USDA keys",
           "x": 385.4666666666667,
           "y": 249.7,
@@ -30380,14 +30305,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t71",
+          "element": "t68",
           "start": 0,
           "end": 32,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t71",
+          "element": "t68",
           "start": 0,
           "end": 32,
           "bold": true
@@ -30395,7 +30320,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r72",
+          "id": "r69",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 300.0,
@@ -30405,7 +30330,7 @@
         },
         {
           "op": "add-image",
-          "id": "im73",
+          "id": "im70",
           "path": "assets/icons/kit/fitness_center-ochre.svg",
           "alt": "",
           "x": 363.6666666666667,
@@ -30416,7 +30341,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t74",
+          "id": "t71",
           "text": "Benchmark with real workouts",
           "x": 385.4666666666667,
           "y": 311.7,
@@ -30429,14 +30354,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t74",
+          "element": "t71",
           "start": 0,
           "end": 28,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t74",
+          "element": "t71",
           "start": 0,
           "end": 28,
           "bold": true
@@ -30444,7 +30369,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r75",
+          "id": "r72",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
           "y": 362.0,
@@ -30454,7 +30379,7 @@
         },
         {
           "op": "add-image",
-          "id": "im76",
+          "id": "im73",
           "path": "assets/icons/kit/storefront-ochre.svg",
           "alt": "",
           "x": 363.6666666666667,
@@ -30465,7 +30390,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t77",
+          "id": "t74",
           "text": "Connect live store prices",
           "x": 385.4666666666667,
           "y": 373.7,
@@ -30478,14 +30403,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t77",
+          "element": "t74",
           "start": 0,
           "end": 25,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t77",
+          "element": "t74",
           "start": 0,
           "end": 25,
           "bold": true
@@ -30493,7 +30418,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r78",
+          "id": "r75",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -30504,7 +30429,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r79",
+          "id": "r76",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -30515,7 +30440,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t80",
+          "id": "t77",
           "text": "LATER",
           "x": 644.6333333333333,
           "y": 208.8,
@@ -30528,14 +30453,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t80",
+          "element": "t77",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t80",
+          "element": "t77",
           "start": 0,
           "end": 5,
           "bold": true
@@ -30543,7 +30468,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r81",
+          "id": "r78",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 238.0,
@@ -30553,7 +30478,7 @@
         },
         {
           "op": "add-image",
-          "id": "im82",
+          "id": "im79",
           "path": "assets/icons/kit/verified-ochre.svg",
           "alt": "",
           "x": 660.8333333333334,
@@ -30564,7 +30489,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t83",
+          "id": "t80",
           "text": "Ask a dietitian to review the rules",
           "x": 682.6333333333333,
           "y": 265.2,
@@ -30577,14 +30502,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t83",
+          "element": "t80",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t83",
+          "element": "t80",
           "start": 0,
           "end": 35,
           "bold": true
@@ -30592,7 +30517,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r84",
+          "id": "r81",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 331.0,
@@ -30602,7 +30527,7 @@
         },
         {
           "op": "add-image",
-          "id": "im85",
+          "id": "im82",
           "path": "assets/icons/kit/group-ochre.svg",
           "alt": "",
           "x": 660.8333333333334,
@@ -30613,7 +30538,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t86",
+          "id": "t83",
           "text": "Use feedback, then test with people",
           "x": 682.6333333333333,
           "y": 358.2,
@@ -30626,14 +30551,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t86",
+          "element": "t83",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t86",
+          "element": "t83",
           "start": 0,
           "end": 35,
           "bold": true

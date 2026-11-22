@@ -50,9 +50,9 @@
     }
   },
   "inputs": {
-    "brief-content.json": "3a86d4641987f9803ed80dddf1692b9500b06ca14909646883bd24631638e74f",
+    "brief-content.json": "5bb7a544e963c4eaa962125c5618a61606f17f0e32f234dff5d530380134fe28",
     "deck-kit.json": "14f544d90a5bc99dedfa3e80f2307a59e3a134d639af000c25645cd6321244cc",
-    "claims-register.md": "d62dfbe53864475412c4851f45d18acd37ab017d17042901fbb032e982575012",
+    "claims-register.md": "0a3730b76178b509a2a77bc1291af46a77b0615d602f22cbf5034f4c90525b93",
     "kit-pin.json": "fab1758a95b0a452fc8b028ebeaf27783a75db5e2d2a0b587ca79501de3b43c6",
     "project_layouts.py": "af76d1380e2e8d239d8397df9edba1c578f1b7c1d71a8391a50d018a48e67489"
   },
@@ -387,8 +387,8 @@
     "assets/photos/problem-spaghetti-bolognese.provenance.json": "8495d2a79e71dd55241cc5d444b1db1ab9388e5abc31ede9ffd21dfd7155b9cd"
   },
   "outputs": {
-    "deck.html": "ac25bc72926e65ff0528b01263e84a601f484b96d3b90705a9342453d39cf08b",
-    "deck.pdf": "8c01b6299eed8bb8f0f1d2ed12ba3c592af43b62ac6fbd15fd327ad8b02622f3"
+    "deck.html": "43300962865715a8a23f915c838e5f180cf70e237d5eae874a84fd504b750f26",
+    "deck.pdf": "1d6e7dfc5e962798b1111ee851a681c9a13871576e2abec65943c6c8af6394ee"
   },
   "slide_count": 20
 }

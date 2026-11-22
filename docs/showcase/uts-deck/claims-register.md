@@ -46,5 +46,7 @@ They measure plans against fixed targets, not users. AMDR is a daily reference a
 | Pasta for the average man | 2,889 kcal a day; 809 kcal meal target | Offline run of "pasta", average man, on main, 22 November 2026 (scripts/meal_quality_baseline.py service) | Same as docs/meal_quality/baseline.json "creamy pasta / average man" |
 | Pasta swaps | Vegan: Lentil Bolognese Pasta instead of Tuna Pasta Salad; coeliac: gluten-free pasta | Same run | Coeliac swap is DEC-31 |
 | Pasta shopping list | $3.50, $2.80, $3.50, $1.40, $3.50; $14.70 estimated | Same run, Coles Earlwood local reference | Tuna, cucumber and olive oil are category price estimates |
-| Latest milestone | 22 Nov: 76 recipes, workouts, allergen tags | PRs #47, #48, #49 merged 22 November 2026 | |
+| Latest milestone | 22 Nov: 76 recipes, kitchen app, Cloud Run | PRs #47 to #52 merged 22 November 2026; deploy run 45010039893 | |
 | Wider check | 152 of 152 | scripts/meal_quality_baseline.py --wider on main, 22 November 2026 | Every recipe by name, two profiles |
+| Cloud Run live | API live in australia-southeast1, max 1 instance, live check passed | deploy.yml run 45010039893 on main (e6ef769), 22 November 2026 | Free tier, scales to zero; hosted mode stores nothing |
+| First real trace | One POST /generate-meal-plan with five stage spans in Cloud Trace | Cloud Trace API read, project ai-meal-planner-515508, 22 November 2026 | Only sampled requests are traced; batches can be lost when Cloud Run throttles CPU |

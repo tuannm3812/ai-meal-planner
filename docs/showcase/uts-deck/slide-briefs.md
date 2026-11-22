@@ -606,7 +606,7 @@ Layout: mp_engineering
 
 Reader question: Is the engineering real?
 
-Message: Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.
+Message: Health data is kept out of traces by a test, and real traces now reach Cloud Trace.
 
 Exact face text:
 
@@ -621,7 +621,7 @@ Exact face text:
 - AI Meal Planner
 - 13
 - TAKEAWAY
-- Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.
+- Health data is kept out of traces by a test, and real traces now reach Cloud Trace.
 - From a change to production
 - Contract
 - CI fails on any drift
@@ -636,7 +636,7 @@ Exact face text:
 - One Docker image
 - Dockerfile
 - Cloud Run
-- Ready, not live
+- Live, one instance
 - deploy.yml
 - Tracing
 - Health data kept out
@@ -685,11 +685,10 @@ Exact face text:
 - Not tested
 - •  No user testing
 - •  No clinical review
-- •  Not deployed
 - •  No database migrations
 - •  Taste and health outcomes unknown
 - CLOSES IT
-- Deploy, then test with people
+- Test with people
 
 ## 15. What comes next, in priority order
 
@@ -724,12 +723,11 @@ Exact face text:
 - 7 Nov
 - 68 of 68, gluten fix
 - 22 Nov
-- 76 recipes, allergen tags, kitchen app
+- 76 recipes, kitchen app, Cloud Run
 - Now
 - Next steps
 - NOW
 - Add database migrations
-- Deploy to Cloud Run
 - Add user accounts
 - NEXT
 - Run the benchmark with USDA keys

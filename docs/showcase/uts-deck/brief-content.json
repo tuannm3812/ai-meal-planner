@@ -1034,7 +1034,7 @@
           ],
           [
             "googlecloud",
-            "Cloud Run, not yet live"
+            "Cloud Run, live"
           ],
           [
             "opentelemetry",
@@ -1218,15 +1218,15 @@
       "accent": "plum",
       "title": "Built like a product, not a notebook",
       "subtitle": "Six production habits, in the order a change travels through them.",
-      "takeaway": "Health data is kept out of traces by a test, but no trace has reached Cloud Trace yet.",
+      "takeaway": "Health data is kept out of traces by a test, and real traces now reach Cloud Trace.",
       "question": "Is the engineering real?",
       "notes": {
         "purpose": "Show the production habits.",
         "script": [
-          "On the line, teal steps run today; the grey ones are built and wait for a GCP project.",
+          "All six steps on the line run today: the API is live on Cloud Run in Sydney, capped at one instance.",
           "The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.",
-          "The deployment workflow and tracing are built, but they wait for a GCP project.",
-          "Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
+          "The first real trace reached Cloud Trace on 22 November 2026: one plan request, five stage spans, allowlisted fields only.",
+          "Sources: deploy.yml run 45010039893; ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
         ],
         "references": [
           "sources.md",
@@ -1266,16 +1266,16 @@
         {
           "icon": "cloud_upload",
           "title": "Cloud Run",
-          "text": "Ready, not live",
+          "text": "Live, one instance",
           "file": "deploy.yml",
-          "live": false
+          "live": true
         },
         {
           "icon": "visibility",
           "title": "Tracing",
           "text": "Health data kept out",
           "file": "core/telemetry.py",
-          "live": false
+          "live": true
         }
       ],
       "stats": [
@@ -1365,12 +1365,11 @@
           "items": [
             "No user testing",
             "No clinical review",
-            "Not deployed",
             "No database migrations",
             "Taste and health outcomes unknown"
           ],
           "strength": 1,
-          "next": "Deploy, then test with people"
+          "next": "Test with people"
         }
       ]
     },
@@ -1387,7 +1386,7 @@
       "notes": {
         "purpose": "Pair the limits with the work that answers them.",
         "script": [
-          "Foundations first: migrations, a real deployment and accounts. Then better inputs. Then scale and testing with people.",
+          "Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.",
           "Sources: docs/4_next_steps.md §6 and §7."
         ],
         "references": [
@@ -1418,7 +1417,7 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, allergen tags, kitchen app"
+          "text": "76 recipes, kitchen app, Cloud Run"
         },
         {
           "date": "Now",
@@ -1430,12 +1429,10 @@
           "title": "Now",
           "items": [
             "Add database migrations",
-            "Deploy to Cloud Run",
             "Add user accounts"
           ],
           "icons": [
             "inventory_2",
-            "cloud_upload",
             "person"
           ]
         },

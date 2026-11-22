@@ -146,10 +146,10 @@ References:
 
 Show the production habits.
 
-On the line, teal steps run today; the grey ones are built and wait for a GCP project.
+All six steps on the line run today: the API is live on Cloud Run in Sydney, capped at one instance.
 The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.
-The deployment workflow and tracing are built, but they wait for a GCP project.
-Sources: ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026.
+The first real trace reached Cloud Trace on 22 November 2026: one plan request, five stage spans, allowlisted fields only.
+Sources: deploy.yml run 45010039893; ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026.
 
 References:
 - sources.md
@@ -170,7 +170,7 @@ References:
 
 Pair the limits with the work that answers them.
 
-Foundations first: migrations, a real deployment and accounts. Then better inputs. Then scale and testing with people.
+Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.
 Sources: docs/4_next_steps.md §6 and §7.
 
 References:

@@ -8239,3 +8239,18 @@ A3 plan page, A4 below the plan), each a real screen with numbered pins and one-
 project layout `mp_walk`. Captures come from `capture_walk_2026-11-22.py` after planning and saving three
 meals, ticking three shopping items and a four-star rating; the plan is unchanged (694 of 691 kcal, $24.50).
 Build, export, check_deck and check_markers report no problems; 20 pages. Slide Previews version 30.
+
+## 2026-11-22 — Claude — API live on Cloud Run; deck slides 12 to 15
+
+Mike approved deploying on the GCP free tier (project `ai-meal-planner-515508`, australia-southeast1).
+Done per `docs/6_deployment.md` §1: services, Artifact Registry, runtime and deployer service accounts,
+Workload Identity Federation, one `live-check` API key (hash in Secret Manager, raw key only in the
+`MEAL_PLANNER_SMOKE_KEY` GitHub secret), GitHub variables, `GCP_MAX_INSTANCES=1` (PR #52), and a billing
+budget of 17,000 VND (about A$1; the billing account is in VND) alerting at 50%, 100% and forecast 100%.
+Deploy run 45010039893 on main passed, including `live_check.sh`. Cloud Trace holds a full
+`POST /generate-meal-plan` trace (calorie.predict, meal.retrieve, nutrition.verify, plan.reconcile,
+supermarket.list) with allowlisted attributes only. Caveat seen: requests are traced only when sampled
+(Cloud Run's sampling or a caller's sampled `traceparent`), and one batch was lost to a timeout when CPU
+was throttled between requests. Deck: slide 13 all live, slide 12 "Cloud Run, live", slide 14 drops
+"Not deployed", slide 15 drops "Deploy to Cloud Run". `AGENTS.md` and `docs/4_next_steps.md` on main still
+describe the deploy as pending.
