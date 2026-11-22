@@ -43,6 +43,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
 | 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
 | 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
+| 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -711,3 +712,28 @@ only its macro. A guard test enforces all of it.
 
 Rules out CSS variables for theming (there is one theme, and Tailwind classes plus a JS
 module cover both HTML and SVG) and a second icon set.
+
+## 2026-11-22 — Calorie model: workouts past its training range
+
+### DEC-39 — A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged
+
+The workout check (`scripts/meal_quality_baseline.py --workouts`) found that the
+model scored a 45, 60 and 90-minute workout the same: 238 kcal for the average
+man. Its training data (Kaggle S5E5) holds workouts of 1 to 30 minutes and heart
+rates of 67 to 128 bpm, read from the trees' bin edges, and boosted trees are flat
+past the last edge.
+
+A workout longer than 30 minutes is now predicted at 30 minutes and scaled by its
+length, so the 30-minute rate per minute holds: a 60-minute run at 140 bpm adds
+477 kcal for the average man, not 238. A heart rate above 128 bpm is still
+predicted as 128, and the response warns that a harder workout may be
+undercounted. Each case adds a warning to `calorie_budget.warnings`. Workouts of
+30 minutes or less, and the 72-plan baseline, do not change.
+
+Still open: the body-temperature default of 37 °C is below the training range
+(37.1 to 41.5 °C, mean 40.0), and the model is not monotonic in it, so a short
+workout at the default scores high (10 minutes at 110 bpm: 173 kcal at 37 °C, 67
+at 40.5 °C). The overlap between the activity level and today's workout is
+measured by the same check and waits on the owner (`docs/7_meal_quality.md` §5).
+Ruled out: a linear model past 30 minutes fitted to the trees, which would add a
+second model to explain for one edge.

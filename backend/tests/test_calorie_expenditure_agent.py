@@ -156,3 +156,26 @@ def test_the_fallback_reports_no_exercise() -> None:
     response = CalorieExpenditureAgent().predict(_person(duration_minutes=45))
 
     assert response.exercise is None
+
+
+def test_a_workout_past_the_training_range_is_counted_per_minute() -> None:
+    """The model's trees are flat past 30 minutes, so longer workouts scale by length."""
+    half_hour = _model_agent().predict(_person(duration_minutes=30, heart_rate_bpm=110))
+    hour = _model_agent().predict(_person(duration_minutes=60, heart_rate_bpm=110))
+    ninety = _model_agent().predict(_person(duration_minutes=90, heart_rate_bpm=110))
+
+    assert hour.exercise.kcal == pytest.approx(2 * half_hour.exercise.kcal, abs=0.2)
+    assert ninety.exercise.kcal == pytest.approx(3 * half_hour.exercise.kcal, abs=0.2)
+    assert hour.exercise.duration_minutes == 60
+    assert any("30-minute rate" in warning for warning in hour.warnings)
+    assert not any("30-minute rate" in warning for warning in half_hour.warnings)
+
+
+def test_a_heart_rate_past_the_training_range_is_flagged() -> None:
+    hard = _model_agent().predict(_person(duration_minutes=30, heart_rate_bpm=150))
+    steady = _model_agent().predict(_person(duration_minutes=30, heart_rate_bpm=120))
+    rest = _model_agent().predict(_person(duration_minutes=0, heart_rate_bpm=150))
+
+    assert any("128 bpm" in warning for warning in hard.warnings)
+    assert not any("128 bpm" in warning for warning in steady.warnings)
+    assert not any("128 bpm" in warning for warning in rest.warnings)

@@ -115,6 +115,10 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-11-22: the corpus holds 76 recipes (P7, DEC-35); the wider check meets
   the targets for 152 of 152. New ingredients use estimated nutrition until a
   USDA run (P4).
+- 2026-11-22: the workout check (`meal_quality_baseline.py --workouts`, 144 plans,
+  six stated workouts per profile) meets the targets for 143 of 144. Workouts past
+  the model's 30-minute training range now count per minute (DEC-39). It measures
+  the activity-level overlap; the fix waits on the owner (`docs/7_meal_quality.md` §5).
 
 - 2026-11-22: React is the main app and Streamlit the backup demo (DEC-37). React is
   now a kitchen app: home, plan page with Viridis charts and runners-up, save and

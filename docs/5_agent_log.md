@@ -8274,3 +8274,25 @@ Mike asked to merge the deck and clean up copies. The deck branch (`claude/proje
 which contains the earlier `claude/project-thread-mjsqyt` work) now includes main. Ruff skips
 `docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
 scripts were formatted. `ruff check .` and `ruff format --check .` pass.
+
+## 2026-11-22 — Claude — workout check; workouts past 30 minutes (DEC-39)
+
+Mike asked for the meal-quality benchmark to cover realistic workouts (P5 follow-up). New
+`backend/app/evaluation/workouts.py` and `meal_quality_baseline.py --workouts`: six stated
+workouts (not given, rest day, 20/30/60/90 minutes) for each of the four profiles on six matched
+cravings, 144 plans, apart from the 72. Report and rows in `docs/meal_quality/workouts.{md,json}`.
+143 of 144 meet the targets; the miss is Tuna Pasta Salad at a 378 kcal target (pasta at its 0.5x
+floor, carbs 43%).
+
+Found and fixed: the model's trees are flat past 30 minutes and 128 bpm (its training range, read
+from the bin edges), so 45, 60 and 90 minutes all added 238 kcal. A longer workout is now predicted
+at 30 minutes and scaled by length; a heart rate past 128 is flagged (DEC-39). The 72-plan baseline
+is unchanged (diffed against a run before the change).
+
+Measured, not fixed: the activity level already holds an average day's exercise (626 kcal at x1.55),
+and today's workout is added on top; 15 of 24 profile-days count exercise twice. The column "if
+replaced" shows the budget with today's workout replacing it. The fix changes every budget, so it
+goes to Mike. Also flagged: the 37 °C temperature default is below the training range.
+
+Verified: `uv run pytest` 669 passed, coverage 97%; `ruff check` and `ruff format --check` clean;
+`docs/openapi.json` unchanged.
