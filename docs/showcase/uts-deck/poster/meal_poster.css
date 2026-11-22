@@ -1,0 +1,167 @@
+/* AI Meal Planner poster: project blocks on top of the kit and uts_poster.css.
+   Type uses only POSTER-TEMPLATE.md's seven A1 sizes: title 64, figure 48, subtitle 26, heading 28, body 22,
+   eyebrow 20, caption 18 pt. Charts are Viridis; icons are big and sit on the card with no tile. */
+
+/* From uts_poster.css (the kit's template): header, answer band and footer rules this poster uses. */
+.eyebrow::before { display: none; }
+header { align-items: start; }
+header .logo { align-self: start; margin-top: 0; }
+.ptake { background: #1B2430; color: #FFFFFF; display: grid; grid-template-columns: auto 1fr auto; gap: 0 8mm; padding: 4mm 7mm; align-items: center; }
+.ptake .tkfig { border-right: .3mm solid #5A6370; padding-right: 8mm; }
+.ptake .tkfig b { display: block; font-size: 48pt; line-height: 1; color: #FDE725; }
+.ptake .tkfig span { display: block; font-size: 18pt; color: #D8DEE3; margin-top: 1mm; }
+.ptake .tkmain b { display: block; font-size: 28pt; line-height: 1.15; }
+.ptake .tkmain span { display: block; font-size: 22pt; color: #D8DEE3; margin-top: 1mm; }
+.ptake .tkmain strong, .ptake .tkfig strong { color: #FFFFFF; }
+.ptake .tknext { border-left: .3mm solid #5A6370; padding-left: 8mm; }
+.ptake .tknext > b { font-size: 20pt; letter-spacing: .06em; text-transform: uppercase; color: #FDE725; }
+.ptake ol { list-style: none; margin: 1.5mm 0 0; padding: 0; }
+.ptake li { font-size: 18pt; display: flex; gap: 2.5mm; align-items: center; margin-bottom: 1mm; }
+.ptake li i { font-style: normal; font-weight: 700; display: inline-grid; place-items: center; width: 7mm; height: 7mm; line-height: 1;
+  border-radius: 50%; background: #FDE725; color: #1B2430; font-size: 18pt; flex: none; }
+footer { display: flex; }
+code { font-family: "Google Sans Code", ui-monospace, monospace; }
+
+header .logo { height: 32mm; }
+.subtitle { max-width: 120ch; }
+.card.m { background: var(--accfill); border-top-color: var(--acc); display: flex; flex-direction: column; }
+.card.m h2 { display: block; }
+.card.m h2 strong { color: var(--acc); }
+.card.m .caption { margin-top: auto; padding-top: 3mm; }
+.divider > b { background: var(--secondary); }
+.ptake .tkmain b { color: #FFFFFF; }
+.ptake li em { font-style: normal; color: #D8DEE3; margin-left: 1.5mm; }
+.ptake li span { color: #FFFFFF; font-weight: 700; }
+
+/* mproblem */
+.mproblem .qgrid { display: grid; grid-template-columns: 44mm 1fr; gap: 6mm; align-items: center; }
+.mproblem .qart { margin: 0; text-align: center; }
+.mproblem .qart img { width: 100%; display: block; }
+.mproblem .qart figcaption { font-size: 22pt; color: var(--ink); font-weight: 700; margin-top: 1mm; }
+.mproblem .qrows { display: grid; gap: 3mm; }
+.mproblem .qrow { display: grid; grid-template-columns: 15mm 1fr; gap: 4mm; align-items: start; }
+.mproblem .qicon { width: 15mm; height: 15mm; }
+.mproblem .qrow b { display: block; font-size: 22pt; color: var(--ink); }
+.mproblem .qrow p { font-size: 22pt; }
+
+/* mplates */
+.mplates .plates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; flex: 1; align-items: end; }
+.mplates .plate { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.mplates .pimg { width: 100%; height: 40mm; display: flex; align-items: flex-end; justify-content: center; }
+.mplates .pimg div { aspect-ratio: 1; }
+.mplates .pimg div img { height: 100%; display: block; }
+.mplates .plate b { font-size: 48pt; color: var(--ink); line-height: 1; margin-top: 1.5mm; white-space: nowrap; }
+.mplates .pro { font-size: 22pt; color: var(--ink); font-weight: 700; margin-top: 1mm; }
+.mplates .who { font-size: 18pt; white-space: nowrap; }
+
+/* mstations */
+.mstations .order { font-family: "Google Sans Code", monospace; font-size: 18pt; color: var(--ink); margin-bottom: 3mm; }
+.mstations .order span { font-weight: 700; color: var(--acc); margin-right: 4mm; text-transform: uppercase; letter-spacing: .06em; }
+.mstations .stations { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6mm; }
+.mstations .station { background: #FFFFFF; padding: 3.5mm 4mm; display: grid; grid-template-columns: 30mm 1fr; gap: 0 3mm;
+  grid-template-rows: auto auto 1fr auto; position: relative; }
+.mstations .station:not(:last-child)::after { content: ""; position: absolute; right: -5mm; top: 50%;
+  border-left: 3.4mm solid var(--acc); border-top: 2.2mm solid transparent; border-bottom: 2.2mm solid transparent; z-index: 1;
+  transform: translateY(-50%); }
+.mstations .sart { grid-row: 1 / 4; width: 30mm; height: 24mm; object-fit: contain; align-self: center; }
+.mstations .role { font-size: 18pt; font-weight: 700; color: var(--acc); text-transform: uppercase; letter-spacing: .05em; }
+.mstations .station b { font-size: 22pt; color: var(--ink); line-height: 1.15; }
+.mstations .station p { grid-column: 1 / -1; font-size: 18pt; margin: 2mm 0 2mm; }
+.mstations .out { grid-column: 1 / -1; align-self: flex-start; justify-self: start; background: var(--accfill); color: var(--acc); font-weight: 700;
+  font-size: 18pt; padding: .8mm 3mm; border-left: 1.2mm solid var(--acc); }
+
+/* mapp */
+.mapp .asteps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
+.mapp .ashot { background: #FFFFFF; height: 40mm; overflow: hidden; border: .3mm solid var(--hair); }
+.mapp .ashot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+.mapp .ahead { display: flex; align-items: center; gap: 2.5mm; margin-top: 3mm; }
+.mapp .aicon { width: 11mm; height: 11mm; }
+.mapp .ahead b { font-size: 22pt; color: var(--ink); }
+.mapp .astep p { font-size: 22pt; margin-top: 1mm; }
+
+/* mrings */
+.mrings .rings { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+.mrings .rg { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3mm; }
+.mrings .donut { position: relative; width: 40mm; height: 40mm; }
+.mrings .donut svg { width: 100%; height: 100%; display: block; }
+.mrings .dc { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
+.mrings .dc b { font-size: 22pt; color: var(--ink); line-height: 1; }
+.mrings .dc span { font-size: 18pt; }
+.mrings .rgtext > b { display: block; font-size: 22pt; color: var(--ink); margin-bottom: 2mm; }
+.mrings .rgtext strong { color: var(--acc); }
+.mrings .rkey { display: grid; gap: 1mm; justify-items: start; text-align: left; }
+.mrings .k { font-size: 18pt; display: flex; align-items: center; gap: 2mm; }
+.mrings .k i { width: 4.5mm; height: 4.5mm; border-radius: 50%; flex: none; }
+
+/* mresults */
+.mresults .rgrid { display: grid; grid-template-columns: 1fr 72mm; gap: 7mm; flex: 1; }
+.mresults .ctitle, .mfunnel .ctitle { font-size: 18pt; font-weight: 700; color: var(--ink); margin-bottom: 2mm; }
+.mresults .rbars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+.mresults .rbar { display: flex; flex-direction: column; text-align: center; position: relative; }
+.mresults .rcol { height: 48mm; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch;
+  border-bottom: .5mm solid var(--ink); }
+.mresults .rcol i { display: block; }
+.mresults .rv { font-size: 48pt; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 1.5mm; }
+.mresults .rbar b { font-size: 18pt; color: var(--ink); margin-top: 1.5mm; }
+.mresults .rbar > span { font-size: 18pt; line-height: 1.2; }
+.mresults .rbar em { position: absolute; left: -2mm; top: 0; font-style: normal; font-size: 18pt; font-weight: 700; color: var(--acc);
+  transform: translateX(-50%); }
+.mresults .metrics { display: grid; gap: 2.5mm; align-content: center; }
+.mresults .metric { display: grid; grid-template-columns: 12mm 1fr; gap: 3.5mm; align-items: center; }
+.mresults .micon { width: 12mm; height: 12mm; }
+.mresults .metric b { display: block; font-size: 28pt; color: var(--ink); line-height: 1.05; }
+.mresults .metric span { font-size: 18pt; display: block; line-height: 1.15; }
+
+/* mfunnel */
+.mfunnel .frows { display: grid; gap: 1.2mm; }
+.mfunnel .fnrow { display: grid; grid-template-columns: 50mm 1fr auto; gap: 3mm; align-items: center; font-size: 18pt; }
+.mfunnel .ftrack { height: 6mm; position: relative; }
+.mfunnel .ftrack i { position: absolute; left: 0; top: 0; bottom: 0; }
+.mfunnel .fnrow b { font-size: 22pt; color: var(--ink); }
+.mfunnel .fouts { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; margin-top: 3mm; }
+.mfunnel .fout { display: grid; grid-template-columns: 11mm 1fr; gap: 2.5mm; align-items: start; }
+.mfunnel .ficon { width: 11mm; height: 11mm; }
+.mfunnel .fout b { font-size: 22pt; color: var(--ink); }
+.mfunnel .fout p { font-size: 18pt; }
+
+/* march */
+.march .agrid { display: grid; grid-template-columns: 64mm 10mm 80mm 10mm 1fr; align-items: stretch; }
+.march .col { display: flex; flex-direction: column; gap: 2.5mm; }
+.march .lab { font-size: 18pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--acc); }
+.march .node { background: #FFFFFF; padding: 2.5mm 4mm; flex: 1; }
+.march .nhead { display: flex; align-items: center; gap: 2.5mm; }
+.march .nhead b { font-size: 22pt; color: var(--ink); }
+.march .nicon { width: 10mm; height: 10mm; }
+.march .lgs { margin-left: auto; display: flex; gap: 1.8mm; }
+.march .lg { height: 6mm; width: auto; }
+.march .node p { font-size: 18pt; }
+.march .arrow { position: relative; }
+.march .arrow::before { content: ""; position: absolute; left: 1.5mm; right: 3mm; top: 55%; border-top: .5mm solid var(--rule); }
+.march .arrow::after { content: ""; position: absolute; right: 1mm; top: calc(55% - 1.8mm);
+  border-left: 3mm solid var(--rule); border-top: 1.8mm solid transparent; border-bottom: 1.8mm solid transparent; }
+.march .agents { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; flex: 1; }
+.march .mchecks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-top: 3mm; border-top: .3mm solid var(--hair);
+  padding-top: 3.5mm; }
+.march .chk { display: grid; grid-template-columns: 13mm 1fr; gap: 3mm; align-items: center; }
+.march .cicon { width: 13mm; height: 13mm; }
+.march .chk b { font-size: 28pt; color: var(--ink); display: block; line-height: 1.05; }
+.march .chk span { font-size: 18pt; display: block; }
+
+/* minsights */
+.minsights .insights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+.minsights .ins { display: grid; grid-template-columns: 14mm 1fr; gap: 3.5mm; align-items: start; }
+.minsights .iicon { width: 14mm; height: 14mm; }
+.minsights .itag { font-size: 18pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--acc); display: block; }
+.minsights .ins b { display: block; font-size: 22pt; color: var(--ink); line-height: 1.2; }
+.minsights .ins p { font-size: 18pt; margin-top: 1mm; }
+
+/* mtry */
+.mtry .tgrid { display: grid; grid-template-columns: 34mm 1fr; gap: 4mm; align-items: center; }
+.mtry .qr svg { width: 34mm; height: 34mm; display: block; }
+.mtry .tlinks p { font-size: 18pt; }
+.mtry .tlinks span { display: block; font-weight: 700; color: var(--ink); }
+
+.mresults .rbar > span { display: none; }
+.march .agent .nhead { flex-wrap: wrap; }
+.march .agent .lgs { margin-left: 0; }
+.card.m > * { flex-shrink: 0; }

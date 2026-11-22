@@ -8274,3 +8274,17 @@ Mike asked to merge the deck and clean up copies. The deck branch (`claude/proje
 which contains the earlier `claude/project-thread-mjsqyt` work) now includes main. Ruff skips
 `docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
 scripts were formatted. `ruff check .` and `ruff format --check .` pass.
+
+## 2026-11-23 — Claude — UTS A1 poster for the AI Meal Planner
+
+Mike asked for a project poster that matches the UTS deck kit. New files in `docs/showcase/uts-deck/poster/`
+(spec, project blocks, CSS, logo lockup, render script) render through the deck-kit poster engine to
+`docs/showcase/uts-deck/output/poster.pdf` and a 6000 px `poster.png`. It follows `POSTER-TEMPLATE.md`: A1 portrait,
+18 mm margins, 12 columns, Google Sans at the seven sizes, UTS logo at the top right with the project mark beside it,
+a dark answer band (72 of 72), section labels, and a footer. Mike's preferences applied: Viridis charts, tinted
+cards instead of grey, the deck's plate and station illustrations, large icons with no tiles, simple two-part
+donuts, limits as insights. Numbers come from `claims-register.md`; the coordinator's 0.4%, 68 of 68 and 95% were
+older figures, so the poster uses 0.5%, 152 of 152 and 97%. "No database migrations" is dropped as a limit (DEC-32).
+
+Verified: the engine reports "no automated problems" (no overflow, type levels only, every number in the register,
+fonts Google Sans and Google Sans Code embedded, one 594 × 841 mm page).
