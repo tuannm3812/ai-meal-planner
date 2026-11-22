@@ -40,7 +40,7 @@ update when a task is done.
 
 ## Accuracy
 
-- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A workout day can still overlap the activity level.
+- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A stated workout now replaces the activity level's exercise (DEC-40).
 - [x] **P6 Diet rules:** move from matching ingredient names to tagged allergens. Done 22 November 2026, DEC-34. New recipes must tag their ingredients.
 - [ ] **Meal target:** record why it is 28% of the day, and review the cap for large budgets. The large athlete's meal is 19% of the day.
 - [ ] **Low-carb preference:** it favours no meal now, because no recipe is low-carb (DEC-30).

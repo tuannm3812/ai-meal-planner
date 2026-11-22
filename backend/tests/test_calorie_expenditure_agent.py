@@ -118,12 +118,49 @@ def _person(**workout: float) -> CalorieExpenditureRequest:
 
 
 def test_a_rest_day_adds_no_exercise() -> None:
-    """P5: with 0 minutes the daily estimate is the activity-adjusted BMR alone."""
+    """P5 and DEC-40: a stated rest day counts no exercise, not even the activity level's."""
     rest = _model_agent().predict(_person(duration_minutes=0))
 
     bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
     assert rest.exercise.kcal == 0
-    assert rest.estimated_daily_expenditure_kcal == round(bmr * 1.55, 1)
+    assert rest.exercise.replaces_activity_exercise
+    assert rest.estimated_daily_expenditure_kcal == round(bmr * 1.2, 1)
+
+
+def test_a_stated_workout_replaces_the_activity_levels_exercise() -> None:
+    """DEC-40: BMR x 1.2 plus the workout, whatever the activity level says."""
+    moderate = _model_agent().predict(_person(duration_minutes=45, heart_rate_bpm=120))
+    very = _model_agent().predict(
+        _person(duration_minutes=45, heart_rate_bpm=120).model_copy(
+            update={"activity_multiplier": 1.725}
+        )
+    )
+
+    bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
+    assert moderate.estimated_daily_expenditure_kcal == pytest.approx(
+        bmr * 1.2 + moderate.exercise.kcal, abs=0.1
+    )
+    assert very.estimated_daily_expenditure_kcal == moderate.estimated_daily_expenditure_kcal
+
+
+def test_a_workout_not_given_keeps_the_activity_level() -> None:
+    """Without a stated workout the default is still added to the usual week."""
+    unknown = _model_agent().predict(_person())
+
+    bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
+    assert not unknown.exercise.replaces_activity_exercise
+    assert unknown.estimated_daily_expenditure_kcal == pytest.approx(
+        bmr * 1.55 + unknown.exercise.kcal, abs=0.1
+    )
+
+
+def test_a_multiplier_below_sedentary_is_kept_on_a_workout_day() -> None:
+    low = _model_agent().predict(
+        _person(duration_minutes=0).model_copy(update={"activity_multiplier": 1.1})
+    )
+
+    bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
+    assert low.estimated_daily_expenditure_kcal == round(bmr * 1.1, 1)
 
 
 def test_the_workout_given_is_the_workout_used() -> None:
@@ -149,7 +186,12 @@ def test_missing_workout_details_are_named_as_defaults() -> None:
 
     assert unknown.exercise.defaulted == ["duration_minutes", "heart_rate_bpm", "body_temp_c"]
     assert explicit.exercise.defaulted == []
-    assert unknown.estimated_daily_expenditure_kcal == explicit.estimated_daily_expenditure_kcal
+    assert unknown.exercise.kcal == explicit.exercise.kcal
+    # DEC-40: only a stated workout replaces the activity level's usual exercise.
+    bmr = (10 * 64) + (6.25 * 168) - (5 * 34) - 161
+    assert unknown.estimated_daily_expenditure_kcal - explicit.estimated_daily_expenditure_kcal == (
+        pytest.approx(bmr * (1.55 - 1.2), abs=0.1)
+    )
 
 
 def test_the_fallback_reports_no_exercise() -> None:

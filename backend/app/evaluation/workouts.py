@@ -6,12 +6,13 @@ This check sends six workouts, from a rest day to a 90-minute ride, for each
 baseline profile on six matched cravings: 144 plans, reported apart from the 72
 so the baseline stays comparable.
 
-It also measures a known gap. The activity levels are described as exercise
-days in a usual week ("moderately active: exercise 3-5 days a week"), so
-BMR times the multiplier already holds an average day's exercise, and the
-service then adds today's workout on top. The report shows both numbers side
-by side, and the budget the day would get if today's workout replaced the
-activity level's exercise (BMR times the sedentary 1.2, plus the workout).
+It also measures the overlap between the activity level and the workout. The
+activity levels are exercise days in a usual week ("moderately active: exercise
+3-5 days a week"), so BMR times the multiplier already holds an average day's
+exercise. Since DEC-40 a stated workout replaces it (BMR times the sedentary 1.2,
+plus the workout); a workout left out still adds the model's default on top of
+the activity level. The report shows each day's budget next to the budget it
+had when the workout was always added on top.
 
 Run it with ``scripts/meal_quality_baseline.py --workouts``.
 """
@@ -23,6 +24,7 @@ from pathlib import Path
 from typing import Any
 
 from backend.app.agents.calorie_expenditure_agent import (
+    SEDENTARY_MULTIPLIER,
     CalorieExpenditureAgent,
     CalorieExpenditureRequest,
 )
@@ -37,9 +39,6 @@ from backend.app.evaluation.meal_quality import (
     build_service,
     measure,
 )
-
-SEDENTARY_MULTIPLIER = 1.2
-"""The activity level that counts no exercise; the clients' lowest option."""
 
 WORKOUTS = (
     Workout("workout not given"),
@@ -81,8 +80,9 @@ class DayBudget:
     workout_kcal: float
     activity_exercise_kcal: float
     """BMR times (multiplier - 1.2): the exercise the activity level already counts."""
-    replaced_budget_kcal: float
-    """The budget if today's workout replaced the activity level's exercise."""
+    stacked_budget_kcal: float
+    """The budget with the workout added on top of the activity level, as before DEC-40."""
+    replaces_activity_exercise: bool
     warnings: tuple[str, ...]
     plans: int
     meets_targets: int
@@ -102,8 +102,8 @@ def _day_budget(
         activity_multiplier=SEDENTARY_MULTIPLIER,
     )
     bmr = CalorieExpenditureAgent._estimate_with_bmr(sedentary) / SEDENTARY_MULTIPLIER
-    replaced, _ = CalorieExpenditureAgent._meal_budget(
-        bmr * SEDENTARY_MULTIPLIER + workout_kcal, profile.goal, profile.sex
+    stacked, _ = CalorieExpenditureAgent._meal_budget(
+        bmr * profile.activity_multiplier + workout_kcal, profile.goal, profile.sex
     )
     return DayBudget(
         profile=profile.name,
@@ -113,7 +113,10 @@ def _day_budget(
         budget_kcal=budget.meal_calorie_budget_kcal,
         workout_kcal=workout_kcal,
         activity_exercise_kcal=round(bmr * (profile.activity_multiplier - SEDENTARY_MULTIPLIER), 1),
-        replaced_budget_kcal=round(replaced, 1),
+        stacked_budget_kcal=round(stacked, 1),
+        replaces_activity_exercise=bool(
+            budget.exercise and budget.exercise.replaces_activity_exercise
+        ),
         warnings=tuple(
             warning
             for warning in budget.warnings
@@ -166,7 +169,13 @@ def render_workouts(days: Sequence[DayBudget]) -> str:
     """
     plans = sum(day.plans for day in days)
     met = sum(day.meets_targets for day in days)
-    stated = [day for day in days if day.workout_kcal > 0 and day.activity_exercise_kcal > 0]
+    stacked = [
+        day
+        for day in days
+        if not day.replaces_activity_exercise
+        and day.workout_kcal > 0
+        and day.activity_exercise_kcal > 0
+    ]
     lines = [
         "",
         "## Workout days",
@@ -176,22 +185,22 @@ def render_workouts(days: Sequence[DayBudget]) -> str:
         f"{plans}.**",
         "",
         '"Activity level counts" is BMR times (multiplier - 1.2): the exercise the '
-        "activity level already holds for an average day. The service adds today's "
-        'workout on top of it. "If replaced" is the budget when today\'s workout '
-        "replaces that exercise instead.",
+        "activity level holds for an average day. A stated workout replaces it "
+        '(DEC-40). "Added on top" is the budget the day had before DEC-40, when '
+        "the workout was always added to the activity level.",
         "",
-        f"On {len(stated)} of the {len(days)} days, both a workout and an activity level "
-        "above sedentary count exercise.",
+        f"Days that still count exercise twice: {len(stacked)} of {len(days)}, all with "
+        "the workout not given, where the model's default is added to the activity level.",
         "",
-        "| Profile | Workout | Workout kcal | Activity level counts | Budget | If replaced "
-        "| Meets targets |",
+        "| Profile | Workout | Workout kcal | Activity level counts | Budget "
+        "| Added on top | Meets targets |",
         "|---|---|---:|---:|---:|---:|---:|",
     ]
     for day in days:
         lines.append(
             f"| {day.profile} (x{day.activity_multiplier}) | {day.workout} "
             f"| {day.workout_kcal:.0f} | {day.activity_exercise_kcal:.0f} "
-            f"| {day.budget_kcal:.0f} | {day.replaced_budget_kcal:.0f} "
+            f"| {day.budget_kcal:.0f} | {day.stacked_budget_kcal:.0f} "
             f"| {day.meets_targets} of {day.plans} |"
         )
     flagged = sorted({warning for day in days for warning in day.warnings})

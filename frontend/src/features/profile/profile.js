@@ -26,9 +26,10 @@ export const ACTIVITY_OPTIONS = [
   { value: '1.9', label: 'Extra active (physical job or training twice a day)' },
 ]
 
-// Today's workout (P5, DEC-33). The activity level describes a usual week;
-// the trained model adds today's session on top. "Not sure" sends nothing, so
-// the service assumes its default workout and the plan says so.
+// Today's workout (P5, DEC-33). The activity level describes a usual week; a
+// stated workout or rest day replaces that week's exercise (DEC-40). "Not sure"
+// sends nothing, so the service keeps the activity level, adds its default
+// workout and the plan says so.
 export const WORKOUT_OPTIONS = [
   { value: 'unsure', label: 'Not sure (assume a 30-minute workout)' },
   { value: 'rest', label: 'Rest day, no workout' },

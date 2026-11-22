@@ -193,16 +193,16 @@ Findings:
    was trained on 1 to 30 minutes, so 45, 60 and 90 minutes all added 238 kcal
    for the average man. They now add 357, 477 and 715. Heart rates past 128 bpm
    are still read as 128, with a warning.
-3. **The activity level and today's workout overlap.** The clients describe
-   the activity levels as exercise days a week, so BMR times the multiplier
-   already holds an average day's exercise: 626 kcal for the average man
-   (x1.55), 714 for the active woman (x1.725) and 1,534 for the athlete (x1.9).
-   The service adds today's workout on top. On a 60-minute run day the average
-   man gets 3,251 kcal; if the run replaced the activity level's exercise, he
-   would get 2,625. A rest day still counts the 626. A workout left out still
-   adds the 30-minute default (108 to 142 kcal) on top of the activity level.
-   15 of the 24 profile-days count exercise twice. How to fix this changes
-   every budget, so it waits on the owner.
+3. **The activity level and today's workout overlapped** (fixed, DEC-40). The
+   clients describe the activity levels as exercise days a week, so BMR times
+   the multiplier already holds an average day's exercise: 626 kcal for the
+   average man (x1.55), 714 for the active woman (x1.725) and 1,534 for the
+   athlete (x1.9). Today's workout was added on top, on 15 of 24 profile-days.
+   A stated workout now replaces it: the average man's 60-minute run day goes
+   from 3,251 to 2,625 kcal, and his rest day from 2,774 to 2,148. A workout
+   left out still adds the 30-minute default (108 to 142 kcal) to the activity
+   level, so 3 of 24 days still count both. The report's "Added on top"
+   column keeps the old budgets. 143 of 144 still meet the targets.
 4. **The 37 °C body-temperature default is below the training range** (37.1 to
    41.5 °C). A 20-minute walk at 95 bpm adds 63 kcal, less than the 115 kcal
    default it replaces, and short workouts at 37 °C score oddly high. The

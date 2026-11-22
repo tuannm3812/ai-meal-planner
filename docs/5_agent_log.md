@@ -8296,3 +8296,17 @@ goes to Mike. Also flagged: the 37 °C temperature default is below the training
 
 Verified: `uv run pytest` 669 passed, coverage 97%; `ruff check` and `ruff format --check` clean;
 `docs/openapi.json` unchanged.
+
+## 2026-11-22 — Claude — a stated workout replaces the activity level's exercise (DEC-40)
+
+Mike chose "workout replaces activity exercise" on the decision card. When `duration_minutes`
+is given (0 for a rest day), expenditure is BMR x 1.2 plus the workout (a multiplier below 1.2
+is kept); a workout left out keeps the activity level plus the 30-minute default, so the 72-plan
+baseline is unchanged (diffed). New response field `exercise.replaces_activity_exercise`
+(`docs/openapi.json` regenerated); the React step 1 hint and plan note say a stated workout takes
+the place of the usual week's exercise. The workout check now shows each budget next to the old
+"added on top" one: 143 of 144 still meet the targets; 3 of 24 days (workout not given) still
+count both. Consequence noted in DEC-40: a high activity level with a stated modest workout gets
+far less than "not sure".
+
+Verified: `uv run pytest` and frontend `npm test` / `npm run lint` pass; ruff clean.

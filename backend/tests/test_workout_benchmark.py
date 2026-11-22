@@ -1,4 +1,5 @@
 """The workout check runs stated workouts through the real service and measures the overlap."""
+# DEC-40: a stated workout replaces the activity level's exercise.
 
 import json
 import subprocess
@@ -49,7 +50,11 @@ def test_the_report_puts_each_workout_next_to_the_activity_overlap() -> None:
     average_rest = by_key[(PROFILES[1].name, "rest day")]
     # BMR 1,790 x (1.55 - 1.2): the exercise a moderate activity level already counts.
     assert average_rest.activity_exercise_kcal == 626.5
-    assert average_rest.replaced_budget_kcal == round(1790 * 1.2, 1)
+    assert average_rest.budget_kcal == round(1790 * 1.2, 1)
+    assert average_rest.stacked_budget_kcal == round(1790 * 1.55, 1)
+    assert average_rest.replaces_activity_exercise
+    unknown = by_key[(PROFILES[1].name, "workout not given")]
+    assert unknown.budget_kcal == unknown.stacked_budget_kcal
     run_day = by_key[(PROFILES[1].name, "60 min run at 140 bpm")]
     assert run_day.budget_kcal - average_rest.budget_kcal == pytest.approx(
         run_day.workout_kcal, abs=0.1
@@ -57,7 +62,7 @@ def test_the_report_puts_each_workout_next_to_the_activity_overlap() -> None:
     assert run_day.warnings
     report = render_workouts(days)
     assert report.startswith("\n## Workout days\n")
-    assert "| average man, maintaining (x1.55) | rest day | 0 | 626 | 2774 | 2148 |" in report
+    assert "| average man, maintaining (x1.55) | rest day | 0 | 626 | 2148 | 2774 |" in report
 
 
 def test_script_runs_the_workout_check(tmp_path: Path) -> None:
