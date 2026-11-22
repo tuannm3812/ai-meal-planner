@@ -19,10 +19,13 @@ toward the same ranges, defined once in ``core/macro_balance.py``.
 
 Every run is offline and deterministic: no Gemini key, no USDA or FatSecret
 credentials, and an empty profile store, so a request's stored profile is the
-built-in default. The calorie model, the meal corpus and the retrieval backend
-are the code's defaults, never the caller's environment, and a run refuses to
-start when one of them is missing rather than measure a fallback (Codex,
-2026-10-18). Run it with ``scripts/meal_quality_baseline.py``.
+built-in default. The one exception is opt-in: given a USDA key, a run looks
+ingredients up in USDA FoodData Central, which is live data and so not
+deterministic (P4). Its provenance says so and counts the lookups. The
+calorie model, the meal corpus and the retrieval backend are the code's
+defaults, never the caller's environment, and a run refuses to start when one
+of them is missing rather than measure a fallback (Codex, 2026-10-18). Run it
+with ``scripts/meal_quality_baseline.py``.
 
 Classification uses full-precision values; rounding is for presentation only.
 """
@@ -205,6 +208,7 @@ class PlanQuality(BaseModel):
     macro_percent: dict[str, float] | None = None
     macros_in_range: dict[str, bool] | None = None
     estimated_ingredients: int | None = None
+    usda_ingredients: int | None = None
     retrieval_score: float | None = None
 
 
@@ -246,6 +250,9 @@ def measure(scenario: Scenario, result: MealPlanResult) -> PlanQuality:
     quality.estimated_ingredients = sum(
         1 for ingredient in nutrition.ingredients_macros if ingredient.verification == "estimated"
     )
+    quality.usda_ingredients = sum(
+        1 for ingredient in nutrition.ingredients_macros if ingredient.data_source == USDA_SOURCE
+    )
     if result.meal_plan.retrieval is not None:
         quality.retrieval_score = round(result.meal_plan.retrieval.selected_score, 3)
 
@@ -282,6 +289,44 @@ class BenchmarkConfigurationError(RuntimeError):
     """A required benchmark artifact is missing, so the run would measure a fallback."""
 
 
+USDA_SOURCE = "usda_fooddata_central"
+
+
+class CountingNutritionAgent(NutritionVerificationAgent):
+    """The production nutrition agent, counting its USDA lookups for the report.
+
+    A USDA run that quietly fell back to local tables would report local-table
+    numbers as USDA ones, so the run records how many lookups were made, how
+    many failed and how many found nothing usable.
+    """
+
+    def __init__(self, usda_api_key: str | None = None):
+        super().__init__(usda_api_key=usda_api_key)
+        self.usda_lookups = 0
+        self.usda_failures = 0
+        self.usda_empty = 0
+
+    def _query_usda_database(self, item_name: str) -> dict[str, Any] | None:
+        self.usda_lookups += 1
+        try:
+            result = super()._query_usda_database(item_name)
+        except Exception:
+            self.usda_failures += 1
+            raise
+        if not self._has_usable_macros(result):
+            self.usda_empty += 1
+        return result
+
+    def usda_counts(self) -> dict[str, int]:
+        """Lookups made, failed and unusable, and ingredients USDA answered."""
+        return {
+            "usda_lookups": self.usda_lookups,
+            "usda_lookup_failures": self.usda_failures,
+            "usda_no_usable_match": self.usda_empty,
+            "usda_ingredients_cached": len(self._macro_cache),
+        }
+
+
 @dataclass(frozen=True)
 class BenchmarkConfig:
     """The artifacts a run measures. The default is the canonical baseline."""
@@ -311,7 +356,7 @@ class BenchmarkConfig:
 
 
 def build_service(
-    data_dir: Path, config: BenchmarkConfig | None = None
+    data_dir: Path, config: BenchmarkConfig | None = None, usda_api_key: str | None = None
 ) -> tuple[MealPlanningService, dict[str, Any]]:
     """Build the real service with every external provider switched off.
 
@@ -319,10 +364,12 @@ def build_service(
         data_dir: An empty directory for the profile store, so every request
             reads the built-in default profile.
         config: The artifacts to measure; the canonical baseline when omitted.
+        usda_api_key: Look ingredients up in USDA FoodData Central with this
+            key. Omitted, the run is offline.
 
     Returns:
-        A MealPlanningService wired like production, minus API keys, and the
-        provenance of what it loaded.
+        A MealPlanningService wired like production, minus API keys unless a
+        USDA key is given, and the provenance of what it loaded.
 
     Raises:
         BenchmarkConfigurationError: The calorie model or the meal corpus did
@@ -352,7 +399,7 @@ def build_service(
         )
     service = MealPlanningService(
         meal_agent=meal_agent,
-        nutrition_agent=NutritionVerificationAgent(),
+        nutrition_agent=CountingNutritionAgent(usda_api_key=usda_api_key),
         supermarket_agent=SupermarketAgent(),
         calorie_agent=calorie_agent,
         profile_repo=profile_repo,
@@ -363,6 +410,7 @@ def build_service(
         "meal_corpus_sha256": _sha256(config.meal_corpus_path),
         "meal_count": len(meal_agent.meal_retriever.meals),
         "retriever": meal_agent.meal_retriever.active_backend,
+        "nutrition_source": "usda_fooddata_central" if usda_api_key else "local_tables",
     }
     return service, provenance
 
@@ -373,23 +421,30 @@ def _sha256(path: Path) -> str:
 
 
 def run(
-    scenarios: Iterable[Scenario] | None = None, config: BenchmarkConfig | None = None
+    scenarios: Iterable[Scenario] | None = None,
+    config: BenchmarkConfig | None = None,
+    usda_api_key: str | None = None,
 ) -> tuple[list[PlanQuality], dict[str, Any]]:
     """Run scenarios through a freshly built offline service.
 
     Args:
         scenarios: The scenarios to run; the fixed default set when omitted.
         config: The artifacts to measure; the canonical baseline when omitted.
+        usda_api_key: Look ingredients up in USDA FoodData Central; offline
+            when omitted.
 
     Returns:
-        One PlanQuality per scenario, in order, and the run's provenance.
+        One PlanQuality per scenario, in order, and the run's provenance. A
+        USDA run's provenance also counts its lookups.
     """
     scenarios = list(scenarios) if scenarios is not None else default_scenarios()
     with tempfile.TemporaryDirectory() as data_dir:
-        service, provenance = build_service(Path(data_dir), config)
+        service, provenance = build_service(Path(data_dir), config, usda_api_key)
         rows = [
             measure(scenario, service.generate(scenario.to_request())) for scenario in scenarios
         ]
+        if usda_api_key:
+            provenance.update(service.nutrition_agent.usda_counts())
     return rows, provenance
 
 
@@ -503,6 +558,7 @@ class Summary:
     macros_in_range: dict[str, int]
     all_macros_in_range: int
     with_estimated_ingredients: int
+    with_usda_ingredients: int
     weak_matches: int
     daily_budget_kcal: dict[str, float | None]
 
@@ -549,6 +605,7 @@ def summarise(rows: Sequence[PlanQuality]) -> Summary:
         },
         all_macros_in_range=sum(1 for row in served if all(row.macros_in_range.values())),
         with_estimated_ingredients=sum(1 for row in served if row.estimated_ingredients),
+        with_usda_ingredients=sum(1 for row in served if row.usda_ingredients),
         weak_matches=sum(
             1
             for row in served
@@ -625,6 +682,8 @@ def render_markdown(
         f"all three {summary.all_macros_in_range} of {served}.",
         f"- Plans with at least one estimated ingredient: "
         f"{summary.with_estimated_ingredients} of {served}.",
+        f"- Plans with at least one USDA-verified ingredient: "
+        f"{summary.with_usda_ingredients} of {served}.",
         f"- Corpus matches scoring below {WEAK_MATCH_SCORE}: {summary.weak_matches}.",
         "",
         "## Plans",
