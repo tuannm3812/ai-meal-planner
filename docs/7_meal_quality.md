@@ -165,3 +165,45 @@ Each item is a separate PR that reruns the baseline and reports the change.
    match today.
 4. **Meal target at the extremes** (finding 3), once the owner decides how
    many meals a day the target assumes.
+
+## 5. Workout days, 2026-11-22
+
+The fixed 72 send no workout, so each assumes the model's default (30 minutes
+at 100 bpm). The workout check sends six stated workouts (not given, rest day,
+a 20-minute walk at 95 bpm, a 30-minute jog at 120, a 60-minute run at 140 and a
+90-minute ride at 135) for each of the four profiles on six matched cravings:
+144 plans, reported apart from the 72.
+
+```bash
+uv run python scripts/meal_quality_baseline.py --workouts           # 144-request workout check
+```
+
+Report: [`meal_quality/workouts.md`](meal_quality/workouts.md); rows:
+[`meal_quality/workouts.json`](meal_quality/workouts.json).
+
+Findings:
+
+1. **143 of 144 plans meet the targets.** Daily budgets run from 1,200 to
+   5,094 kcal. The miss is Tuna Pasta Salad at a 378 kcal target (the
+   sedentary woman's 60-minute run day): carbs reach 43%, and the balancer
+   reverts because the pasta is already at its 0.5x floor. Targets between
+   about 360 and 390 kcal miss the same way; the fixed 72 never ask for one,
+   because that profile sits on the 1,200 kcal floor.
+2. **Workouts past 30 minutes were counted as 30** (fixed, DEC-39). The model
+   was trained on 1 to 30 minutes, so 45, 60 and 90 minutes all added 238 kcal
+   for the average man. They now add 357, 477 and 715. Heart rates past 128 bpm
+   are still read as 128, with a warning.
+3. **The activity level and today's workout overlapped** (fixed, DEC-40). The
+   clients describe the activity levels as exercise days a week, so BMR times
+   the multiplier already holds an average day's exercise: 626 kcal for the
+   average man (x1.55), 714 for the active woman (x1.725) and 1,534 for the
+   athlete (x1.9). Today's workout was added on top, on 15 of 24 profile-days.
+   A stated workout now replaces it: the average man's 60-minute run day goes
+   from 3,251 to 2,625 kcal, and his rest day from 2,774 to 2,148. A workout
+   left out still adds the 30-minute default (108 to 142 kcal) to the activity
+   level, so 3 of 24 days still count both. The report's "Added on top"
+   column keeps the old budgets. 143 of 144 still meet the targets.
+4. **The 37 °C body-temperature default is below the training range** (37.1 to
+   41.5 °C). A 20-minute walk at 95 bpm adds 63 kcal, less than the 115 kcal
+   default it replaces, and short workouts at 37 °C score oddly high. The
+   clients never ask for body temperature, so every request uses the default.

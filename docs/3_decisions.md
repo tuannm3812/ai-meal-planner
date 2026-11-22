@@ -43,6 +43,8 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
 | 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
 | 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
+| 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
+| 40 | A stated workout replaces the activity level's exercise | 2026-11-22 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -711,3 +713,51 @@ only its macro. A guard test enforces all of it.
 
 Rules out CSS variables for theming (there is one theme, and Tailwind classes plus a JS
 module cover both HTML and SVG) and a second icon set.
+
+## 2026-11-22 — Calorie model: workouts past its training range
+
+### DEC-39 — A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged
+
+The workout check (`scripts/meal_quality_baseline.py --workouts`) found that the
+model scored a 45, 60 and 90-minute workout the same: 238 kcal for the average
+man. Its training data (Kaggle S5E5) holds workouts of 1 to 30 minutes and heart
+rates of 67 to 128 bpm, read from the trees' bin edges, and boosted trees are flat
+past the last edge.
+
+A workout longer than 30 minutes is now predicted at 30 minutes and scaled by its
+length, so the 30-minute rate per minute holds: a 60-minute run at 140 bpm adds
+477 kcal for the average man, not 238. A heart rate above 128 bpm is still
+predicted as 128, and the response warns that a harder workout may be
+undercounted. Each case adds a warning to `calorie_budget.warnings`. Workouts of
+30 minutes or less, and the 72-plan baseline, do not change.
+
+Still open: the body-temperature default of 37 °C is below the training range
+(37.1 to 41.5 °C, mean 40.0), and the model is not monotonic in it, so a short
+workout at the default scores high (10 minutes at 110 bpm: 173 kcal at 37 °C, 67
+at 40.5 °C). The overlap between the activity level and today's workout is
+measured by the same check and fixed by DEC-40.
+Ruled out: a linear model past 30 minutes fitted to the trees, which would add a
+second model to explain for one edge.
+
+### DEC-40 — A stated workout replaces the activity level's exercise
+
+The clients describe the activity levels as exercise days in a usual week, so BMR
+times the multiplier already holds an average day's exercise (626 kcal for the
+average man at x1.55). DEC-33 then added today's workout on top, so a workout day
+counted exercise twice, and a rest day still counted the week's average. The workout
+check found this on 15 of 24 profile-days. Mike chose this fix on 2026-11-22.
+
+When the request states today's workout (`duration_minutes` given, 0 for a rest day),
+the day's expenditure is BMR times 1.2, the sedentary multiplier, plus the workout. A
+multiplier below 1.2 is kept. When the workout is not given, nothing changes: the
+activity level stands and the model's 30-minute default is added, so the 72-plan
+baseline does not move. `calorie_budget.exercise.replaces_activity_exercise` says
+which applied, and the React plan page says so.
+
+Budgets on stated days fall: the average man's rest day goes from 2,774 to 2,148 kcal
+and his 60-minute run day from 3,251 to 2,625. Consequence to watch: a person on a
+high activity level who states a modest workout gets far less than one who answers
+"not sure" (the athlete: 3,333 kcal for a 60-minute run, 4,521 for not sure), so a
+physical job, which the activity level also covers, is no longer counted on stated
+days. Ruled out: keeping the weekly average and adding only a workout's excess over
+it, which would make a rest day count the average again.

@@ -163,7 +163,11 @@ function workoutNote(budget) {
       : null
   }
   if (!isNumber(exercise.duration_minutes) || !isNumber(exercise.kcal)) return null
-  if (exercise.duration_minutes === 0) return 'No workout was added, because today is a rest day.'
+  if (exercise.duration_minutes === 0) {
+    return exercise.replaces_activity_exercise
+      ? "No workout was added, because today is a rest day, and your activity level's usual exercise is left out."
+      : 'No workout was added, because today is a rest day.'
+  }
   const defaulted = Array.isArray(exercise.defaulted) ? exercise.defaulted : []
   const minutes = Math.round(exercise.duration_minutes)
   const bpm = isNumber(exercise.heart_rate_bpm) ? Math.round(exercise.heart_rate_bpm) : null
@@ -171,7 +175,9 @@ function workoutNote(budget) {
   const added = `adding ${kcal(exercise.kcal)}`
   return defaulted.includes('duration_minutes')
     ? `That estimate includes a default ${minutes}-minute workout${pace}, ${added}, because no workout was given.`
-    : `That estimate includes your ${minutes}-minute workout${pace}, ${added}.`
+    : exercise.replaces_activity_exercise
+      ? `That estimate includes your ${minutes}-minute workout${pace}, ${added}, in place of your activity level's usual exercise.`
+      : `That estimate includes your ${minutes}-minute workout${pace}, ${added}.`
 }
 
 // "How this plan was made": the service's own notes, in its words, plus the

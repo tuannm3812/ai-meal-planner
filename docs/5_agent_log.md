@@ -8299,3 +8299,39 @@ accepts any age above 0 for adult formulas.
 
 Needs Mike: ask the capstone supervisor whether UTS ethics approval applies, and
 find a dietitian.
+
+## 2026-11-22 — Claude — workout check; workouts past 30 minutes (DEC-39)
+
+Mike asked for the meal-quality benchmark to cover realistic workouts (P5 follow-up). New
+`backend/app/evaluation/workouts.py` and `meal_quality_baseline.py --workouts`: six stated
+workouts (not given, rest day, 20/30/60/90 minutes) for each of the four profiles on six matched
+cravings, 144 plans, apart from the 72. Report and rows in `docs/meal_quality/workouts.{md,json}`.
+143 of 144 meet the targets; the miss is Tuna Pasta Salad at a 378 kcal target (pasta at its 0.5x
+floor, carbs 43%).
+
+Found and fixed: the model's trees are flat past 30 minutes and 128 bpm (its training range, read
+from the bin edges), so 45, 60 and 90 minutes all added 238 kcal. A longer workout is now predicted
+at 30 minutes and scaled by length; a heart rate past 128 is flagged (DEC-39). The 72-plan baseline
+is unchanged (diffed against a run before the change).
+
+Measured, not fixed: the activity level already holds an average day's exercise (626 kcal at x1.55),
+and today's workout is added on top; 15 of 24 profile-days count exercise twice. The column "if
+replaced" shows the budget with today's workout replacing it. The fix changes every budget, so it
+goes to Mike. Also flagged: the 37 °C temperature default is below the training range.
+
+Verified: `uv run pytest` 669 passed, coverage 97%; `ruff check` and `ruff format --check` clean;
+`docs/openapi.json` unchanged.
+
+## 2026-11-22 — Claude — a stated workout replaces the activity level's exercise (DEC-40)
+
+Mike chose "workout replaces activity exercise" on the decision card. When `duration_minutes`
+is given (0 for a rest day), expenditure is BMR x 1.2 plus the workout (a multiplier below 1.2
+is kept); a workout left out keeps the activity level plus the 30-minute default, so the 72-plan
+baseline is unchanged (diffed). New response field `exercise.replaces_activity_exercise`
+(`docs/openapi.json` regenerated); the React step 1 hint and plan note say a stated workout takes
+the place of the usual week's exercise. The workout check now shows each budget next to the old
+"added on top" one: 143 of 144 still meet the targets; 3 of 24 days (workout not given) still
+count both. Consequence noted in DEC-40: a high activity level with a stated modest workout gets
+far less than "not sure".
+
+Verified: `uv run pytest` and frontend `npm test` / `npm run lint` pass; ruff clean.
