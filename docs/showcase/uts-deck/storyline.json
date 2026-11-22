@@ -31023,6 +31023,5076 @@
           "line_spacing": 135
         }
       ]
+    },
+    {
+      "id": "walk1",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "First visit",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A1. First visit: your details, asked once",
+      "subtitle": "Kept on this device; the Profile page can change them or forget them.",
+      "question": "What does the app ask for, and why?",
+      "image": {
+        "path": "assets/figures/walk-1-first-visit.jpg",
+        "aspect": 1.02803738317757,
+        "alt": "The React app's first-run form: goal cards, age, sex, height, weight, activity, today's workout, things to avoid, where you shop, and a side panel on how the meal is sized."
+      },
+      "pins": [
+        [
+          250,
+          240
+        ],
+        [
+          282,
+          389
+        ],
+        [
+          310,
+          488
+        ],
+        [
+          296,
+          705
+        ],
+        [
+          211,
+          877
+        ],
+        [
+          930,
+          50
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Goal",
+          "text": "Lose, maintain or gain sets the meal's target; weight loss keeps a **safe floor**."
+        },
+        {
+          "title": "Body",
+          "text": "Age, sex, height and weight give the daily energy estimate."
+        },
+        {
+          "title": "Activity and today's workout",
+          "text": "The usual week, plus **today's session** from the trained model."
+        },
+        {
+          "title": "Anything to avoid",
+          "text": "Diets and allergies become **hard limits**, checked against allergen tags."
+        },
+        {
+          "title": "Where you shop",
+          "text": "Picks the store for the shopping list."
+        },
+        {
+          "title": "How your meal is sized",
+          "text": "The four sizing steps in plain words, beside the form."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The first visit asks for these details once. Each field maps to one step of the calorie target or the safety rules.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "n": 17,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.23333333333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l2",
+          "x": 101.33333333333334,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t3",
+          "text": "First visit",
+          "x": 102.13333333333334,
+          "y": 22.3,
+          "width": 780.0666666666666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t8",
+          "text": "A1. First visit: your details, asked once",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 41,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 41,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t9",
+          "text": "Kept on this device; the Profile page can change them or forget them.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 69,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t13",
+          "text": "17",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.0,
+          "y": 131.5,
+          "width": 340.2523364485981,
+          "height": 331.0,
+          "background_color": "#D8DEE3"
+        },
+        {
+          "op": "add-image",
+          "id": "im15",
+          "path": "assets/figures/walk-1-first-visit.jpg",
+          "alt": "The React app's first-run form: goal cards, age, sex, height, weight, activity, today's workout, things to avoid, where you shop, and a side panel on how the meal is sized.",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 339.2523364485981,
+          "height": 330.0
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r16",
+          "shape_type": "ELLIPSE",
+          "x": 117.31308411214951,
+          "y": 200.2,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r17",
+          "shape_type": "ELLIPSE",
+          "x": 119.31308411214951,
+          "y": 202.2,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t18",
+          "text": "1",
+          "x": 112.11308411214951,
+          "y": 197.5,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r19",
+          "shape_type": "ELLIPSE",
+          "x": 128.16915887850467,
+          "y": 249.37,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r20",
+          "shape_type": "ELLIPSE",
+          "x": 130.16915887850467,
+          "y": 251.37,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t21",
+          "text": "2",
+          "x": 122.96915887850467,
+          "y": 246.67000000000002,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r22",
+          "shape_type": "ELLIPSE",
+          "x": 137.6682242990654,
+          "y": 282.03999999999996,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r23",
+          "shape_type": "ELLIPSE",
+          "x": 139.6682242990654,
+          "y": 284.03999999999996,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t24",
+          "text": "3",
+          "x": 132.4682242990654,
+          "y": 279.34,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r25",
+          "shape_type": "ELLIPSE",
+          "x": 132.91869158878504,
+          "y": 353.65,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r26",
+          "shape_type": "ELLIPSE",
+          "x": 134.91869158878504,
+          "y": 355.65,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t27",
+          "text": "4",
+          "x": 127.71869158878503,
+          "y": 350.95,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r28",
+          "shape_type": "ELLIPSE",
+          "x": 104.0822429906542,
+          "y": 410.41,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r29",
+          "shape_type": "ELLIPSE",
+          "x": 106.0822429906542,
+          "y": 412.41,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t30",
+          "text": "5",
+          "x": 98.88224299065419,
+          "y": 407.71000000000004,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r31",
+          "shape_type": "ELLIPSE",
+          "x": 348.00467289719626,
+          "y": 137.5,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r32",
+          "shape_type": "ELLIPSE",
+          "x": 350.00467289719626,
+          "y": 139.5,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t33",
+          "text": "6",
+          "x": 342.80467289719627,
+          "y": 134.8,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r34",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 135.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r35",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 137.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t36",
+          "text": "1",
+          "x": 400.5523364485981,
+          "y": 133.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t37",
+          "text": "Goal",
+          "x": 431.5523364485981,
+          "y": 130.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t37",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t37",
+          "start": 0,
+          "end": 4,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t38",
+          "text": "Lose, maintain or gain sets the meal's target; weight loss keeps a safe floor.",
+          "x": 431.5523364485981,
+          "y": 149.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t38",
+          "start": 0,
+          "end": 78,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t38",
+          "start": 67,
+          "end": 77,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l39",
+          "x": 406.7523364485981,
+          "y": 186.5,
+          "width": 512.247663551402,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r40",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 190.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r41",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 192.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t42",
+          "text": "2",
+          "x": 400.5523364485981,
+          "y": 188.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t43",
+          "text": "Body",
+          "x": 431.5523364485981,
+          "y": 185.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 4,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t44",
+          "text": "Age, sex, height and weight give the daily energy estimate.",
+          "x": 431.5523364485981,
+          "y": 204.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t44",
+          "start": 0,
+          "end": 59,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l45",
+          "x": 406.7523364485981,
+          "y": 241.5,
+          "width": 512.247663551402,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 245.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r47",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 247.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t48",
+          "text": "3",
+          "x": 400.5523364485981,
+          "y": 243.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t49",
+          "text": "Activity and today's workout",
+          "x": 431.5523364485981,
+          "y": 240.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 28,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t49",
+          "start": 0,
+          "end": 28,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t50",
+          "text": "The usual week, plus today's session from the trained model.",
+          "x": 431.5523364485981,
+          "y": 259.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 60,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t50",
+          "start": 21,
+          "end": 36,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l51",
+          "x": 406.7523364485981,
+          "y": 296.5,
+          "width": 512.247663551402,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r52",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 300.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r53",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 302.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t54",
+          "text": "4",
+          "x": 400.5523364485981,
+          "y": 298.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t55",
+          "text": "Anything to avoid",
+          "x": 431.5523364485981,
+          "y": 295.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t55",
+          "start": 0,
+          "end": 17,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t55",
+          "start": 0,
+          "end": 17,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t56",
+          "text": "Diets and allergies become hard limits, checked against allergen tags.",
+          "x": 431.5523364485981,
+          "y": 314.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t56",
+          "start": 0,
+          "end": 70,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t56",
+          "start": 27,
+          "end": 38,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l57",
+          "x": 406.7523364485981,
+          "y": 351.5,
+          "width": 512.247663551402,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r58",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 355.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r59",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 357.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t60",
+          "text": "5",
+          "x": 400.5523364485981,
+          "y": 353.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t61",
+          "text": "Where you shop",
+          "x": 431.5523364485981,
+          "y": 350.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 14,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t62",
+          "text": "Picks the store for the shopping list.",
+          "x": 431.5523364485981,
+          "y": 369.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 38,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk1",
+          "id": "l63",
+          "x": 406.7523364485981,
+          "y": 406.5,
+          "width": 512.247663551402,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r64",
+          "shape_type": "ELLIPSE",
+          "x": 405.7523364485981,
+          "y": 410.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk1",
+          "id": "r65",
+          "shape_type": "ELLIPSE",
+          "x": 407.7523364485981,
+          "y": 412.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t66",
+          "text": "6",
+          "x": 400.5523364485981,
+          "y": 408.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t67",
+          "text": "How your meal is sized",
+          "x": 431.5523364485981,
+          "y": 405.8,
+          "width": 494.64766355140193,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t67",
+          "start": 0,
+          "end": 22,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t67",
+          "start": 0,
+          "end": 22,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk1",
+          "id": "t68",
+          "text": "The four sizing steps in plain words, beside the form.",
+          "x": 431.5523364485981,
+          "y": 424.8,
+          "width": 494.64766355140193,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t68",
+          "start": 0,
+          "end": 54,
+          "line_spacing": 135
+        }
+      ]
+    },
+    {
+      "id": "walk2",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Home",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A2. Home: one search box",
+      "subtitle": "After the first visit, every plan starts here.",
+      "question": "Where does a person start?",
+      "image": {
+        "path": "assets/figures/walk-2-home.jpg",
+        "aspect": 1.0519877675840978,
+        "alt": "The React home page: a large craving search, suggested dishes, a line naming where you shop, three short promises, and saved meals as cards."
+      },
+      "pins": [
+        [
+          671,
+          246
+        ],
+        [
+          207,
+          390
+        ],
+        [
+          450,
+          439
+        ],
+        [
+          262,
+          556
+        ],
+        [
+          213,
+          661
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Craving search",
+          "text": "Any words; the planner finds the closest of **76 recipes**."
+        },
+        {
+          "title": "Suggestions",
+          "text": "One tap fills the search with a dish from the library."
+        },
+        {
+          "title": "Your details",
+          "text": "Who the meal is sized for and where you shop, with a link to change them."
+        },
+        {
+          "title": "Three promises",
+          "text": "A real recipe, an **honest note** when nothing matches, and a shopping list."
+        },
+        {
+          "title": "My meals and Past plans",
+          "text": "Saved meals and recent plans come back as cards with kcal and a macro bar."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Three meals were planned and saved before this capture, so the cards are filled.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "n": 18,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.23333333333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l2",
+          "x": 101.33333333333334,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t3",
+          "text": "Home",
+          "x": 102.13333333333334,
+          "y": 22.3,
+          "width": 780.0666666666666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t8",
+          "text": "A2. Home: one search box",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 24,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 24,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t9",
+          "text": "After the first visit, every plan starts here.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 46,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t13",
+          "text": "18",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.0,
+          "y": 131.5,
+          "width": 348.1559633027523,
+          "height": 331.0,
+          "background_color": "#D8DEE3"
+        },
+        {
+          "op": "add-image",
+          "id": "im15",
+          "path": "assets/figures/walk-2-home.jpg",
+          "alt": "The React home page: a large craving search, suggested dishes, a line naming where you shop, three short promises, and saved meals as cards.",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 347.1559633027523,
+          "height": 330.0
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r16",
+          "shape_type": "ELLIPSE",
+          "x": 265.4416513761468,
+          "y": 202.18,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r17",
+          "shape_type": "ELLIPSE",
+          "x": 267.4416513761468,
+          "y": 204.18,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t18",
+          "text": "1",
+          "x": 260.2416513761468,
+          "y": 199.48000000000002,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r19",
+          "shape_type": "ELLIPSE",
+          "x": 104.36128440366973,
+          "y": 249.70000000000005,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r20",
+          "shape_type": "ELLIPSE",
+          "x": 106.36128440366973,
+          "y": 251.70000000000005,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t21",
+          "text": "2",
+          "x": 99.16128440366973,
+          "y": 247.00000000000006,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r22",
+          "shape_type": "ELLIPSE",
+          "x": 188.72018348623854,
+          "y": 265.87,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r23",
+          "shape_type": "ELLIPSE",
+          "x": 190.72018348623854,
+          "y": 267.87,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t24",
+          "text": "3",
+          "x": 183.52018348623855,
+          "y": 263.17,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r25",
+          "shape_type": "ELLIPSE",
+          "x": 123.45486238532112,
+          "y": 304.48,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r26",
+          "shape_type": "ELLIPSE",
+          "x": 125.45486238532112,
+          "y": 306.48,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t27",
+          "text": "4",
+          "x": 118.25486238532112,
+          "y": 301.78000000000003,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r28",
+          "shape_type": "ELLIPSE",
+          "x": 106.44422018348624,
+          "y": 339.13,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r29",
+          "shape_type": "ELLIPSE",
+          "x": 108.44422018348624,
+          "y": 341.13,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t30",
+          "text": "5",
+          "x": 101.24422018348623,
+          "y": 336.43,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r31",
+          "shape_type": "ELLIPSE",
+          "x": 413.6559633027523,
+          "y": 135.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r32",
+          "shape_type": "ELLIPSE",
+          "x": 415.6559633027523,
+          "y": 137.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t33",
+          "text": "1",
+          "x": 408.4559633027523,
+          "y": 133.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t34",
+          "text": "Craving search",
+          "x": 439.4559633027523,
+          "y": 130.8,
+          "width": 486.7440366972477,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t34",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t34",
+          "start": 0,
+          "end": 14,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t35",
+          "text": "Any words; the planner finds the closest of 76 recipes.",
+          "x": 439.4559633027523,
+          "y": 149.8,
+          "width": 486.7440366972477,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t35",
+          "start": 0,
+          "end": 55,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t35",
+          "start": 44,
+          "end": 54,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l36",
+          "x": 414.6559633027523,
+          "y": 197.5,
+          "width": 504.3440366972477,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r37",
+          "shape_type": "ELLIPSE",
+          "x": 413.6559633027523,
+          "y": 201.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r38",
+          "shape_type": "ELLIPSE",
+          "x": 415.6559633027523,
+          "y": 203.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t39",
+          "text": "2",
+          "x": 408.4559633027523,
+          "y": 199.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t39",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t39",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t40",
+          "text": "Suggestions",
+          "x": 439.4559633027523,
+          "y": 196.8,
+          "width": 486.7440366972477,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t40",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t40",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t41",
+          "text": "One tap fills the search with a dish from the library.",
+          "x": 439.4559633027523,
+          "y": 215.8,
+          "width": 486.7440366972477,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t41",
+          "start": 0,
+          "end": 54,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l42",
+          "x": 414.6559633027523,
+          "y": 263.5,
+          "width": 504.3440366972477,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r43",
+          "shape_type": "ELLIPSE",
+          "x": 413.6559633027523,
+          "y": 267.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r44",
+          "shape_type": "ELLIPSE",
+          "x": 415.6559633027523,
+          "y": 269.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t45",
+          "text": "3",
+          "x": 408.4559633027523,
+          "y": 265.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t45",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t45",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t46",
+          "text": "Your details",
+          "x": 439.4559633027523,
+          "y": 262.8,
+          "width": 486.7440366972477,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t47",
+          "text": "Who the meal is sized for and where you shop, with a link to change them.",
+          "x": 439.4559633027523,
+          "y": 281.8,
+          "width": 486.7440366972477,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t47",
+          "start": 0,
+          "end": 73,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l48",
+          "x": 414.6559633027523,
+          "y": 329.5,
+          "width": 504.3440366972477,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r49",
+          "shape_type": "ELLIPSE",
+          "x": 413.6559633027523,
+          "y": 333.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r50",
+          "shape_type": "ELLIPSE",
+          "x": 415.6559633027523,
+          "y": 335.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t51",
+          "text": "4",
+          "x": 408.4559633027523,
+          "y": 331.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t51",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t51",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t52",
+          "text": "Three promises",
+          "x": 439.4559633027523,
+          "y": 328.8,
+          "width": 486.7440366972477,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t52",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t52",
+          "start": 0,
+          "end": 14,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t53",
+          "text": "A real recipe, an honest note when nothing matches, and a shopping list.",
+          "x": 439.4559633027523,
+          "y": 347.8,
+          "width": 486.7440366972477,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t53",
+          "start": 0,
+          "end": 72,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t53",
+          "start": 18,
+          "end": 29,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk2",
+          "id": "l54",
+          "x": 414.6559633027523,
+          "y": 395.5,
+          "width": 504.3440366972477,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r55",
+          "shape_type": "ELLIPSE",
+          "x": 413.6559633027523,
+          "y": 399.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk2",
+          "id": "r56",
+          "shape_type": "ELLIPSE",
+          "x": 415.6559633027523,
+          "y": 401.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t57",
+          "text": "5",
+          "x": 408.4559633027523,
+          "y": 397.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t57",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t57",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t58",
+          "text": "My meals and Past plans",
+          "x": 439.4559633027523,
+          "y": 394.8,
+          "width": 486.7440366972477,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t58",
+          "start": 0,
+          "end": 23,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t58",
+          "start": 0,
+          "end": 23,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk2",
+          "id": "t59",
+          "text": "Saved meals and recent plans come back as cards with kcal and a macro bar.",
+          "x": 439.4559633027523,
+          "y": 413.8,
+          "width": 486.7440366972477,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t59",
+          "start": 0,
+          "end": 74,
+          "line_spacing": 135
+        }
+      ]
+    },
+    {
+      "id": "walk3",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Plan page",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A3. The plan page: what it is and how it fits",
+      "subtitle": "Chicken Fried Rice for the same profile, after saving it and ticking three items.",
+      "question": "What does a plan show?",
+      "image": {
+        "path": "assets/figures/walk-3-plan.jpg",
+        "aspect": 0.9411764705882353,
+        "alt": "The top of the React plan page: Chicken Fried Rice with status tags, a Saved to My meals button, an estimates notice, a calorie ring at 694 of 691 kcal, a macro donut, balance bars and the shopping list with three items ticked."
+      },
+      "pins": [
+        [
+          517,
+          156
+        ],
+        [
+          430,
+          212
+        ],
+        [
+          913,
+          229
+        ],
+        [
+          372,
+          493
+        ],
+        [
+          372,
+          638
+        ],
+        [
+          870,
+          394
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Status tags",
+          "text": "Close menu match, portions rebalanced, some nutrition **estimated**."
+        },
+        {
+          "title": "Save meal",
+          "text": "Adds it to My meals on the home page."
+        },
+        {
+          "title": "Estimates notice",
+          "text": "Says how many ingredients use estimated nutrition: here **3 of 6**."
+        },
+        {
+          "title": "Calorie ring",
+          "text": "This meal, **694 kcal**, against its 691 kcal target."
+        },
+        {
+          "title": "Macro donut and balance",
+          "text": "Grams and share of each macro, against its recommended range."
+        },
+        {
+          "title": "Shopping list",
+          "text": "Grouped by aisle, with a price per item; ticks stay as you shop."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Ring, donut and bars use the app's Viridis macro colours: protein, carbs, fat.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "n": 19,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.23333333333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l2",
+          "x": 101.33333333333334,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t3",
+          "text": "Plan page",
+          "x": 102.13333333333334,
+          "y": 22.3,
+          "width": 780.0666666666666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t8",
+          "text": "A3. The plan page: what it is and how it fits",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 45,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 45,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t9",
+          "text": "Chicken Fried Rice for the same profile, after saving it and ticking three items.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 81,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t13",
+          "text": "19",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.0,
+          "y": 131.5,
+          "width": 311.5882352941176,
+          "height": 331.0,
+          "background_color": "#D8DEE3"
+        },
+        {
+          "op": "add-image",
+          "id": "im15",
+          "path": "assets/figures/walk-3-plan.jpg",
+          "alt": "The top of the React plan page: Chicken Fried Rice with status tags, a Saved to My meals button, an estimates notice, a calorie ring at 694 of 691 kcal, a macro donut, balance bars and the shopping list with three items ticked.",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 310.5882352941176,
+          "height": 330.0
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r16",
+          "shape_type": "ELLIPSE",
+          "x": 193.0741176470588,
+          "y": 172.48,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r17",
+          "shape_type": "ELLIPSE",
+          "x": 195.0741176470588,
+          "y": 174.48,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t18",
+          "text": "1",
+          "x": 187.87411764705882,
+          "y": 169.78,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r19",
+          "shape_type": "ELLIPSE",
+          "x": 166.05294117647057,
+          "y": 190.95999999999998,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r20",
+          "shape_type": "ELLIPSE",
+          "x": 168.05294117647057,
+          "y": 192.95999999999998,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t21",
+          "text": "2",
+          "x": 160.85294117647058,
+          "y": 188.26,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r22",
+          "shape_type": "ELLIPSE",
+          "x": 316.0670588235294,
+          "y": 196.57,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r23",
+          "shape_type": "ELLIPSE",
+          "x": 318.0670588235294,
+          "y": 198.57,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t24",
+          "text": "3",
+          "x": 310.8670588235294,
+          "y": 193.87,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r25",
+          "shape_type": "ELLIPSE",
+          "x": 148.03882352941176,
+          "y": 283.69,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r26",
+          "shape_type": "ELLIPSE",
+          "x": 150.03882352941176,
+          "y": 285.69,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t27",
+          "text": "4",
+          "x": 142.83882352941177,
+          "y": 280.99,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r28",
+          "shape_type": "ELLIPSE",
+          "x": 148.03882352941176,
+          "y": 331.53999999999996,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r29",
+          "shape_type": "ELLIPSE",
+          "x": 150.03882352941176,
+          "y": 333.53999999999996,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t30",
+          "text": "5",
+          "x": 142.83882352941177,
+          "y": 328.84,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r31",
+          "shape_type": "ELLIPSE",
+          "x": 302.71176470588233,
+          "y": 251.01999999999998,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r32",
+          "shape_type": "ELLIPSE",
+          "x": 304.71176470588233,
+          "y": 253.01999999999998,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t33",
+          "text": "6",
+          "x": 297.51176470588234,
+          "y": 248.32,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r34",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 135.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r35",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 137.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t36",
+          "text": "1",
+          "x": 371.88823529411764,
+          "y": 133.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t37",
+          "text": "Status tags",
+          "x": 402.88823529411764,
+          "y": 130.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t37",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t37",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t38",
+          "text": "Close menu match, portions rebalanced, some nutrition estimated.",
+          "x": 402.88823529411764,
+          "y": 149.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t38",
+          "start": 0,
+          "end": 64,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t38",
+          "start": 54,
+          "end": 63,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l39",
+          "x": 378.0882352941176,
+          "y": 186.5,
+          "width": 540.9117647058824,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r40",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 190.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r41",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 192.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t42",
+          "text": "2",
+          "x": 371.88823529411764,
+          "y": 188.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t43",
+          "text": "Save meal",
+          "x": 402.88823529411764,
+          "y": 185.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t44",
+          "text": "Adds it to My meals on the home page.",
+          "x": 402.88823529411764,
+          "y": 204.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t44",
+          "start": 0,
+          "end": 37,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l45",
+          "x": 378.0882352941176,
+          "y": 241.5,
+          "width": 540.9117647058824,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 245.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r47",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 247.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t48",
+          "text": "3",
+          "x": 371.88823529411764,
+          "y": 243.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t49",
+          "text": "Estimates notice",
+          "x": 402.88823529411764,
+          "y": 240.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 16,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t49",
+          "start": 0,
+          "end": 16,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t50",
+          "text": "Says how many ingredients use estimated nutrition: here 3 of 6.",
+          "x": 402.88823529411764,
+          "y": 259.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 63,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t50",
+          "start": 56,
+          "end": 62,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l51",
+          "x": 378.0882352941176,
+          "y": 296.5,
+          "width": 540.9117647058824,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r52",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 300.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r53",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 302.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t54",
+          "text": "4",
+          "x": 371.88823529411764,
+          "y": 298.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t55",
+          "text": "Calorie ring",
+          "x": 402.88823529411764,
+          "y": 295.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t55",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t55",
+          "start": 0,
+          "end": 12,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t56",
+          "text": "This meal, 694 kcal, against its 691 kcal target.",
+          "x": 402.88823529411764,
+          "y": 314.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t56",
+          "start": 0,
+          "end": 49,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t56",
+          "start": 11,
+          "end": 19,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l57",
+          "x": 378.0882352941176,
+          "y": 351.5,
+          "width": 540.9117647058824,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r58",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 355.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r59",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 357.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t60",
+          "text": "5",
+          "x": 371.88823529411764,
+          "y": 353.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t61",
+          "text": "Macro donut and balance",
+          "x": 402.88823529411764,
+          "y": 350.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 23,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 23,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t62",
+          "text": "Grams and share of each macro, against its recommended range.",
+          "x": 402.88823529411764,
+          "y": 369.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 61,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk3",
+          "id": "l63",
+          "x": 378.0882352941176,
+          "y": 406.5,
+          "width": 540.9117647058824,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r64",
+          "shape_type": "ELLIPSE",
+          "x": 377.0882352941176,
+          "y": 410.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk3",
+          "id": "r65",
+          "shape_type": "ELLIPSE",
+          "x": 379.0882352941176,
+          "y": 412.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t66",
+          "text": "6",
+          "x": 371.88823529411764,
+          "y": 408.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t67",
+          "text": "Shopping list",
+          "x": 402.88823529411764,
+          "y": 405.8,
+          "width": 523.3117647058824,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t67",
+          "start": 0,
+          "end": 13,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t67",
+          "start": 0,
+          "end": 13,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk3",
+          "id": "t68",
+          "text": "Grouped by aisle, with a price per item; ticks stay as you shop.",
+          "x": 402.88823529411764,
+          "y": 424.8,
+          "width": 523.3117647058824,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t68",
+          "start": 0,
+          "end": 64,
+          "line_spacing": 135
+        }
+      ]
+    },
+    {
+      "id": "walk4",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "After the plan",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A4. Below the plan: sources, feedback and other options",
+      "subtitle": "The rest of the same page, read top to bottom.",
+      "question": "What else is on the page?",
+      "image": {
+        "path": "assets/figures/walk-4-after.jpg",
+        "aspect": 1.302325581395349,
+        "alt": "The lower half of the React plan page: each ingredient's share of calories with its source tag, the shopping total with copy and print, a four-star rating, two other close meals, and a How this plan was made section."
+      },
+      "pins": [
+        [
+          435,
+          157
+        ],
+        [
+          357,
+          293
+        ],
+        [
+          852,
+          40
+        ],
+        [
+          815,
+          264
+        ],
+        [
+          319,
+          701
+        ],
+        [
+          257,
+          939
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Where the calories come from",
+          "text": "Each ingredient's share of the meal, with its served portion."
+        },
+        {
+          "title": "Source tags",
+          "text": "**Estimated** or **reference**, ingredient by ingredient."
+        },
+        {
+          "title": "Estimated total",
+          "text": "**$24.50** from a local price list; copy or print the list."
+        },
+        {
+          "title": "How was it?",
+          "text": "A 1 to 5 star rating and a note, saved with the plan."
+        },
+        {
+          "title": "Also close to your craving",
+          "text": "Runners-up from the same search, sized the same way in one tap."
+        },
+        {
+          "title": "How this plan was made",
+          "text": "The service's notes on how the meal was chosen and checked."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The rating here was 4 of 5 stars, given during the capture.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "n": 20,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.23333333333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l2",
+          "x": 101.33333333333334,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t3",
+          "text": "After the plan",
+          "x": 102.13333333333334,
+          "y": 22.3,
+          "width": 780.0666666666666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t8",
+          "text": "A4. Below the plan: sources, feedback and other options",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 55,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 55,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t9",
+          "text": "The rest of the same page, read top to bottom.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 46,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t13",
+          "text": "20",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.0,
+          "y": 131.5,
+          "width": 430.76744186046517,
+          "height": 331.0,
+          "background_color": "#D8DEE3"
+        },
+        {
+          "op": "add-image",
+          "id": "im15",
+          "path": "assets/figures/walk-4-after.jpg",
+          "alt": "The lower half of the React plan page: each ingredient's share of calories with its source tag, the shopping total with copy and print, a four-star rating, two other close meals, and a How this plan was made section.",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 429.76744186046517,
+          "height": 330.0
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r16",
+          "shape_type": "ELLIPSE",
+          "x": 219.44883720930235,
+          "y": 172.81,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r17",
+          "shape_type": "ELLIPSE",
+          "x": 221.44883720930235,
+          "y": 174.81,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t18",
+          "text": "1",
+          "x": 214.24883720930237,
+          "y": 170.11,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t18",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r19",
+          "shape_type": "ELLIPSE",
+          "x": 185.92697674418605,
+          "y": 217.69,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r20",
+          "shape_type": "ELLIPSE",
+          "x": 187.92697674418605,
+          "y": 219.69,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t21",
+          "text": "2",
+          "x": 180.72697674418606,
+          "y": 214.99,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t21",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r22",
+          "shape_type": "ELLIPSE",
+          "x": 398.6618604651163,
+          "y": 134.2,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r23",
+          "shape_type": "ELLIPSE",
+          "x": 400.6618604651163,
+          "y": 136.2,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t24",
+          "text": "3",
+          "x": 393.46186046511633,
+          "y": 131.5,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t24",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r25",
+          "shape_type": "ELLIPSE",
+          "x": 382.7604651162791,
+          "y": 208.12,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r26",
+          "shape_type": "ELLIPSE",
+          "x": 384.7604651162791,
+          "y": 210.12,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t27",
+          "text": "4",
+          "x": 377.5604651162791,
+          "y": 205.42000000000002,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t27",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r28",
+          "shape_type": "ELLIPSE",
+          "x": 169.5958139534884,
+          "y": 352.33,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r29",
+          "shape_type": "ELLIPSE",
+          "x": 171.5958139534884,
+          "y": 354.33,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t30",
+          "text": "5",
+          "x": 164.3958139534884,
+          "y": 349.63,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r31",
+          "shape_type": "ELLIPSE",
+          "x": 142.95023255813953,
+          "y": 430.87,
+          "width": 22,
+          "height": 22,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r32",
+          "shape_type": "ELLIPSE",
+          "x": 144.95023255813953,
+          "y": 432.87,
+          "width": 18,
+          "height": 18,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t33",
+          "text": "6",
+          "x": 137.75023255813954,
+          "y": 428.17,
+          "width": 32.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r34",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 135.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r35",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 137.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t36",
+          "text": "1",
+          "x": 491.0674418604652,
+          "y": 133.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t36",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t37",
+          "text": "Where the calories come from",
+          "x": 522.0674418604651,
+          "y": 130.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t37",
+          "start": 0,
+          "end": 28,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t37",
+          "start": 0,
+          "end": 28,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t38",
+          "text": "Each ingredient's share of the meal, with its served portion.",
+          "x": 522.0674418604651,
+          "y": 149.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t38",
+          "start": 0,
+          "end": 61,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l39",
+          "x": 497.26744186046517,
+          "y": 186.5,
+          "width": 421.73255813953483,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r40",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 190.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r41",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 192.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t42",
+          "text": "2",
+          "x": 491.0674418604652,
+          "y": 188.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t42",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t43",
+          "text": "Source tags",
+          "x": 522.0674418604651,
+          "y": 185.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t44",
+          "text": "Estimated or reference, ingredient by ingredient.",
+          "x": 522.0674418604651,
+          "y": 204.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t44",
+          "start": 0,
+          "end": 49,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t44",
+          "start": 0,
+          "end": 9,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "style-text",
+          "element": "t44",
+          "start": 13,
+          "end": 22,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l45",
+          "x": 497.26744186046517,
+          "y": 241.5,
+          "width": 421.73255813953483,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r46",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 245.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r47",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 247.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t48",
+          "text": "3",
+          "x": 491.0674418604652,
+          "y": 243.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t48",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t49",
+          "text": "Estimated total",
+          "x": 522.0674418604651,
+          "y": 240.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t49",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t50",
+          "text": "$24.50 from a local price list; copy or print the list.",
+          "x": 522.0674418604651,
+          "y": 259.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 55,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t50",
+          "start": 0,
+          "end": 6,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l51",
+          "x": 497.26744186046517,
+          "y": 296.5,
+          "width": 421.73255813953483,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r52",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 300.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r53",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 302.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t54",
+          "text": "4",
+          "x": 491.0674418604652,
+          "y": 298.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t54",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t55",
+          "text": "How was it?",
+          "x": 522.0674418604651,
+          "y": 295.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t55",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t55",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t56",
+          "text": "A 1 to 5 star rating and a note, saved with the plan.",
+          "x": 522.0674418604651,
+          "y": 314.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t56",
+          "start": 0,
+          "end": 53,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l57",
+          "x": 497.26744186046517,
+          "y": 351.5,
+          "width": 421.73255813953483,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r58",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 355.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r59",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 357.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t60",
+          "text": "5",
+          "x": 491.0674418604652,
+          "y": 353.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t60",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t61",
+          "text": "Also close to your craving",
+          "x": 522.0674418604651,
+          "y": 350.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t61",
+          "start": 0,
+          "end": 26,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t61",
+          "start": 0,
+          "end": 26,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t62",
+          "text": "Runners-up from the same search, sized the same way in one tap.",
+          "x": 522.0674418604651,
+          "y": 369.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 63,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "walk4",
+          "id": "l63",
+          "x": 497.26744186046517,
+          "y": 406.5,
+          "width": 421.73255813953483,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r64",
+          "shape_type": "ELLIPSE",
+          "x": 496.26744186046517,
+          "y": 410.0,
+          "width": 24,
+          "height": 24,
+          "background_color": "#FFFFFF"
+        },
+        {
+          "op": "add-shape",
+          "slide": "walk4",
+          "id": "r65",
+          "shape_type": "ELLIPSE",
+          "x": 498.26744186046517,
+          "y": 412.0,
+          "width": 20,
+          "height": 20,
+          "background_color": "#1B2430"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t66",
+          "text": "6",
+          "x": 491.0674418604652,
+          "y": 408.3,
+          "width": 34.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t66",
+          "start": 0,
+          "end": 1,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t67",
+          "text": "How this plan was made",
+          "x": 522.0674418604651,
+          "y": 405.8,
+          "width": 404.1325581395348,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t67",
+          "start": 0,
+          "end": 22,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t67",
+          "start": 0,
+          "end": 22,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "walk4",
+          "id": "t68",
+          "text": "The service's notes on how the meal was chosen and checked.",
+          "x": 522.0674418604651,
+          "y": 424.8,
+          "width": 404.1325581395348,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t68",
+          "start": 0,
+          "end": 59,
+          "line_spacing": 135
+        }
+      ]
     }
   ],
   "project_layouts": "project_layouts.py",

@@ -8231,3 +8231,11 @@ page (`docs/showcase/slides/captures/2026-11-22-plan.json`, same plan as before:
 48/78/19 g), slide 10's macro colours now match the app's tokens (#440154, #2A788E, #22A884), slide 12
 names the "Kitchen app" client, and slide 15's 22 Nov milestone adds it. Build, export, check_deck and
 check_markers report no problems. Slide Previews artifact republished (version 29).
+
+## 2026-11-22 — Claude — UTS deck: app walkthrough appendix
+
+Mike asked for a detailed walkthrough in an appendix. Four slides follow Thank you (A1 first visit, A2 home,
+A3 plan page, A4 below the plan), each a real screen with numbered pins and one-line callouts, on a new
+project layout `mp_walk`. Captures come from `capture_walk_2026-11-22.py` after planning and saving three
+meals, ticking three shopping items and a four-star rating; the plan is unchanged (694 of 691 kcal, $24.50).
+Build, export, check_deck and check_markers report no problems; 20 pages. Slide Previews version 30.

@@ -887,5 +887,31 @@ def mp_close(L, p, slide):
     paint(L, p, slide['image_caption'], RIGHT - cw + 12, 442, cw - 24, 10, INK, True)
     paint(L, p, slide['image_note'], RIGHT - cw + 12, 458, cw - 24, 8, BODY)
 
+
+# -- appendix: app walkthrough ------------------------------------------------------------------
+def mp_walk(L, p, slide):
+    """One app screen on the left with numbered pins; the matching callouts on the right."""
+    bottom = band(L, p, slide) - 14
+    shot = slide['image']
+    h = bottom - TOP
+    w = min(h * shot['aspect'], 470)
+    h = w / shot['aspect']
+    p.rect(LEFT - 0.5, TOP - 0.5, w + 1, h + 1, HAIR)
+    img(L, p, shot['path'], shot['alt'], LEFT, TOP, w, h)
+    for n, (ix, iy) in enumerate(slide['pins'], 1):
+        pin(L, p, n, LEFT + ix / 1000 * w, TOP + iy / 1000 * h)
+    x0 = LEFT + w + 24
+    cw = RIGHT - x0
+    rows = slide['callouts']
+    rh = (bottom - TOP) / len(rows)
+    for i, r in enumerate(rows):
+        y = TOP + i * rh
+        if i:
+            p.line(x0, y - 0.5, RIGHT, y - 0.5, HAIR)
+        pin(L, p, i + 1, x0 + 11, y + 15, 10)
+        put(L, p, r['title'], x0 + 32, y + 6, cw - 32, 12, 'ink', True)
+        inked(L, p, r['text'], x0 + 32, y + 25, cw - 32, 10)
+
+
 LAYOUTS = {f.__name__: f for f in (mp_arch_flow, mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
-                                   mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next)}
+                                   mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next, mp_walk)}

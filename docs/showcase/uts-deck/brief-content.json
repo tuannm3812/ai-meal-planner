@@ -1502,6 +1502,310 @@
       },
       "header_style": "appendix",
       "image_note": "A study project, not medical advice."
+    },
+    {
+      "id": "walk1",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "First visit",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A1. First visit: your details, asked once",
+      "subtitle": "Kept on this device; the Profile page can change them or forget them.",
+      "question": "What does the app ask for, and why?",
+      "image": {
+        "path": "assets/figures/walk-1-first-visit.jpg",
+        "aspect": 1.02803738317757,
+        "alt": "The React app's first-run form: goal cards, age, sex, height, weight, activity, today's workout, things to avoid, where you shop, and a side panel on how the meal is sized."
+      },
+      "pins": [
+        [
+          250,
+          240
+        ],
+        [
+          282,
+          389
+        ],
+        [
+          310,
+          488
+        ],
+        [
+          296,
+          705
+        ],
+        [
+          211,
+          877
+        ],
+        [
+          930,
+          50
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Goal",
+          "text": "Lose, maintain or gain sets the meal's target; weight loss keeps a **safe floor**."
+        },
+        {
+          "title": "Body",
+          "text": "Age, sex, height and weight give the daily energy estimate."
+        },
+        {
+          "title": "Activity and today's workout",
+          "text": "The usual week, plus **today's session** from the trained model."
+        },
+        {
+          "title": "Anything to avoid",
+          "text": "Diets and allergies become **hard limits**, checked against allergen tags."
+        },
+        {
+          "title": "Where you shop",
+          "text": "Picks the store for the shopping list."
+        },
+        {
+          "title": "How your meal is sized",
+          "text": "The four sizing steps in plain words, beside the form."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The first visit asks for these details once. Each field maps to one step of the calorie target or the safety rules.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk2",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Home",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A2. Home: one search box",
+      "subtitle": "After the first visit, every plan starts here.",
+      "question": "Where does a person start?",
+      "image": {
+        "path": "assets/figures/walk-2-home.jpg",
+        "aspect": 1.0519877675840978,
+        "alt": "The React home page: a large craving search, suggested dishes, a line naming where you shop, three short promises, and saved meals as cards."
+      },
+      "pins": [
+        [
+          671,
+          246
+        ],
+        [
+          207,
+          390
+        ],
+        [
+          450,
+          439
+        ],
+        [
+          262,
+          556
+        ],
+        [
+          213,
+          661
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Craving search",
+          "text": "Any words; the planner finds the closest of **76 recipes**."
+        },
+        {
+          "title": "Suggestions",
+          "text": "One tap fills the search with a dish from the library."
+        },
+        {
+          "title": "Your details",
+          "text": "Who the meal is sized for and where you shop, with a link to change them."
+        },
+        {
+          "title": "Three promises",
+          "text": "A real recipe, an **honest note** when nothing matches, and a shopping list."
+        },
+        {
+          "title": "My meals and Past plans",
+          "text": "Saved meals and recent plans come back as cards with kcal and a macro bar."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Three meals were planned and saved before this capture, so the cards are filled.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk3",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Plan page",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A3. The plan page: what it is and how it fits",
+      "subtitle": "Chicken Fried Rice for the same profile, after saving it and ticking three items.",
+      "question": "What does a plan show?",
+      "image": {
+        "path": "assets/figures/walk-3-plan.jpg",
+        "aspect": 0.9411764705882353,
+        "alt": "The top of the React plan page: Chicken Fried Rice with status tags, a Saved to My meals button, an estimates notice, a calorie ring at 694 of 691 kcal, a macro donut, balance bars and the shopping list with three items ticked."
+      },
+      "pins": [
+        [
+          517,
+          156
+        ],
+        [
+          430,
+          212
+        ],
+        [
+          913,
+          229
+        ],
+        [
+          372,
+          493
+        ],
+        [
+          372,
+          638
+        ],
+        [
+          870,
+          394
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Status tags",
+          "text": "Close menu match, portions rebalanced, some nutrition **estimated**."
+        },
+        {
+          "title": "Save meal",
+          "text": "Adds it to My meals on the home page."
+        },
+        {
+          "title": "Estimates notice",
+          "text": "Says how many ingredients use estimated nutrition: here **3 of 6**."
+        },
+        {
+          "title": "Calorie ring",
+          "text": "This meal, **694 kcal**, against its 691 kcal target."
+        },
+        {
+          "title": "Macro donut and balance",
+          "text": "Grams and share of each macro, against its recommended range."
+        },
+        {
+          "title": "Shopping list",
+          "text": "Grouped by aisle, with a price per item; ticks stay as you shop."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Ring, donut and bars use the app's Viridis macro colours: protein, carbs, fat.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk4",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "After the plan",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A4. Below the plan: sources, feedback and other options",
+      "subtitle": "The rest of the same page, read top to bottom.",
+      "question": "What else is on the page?",
+      "image": {
+        "path": "assets/figures/walk-4-after.jpg",
+        "aspect": 1.302325581395349,
+        "alt": "The lower half of the React plan page: each ingredient's share of calories with its source tag, the shopping total with copy and print, a four-star rating, two other close meals, and a How this plan was made section."
+      },
+      "pins": [
+        [
+          435,
+          157
+        ],
+        [
+          357,
+          293
+        ],
+        [
+          852,
+          40
+        ],
+        [
+          815,
+          264
+        ],
+        [
+          319,
+          701
+        ],
+        [
+          257,
+          939
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Where the calories come from",
+          "text": "Each ingredient's share of the meal, with its served portion."
+        },
+        {
+          "title": "Source tags",
+          "text": "**Estimated** or **reference**, ingredient by ingredient."
+        },
+        {
+          "title": "Estimated total",
+          "text": "**$24.50** from a local price list; copy or print the list."
+        },
+        {
+          "title": "How was it?",
+          "text": "A 1 to 5 star rating and a note, saved with the plan."
+        },
+        {
+          "title": "Also close to your craving",
+          "text": "Runners-up from the same search, sized the same way in one tap."
+        },
+        {
+          "title": "How this plan was made",
+          "text": "The service's notes on how the meal was chosen and checked."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The rating here was 4 of 5 stars, given during the capture.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
     }
   ],
   "project_layouts": "project_layouts.py",

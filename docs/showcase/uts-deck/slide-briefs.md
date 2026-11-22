@@ -758,3 +758,163 @@ Exact face text:
 - Scan for the live demo
 - Two people, two cravings, two different plates.
 - A study project, not medical advice.
+
+## 17. A1. First visit: your details, asked once
+
+Layout: mp_walk
+
+Reader question: What does the app ask for, and why?
+
+Message: Appendix: a closer look at one screen of the React app.
+
+Exact face text:
+
+- APPENDIX
+- First visit
+- A1. First visit: your details, asked once
+- Kept on this device; the Profile page can change them or forget them.
+- AI Meal Planner
+- 17
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 1
+- Goal
+- Lose, maintain or gain sets the meal's target; weight loss keeps a safe floor.
+- 2
+- Body
+- Age, sex, height and weight give the daily energy estimate.
+- 3
+- Activity and today's workout
+- The usual week, plus today's session from the trained model.
+- 4
+- Anything to avoid
+- Diets and allergies become hard limits, checked against allergen tags.
+- 5
+- Where you shop
+- Picks the store for the shopping list.
+- 6
+- How your meal is sized
+- The four sizing steps in plain words, beside the form.
+
+## 18. A2. Home: one search box
+
+Layout: mp_walk
+
+Reader question: Where does a person start?
+
+Message: Appendix: a closer look at one screen of the React app.
+
+Exact face text:
+
+- APPENDIX
+- Home
+- A2. Home: one search box
+- After the first visit, every plan starts here.
+- AI Meal Planner
+- 18
+- 1
+- 2
+- 3
+- 4
+- 5
+- 1
+- Craving search
+- Any words; the planner finds the closest of 76 recipes.
+- 2
+- Suggestions
+- One tap fills the search with a dish from the library.
+- 3
+- Your details
+- Who the meal is sized for and where you shop, with a link to change them.
+- 4
+- Three promises
+- A real recipe, an honest note when nothing matches, and a shopping list.
+- 5
+- My meals and Past plans
+- Saved meals and recent plans come back as cards with kcal and a macro bar.
+
+## 19. A3. The plan page: what it is and how it fits
+
+Layout: mp_walk
+
+Reader question: What does a plan show?
+
+Message: Appendix: a closer look at one screen of the React app.
+
+Exact face text:
+
+- APPENDIX
+- Plan page
+- A3. The plan page: what it is and how it fits
+- Chicken Fried Rice for the same profile, after saving it and ticking three items.
+- AI Meal Planner
+- 19
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 1
+- Status tags
+- Close menu match, portions rebalanced, some nutrition estimated.
+- 2
+- Save meal
+- Adds it to My meals on the home page.
+- 3
+- Estimates notice
+- Says how many ingredients use estimated nutrition: here 3 of 6.
+- 4
+- Calorie ring
+- This meal, 694 kcal, against its 691 kcal target.
+- 5
+- Macro donut and balance
+- Grams and share of each macro, against its recommended range.
+- 6
+- Shopping list
+- Grouped by aisle, with a price per item; ticks stay as you shop.
+
+## 20. A4. Below the plan: sources, feedback and other options
+
+Layout: mp_walk
+
+Reader question: What else is on the page?
+
+Message: Appendix: a closer look at one screen of the React app.
+
+Exact face text:
+
+- APPENDIX
+- After the plan
+- A4. Below the plan: sources, feedback and other options
+- The rest of the same page, read top to bottom.
+- AI Meal Planner
+- 20
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 1
+- Where the calories come from
+- Each ingredient's share of the meal, with its served portion.
+- 2
+- Source tags
+- Estimated or reference, ingredient by ingredient.
+- 3
+- Estimated total
+- $24.50 from a local price list; copy or print the list.
+- 4
+- How was it?
+- A 1 to 5 star rating and a note, saved with the plan.
+- 5
+- Also close to your craving
+- Runners-up from the same search, sized the same way in one tap.
+- 6
+- How this plan was made
+- The service's notes on how the meal was chosen and checked.

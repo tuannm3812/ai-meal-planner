@@ -186,3 +186,43 @@ The demo and the code are linked here.
 
 References:
 - sources.md
+
+## 17. A1. First visit: your details, asked once
+
+Appendix: a closer look at one screen of the React app.
+
+The first visit asks for these details once. Each field maps to one step of the calorie target or the safety rules.
+Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+
+References:
+- sources.md
+
+## 18. A2. Home: one search box
+
+Appendix: a closer look at one screen of the React app.
+
+Three meals were planned and saved before this capture, so the cards are filled.
+Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+
+References:
+- sources.md
+
+## 19. A3. The plan page: what it is and how it fits
+
+Appendix: a closer look at one screen of the React app.
+
+Ring, donut and bars use the app's Viridis macro colours: protein, carbs, fat.
+Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+
+References:
+- sources.md
+
+## 20. A4. Below the plan: sources, feedback and other options
+
+Appendix: a closer look at one screen of the React app.
+
+The rating here was 4 of 5 stars, given during the capture.
+Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+
+References:
+- sources.md
