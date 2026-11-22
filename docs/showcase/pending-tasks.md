@@ -36,7 +36,7 @@ update when a task is done.
 - [x] **P7 Recipes:** grow the library from 34 to 75–100 recipes. Done 22 November 2026: 76 recipes, DEC-35. The deck's "34 recipes" now reads 76.
 - [ ] **P8 Prices:** connect live store prices. 4 of 6 items in the example plan use category prices.
 - [ ] **P9 Learning:** use saved meals and ratings in ranking. They are collected but unused. `docs/4_next_steps.md` §7.10.
-- [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets.
+- [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets. The plan, a dietitian checklist and a user-test protocol, is in `docs/9_dietitian_review_and_user_tests.md` (22 November 2026).
 
 ## Accuracy
 

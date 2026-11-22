@@ -129,6 +129,9 @@ the hand-offs by watching the log; its header says how to run it.
   a billing budget of about A$1 alerts the owner. A full `POST /generate-meal-plan`
   trace with all five stage spans reached Cloud Trace. G6's two-instance and
   revocation runs (`docs/6_deployment.md` §3) have not been run on the real service.
+- 2026-11-22: `docs/9_dietitian_review_and_user_tests.md` plans P9's people work: a
+  dietitian checklist of every diet rule, then a five-to-eight-person usability test.
+  Neither has run; ethics approval is to be checked with the supervisor first.
 
 ## Open risks
 
