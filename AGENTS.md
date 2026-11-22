@@ -119,7 +119,10 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-11-22: React is the main app and Streamlit the backup demo (DEC-37). React is
   now a kitchen app: home, plan page with Viridis charts and runners-up, save and
   rate, My meals, Past plans, and a profile remembered on the device (DEC-36). Spec
-  and plan are in `docs/superpowers/`; the frontend has 224 tests.
+  and plan are in `docs/superpowers/`.
+- 2026-11-22: every React colour lives in `frontend/src/theme/tokens.js`, and icons
+  render through one `Icon` component (DEC-38). A guard test fails on raw hex, stock
+  Tailwind colours or a stray Lucide import. The frontend has 233 tests.
 
 ## Open risks
 

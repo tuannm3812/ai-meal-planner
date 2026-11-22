@@ -1,7 +1,8 @@
-import { Star } from 'lucide-react'
 import { useId, useState } from 'react'
 
 import { sendFeedback } from '../../api/mealPlanner'
+import Icon from '../../components/icons/Icon'
+import { Star } from '../../components/icons/glyphs'
 import { feedbackErrorMessage, feedbackPayload, isNotImplemented } from './feedback'
 
 const STARS = [1, 2, 3, 4, 5]
@@ -39,18 +40,18 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
         How was it?
       </h2>
       {sentRating ? (
-        <p className="mt-1 text-sm text-[#C9D3CC]" role="status">
+        <p className="mt-1 text-sm text-on-ink-muted" role="status">
           Thanks. You rated it {sentRating} out of 5.
         </p>
       ) : (
-        <p className="mt-1 text-sm text-[#C9D3CC]">Your rating is saved with this plan.</p>
+        <p className="mt-1 text-sm text-on-ink-muted">Your rating is saved with this plan.</p>
       )}
       <form className="mt-3" onSubmit={send}>
         <fieldset disabled={Boolean(sentRating) || sending}>
           <legend className="sr-only">Rating</legend>
           <div className="flex gap-1">
             {STARS.map((n) => (
-              <label className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl focus-within:ring-2 focus-within:ring-viridis-6" key={n}>
+              <label className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl focus-within:ring-2 focus-within:ring-lime" key={n}>
                 <input
                   checked={shown === n}
                   className="sr-only"
@@ -60,13 +61,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
                   value={n}
                 />
                 <span className="sr-only">{n === 1 ? '1 star' : `${n} stars`}</span>
-                <Star
-                  aria-hidden="true"
-                  className="text-viridis-6"
-                  fill={n <= shown ? 'currentColor' : 'none'}
-                  size={34}
-                  strokeWidth={1.6}
-                />
+                <Icon as={Star} filled={n <= shown} size="lg" tone="ink" />
               </label>
             ))}
           </div>
@@ -76,7 +71,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
                 A note (optional)
               </label>
               <textarea
-                className="mt-1.5 w-full rounded-xl border-0 px-3 py-2.5 text-base text-ink focus:outline-none focus:ring-2 focus:ring-viridis-5"
+                className="mt-1.5 w-full rounded-xl border-0 px-3 py-2.5 text-base text-ink focus:outline-none focus:ring-2 focus:ring-lime"
                 id={noteId}
                 maxLength={500}
                 onChange={(event) => setNotes(event.target.value)}
@@ -85,7 +80,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
                 value={notes}
               />
               <button
-                className="mt-3 min-h-[48px] rounded-2xl bg-white px-5 font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5 disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-3 min-h-[48px] rounded-2xl bg-surface px-5 font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-lime disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={!rating || sending}
                 type="submit"
               >
@@ -96,7 +91,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
         </fieldset>
       </form>
       {error && (
-        <p className="mt-2 text-sm text-[#FFD2BC]" role="alert">
+        <p className="mt-2 text-sm text-danger-on-ink" role="alert">
           {error}
         </p>
       )}

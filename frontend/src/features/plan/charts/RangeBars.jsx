@@ -19,9 +19,9 @@ function RangeBars({ split }) {
                 {!inside && <span className="ml-1 font-semibold text-estimate-fg">(outside)</span>}
               </span>
             </div>
-            <div aria-hidden="true" className="relative mt-1.5 h-3.5 rounded-full bg-[#F2F5F0]">
+            <div aria-hidden="true" className="relative mt-1.5 h-3.5 rounded-full bg-ground">
               <div
-                className="absolute inset-y-0 rounded-full bg-[#C6E3CF]"
+                className="absolute inset-y-0 rounded-full bg-band"
                 data-testid={`band-${macro.key}`}
                 style={{ left: `${low}%`, width: `${high - low}%` }}
               />

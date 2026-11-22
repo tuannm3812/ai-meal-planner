@@ -1,10 +1,11 @@
 // The arithmetic behind the plan page's SVG charts, kept apart so it can be
 // tested without rendering.
 
-// Viridis, six steps (DESIGN.md §3). Categorical series take them in order.
-export const MACRO_COLORS = { protein: '#440154', carbs: '#2A788E', fat: '#22A884' }
+import { MACRO_COLORS, VIRIDIS } from '../../../theme/tokens'
 
-export const VIRIDIS = ['#440154', '#414487', '#2A788E', '#22A884', '#7AD151', '#FDE725']
+// Viridis, six steps (DESIGN.md §3), from the tokens file. Categorical series
+// take them in order.
+export { MACRO_COLORS, VIRIDIS }
 
 // How much of the ring to fill: served over target, capped at a full ring.
 export function ringFraction(served, target) {

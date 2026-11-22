@@ -1,16 +1,17 @@
-import { Bookmark, History, UserRound } from 'lucide-react'
+import Icon from '../components/icons/Icon'
+import { Bookmark, History, UserRound } from '../components/icons/glyphs'
 import { NavLink, Outlet } from 'react-router-dom'
 
 import logoMark from '../assets/brand/logo-mark.svg'
 
 const LINKS = [
-  { to: '/meals', label: 'My meals', Icon: Bookmark },
-  { to: '/history', label: 'Past plans', Icon: History },
-  { to: '/profile', label: 'Profile', Icon: UserRound },
+  { to: '/meals', label: 'My meals', glyph: Bookmark },
+  { to: '/history', label: 'Past plans', glyph: History },
+  { to: '/profile', label: 'Profile', glyph: UserRound },
 ]
 
 const linkClass = ({ isActive }) =>
-  `flex min-h-[44px] items-center gap-2 rounded-xl px-3 text-[15px] font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5 ${
+  `flex min-h-[44px] items-center gap-2 rounded-xl px-3 text-[15px] font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-lime ${
     isActive ? 'bg-white/10' : 'hover:bg-white/10'
   }`
 
@@ -22,16 +23,16 @@ function AppShell() {
       <header className="bg-ink text-white">
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3 sm:px-6">
           <NavLink
-            className="flex min-h-[44px] items-center gap-2.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5"
+            className="flex min-h-[44px] items-center gap-2.5 rounded-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-lime"
             to="/"
           >
             <img alt="" height="32" src={logoMark} width="32" />
             <span className="font-display text-xl font-extrabold">AI Meal Planner</span>
           </NavLink>
           <nav aria-label="Main" className="flex flex-wrap gap-1">
-            {LINKS.map(({ to, label, Icon }) => (
+            {LINKS.map(({ to, label, glyph }) => (
               <NavLink className={linkClass} key={to} to={to}>
-                <Icon aria-hidden="true" className="text-viridis-5" size={26} strokeWidth={1.8} />
+                <Icon as={glyph} tone="ink" />
                 {label}
               </NavLink>
             ))}

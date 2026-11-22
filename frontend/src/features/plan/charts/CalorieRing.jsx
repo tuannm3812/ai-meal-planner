@@ -1,3 +1,4 @@
+import { neutral, VIRIDIS } from '../../../theme/tokens'
 import { ringFraction } from './geometry'
 
 const R = 56
@@ -15,14 +16,14 @@ function CalorieRing({ total, target }) {
   return (
     <figure className="m-0 flex items-center gap-4">
       <svg aria-label={label} className="h-[150px] w-[150px] shrink-0" role="img" viewBox="0 0 140 140">
-        <circle cx="70" cy="70" fill="none" r={R} stroke="#DCEEE1" strokeWidth="14" />
+        <circle cx="70" cy="70" fill="none" r={R} stroke={neutral.tint} strokeWidth="14" />
         {fraction !== null && (
           <circle
             cx="70"
             cy="70"
             fill="none"
             r={R}
-            stroke="#22A884"
+            stroke={VIRIDIS[1]}
             strokeDasharray={`${fraction * CIRCUMFERENCE} ${CIRCUMFERENCE}`}
             strokeLinecap={fraction < 1 ? 'round' : 'butt'}
             strokeWidth="14"

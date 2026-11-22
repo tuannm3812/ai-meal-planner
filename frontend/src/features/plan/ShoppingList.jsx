@@ -1,6 +1,7 @@
-import { Copy, Printer, ShoppingCart } from 'lucide-react'
 import { useState } from 'react'
 
+import Icon from '../../components/icons/Icon'
+import { Copy, Printer, ShoppingCart } from '../../components/icons/glyphs'
 import { secondaryButton } from '../../components/ui/styles'
 import { formatCurrency } from '../../lib/format'
 import { aisles, storeOf, total } from './shopping'
@@ -38,7 +39,7 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
           className="flex items-center gap-3 font-display text-[26px] font-extrabold tracking-tight text-ink"
           id="shopping-heading"
         >
-          <ShoppingCart aria-hidden="true" className="text-accent" size={30} strokeWidth={1.8} />
+          <Icon as={ShoppingCart} size="lg" tone="light" />
           Shopping list
         </h2>
         {count > 0 && (
@@ -72,7 +73,7 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
         <div className="mt-4 flex flex-col gap-5">
           {groups.map((group) => (
             <fieldset key={group.name}>
-              <legend className="text-xs font-semibold uppercase tracking-wider text-carbs">
+              <legend className="text-xs font-semibold uppercase tracking-wider text-leaf">
                 {group.name}
               </legend>
               <ul className="mt-1 divide-y divide-tint">
@@ -127,11 +128,11 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
       {count > 0 && (
         <div className="mt-4 flex flex-wrap gap-3 print:hidden">
           <button className={`${secondaryButton} flex-1`} onClick={copy} type="button">
-            <Copy aria-hidden="true" size={22} strokeWidth={1.8} />
+            <Icon as={Copy} size="sm" />
             Copy list
           </button>
           <button className={`${secondaryButton} flex-1`} onClick={() => window.print()} type="button">
-            <Printer aria-hidden="true" size={22} strokeWidth={1.8} />
+            <Icon as={Printer} size="sm" />
             Print
           </button>
         </div>

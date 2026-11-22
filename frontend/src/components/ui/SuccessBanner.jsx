@@ -1,6 +1,6 @@
 function SuccessBanner({ children }) {
   return (
-    <div className="rounded-xl border border-emerald-100 bg-tint p-3 text-sm leading-6 text-carbs">
+    <div className="rounded-xl bg-success-bg p-3 text-sm leading-6 text-success-fg">
       {children}
     </div>
   )

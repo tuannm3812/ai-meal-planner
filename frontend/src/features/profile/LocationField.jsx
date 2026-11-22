@@ -1,5 +1,7 @@
-import { MapPin } from 'lucide-react'
 import { useId } from 'react'
+
+import Icon from '../../components/icons/Icon'
+import { MapPin } from '../../components/icons/glyphs'
 
 // Where the person shops, kept with their details (spec §4.2).
 function LocationField({ value, error, onChange }) {
@@ -8,7 +10,7 @@ function LocationField({ value, error, onChange }) {
   return (
     <div className="max-w-md">
       <label className="flex items-center gap-2 text-sm font-medium text-ink" htmlFor={id}>
-        <MapPin aria-hidden="true" className="text-carbs" size={22} strokeWidth={1.8} />
+        <Icon as={MapPin} tone="light" />
         Where you shop
       </label>
       <input

@@ -1,6 +1,7 @@
-import { ArrowLeft, ArrowRight, Flame, Info, PieChart } from 'lucide-react'
 import { Link } from 'react-router-dom'
 
+import Icon from '../../components/icons/Icon'
+import { ArrowLeft, ArrowRight, Flame, Info, PieChart } from '../../components/icons/glyphs'
 import BlobShape from '../../components/illustrations/BlobShape'
 import DishIllustration from '../../components/illustrations/DishIllustration'
 import { card, ghostButton, pageShell, sectionHeading } from '../../components/ui/styles'
@@ -69,13 +70,13 @@ function PlanDetail({
           <div className="relative flex flex-wrap items-center gap-8">
             <div className="flex min-w-0 flex-[3_1_480px] flex-col gap-3.5">
               <Link
-                className="inline-flex min-h-[44px] w-fit items-center gap-1.5 rounded-xl text-sm text-[#C9D3CC] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5 print:hidden"
+                className="inline-flex min-h-[44px] w-fit items-center gap-1.5 rounded-xl text-sm text-on-ink-muted hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-lime print:hidden"
                 to="/"
               >
-                <ArrowLeft aria-hidden="true" size={18} />
+                <Icon as={ArrowLeft} size="sm" />
                 Home
               </Link>
-              {craving && <p className="text-[15px] text-[#C9D3CC]">For your craving &ldquo;{craving}&rdquo;</p>}
+              {craving && <p className="text-[15px] text-on-ink-muted">For your craving &ldquo;{craving}&rdquo;</p>}
               <h1
                 className="font-display text-4xl font-extrabold leading-none tracking-tight sm:text-[56px]"
                 id="plan-heading"
@@ -120,7 +121,7 @@ function PlanDetail({
 
           {estimated && (
             <p className="relative mt-6 flex items-start gap-3 rounded-2xl bg-estimate-bg px-4 py-3 text-[15px] text-estimate-fg">
-              <Info aria-hidden="true" className="mt-0.5 shrink-0" size={22} />
+              <Icon as={Info} className="mt-0.5" />
               <span>
                 {estimated.estimated} of {estimated.of} ingredients use estimated nutrition from
                 local tables, so these numbers are approximate.
@@ -130,7 +131,7 @@ function PlanDetail({
             </p>
           )}
           {feedback?.off && (
-            <p className="relative mt-4 text-sm text-[#C9D3CC]" role="status">
+            <p className="relative mt-4 text-sm text-on-ink-muted" role="status">
               {HOSTED_FEEDBACK_MESSAGE}
             </p>
           )}
@@ -142,7 +143,7 @@ function PlanDetail({
           {(energy || split || outcome) && (
             <section aria-labelledby="nutrition-heading" className={card}>
               <h2 className={sectionHeading} id="nutrition-heading">
-                <Flame aria-hidden="true" className="text-carbs" size={32} strokeWidth={1.8} />
+                <Icon as={Flame} size="lg" tone="light" />
                 Nutrition
               </h2>
               {energy && (
@@ -184,7 +185,7 @@ function PlanDetail({
           {items.length > 0 && (
             <section aria-labelledby="sources-heading" className={card}>
               <h2 className={sectionHeading} id="sources-heading">
-                <PieChart aria-hidden="true" className="text-protein" size={32} strokeWidth={1.8} />
+                <Icon as={PieChart} size="lg" tone="light" />
                 Where the calories come from
               </h2>
               <p className="mb-4 mt-1 text-sm text-muted">
@@ -203,13 +204,13 @@ function PlanDetail({
                 {others.map((meal) => (
                   <li key={meal.id}>
                     <button
-                      className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-surface px-4 font-semibold text-ink hover:ring-2 hover:ring-carbs focus:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-surface px-4 font-semibold text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={runnerUpDisabled}
                       onClick={() => onPlanRunnerUp(meal.name)}
                       type="button"
                     >
                       {meal.name}
-                      <ArrowRight aria-hidden="true" size={18} />
+                      <Icon as={ArrowRight} size="sm" />
                     </button>
                   </li>
                 ))}

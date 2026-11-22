@@ -1,7 +1,16 @@
-import { ArrowRight, BookOpenCheck, Bookmark, History, MessageSquareText, Search, ShoppingBasket } from 'lucide-react'
 import { Link, useNavigate } from 'react-router-dom'
 
 import { usePlannerContext } from '../app/PlannerContext'
+import Icon from '../components/icons/Icon'
+import {
+  ArrowRight,
+  BookOpenCheck,
+  Bookmark,
+  History,
+  MessageSquareText,
+  Search,
+  ShoppingBasket,
+} from '../components/icons/glyphs'
 import BlobShape from '../components/illustrations/BlobShape'
 import DishIllustration from '../components/illustrations/DishIllustration'
 import { pageShell, primaryButton, sectionHeading } from '../components/ui/styles'
@@ -28,11 +37,11 @@ function Welcome() {
     <main>
       <section className="bg-ink text-white">
         <div className={`${pageShell} py-10`}>
-          <p className="text-[15px] font-semibold text-viridis-5">Welcome</p>
+          <p className="text-[15px] font-semibold text-lime">Welcome</p>
           <p className="mt-2 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
             Say what you crave. Get a meal that fits you.
           </p>
-          <p className="mt-3 max-w-2xl text-[#C9D3CC]">
+          <p className="mt-3 max-w-2xl text-on-ink-muted">
             First, a few details so every meal is sized for you. You only do this once on this
             device.
           </p>
@@ -78,12 +87,12 @@ function CravingBanner() {
             className="font-display text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-[58px]"
             id="home-heading"
           >
-            Say what you crave. <span className="text-viridis-5">Get a meal that fits you.</span>
+            Say what you crave. <span className="text-lime">Get a meal that fits you.</span>
           </h1>
           <form className="flex flex-col gap-3" noValidate onSubmit={submit}>
             <div className="flex flex-wrap gap-3">
-              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-viridis-5">
-                <Search aria-hidden="true" className="shrink-0 text-carbs" size={28} strokeWidth={2} />
+              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-lime">
+                <Icon as={Search} tone="light" />
                 <label className="sr-only" htmlFor="craving-input">
                   Your craving
                 </label>
@@ -102,12 +111,12 @@ function CravingBanner() {
               </button>
             </div>
             {requestFieldErrors.craving && craving && (
-              <p className="text-sm text-[#FFD2BC]" id="craving-error">
+              <p className="text-sm text-danger-on-ink" id="craving-error">
                 {requestFieldErrors.craving}
               </p>
             )}
             {requestFieldErrors.location && (
-              <p className="text-sm text-[#FFD2BC]">
+              <p className="text-sm text-danger-on-ink">
                 {requestFieldErrors.location}{' '}
                 <Link className="underline" to="/profile">
                   Fix it on your profile
@@ -115,21 +124,21 @@ function CravingBanner() {
               </p>
             )}
             {retryPause.active && (
-              <p className="text-sm text-[#FFD2BC]">
+              <p className="text-sm text-danger-on-ink">
                 The server asked for a pause. You can plan again in about {retryPause.seconds}{' '}
                 seconds.
               </p>
             )}
           </form>
           <div>
-            <p className="text-sm text-[#C9D3CC]" id="craving-suggestions">
+            <p className="text-sm text-on-ink-muted" id="craving-suggestions">
               Or try one of these
             </p>
             <ul aria-labelledby="craving-suggestions" className="mt-2 flex flex-wrap gap-2">
               {CRAVING_SUGGESTIONS.map((suggestion) => (
                 <li key={suggestion.meal}>
                   <button
-                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5"
+                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime"
                     onClick={() => setCraving(suggestion.label.toLowerCase())}
                     type="button"
                   >
@@ -139,7 +148,7 @@ function CravingBanner() {
               ))}
             </ul>
           </div>
-          <p className="text-sm text-[#C9D3CC]">
+          <p className="text-sm text-on-ink-muted">
             {typeof target === 'number' ? `Sized for you: about ${Math.round(target)} kcal a meal. ` : 'Sized for you. '}
             Shopping near {location.trim() || 'your area'}.{' '}
             <Link className="text-white underline underline-offset-4" to="/profile">
@@ -162,20 +171,17 @@ const PROMISES = [
   {
     title: 'Matched to a real menu',
     body: 'Every meal comes from a tested recipe, never made up on the spot.',
-    Icon: BookOpenCheck,
-    tone: 'text-protein',
+    glyph: BookOpenCheck,
   },
   {
     title: 'Honest when it misses',
     body: 'No close match? You get a standard meal and a note saying so.',
-    Icon: MessageSquareText,
-    tone: 'text-carbs',
+    glyph: MessageSquareText,
   },
   {
     title: 'Shopping list included',
     body: 'Ingredients mapped to store aisles, with estimated prices.',
-    Icon: ShoppingBasket,
-    tone: 'text-fat',
+    glyph: ShoppingBasket,
   },
 ]
 
@@ -193,7 +199,7 @@ function HomePage() {
       <div className={`${pageShell} flex flex-col gap-10 py-10`}>
         {planner.submitted && (
           <Link
-            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-carbs focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             to="/plan"
           >
             <span>
@@ -201,13 +207,13 @@ function HomePage() {
               {planner.plan?.meal_plan?.meal_definition?.structured_meal_name &&
                 `: ${planner.plan.meal_plan.meal_definition.structured_meal_name}`}
             </span>
-            <ArrowRight aria-hidden="true" size={22} />
+            <Icon as={ArrowRight} size="sm" />
           </Link>
         )}
         <ul className="grid gap-5 sm:grid-cols-3">
-          {PROMISES.map(({ title, body, Icon, tone }) => (
+          {PROMISES.map(({ title, body, glyph }) => (
             <li className="flex gap-4" key={title}>
-              <Icon aria-hidden="true" className={`shrink-0 ${tone}`} size={34} strokeWidth={1.7} />
+              <Icon as={glyph} size="lg" tone="light" />
               <div>
                 <p className="font-semibold text-ink">{title}</p>
                 <p className="mt-0.5 text-sm text-muted">{body}</p>
@@ -218,7 +224,7 @@ function HomePage() {
         <section aria-labelledby="home-meals" className="flex flex-col gap-4">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className={sectionHeading} id="home-meals">
-              <Bookmark aria-hidden="true" className="text-protein" size={32} strokeWidth={1.8} />
+              <Icon as={Bookmark} size="lg" tone="light" />
               My meals
             </h2>
             <Link className="text-[15px] font-semibold underline-offset-4 hover:underline" to="/meals">
@@ -235,7 +241,7 @@ function HomePage() {
         <section aria-labelledby="home-history" className="flex flex-col gap-4">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className={sectionHeading} id="home-history">
-              <History aria-hidden="true" className="text-carbs" size={32} strokeWidth={1.8} />
+              <Icon as={History} size="lg" tone="light" />
               Past plans
             </h2>
             <Link className="text-[15px] font-semibold underline-offset-4 hover:underline" to="/history">

@@ -1,33 +1,16 @@
+import { brand, food, neutral, VIRIDIS } from '../../theme/tokens'
 import { dishType } from './dishType'
 
 // Flat food drawings (DESIGN.md §5, DEC-37): no outlines, no gradients, the
-// palette plus a few food colours. Each stands for a kind of dish, so it is
-// decorative and hidden from assistive technology.
+// palette plus the food colours in theme/tokens.js. Each stands for a kind of
+// dish, so it is decorative and hidden from assistive technology.
 const C = {
-  ink: '#15291F',
-  teal: '#2A788E',
-  tealDark: '#21677A',
-  green: '#22A884',
-  lime: '#7AD151',
-  tomato: '#C8431F',
-  plate: '#FFFFFF',
-  plateRim: '#DCEEE1',
-  rice: '#FFF6E0',
-  chicken: '#D9A066',
-  egg: '#F2C14E',
-  carrot: '#E8833A',
-  salmon: '#F08A5D',
-  salmonLine: '#FFD2BC',
-  curry: '#D98E2B',
-  bean: '#F2D59B',
-  grain: '#E3CF95',
-  noodle: '#F3D27A',
-  broth: '#F2B66D',
-  tortilla: '#EBC57E',
-  oat: '#E9D8A6',
-  bread: '#D9A35F',
-  crumb: '#F6DFAE',
-  potato: '#E9C46A',
+  ink: neutral.ink,
+  teal: VIRIDIS[2],
+  green: VIRIDIS[3],
+  lime: brand.lime,
+  tomato: brand.tomato,
+  ...food,
 }
 
 const Leaf = ({ x, y, flip = false, color = C.green }) => (
@@ -81,12 +64,12 @@ const DRAWINGS = {
     </>
   ),
   noodles: () => (
-    <Bowl color={C.tomato} band="#A8361A">
+    <Bowl color={C.tomato} band={C.tomatoDark}>
       <path d="M40 70c6-34 114-34 120 0z" fill={C.noodle} />
       <path
         d="M52 62c10-8 20 8 30 0s20 8 30 0 20 8 30 0M56 52c10-8 20 8 30 0s20 8 30 0 16 6 24 0"
         fill="none"
-        stroke="#D9AE45"
+        stroke={C.noodleLine}
         strokeWidth="3"
         strokeLinecap="round"
       />
@@ -110,7 +93,7 @@ const DRAWINGS = {
     </Plate>
   ),
   curry: () => (
-    <Bowl color={C.tomato} band="#A8361A">
+    <Bowl color={C.tomato} band={C.tomatoDark}>
       <path d="M40 70c6-30 114-30 120 0z" fill={C.curry} />
       <circle cx="72" cy="58" r="7" fill={C.bean} />
       <circle cx="94" cy="52" r="7" fill={C.bean} />
@@ -129,7 +112,7 @@ const DRAWINGS = {
     </Bowl>
   ),
   salad: () => (
-    <Bowl color={C.green} band="#1C8E70">
+    <Bowl color={C.green} band={C.greenDark}>
       <path d="M40 70c4-36 116-36 120 0z" fill={C.lime} />
       <Leaf x={52} y={60} />
       <Leaf x={120} y={56} flip />
@@ -162,10 +145,10 @@ const DRAWINGS = {
   oats: () => (
     <Bowl>
       <path d="M40 70c6-28 114-28 120 0z" fill={C.oat} />
-      <ellipse cx="78" cy="56" rx="12" ry="6" fill="#F7E7A1" />
-      <ellipse cx="102" cy="52" rx="12" ry="6" fill="#F7E7A1" />
-      <circle cx="124" cy="58" r="5" fill="#5B3A8C" />
-      <circle cx="134" cy="62" r="5" fill="#5B3A8C" />
+      <ellipse cx="78" cy="56" rx="12" ry="6" fill={C.banana} />
+      <ellipse cx="102" cy="52" rx="12" ry="6" fill={C.banana} />
+      <circle cx="124" cy="58" r="5" fill={C.berry} />
+      <circle cx="134" cy="62" r="5" fill={C.berry} />
       <circle cx="64" cy="64" r="3" fill={C.bread} />
     </Bowl>
   ),

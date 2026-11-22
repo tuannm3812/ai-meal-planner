@@ -1,5 +1,7 @@
+import { neutral } from '../../theme/tokens'
+
 // The one soft shape behind a banner illustration (DESIGN.md §6).
-function BlobShape({ className = '', color = '#1F3D2E' }) {
+function BlobShape({ className = '', color = neutral.inkRaised }) {
   return (
     <svg aria-hidden="true" className={className} focusable="false" viewBox="0 0 620 620">
       <path
