@@ -62,13 +62,13 @@ the hand-offs by watching the log; its header says how to run it.
   (#17) are merged. #17 is `.github/workflows/deploy.yml` (Cloud Run, Workload
   Identity Federation, inert until configured), `docs/6_deployment.md`,
   `scripts/live_check.sh` and `X-Instance-Id`. CI rehearses a two-instance
-  deploy and a key revocation. The real deploy needs the owner's GCP project
-  (`docs/6_deployment.md` §1).
+  deploy and a key revocation. The real deploy went live on 2026-11-22 (see
+  below).
 - 2026-10-11: G10b tracing (#18) is merged. It has OpenTelemetry stage spans
   exported to Cloud Trace over OTLP, holds traces and logs to one allowlist,
   and continues only an incoming `traceparent` (DEC-17 to DEC-20). The proof
   is `test_telemetry_redaction.py`. The client-safe Gemini warning (#19) is
-  merged too. A real trace arriving in Cloud Trace awaits the owner's GCP setup.
+  merged too. A real trace reached Cloud Trace on 2026-11-22.
   Direction item G, the committed and CI-checked OpenAPI contract
   (`docs/openapi.json`, DEC-21), is merged (#20), and so is its follow-up
   (#21), which declares the `X-API-Key` scheme and each route's domain errors.
@@ -123,6 +123,12 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-11-22: every React colour lives in `frontend/src/theme/tokens.js`, and icons
   render through one `Icon` component (DEC-38). A guard test fails on raw hex, stock
   Tailwind colours or a stray Lucide import. The frontend has 233 tests.
+- 2026-11-22: the API is live on Cloud Run (GCP free tier, project
+  `ai-meal-planner-515508`, australia-southeast1), deployed by `deploy.yml` with
+  its live check passing. `GCP_MAX_INSTANCES=1` caps it at one instance (#52), and
+  a billing budget of about A$1 alerts the owner. A full `POST /generate-meal-plan`
+  trace with all five stage spans reached Cloud Trace. G6's two-instance and
+  revocation runs (`docs/6_deployment.md` §3) have not been run on the real service.
 
 ## Open risks
 
@@ -153,6 +159,10 @@ the hand-offs by watching the log; its header says how to run it.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production
     refuses to start in it.
   - The React dashboard cannot call a keyed API in v1.
+- **Only sampled requests are traced.** The app continues Cloud Run's `traceparent`,
+  so a request is traced only when Cloud Run samples it or the caller sends a sampled
+  one. One span batch was lost to an export timeout on 2026-11-22, likely while CPU
+  was throttled between requests.
 - **Telemetry limits (DEC-17, DEC-18).** Three things the allowlist does not
   cover:
   - unexpected 500s log a traceback, including that exception's message;

@@ -15,6 +15,14 @@ What runs where:
 | Deploy identity | Workload Identity Federation | No long-lived keys in GitHub |
 | Acceptance | `scripts/live_check.sh` | Runs after every deploy; the same script CI runs against its nginx rehearsal |
 
+**Status (2026-11-22):** live. Project `ai-meal-planner-515508`, region
+`australia-southeast1`, `GCP_MAX_INSTANCES=1`, a billing budget of 17,000 VND
+(about A$1, the billing account's currency) alerting at 50%, 100% and forecast
+100%. One key, `live-check`, exists; its raw value is only in the
+`MEAL_PLANNER_SMOKE_KEY` GitHub secret. A planning request appears in Cloud Trace
+only when it is sampled: send `traceparent: 00-<32 hex>-<16 hex>-01` to force one.
+§3's acceptance runs are still to do on the real service.
+
 ## 1. One-time setup
 
 Needs: a GCP project with billing enabled, `gcloud` logged in as an owner of it

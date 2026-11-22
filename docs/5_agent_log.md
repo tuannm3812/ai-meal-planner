@@ -8219,3 +8219,10 @@ local API, and the README screenshots are retaken. No backend, data or Streamlit
 Mike approved deploying the API to Cloud Run on the free tier with a one-instance cap. The deploy
 workflow hard-coded `--max-instances=3`; it now reads `vars.GCP_MAX_INSTANCES` (default 3), set to 1
 for this project. `docs/6_deployment.md` notes that the two-instance acceptance run needs it at 2.
+
+## 2026-11-22 — Claude — docs: the API is live on Cloud Run
+
+`AGENTS.md`, `README.md` §6.6, `docs/4_next_steps.md` and `docs/6_deployment.md` now say the API is
+live (deploy run 45010039893, PR #52 caps it at one instance) and that a real trace reached Cloud
+Trace. New open risk in `AGENTS.md`: only sampled requests are traced, and a batch can be lost while
+CPU is throttled. G6's §3 acceptance runs on the real service are still open. Docs only.
