@@ -38,6 +38,9 @@ subject of the repo.
   So the source stays byte-identical to whatever produced the committed outputs.
   Changing a notebook means rerunning it on the platform and committing the new
   outputs together with the new source.
+- **Ruff skips `docs/showcase/uts-deck/`.** It is a consumer of the UTS deck kit, and its layout
+  and poster code follow the kit's conventions (longer lines, compact geometry calls). It is
+  presentation tooling, not service code. Other showcase scripts are still linted.
 - **`scikit-learn` is pinned exactly to `1.6.1`.** The shipped model artifact was
   trained under it; unpinning silently risks load-time incompatibility warnings and
   changed predictions.

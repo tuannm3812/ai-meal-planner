@@ -8214,6 +8214,47 @@ classes outside the plan feature, Lucide imported outside the icon folder, and h
 233 frontend tests pass (23 files); eslint and the build are clean. Checked in Chromium against the
 local API, and the README screenshots are retaken. No backend, data or Streamlit change.
 
+## 2026-11-18 — Claude — showcase deck on the UTS deck kit
+
+Mike asked to apply the UTS deck kit 0.6.0. The deck is now a kit consumer in `docs/showcase/uts-deck`
+(identity none, palette A, HTML and PDF). Slides 3–15 use project layouts (`project_layouts.py`) that
+bring back the plates, stations, funnel, architecture logos and staircase within kit rules. Every slide
+number is in `claims-register.md`. Build, export, check_deck, audit_layout and check_markers report 0
+findings. The Google Slides deck is unchanged and now the previous version.
+
+## 2026-11-22 — Claude — UTS deck refreshed for the React kitchen app
+
+Mike asked to bring the showcase deck up to date with PRs #47 to #51. The deck branch now includes
+main. The 76-recipe, workout and allergen numbers were already refreshed, so this change covers the new
+React app: slide 5 uses fresh captures of the first-run form, the craving search home page and the plan
+page (`docs/showcase/slides/captures/2026-11-22-plan.json`, same plan as before: 694 of 691 kcal,
+48/78/19 g), slide 10's macro colours now match the app's tokens (#440154, #2A788E, #22A884), slide 12
+names the "Kitchen app" client, and slide 15's 22 Nov milestone adds it. Build, export, check_deck and
+check_markers report no problems. Slide Previews artifact republished (version 29).
+
+## 2026-11-22 — Claude — UTS deck: app walkthrough appendix
+
+Mike asked for a detailed walkthrough in an appendix. Four slides follow Thank you (A1 first visit, A2 home,
+A3 plan page, A4 below the plan), each a real screen with numbered pins and one-line callouts, on a new
+project layout `mp_walk`. Captures come from `capture_walk_2026-11-22.py` after planning and saving three
+meals, ticking three shopping items and a four-star rating; the plan is unchanged (694 of 691 kcal, $24.50).
+Build, export, check_deck and check_markers report no problems; 20 pages. Slide Previews version 30.
+
+## 2026-11-22 — Claude — API live on Cloud Run; deck slides 12 to 15
+
+Mike approved deploying on the GCP free tier (project `ai-meal-planner-515508`, australia-southeast1).
+Done per `docs/6_deployment.md` §1: services, Artifact Registry, runtime and deployer service accounts,
+Workload Identity Federation, one `live-check` API key (hash in Secret Manager, raw key only in the
+`MEAL_PLANNER_SMOKE_KEY` GitHub secret), GitHub variables, `GCP_MAX_INSTANCES=1` (PR #52), and a billing
+budget of 17,000 VND (about A$1; the billing account is in VND) alerting at 50%, 100% and forecast 100%.
+Deploy run 45010039893 on main passed, including `live_check.sh`. Cloud Trace holds a full
+`POST /generate-meal-plan` trace (calorie.predict, meal.retrieve, nutrition.verify, plan.reconcile,
+supermarket.list) with allowlisted attributes only. Caveat seen: requests are traced only when sampled
+(Cloud Run's sampling or a caller's sampled `traceparent`), and one batch was lost to a timeout when CPU
+was throttled between requests. Deck: slide 13 all live, slide 12 "Cloud Run, live", slide 14 drops
+"Not deployed", slide 15 drops "Deploy to Cloud Run". `AGENTS.md` and `docs/4_next_steps.md` on main still
+describe the deploy as pending.
+
 ## 2026-11-22 — Claude — Cloud Run max instances as a setting
 
 Mike approved deploying the API to Cloud Run on the free tier with a one-instance cap. The deploy
@@ -8226,3 +8267,10 @@ for this project. `docs/6_deployment.md` notes that the two-instance acceptance 
 live (deploy run 45010039893, PR #52 caps it at one instance) and that a real trace reached Cloud
 Trace. New open risk in `AGENTS.md`: only sampled requests are traced, and a batch can be lost while
 CPU is throttled. G6's §3 acceptance runs on the real service are still open. Docs only.
+
+## 2026-11-22 — Claude — showcase deck merged to main
+
+Mike asked to merge the deck and clean up copies. The deck branch (`claude/project-thread-7mqgsg`,
+which contains the earlier `claude/project-thread-mjsqyt` work) now includes main. Ruff skips
+`docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
+scripts were formatted. `ruff check .` and `ruff format --check .` pass.

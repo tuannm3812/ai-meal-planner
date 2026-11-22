@@ -72,7 +72,8 @@ target-version = "py311"
 # each were a standalone module. Spec and plan documents quote *fragments* - a
 # method shown at its class indentation, a partial call site - so formatting them
 # that way is wrong, not just noisy: ruff dedents methods out of their class.
-extend-exclude = ["*.ipynb", "*.md"]
+# docs/showcase/uts-deck is a UTS deck kit consumer: its layout code follows the kit's own style.
+extend-exclude = ["*.ipynb", "*.md", "docs/showcase/uts-deck"]
 # force-exclude so an explicitly-named path cannot bypass the rules above.
 force-exclude = true
 

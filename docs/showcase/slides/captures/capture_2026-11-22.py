@@ -1,0 +1,32 @@
+import sys
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+OUT = Path(sys.argv[1])
+OUT.mkdir(exist_ok=True)
+with sync_playwright() as p:
+    b = p.chromium.launch(headless=True, args=["--lang=en-US"])
+    pg = b.new_context(
+        locale="en-US", viewport={"width": 1280, "height": 900}, device_scale_factor=1.5
+    ).new_page()
+    pg.goto("http://localhost:5199/")
+    pg.get_by_label("Age").fill("34")
+    pg.get_by_label("Sex").select_option("male")
+    pg.get_by_label("Height (cm)").fill("165")
+    pg.get_by_label("Weight (kg)").fill("65")
+    pg.get_by_label("Where you shop").fill("Earlwood, NSW")
+    pg.wait_for_timeout(500)
+    pg.screenshot(path=OUT / "raw-1-profile.png", full_page=True)
+    pg.get_by_role("button", name="Save and start planning").click()
+    pg.wait_for_timeout(800)
+    pg.locator("#craving-input").fill("chicken fried rice")
+    pg.wait_for_timeout(400)
+    pg.screenshot(path=OUT / "raw-2-home.png", full_page=True)
+    pg.locator("#craving-input").press("Enter")
+    pg.wait_for_url("**/plan**", timeout=60000)
+    pg.wait_for_timeout(4000)
+    pg.evaluate("document.activeElement && document.activeElement.blur()")
+    pg.screenshot(path=OUT / "raw-3-plan.png", full_page=True)
+    print(pg.url)
+    b.close()

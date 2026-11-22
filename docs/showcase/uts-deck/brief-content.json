@@ -1,0 +1,1814 @@
+{
+  "title": "AI Meal Planner",
+  "identity": "uts",
+  "author": "Manh Tuan (Mike) Nguyen",
+  "affiliation": "TD School, University of Technology Sydney",
+  "date": "November 2026",
+  "slides": [
+    {
+      "id": "cover",
+      "layout": "mp_cover",
+      "section": "Personal project | Multi-agent meal planner",
+      "title": "What should I eat tonight?",
+      "subtitle": "One meal sized to your body and goal, each ingredient's source shown, and the shopping list ready.",
+      "accent": "slate",
+      "question": "What is this project, and why should a reader care?",
+      "notes": {
+        "purpose": "Introduce the app through the question everyone asks.",
+        "script": [
+          "Everyone asks this question, so that's where this project starts. You type a craving, and you get one meal sized to you, with each ingredient's source shown and the shopping list already written.",
+          "The rest of this deck shows how it works and how I measured it."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "motif": {
+        "path": "assets/figures/cover-motif.svg",
+        "alt": "A row of plates, rice grains and diced vegetables in palette A."
+      },
+      "art": {
+        "image": "assets/photos/cover-chicken-fried-rice.jpg",
+        "alt": "Photo of a plate of chicken fried rice with peas, carrot and green beans, each ingredient tagged",
+        "target": "694 kcal, target 691",
+        "tags": [
+          {
+            "name": "Chicken breast, 100 g",
+            "source": "Estimated",
+            "dot": [
+              644,
+              368
+            ],
+            "box": [
+              572,
+              440
+            ]
+          },
+          {
+            "name": "Cooked rice, 220 g",
+            "source": "Estimated",
+            "dot": [
+              820,
+              282
+            ],
+            "box": [
+              787,
+              196
+            ]
+          },
+          {
+            "name": "Vegetables, 115 g",
+            "source": "Reference",
+            "dot": [
+              780,
+              413
+            ],
+            "box": [
+              760,
+              440
+            ]
+          }
+        ],
+        "receipt": {
+          "title": "SHOPPING LIST",
+          "items": [
+            [
+              "CHICKEN BREAST",
+              "$7.80"
+            ],
+            [
+              "COOKED RICE",
+              "$3.20"
+            ],
+            [
+              "WHOLE EGG",
+              "$3.50"
+            ],
+            [
+              "VEGETABLES",
+              "$3.50"
+            ],
+            [
+              "SESAME OIL",
+              "$3.50"
+            ],
+            [
+              "SOY SAUCE",
+              "$3.00"
+            ]
+          ],
+          "total_label": "ESTIMATED",
+          "total": "$24.50"
+        }
+      },
+      "header_style": "appendix"
+    },
+    {
+      "id": "agenda",
+      "layout": "mp_agenda",
+      "agenda_style": "kaggle",
+      "page_position": "right",
+      "chapter_fill": "accent_pale",
+      "section": "AGENDA",
+      "title": "Agenda",
+      "subtitle": "From the problem, through how it works, to what was measured and what is still open.",
+      "accent": "slate",
+      "question": "Which sections are in this deck, and where do they begin?",
+      "contents": [
+        {
+          "title": "Overview",
+          "accent": "slate",
+          "entries": [
+            {
+              "title": "One-page summary",
+              "from": "summary",
+              "through": "summary"
+            },
+            {
+              "title": "Why it matters",
+              "from": "problem",
+              "through": "problem"
+            }
+          ]
+        },
+        {
+          "title": "How it works",
+          "accent": "blue",
+          "entries": [
+            {
+              "title": "The flow",
+              "from": "flow",
+              "through": "flow"
+            },
+            {
+              "title": "Four agents",
+              "from": "agents",
+              "through": "agents"
+            },
+            {
+              "title": "Calorie target",
+              "from": "calories",
+              "through": "calories"
+            },
+            {
+              "title": "Choosing the meal",
+              "from": "choosing",
+              "through": "choosing"
+            },
+            {
+              "title": "Nutrition",
+              "from": "nutrition",
+              "through": "nutrition"
+            }
+          ]
+        },
+        {
+          "title": "Evidence",
+          "accent": "plum",
+          "entries": [
+            {
+              "title": "What good means",
+              "from": "good",
+              "through": "good"
+            },
+            {
+              "title": "Results",
+              "from": "results",
+              "through": "results"
+            },
+            {
+              "title": "Architecture",
+              "from": "architecture",
+              "through": "architecture"
+            },
+            {
+              "title": "Engineering",
+              "from": "engineering",
+              "through": "engineering"
+            }
+          ]
+        },
+        {
+          "title": "Limits and next steps",
+          "accent": "ochre",
+          "entries": [
+            {
+              "title": "Limits",
+              "from": "limits",
+              "through": "limits"
+            },
+            {
+              "title": "Next steps",
+              "from": "next",
+              "through": "next"
+            }
+          ]
+        }
+      ],
+      "notes": {
+        "purpose": "Locate each section by its page number.",
+        "script": [
+          "The deck runs from the problem, through how the planner works, to what was measured and what is still open."
+        ],
+        "references": []
+      },
+      "header_style": "appendix"
+    },
+    {
+      "id": "summary",
+      "layout": "mp_summary",
+      "section": "Overview",
+      "topic": "One-page summary",
+      "accent": "slate",
+      "title": "One craving, sized to four different people",
+      "subtitle": "Four agents and 76 curated recipes size the same chicken fried rice for each person, with no LLM key needed.",
+      "findings": [
+        {
+          "label": "Sized to you",
+          "value": "0.5%",
+          "icon": "person",
+          "accent": "slate",
+          "text": "Median gap between each meal and its target, worst **9.9%**.",
+          "chart": {
+            "kind": "gap",
+            "median": 0.5,
+            "worst": 9.9,
+            "limit": 10
+          }
+        },
+        {
+          "label": "On target",
+          "value": "72 of 72",
+          "icon": "balance",
+          "accent": "blue",
+          "text": "Benchmark plans meet the calorie and macro targets, up from **10**.",
+          "chart": {
+            "kind": "dots",
+            "total": 72,
+            "first": 10,
+            "label": ""
+          }
+        },
+        {
+          "label": "Fits your limits",
+          "value": "5 of 5",
+          "icon": "check_circle",
+          "accent": "plum",
+          "text": "Guardrail cases hold: limits **rule out recipes or swap ingredients**.",
+          "chart": {
+            "kind": "checks",
+            "total": 5
+          }
+        },
+        {
+          "label": "Honest about gaps",
+          "value": "68 of 72",
+          "icon": "fact_check",
+          "accent": "ochre",
+          "text": "Plans include an **estimated** ingredient, and the app labels each one.",
+          "chart": {
+            "kind": "dots",
+            "total": 72,
+            "first": 68,
+            "label": ""
+          }
+        }
+      ],
+      "takeaway": "Plate area shows calories. All figures come from the project's own offline benchmark, not a user study.",
+      "question": "What does the planner do, and how well does it work?",
+      "notes": {
+        "purpose": "If you read one slide, read this one.",
+        "script": [
+          "This is the same craving for four people, so the meal fits the person.",
+          "That quality is measured: all 72 plans in the project's own benchmark meet the targets, up from 10.",
+          "It stays honest: estimates are labelled, and it says so when nothing matches."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "plates": [
+        {
+          "kcal": 363,
+          "protein": "26 g protein",
+          "who": "Older woman, losing weight",
+          "image": "assets/figures/plates/plate-363.png",
+          "alt": "Plate of chicken fried rice, 363 kcal"
+        },
+        {
+          "kcal": 694,
+          "protein": "48 g protein",
+          "who": "Active woman, maintaining",
+          "image": "assets/figures/plates/plate-694.png",
+          "alt": "Plate of chicken fried rice, 694 kcal"
+        },
+        {
+          "kcal": 809,
+          "protein": "60 g protein",
+          "who": "Average man, maintaining",
+          "image": "assets/figures/plates/plate-809.png",
+          "alt": "Plate of chicken fried rice, 809 kcal"
+        },
+        {
+          "kcal": 850,
+          "protein": "63 g protein",
+          "who": "Large athlete, gaining",
+          "image": "assets/figures/plates/plate-850.png",
+          "alt": "Plate of chicken fried rice, 850 kcal"
+        }
+      ]
+    },
+    {
+      "id": "problem",
+      "layout": "mp_problem",
+      "section": "Overview",
+      "topic": "Why it matters",
+      "accent": "slate",
+      "title": "Picking a meal is easy; sizing it to you is not",
+      "subtitle": "Three questions sit between a craving and a meal you can trust.",
+      "takeaway": "The Today lines are this project's framing of the problem, not survey results.",
+      "question": "Why is this worth solving?",
+      "notes": {
+        "purpose": "Show the work that sits between a craving and a meal.",
+        "script": [
+          "Most of us know what we feel like eating. The hard part comes after that.",
+          "The right amount depends on the person. Diets and conditions change the meal. And even one meal means several ingredients to find and price.",
+          "The next section shows how one request answers all three.",
+          "Sources: Benchmark budgets: docs/meal_quality/baseline.json; pasta examples: local run, 7 November 2026, no provider keys."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "craving": "I feel like pasta tonight.",
+      "answer": "One request answers all three.",
+      "image": {
+        "path": "assets/photos/problem-spaghetti-bolognese.jpg",
+        "alt": "Photo of spaghetti bolognese with three numbered pins, one for each question"
+      },
+      "rows": [
+        {
+          "icon": "monitor_weight",
+          "question": "How much?",
+          "fact": "Daily budgets in the benchmark run from **1,200 to 4,521 kcal**.",
+          "today": "Guess from \"serves 4\"",
+          "visual": {
+            "kind": "range",
+            "low": 1200,
+            "high": 4521,
+            "mark": 2889,
+            "meal": 809,
+            "axis": 4600,
+            "day_label": "Day budgets",
+            "mark_label": "Average man: 2,889",
+            "meal_label": "His pasta: 809"
+          }
+        },
+        {
+          "icon": "no_food",
+          "question": "Is it right for me?",
+          "fact": "The same request needs a **different meal** or a **swapped ingredient**.",
+          "today": "Read every label",
+          "visual": {
+            "kind": "swaps",
+            "items": [
+              [
+                "Vegan",
+                "Tuna pasta salad",
+                "Lentil Bolognese Pasta"
+              ],
+              [
+                "Coeliac",
+                "Wholemeal pasta",
+                "Gluten-free pasta"
+              ]
+            ]
+          }
+        },
+        {
+          "icon": "shopping_cart",
+          "question": "What do I buy?",
+          "fact": "**Five ingredients** to find and price at the store.",
+          "today": "Write a list, guess the cost",
+          "visual": {
+            "kind": "receipt",
+            "items": [
+              [
+                "Tuna",
+                "$3.50"
+              ],
+              [
+                "Pasta",
+                "$2.80"
+              ],
+              [
+                "Cucumber",
+                "$3.50"
+              ],
+              [
+                "Tomato",
+                "$1.40"
+              ],
+              [
+                "Olive oil",
+                "$3.50"
+              ]
+            ],
+            "total": "$14.70",
+            "total_label": "Estimated"
+          }
+        }
+      ],
+      "pins": [
+        [
+          520,
+          650
+        ],
+        [
+          895,
+          345
+        ],
+        [
+          430,
+          440
+        ]
+      ]
+    },
+    {
+      "id": "flow",
+      "layout": "mp_flow",
+      "section": "How it works",
+      "topic": "The flow",
+      "accent": "blue",
+      "title": "One craving in, one meal and a shopping list out",
+      "subtitle": "The React app, shown close up from a local run with no provider keys.",
+      "takeaway": "Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.",
+      "question": "What does a person actually do?",
+      "notes": {
+        "purpose": "Walk through the real app: details once, then search, then the plan page.",
+        "script": [
+          "The first visit asks for your details once and keeps them on this device, including today's workout.",
+          "After that the home page is one search box: say what you feel like eating, or pick a suggestion.",
+          "The plan page shows the meal against its target, a macro donut, where the calories come from and a shopping list. You can save the meal and rate it.",
+          "Sources: Captures: docs/showcase/slides/captures/2026-11-22-plan.json; React app on main (ac4d44d), local run, 22 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "steps": [
+        {
+          "image": "assets/figures/app-1-profile-zoom.jpg",
+          "alt": "Close-up of the React app's first-run form: goal, age, sex, height, weight, activity level and today's workout.",
+          "icon": "person",
+          "title": "1. You, once",
+          "text": "Goal, body, **today's workout** and limits.",
+          "value": "34, male, 165 cm, 65 kg"
+        },
+        {
+          "image": "assets/figures/app-2-craving-zoom.jpg",
+          "alt": "Close-up of the React home page: a large craving search reading chicken fried rice, a Plan my meal button and suggested dishes.",
+          "icon": "search",
+          "title": "2. Craving",
+          "text": "One search box, or a suggested dish.",
+          "value": "chicken fried rice"
+        },
+        {
+          "image": "assets/figures/app-3-plan-zoom.jpg",
+          "alt": "Close-up of the React plan page: Chicken Fried Rice, a calorie ring at 694 of 691 kcal, a Viridis macro donut and the start of the shopping list.",
+          "icon": "rice_bowl",
+          "title": "3. Your plan",
+          "text": "Charts, a **shopping list**, save and rate.",
+          "value": "694 kcal, target 691"
+        }
+      ]
+    },
+    {
+      "id": "agents",
+      "layout": "mp_agents",
+      "section": "How it works",
+      "topic": "Four agents",
+      "accent": "blue",
+      "title": "Four agents work like one kitchen",
+      "subtitle": "An order comes in, each station does one job, and a planning service runs them in order.",
+      "takeaway": "Meals come from 76 curated recipes, not generation, so the core path needs no LLM key.",
+      "question": "How does one request become one plan?",
+      "notes": {
+        "purpose": "Show the four agents and their real outputs.",
+        "script": [
+          "The calorie agent sets a daily budget, the recommendation agent picks and sizes the meal, the nutrition agent labels estimates, and the supermarket agent prices the list.",
+          "The service balances portions after verification.",
+          "Sources: backend/app/services/meal_planning_service.py; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "order": "ORDER   chicken fried rice, active woman, maintaining",
+      "stations": [
+        {
+          "image": "assets/figures/stations/station-scale.png",
+          "alt": "Illustration of a kitchen scale.",
+          "role": "The portion planner",
+          "title": "Calorie expenditure",
+          "text": "Estimates a day's burn and sets the **daily budget**.",
+          "value": "2,469 kcal budget"
+        },
+        {
+          "image": "assets/figures/stations/station-pan.png",
+          "alt": "Illustration of a pan of fried rice.",
+          "role": "The chef",
+          "title": "Meal recommendation",
+          "text": "Sets the **meal target**, rules out conflicts, picks a recipe and sizes it.",
+          "value": "691 kcal target"
+        },
+        {
+          "image": "assets/figures/stations/station-taster.png",
+          "alt": "Illustration of a clipboard and magnifier.",
+          "role": "The taster",
+          "title": "Nutrition verification",
+          "text": "Looks up each ingredient and **labels estimates**.",
+          "value": "694 kcal, 3 of 6 estimated"
+        },
+        {
+          "image": "assets/figures/stations/station-basket.png",
+          "alt": "Illustration of a shopping basket.",
+          "role": "The shopper",
+          "title": "Supermarket",
+          "text": "Matches ingredients to **store items** or category prices.",
+          "value": "$24.50 estimated"
+        }
+      ],
+      "ticket": {
+        "title": "Order ticket",
+        "lines": [
+          "Budget: 2,469 kcal",
+          "Chicken Fried Rice, 691 kcal target",
+          "Checked: 694 kcal, 3 of 6 estimated",
+          "Shopping list: $24.50 estimated"
+        ]
+      }
+    },
+    {
+      "id": "calories",
+      "layout": "mp_calories",
+      "section": "How it works",
+      "topic": "Calorie target",
+      "accent": "blue",
+      "title": "From your body to a meal target",
+      "subtitle": "Worked example: an active woman keeping her weight. Her meal target is 28% of the daily budget.",
+      "takeaway": "The model's R² of 0.996 is for exercise calories only, which add just 3–10% of the day in these plans.",
+      "question": "How does it decide how much?",
+      "notes": {
+        "purpose": "Follow one person from body to meal target.",
+        "script": [
+          "Body size and activity give about 2,344 kcal a day. The trained model adds 125. Her goal is to maintain, so her budget is 2,469, and one meal gets 28%: 691 kcal.",
+          "Exercise adds only 5% here because the run uses default exercise inputs: 30 minutes at 100 bpm.",
+          "A weight-loss floor of 1,200 kcal for women and 1,500 for men protects low budgets.",
+          "Sources: calorie_expenditure_agent.py; models/calorie_expenditure/metrics.json; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "steps": [
+        {
+          "icon": "person",
+          "title": "Body and activity",
+          "text": "Size and activity give a daily estimate.",
+          "value": "2,344 kcal"
+        },
+        {
+          "icon": "fitness_center",
+          "title": "Exercise",
+          "text": "A trained model adds exercise calories.",
+          "value": "+125 kcal"
+        },
+        {
+          "icon": "flag",
+          "title": "Goal",
+          "text": "Gain +250, lose −400, with a safety floor.",
+          "value": "2,469 kcal budget"
+        },
+        {
+          "icon": "rice_bowl",
+          "title": "This meal",
+          "text": "28% of the budget, within 350–850 kcal.",
+          "value": "691 kcal target"
+        }
+      ],
+      "chart": {
+        "rings": [
+          {
+            "image": "assets/figures/shapes/ring-day.svg",
+            "alt": "Ring of her 2,469 kcal budget: 2,344 kcal from body and activity, 125 kcal from exercise.",
+            "centre": "2,469",
+            "centre_label": "kcal budget",
+            "headline": "Exercise adds only 5%",
+            "text": "The trained model moves her budget by 125 kcal."
+          },
+          {
+            "image": "assets/figures/shapes/ring-meal.svg",
+            "alt": "Ring of the same budget: this 691 kcal meal is 28%, the rest of her day 1,778 kcal.",
+            "centre": "691",
+            "centre_label": "kcal meal",
+            "headline": "One meal, 28% of her day",
+            "text": "The rest of the budget stays for her other meals."
+          }
+        ]
+      }
+    },
+    {
+      "id": "choosing",
+      "layout": "mp_choosing",
+      "section": "How it works",
+      "topic": "Choosing the meal",
+      "accent": "blue",
+      "title": "Hard limits come first, then a relevant recipe",
+      "subtitle": "A vegan asks for chicken fried rice: the recipes narrow down to one.",
+      "takeaway": "Safety comes before relevance, and the profile only changes the order of safe, relevant recipes.",
+      "question": "How does it choose the meal?",
+      "notes": {
+        "purpose": "Show the funnel from one real request.",
+        "script": [
+          "Of 76 recipes, 30 are safe for a vegan, 6 are relevant to the craving, and one is served.",
+          "If nothing is close, you get a standard meal and a note. If nothing is safe, it refuses.",
+          "Sources: backend/app/rag/retriever.py; local run, 7 November 2026; docs/meal_quality/baseline.json."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "funnel": {
+        "title": "Recipes left at each step",
+        "rows": [
+          {
+            "label": "All recipes",
+            "value": 76,
+            "text": "76"
+          },
+          {
+            "label": "Safe for a vegan",
+            "value": 30,
+            "text": "30"
+          },
+          {
+            "label": "Relevant to the craving",
+            "value": 6,
+            "text": "6"
+          },
+          {
+            "label": "Served",
+            "value": 1,
+            "text": "1: Tofu Fried Rice"
+          }
+        ]
+      },
+      "outcomes": [
+        {
+          "icon": "check_circle",
+          "title": "Close match",
+          "text": "\"chicken fried rice\" gets that recipe, **sized to you**.",
+          "count": "61 of 72 benchmark plans"
+        },
+        {
+          "icon": "flag",
+          "title": "No close match",
+          "text": "\"pizza\" gets a **standard meal** and a note saying so.",
+          "count": "11 of 72 benchmark plans"
+        },
+        {
+          "icon": "block",
+          "title": "Nothing safe",
+          "text": "Too many limits: the plan is **refused**, not guessed.",
+          "count": "2 of 5 guardrail cases"
+        },
+        {
+          "icon": "balance",
+          "title": "Or a safe swap",
+          "text": "A coeliac who asks for pasta keeps the recipe with **gluten-free pasta**.",
+          "count": "Each swap checked against all limits"
+        }
+      ]
+    },
+    {
+      "id": "nutrition",
+      "layout": "mp_nutrition",
+      "section": "How it works",
+      "topic": "Nutrition",
+      "accent": "blue",
+      "title": "Each ingredient is looked up, and estimates are labelled",
+      "subtitle": "Chicken fried rice from a local run with no USDA or FatSecret keys: 694 kcal against a 691 kcal target.",
+      "takeaway": "Only 3 of 6 ingredients are estimates, but they carry 66% of the calories; with no keys, nothing here is externally verified.",
+      "question": "Can you trust the numbers?",
+      "notes": {
+        "purpose": "Show where each number came from.",
+        "script": [
+          "Three of the six ingredients are estimates, but they include chicken and rice, the biggest items, so they carry 459 of the 694 kcal.",
+          "Sources: nutrition_verification_agent.py; local run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "columns": [
+        "Ingredient",
+        "Amount",
+        "kcal",
+        "Source"
+      ],
+      "rows": [
+        [
+          "Chicken breast",
+          "100 g",
+          "165",
+          "Estimated"
+        ],
+        [
+          "Cooked rice",
+          "220 g",
+          "286",
+          "Estimated"
+        ],
+        [
+          "Whole egg",
+          "50 g",
+          "72",
+          "Reference"
+        ],
+        [
+          "Mixed vegetables",
+          "115 g",
+          "75",
+          "Reference"
+        ],
+        [
+          "Soy sauce",
+          "15 g",
+          "8",
+          "Estimated"
+        ],
+        [
+          "Sesame oil",
+          "10 g",
+          "88",
+          "Reference"
+        ]
+      ],
+      "split": {
+        "title": "Where the 694 kcal come from",
+        "parts": [
+          {
+            "kind": "Estimated",
+            "value": 459,
+            "label": "459 kcal estimated, 66%"
+          },
+          {
+            "kind": "Reference",
+            "value": 235,
+            "label": "235 reference"
+          }
+        ]
+      },
+      "order_title": "Lookup order",
+      "order": [
+        {
+          "icon": "verified",
+          "title": "1. Trusted local reference",
+          "text": "Checked local values come first."
+        },
+        {
+          "icon": "search",
+          "title": "2. USDA, then FatSecret",
+          "text": "Used only when **provider keys** are set."
+        },
+        {
+          "icon": "calculate",
+          "title": "3. Local or category estimate",
+          "text": "The **last resort**, always labelled."
+        }
+      ]
+    },
+    {
+      "id": "good",
+      "layout": "mp_good",
+      "section": "Evidence",
+      "topic": "What good means",
+      "accent": "plum",
+      "title": "We defined a good meal before improving one",
+      "subtitle": "A plan passes only if it clears both tests, on a fixed set of 72 requests run offline.",
+      "takeaway": "At the first run 68 of 72 plans hit calories, but only 10 cleared both tests.",
+      "question": "What counts as good?",
+      "notes": {
+        "purpose": "Fix what good means before changing anything.",
+        "script": [
+          "Dots: chicken fried rice for the active woman. AMDR is a daily reference, applied here to one meal.",
+          "Calories had to land within 10% of the target, and each macro inside the adult AMDR range. The same 72 requests run every time.",
+          "Sources: docs/7_meal_quality.md §1; DEC-25."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "macro_title": "Test 2: share of the meal's energy",
+      "macros": [
+        {
+          "name": "Protein",
+          "low": 10,
+          "high": 35,
+          "value": 28,
+          "range_label": "Allowed 10–35%"
+        },
+        {
+          "name": "Carbs",
+          "low": 45,
+          "high": 65,
+          "value": 46,
+          "range_label": "Allowed 45–65%"
+        },
+        {
+          "name": "Fat",
+          "low": 20,
+          "high": 35,
+          "value": 26,
+          "range_label": "Allowed 20–35%"
+        }
+      ],
+      "calorie_label": "TEST 1",
+      "calorie_value": "Within 10%",
+      "calorie_text": "of the meal's calorie target",
+      "grid_title": "72 fixed requests",
+      "grid_labels": [
+        "12 cravings × 4 body profiles",
+        "6 cravings × 4 diet or health limits"
+      ],
+      "calorie_example": {
+        "value": 0.4,
+        "label": "694 kcal vs 691 target",
+        "limit": 10
+      }
+    },
+    {
+      "id": "results",
+      "layout": "mp_results",
+      "section": "Evidence",
+      "topic": "Results",
+      "accent": "plum",
+      "title": "Three fixes took the planner from 10 to 72 of 72",
+      "subtitle": "Plans meeting both targets on the project's own offline benchmark of 72 requests.",
+      "takeaway": "The 41 to 47 step moved 11 off-menu requests to fallback meals; the fixes were tuned on these 72, so the wider check matters.",
+      "question": "Did it get better, and why?",
+      "notes": {
+        "purpose": "Show what each fix changed.",
+        "script": [
+          "Resizing each ingredient took it to 41. The relevance gate moved 11 off-menu requests to fallback meals, giving 47. Adding a fat to six recipes and a rounding retry took it to 72.",
+          "The fixes were tuned on these 72, so I also asked for every recipe by name: 49 of 68 passed before a further fix, 68 of 68 after; with 76 recipes it is 152 of 152.",
+          "Sources: docs/7_meal_quality.md §2; docs/meal_quality/baseline.md; DEC-26 to DEC-30."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "chart_title": "Plans meeting both targets, out of 72",
+      "maximum": 72,
+      "bars": [
+        {
+          "label": "First run",
+          "change": "Before any fix",
+          "value": 10
+        },
+        {
+          "label": "Portion balancing",
+          "change": "Ingredients resized",
+          "value": 41
+        },
+        {
+          "label": "Honest fallback",
+          "change": "Off-menu cravings moved",
+          "value": 47
+        },
+        {
+          "label": "Cooking fat, retry",
+          "change": "Oil added to 6 recipes",
+          "value": 72
+        }
+      ],
+      "metrics": [
+        {
+          "icon": "balance",
+          "value": "0.5%",
+          "label": "median calorie gap, worst 9.9%"
+        },
+        {
+          "icon": "check_circle",
+          "value": "5 of 5",
+          "label": "guardrail cases hold"
+        },
+        {
+          "icon": "search",
+          "value": "152 of 152",
+          "label": "wider check, every recipe by name"
+        }
+      ]
+    },
+    {
+      "id": "architecture",
+      "layout": "mp_arch_flow",
+      "section": "Evidence",
+      "topic": "Architecture",
+      "accent": "plum",
+      "title": "One service, two clients, four agents",
+      "subtitle": "One request through the system, stage by stage.",
+      "takeaway": "Both clients use the same planning service, and the one trained model is 0.64 MB, so the core path needs no GPU.",
+      "question": "What is it made of?",
+      "notes": {
+        "purpose": "Show the whole system on one page.",
+        "script": [
+          "Read left to right by stage, top to bottom inside a stage. Step 4 is the only exit: no close match falls back to a standard meal; nothing safe is refused.",
+          "Docker, GitHub Actions and the Cloud Run workflow are on the engineering slide. Gemini only writes an optional note, and only with a key.",
+          "Both clients use the same planning service, so the logic lives in one place.",
+          "The hosted demo runs the same service inside Streamlit.",
+          "Sources: docs/2_architecture.md; pyproject.toml; frontend/package.json."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "arch": {
+        "labels": [
+          "Clients",
+          "API",
+          "Planning service"
+        ],
+        "clients": [
+          {
+            "title": "Streamlit",
+            "text": "Live, public demo",
+            "logos": [
+              "streamlit"
+            ]
+          },
+          {
+            "title": "React",
+            "text": "Kitchen app, run locally",
+            "logos": [
+              "react",
+              "vite",
+              "tailwindcss"
+            ]
+          }
+        ],
+        "api": {
+          "title": "FastAPI",
+          "text": "Typed JSON, API keys, rate limits",
+          "logos": [
+            "fastapi",
+            "pydantic"
+          ]
+        },
+        "store": {
+          "title": "SQLite",
+          "text": "Local history, via SQLModel",
+          "logo": "sqlite"
+        },
+        "service": "MealPlanningService",
+        "agents": [
+          {
+            "icon": "monitor_weight",
+            "title": "Calorie expenditure",
+            "text": "Trained HistGradientBoosting model",
+            "logos": [
+              "scikitlearn"
+            ]
+          },
+          {
+            "icon": "skillet",
+            "title": "Meal recommendation",
+            "text": "TF-IDF search of 76 recipes, diet rules",
+            "logos": [
+              "scikitlearn"
+            ]
+          },
+          {
+            "icon": "fact_check",
+            "title": "Nutrition verification",
+            "text": "Local tables; USDA, FatSecret with keys"
+          },
+          {
+            "icon": "balance",
+            "title": "Balance and reconcile",
+            "text": "A service step: linear programme for portions",
+            "logos": [
+              "scipy"
+            ]
+          },
+          {
+            "icon": "shopping_basket",
+            "title": "Supermarket",
+            "text": "Local store items and category prices"
+          }
+        ],
+        "stack_label": "BUILT WITH",
+        "stack": [
+          [
+            "python",
+            "Python"
+          ],
+          [
+            "docker",
+            "Docker"
+          ],
+          [
+            "githubactions",
+            "GitHub Actions"
+          ],
+          [
+            "googlecloud",
+            "Cloud Run, live"
+          ],
+          [
+            "opentelemetry",
+            "OpenTelemetry"
+          ],
+          [
+            "googlegemini",
+            "Gemini, optional"
+          ]
+        ]
+      },
+      "flow": {
+        "lanes": [
+          {
+            "key": "ask",
+            "title": "Ask",
+            "sub": "two clients",
+            "tone": "slate"
+          },
+          {
+            "key": "api",
+            "title": "API",
+            "sub": "FastAPI",
+            "tone": "blue"
+          },
+          {
+            "key": "plan",
+            "title": "Plan",
+            "sub": "MealPlanningService, four agents",
+            "tone": "plum"
+          },
+          {
+            "key": "answer",
+            "title": "Answer",
+            "sub": "for the person",
+            "tone": "teal"
+          }
+        ],
+        "ask": {
+          "step": {
+            "n": 1,
+            "title": "ask",
+            "text": "profile and craving"
+          },
+          "clients": [
+            {
+              "title": "Streamlit",
+              "text": "Live public demo",
+              "logos": [
+                "streamlit"
+              ]
+            },
+            {
+              "title": "React",
+              "text": "Kitchen app, run locally",
+              "logos": [
+                "react",
+                "vite",
+                "tailwindcss"
+              ]
+            }
+          ]
+        },
+        "api": {
+          "step": {
+            "n": 2,
+            "title": "validate",
+            "bullets": [
+              "API key and rate limit",
+              "typed request and response"
+            ],
+            "logos": [
+              "fastapi",
+              "pydantic"
+            ]
+          },
+          "store": {
+            "title": "SQLite",
+            "text": "plan history, local runs",
+            "logos": [
+              "sqlite"
+            ]
+          }
+        },
+        "plan": [
+          {
+            "n": 3,
+            "title": "budget",
+            "text": "trained model estimates the day; the goal sets the meal target",
+            "logos": [
+              "scikitlearn"
+            ]
+          },
+          {
+            "n": 4,
+            "title": "choose",
+            "text": "rules out conflicts, then TF-IDF over 76 recipes; sizes it",
+            "logos": [
+              "scikitlearn"
+            ],
+            "exit": true
+          },
+          {
+            "n": 5,
+            "title": "verify",
+            "text": "local tables first; USDA, FatSecret with keys; estimates labelled"
+          },
+          {
+            "n": 6,
+            "title": "balance",
+            "text": "a linear programme keeps macros inside AMDR",
+            "logos": [
+              "scipy"
+            ]
+          },
+          {
+            "n": 7,
+            "title": "shop",
+            "text": "store items, else category prices"
+          }
+        ],
+        "answer": {
+          "step": {
+            "n": 8,
+            "title": "show",
+            "bullets": [
+              "meal, kcal and macro balance",
+              "sources, estimates marked",
+              "shopping list",
+              "optional Gemini note"
+            ],
+            "logos": [
+              "googlegemini"
+            ]
+          },
+          "exits": [
+            {
+              "title": "fallback",
+              "text": "a standard meal and a note",
+              "tone": "ochre"
+            },
+            {
+              "title": "refused",
+              "text": "no plan, not a guess",
+              "tone": "red"
+            }
+          ]
+        },
+        "guarantees": [
+          {
+            "icon": "fact_check",
+            "title": "Typed JSON",
+            "text": "never raw model text"
+          },
+          {
+            "icon": "verified",
+            "title": "Runs with no keys",
+            "text": "keys only add outside checks"
+          },
+          {
+            "icon": "search",
+            "title": "Estimates labelled",
+            "text": "each ingredient shows its source"
+          },
+          {
+            "icon": "lock",
+            "title": "Health data out of traces",
+            "text": "a test holds traces to an allowlist",
+            "logos": [
+              "opentelemetry"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "engineering",
+      "layout": "mp_engineering",
+      "section": "Evidence",
+      "topic": "Engineering",
+      "accent": "plum",
+      "title": "Built like a product, not a notebook",
+      "subtitle": "Six production habits, in the order a change travels through them.",
+      "takeaway": "Health data is kept out of traces by a test, and real traces now reach Cloud Trace.",
+      "question": "Is the engineering real?",
+      "notes": {
+        "purpose": "Show the production habits.",
+        "script": [
+          "All six steps on the line run today: the API is live on Cloud Run in Sydney, capped at one instance.",
+          "The last full run, on main on 22 November 2026, passed 662 Python tests at 97% coverage. Five checks run on every pull request.",
+          "The first real trace reached Cloud Trace on 22 November 2026: one plan request, five stage spans, allowlisted fields only.",
+          "Sources: deploy.yml run 45010039893; ci.yml; docs/openapi.json; test_telemetry_redaction.py; local full run, 7 November 2026."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "line_title": "From a change to production",
+      "steps": [
+        {
+          "icon": "fact_check",
+          "title": "Contract",
+          "text": "CI fails on any drift",
+          "file": "docs/openapi.json",
+          "live": true
+        },
+        {
+          "icon": "science",
+          "title": "Tests",
+          "text": "662 Python tests",
+          "file": "backend/tests/",
+          "live": true
+        },
+        {
+          "icon": "lock",
+          "title": "Security",
+          "text": "API keys, rate limits",
+          "file": "api/auth.py",
+          "live": true
+        },
+        {
+          "icon": "inventory_2",
+          "title": "Container",
+          "text": "One Docker image",
+          "file": "Dockerfile",
+          "live": true
+        },
+        {
+          "icon": "cloud_upload",
+          "title": "Cloud Run",
+          "text": "Live, one instance",
+          "file": "deploy.yml",
+          "live": true
+        },
+        {
+          "icon": "visibility",
+          "title": "Tracing",
+          "text": "Health data kept out",
+          "file": "core/telemetry.py",
+          "live": true
+        }
+      ],
+      "stats": [
+        {
+          "value": "662",
+          "label": "Python tests, all passing: 570 backend, 92 Streamlit",
+          "viz": {
+            "kind": "split",
+            "parts": [
+              [
+                570,
+                "#3B528B"
+              ],
+              [
+                92,
+                "#21918C"
+              ]
+            ]
+          }
+        },
+        {
+          "value": "97%",
+          "label": "coverage, and CI fails below an 89% floor",
+          "viz": {
+            "kind": "floor",
+            "value": 97,
+            "floor": 89
+          }
+        },
+        {
+          "value": "5",
+          "label": "CI checks on every pull request",
+          "viz": {
+            "kind": "checks",
+            "total": 5
+          }
+        }
+      ]
+    },
+    {
+      "id": "limits",
+      "layout": "mp_limits",
+      "section": "Limits and next steps",
+      "topic": "Limits",
+      "accent": "ochre",
+      "title": "What this project does not prove yet",
+      "subtitle": "The numbers are measured offline; how people use it is untested.",
+      "takeaway": "A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.",
+      "question": "What is unproven?",
+      "notes": {
+        "purpose": "Put the limits in one place.",
+        "script": [
+          "Plans hit their targets on fixed requests. Most lean on estimates. Nobody has used it yet.",
+          "Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "steps": [
+        {
+          "icon": "check_circle",
+          "title": "Measured",
+          "items": [
+            "**72 of 72** and **152 of 152**, offline",
+            "But the checks guided the fixes",
+            "11 of 72 fall back"
+          ],
+          "strength": 3,
+          "next": "Run the benchmark with USDA keys"
+        },
+        {
+          "icon": "calculate",
+          "title": "Estimated",
+          "items": [
+            "**68 of 72** plans include an estimate",
+            "AMDR is a daily range on one meal",
+            "The benchmark uses default workouts"
+          ],
+          "strength": 2,
+          "next": "Real workouts in the benchmark"
+        },
+        {
+          "icon": "group",
+          "title": "Not tested",
+          "items": [
+            "No user testing",
+            "No clinical review",
+            "No database migrations",
+            "Taste and health outcomes unknown"
+          ],
+          "strength": 1,
+          "next": "Test with people"
+        }
+      ]
+    },
+    {
+      "id": "next",
+      "layout": "mp_next",
+      "section": "Limits and next steps",
+      "topic": "Next steps",
+      "accent": "ochre",
+      "title": "What comes next, in priority order",
+      "subtitle": "How the project got here, and the work still ahead.",
+      "takeaway": "Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.",
+      "question": "What comes next?",
+      "notes": {
+        "purpose": "Pair the limits with the work that answers them.",
+        "script": [
+          "Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.",
+          "Sources: docs/4_next_steps.md §6 and §7."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "milestones": [
+        {
+          "date": "8 Oct",
+          "text": "Refactor on main"
+        },
+        {
+          "date": "11 Oct",
+          "text": "API keys, deploy workflow, tracing"
+        },
+        {
+          "date": "18 Oct",
+          "text": "72 of 72 plans on target"
+        },
+        {
+          "date": "21 Oct",
+          "text": "React design approved"
+        },
+        {
+          "date": "7 Nov",
+          "text": "68 of 68, gluten fix"
+        },
+        {
+          "date": "22 Nov",
+          "text": "76 recipes, kitchen app, Cloud Run"
+        },
+        {
+          "date": "Now",
+          "text": "Next steps"
+        }
+      ],
+      "columns": [
+        {
+          "title": "Now",
+          "items": [
+            "Add database migrations",
+            "Add user accounts"
+          ],
+          "icons": [
+            "inventory_2",
+            "person"
+          ]
+        },
+        {
+          "title": "Next",
+          "items": [
+            "Run the benchmark with USDA keys",
+            "Benchmark with real workouts",
+            "Connect live store prices"
+          ],
+          "icons": [
+            "fact_check",
+            "fitness_center",
+            "storefront"
+          ]
+        },
+        {
+          "title": "Later",
+          "items": [
+            "Ask a dietitian to review the rules",
+            "Use feedback, then test with people"
+          ],
+          "icons": [
+            "verified",
+            "group"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "close",
+      "layout": "mp_close",
+      "accent": "slate",
+      "section": "",
+      "title": "Thank you",
+      "subtitle": "",
+      "thanks": "Try the live demo, read the code, and send me your feedback.",
+      "links": [
+        [
+          "Demo",
+          "tuannm3812-ai-meal-planner.streamlit.app"
+        ],
+        [
+          "Code",
+          "github.com/tuannm3812/ai-meal-planner"
+        ]
+      ],
+      "qr_label": "Scan for the live demo",
+      "image": {
+        "path": "assets/photos/close-two-bowls.jpg",
+        "alt": "Photo of two different poke bowls side by side on a wooden table."
+      },
+      "image_caption": "Two people, two cravings, two different plates.",
+      "question": "Where do I try it?",
+      "notes": {
+        "purpose": "Thank the audience and point to the demo and code.",
+        "script": [
+          "Thank you. That's AI Meal Planner: one craving in, one meal sized to you, with each ingredient's source shown.",
+          "The demo and the code are linked here."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      },
+      "header_style": "appendix",
+      "image_note": "A study project, not medical advice."
+    },
+    {
+      "id": "walk1",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "First visit",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A1. First visit: your details, asked once",
+      "subtitle": "Kept on this device; the Profile page can change them or forget them.",
+      "question": "What does the app ask for, and why?",
+      "image": {
+        "path": "assets/figures/walk-1-first-visit.jpg",
+        "aspect": 1.02803738317757,
+        "alt": "The React app's first-run form: goal cards, age, sex, height, weight, activity, today's workout, things to avoid, where you shop, and a side panel on how the meal is sized."
+      },
+      "pins": [
+        [
+          250,
+          240
+        ],
+        [
+          282,
+          389
+        ],
+        [
+          310,
+          488
+        ],
+        [
+          296,
+          705
+        ],
+        [
+          211,
+          877
+        ],
+        [
+          930,
+          50
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Goal",
+          "text": "Lose, maintain or gain sets the meal's target; weight loss keeps a **safe floor**."
+        },
+        {
+          "title": "Body",
+          "text": "Age, sex, height and weight give the daily energy estimate."
+        },
+        {
+          "title": "Activity and today's workout",
+          "text": "The usual week, plus **today's session** from the trained model."
+        },
+        {
+          "title": "Anything to avoid",
+          "text": "Diets and allergies become **hard limits**, checked against allergen tags."
+        },
+        {
+          "title": "Where you shop",
+          "text": "Picks the store for the shopping list."
+        },
+        {
+          "title": "How your meal is sized",
+          "text": "The four sizing steps in plain words, beside the form."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The first visit asks for these details once. Each field maps to one step of the calorie target or the safety rules.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk2",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Home",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A2. Home: one search box",
+      "subtitle": "After the first visit, every plan starts here.",
+      "question": "Where does a person start?",
+      "image": {
+        "path": "assets/figures/walk-2-home.jpg",
+        "aspect": 1.0519877675840978,
+        "alt": "The React home page: a large craving search, suggested dishes, a line naming where you shop, three short promises, and saved meals as cards."
+      },
+      "pins": [
+        [
+          671,
+          246
+        ],
+        [
+          207,
+          390
+        ],
+        [
+          450,
+          439
+        ],
+        [
+          262,
+          556
+        ],
+        [
+          213,
+          661
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Craving search",
+          "text": "Any words; the planner finds the closest of **76 recipes**."
+        },
+        {
+          "title": "Suggestions",
+          "text": "One tap fills the search with a dish from the library."
+        },
+        {
+          "title": "Your details",
+          "text": "Who the meal is sized for and where you shop, with a link to change them."
+        },
+        {
+          "title": "Three promises",
+          "text": "A real recipe, an **honest note** when nothing matches, and a shopping list."
+        },
+        {
+          "title": "My meals and Past plans",
+          "text": "Saved meals and recent plans come back as cards with kcal and a macro bar."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Three meals were planned and saved before this capture, so the cards are filled.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk3",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "Plan page",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A3. The plan page: what it is and how it fits",
+      "subtitle": "Chicken Fried Rice for the same profile, after saving it and ticking three items.",
+      "question": "What does a plan show?",
+      "image": {
+        "path": "assets/figures/walk-3-plan.jpg",
+        "aspect": 0.9411764705882353,
+        "alt": "The top of the React plan page: Chicken Fried Rice with status tags, a Saved to My meals button, an estimates notice, a calorie ring at 694 of 691 kcal, a macro donut, balance bars and the shopping list with three items ticked."
+      },
+      "pins": [
+        [
+          517,
+          156
+        ],
+        [
+          430,
+          212
+        ],
+        [
+          913,
+          229
+        ],
+        [
+          372,
+          493
+        ],
+        [
+          372,
+          638
+        ],
+        [
+          870,
+          394
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Status tags",
+          "text": "Close menu match, portions rebalanced, some nutrition **estimated**."
+        },
+        {
+          "title": "Save meal",
+          "text": "Adds it to My meals on the home page."
+        },
+        {
+          "title": "Estimates notice",
+          "text": "Says how many ingredients use estimated nutrition: here **3 of 6**."
+        },
+        {
+          "title": "Calorie ring",
+          "text": "This meal, **694 kcal**, against its 691 kcal target."
+        },
+        {
+          "title": "Macro donut and balance",
+          "text": "Grams and share of each macro, against its recommended range."
+        },
+        {
+          "title": "Shopping list",
+          "text": "Grouped by aisle, with a price per item; ticks stay as you shop."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "Ring, donut and bars use the app's Viridis macro colours: protein, carbs, fat.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "walk4",
+      "layout": "mp_walk",
+      "section": "Appendix",
+      "topic": "After the plan",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A4. Below the plan: sources, feedback and other options",
+      "subtitle": "The rest of the same page, read top to bottom.",
+      "question": "What else is on the page?",
+      "image": {
+        "path": "assets/figures/walk-4-after.jpg",
+        "aspect": 1.302325581395349,
+        "alt": "The lower half of the React plan page: each ingredient's share of calories with its source tag, the shopping total with copy and print, a four-star rating, two other close meals, and a How this plan was made section."
+      },
+      "pins": [
+        [
+          435,
+          157
+        ],
+        [
+          357,
+          293
+        ],
+        [
+          852,
+          40
+        ],
+        [
+          815,
+          264
+        ],
+        [
+          319,
+          701
+        ],
+        [
+          257,
+          939
+        ]
+      ],
+      "callouts": [
+        {
+          "title": "Where the calories come from",
+          "text": "Each ingredient's share of the meal, with its served portion."
+        },
+        {
+          "title": "Source tags",
+          "text": "**Estimated** or **reference**, ingredient by ingredient."
+        },
+        {
+          "title": "Estimated total",
+          "text": "**$24.50** from a local price list; copy or print the list."
+        },
+        {
+          "title": "How was it?",
+          "text": "A 1 to 5 star rating and a note, saved with the plan."
+        },
+        {
+          "title": "Also close to your craving",
+          "text": "Runners-up from the same search, sized the same way in one tap."
+        },
+        {
+          "title": "How this plan was made",
+          "text": "The service's notes on how the meal was chosen and checked."
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: a closer look at one screen of the React app.",
+        "script": [
+          "The rating here was 4 of 5 stars, given during the capture.",
+          "Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026."
+        ],
+        "references": [
+          "sources.md"
+        ]
+      }
+    }
+  ],
+  "project_layouts": "project_layouts.py",
+  "tracker_align": "logos",
+  "partner_logo": {
+    "path": "assets/brand/ai-meal-planner-mark.svg",
+    "alt": "AI Meal Planner logo"
+  }
+}
