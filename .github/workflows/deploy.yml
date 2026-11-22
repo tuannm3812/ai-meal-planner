@@ -77,7 +77,7 @@ jobs:
             --service-account=${{ vars.GCP_RUNTIME_SERVICE_ACCOUNT }}
             --allow-unauthenticated
             --min-instances=${{ env.MIN_INSTANCES }}
-            --max-instances=3
+            --max-instances=${{ vars.GCP_MAX_INSTANCES || '3' }}
           env_vars_update_strategy: overwrite
           env_vars: |-
             APP_ENV=production

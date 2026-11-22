@@ -9,7 +9,7 @@ What runs where:
 | Piece | Where | Notes |
 | --- | --- | --- |
 | API image | Artifact Registry | Built from `Dockerfile` by `.github/workflows/deploy.yml` |
-| API service | Cloud Run | `HOSTED_MODE=true`, `APP_ENV=production`, port 8000, 0–3 instances |
+| API service | Cloud Run | `HOSTED_MODE=true`, `APP_ENV=production`, port 8000, 0–3 instances (`GCP_MAX_INSTANCES`) |
 | `API_KEYS` | Secret Manager | Hashed key records only (README §8.1) |
 | Traces | Cloud Trace | `TRACING_EXPORTER=cloud_trace`; allowlisted metadata only (DEC-17) |
 | Deploy identity | Workload Identity Federation | No long-lived keys in GitHub |
@@ -118,6 +118,10 @@ gh variable set GCP_DEPLOY_SERVICE_ACCOUNT --body "$DEPLOYER_SA"
 gh variable set GCP_RUNTIME_SERVICE_ACCOUNT --body "$RUNTIME_SA"
 gh secret set MEAL_PLANNER_SMOKE_KEY     # paste the live-check raw key
 ```
+
+Optional: `gh variable set GCP_MAX_INSTANCES --body 1` caps the service at one instance
+(default 3), which keeps a free-tier demo from scaling up its bill. The two-instance
+acceptance check in §3 needs it at 2 or more for that run.
 
 Until `GCP_PROJECT_ID` is set, the deploy workflow skips itself, so merging it
 deploys nothing. The `production` environment it names can be given required
