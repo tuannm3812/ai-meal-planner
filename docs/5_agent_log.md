@@ -8274,3 +8274,15 @@ Mike asked to merge the deck and clean up copies. The deck branch (`claude/proje
 which contains the earlier `claude/project-thread-mjsqyt` work) now includes main. Ruff skips
 `docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
 scripts were formatted. `ruff check .` and `ruff format --check .` pass.
+
+## 2026-11-22 — Claude — user accounts: design draft
+
+Mike chose Firebase for user accounts: Google sign-in through Firebase Auth, Firestore for
+profiles, plans and feedback, and Firebase Hosting for React, all on free tiers in
+`ai-meal-planner-515508`. Supabase (second vendor, free project sleeps) and Cloud SQL (about
+A$15 a month) were ruled out. The draft is
+`docs/superpowers/specs/2026-11-22-user-accounts-design.md`. It verifies Firebase ID tokens
+with the existing `google-auth` dependency, ignores a body `user_id` for account callers, adds
+a Firestore repository behind the DEC-4 boundary, and lifts DEC-10's 501 only on Firestore.
+Docs only; nothing is built. Needs Mike: approve the spec, and answer whether signed-out
+visitors may use the hosted app (anonymous sign-in recommended).
