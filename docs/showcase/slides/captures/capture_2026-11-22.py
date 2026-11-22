@@ -1,10 +1,15 @@
 import sys
 from pathlib import Path
+
 from playwright.sync_api import sync_playwright
-OUT = Path(sys.argv[1]); OUT.mkdir(exist_ok=True)
+
+OUT = Path(sys.argv[1])
+OUT.mkdir(exist_ok=True)
 with sync_playwright() as p:
     b = p.chromium.launch(headless=True, args=["--lang=en-US"])
-    pg = b.new_context(locale="en-US", viewport={"width": 1280, "height": 900}, device_scale_factor=1.5).new_page()
+    pg = b.new_context(
+        locale="en-US", viewport={"width": 1280, "height": 900}, device_scale_factor=1.5
+    ).new_page()
     pg.goto("http://localhost:5199/")
     pg.get_by_label("Age").fill("34")
     pg.get_by_label("Sex").select_option("male")

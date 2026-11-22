@@ -8267,3 +8267,10 @@ for this project. `docs/6_deployment.md` notes that the two-instance acceptance 
 live (deploy run 45010039893, PR #52 caps it at one instance) and that a real trace reached Cloud
 Trace. New open risk in `AGENTS.md`: only sampled requests are traced, and a batch can be lost while
 CPU is throttled. G6's §3 acceptance runs on the real service are still open. Docs only.
+
+## 2026-11-22 — Claude — showcase deck merged to main
+
+Mike asked to merge the deck and clean up copies. The deck branch (`claude/project-thread-7mqgsg`,
+which contains the earlier `claude/project-thread-mjsqyt` work) now includes main. Ruff skips
+`docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
+scripts were formatted. `ruff check .` and `ruff format --check .` pass.
