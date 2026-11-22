@@ -30,3 +30,16 @@ export async function fetchHealth() {
   const { data } = await axios.get(`${API_BASE_URL}/health`)
   return data
 }
+
+export async function fetchMealFeedback(userId, limit) {
+  const { data } = await axios.get(`${API_BASE_URL}/meal-feedback/${userId}`, {
+    params: { limit },
+  })
+  return data
+}
+
+// Save or rate a plan. Feedback is append-only on the server.
+export async function sendFeedback(payload) {
+  const { data } = await axios.post(`${API_BASE_URL}/meal-feedback`, payload)
+  return data
+}

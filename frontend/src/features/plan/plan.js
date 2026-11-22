@@ -118,6 +118,7 @@ export function ingredients(plan) {
     return verified.map((ingredient) => ({
       name: ingredient.item_name,
       grams: ingredient.base_quantity_grams,
+      kcal: isNumber(ingredient.calories_kcal) ? ingredient.calories_kcal : null,
       tag: SOURCE_TAGS[verificationOf(ingredient)],
       estimated: verificationOf(ingredient) === 'estimated',
     }))
@@ -127,6 +128,7 @@ export function ingredients(plan) {
   return defined.map((ingredient) => ({
     name: ingredient.item_name,
     grams: ingredient.base_quantity_grams,
+    kcal: null,
     tag: null,
     estimated: false,
   }))
