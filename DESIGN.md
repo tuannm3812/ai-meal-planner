@@ -5,10 +5,12 @@ poster, the LinkedIn image, the slide deck and any page or document that shows
 the product. If a piece of work departs from this file, change the work or
 change this file. Don't let them drift.
 
-The identity is **Kitchen green**. Colour values live in
+The identity is **Kitchen green**, in its "Flat kitchen" edition since 22 November
+2026 (DEC-37). Colour values live in
 [`frontend/tailwind.config.js`](frontend/tailwind.config.js); if the two ever
 differ, that file wins and this one gets fixed. The app's flow and screens are
-in [`docs/8_design.md`](docs/8_design.md) (DEC-29). What the poster and deck
+in [`docs/8_design.md`](docs/8_design.md) (DEC-29) and the kitchen-app spec,
+[`docs/superpowers/specs/2026-11-22-react-kitchen-app-design.md`](docs/superpowers/specs/2026-11-22-react-kitchen-app-design.md). What the poster and deck
 say is in [`docs/showcase/`](docs/showcase/README.md), which also holds the strict
 [slide](docs/showcase/slides/DESIGN.md) and [poster](docs/showcase/DESIGN.md) standards.
 
@@ -35,7 +37,8 @@ crave. Get a meal that fits you.**
 
 | Token | Hex | Role |
 | --- | --- | --- |
-| `ground` | #F6F7F2 | Page and slide background |
+| `ground` | #EEF4EF | App page background (light green) |
+| `tint` | #DCEEE1 | App section tints and illustration grounds |
 | `surface` | #FFFFFF | Cards and readable surfaces |
 | `ink` | #15291F | Text, headings, dark panels |
 | `muted` | #4B5B52 | Supporting text |
@@ -43,28 +46,35 @@ crave. Get a meal that fits you.**
 | `accent` | #C8431F | Tomato: logo, primary action, the one highlight |
 | `accent-text` | #B23A17 | Small tomato text on light backgrounds |
 | `success-bg` / `success-fg` | #E3EFE6 / #1B5E3F | Positive result, always with a text label |
-| `protein` | #2F6FAB | Protein data only |
-| `carbs` | #9A6A12 | Carbohydrate data only |
-| `fat` | #7A4E9C | Fat data only |
+| `estimate-bg` / `estimate-fg` | #FBEBD6 / #7A4A0C | Estimate badges and notices |
+| `protein` | #440154 | Protein data only (Viridis) |
+| `carbs` | #2A788E | Carbohydrate data only (Viridis) |
+| `fat` | #22A884 | Fat data only (Viridis) |
+| `viridis-1` to `viridis-6` | #440154 #414487 #2A788E #22A884 #7AD151 #FDE725 | Categorical chart series, in order |
 
-Aim for about 70% ground and white, 20% ink, under 10% tomato. Macro colours
-never mean anything but their macro. Green never means medically safe. Tomato
-never means an error. Estimate badges use #FBEBD6 with #7A4A0C text. Outside the app,
-#ECEFE8 is allowed for neutral tracks and badges, #EEF4EF for panels, #9AA5A0 for baseline
-results and #C9D3CC for secondary text on `ink`. The showcase uses a white canvas.
+Aim for about 70% ground and white, 20% ink, under 10% tomato. Charts use Viridis,
+the owner's choice: the macro colours are its three darker stops, each at least 3:1
+on white, and a categorical series takes `viridis-1` onward in order, always with a
+text label. `viridis-5` and `viridis-6` are fills on `ink` or next to a label, never
+text on white. On `ink`, protein uses #B9A3C8 so it stays visible. Macro colours never
+mean anything but their macro. Green never means medically safe. Tomato never means an
+error. #C9D3CC is secondary text on `ink`. The showcase keeps its own palette: #F6F7F2
+for slide grounds, #ECEFE8 for neutral tracks and badges, #9AA5A0 for baseline results,
+and a white canvas.
 
 ## 4. Type
 
-- **App:** Bricolage Grotesque for headlines and big numbers; Inter for everything read.
+- **App:** Bricolage Grotesque ExtraBold (800) for headlines and big numbers; Inter for
+  everything read.
 - **Showcase (deck, poster, LinkedIn image):** Google Sans, chosen by Mike for a professional
   portfolio look, with Google Sans Code for code spans.
 - No other typefaces. Authentic app screenshots keep their own type.
 
 | Role | App |
 | --- | --- |
-| Title | 32–40 px, 700 |
-| Big number | 32–40 px, 700 |
-| Section heading | 22–24 px, 700 |
+| Title | 40–58 px, 800 |
+| Big number | 28–40 px, 800 |
+| Section heading | 22–26 px, 800 |
 | Body | 16 px |
 | Caption or label | 12–14 px |
 
@@ -86,17 +96,29 @@ Put it beside the name "AI Meal Planner". Use it alone only where space is tiny.
 - Leave a quarter of its width clear on every side; never under 24 px.
 - It stands for a planned meal, not a weekly calendar feature, so don't imply one.
 
-There is no icon set. Numbered ink circles do that job. If a piece truly needs
-pictograms, use one outline set, 1.5 px stroke, in ink.
+**Icons:** the app uses one outline set, [`lucide-react`](https://lucide.dev) (ISC), at
+a 1.6–2 px stroke and 24–36 px. Icons sit on the page with no tile or circle behind
+them, in ink or a Viridis colour, always next to a word unless the control has an
+accessible name. Slides and posters keep numbered ink circles.
+
+**Illustrations:** flat food drawings, one for each kind of dish (rice bowl, stir fry,
+noodles, pasta, curry, soup, salad, taco or wrap, eggs and toast, oats, plate, bowl).
+They use no outlines and no gradients, and they are hidden from screen readers. They
+stand for a kind of dish, never a photo of the meal; the service has no photos. One
+soft blob shape may sit behind a banner illustration.
 
 ## 6. Layout and components
 
 - Spacing steps: 8, 12, 16, 24, 32, 48 px. Keep related things close.
-- Cards: white, a 1 px `line` border, 16–20 px corners, no heavy shadows, no
-  gradients, no accent stripes along an edge, no rules under titles.
-- Dark `ink` panels carry the one headline number on a surface.
+- Cards: white with no border on the green ground in the app (a 1 px `line` border on
+  the showcase's white canvas), 24 px corners, no heavy shadows, no gradients, no
+  accent stripes along an edge, no rules under titles.
+- Dark `ink` banners open each app page and carry its headline; dark `ink` panels carry
+  the one headline number on a surface.
 - Badges: short text label, never colour alone.
-- Charts: one series colour unless colour means something; label values directly.
+- Charts: one series colour unless colour means something; label values directly. The
+  app's plan page draws a calorie ring, a macro donut, range bars over a green band and a
+  stacked bar of where the calories come from, all plain SVG.
 
 ## 7. Output specs
 

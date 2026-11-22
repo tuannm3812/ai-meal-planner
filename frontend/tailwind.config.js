@@ -6,12 +6,13 @@ export default {
   ],
   theme: {
     extend: {
-      // "Kitchen green" tokens from docs/8_design.md §4. Components use these
-      // names (bg-ink, text-muted, ...) rather than raw hex.
+      // "Kitchen green" tokens, Flat kitchen edition (DESIGN.md, DEC-37).
+      // Components use these names (bg-ink, text-muted, ...) rather than raw hex.
       colors: {
         ink: '#15291F',
         muted: '#4B5B52',
-        ground: '#F6F7F2',
+        ground: '#EEF4EF',
+        tint: '#DCEEE1',
         surface: '#FFFFFF',
         line: '#DDE3DA',
         accent: {
@@ -22,9 +23,23 @@ export default {
           bg: '#E3EFE6',
           fg: '#1B5E3F',
         },
-        protein: '#2F6FAB',
-        carbs: '#9A6A12',
-        fat: '#7A4E9C',
+        estimate: {
+          bg: '#FBEBD6',
+          fg: '#7A4A0C',
+        },
+        // Viridis: macros take three stops, each at least 3:1 on white.
+        protein: '#440154',
+        carbs: '#2A788E',
+        fat: '#22A884',
+        // The six-step ramp for categorical series, always with a text label.
+        viridis: {
+          1: '#440154',
+          2: '#414487',
+          3: '#2A788E',
+          4: '#22A884',
+          5: '#7AD151',
+          6: '#FDE725',
+        },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],

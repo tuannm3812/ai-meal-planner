@@ -8170,3 +8170,27 @@ are listed in DEC-35. Three retrieval tests changed: "burrito bowl" now expects 
 and the two relevance-over-score tests use "winter", because "eggs" now leads on score. 662 Python
 tests pass and ruff is clean.
 
+## 2026-11-22 — Claude — React kitchen app: React becomes the main app
+
+Mike asked for a more polished UI than Streamlit, without a Codex review once he approves and
+the tests pass. He rejected a restyle, then brainstormed a full redesign over six questions, with
+mockups on a design canvas: a kitchen app, remembered on this device, with save, rate, shop and
+runners-up on each plan; home layout B; and the "Flat kitchen" look. The spec and build plan are in
+`docs/superpowers/`, and the decisions are DEC-36 and DEC-37. The backend, data and Streamlit are
+untouched.
+
+Changed: `MealFlow`'s request logic moved unchanged into `usePlanner`, behind a context, and
+routed pages replace the three steps. New: Home, Plan, My meals, Past plans, the stored plan view,
+Profile (with Forget me and the calorie estimate), Viridis SVG charts, 12 flat dish illustrations,
+save and rating through `POST /meal-feedback`, and Copy and Print on the shopping list.
+`HistoryTab`, `PlanView`, `StepIndicator` and `BrandBar` are gone. Their tests moved onto the
+pages with every guarantee kept, and the old step navigation became page links. One guarantee
+changed on purpose: a returning visit now reads its own saved meals and history on Home, while a
+first visit still sends nothing until the person plans.
+
+Verified: 224 frontend tests pass (22 files); eslint and the build are clean. 662 Python tests
+pass, and `docs/openapi.json` is untouched. One frontend test failed once while Playwright and pytest
+ran on the same machine, then passed on three reruns; it was not identified. Checked in Chromium at
+1280 and 390 px against the local API: first visit, home, plan, save, home lists and profile. The
+README screenshots are retaken from the new app.
+

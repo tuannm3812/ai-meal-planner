@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -11,8 +11,8 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import { goToStep, planMeal as planCraving } from '../../test/flow'
-import MealFlow from '../flow/MealFlow'
+import { STORAGE_KEY } from '../../app/storage'
+import { backToPlan, goToProfile, planMeal as planCraving, renderApp } from '../../test/renderApp'
 
 const PLAN = {
   data: {
@@ -27,10 +27,10 @@ const PLAN = {
 
 const planMeal = (user) => planCraving(user, 'fried rice')
 
-// From the plan, back to step 1 to change a detail.
-const toDetails = (user) => user.click(screen.getByRole('button', { name: 'Change your details' }))
+// From the plan to the Profile page, to change a detail.
+const toDetails = goToProfile
 
-describe('Profile step', () => {
+describe('Profile details', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -41,7 +41,7 @@ describe('Profile step', () => {
 
   it('sends the profile with the meal request', async () => {
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await user.click(screen.getByRole('radio', { name: /Lose weight/ }))
     await user.clear(screen.getByLabelText('Age'))
@@ -58,7 +58,7 @@ describe('Profile step', () => {
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(axios.post.mock.calls[0][1]).toEqual({
-      user_id: 'web-local-user',
+      user_id: expect.stringMatching(/^web-[0-9a-f-]{36}$/),
       craving: 'fried rice',
       location: 'Earlwood, NSW',
       goal: 'lose',
@@ -74,7 +74,7 @@ describe('Profile step', () => {
 
   it("sends today's workout only after the person says they worked out", async () => {
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     expect(screen.queryByLabelText('Minutes')).not.toBeInTheDocument()
     await user.selectOptions(screen.getByLabelText("Today's workout"), 'trained')
@@ -88,7 +88,7 @@ describe('Profile step', () => {
 
   it('sends a rest day as 0 minutes', async () => {
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await user.selectOptions(screen.getByLabelText("Today's workout"), 'rest')
     await planMeal(user)
@@ -98,7 +98,7 @@ describe('Profile step', () => {
 
   it('shows a field message and sends nothing while a detail is out of range', async () => {
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await user.clear(screen.getByLabelText('Age'))
     await user.type(screen.getByLabelText('Age'), '130')
@@ -106,9 +106,8 @@ describe('Profile step', () => {
     const age = screen.getByLabelText('Age')
     expect(age).toHaveAttribute('aria-invalid', 'true')
     expect(age).toHaveAccessibleDescription('Age must be more than 0 and at most 120 years.')
-    // Neither the next step nor the plan can be reached with an invalid detail.
-    expect(screen.getByRole('button', { name: 'Next: what are you craving?' })).toBeDisabled()
-    expect(screen.getByRole('button', { name: '2 · Craving' })).toBeDisabled()
+    // The app can't be started, so no plan can be asked for, with an invalid detail.
+    expect(screen.getByRole('button', { name: 'Save and start planning' })).toBeDisabled()
     expect(screen.getByText('Fix the highlighted details to continue.')).toBeInTheDocument()
 
     await user.type(age, '{Enter}')
@@ -119,7 +118,7 @@ describe('Profile step', () => {
   it('marks a plan stale when the profile changes, and re-plans with the new details', async () => {
     axios.post.mockResolvedValueOnce(PLAN).mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await planMeal(user)
     expect(await screen.findByText('Chicken Fried Rice')).toBeInTheDocument()
@@ -127,7 +126,7 @@ describe('Profile step', () => {
 
     await toDetails(user)
     await user.click(screen.getByRole('radio', { name: /Gain/ }))
-    await goToStep(user, '3 · Your plan')
+    await backToPlan(user)
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     // The plan stays visible, labelled as made for the old details.
     expect(screen.getByText('Chicken Fried Rice')).toBeInTheDocument()
@@ -142,17 +141,17 @@ describe('Profile step', () => {
   it('drops the stale mark when an edit is undone', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await planMeal(user)
     await screen.findByText('Chicken Fried Rice')
     await toDetails(user)
     await user.click(screen.getByRole('checkbox', { name: 'Gluten-free' }))
-    await goToStep(user, '3 · Your plan')
+    await backToPlan(user)
     expect(screen.getByText(/Made for your previous details/)).toBeInTheDocument()
     await toDetails(user)
     await user.click(screen.getByRole('checkbox', { name: 'Gluten-free' }))
-    await goToStep(user, '3 · Your plan')
+    await backToPlan(user)
     expect(screen.queryByText(/Made for your previous details/)).not.toBeInTheDocument()
   })
 
@@ -164,12 +163,12 @@ describe('Profile step', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await planMeal(user)
     expect(
       await screen.findByText(
-        'The service could not use some of your details. Go back to the highlighted fields.',
+        'The service could not use some of your details. Fix the highlighted fields.',
       ),
     ).toBeInTheDocument()
     await toDetails(user)
@@ -196,7 +195,7 @@ describe('Profile step', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await planMeal(user)
     await screen.findByRole('alert')
@@ -226,7 +225,7 @@ describe('Profile step', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
     await planMeal(user)
     expect(
@@ -234,27 +233,28 @@ describe('Profile step', () => {
     ).toBeInTheDocument()
   })
 
-  it('keeps the profile out of the URL and browser storage', async () => {
+  // DEC-36 replaces "never in browser storage": the details are remembered on
+  // this device under one key, only once the person starts, and never in a URL.
+  it('remembers the profile only after starting, under one key, and never in the URL', async () => {
     axios.post.mockResolvedValueOnce(PLAN)
+    const user = userEvent.setup()
+    renderApp()
     const setItem = vi.spyOn(Storage.prototype, 'setItem')
     const pushState = vi.spyOn(window.history, 'pushState')
-    const replaceState = vi.spyOn(window.history, 'replaceState')
     const before = window.location.href
-    const user = userEvent.setup()
-    render(<MealFlow />)
 
     await user.click(screen.getByRole('checkbox', { name: 'Kidney disease' }))
+    expect(setItem).not.toHaveBeenCalled()
     await planMeal(user)
     await waitFor(() => expect(screen.getByText('Chicken Fried Rice')).toBeInTheDocument())
 
-    expect(setItem).not.toHaveBeenCalled()
+    expect(new Set(setItem.mock.calls.map(([key]) => key))).toEqual(new Set([STORAGE_KEY]))
     expect(pushState).not.toHaveBeenCalled()
-    expect(replaceState).not.toHaveBeenCalled()
     expect(window.location.href).toBe(before)
   })
 
   it('says where the details go and that it is not medical advice', () => {
-    render(<MealFlow />)
+    renderApp()
     expect(screen.getByRole('heading', { name: 'Tell us about you' })).toBeInTheDocument()
     expect(
       screen.getByText(/the server keeps a history of the plans it makes, including these details/),
@@ -264,10 +264,10 @@ describe('Profile step', () => {
 
   it('reaches every profile control from the keyboard', async () => {
     const user = userEvent.setup()
-    render(<MealFlow />)
+    renderApp()
 
-    // From the step heading: one tab stop for the goal radio group, then the
-    // fields, the chips and the button to the next step.
+    // From the heading: one tab stop for the goal radio group, then the
+    // fields, the chips, where you shop and the button to start.
     screen.getByRole('heading', { name: 'Tell us about you' }).focus()
     const expected = [
       screen.getByRole('radio', { name: /Maintain/ }),
@@ -280,7 +280,8 @@ describe('Profile step', () => {
       ...['Vegetarian', 'Vegan', 'Dairy-free', 'Gluten-free', 'Peanut allergy', 'Kidney disease'].map(
         (name) => screen.getByRole('checkbox', { name }),
       ),
-      screen.getByRole('button', { name: 'Next: what are you craving?' }),
+      screen.getByLabelText(/Where you shop/),
+      screen.getByRole('button', { name: 'Save and start planning' }),
     ]
     for (const control of expected) {
       await user.tab()

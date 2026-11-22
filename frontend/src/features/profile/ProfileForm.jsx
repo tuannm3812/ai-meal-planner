@@ -72,9 +72,10 @@ function ChoiceField({ label, value, options, error, onChange, className = '' })
   )
 }
 
-// Step 1 of docs/8_design.md §3.1. Controlled: the profile and its errors
+// The profile of docs/8_design.md §3.1, on the first visit and the Profile
+// page. Controlled: the profile and its errors
 // belong to the caller, which sends them with the meal request.
-function ProfileForm({ profile, errors = {}, onChange }) {
+function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details', children }) {
   const set = (key) => (value) => onChange({ ...profile, [key]: value })
 
   const toggleAvoid = (id) => {
@@ -87,14 +88,14 @@ function ProfileForm({ profile, errors = {}, onChange }) {
   return (
     <section
       aria-labelledby="profile-heading"
-      className="grid gap-8 rounded-[20px] border border-line bg-surface p-6 sm:p-8 lg:grid-cols-[1fr_300px]"
+      className="grid gap-8 rounded-3xl bg-surface p-6 sm:p-8 lg:grid-cols-[1fr_300px]"
     >
       <div className="min-w-0">
         <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">
-          Step 1 · You
+          {eyebrow}
         </p>
         <h1
-          className="mt-2 font-display text-3xl font-bold tracking-tight text-ink"
+          className="mt-2 font-display text-4xl font-extrabold tracking-tight text-ink"
           id="profile-heading"
           tabIndex={-1}
         >
@@ -102,8 +103,9 @@ function ProfileForm({ profile, errors = {}, onChange }) {
         </h1>
         <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
           We use this to estimate how much energy you burn in a day and size your meal to fit
-          your goal. Your details go with each plan request, and when the app runs locally the
-          server keeps a history of the plans it makes, including these details.
+          your goal. This browser keeps your details so you don't retype them. They go with each
+          plan request, and when the app runs locally the server keeps a history of the plans it
+          makes, including these details.
         </p>
 
         <div className="mt-8 flex flex-col gap-7">
@@ -236,12 +238,13 @@ function ProfileForm({ profile, errors = {}, onChange }) {
             </div>
             <FieldError message={errors.avoid} />
           </fieldset>
+          {children}
         </div>
       </div>
 
       <aside
         aria-label="How your meal is sized"
-        className="self-start rounded-[20px] bg-ink p-7 text-ground"
+        className="self-start rounded-3xl bg-ink p-7 text-ground"
       >
         <p className="text-sm text-ground/75">How your meal is sized</p>
         <ol className="mt-4 flex list-decimal flex-col gap-3.5 pl-5 text-base leading-6">

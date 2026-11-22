@@ -1,0 +1,19 @@
+// Shared class lists for the Flat kitchen look (DESIGN.md §6), so pages stay
+// consistent without a component per button.
+export const focusRing =
+  'focus:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2'
+
+export const primaryButton = `inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-accent px-7 text-[17px] font-semibold text-white ${focusRing} disabled:cursor-not-allowed disabled:bg-[#C9D3CC] disabled:text-ink/70`
+
+export const secondaryButton = `inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl border border-ink bg-surface px-5 font-semibold text-ink hover:bg-tint ${focusRing} disabled:cursor-not-allowed disabled:opacity-60`
+
+// On an ink banner.
+export const ghostButton =
+  'inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border border-white/40 px-5 font-semibold text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-viridis-5'
+
+export const card = 'rounded-3xl bg-surface p-6 sm:p-7'
+
+export const sectionHeading =
+  'flex items-center gap-3 font-display text-[26px] font-extrabold tracking-tight text-ink'
+
+export const pageShell = 'mx-auto w-full max-w-6xl px-4 sm:px-6'

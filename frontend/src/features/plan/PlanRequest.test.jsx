@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
@@ -11,10 +11,9 @@ vi.mock('axios', () => ({
 
 import axios from 'axios'
 
-import { goToStep } from '../../test/flow'
-import MealFlow from './MealFlow'
+import { STORED, goHome, renderApp } from '../../test/renderApp'
 
-describe('MealFlow error text', () => {
+describe('Plan request and quality', () => {
   beforeEach(() => {
     vi.clearAllMocks()
   })
@@ -26,7 +25,7 @@ describe('MealFlow error text', () => {
     // have noticed - it only exercises the `detail` branch.
     axios.post.mockRejectedValueOnce(new Error('Network Error'))
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'High-protein burger')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -41,7 +40,7 @@ describe('MealFlow error text', () => {
   it("still prefers the backend's detail when there is one", async () => {
     axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Craving too short' } } })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     // Two characters: one is now refused before sending (MealRequest's minimum).
     await user.type(screen.getByLabelText(/Your craving/i), 'xy')
@@ -52,7 +51,7 @@ describe('MealFlow error text', () => {
 
   it('clears the previously rendered plan when a retry fails', async () => {
     // Pins the reset()-before-run() contract: useAsyncRequest's `run` never
-    // clears `data` on its own, so MealFlow must call `clearMealPlan()`
+    // clears `data` on its own, so the planner must call `clearPlan()`
     // before firing a second request. Without that call, a failed retry
     // would leave the first plan rendered next to the new error.
     axios.post.mockResolvedValueOnce({
@@ -65,14 +64,14 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'High-protein burger')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
     expect(await screen.findByText('Grilled Chicken Bowl')).toBeInTheDocument()
 
     axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Backend exploded again' } } })
-    await goToStep(user, '2 · Craving')
+    await goHome(user)
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
 
     expect(await screen.findByText('Backend exploded again')).toBeInTheDocument()
@@ -95,7 +94,7 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'tofu')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -130,7 +129,7 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'chicken fried rice')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -141,7 +140,7 @@ describe('MealFlow error text', () => {
     expect(screen.getByText('47%')).toBeInTheDocument()
     expect(screen.getByText('23%')).toBeInTheDocument()
     expect(screen.queryByText('41%')).not.toBeInTheDocument()
-    expect(screen.getByText('Meal target: 700 kcal')).toBeInTheDocument()
+    expect(screen.getByRole('img', { name: /against a 700 kcal meal target/ })).toBeInTheDocument()
     expect(
       screen.getByText('Rebalanced ingredient portions toward the recommended split.'),
     ).toBeInTheDocument()
@@ -169,7 +168,7 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'pizza')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -208,7 +207,7 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'lentil bolognese')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -234,7 +233,7 @@ describe('MealFlow error text', () => {
         }),
     )
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'pizza')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))
@@ -252,10 +251,10 @@ describe('MealFlow error text', () => {
       },
     })
     expect(await screen.findByText(/close match for .pizza./)).toBeInTheDocument()
-    await goToStep(user, '2 · Craving')
+    await goHome(user)
     await user.clear(screen.getByLabelText(/Your craving/i))
     await user.type(screen.getByLabelText(/Your craving/i), 'salmon dinner')
-    await goToStep(user, '3 · Your plan')
+    await user.click(screen.getByRole('link', { name: /Back to your plan/ }))
 
     expect(axios.post).toHaveBeenCalledTimes(1)
     expect(screen.getByText(/close match for .pizza./)).toBeInTheDocument()
@@ -278,7 +277,7 @@ describe('MealFlow error text', () => {
       },
     })
     const user = userEvent.setup()
-    render(<MealFlow initialStep="craving" />)
+    renderApp({ stored: STORED })
 
     await user.type(screen.getByLabelText(/Your craving/i), 'chicken')
     await user.click(screen.getByRole('button', { name: 'Plan my meal' }))

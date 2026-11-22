@@ -91,7 +91,7 @@ describe('ingredients', () => {
 
   it('falls back to the meal definition, untagged, without verified nutrition', () => {
     const plan = { meal_plan: { meal_definition: { ingredients: [{ item_name: 'x', base_quantity_grams: 9 }] } } }
-    expect(ingredients(plan)).toEqual([{ name: 'x', grams: 9, tag: null, estimated: false }])
+    expect(ingredients(plan)).toEqual([{ name: 'x', grams: 9, kcal: null, tag: null, estimated: false }])
     expect(estimatedCount(plan)).toBeNull()
   })
 
