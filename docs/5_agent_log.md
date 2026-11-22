@@ -8221,3 +8221,13 @@ Mike asked to apply the UTS deck kit 0.6.0. The deck is now a kit consumer in `d
 bring back the plates, stations, funnel, architecture logos and staircase within kit rules. Every slide
 number is in `claims-register.md`. Build, export, check_deck, audit_layout and check_markers report 0
 findings. The Google Slides deck is unchanged and now the previous version.
+
+## 2026-11-22 — Claude — UTS deck refreshed for the React kitchen app
+
+Mike asked to bring the showcase deck up to date with PRs #47 to #51. The deck branch now includes
+main. The 76-recipe, workout and allergen numbers were already refreshed, so this change covers the new
+React app: slide 5 uses fresh captures of the first-run form, the craving search home page and the plan
+page (`docs/showcase/slides/captures/2026-11-22-plan.json`, same plan as before: 694 of 691 kcal,
+48/78/19 g), slide 10's macro colours now match the app's tokens (#440154, #2A788E, #22A884), slide 12
+names the "Kitchen app" client, and slide 15's 22 Nov milestone adds it. Build, export, check_deck and
+check_markers report no problems. Slide Previews artifact republished (version 29).

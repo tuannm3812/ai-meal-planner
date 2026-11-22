@@ -8188,15 +8188,16 @@
       "topic": "The flow",
       "accent": "blue",
       "title": "One craving in, one meal and a shopping list out",
-      "subtitle": "Three steps in the React app, shown close up from a local run with no provider keys.",
-      "takeaway": "Two short screens lead to one plan page that shows how it was made.",
+      "subtitle": "The React app, shown close up from a local run with no provider keys.",
+      "takeaway": "Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.",
       "question": "What does a person actually do?",
       "notes": {
-        "purpose": "Walk through the real app in three steps.",
+        "purpose": "Walk through the real app: details once, then search, then the plan page.",
         "script": [
-          "You enter your body, goal and anything to avoid. Then you say what you feel like eating and where you shop.",
-          "You get one meal, its balance, each ingredient's source and a shopping list.",
-          "Sources: Captures: docs/showcase/slides/captures/2026-11-06-plan.json; React app, local run, 6 November 2026."
+          "The first visit asks for your details once and keeps them on this device, including today's workout.",
+          "After that the home page is one search box: say what you feel like eating, or pick a suggestion.",
+          "The plan page shows the meal against its target, a macro donut, where the calories come from and a shopping list. You can save the meal and rate it.",
+          "Sources: Captures: docs/showcase/slides/captures/2026-11-22-plan.json; React app on main (ac4d44d), local run, 22 November 2026."
         ],
         "references": [
           "sources.md",
@@ -8206,26 +8207,26 @@
       "steps": [
         {
           "image": "assets/figures/app-1-profile-zoom.jpg",
-          "alt": "Close-up of step 1 in the React app: goal, age, sex, height, weight, activity and things to avoid.",
+          "alt": "Close-up of the React app's first-run form: goal, age, sex, height, weight, activity level and today's workout.",
           "icon": "person",
-          "title": "1. You",
-          "text": "Goal, body details, activity and anything to avoid.",
+          "title": "1. You, once",
+          "text": "Goal, body, **today's workout** and limits.",
           "value": "34, male, 165 cm, 65 kg"
         },
         {
           "image": "assets/figures/app-2-craving-zoom.jpg",
-          "alt": "Close-up of step 2: the craving field reading chicken fried rice, suggestions and where you shop.",
+          "alt": "Close-up of the React home page: a large craving search reading chicken fried rice, a Plan my meal button and suggested dishes.",
           "icon": "search",
           "title": "2. Craving",
-          "text": "Say what you feel like eating and where you shop.",
+          "text": "One search box, or a suggested dish.",
           "value": "chicken fried rice"
         },
         {
           "image": "assets/figures/app-3-plan-zoom.jpg",
-          "alt": "Close-up of step 3: Chicken Fried Rice, 694 kcal against a 691 kcal target, with its macro balance.",
+          "alt": "Close-up of the React plan page: Chicken Fried Rice, a calorie ring at 694 of 691 kcal, a Viridis macro donut and the start of the shopping list.",
           "icon": "rice_bowl",
           "title": "3. Your plan",
-          "text": "One meal, its **balance**, sources and a shopping list.",
+          "text": "Charts, a **shopping list**, save and rate.",
           "value": "694 kcal, target 691"
         }
       ],
@@ -8539,7 +8540,7 @@
           "op": "add-textbox",
           "slide": "flow",
           "id": "t18",
-          "text": "Three steps in the React app, shown close up from a local run with no provider keys.",
+          "text": "The React app, shown close up from a local run with no provider keys.",
           "x": 36.3,
           "y": 92.8,
           "width": 889.9,
@@ -8553,7 +8554,7 @@
           "op": "style-paragraph",
           "element": "t18",
           "start": 0,
-          "end": 84,
+          "end": 69,
           "line_spacing": 135
         },
         {
@@ -8682,7 +8683,7 @@
           "op": "add-textbox",
           "slide": "flow",
           "id": "t26",
-          "text": "Two short screens lead to one plan page that shows how it was made.",
+          "text": "Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.",
           "x": 147.3,
           "y": 442.05,
           "width": 761.9,
@@ -8696,7 +8697,7 @@
           "op": "style-paragraph",
           "element": "t26",
           "start": 0,
-          "end": 67,
+          "end": 98,
           "line_spacing": 135
         },
         {
@@ -8736,7 +8737,7 @@
           "op": "add-image",
           "id": "im30",
           "path": "assets/figures/app-1-profile-zoom.jpg",
-          "alt": "Close-up of step 1 in the React app: goal, age, sex, height, weight, activity and things to avoid.",
+          "alt": "Close-up of the React app's first-run form: goal, age, sex, height, weight, activity level and today's workout.",
           "x": 53.5,
           "y": 144.0,
           "width": 257.1666666666667,
@@ -8756,7 +8757,7 @@
           "op": "add-textbox",
           "slide": "flow",
           "id": "t32",
-          "text": "1. You",
+          "text": "1. You, once",
           "x": 80.3,
           "y": 333.6203125,
           "width": 235.5666666666667,
@@ -8770,21 +8771,21 @@
           "op": "style-paragraph",
           "element": "t32",
           "start": 0,
-          "end": 6,
+          "end": 12,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t32",
           "start": 0,
-          "end": 6,
+          "end": 12,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "flow",
           "id": "t33",
-          "text": "Goal, body details, activity and anything to avoid.",
+          "text": "Goal, body, today's workout and limits.",
           "x": 50.3,
           "y": 361.6203125,
           "width": 263.56666666666666,
@@ -8798,8 +8799,16 @@
           "op": "style-paragraph",
           "element": "t33",
           "start": 0,
-          "end": 51,
+          "end": 39,
           "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 12,
+          "end": 27,
+          "bold": true,
+          "color": "#1B2430"
         },
         {
           "op": "add-shape",
@@ -8890,7 +8899,7 @@
           "op": "add-image",
           "id": "im40",
           "path": "assets/figures/app-2-craving-zoom.jpg",
-          "alt": "Close-up of step 2: the craving field reading chicken fried rice, suggestions and where you shop.",
+          "alt": "Close-up of the React home page: a large craving search reading chicken fried rice, a Plan my meal button and suggested dishes.",
           "x": 352.6666666666667,
           "y": 144.0,
           "width": 257.1666666666667,
@@ -8938,7 +8947,7 @@
           "op": "add-textbox",
           "slide": "flow",
           "id": "t43",
-          "text": "Say what you feel like eating and where you shop.",
+          "text": "One search box, or a suggested dish.",
           "x": 349.4666666666667,
           "y": 361.6203125,
           "width": 263.56666666666666,
@@ -8952,7 +8961,7 @@
           "op": "style-paragraph",
           "element": "t43",
           "start": 0,
-          "end": 49,
+          "end": 36,
           "line_spacing": 135
         },
         {
@@ -9044,7 +9053,7 @@
           "op": "add-image",
           "id": "im50",
           "path": "assets/figures/app-3-plan-zoom.jpg",
-          "alt": "Close-up of step 3: Chicken Fried Rice, 694 kcal against a 691 kcal target, with its macro balance.",
+          "alt": "Close-up of the React plan page: Chicken Fried Rice, a calorie ring at 694 of 691 kcal, a Viridis macro donut and the start of the shopping list.",
           "x": 651.8333333333334,
           "y": 144.0,
           "width": 257.1666666666667,
@@ -9092,7 +9101,7 @@
           "op": "add-textbox",
           "slide": "flow",
           "id": "t53",
-          "text": "One meal, its balance, sources and a shopping list.",
+          "text": "Charts, a shopping list, save and rate.",
           "x": 648.6333333333333,
           "y": 361.6203125,
           "width": 263.56666666666666,
@@ -9106,14 +9115,14 @@
           "op": "style-paragraph",
           "element": "t53",
           "start": 0,
-          "end": 51,
+          "end": 39,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t53",
-          "start": 14,
-          "end": 21,
+          "start": 10,
+          "end": 23,
           "bold": true,
           "color": "#1B2430"
         },
@@ -20582,7 +20591,7 @@
           "y": 208.0,
           "width": 123.0,
           "height": 10,
-          "background_color": "#3B528B"
+          "background_color": "#440154"
         },
         {
           "op": "add-shape",
@@ -20712,7 +20721,7 @@
           "y": 290.0,
           "width": 98.4,
           "height": 10,
-          "background_color": "#21918C"
+          "background_color": "#2A788E"
         },
         {
           "op": "add-shape",
@@ -20842,7 +20851,7 @@
           "y": 372.0,
           "width": 73.8,
           "height": 10,
-          "background_color": "#5EC962"
+          "background_color": "#22A884"
         },
         {
           "op": "add-shape",
@@ -23376,7 +23385,7 @@
           },
           {
             "title": "React",
-            "text": "Guided flow, run locally",
+            "text": "Kitchen app, run locally",
             "logos": [
               "react",
               "vite",
@@ -23505,7 +23514,7 @@
             },
             {
               "title": "React",
-              "text": "Guided flow, run locally",
+              "text": "Kitchen app, run locally",
               "logos": [
                 "react",
                 "vite",
@@ -24584,7 +24593,7 @@
           "op": "add-textbox",
           "slide": "architecture",
           "id": "t53",
-          "text": "Guided flow, run locally",
+          "text": "Kitchen app, run locally",
           "x": 54.3,
           "y": 312.8,
           "width": 112.4,
@@ -29070,7 +29079,7 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, workouts, allergen tags"
+          "text": "76 recipes, allergen tags, kitchen app"
         },
         {
           "date": "Now",
@@ -30007,7 +30016,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t50",
-          "text": "76 recipes, workouts, allergen tags",
+          "text": "76 recipes, allergen tags, kitchen app",
           "x": 669.2166666666667,
           "y": 159.8,
           "width": 154.4,
@@ -30022,7 +30031,7 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 35,
+          "end": 38,
           "line_spacing": 135
         },
         {

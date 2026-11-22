@@ -443,15 +443,16 @@
       "topic": "The flow",
       "accent": "blue",
       "title": "One craving in, one meal and a shopping list out",
-      "subtitle": "Three steps in the React app, shown close up from a local run with no provider keys.",
-      "takeaway": "Two short screens lead to one plan page that shows how it was made.",
+      "subtitle": "The React app, shown close up from a local run with no provider keys.",
+      "takeaway": "Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.",
       "question": "What does a person actually do?",
       "notes": {
-        "purpose": "Walk through the real app in three steps.",
+        "purpose": "Walk through the real app: details once, then search, then the plan page.",
         "script": [
-          "You enter your body, goal and anything to avoid. Then you say what you feel like eating and where you shop.",
-          "You get one meal, its balance, each ingredient's source and a shopping list.",
-          "Sources: Captures: docs/showcase/slides/captures/2026-11-06-plan.json; React app, local run, 6 November 2026."
+          "The first visit asks for your details once and keeps them on this device, including today's workout.",
+          "After that the home page is one search box: say what you feel like eating, or pick a suggestion.",
+          "The plan page shows the meal against its target, a macro donut, where the calories come from and a shopping list. You can save the meal and rate it.",
+          "Sources: Captures: docs/showcase/slides/captures/2026-11-22-plan.json; React app on main (ac4d44d), local run, 22 November 2026."
         ],
         "references": [
           "sources.md",
@@ -461,26 +462,26 @@
       "steps": [
         {
           "image": "assets/figures/app-1-profile-zoom.jpg",
-          "alt": "Close-up of step 1 in the React app: goal, age, sex, height, weight, activity and things to avoid.",
+          "alt": "Close-up of the React app's first-run form: goal, age, sex, height, weight, activity level and today's workout.",
           "icon": "person",
-          "title": "1. You",
-          "text": "Goal, body details, activity and anything to avoid.",
+          "title": "1. You, once",
+          "text": "Goal, body, **today's workout** and limits.",
           "value": "34, male, 165 cm, 65 kg"
         },
         {
           "image": "assets/figures/app-2-craving-zoom.jpg",
-          "alt": "Close-up of step 2: the craving field reading chicken fried rice, suggestions and where you shop.",
+          "alt": "Close-up of the React home page: a large craving search reading chicken fried rice, a Plan my meal button and suggested dishes.",
           "icon": "search",
           "title": "2. Craving",
-          "text": "Say what you feel like eating and where you shop.",
+          "text": "One search box, or a suggested dish.",
           "value": "chicken fried rice"
         },
         {
           "image": "assets/figures/app-3-plan-zoom.jpg",
-          "alt": "Close-up of step 3: Chicken Fried Rice, 694 kcal against a 691 kcal target, with its macro balance.",
+          "alt": "Close-up of the React plan page: Chicken Fried Rice, a calorie ring at 694 of 691 kcal, a Viridis macro donut and the start of the shopping list.",
           "icon": "rice_bowl",
           "title": "3. Your plan",
-          "text": "One meal, its **balance**, sources and a shopping list.",
+          "text": "Charts, a **shopping list**, save and rate.",
           "value": "694 kcal, target 691"
         }
       ]
@@ -959,7 +960,7 @@
           },
           {
             "title": "React",
-            "text": "Guided flow, run locally",
+            "text": "Kitchen app, run locally",
             "logos": [
               "react",
               "vite",
@@ -1088,7 +1089,7 @@
             },
             {
               "title": "React",
-              "text": "Guided flow, run locally",
+              "text": "Kitchen app, run locally",
               "logos": [
                 "react",
                 "vite",
@@ -1417,7 +1418,7 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, workouts, allergen tags"
+          "text": "76 recipes, allergen tags, kitchen app"
         },
         {
           "date": "Now",

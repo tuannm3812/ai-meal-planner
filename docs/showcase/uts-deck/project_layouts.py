@@ -22,7 +22,8 @@ VIRIDIS4 = [V_DARK, V_BLUE, V_TEAL, V_GREEN]
 
 def pale(slide):
     return ACCENT[slide.get('accent', 'slate')][1]
-PROTEIN, CARBS, FAT = V_BLUE, V_TEAL, V_GREEN
+# Macro colours match the React app's tokens (frontend/src/theme/tokens.js, DEC-38).
+PROTEIN, CARBS, FAT = '#440154', '#2A788E', '#22A884'
 
 
 # -- primitives ---------------------------------------------------------------------------------

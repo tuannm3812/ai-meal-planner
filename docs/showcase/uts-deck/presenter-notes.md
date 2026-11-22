@@ -45,11 +45,12 @@ References:
 
 ## 5. One craving in, one meal and a shopping list out
 
-Walk through the real app in three steps.
+Walk through the real app: details once, then search, then the plan page.
 
-You enter your body, goal and anything to avoid. Then you say what you feel like eating and where you shop.
-You get one meal, its balance, each ingredient's source and a shopping list.
-Sources: Captures: docs/showcase/slides/captures/2026-11-06-plan.json; React app, local run, 6 November 2026.
+The first visit asks for your details once and keeps them on this device, including today's workout.
+After that the home page is one search box: say what you feel like eating, or pick a suggestion.
+The plan page shows the meal against its target, a macro donut, where the calories come from and a shopping list. You can save the meal and rate it.
+Sources: Captures: docs/showcase/slides/captures/2026-11-22-plan.json; React app on main (ac4d44d), local run, 22 November 2026.
 
 References:
 - sources.md

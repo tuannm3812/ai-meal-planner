@@ -212,7 +212,7 @@ Layout: mp_flow
 
 Reader question: What does a person actually do?
 
-Message: Two short screens lead to one plan page that shows how it was made.
+Message: Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.
 
 Exact face text:
 
@@ -223,19 +223,19 @@ Exact face text:
 - HOW IT WORKS
 - The flow
 - One craving in, one meal and a shopping list out
-- Three steps in the React app, shown close up from a local run with no provider keys.
+- The React app, shown close up from a local run with no provider keys.
 - AI Meal Planner
 - 5
 - TAKEAWAY
-- Two short screens lead to one plan page that shows how it was made.
-- 1. You
-- Goal, body details, activity and anything to avoid.
+- Details are asked once; after that, one search gives a sized meal, its charts and a shopping list.
+- 1. You, once
+- Goal, body, today's workout and limits.
 - 34, male, 165 cm, 65 kg
 - 2. Craving
-- Say what you feel like eating and where you shop.
+- One search box, or a suggested dish.
 - chicken fried rice
 - 3. Your plan
-- One meal, its balance, sources and a shopping list.
+- Charts, a shopping list, save and rate.
 - 694 kcal, target 691
 
 ## 6. Four agents work like one kitchen
@@ -559,7 +559,7 @@ Exact face text:
 - Streamlit
 - Live public demo
 - React
-- Guided flow, run locally
+- Kitchen app, run locally
 - 2
 - validate
 - API key and rate limit
@@ -724,7 +724,7 @@ Exact face text:
 - 7 Nov
 - 68 of 68, gluten fix
 - 22 Nov
-- 76 recipes, workouts, allergen tags
+- 76 recipes, allergen tags, kitchen app
 - Now
 - Next steps
 - NOW

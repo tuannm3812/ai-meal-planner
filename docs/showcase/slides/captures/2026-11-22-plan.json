@@ -1,0 +1,19 @@
+{
+  "captured": "2026-11-22",
+  "app": "React kitchen app (PR #50, palette and icons PR #51), first run, home and plan page",
+  "code_commit": "ac4d44d (main)",
+  "script": "capture_2026-11-22.py",
+  "viewport": [1280, 900],
+  "device_scale_factor": 1.5,
+  "environment": {"STORAGE_BACKEND": "json", "provider_keys": false, "api_keys": false},
+  "profile": {"age": 34, "sex": "male", "height_cm": 165, "weight_kg": 65,
+              "activity": "Moderately active (default)", "workout": "Not sure (default, 30 minutes)",
+              "goal": "maintain (default)"},
+  "craving": "chicken fried rice",
+  "location": "Earlwood, NSW",
+  "result": {"meal": "Chicken Fried Rice", "kcal": 694, "meal_target_kcal": 691,
+             "protein_g": 48, "carbs_g": 78, "fat_g": 19, "split_percent": [28, 46, 26],
+             "estimated_ingredients": "3 of 6", "shopping_total_aud": 24.50,
+             "also_close": ["Pork Fried Rice", "Cashew Chicken Stir Fry"]},
+  "use": "Product illustration, not benchmark evidence. Slide JPGs in uts-deck/assets/figures are crops of the 1.5x captures."
+}
