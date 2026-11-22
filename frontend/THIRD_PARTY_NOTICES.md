@@ -8,6 +8,13 @@ makes no request to a font service.
 | Font | Package | Copyright | Licence |
 | --- | --- | --- | --- |
 | Inter (400, 500, 600) | `@fontsource/inter` 5.3.0 | 2016 The Inter Project Authors (https://github.com/rsms/inter) | SIL Open Font License 1.1 |
-| Bricolage Grotesque (700) | `@fontsource/bricolage-grotesque` 5.3.0 | 2022 The Bricolage Grotesque Project Authors (https://github.com/ateliertriay/bricolage) | SIL Open Font License 1.1 |
+| Bricolage Grotesque (700, 800) | `@fontsource/bricolage-grotesque` 5.3.0 | 2022 The Bricolage Grotesque Project Authors (https://github.com/ateliertriay/bricolage) | SIL Open Font License 1.1 |
 
 The full licence text ships in each package's `LICENSE` file.
+
+## Libraries with their own notice
+
+| Library | Package | Licence |
+| --- | --- | --- |
+| Lucide icons | `lucide-react` 1.77.0 | ISC (https://lucide.dev/license) |
+| React Router | `react-router-dom` 7.18.6 | MIT |

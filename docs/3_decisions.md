@@ -647,3 +647,48 @@ Low-Sodium Chicken Rice Bowl. The median calorie deviation moves from 0.4% to 0.
 
 Rules out generating recipes with Gemini. Each recipe here was written and checked
 by hand against the targets, and the corpus stays a curated, reviewable file.
+
+## 2026-11-22 — React becomes the main app
+
+### DEC-36 — The React app remembers the person on this device
+
+Mike chose a personal kitchen app: you come back to your saved meals and past plans,
+which only works if the app knows you. There are no accounts. The browser now keeps
+one `localStorage` key, `aimp.v1`, holding the opaque user ID, the profile and where
+the person shops. Nothing else is stored: no plans, no ratings, no shopping ticks.
+
+The Profile page says so, and "Forget me on this device" clears the key after a
+confirmation. Server history is not touched, and the confirmation says that too.
+Storage that is blocked or full is caught, and the app works for the visit and says it
+can't remember. Health fields still never go in a URL.
+
+Supersedes the "never in `localStorage`" line of DEC-29 (docs/8_design.md §3.1). Rules
+out accounts for now: they need backend work (docs/4_next_steps.md §7.7).
+
+### DEC-37 — React is the main app, rebuilt as a kitchen app in "Flat kitchen"
+
+Mike judged the React plan screen to look like the Streamlit app. React becomes the main
+app, and Streamlit stays as the simple backup demo, unchanged. Over six questions he
+chose:
+
+- a kitchen app (home, plan page, My meals, Past plans, Profile) over a wizard;
+- save, rate, a shopping checklist and the retrieval's runners-up on every plan;
+- a home page led by one big craving search;
+- the "Flat kitchen" look: Bricolage Grotesque 800 and Inter, flat dish illustrations,
+  a light green ground, and white cards with no border.
+
+He asked for Viridis in charts, less grey, and bigger icons with no tiles. The macro
+colours became Viridis stops #440154, #2A788E and #22A884 (each at least 3:1 on white),
+and the plan page draws a calorie ring, a macro donut, range bars and a stacked bar of
+where the calories come from, all in plain SVG with no chart library. Icons come from
+`lucide-react` (ISC), and routing from `react-router-dom` (MIT).
+
+Constraints kept: feedback is append-only, so a save can't be undone (an unsave is a
+backend change). A stored plan reopens from history as it was, never re-planned. A
+hosted server's 501 hides saving and rating, but planning still works. A first visit
+still makes no network call before the person plans. A returning visit reads its own
+saved meals and history on Home.
+
+Rules out meal photos (the service has none, and a stock photo would show a different
+dish) and a chart library (four small charts don't need one).
+

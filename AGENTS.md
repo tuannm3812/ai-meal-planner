@@ -116,6 +116,11 @@ the hand-offs by watching the log; its header says how to run it.
   the targets for 152 of 152. New ingredients use estimated nutrition until a
   USDA run (P4).
 
+- 2026-11-22: React is the main app and Streamlit the backup demo (DEC-37). React is
+  now a kitchen app: home, plan page with Viridis charts and runners-up, save and
+  rate, My meals, Past plans, and a profile remembered on the device (DEC-36). Spec
+  and plan are in `docs/superpowers/`; the frontend has 224 tests.
+
 ## Open risks
 
 - `.streamlit/secrets.toml` is now gitignored (PR #7). Local
@@ -137,10 +142,9 @@ the hand-offs by watching the log; its header says how to run it.
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
-- **In hosted mode the React "Past plans" link stays visible.** Opening it shows
-  a notice instead of history. Hiding the link would need a `/health` call on
-  first render, which the flow tests in `App.test.jsx` forbid. React cannot call a
-  keyed production API in v1 anyway (DEC-8).
+- **In hosted mode the React "My meals" and "Past plans" links stay visible.**
+  Opening them shows a notice instead of history, and a 501 on save or rate hides
+  those controls. React cannot call a keyed production API in v1 anyway (DEC-8).
 - **G4 limits, by design.**
   - The rate limit is per instance, so N instances allow N times the limit.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production

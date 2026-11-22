@@ -235,6 +235,14 @@ unit of work.
   is the honest scale.
 - **Audit logging** for profile and plan changes. Named in Later Scope alongside the
   managed database; health-adjacent recommendations are the case for it.
+- **Unsave a meal, and edit a rating (kitchen app, DEC-37).** Feedback is
+  append-only, so the React app can save a meal but not unsave it, and it sends one
+  rating per plan per visit. Both need a backend change, such as a delete or
+  "latest record wins" rule on `/meal-feedback`.
+- **Dish illustrations for new kinds of meal.** `dishType()` in
+  `frontend/src/components/illustrations/dishType.js` picks one of 12 drawings by
+  keyword and falls back to a generic bowl. A new kind of dish (a sandwich, a pizza)
+  needs a drawing and a keyword.
 - **User feedback loop for preference learning.** The consuming half — feedback as a
   retrieval ranking feature — is a §7.5 gap; the collection half already works, so
   this is about what the stored signal is used for.
