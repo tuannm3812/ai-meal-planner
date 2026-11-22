@@ -8275,6 +8275,31 @@ which contains the earlier `claude/project-thread-mjsqyt` work) now includes mai
 `docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
 scripts were formatted. `ruff check .` and `ruff format --check .` pass.
 
+## 2026-11-22 — Claude — plan for the dietitian review and user tests (P9)
+
+Mike asked for the next step of P9 "People". Added
+`docs/9_dietitian_review_and_user_tests.md`, docs only, no behaviour change:
+
+- Part A, a dietitian checklist of every rule the planner applies, each with where it
+  lives and the question to ask: energy (multipliers, the 400/250 kcal goal offsets,
+  the 1,200/1,500 kcal floors, the 28% meal share and its 350-850 kcal clamp), macros
+  and portions (AMDR, 0.65x-1.6x scaling, 0.5x-2x per ingredient, the added oils),
+  allergens and diets (the tag table, swaps), health conditions (sodium, kidney,
+  `avoid_conditions`) and who the app should refuse (age above 0 is accepted today).
+- Part B, a 30-minute usability protocol for five to eight adults: seven tasks,
+  consent and data handling, measures and how findings feed the deck's "Not tested"
+  step. It starts only after Part A's must-fix items close.
+
+Checked against the code: the floors and offsets in `calorie_expenditure_agent.py`,
+the meal share in `meal_recommendation_agent.py`, the clamp in `core/portions.py`,
+the swaps and groups in `rag/rules.py`, the 65 tagged ingredients and the corpus's
+`avoid_conditions` counts. Two things found while reading, left for the dietitian
+rather than changed: low-sodium soy sauce is tagged `high_sodium`, and the API
+accepts any age above 0 for adult formulas.
+
+Needs Mike: ask the capstone supervisor whether UTS ethics approval applies, and
+find a dietitian.
+
 ## 2026-11-22 — Claude — workout check; workouts past 30 minutes (DEC-39)
 
 Mike asked for the meal-quality benchmark to cover realistic workouts (P5 follow-up). New
