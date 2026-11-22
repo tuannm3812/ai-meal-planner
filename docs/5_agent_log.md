@@ -8213,3 +8213,9 @@ Verified: `tokens.test.js` fails on raw hex outside the tokens file, stock Tailw
 classes outside the plan feature, Lucide imported outside the icon folder, and hand-set icon sizes.
 233 frontend tests pass (23 files); eslint and the build are clean. Checked in Chromium against the
 local API, and the README screenshots are retaken. No backend, data or Streamlit change.
+
+## 2026-11-22 — Claude — Cloud Run max instances as a setting
+
+Mike approved deploying the API to Cloud Run on the free tier with a one-instance cap. The deploy
+workflow hard-coded `--max-instances=3`; it now reads `vars.GCP_MAX_INSTANCES` (default 3), set to 1
+for this project. `docs/6_deployment.md` notes that the two-instance acceptance run needs it at 2.
