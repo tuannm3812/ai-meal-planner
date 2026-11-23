@@ -234,7 +234,12 @@ free tiers in the same project and under the same budget alert
 below, `deploy.yml` deploys the API exactly as before (SQLite, history refused) and skips
 the hosting job.
 
-**Status (2026-11-23):** built (PR #58); this setup has not been done yet.
+**Status (2026-11-23):** live at `https://ai-meal-planner-515508.web.app`. The setup
+below was done from Mike's Mac (deploy run 45121738187 passed, live check included).
+Firebase Auth's sign-in providers are switched on in the console, because its admin
+API needs Identity Platform first, which was ruled out. The first deploy failed its
+live check because the saved-meals index did not exist yet; it was created by hand and
+the deploy job now publishes indexes first.
 
 ### One-time setup
 
@@ -268,8 +273,10 @@ for role in roles/firebasehosting.admin roles/firebaserules.admin \
 done
 ```
 
-In the Firebase console, under **Authentication → Sign-in method**, turn on **Google** and
-**Anonymous**. Under **Settings → Authorised domains**, check that `$PROJECT_ID.web.app` and
+In the Firebase console, under **Authentication**, click **Get started** if it is shown
+(plain Firebase Auth; decline any Identity Platform upgrade), then under **Sign-in method**
+turn on **Google** and **Anonymous**. The admin API cannot do this without Identity
+Platform. Under **Settings → Authorised domains**, check that `$PROJECT_ID.web.app` and
 `$PROJECT_ID.firebaseapp.com` are listed.
 
 Then switch accounts on and deploy:
@@ -279,12 +286,14 @@ gh variable set ACCOUNTS_ENABLED --body true
 gh workflow run deploy.yml
 ```
 
-The deploy then sets `STORAGE_BACKEND=firestore`, `FIREBASE_PROJECT_ID` and
-`ALLOWED_ORIGINS=https://$PROJECT_ID.web.app`. The hosting job builds React against the
-new revision's URL and publishes it with `firestore.rules`, which refuse every browser
-read and write because only the API's service account uses Firestore. It also publishes
-`firestore.indexes.json`, whose index serves the saved-meals query. `live_check.sh` sees
+The deploy job first publishes `firestore.rules` and `firestore.indexes.json`. The rules
+refuse every browser read and write, because only the API's service account uses
+Firestore. The job then waits until every index is READY, because the saved-meals query
+fails without its index. Then it deploys the API with `STORAGE_BACKEND=firestore`,
+`FIREBASE_PROJECT_ID` and `ALLOWED_ORIGINS=https://$PROJECT_ID.web.app`. `live_check.sh` sees
 `history_enabled` and checks that history answers and that a bad sign-in token gets 401.
+The hosting job then builds React against the new revision's URL and publishes it, and it
+retries its check for up to a minute, because a brand-new site can answer 404 at first.
 
 To switch accounts off again, set `ACCOUNTS_ENABLED` to anything else and redeploy. The
 Firestore data stays until it is deleted.
