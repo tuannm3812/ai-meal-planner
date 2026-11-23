@@ -278,6 +278,9 @@ TRACE_SAMPLE_RATIO=1.0
 | `GET` | `/meal-feedback/{user_id}` | `history:read` | Return feedback history for a user |
 | `GET` | `/saved-meals/{user_id}` | `history:read` | Return saved meals for a user |
 | `POST` | `/calorie-expenditure/predict` | `plans:write` | Predict daily calorie expenditure and meal calorie budget |
+| `GET` | `/me/profile` | signed-in user | The account's saved profile and location (Firestore only, DEC-43) |
+| `PUT` | `/me/profile` | signed-in user | Save the account's profile and location |
+| `DELETE` | `/me` | signed-in user | Delete every plan, feedback record and profile the account stored |
 
 **The contract is a file.** [`docs/openapi.json`](docs/openapi.json) is the full OpenAPI document: every route, request and response schema. CI fails when the code drifts from it (`backend/tests/test_openapi_contract.py`), so any API change appears in review as a diff to that file. After a deliberate change, run `uv run python scripts/export_openapi.py` and commit the result. The document declares `X-API-Key` as a security scheme (`ApiKeyAuth`). It also lists each route's *domain* error responses, generated from the domain exceptions. They all share one body, `ErrorResponse` (`status`, `error`, optional `code`, `detail`), including the feedback route's `400` (code `feedback_signal_required`). An unexpected `500` is not declared on any route, though its body has the same `ErrorResponse` shape.
 
@@ -325,6 +328,8 @@ API_KEYS=[{"client_id": "partner-app", "key_sha256": "<hex digest>", "scopes": [
 ```
 
 Send the raw key as `X-API-Key`. The scopes are `plans:write`, `feedback:write` and `history:read`; there is deliberately no admin scope. A malformed `API_KEYS` stops the API at startup rather than running half-configured.
+
+**Signed-in users (DEC-43).** With `FIREBASE_PROJECT_ID` set, a request may instead carry a Firebase ID token as `Authorization: Bearer <token>`. The API checks its signature against Google's published keys (cached for an hour), its audience and issuer for that project, and its expiry, then treats the caller as the token's uid in one `accounts` namespace, holding all three scopes. A body's `user_id` is replaced by the uid, a history path naming another user is `403 insufficient_scope`, and feedback must reference the same user's own plan. A request with both a key and a token is refused. No key record may use the `accounts` client_id. The rate limit counts each user apart. Only the uid is kept, never the email or name. With `STORAGE_BACKEND=firestore` (the `firestore` extra), every instance shares one store, so a hosted deployment keeps history and `/health` reports `history_enabled: true`; the `/me` routes need it and return `501 accounts_unavailable` otherwise. React sign-in follows in a later slice (`docs/superpowers/specs/2026-11-22-user-accounts-design.md`).
 
 **Rotation and revocation.** To rotate, add a record with a new key hash and the **same** `client_id`, deploy, move the client to the new key, then remove the old record and deploy again. The namespace is unchanged throughout. To revoke, remove the record and redeploy: every instance reads `API_KEYS` at startup, so after rollout no instance accepts the old key.
 

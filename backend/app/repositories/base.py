@@ -101,6 +101,51 @@ class MealFeedbackStore(Protocol):
         ...
 
 
+@runtime_checkable
+class AccountStore(Protocol):
+    """A signed-in user's own profile, and erasure of everything they stored (DEC-43)."""
+
+    def get_account(self, user_id: str, *, client_id: str) -> dict[str, Any] | None:
+        """Return the user's saved profile and location, or None if never saved.
+
+        Args:
+            user_id: The account's uid.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            ``{"profile", "location", "updated_at"}``, or None.
+        """
+        ...
+
+    def save_account(
+        self, user_id: str, profile: dict[str, Any], location: str | None, *, client_id: str
+    ) -> dict[str, Any]:
+        """Replace the user's saved profile and location.
+
+        Args:
+            user_id: The account's uid.
+            profile: The app's profile fields.
+            location: Where the person shops, if given.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            The stored record, as ``get_account`` would return it.
+        """
+        ...
+
+    def delete_user(self, user_id: str, *, client_id: str) -> dict[str, int]:
+        """Delete the user's profile, plans and feedback.
+
+        Args:
+            user_id: The account's uid.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            How many plans and feedback records were deleted.
+        """
+        ...
+
+
 def client_of(record: dict[str, Any]) -> str:
     """Return the client namespace a stored record belongs to.
 

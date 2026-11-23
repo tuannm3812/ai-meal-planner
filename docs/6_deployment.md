@@ -225,3 +225,76 @@ This requires `min_instances=2` to still be in effect.
 - **Render:** retired on 2026-10-12 (DEC-22), and `render.yaml` is deleted.
   Cloud Run is the only hosted API target. The Streamlit demo still runs on
   Streamlit Community Cloud (DEC-2).
+
+## 5. User accounts (DEC-43)
+
+Signed-in accounts need Firebase Auth, a Firestore database and Firebase Hosting, all on
+free tiers in the same project and under the same budget alert
+(`docs/superpowers/specs/2026-11-22-user-accounts-design.md` §7). Until the last step
+below, `deploy.yml` deploys the API exactly as before (SQLite, history refused) and skips
+the hosting job.
+
+**Status (2026-11-23):** built (PR #58); this setup has not been done yet.
+
+### One-time setup
+
+```bash
+export PROJECT_ID=ai-meal-planner-515508
+export REGION=australia-southeast1
+RUNTIME_SA=meal-planner-runtime@$PROJECT_ID.iam.gserviceaccount.com
+DEPLOYER_SA=meal-planner-deployer@$PROJECT_ID.iam.gserviceaccount.com
+
+gcloud services enable firebase.googleapis.com firestore.googleapis.com \
+  firebasehosting.googleapis.com firebaserules.googleapis.com identitytoolkit.googleapis.com
+
+# Firebase on the existing project, and a Firestore database in the API's region.
+npx firebase-tools@14.27.0 login
+npx firebase-tools@14.27.0 projects:addfirebase "$PROJECT_ID"
+gcloud firestore databases create --location="$REGION" --type=firestore-native
+
+# A web app, whose public config the React build carries.
+npx firebase-tools@14.27.0 apps:create web ai-meal-planner --project "$PROJECT_ID"
+npx firebase-tools@14.27.0 apps:sdkconfig web --project "$PROJECT_ID"  # note apiKey, appId
+gh variable set FIREBASE_WEB_API_KEY --body "<apiKey>"
+gh variable set FIREBASE_WEB_APP_ID --body "<appId>"
+
+# The API reads and writes Firestore; the deployer publishes hosting, rules and indexes.
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+  --member="serviceAccount:$RUNTIME_SA" --role=roles/datastore.user
+for role in roles/firebasehosting.admin roles/firebaserules.admin \
+    roles/datastore.indexAdmin roles/firebase.viewer roles/serviceusage.serviceUsageConsumer; do
+  gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:$DEPLOYER_SA" --role="$role"
+done
+```
+
+In the Firebase console, under **Authentication → Sign-in method**, turn on **Google** and
+**Anonymous**. Under **Settings → Authorised domains**, check that `$PROJECT_ID.web.app` and
+`$PROJECT_ID.firebaseapp.com` are listed.
+
+Then switch accounts on and deploy:
+
+```bash
+gh variable set ACCOUNTS_ENABLED --body true
+gh workflow run deploy.yml
+```
+
+The deploy then sets `STORAGE_BACKEND=firestore`, `FIREBASE_PROJECT_ID` and
+`ALLOWED_ORIGINS=https://$PROJECT_ID.web.app`. The hosting job builds React against the
+new revision's URL and publishes it with `firestore.rules`, which refuse every browser
+read and write because only the API's service account uses Firestore. It also publishes
+`firestore.indexes.json`, whose index serves the saved-meals query. `live_check.sh` sees
+`history_enabled` and checks that history answers and that a bad sign-in token gets 401.
+
+To switch accounts off again, set `ACCOUNTS_ENABLED` to anything else and redeploy. The
+Firestore data stays until it is deleted.
+
+### Check by hand
+
+1. Open `https://$PROJECT_ID.web.app` in a private window and plan a meal. This signs in
+   anonymously, so no Google sign-in is needed.
+2. Save the meal, then open **My meals**. It is listed.
+3. On **Profile**, choose **Sign in with Google**. The saved meal is still listed.
+4. In a different browser, sign in with the same Google account. The meal is listed there too.
+5. **Delete my account and data**, then confirm. My meals is empty, and the account no longer
+   appears under Authentication → Users.

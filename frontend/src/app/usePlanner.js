@@ -201,6 +201,16 @@ export function usePlanner() {
     setHasProfile(false)
   }
 
+  // A signed-in account's saved details replace this device's (DEC-43).
+  const adoptAccount = (accountProfile, accountLocation) => {
+    const next = { ...DEFAULT_PROFILE, ...accountProfile }
+    const nextLocation = accountLocation || location
+    setProfileValue(next)
+    setLocationValue(nextLocation)
+    setHasProfile(true)
+    persist({ profile: next, location: nextLocation }, true)
+  }
+
   return {
     userId,
     profile,
@@ -216,6 +226,7 @@ export function usePlanner() {
     },
     canRemember,
     forget,
+    adoptAccount,
     plan,
     isLoading,
     error,

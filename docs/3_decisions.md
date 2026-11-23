@@ -45,6 +45,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
 | 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
 | 40 | A stated workout replaces the activity level's exercise | 2026-11-22 |
+| 43 | User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers | 2026-11-23 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -800,3 +801,23 @@ pins, 72 of 72 benchmark plans and 144 of 152 wider plans meet the targets on US
 Rules out tuning pins to the score: Hass avocado and store-bought hummus stay although
 USDA averages would clear about five misses.
 
+## 2026-11-23 — User accounts
+
+Source: `docs/superpowers/specs/2026-11-22-user-accounts-design.md`.
+
+### DEC-43 — User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers
+
+Mike chose Google sign-in through Firebase Auth, Firestore for profiles, plans and
+feedback, and Firebase Hosting for the React app, all on free tiers in the existing GCP
+project and its A$1 budget alert. A signed-out visitor to the hosted app is signed in
+anonymously, so planning and history work without a Google account; Google is the only
+named sign-in for now.
+
+The API verifies Firebase ID tokens with `google-auth`, stores only the uid, and for an
+account caller ignores any body `user_id` and refuses a path `user_id` that is not the
+caller's. API keys keep working for Streamlit and scripts. Hosted mode serves history
+when storage is Firestore; DEC-10's refusal stays for hosted SQLite.
+
+Rules out Supabase (a second vendor whose free project sleeps after a week idle), Cloud
+SQL (about A$15 or more a month) and staying device-only. Supersedes DEC-36's "no
+accounts" and lifts DEC-8's limit that React cannot call the hosted API.

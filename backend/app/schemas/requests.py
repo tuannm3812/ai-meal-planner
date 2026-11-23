@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field
+from typing import Annotated
+
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Ingredient(BaseModel):
@@ -34,3 +36,34 @@ class MealFeedbackRequest(BaseModel):
     rating: int | None = Field(default=None, ge=1, le=5)
     saved: bool = False
     notes: str | None = Field(default=None, max_length=500)
+
+
+class AccountProfile(BaseModel):
+    """The React app's profile fields, as it holds them (DEC-36, DEC-43).
+
+    Number inputs are kept as the strings the person typed; the app converts
+    them only when it plans. Every field is bounded and no other field is
+    accepted, so an account stores exactly what the Profile page shows.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    goal: str | None = Field(default=None, max_length=40)
+    age: str | None = Field(default=None, max_length=8)
+    sex: str | None = Field(default=None, max_length=16)
+    heightCm: str | None = Field(default=None, max_length=8)  # noqa: N815 - the app's key
+    weightKg: str | None = Field(default=None, max_length=8)  # noqa: N815
+    activity: str | None = Field(default=None, max_length=8)
+    workout: str | None = Field(default=None, max_length=16)
+    workoutMinutes: str | None = Field(default=None, max_length=8)  # noqa: N815
+    heartRate: str | None = Field(default=None, max_length=8)  # noqa: N815
+    avoid: list[Annotated[str, Field(max_length=40)]] = Field(default_factory=list, max_length=16)
+
+
+class AccountProfileRequest(BaseModel):
+    """A signed-in user's profile and shopping location, to save to their account."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    profile: AccountProfile
+    location: str | None = Field(default=None, max_length=160)

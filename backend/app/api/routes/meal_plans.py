@@ -6,7 +6,7 @@ from uuid import uuid4
 from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.api.auth import HistoryEnabled, HistoryRead, PlansWrite
+from backend.app.api.auth import HistoryEnabled, HistoryRead, PlansWrite, body_for, user_for
 from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core import telemetry
 from backend.app.core.container import ContainerDep
@@ -45,6 +45,7 @@ async def generate_meal_plan(
         The assembled meal plan response. It is persisted to history unless
         ``plan_status`` is ``infeasible``, which has no meal to keep.
     """
+    request = body_for(principal, request)
     request_id = str(uuid4())
     generated_at = datetime.now(UTC).isoformat()
     service = container.meal_planning_service
@@ -67,8 +68,8 @@ async def generate_meal_plan(
         infeasible_reason=result.infeasible_reason,
     )
     # An infeasible result has no meal to keep, and history views expect one. A
-    # hosted deployment keeps nothing: its instances share no storage (G6).
-    if result.plan_status != "infeasible" and not container.settings.hosted_mode:
+    # hosted deployment keeps nothing unless its instances share Firestore (G6, DEC-43).
+    if result.plan_status != "infeasible" and container.settings.keeps_history:
         await run_in_threadpool(
             container.meal_history.save, response.model_dump(), client_id=principal.client_id
         )
@@ -101,6 +102,7 @@ async def list_meal_plans(
     Returns:
         The clamped limit and the matching stored meal-plan records.
     """
+    user_id = user_for(principal, user_id)
     safe_limit = max(1, min(limit, 50))
     items = await run_in_threadpool(
         container.meal_history.list_for_user,

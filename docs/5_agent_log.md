@@ -8360,3 +8360,98 @@ every non-trusted corpus ingredient is pinned. Full suite passes, coverage 97%. 
 on the Mac: 72 of 72 benchmark, 144 of 152 wider, no estimated ingredient, guardrails 5
 of 5. Seen once: 2 of 25 detail lookups timed out at 6 s on a first attempt.
 
+## 2026-11-22 — Claude — user accounts: design draft
+
+Mike chose Firebase for user accounts: Google sign-in through Firebase Auth, Firestore for
+profiles, plans and feedback, and Firebase Hosting for React, all on free tiers in
+`ai-meal-planner-515508`. Supabase (second vendor, free project sleeps) and Cloud SQL (about
+A$15 a month) were ruled out. The draft is
+`docs/superpowers/specs/2026-11-22-user-accounts-design.md`. It verifies Firebase ID tokens
+with the existing `google-auth` dependency, ignores a body `user_id` for account callers, adds
+a Firestore repository behind the DEC-4 boundary, and lifts DEC-10's 501 only on Firestore.
+Docs only; nothing is built. Needs Mike: approve the spec, and answer whether signed-out
+visitors may use the hosted app (anonymous sign-in recommended).
+
+## 2026-11-23 — Claude — user accounts: design approved
+
+Mike approved the design with both recommendations: anonymous sign-in for signed-out
+visitors to the hosted app, and Google as the only named sign-in. The spec records the
+answers and how an anonymous account links to Google; DEC-43 records the decision. Next is
+slice 1, bearer-token auth.
+
+## 2026-11-23 — Claude — user accounts slice 1: bearer-token auth
+
+`Authorization: Bearer <Firebase ID token>` is accepted on every protected route when
+`FIREBASE_PROJECT_ID` is set (`core/firebase_auth.py`). The token is checked with `google-auth`
+(now a direct dependency) against Google's certificates, cached for an hour and refetched once
+for an unseen key id, plus audience, issuer, expiry and a 1-128 character subject. A valid
+token is the principal `accounts` with `user_id=<uid>` and all three scopes. Routes use the uid:
+a body `user_id` is replaced (`body_for`), a path naming another user is 403
+(`user_for`), and feedback must reference the same user's plan (found while testing: the
+shared namespace alone let one account rate another's meal). Both credentials at once is 401;
+`accounts` is a reserved client_id; the rate limit keys on client and uid, and applies to
+accounts in open local mode too. OpenAPI declares `FirebaseAuth` beside `ApiKeyAuth`.
+Verified: `test_firebase_auth.py` signs real RS256 tokens with a generated key;
+`test_api_accounts.py` covers the route rules with a fake verifier. `uv run pytest`: 715
+passed, coverage 97%. Hosted mode still refuses history until Firestore (slice 3).
+
+## 2026-11-23 — Claude — user accounts slice 2: Firestore repositories
+
+`STORAGE_BACKEND=firestore` builds `repositories/firestore_store.py`, which implements the three
+storage protocols (DEC-4) on Firestore. Layout: `namespaces/{client}/users/{user}/plans|feedback`
+plus `namespaces/{client}/plan_index/{request_id}` for `find_by_request_id`. Every id is escaped
+(`c:`, `u:`, `r:` prefix plus URL quoting), so a `/` or a reserved-looking id cannot reach another
+path. A record is stored as one JSON string beside the queried fields, because Firestore cannot
+hold every JSON shape (an array of arrays); `sort_key` is a per-process increasing nanosecond key.
+`saved_only` is a query filter before the limit, backed by the composite index in
+`firestore.indexes.json` (deployed in slice 5). The client is the optional `firestore` extra,
+installed in the image and in CI. CI's backend job starts the Firestore emulator
+(firebase-tools 14.27.0, Java 21), so the repository contract suite now runs on JSON, SQLite and
+Firestore. Verified locally against the emulator: `uv run pytest`, 753 passed;
+`firestore_store.py` and `factory.py` at 100%. Without the emulator the Firestore cases skip.
+
+## 2026-11-23 — Claude — user accounts slice 3: account routes and hosted history
+
+New `AccountStore` protocol, implemented by `FirestoreUserProfileRepository`: `get_account`,
+`save_account` and `delete_user`. Routes (`api/routes/accounts.py`): `GET /me/profile` (404
+`profile_not_found`, the first raise of `ProfileNotFound`), `PUT /me/profile` (the React profile's
+own fields only, each bounded, `extra="forbid"`), and `DELETE /me`, which deletes the account's
+plans, their request-id index entries, feedback and profile, in batches. An API-key client gets
+403 on these; a non-Firestore backend gets 501 `accounts_unavailable`. `settings.keeps_history`
+is false only for hosted mode on per-instance storage, so a hosted deployment on Firestore stores
+plans and serves history; `/health` reports it as `history_enabled`, and Streamlit hides history
+only where it is false. Verified on the emulator: a hosted Firestore deployment keeps history; a
+profile round-trips per user; deleting Alice removes only Alice's records and her plan can no
+longer take feedback. `uv run pytest` with the emulator: 772 passed, coverage 97%.
+
+## 2026-11-23 — Claude — user accounts slice 4: React sign-in
+
+`frontend/src/auth/firebase.js` turns accounts on only when the build has `VITE_FIREBASE_API_KEY`,
+`_AUTH_DOMAIN` and `_PROJECT_ID`; without them nothing changes (no header, no Firebase call).
+With them, `api/mealPlanner.js` sends `Authorization: Bearer` on every call and uses the uid as
+the history path and body `user_id`. A visitor is signed in anonymously at the first API call,
+so a first visit still makes no network call before planning (DEC-37). Google sign-in (Profile
+page card and a top-bar button) links the anonymous account, or signs into an existing one when
+Firebase reports `credential-already-in-use`. On sign-in an existing account profile replaces the
+device's; otherwise the device's is saved to the account; later edits save after 800 ms. Sign out
+and "Delete my account and data" (with a confirmation) forget the device; delete calls
+`DELETE /me` first and removes the Firebase sign-in after, re-authenticating if Firebase asks.
+A failed server delete removes nothing locally. `firebase` 13.2.0 (Apache-2.0) adds about 35 kB
+gzipped. Verified: `vitest run` 257 passed (23 new: firebase module, API identity, account
+card); `eslint` clean; `vite build` with and without the config.
+
+## 2026-11-23 — Claude — user accounts slice 5: Firebase Hosting deploy
+
+`deploy.yml` reads `vars.ACCOUNTS_ENABLED`. Unset, the API deploys as before. `true` sets
+`STORAGE_BACKEND=firestore`, `FIREBASE_PROJECT_ID` and `ALLOWED_ORIGINS=https://<project>.web.app`,
+and a new `hosting` job builds React against the new revision (Firebase web config from
+`FIREBASE_WEB_API_KEY` and `FIREBASE_WEB_APP_ID`), then deploys hosting, `firestore.rules` (deny
+all browser access; only the API's service account uses Firestore) and `firestore.indexes.json`
+with firebase-tools 14.27.0 over the existing Workload Identity Federation. `firebase.json` serves
+`frontend/dist` as a single-page app. `live_check.sh` reads `history_enabled` from `/health`: on
+shared storage it expects 200 from history routes, 404 for feedback on an unknown plan, and 401
+for an invalid bearer token; otherwise it keeps the 501 checks. Two new fixture tests cover the
+shared-storage path. `docs/6_deployment.md` §5 is the one-time setup (APIs, Firebase on the
+project, Firestore in australia-southeast1, a web app, IAM roles, Google and Anonymous
+providers) and a by-hand check. The React list pages no longer say "on this device" when
+accounts are on. Not run against the real project: that needs Mike's setup. Needs Mike.

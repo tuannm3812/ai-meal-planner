@@ -22,11 +22,13 @@ def _store_path(settings: AppSettings, json_filename: str) -> str:
             since both stores share one database file there.
 
     Returns:
-        The JSON file path under the JSON backend, or the shared SQLite
-        database path under the SQLite backend.
+        The JSON file path under the JSON backend, the shared SQLite
+        database path under the SQLite backend, or ``"firestore"``.
     """
     if settings.storage_backend == "json":
         return str(settings.data_dir / json_filename)
+    if settings.storage_backend == "firestore":
+        return "firestore"
     return str(settings.sqlite_path)
 
 
@@ -80,6 +82,8 @@ async def health_check(container: ContainerDep) -> HealthResponse:
             ),
             "storage_backend": settings.storage_backend,
             "hosted_mode": settings.hosted_mode,
+            # DEC-43: a hosted deployment on Firestore keeps history after all.
+            "history_enabled": settings.keeps_history,
             "history_store": _store_path(settings, "meal_history.json"),
             "feedback_store": _store_path(settings, "meal_feedback.json"),
             "calorie_model_configured": bool(container.calorie_agent.model),

@@ -14,6 +14,7 @@ from ..repositories.factory import build_repositories
 from ..services.meal_planning_service import MealPlanningService
 from .auth import AuthConfig, RateLimiter
 from .config import AppSettings
+from .firebase_auth import FirebaseTokenVerifier
 
 
 @dataclass(frozen=True)
@@ -33,6 +34,8 @@ class Container:
     # consults.
     auth: AuthConfig = field(default_factory=AuthConfig)
     rate_limiter: RateLimiter = field(default_factory=lambda: RateLimiter(60))
+    # DEC-43. None means signed-in accounts are off and a bearer token is refused.
+    token_verifier: FirebaseTokenVerifier | None = None
 
 
 def build_container(settings: AppSettings) -> Container:
@@ -88,6 +91,11 @@ def build_container(settings: AppSettings) -> Container:
         ),
         auth=auth,
         rate_limiter=RateLimiter(settings.rate_limit_per_minute),
+        token_verifier=(
+            FirebaseTokenVerifier(settings.firebase_project_id)
+            if settings.firebase_project_id.strip()
+            else None
+        ),
     )
 
 

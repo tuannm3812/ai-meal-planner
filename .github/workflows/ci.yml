@@ -31,7 +31,27 @@ jobs:
           enable-cache: true
 
       - name: Sync dependencies
-        run: uv sync --locked --all-groups --extra tracing
+        run: uv sync --locked --all-groups --extra tracing --extra firestore
+
+      # DEC-43: the Firestore repository runs the same contract as JSON and SQLite,
+      # against the local emulator. Nothing leaves the runner.
+      - name: Set up Java for the Firestore emulator
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Start the Firestore emulator
+        run: |
+          npx --yes firebase-tools@14.27.0 setup:emulators:firestore
+          jar=$(ls ~/.cache/firebase/emulators/cloud-firestore-emulator-*.jar | head -1)
+          nohup java -jar "$jar" --host 127.0.0.1 --port 8085 > emulator.log 2>&1 &
+          for _ in $(seq 1 60); do
+            curl -sf http://127.0.0.1:8085/ > /dev/null && exit 0
+            sleep 1
+          done
+          cat emulator.log
+          exit 1
 
       - name: Check the interpreter is the matrix version
         run: >-
@@ -46,6 +66,8 @@ jobs:
         run: uv run ruff format --check .
 
       - name: Run tests
+        env:
+          FIRESTORE_EMULATOR_HOST: 127.0.0.1:8085
         run: uv run pytest --cov-fail-under=89
 
   requirements-drift:

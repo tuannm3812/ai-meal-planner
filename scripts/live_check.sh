@@ -15,7 +15,9 @@
 #
 # It checks that:
 # - /health is public, reports production, and reports hosted mode;
-# - each history and feedback route returns 501 history_disabled_stateless;
+# - each history and feedback route returns 501 history_disabled_stateless, or,
+#   when /health reports history_enabled (Firestore, DEC-43), returns 200 and an
+#   invalid sign-in token gets 401;
 # - an anonymous request gets 401, and a keyed meal plan gets 200;
 # - with OLD_KEY, the revoked key gets 401.
 # Every fanned-out check must, on its own, be answered by at least
@@ -81,19 +83,31 @@ fan_out() {
 }
 
 echo "1. /health is public, production, hosted"
-curl -fsS "${CURL_LIMITS[@]}" "$URL/health" | python3 -c '
+HISTORY_ENABLED="$(curl -fsS "${CURL_LIMITS[@]}" "$URL/health" | python3 -c '
 import json, sys
 d = json.load(sys.stdin)
 assert d["environment"] == "production", d["environment"]
 assert d["services"]["hosted_mode"] is True, d["services"]
-print("   environment=production hosted_mode=True")'
+print(str(bool(d["services"].get("history_enabled", False))).lower())')"
+echo "   environment=production hosted_mode=True history_enabled=$HISTORY_ENABLED"
 
-echo "2. each history and feedback route is refused, by at least $EXPECT_INSTANCES instance(s)"
 FEEDBACK='{"user_id":"user_123","request_id":"abcdefgh","meal_name":"Meal","liked":true}'
-fan_out meal-plans 501 history_disabled_stateless GET /meal-plans/user_123 "$KEY"
-fan_out meal-feedback 501 history_disabled_stateless GET /meal-feedback/user_123 "$KEY"
-fan_out saved-meals 501 history_disabled_stateless GET /saved-meals/user_123 "$KEY"
-fan_out post-feedback 501 history_disabled_stateless POST /meal-feedback "$KEY" "$FEEDBACK"
+if [ "$HISTORY_ENABLED" = true ]; then
+  echo "2. history is shared storage (DEC-43), by at least $EXPECT_INSTANCES instance(s)"
+  fan_out meal-plans 200 "*" GET /meal-plans/user_123 "$KEY"
+  fan_out saved-meals 200 "*" GET /saved-meals/user_123 "$KEY"
+  fan_out post-feedback 404 meal_not_found POST /meal-feedback "$KEY" "$FEEDBACK"
+  status="$(curl -sS "${CURL_LIMITS[@]}" -o /dev/null -w '%{http_code}' \
+    -H 'Authorization: Bearer not-a-firebase-token' "$URL/meal-plans/user_123")"
+  [ "$status" = 401 ] || { echo "   invalid sign-in token -> $status"; exit 1; }
+  echo "   invalid sign-in token -> 401"
+else
+  echo "2. each history and feedback route is refused, by at least $EXPECT_INSTANCES instance(s)"
+  fan_out meal-plans 501 history_disabled_stateless GET /meal-plans/user_123 "$KEY"
+  fan_out meal-feedback 501 history_disabled_stateless GET /meal-feedback/user_123 "$KEY"
+  fan_out saved-meals 501 history_disabled_stateless GET /saved-meals/user_123 "$KEY"
+  fan_out post-feedback 501 history_disabled_stateless POST /meal-feedback "$KEY" "$FEEDBACK"
+fi
 
 echo "3. authentication first; meal planning works"
 fan_out anonymous 401 missing_or_invalid_api_key GET /meal-plans/user_123 ""
