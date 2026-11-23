@@ -30,6 +30,21 @@ class CalorieExpenditureRequest(BaseModel):
 EXERCISE_DEFAULTS = {"duration_minutes": 30.0, "heart_rate_bpm": 100.0, "body_temp_c": 37.0}
 """What the model assumes for a workout detail the request leaves out."""
 
+MODEL_MAX_DURATION_MINUTES = 30.0
+"""The longest workout in the model's training data (Kaggle S5E5, 1-30 minutes).
+
+Its boosted trees are flat past this point, so a 90-minute workout predicted
+directly scores the same as a 30-minute one. A longer workout is predicted at
+30 minutes and scaled by its length, holding the 30-minute rate per minute."""
+
+MODEL_MAX_HEART_RATE_BPM = 128.0
+"""The highest average heart rate in the training data. The model predicts the
+same calories for any rate above it, so a harder workout is undercounted."""
+
+SEDENTARY_MULTIPLIER = 1.2
+"""The activity multiplier that holds no exercise. The other activity levels are
+exercise days in a usual week, so a stated workout replaces them (DEC-40)."""
+
 
 class ExerciseEstimate(BaseModel):
     """The workout the trained model added to the daily estimate (DEC-33).
@@ -40,6 +55,10 @@ class ExerciseEstimate(BaseModel):
         body_temp_c: Body temperature during the workout.
         kcal: Calories the workout added to the daily estimate.
         defaulted: The details the request left out, filled from EXERCISE_DEFAULTS.
+        replaces_activity_exercise: True when the request stated today's workout,
+            so the day counts it in place of the activity level's usual exercise
+            (DEC-40). False when the workout was not given, and the default is
+            added to the activity level as before.
     """
 
     duration_minutes: float
@@ -47,6 +66,7 @@ class ExerciseEstimate(BaseModel):
     body_temp_c: float
     kcal: float
     defaulted: list[str] = Field(default_factory=list)
+    replaces_activity_exercise: bool = False
 
 
 class CalorieExpenditureResponse(BaseModel):
@@ -123,7 +143,11 @@ class CalorieExpenditureAgent:
             if sex_warning:
                 warnings.append(sex_warning)
             exercise, exercise_kcal = self._estimate_exercise(request, normalized_sex)
-            expenditure = self._estimate_with_bmr(request) + exercise_kcal
+            warnings.extend(self._workout_range_warnings(exercise))
+            multiplier = request.activity_multiplier
+            if exercise.replaces_activity_exercise:
+                multiplier = min(multiplier, SEDENTARY_MULTIPLIER)
+            expenditure = self._estimate_with_bmr(request, multiplier) + exercise_kcal
             confidence = 0.82
             model_version = self.model_version
         else:
@@ -176,29 +200,58 @@ class CalorieExpenditureAgent:
             field: EXERCISE_DEFAULTS[field] if given[field] is None else given[field]
             for field in EXERCISE_DEFAULTS
         }
-        if used["duration_minutes"] == 0:
+        duration = used["duration_minutes"]
+        if duration == 0:
             kcal = 0.0
         else:
+            modelled = min(duration, MODEL_MAX_DURATION_MINUTES)
             row = {
                 "Sex": normalized_sex,
                 "Age": request.age,
                 "Height": request.height_cm,
                 "Weight": request.weight_kg,
-                "Duration": used["duration_minutes"],
+                "Duration": modelled,
                 "Heart_Rate": used["heart_rate_bpm"],
                 "Body_Temp": used["body_temp_c"],
             }
             kcal = max(float(self.model.predict(pd.DataFrame([row]))[0]), 0.0)
-        return ExerciseEstimate(**used, kcal=round(kcal, 1), defaulted=defaulted), kcal
+            kcal *= duration / modelled
+        estimate = ExerciseEstimate(
+            **used,
+            kcal=round(kcal, 1),
+            defaulted=defaulted,
+            replaces_activity_exercise=given["duration_minutes"] is not None,
+        )
+        return estimate, kcal
 
     @staticmethod
-    def _estimate_with_bmr(request: CalorieExpenditureRequest) -> float:
+    def _workout_range_warnings(exercise: ExerciseEstimate) -> list[str]:
+        """Say when a stated workout lies outside what the model was trained on."""
+        warnings = []
+        if exercise.duration_minutes > MODEL_MAX_DURATION_MINUTES:
+            warnings.append(
+                f"Workouts over {MODEL_MAX_DURATION_MINUTES:.0f} minutes are estimated at the "
+                f"{MODEL_MAX_DURATION_MINUTES:.0f}-minute rate per minute, beyond the model's "
+                "training range."
+            )
+        if exercise.duration_minutes and exercise.heart_rate_bpm > MODEL_MAX_HEART_RATE_BPM:
+            warnings.append(
+                f"Heart rates above {MODEL_MAX_HEART_RATE_BPM:.0f} bpm are estimated as "
+                f"{MODEL_MAX_HEART_RATE_BPM:.0f} bpm, so a harder workout may be undercounted."
+            )
+        return warnings
+
+    @staticmethod
+    def _estimate_with_bmr(
+        request: CalorieExpenditureRequest, multiplier: float | None = None
+    ) -> float:
+        """BMR (Mifflin-St Jeor) times a multiplier, the request's activity level by default."""
         sex = request.sex.strip().lower()
         if sex in {"m", "male"}:
             bmr = (10 * request.weight_kg) + (6.25 * request.height_cm) - (5 * request.age) + 5
         else:
             bmr = (10 * request.weight_kg) + (6.25 * request.height_cm) - (5 * request.age) - 161
-        return bmr * request.activity_multiplier
+        return bmr * (request.activity_multiplier if multiplier is None else multiplier)
 
     @classmethod
     def _meal_budget(cls, expenditure: float, goal: str, sex: str) -> tuple[float, str | None]:

@@ -171,7 +171,8 @@ describe('App', () => {
     expect(Object.keys(stored)).toEqual(['userId', 'profile', 'location'])
     expect(stored.profile.avoid).toEqual(['kidney'])
     for (const [url, options] of axios.get.mock.calls) {
-      expect(url).not.toMatch(/kidney|weight|age|64|168/i)
+      // The random user ID can contain "64" or "168", so only the rest of the URL is checked.
+      expect(url.replace(stored.userId, '')).not.toMatch(/kidney|weight|age|64|168/i)
       expect(options?.params ?? {}).toEqual({ limit: 50 })
     }
   })

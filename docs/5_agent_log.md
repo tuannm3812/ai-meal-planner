@@ -8275,6 +8275,91 @@ which contains the earlier `claude/project-thread-mjsqyt` work) now includes mai
 `docs/showcase/uts-deck/` (kit conventions; recorded in `docs/0_coding_standards.md`); the two capture
 scripts were formatted. `ruff check .` and `ruff format --check .` pass.
 
+## 2026-11-22 — Claude — plan for the dietitian review and user tests (P9)
+
+Mike asked for the next step of P9 "People". Added
+`docs/9_dietitian_review_and_user_tests.md`, docs only, no behaviour change:
+
+- Part A, a dietitian checklist of every rule the planner applies, each with where it
+  lives and the question to ask: energy (multipliers, the 400/250 kcal goal offsets,
+  the 1,200/1,500 kcal floors, the 28% meal share and its 350-850 kcal clamp), macros
+  and portions (AMDR, 0.65x-1.6x scaling, 0.5x-2x per ingredient, the added oils),
+  allergens and diets (the tag table, swaps), health conditions (sodium, kidney,
+  `avoid_conditions`) and who the app should refuse (age above 0 is accepted today).
+- Part B, a 30-minute usability protocol for five to eight adults: seven tasks,
+  consent and data handling, measures and how findings feed the deck's "Not tested"
+  step. It starts only after Part A's must-fix items close.
+
+Checked against the code: the floors and offsets in `calorie_expenditure_agent.py`,
+the meal share in `meal_recommendation_agent.py`, the clamp in `core/portions.py`,
+the swaps and groups in `rag/rules.py`, the 65 tagged ingredients and the corpus's
+`avoid_conditions` counts. Two things found while reading, left for the dietitian
+rather than changed: low-sodium soy sauce is tagged `high_sodium`, and the API
+accepts any age above 0 for adult formulas.
+
+Needs Mike: ask the capstone supervisor whether UTS ethics approval applies, and
+find a dietitian.
+
+## 2026-11-22 — Claude — workout check; workouts past 30 minutes (DEC-39)
+
+Mike asked for the meal-quality benchmark to cover realistic workouts (P5 follow-up). New
+`backend/app/evaluation/workouts.py` and `meal_quality_baseline.py --workouts`: six stated
+workouts (not given, rest day, 20/30/60/90 minutes) for each of the four profiles on six matched
+cravings, 144 plans, apart from the 72. Report and rows in `docs/meal_quality/workouts.{md,json}`.
+143 of 144 meet the targets; the miss is Tuna Pasta Salad at a 378 kcal target (pasta at its 0.5x
+floor, carbs 43%).
+
+Found and fixed: the model's trees are flat past 30 minutes and 128 bpm (its training range, read
+from the bin edges), so 45, 60 and 90 minutes all added 238 kcal. A longer workout is now predicted
+at 30 minutes and scaled by length; a heart rate past 128 is flagged (DEC-39). The 72-plan baseline
+is unchanged (diffed against a run before the change).
+
+Measured, not fixed: the activity level already holds an average day's exercise (626 kcal at x1.55),
+and today's workout is added on top; 15 of 24 profile-days count exercise twice. The column "if
+replaced" shows the budget with today's workout replacing it. The fix changes every budget, so it
+goes to Mike. Also flagged: the 37 °C temperature default is below the training range.
+
+Verified: `uv run pytest` 669 passed, coverage 97%; `ruff check` and `ruff format --check` clean;
+`docs/openapi.json` unchanged.
+
+## 2026-11-22 — Claude — a stated workout replaces the activity level's exercise (DEC-40)
+
+Mike chose "workout replaces activity exercise" on the decision card. When `duration_minutes`
+is given (0 for a rest day), expenditure is BMR x 1.2 plus the workout (a multiplier below 1.2
+is kept); a workout left out keeps the activity level plus the 30-minute default, so the 72-plan
+baseline is unchanged (diffed). New response field `exercise.replaces_activity_exercise`
+(`docs/openapi.json` regenerated); the React step 1 hint and plan note say a stated workout takes
+the place of the usual week's exercise. The workout check now shows each budget next to the old
+"added on top" one: 143 of 144 still meet the targets; 3 of 24 days (workout not given) still
+count both. Consequence noted in DEC-40: a high activity level with a stated modest workout gets
+far less than "not sure".
+
+Verified: `uv run pytest` and frontend `npm test` / `npm run lint` pass; ruff clean.
+## 2026-11-23 — Claude — P4: meal-quality benchmark with USDA data
+
+Added `--usda` to `scripts/meal_quality_baseline.py` (DEC-41): the key is read from
+`USDA_API_KEY`, provenance counts lookups, and the script exits 2 with no key or no
+successful lookup. Ran it on Mike's Mac (the cloud sandbox's proxy refuses
+`api.nal.usda.gov`); the key stayed in `backend/.env` and is in no committed file. The
+first run found energy read in kJ (shrimp, tuna, broth); fixed in `_energy_kcal` with
+tests for both entry orders and kJ-only foods. After the fix: 50 of 72 benchmark plans and
+113 of 152 wider plans meet the targets, 72 of 72 within 10% of calories, guardrails 5 of 5.
+Remaining misses are fat-heavy wrong matches from USDA's top search hit (turkey mince →
+ham, avocado → dressing); `docs/meal_quality/usda_lookup_diagnosis.md` lists every
+ingredient. Proposed next: pin a FoodData Central ID per ingredient. Full test suite passes.
+
+## 2026-11-23 — Claude — DEC-42: pinned USDA food IDs
+
+Mike approved pinning a USDA food per ingredient. On his Mac, each of the 41 looked-up
+ingredients was matched to a Foundation, SR Legacy or Survey food by several filtered
+searches and confirmed with `/fdc/v1/food/{id}`; `data/reference/usda_fdc_ids.json` holds
+the picks. `_query_usda_database` fetches pinned names by ID, `_flat_nutrients` reads both
+the search and the detail shapes, and energy prefers 208 then Atwater General 957. New
+tests: fetch by ID with a Foundation payload, SR Legacy kcal-not-kJ, and a guard that
+every non-trusted corpus ingredient is pinned. Full suite passes, coverage 97%. USDA reruns
+on the Mac: 72 of 72 benchmark, 144 of 152 wider, no estimated ingredient, guardrails 5
+of 5. Seen once: 2 of 25 detail lookups timed out at 6 s on a first attempt.
+
 ## 2026-11-22 — Claude — user accounts: design draft
 
 Mike chose Firebase for user accounts: Google sign-in through Firebase Auth, Firestore for
@@ -8286,3 +8371,10 @@ with the existing `google-auth` dependency, ignores a body `user_id` for account
 a Firestore repository behind the DEC-4 boundary, and lifts DEC-10's 501 only on Firestore.
 Docs only; nothing is built. Needs Mike: approve the spec, and answer whether signed-out
 visitors may use the hosted app (anonymous sign-in recommended).
+
+## 2026-11-23 — Claude — user accounts: design approved
+
+Mike approved the design with both recommendations: anonymous sign-in for signed-out
+visitors to the hosted app, and Google as the only named sign-in. The spec records the
+answers and how an anonymous account links to Google; DEC-43 records the decision. Next is
+slice 1, bearer-token auth.

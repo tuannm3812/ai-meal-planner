@@ -1,6 +1,7 @@
 # User accounts — design
 
-Status: **draft for Mike's approval**, 2026-11-22. Nothing here is built yet.
+Status: **approved by Mike on 2026-11-23**, with both §8 recommendations (DEC-43). Built in
+the five slices of §9.
 
 Mike chose Firebase on 2026-11-22: Google sign-in through Firebase Auth, saved meals,
 ratings and profiles in Firestore, and the React app on Firebase Hosting, all on free
@@ -25,8 +26,12 @@ every instance, and a host for React.
 ## 2. What the person sees
 
 - The app works signed out, as today: plan, look at the result, keep a profile on this
-  device. See §8 question 1 for whether a signed-out visitor can use the hosted app.
+  device. On the hosted app a signed-out visitor is signed in anonymously (§3), so their
+  plans and saved meals are kept too, on this browser only.
 - **"Sign in with Google"** sits in the brand bar and on the Profile page.
+- Signing in with Google links the anonymous account, so the uid and its records carry
+  over. If that Google account already exists, the app signs into it instead, and the
+  anonymous records stay behind with the anonymous uid; they are not merged.
 - On first sign-in, a profile kept on this device moves into the account, unless the
   account already has one; then the account's wins and the person is told.
 - Signed in, My meals, Past plans, save and rate all work on the hosted app, on any device.
@@ -36,12 +41,14 @@ every instance, and a host for React.
 
 ## 3. Identity
 
-- The browser signs in with the Firebase JS SDK (`firebase/auth`, Google provider, popup)
-  and sends the Firebase ID token as `Authorization: Bearer <token>`.
+- The browser signs in with the Firebase JS SDK (`firebase/auth`): anonymously on a
+  first hosted visit, then with the Google provider in a popup (`linkWithPopup`). It sends the Firebase ID token as `Authorization: Bearer <token>`.
 - The API verifies it with `google.oauth2.id_token.verify_firebase_token`, from
   `google-auth`, which is already a dependency. It checks the signature against Google's
   cached public certificates, the audience (the project ID) and the issuer. No
   `firebase-admin` dependency is needed.
+- An anonymous token is treated like a Google one. Anyone can mint anonymous uids, so the
+  per-uid rate limit is not a cap on one person; the one-instance cap still bounds cost.
 - A verified token becomes a `Principal` with `client_id="accounts"`, the new field
   `user_id=<Firebase uid>`, and the three existing scopes. The rate limit keys on the uid.
 - For an account principal the server **ignores any `user_id` in the body** and uses the
@@ -115,21 +122,18 @@ All free tiers, inside the existing budget alert:
 
 | Service | Free allowance | Expected use |
 | --- | --- | --- |
-| Firebase Auth, Google sign-in | no charge (only phone sign-in is billed, and it isn't used) | a handful of users |
+| Firebase Auth, Google and anonymous sign-in | no charge (only phone sign-in is billed, and it isn't used) | a handful of users |
 | Firestore | 1 GiB stored; 50,000 reads, 20,000 writes and 20,000 deletes a day | about 40 reads a visit, so about 1,250 visits a day before any charge |
 | Firebase Hosting | 10 GB stored, 360 MB a day transferred | about 1 MB a first visit |
 | Cloud Run | unchanged, capped at one instance | unchanged |
 
 The one-instance cap still bounds compute cost if someone scripts sign-ins.
 
-## 8. Questions for Mike
+## 8. Mike's answers (2026-11-23)
 
-1. **Can a signed-out visitor use the hosted app?** Recommended: yes, through Firebase
-   anonymous sign-in. The browser gets a uid with no Google account, planning works, and
-   signing in with Google later keeps that uid's plans. The other way is to require Google
-   sign-in before the hosted app plans anything.
-2. **Sign-in methods.** Recommended: Google only for now. Email and password is a later,
-   small change.
+1. **A signed-out visitor can use the hosted app**, through Firebase anonymous sign-in.
+   Ruled out: requiring Google sign-in before the hosted app plans anything.
+2. **Google sign-in only** for now. Email and password is a later, small change.
 
 ## 9. Order of work
 
@@ -142,8 +146,8 @@ Each slice is its own PR, merged in order:
 5. Firebase Hosting deploy, CORS, `live_check.sh`, `docs/6_deployment.md`; then Mike's
    one-time setup and a real sign-in on the live app.
 
-When this is approved, it becomes DEC-39 in `docs/3_decisions.md`, and §7.2, §7.3 and §7.7
-of `docs/4_next_steps.md` point here.
+The decision is DEC-43 in `docs/3_decisions.md`; §7.2, §7.3 and §7.7 of
+`docs/4_next_steps.md` point here.
 
 ## 10. Out of scope
 

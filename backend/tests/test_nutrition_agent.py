@@ -488,3 +488,155 @@ def test_the_cooldown_constants_are_what_the_docs_claim() -> None:
     """
     assert NutritionVerificationAgent._FAILURE_THRESHOLD == 3
     assert NutritionVerificationAgent._COOLDOWN_SECONDS == 120
+
+
+# P4, 2026-11-23: USDA lists energy in kcal and kJ under the same name.
+
+
+def _usda_with_energy(*energy: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "foods": [
+            {
+                "foodNutrients": [
+                    *energy,
+                    {"nutrientName": "Protein", "value": 20.0, "unitName": "G"},
+                    {"nutrientName": "Carbohydrate, by difference", "value": 0.0, "unitName": "G"},
+                    {"nutrientName": "Total lipid (fat)", "value": 1.0, "unitName": "G"},
+                ]
+            }
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    "energy",
+    [
+        # kJ listed last used to win, reading 356 "kcal" for shrimp.
+        (
+            {"nutrientName": "Energy", "value": 85.0, "unitName": "KCAL"},
+            {"nutrientName": "Energy", "value": 356.0, "unitName": "kJ"},
+        ),
+        (
+            {"nutrientName": "Energy", "value": 356.0, "unitName": "kJ"},
+            {"nutrientName": "Energy", "value": 85.0, "unitName": "KCAL"},
+        ),
+        ({"nutrientName": "Energy (Atwater General Factors)", "value": 85.0, "unitName": "KCAL"},),
+    ],
+)
+def test_usda_energy_is_read_in_kcal_whatever_the_order(
+    monkeypatch: pytest.MonkeyPatch, energy: tuple[dict[str, Any], ...]
+) -> None:
+    monkeypatch.setattr(module, "urlopen", _fake_urlopen(_usda_with_energy(*energy)))
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("kale")
+
+    assert result["calories"] == 85.0
+
+
+def test_usda_energy_only_in_kilojoules_is_converted(monkeypatch: pytest.MonkeyPatch) -> None:
+    payload = _usda_with_energy({"nutrientName": "Energy", "value": 418.4, "unitName": "kJ"})
+    monkeypatch.setattr(module, "urlopen", _fake_urlopen(payload))
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("kale")
+
+    assert result["calories"] == pytest.approx(100.0)
+
+
+# DEC-42: pinned ingredients are fetched by their reviewed FDC ID.
+
+FOUNDATION_FOOD = {
+    "fdcId": 2514747,
+    "dataType": "Foundation",
+    "foodNutrients": [
+        {
+            "type": "FoodNutrient",
+            "nutrient": {"number": "1008", "name": "Energy", "unitName": "kcal"},
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "number": "958",
+                "name": "Energy (Atwater Specific Factors)",
+                "unitName": "kcal",
+            },
+            "amount": 149.0,
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {
+                "number": "957",
+                "name": "Energy (Atwater General Factors)",
+                "unitName": "kcal",
+            },
+            "amount": 152.6,
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {"number": "203", "name": "Protein", "unitName": "g"},
+            "amount": 17.3,
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {"number": "205", "name": "Carbohydrate, by difference", "unitName": "g"},
+            "amount": 0.0,
+        },
+        {
+            "type": "FoodNutrient",
+            "nutrient": {"number": "204", "name": "Total lipid (fat)", "unitName": "g"},
+            "amount": 9.6,
+        },
+    ],
+}
+
+
+def test_a_pinned_ingredient_is_fetched_by_its_fdc_id(monkeypatch: pytest.MonkeyPatch) -> None:
+    urls: list[str] = []
+    opener = _fake_urlopen(FOUNDATION_FOOD)
+
+    def recording(url: str, *args: object, **kwargs: object):
+        urls.append(url)
+        return opener(url, *args, **kwargs)
+
+    monkeypatch.setattr(module, "urlopen", recording)
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("Lean turkey mince")
+
+    assert urls[0].startswith("https://api.nal.usda.gov/fdc/v1/food/2514747?")
+    assert "query=" not in urls[0]
+    assert result["fdc_id"] == 2514747
+    # Atwater General, not Specific, and the amount-less Energy entry is skipped.
+    assert result["calories"] == 152.6
+    assert (result["protein"], result["carbs"], result["fat"]) == (17.3, 0.0, 9.6)
+
+
+def test_every_looked_up_corpus_ingredient_has_a_pinned_usda_food() -> None:
+    from backend.app.core.config import AppSettings
+    from backend.app.rag.meal_corpus import load_meal_corpus
+    from backend.app.rag.reference_data import load_reference
+
+    trusted = load_reference("trusted_overrides")
+    pins = load_reference("usda_fdc_ids")
+    names = {
+        ingredient.item_name.strip().lower()
+        for meal in load_meal_corpus(AppSettings.model_fields["meal_corpus_path"].default)
+        for ingredient in meal.ingredients
+    }
+    looked_up = {name for name in names if name not in trusted}
+
+    assert sorted(looked_up - set(pins)) == []
+    assert sorted(set(pins) - looked_up) == []
+    for pin in pins.values():
+        assert isinstance(pin["fdc_id"], int)
+        assert pin["data_type"] != "Branded"
+
+
+def test_a_pinned_sr_legacy_food_reads_kcal_not_kj(monkeypatch: pytest.MonkeyPatch) -> None:
+    food = {
+        "foodNutrients": [
+            {"nutrient": {"number": "208", "name": "Energy", "unitName": "kcal"}, "amount": 123.0},
+            {"nutrient": {"number": "268", "name": "Energy", "unitName": "kJ"}, "amount": 515.0},
+            {"nutrient": {"number": "203", "name": "Protein", "unitName": "g"}, "amount": 2.7},
+        ]
+    }
+    monkeypatch.setattr(module, "urlopen", _fake_urlopen(food))
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("brown rice")
+
+    assert result["fdc_id"] == 169704
+    assert result["calories"] == 123.0

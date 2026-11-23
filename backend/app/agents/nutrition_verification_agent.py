@@ -16,6 +16,8 @@ from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
 
+KJ_PER_KCAL = 4.184
+
 Verification = Literal["verified_external", "trusted_local", "estimated"]
 
 # G3: each data source maps to one verification level. Any source not listed
@@ -75,6 +77,7 @@ class NutritionVerificationAgent:
         self.api_key = usda_api_key
         self.require_verified = require_verified
         self.base_url = "https://api.nal.usda.gov/fdc/v1/foods/search"
+        self.food_url = "https://api.nal.usda.gov/fdc/v1/food"
         self.fatsecret_client_id = fatsecret_client_id
         self.fatsecret_client_secret = fatsecret_client_secret
         self.fatsecret_token: str | None = None
@@ -157,7 +160,7 @@ class NutritionVerificationAgent:
 
         if self.api_key and not self._in_cooldown(self._usda_cooldown_until):
             try:
-                usda_result = self._query_usda_database(search_name)
+                usda_result = self._query_usda_database(item_name)
                 self._usda_consecutive_failures = 0
                 if self._has_usable_macros(usda_result):
                     self._macro_cache[search_name] = usda_result
@@ -253,19 +256,38 @@ class NutritionVerificationAgent:
         return lookup.get(item_name.strip().lower(), item_name)
 
     def _query_usda_database(self, item_name: str) -> dict[str, Any] | None:
-        query = urlencode({"api_key": self.api_key, "query": item_name, "pageSize": 1})
+        """Look an ingredient up in USDA FoodData Central.
+
+        A pinned ingredient (``data/reference/usda_fdc_ids.json``) is fetched by
+        its reviewed FDC ID. Searching by name took the top hit, which was the
+        wrong food for many corpus ingredients (avocado as avocado dressing,
+        turkey mince as minced ham; DEC-42). An unpinned name, which no corpus
+        ingredient is, still falls back to that search.
+        """
+        pin = load_reference("usda_fdc_ids").get(item_name.strip().lower())
+        if pin:
+            query = urlencode({"api_key": self.api_key})
+            with urlopen(f"{self.food_url}/{int(pin['fdc_id'])}?{query}", timeout=6) as response:
+                food = json.loads(response.read().decode("utf-8"))
+            return {**self._usda_macros(food), "fdc_id": int(pin["fdc_id"])}
+
+        search_name = self._normalize_search_name(item_name)
+        query = urlencode({"api_key": self.api_key, "query": search_name, "pageSize": 1})
         with urlopen(f"{self.base_url}?{query}", timeout=6) as response:
             payload = json.loads(response.read().decode("utf-8"))
 
         foods = payload.get("foods", [])
         if not foods:
             return None
+        return self._usda_macros(foods[0])
 
-        nutrients = foods[0].get("foodNutrients", [])
-        by_name = {nutrient.get("nutrientName", "").lower(): nutrient for nutrient in nutrients}
+    def _usda_macros(self, food: dict[str, Any]) -> dict[str, Any]:
+        """Per-100 g macros from one USDA food, from search or from the food endpoint."""
+        nutrients = self._flat_nutrients(food.get("foodNutrients", []))
+        by_name = {nutrient["nutrientName"].lower(): nutrient for nutrient in nutrients}
 
         return {
-            "calories": self._nutrient_value(by_name, "energy", "Energy"),
+            "calories": self._energy_kcal(nutrients),
             "protein": self._nutrient_value(by_name, "protein", "Protein"),
             "carbs": self._nutrient_value(by_name, "carbohydrate", "Carbohydrate, by difference"),
             "fat": self._nutrient_value(by_name, "total lipid", "Total lipid (fat)"),
@@ -382,6 +404,59 @@ class NutritionVerificationAgent:
             estimate = {"calories": 120, "protein": 4, "carbs": 14, "fat": 5}
 
         return {**estimate, "source": "category_estimate", "confidence": 0.45}
+
+    @staticmethod
+    def _flat_nutrients(nutrients: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Normalise USDA nutrient entries to ``nutrientName``, ``unitName``, ``value``.
+
+        Search results are flat (``nutrientName``, ``value``). The food endpoint
+        nests them (``{"nutrient": {"name", "unitName"}, "amount"}``), and its
+        abridged format uses ``name`` and ``amount``.
+        """
+        flat = []
+        for entry in nutrients:
+            nested = entry.get("nutrient") or {}
+            name = entry.get("nutrientName") or entry.get("name") or nested.get("name") or ""
+            unit = entry.get("unitName") or nested.get("unitName")
+            value = entry.get("value", entry.get("amount"))
+            if value is None:
+                # Foundation foods list some nutrients with no amount at all.
+                continue
+            flat.append({"nutrientName": name, "unitName": unit, "value": value})
+        return flat
+
+    @staticmethod
+    def _energy_kcal(nutrients: list[dict[str, Any]]) -> float:
+        """Energy per 100 g in kcal, read by unit rather than by name.
+
+        Many USDA foods list "Energy" twice, once in kcal and once in kJ. Keyed
+        by name, the last entry won, so shrimp read 356 "kcal" instead of 85
+        (P4, 2026-11-23). A kcal entry is preferred, the plain "Energy" one
+        first; kJ is converted only when no kcal entry exists. An entry with no
+        unit is read as kcal, as before. Foundation foods often have no plain
+        Energy entry, only "Energy (Atwater General Factors)" and "(Atwater
+        Specific Factors)"; General is preferred, as when the pins were reviewed.
+        """
+        kcal: list[dict[str, Any]] = []
+        kilojoules: list[dict[str, Any]] = []
+        for nutrient in nutrients:
+            name = nutrient.get("nutrientName", "").lower()
+            if "energy" not in name:
+                continue
+            unit = (nutrient.get("unitName") or "kcal").lower()
+            if unit == "kcal":
+                kcal.append(nutrient)
+            elif unit == "kj":
+                kilojoules.append(nutrient)
+        if kcal:
+            for wanted in ("energy", "energy (atwater general factors)"):
+                named = [n for n in kcal if n.get("nutrientName", "").lower() == wanted]
+                if named:
+                    return float(named[0].get("value", 0))
+            return float(kcal[0].get("value", 0))
+        if kilojoules:
+            return float(kilojoules[0].get("value", 0)) / KJ_PER_KCAL
+        return 0.0
 
     @staticmethod
     def _nutrient_value(by_name: dict[str, Any], partial_key: str, fallback_key: str) -> float:

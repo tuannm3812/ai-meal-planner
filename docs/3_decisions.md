@@ -43,6 +43,9 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 33 | The meal request takes today's workout; a rest day adds no exercise | 2026-11-22 |
 | 34 | Diet rules read a tag table of ingredients; an untagged ingredient is refused | 2026-11-22 |
 | 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
+| 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
+| 40 | A stated workout replaces the activity level's exercise | 2026-11-22 |
+| 43 | User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers | 2026-11-23 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -711,3 +714,110 @@ only its macro. A guard test enforces all of it.
 
 Rules out CSS variables for theming (there is one theme, and Tailwind classes plus a JS
 module cover both HTML and SVG) and a second icon set.
+
+## 2026-11-22 — Calorie model: workouts past its training range
+
+### DEC-39 — A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged
+
+The workout check (`scripts/meal_quality_baseline.py --workouts`) found that the
+model scored a 45, 60 and 90-minute workout the same: 238 kcal for the average
+man. Its training data (Kaggle S5E5) holds workouts of 1 to 30 minutes and heart
+rates of 67 to 128 bpm, read from the trees' bin edges, and boosted trees are flat
+past the last edge.
+
+A workout longer than 30 minutes is now predicted at 30 minutes and scaled by its
+length, so the 30-minute rate per minute holds: a 60-minute run at 140 bpm adds
+477 kcal for the average man, not 238. A heart rate above 128 bpm is still
+predicted as 128, and the response warns that a harder workout may be
+undercounted. Each case adds a warning to `calorie_budget.warnings`. Workouts of
+30 minutes or less, and the 72-plan baseline, do not change.
+
+Still open: the body-temperature default of 37 °C is below the training range
+(37.1 to 41.5 °C, mean 40.0), and the model is not monotonic in it, so a short
+workout at the default scores high (10 minutes at 110 bpm: 173 kcal at 37 °C, 67
+at 40.5 °C). The overlap between the activity level and today's workout is
+measured by the same check and fixed by DEC-40.
+Ruled out: a linear model past 30 minutes fitted to the trees, which would add a
+second model to explain for one edge.
+
+### DEC-40 — A stated workout replaces the activity level's exercise
+
+The clients describe the activity levels as exercise days in a usual week, so BMR
+times the multiplier already holds an average day's exercise (626 kcal for the
+average man at x1.55). DEC-33 then added today's workout on top, so a workout day
+counted exercise twice, and a rest day still counted the week's average. The workout
+check found this on 15 of 24 profile-days. Mike chose this fix on 2026-11-22.
+
+When the request states today's workout (`duration_minutes` given, 0 for a rest day),
+the day's expenditure is BMR times 1.2, the sedentary multiplier, plus the workout. A
+multiplier below 1.2 is kept. When the workout is not given, nothing changes: the
+activity level stands and the model's 30-minute default is added, so the 72-plan
+baseline does not move. `calorie_budget.exercise.replaces_activity_exercise` says
+which applied, and the React plan page says so.
+
+Budgets on stated days fall: the average man's rest day goes from 2,774 to 2,148 kcal
+and his 60-minute run day from 3,251 to 2,625. Consequence to watch: a person on a
+high activity level who states a modest workout gets far less than one who answers
+"not sure" (the athlete: 3,333 kcal for a 60-minute run, 4,521 for not sure), so a
+physical job, which the activity level also covers, is no longer counted on stated
+days. Ruled out: keeping the weekly average and adding only a workout's excess over
+it, which would make a rest day count the average again.
+### DEC-41 — The benchmark can run on USDA data; USDA energy is read by unit
+
+2026-11-23, P4. Mike asked for the meal-quality benchmark to run with real USDA data.
+`scripts/meal_quality_baseline.py --usda` passes `USDA_API_KEY` (shell or `backend/.env`,
+never an argument) to the production nutrition agent. The run's provenance records
+`nutrition_source` and counts USDA lookups, failures and unusable answers, and the script
+exits 2 when no key is set or no lookup succeeded, so a run that quietly fell back to the
+local tables cannot pass as a USDA run. USDA search is live, so these runs are recorded
+apart from the deterministic offline baseline, which stays the reference for every change.
+
+The first run showed `_query_usda_database` keyed nutrients by name, so when a food listed
+`Energy` in both kcal and kJ the kJ value could win (shrimp 356 "kcal" instead of 85).
+`_energy_kcal` now prefers a kcal entry, then converts kJ at 4.184, and reads an entry
+with no unit as kcal as before. Results and the per-ingredient diagnosis:
+`docs/7_meal_quality.md` §6.
+
+Rules out a dataType filter (Foundation, SR Legacy) as the fix for wrong matches: it was
+measured and matched worse foods. Pinned FoodData Central IDs per ingredient are the
+proposed next step, not done here.
+
+### DEC-42 — Corpus ingredients are looked up in USDA by a reviewed FDC ID
+
+2026-11-23, Mike's choice after DEC-41's run. Name search took USDA's top hit, which was
+the wrong food for many ingredients (lean turkey mince as minced ham, avocado as avocado
+dressing, cod as breaded cod), and a dataType filter matched worse. Each of the 41 corpus
+ingredients without a trusted local value is now pinned in
+`data/reference/usda_fdc_ids.json` to one Foundation, SR Legacy or Survey food, chosen for
+the state the recipe's weight implies, and fetched from `/fdc/v1/food/{fdcId}`. A test
+fails when a corpus ingredient is neither trusted nor pinned. An unpinned name still falls
+back to search, which no corpus ingredient reaches.
+
+Energy is read as plain Energy (208) in kcal, then "Energy (Atwater General Factors)"
+(957), which is what Foundation foods carry; entries with no amount are skipped. With the
+pins, 72 of 72 benchmark plans and 144 of 152 wider plans meet the targets on USDA data
+(`docs/7_meal_quality.md` §7).
+
+Rules out tuning pins to the score: Hass avocado and store-bought hummus stay although
+USDA averages would clear about five misses.
+
+## 2026-11-23 — User accounts
+
+Source: `docs/superpowers/specs/2026-11-22-user-accounts-design.md`.
+
+### DEC-43 — User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers
+
+Mike chose Google sign-in through Firebase Auth, Firestore for profiles, plans and
+feedback, and Firebase Hosting for the React app, all on free tiers in the existing GCP
+project and its A$1 budget alert. A signed-out visitor to the hosted app is signed in
+anonymously, so planning and history work without a Google account; Google is the only
+named sign-in for now.
+
+The API verifies Firebase ID tokens with `google-auth`, stores only the uid, and for an
+account caller ignores any body `user_id` and refuses a path `user_id` that is not the
+caller's. API keys keep working for Streamlit and scripts. Hosted mode serves history
+when storage is Firestore; DEC-10's refusal stays for hosted SQLite.
+
+Rules out Supabase (a second vendor whose free project sleeps after a week idle), Cloud
+SQL (about A$15 or more a month) and staying device-only. Supersedes DEC-36's "no
+accounts" and lifts DEC-8's limit that React cannot call the hosted API.
