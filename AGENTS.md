@@ -154,7 +154,10 @@ the hand-offs by watching the log; its header says how to run it.
   whose contract tests run on the Firestore emulator in CI. Slice 3: `GET`/`PUT /me/profile` and
   `DELETE /me`, and a hosted deployment on Firestore keeps history (`history_enabled`). Slice 4:
   React signs in with Firebase (anonymous on first API call, Google from the Profile page or
-  the top bar) when built with `VITE_FIREBASE_*`, and sends the token on every call.
+  the top bar) when built with `VITE_FIREBASE_*`, and sends the token on every call. Slice 5:
+  `deploy.yml` switches to Firestore and publishes React to Firebase Hosting when the
+  `ACCOUNTS_ENABLED` variable is `true`; the one-time setup is `docs/6_deployment.md` §5 (not
+  yet done).
 
 ## Open risks
 

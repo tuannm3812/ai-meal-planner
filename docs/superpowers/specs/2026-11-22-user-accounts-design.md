@@ -1,7 +1,8 @@
 # User accounts — design
 
-Status: **approved by Mike on 2026-11-23**, with both §8 recommendations (DEC-43). Built in
-the five slices of §9.
+Status: **approved by Mike on 2026-11-23**, with both §8 recommendations (DEC-43). All five
+slices of §9 are built (PR #58); the one-time Firebase setup in `docs/6_deployment.md` §5 is
+next.
 
 Mike chose Firebase on 2026-11-22: Google sign-in through Firebase Auth, saved meals,
 ratings and profiles in Firestore, and the React app on Firebase Hosting, all on free

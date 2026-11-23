@@ -3,6 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 
 import AppShell from './app/AppShell'
 import { AccountProvider } from './app/AccountContext'
+import { accountsEnabled } from './auth/firebase'
 import { PlannerProvider } from './app/PlannerContext'
 import HomePage from './pages/HomePage'
 import ListPage from './pages/ListPage'
@@ -26,7 +27,11 @@ function App() {
               <ListPage
                 Icon={Bookmark}
                 empty="Meals you save from a plan show up here."
-                intro="Meals you saved on this device, newest first."
+                intro={
+                  accountsEnabled
+                    ? 'Meals you saved, newest first. Sign in with Google to keep them on any device.'
+                    : 'Meals you saved on this device, newest first.'
+                }
                 pick={(lists) => lists.saved}
                 title="My meals"
               />
@@ -38,7 +43,11 @@ function App() {
               <ListPage
                 Icon={History}
                 empty="Plans you make show up here."
-                intro="Every meal planned on this device, newest first. History lives on the API you are connected to, and it is lost when that server is replaced."
+                intro={
+                  accountsEnabled
+                    ? 'Every meal you planned, newest first. Sign in with Google to keep them on any device.'
+                    : 'Every meal planned on this device, newest first. History lives on the API you are connected to, and it is lost when that server is replaced.'
+                }
                 pick={(lists) => lists.history}
                 title="Past plans"
               />

@@ -8439,3 +8439,19 @@ and "Delete my account and data" (with a confirmation) forget the device; delete
 A failed server delete removes nothing locally. `firebase` 13.2.0 (Apache-2.0) adds about 35 kB
 gzipped. Verified: `vitest run` 257 passed (23 new: firebase module, API identity, account
 card); `eslint` clean; `vite build` with and without the config.
+
+## 2026-11-23 — Claude — user accounts slice 5: Firebase Hosting deploy
+
+`deploy.yml` reads `vars.ACCOUNTS_ENABLED`. Unset, the API deploys as before. `true` sets
+`STORAGE_BACKEND=firestore`, `FIREBASE_PROJECT_ID` and `ALLOWED_ORIGINS=https://<project>.web.app`,
+and a new `hosting` job builds React against the new revision (Firebase web config from
+`FIREBASE_WEB_API_KEY` and `FIREBASE_WEB_APP_ID`), then deploys hosting, `firestore.rules` (deny
+all browser access; only the API's service account uses Firestore) and `firestore.indexes.json`
+with firebase-tools 14.27.0 over the existing Workload Identity Federation. `firebase.json` serves
+`frontend/dist` as a single-page app. `live_check.sh` reads `history_enabled` from `/health`: on
+shared storage it expects 200 from history routes, 404 for feedback on an unknown plan, and 401
+for an invalid bearer token; otherwise it keeps the 501 checks. Two new fixture tests cover the
+shared-storage path. `docs/6_deployment.md` §5 is the one-time setup (APIs, Firebase on the
+project, Firestore in australia-southeast1, a web app, IAM roles, Google and Anonymous
+providers) and a by-hand check. The React list pages no longer say "on this device" when
+accounts are on. Not run against the real project: that needs Mike's setup. Needs Mike.
