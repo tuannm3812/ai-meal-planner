@@ -159,8 +159,8 @@ References:
 
 Put the limits in one place.
 
-Plans hit their targets on fixed requests. Most lean on estimates. Nobody has used it yet.
-Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31.
+Plans hit their targets on fixed requests offline, and 50 of 72 with live USDA data, where the misses trace to wrong USDA matches. Most offline plans lean on estimates. Nobody has used it yet.
+Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5; DEC-31.
 
 References:
 - sources.md
@@ -170,7 +170,7 @@ References:
 
 Pair the limits with the work that answers them.
 
-Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.
+Foundations first: migrations are done and accounts are next; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.
 Sources: docs/4_next_steps.md §6 and §7.
 
 References:
@@ -226,3 +226,31 @@ Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_202
 
 References:
 - sources.md
+
+## 21. A5. Workout days: today's workout replaces the usual week
+
+Appendix: what the workout check measured and the two fixes it led to.
+
+The fixed 72 requests send no workout. This check sends six: not given, rest day, a walk, a jog, a run and a ride, for each of the four profiles on six cravings.
+The activity level already holds an average day's exercise: 626 kcal for this man. Before the fix, today's workout was added on top on 15 of 24 profile-days. Now a stated workout replaces it, so his run day falls from 3,251 to 2,625 kcal. A workout left out still adds the 30-minute default to the activity level.
+The model was trained on 1 to 30 minutes, so 60 and 90 minutes used to count as 30. They now count per minute. Heart rates above 128 bpm are still read as 128, and every request uses the 37 °C body-temperature default, which is just below the training range.
+The one miss: targets between about 360 and 390 kcal push Tuna Pasta Salad's carbs to 43%, because the pasta cannot shrink below half a portion.
+Sources: docs/7_meal_quality.md §5 (Workout days); docs/meal_quality/workouts.md; DEC-39, DEC-40; PR #57.
+
+References:
+- sources.md
+- claims-register.md
+
+## 22. A6. With live USDA data, 50 of 72 plans meet both targets
+
+Appendix: the first benchmark run with independent nutrition data, and what it found.
+
+The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent. USDA search results are live, so this run is not repeatable and never replaces the offline benchmark.
+The first run read energy in kilojoules for foods that list both units: shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, every plan is back within 10% of its calories, and 50 of 72 meet both targets; the median gap is 0.7%.
+Almost every remaining miss has calories on target and fat too high, because the lookup takes USDA's first search hit: avocado finds avocado dressing, and lean turkey mince finds minced ham. The ham match alone causes 16 of the 22 misses, through the fallback turkey bowl.
+Next: pin one reviewed USDA food per ingredient in the reference data, so the lookup is repeatable, then rerun.
+Sources: docs/7_meal_quality.md §5 (With USDA data); docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59.
+
+References:
+- sources.md
+- claims-register.md

@@ -913,5 +913,86 @@ def mp_walk(L, p, slide):
         inked(L, p, r['text'], x0 + 32, y + 25, cw - 32, 10)
 
 
+# -- appendix: benchmark runs -------------------------------------------------------------------
+def chart_key(L, p, keys, x, y, w):
+    """The chart's encoding key, right-aligned above the plot: a swatch per series, then its words."""
+    widths = [L.metrics.fonts[(False, False)].getlength(k['label']) * 8 / 120 for k in keys]
+    xx = x + w
+    for k, kw in reversed(list(zip(keys, widths))):
+        xx -= kw + 4
+        paint(L, p, k['label'], xx, y, kw + 4, 8, BODY)
+        xx -= 14
+        if k.get('outline'):
+            L.outlined(p, xx, y + 2, 10, 8, 'transparent', k['colour'], 1, 'RECTANGLE')
+        else:
+            p.rect(xx, y + 2, 10, 8, k['colour'])
+        xx -= 14
+
+
+def bench_stack(L, p, c, x, top, w, base):
+    """One stacked bar per day: the body's day, the workout on it, and an outline for what used to be added."""
+    bars = c['bars']
+    slot = w / len(bars)
+    scale = (base - top) / c['maximum']
+    for i, b in enumerate(bars):
+        bx, bw = x + i * slot + slot * .22, slot * .56
+        y = base
+        for value, colour in ((b['body'], V_BLUE), (b['workout'], V_TEAL)):
+            h = value * scale
+            if h > 0:
+                p.rect(bx, y - h, bw, h, colour)
+            y -= h
+        gh = b['removed'] * scale
+        L.outlined(p, bx + .5, y - gh, bw - 1, gh, 'transparent', V_DARK, 1, 'RECTANGLE')
+        paint(L, p, f"was {b['before']:,}", bx, y - gh + 5, bw, 8, V_DARK, True, 'center')
+        paint(L, p, f"{b['now']:,}", bx, y + 5, bw, 12, WHITE, True, 'center')
+        put(L, p, b['label'], x + i * slot, base + 6, slot, 10, 'ink', True, 'center')
+        put(L, p, b['detail'], x + i * slot, base + 20, slot, 8, 'body', False, 'center')
+    p.line(x, base, x + w, base, HAIR)
+
+
+def bench_groups(L, p, c, x, top, w, base):
+    """Runs side by side; in each, one bar per measure, out of the same total."""
+    groups = c['groups']
+    slot = w / len(groups)
+    scale = (base - top) / c['maximum']
+    colours = [k['colour'] for k in c['keys']]
+    for i, g in enumerate(groups):
+        n = len(g['values'])
+        bw = slot * .6 / n
+        x0 = x + i * slot + slot * .2
+        for k, v in enumerate(g['values']):
+            h = v * scale
+            p.rect(x0 + k * bw + 2, base - h, bw - 4, h, colours[k])
+            put(L, p, str(v), x0 + k * bw - 6, base - h - 20, bw + 12, 12, 'ink', True, 'center')
+        put(L, p, g['label'], x + i * slot, base + 6, slot, 10, 'ink', True, 'center')
+        put(L, p, g['detail'], x + i * slot, base + 20, slot, 8, 'body', False, 'center')
+    p.line(x, base, x + w, base, HAIR)
+
+
+def mp_bench(L, p, slide):
+    """A benchmark run: its chart on the left, three numbers that explain it on the right."""
+    bottom = band(L, p, slide) - 14
+    lw = 560
+    c = slide['chart']
+    p.rect(LEFT, TOP, lw, bottom - TOP, pale(slide))
+    put(L, p, c['title'], LEFT + 14, TOP + 10, lw - 28, 10, 'body')
+    chart_key(L, p, c['keys'], LEFT + 14, TOP + 28, lw - 28)
+    base = bottom - 50
+    top = TOP + 62
+    (bench_stack if c['kind'] == 'stack' else bench_groups)(L, p, c, LEFT + 14, top, lw - 28, base)
+    x0 = LEFT + lw + 18
+    w = RIGHT - x0
+    mets = slide['metrics']
+    mh = (bottom - TOP - 12 * (len(mets) - 1)) / len(mets)
+    for i, m in enumerate(mets):
+        y = TOP + i * (mh + 12)
+        card(p, x0, y, w, mh, accent(slide), rule='left')
+        dot_icon(L, p, m['icon'], ACCENT[accent(slide)][0], x0 + 14, y + 14, 24)
+        put(L, p, m['value'], x0 + 50, y + 12, w - 64, 18, 'ink', True)
+        inked(L, p, m['label'], x0 + 50, y + 38, w - 64, 10)
+
+
 LAYOUTS = {f.__name__: f for f in (mp_arch_flow, mp_cover, mp_agenda, mp_close, mp_summary, mp_problem, mp_flow, mp_agents, mp_calories, mp_choosing, mp_nutrition,
-                                   mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next, mp_walk)}
+                                   mp_good, mp_results, mp_architecture, mp_engineering, mp_limits, mp_next, mp_walk,
+                                   mp_bench)}

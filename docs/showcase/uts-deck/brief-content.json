@@ -1322,14 +1322,14 @@
       "topic": "Limits",
       "accent": "ochre",
       "title": "What this project does not prove yet",
-      "subtitle": "The numbers are measured offline; how people use it is untested.",
+      "subtitle": "The numbers are measured on fixed requests; how people use it is untested.",
       "takeaway": "A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.",
       "question": "What is unproven?",
       "notes": {
         "purpose": "Put the limits in one place.",
         "script": [
-          "Plans hit their targets on fixed requests. Most lean on estimates. Nobody has used it yet.",
-          "Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md; DEC-31."
+          "Plans hit their targets on fixed requests offline, and 50 of 72 with live USDA data, where the misses trace to wrong USDA matches. Most offline plans lean on estimates. Nobody has used it yet.",
+          "Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5; DEC-31."
         ],
         "references": [
           "sources.md",
@@ -1342,22 +1342,22 @@
           "title": "Measured",
           "items": [
             "**72 of 72** and **152 of 152**, offline",
-            "But the checks guided the fixes",
-            "11 of 72 fall back"
+            "**50 of 72** with live USDA data",
+            "But the checks guided the fixes"
           ],
           "strength": 3,
-          "next": "Run the benchmark with USDA keys"
+          "next": "Pin one USDA food per ingredient"
         },
         {
           "icon": "calculate",
           "title": "Estimated",
           "items": [
-            "**68 of 72** plans include an estimate",
+            "**68 of 72** offline plans include an estimate",
             "AMDR is a daily range on one meal",
-            "The benchmark uses default workouts"
+            "Body temperature is a fixed default"
           ],
           "strength": 2,
-          "next": "Real workouts in the benchmark"
+          "next": "Ask a dietitian to review the rules"
         },
         {
           "icon": "group",
@@ -1365,7 +1365,6 @@
           "items": [
             "No user testing",
             "No clinical review",
-            "No database migrations",
             "Taste and health outcomes unknown"
           ],
           "strength": 1,
@@ -1381,12 +1380,12 @@
       "accent": "ochre",
       "title": "What comes next, in priority order",
       "subtitle": "How the project got here, and the work still ahead.",
-      "takeaway": "Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.",
+      "takeaway": "Accounts and better inputs first, then people; each step answers a limit on the previous page.",
       "question": "What comes next?",
       "notes": {
         "purpose": "Pair the limits with the work that answers them.",
         "script": [
-          "Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.",
+          "Foundations first: migrations are done and accounts are next; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.",
           "Sources: docs/4_next_steps.md §6 and §7."
         ],
         "references": [
@@ -1417,43 +1416,41 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, kitchen app, Cloud Run"
+          "text": "76 recipes, Cloud Run, workout check"
         },
         {
           "date": "Now",
-          "text": "Next steps"
+          "text": "USDA run, next steps"
         }
       ],
       "columns": [
         {
           "title": "Now",
           "items": [
-            "Add database migrations",
-            "Add user accounts"
+            "Add user accounts",
+            "Pin one USDA food per ingredient"
           ],
           "icons": [
-            "inventory_2",
-            "person"
+            "person",
+            "fact_check"
           ]
         },
         {
           "title": "Next",
           "items": [
-            "Run the benchmark with USDA keys",
-            "Benchmark with real workouts",
-            "Connect live store prices"
+            "Connect live store prices",
+            "Use ratings in ranking"
           ],
           "icons": [
-            "fact_check",
-            "fitness_center",
-            "storefront"
+            "storefront",
+            "restaurant"
           ]
         },
         {
           "title": "Later",
           "items": [
             "Ask a dietitian to review the rules",
-            "Use feedback, then test with people"
+            "Test with people"
           ],
           "icons": [
             "verified",
@@ -1552,7 +1549,7 @@
         },
         {
           "title": "Activity and today's workout",
-          "text": "The usual week, plus **today's session** from the trained model."
+          "text": "The usual week; **today's workout**, from the trained model, replaces its exercise."
         },
         {
           "title": "Anything to avoid",
@@ -1801,6 +1798,200 @@
         ],
         "references": [
           "sources.md"
+        ]
+      }
+    },
+    {
+      "id": "workouts",
+      "layout": "mp_bench",
+      "section": "Appendix",
+      "topic": "Workout days",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A5. Workout days: today's workout replaces the usual week",
+      "subtitle": "Workout check, 22 November 2026: 4 profiles × 6 workouts × 6 cravings, 144 plans, apart from the 72.",
+      "takeaway": "Workout days counted the usual week's exercise twice; budgets now drop by it, and plans still meet their targets.",
+      "question": "What happens when people say what exercise they did today?",
+      "chart": {
+        "kind": "stack",
+        "title": "Average man, maintaining: daily budget, kcal",
+        "maximum": 3600,
+        "keys": [
+          {
+            "label": "Body (BMR × 1.2)",
+            "colour": "#3B528B"
+          },
+          {
+            "label": "Today's workout",
+            "colour": "#21918C"
+          },
+          {
+            "label": "Usual week's exercise, no longer added",
+            "colour": "#440154",
+            "outline": true
+          }
+        ],
+        "bars": [
+          {
+            "label": "Rest day",
+            "detail": "no workout",
+            "body": 2148,
+            "workout": 0,
+            "removed": 626,
+            "now": 2148,
+            "before": 2774
+          },
+          {
+            "label": "Walk",
+            "detail": "20 min, 95 bpm",
+            "body": 2148,
+            "workout": 63,
+            "removed": 626,
+            "now": 2211,
+            "before": 2838
+          },
+          {
+            "label": "Jog",
+            "detail": "30 min, 120 bpm",
+            "body": 2148,
+            "workout": 230,
+            "removed": 626,
+            "now": 2378,
+            "before": 3005
+          },
+          {
+            "label": "Run",
+            "detail": "60 min, 140 bpm",
+            "body": 2148,
+            "workout": 477,
+            "removed": 626,
+            "now": 2625,
+            "before": 3251
+          },
+          {
+            "label": "Ride",
+            "detail": "90 min, 135 bpm",
+            "body": 2148,
+            "workout": 715,
+            "removed": 626,
+            "now": 2863,
+            "before": 3490
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "icon": "check_circle",
+          "value": "143 of 144",
+          "label": "plans meet both targets: **6 workouts**, **4 profiles**"
+        },
+        {
+          "icon": "fitness_center",
+          "value": "477 kcal",
+          "label": "for a 60-minute run, up from 238: past **30 minutes**, each minute now counts"
+        },
+        {
+          "icon": "flag",
+          "value": "1 miss",
+          "label": "Tuna Pasta Salad at a **378 kcal** target: carbs 43%, with the pasta already at its smallest portion"
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: what the workout check measured and the two fixes it led to.",
+        "script": [
+          "The fixed 72 requests send no workout. This check sends six: not given, rest day, a walk, a jog, a run and a ride, for each of the four profiles on six cravings.",
+          "The activity level already holds an average day's exercise: 626 kcal for this man. Before the fix, today's workout was added on top on 15 of 24 profile-days. Now a stated workout replaces it, so his run day falls from 3,251 to 2,625 kcal. A workout left out still adds the 30-minute default to the activity level.",
+          "The model was trained on 1 to 30 minutes, so 60 and 90 minutes used to count as 30. They now count per minute. Heart rates above 128 bpm are still read as 128, and every request uses the 37 °C body-temperature default, which is just below the training range.",
+          "The one miss: targets between about 360 and 390 kcal push Tuna Pasta Salad's carbs to 43%, because the pasta cannot shrink below half a portion.",
+          "Sources: docs/7_meal_quality.md §5 (Workout days); docs/meal_quality/workouts.md; DEC-39, DEC-40; PR #57."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      }
+    },
+    {
+      "id": "usda",
+      "layout": "mp_bench",
+      "section": "Appendix",
+      "topic": "USDA data",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A6. With live USDA data, 50 of 72 plans meet both targets",
+      "subtitle": "The same 72 requests, each ingredient looked up in USDA FoodData Central, 23 November 2026.",
+      "takeaway": "The drop measures the lookup, not the recipes: USDA's first search hit is often the wrong food.",
+      "question": "Do the plans still hold with independent nutrition data?",
+      "chart": {
+        "kind": "groups",
+        "title": "Benchmark plans, out of 72",
+        "maximum": 72,
+        "keys": [
+          {
+            "label": "Calories within 10%",
+            "colour": "#21918C"
+          },
+          {
+            "label": "Both targets met",
+            "colour": "#3B528B"
+          }
+        ],
+        "groups": [
+          {
+            "label": "Offline",
+            "detail": "local nutrition tables",
+            "values": [
+              72,
+              72
+            ]
+          },
+          {
+            "label": "USDA, first run",
+            "detail": "energy read in kJ",
+            "values": [
+              64,
+              47
+            ]
+          },
+          {
+            "label": "USDA, kJ fixed",
+            "detail": "energy read in kcal",
+            "values": [
+              72,
+              50
+            ]
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "icon": "calculate",
+          "value": "356 kcal",
+          "label": "read for 100 g of shrimp; the real **85 kcal** was listed beside it in kJ. Fixed."
+        },
+        {
+          "icon": "search",
+          "value": "16 of 22",
+          "label": "remaining misses come from one wrong match: **lean turkey mince** found minced ham"
+        },
+        {
+          "icon": "fact_check",
+          "value": "113 of 152",
+          "label": "wider check, up from 108; guardrails **5 of 5**"
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: the first benchmark run with independent nutrition data, and what it found.",
+        "script": [
+          "The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent. USDA search results are live, so this run is not repeatable and never replaces the offline benchmark.",
+          "The first run read energy in kilojoules for foods that list both units: shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, every plan is back within 10% of its calories, and 50 of 72 meet both targets; the median gap is 0.7%.",
+          "Almost every remaining miss has calories on target and fat too high, because the lookup takes USDA's first search hit: avocado finds avocado dressing, and lean turkey mince finds minced ham. The ham match alone causes 16 of the 22 misses, through the fallback turkey bowl.",
+          "Next: pin one reviewed USDA food per ingredient in the reference data, so the lookup is repeatable, then rerun.",
+          "Sources: docs/7_meal_quality.md §5 (With USDA data); docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
         ]
       }
     }
