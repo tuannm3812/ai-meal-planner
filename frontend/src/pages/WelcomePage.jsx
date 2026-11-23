@@ -13,7 +13,8 @@ import {
 } from '../components/icons/glyphs'
 import BlobShape from '../components/illustrations/BlobShape'
 import DishIllustration from '../components/illustrations/DishIllustration'
-import { ghostButton, pageShell, primaryButton } from '../components/ui/styles'
+import Note from '../components/ui/Note'
+import { ghostButton, pageShell, primaryButton, secondaryButton } from '../components/ui/styles'
 import { CRAVING_SUGGESTIONS } from '../features/craving/craving'
 import CalorieRing from '../features/plan/charts/CalorieRing'
 import MacroDonut from '../features/plan/charts/MacroDonut'
@@ -77,7 +78,7 @@ function FloatingChip({ className = '', children }) {
 function Hero() {
   return (
     <section aria-labelledby="welcome-heading" className="relative overflow-hidden bg-cobalt text-white">
-      <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-24`}>
+      <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 pb-28 pt-12 lg:grid-cols-[1.1fr_1fr] lg:pb-32 lg:pt-16`}>
         <div className="flex flex-col gap-6">
           <p className="w-fit rounded-full border border-white/25 px-4 py-1.5 text-sm font-semibold text-peach">
             One meal at a time
@@ -98,10 +99,10 @@ function Hero() {
             </button>
             <button
               className={`${ghostButton} min-h-[60px] px-7 text-lg`}
-              onClick={() => scrollTo('how-it-works')}
+              onClick={() => scrollTo('example')}
               type="button"
             >
-              How it works
+              See an example plan
             </button>
           </div>
           <p className="flex items-center gap-2 text-[15px] text-on-ink-muted">
@@ -148,23 +149,29 @@ function Hero() {
   )
 }
 
+// Three steps in one strip that sits over the hero's lower edge, so the form
+// comes straight after it.
 function HowItWorks() {
   return (
-    <section aria-labelledby="how-heading" className="scroll-mt-4 py-16 sm:py-20" id="how-it-works">
+    <section aria-labelledby="how-heading" className="relative -mt-20 scroll-mt-4" id="how-it-works">
       <div className={pageShell}>
-        <h2 className="text-center font-display text-4xl font-extrabold tracking-tight text-ink" id="how-heading">
-          How it works
-        </h2>
-        <ol className="mt-12 grid gap-10 sm:grid-cols-3">
-          {STEPS.map(({ glyph, title, body }, index) => (
-            <li className="flex flex-col items-center gap-3 text-center" key={title}>
-              <Icon as={glyph} size="xl" tone="light" />
-              <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">Step {index + 1}</p>
-              <p className="font-display text-2xl font-extrabold tracking-tight text-ink">{title}</p>
-              <p className="max-w-xs text-muted">{body}</p>
-            </li>
-          ))}
-        </ol>
+        <div className="grid gap-x-10 gap-y-6 rounded-3xl border border-ink bg-surface p-6 sm:p-8 lg:grid-cols-[180px_minmax(0,1fr)] lg:items-center">
+          <h2 className="font-display text-2xl font-extrabold leading-tight tracking-tight text-ink" id="how-heading">
+            How it works
+          </h2>
+          <ol className="grid gap-6 sm:grid-cols-3">
+            {STEPS.map(({ glyph, title, body }, index) => (
+              <li className="flex items-start gap-3.5" key={title}>
+                <Icon as={glyph} size="lg" tone="light" />
+                <div className="min-w-0">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-accent-text">Step {index + 1}</p>
+                  <p className="mt-0.5 font-semibold leading-6 text-ink">{title}</p>
+                  <p className="mt-0.5 text-sm leading-5 text-muted">{body}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </div>
     </section>
   )
@@ -172,13 +179,13 @@ function HowItWorks() {
 
 function Menu() {
   return (
-    <section aria-labelledby="menu-heading" className="bg-surface py-16 sm:py-20">
+    <section aria-labelledby="menu-heading" className="bg-surface py-14 sm:py-16">
       <div className={pageShell}>
-        <h2 className="font-display text-4xl font-extrabold tracking-tight text-ink" id="menu-heading">
+        <h2 className="font-display text-3xl font-extrabold tracking-tight text-ink sm:text-4xl" id="menu-heading">
           A real menu, not made-up meals
         </h2>
-        <p className="mt-2 text-lg text-muted">{MENU_SIZE} tested recipes. Here are a few to try.</p>
-        <ul className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+        <p className="mt-3 text-lg text-muted">{MENU_SIZE} tested recipes. Here are a few to try.</p>
+        <ul className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {CRAVING_SUGGESTIONS.map(({ meal }) => (
             <li className="flex flex-col items-center gap-3 rounded-3xl bg-ground p-4 text-center" key={meal}>
               <DishIllustration className="w-full" mealName={meal} />
@@ -193,23 +200,27 @@ function Menu() {
 
 function ExamplePlan() {
   return (
-    <section aria-labelledby="example-heading" className="bg-tint">
-      <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_1.1fr]`}>
+    <section aria-labelledby="example-heading" className="scroll-mt-4 bg-tint" id="example">
+      <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-14 sm:py-16 lg:grid-cols-[1fr_1.1fr]`}>
         <div>
-          <h2 className="font-display text-4xl font-extrabold leading-tight tracking-tight text-ink" id="example-heading">
+          <h2 className="font-display text-3xl font-extrabold leading-tight tracking-tight text-ink sm:text-4xl" id="example-heading">
             Every plan shows its working
           </h2>
           <ul className="mt-8 flex flex-col gap-5">
             {CHECKS.map((check) => (
-              <li className="flex items-center gap-4 text-lg text-ink" key={check.text}>
+              <li className="flex items-start gap-4 text-lg leading-8 text-ink" key={check.text}>
                 <Icon as={check.glyph} size="lg" tone="light" />
                 {check.text}
               </li>
             ))}
           </ul>
+          <button className={`${secondaryButton} mt-8`} onClick={goToForm} type="button">
+            Fill in my details
+            <Icon as={ArrowRight} size="sm" />
+          </button>
         </div>
 
-        <figure className="m-0 rounded-3xl bg-surface p-5 shadow-xl sm:p-7">
+        <figure className="m-0 rounded-3xl border border-ink bg-surface p-5 sm:p-7">
           <figcaption className="flex items-center gap-4">
             <DishIllustration className="w-24 shrink-0" type="rice" />
             <span>
@@ -236,18 +247,40 @@ function GetStarted() {
   const { profile, setProfile, fieldErrors, profileIsValid, location, setLocation, requestFieldErrors } =
     planner
   const locationOk = !requestFieldErrors.location
+  const ready = profileIsValid && locationOk
 
   const start = (event) => {
     event.preventDefault()
-    if (profileIsValid && locationOk) planner.confirmProfile()
+    if (ready) planner.confirmProfile()
   }
 
   return (
-    <section aria-label="Get started" className="scroll-mt-4 py-16 sm:py-20" id="get-started">
-      <form className={`${pageShell} flex flex-col gap-6`} noValidate onSubmit={start}>
+    <section aria-label="Get started" className="scroll-mt-4 py-12 sm:py-14" id="get-started">
+      <form className={pageShell} noValidate onSubmit={start}>
         <ProfileForm
+          badge="About a minute"
           errors={fieldErrors}
           eyebrow="Get started"
+          footer={
+            <div className="flex flex-col gap-5">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+                <button
+                  className={`${primaryButton} min-h-[60px] px-8 text-lg`}
+                  disabled={!ready}
+                  type="submit"
+                >
+                  Save and start planning
+                  <Icon as={ArrowRight} size="sm" />
+                </button>
+                <span className={`text-sm ${ready ? 'text-muted' : 'font-medium text-danger-fg'}`}>
+                  {ready
+                    ? 'You can change these at any time on your profile.'
+                    : 'Fix the highlighted details to continue.'}
+                </span>
+              </div>
+              <Note className="max-w-3xl" onGround>{PROFILE_DISCLOSURE}</Note>
+            </div>
+          }
           headingLevel={2}
           intro="A few details so every meal is sized for you. You only do this once on this device."
           onChange={setProfile}
@@ -256,21 +289,6 @@ function GetStarted() {
         >
           <LocationField error={requestFieldErrors.location} onChange={setLocation} value={location} />
         </ProfileForm>
-        <div className="flex flex-wrap items-center gap-4">
-          <button
-            className={`${primaryButton} min-h-[60px] px-8 text-lg`}
-            disabled={!profileIsValid || !locationOk}
-            type="submit"
-          >
-            Save and start planning
-          </button>
-          <span className="text-sm text-muted">
-            {profileIsValid && locationOk
-              ? 'You can change these at any time on your profile.'
-              : 'Fix the highlighted details to continue.'}
-          </span>
-        </div>
-        <p className="max-w-3xl text-sm leading-6 text-muted">{PROFILE_DISCLOSURE}</p>
       </form>
     </section>
   )
@@ -296,9 +314,9 @@ function WelcomePage() {
       <main>
         <Hero />
         <HowItWorks />
+        <GetStarted />
         <Menu />
         <ExamplePlan />
-        <GetStarted />
       </main>
       <Footer />
     </>

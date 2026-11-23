@@ -8572,3 +8572,26 @@ Mike asked for every remaining item from the content review to be fixed.
 Verified: vitest 265 of 265, eslint clean, `vite build` passes; backend pytest exits 0 and
 ruff is clean. `docs/openapi.json` is unaffected.
 
+## 2026-11-24 — Claude — welcome page: form sooner, ticket-style details form
+
+Mike found the welcome page too dense, wanted Get started easier to reach, the details form
+less plain, clearer notes and warnings, and text alignment checked.
+
+- Page order is now hero, a one-strip "How it works" over the hero's edge, Get started, the
+  menu, the example plan. The form starts about 900 px down at 1,440 px wide, where it used
+  to start past 2,200 px. The hero's second button opens the example plan, which has a
+  "Fill in my details" button back to the form.
+- `ProfileForm` is an order ticket: a tinted header with an "About a minute" badge, five
+  numbered rows (goal, body, activity, avoid, store) on a shared left edge with dashed
+  dividers, goal cards with icons, and a footer holding the button and the storage note.
+- New `components/ui/Note`. Field errors use the danger pair with an alert icon, not coral.
+- Alignment: "How it works" was the page's only centred block and is now left-aligned; the
+  activity and workout selects share a row; section headings share one size; the example
+  card has the same outline as the form.
+- On the Profile page the "How your meal is sized" panel sits under the form below 1,536 px,
+  so the form keeps its width.
+- Fixed a 1 px sideways scroll on phones from the macro donut.
+
+Verified: vitest 265 of 265, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px; no horizontal scroll at 390 px.
+

@@ -161,6 +161,12 @@ soft blob shape may sit behind a banner illustration.
   tabs (Plan a meal, My meals, Past plans, Calories, Profile), Sign in, and a "Sized for
   you" card. The active tab is an ink pill. Below 1,280 px the same links sit in an ink
   top bar.
+- **Forms** are order tickets: a navy outline, a tinted header, then numbered rows split by
+  dashed lines, with each row's name on the left and its fields on one shared edge to the
+  right. The button sits in the ticket's footer.
+- **Notes and errors:** a note is an info icon and `muted` text on a soft ground (`Note`).
+  An error is the `danger` text with an alert icon and a `danger` field border; coral is
+  never an error.
 - Badges: short text label, never colour alone.
 - Charts: one series colour unless colour means something; label values directly. The
   app's plan page draws a calorie ring, a macro donut, range bars over a shaded band and a
