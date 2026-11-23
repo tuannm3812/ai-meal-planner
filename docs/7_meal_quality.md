@@ -171,6 +171,7 @@ Each item is a separate PR that reruns the baseline and reports the change.
 5. **Pin USDA food IDs per ingredient** (§6, finding 2). Search by name
    returns the wrong food for at least 8 of the 41 ingredients USDA is asked
    about. Each ingredient gets a reviewed FoodData Central ID, looked up by ID.
+   Done 2026-11-23 (DEC-42, §7).
 
 ## 5. Workout days, 2026-11-22
 
@@ -277,4 +278,49 @@ So the drop measures the lookup, not the recipes: the local tables were
 closer to the right foods than USDA's top search hit. Next (§4, item 5): pin
 one USDA FoodData Central ID per ingredient in the reference data, reviewed
 once, instead of searching by name at request time. That makes USDA runs
-repeatable and removes the wrong matches; then rerun this section.
+repeatable and removes the wrong matches; then rerun this section. Done: §7.
+
+## 7. With pinned USDA foods, 2026-11-23 (DEC-42)
+
+Each of the 41 corpus ingredients that USDA is asked about now has one
+reviewed FoodData Central food in `data/reference/usda_fdc_ids.json` (27
+Foundation, 13 SR Legacy, 1 Survey; none Branded), fetched by ID from
+`/fdc/v1/food/{fdcId}`. Each pin matches the state the recipe's weight implies:
+rice and couscous cooked, pasta and rice noodles dry, meat and fish raw. The
+file also records the per-100 g values seen when the pin was reviewed. A test
+fails when a corpus ingredient that is not a trusted local value has no pin.
+Reports: [`usda_pinned_baseline.md`](meal_quality/usda_pinned_baseline.md) and
+[`usda_pinned_wider.md`](meal_quality/usda_pinned_wider.md), each with a `.json`.
+
+| | Offline | USDA, name search (§6) | USDA, pinned |
+|---|---:|---:|---:|
+| Benchmark plans meeting the targets | 72 of 72 | 50 of 72 | 72 of 72 |
+| Benchmark median / max calorie deviation | 0.5% / 9.9% | 0.7% / 9.9% | 0.4% / 9.9% |
+| Wider check meeting the targets | 152 of 152 | 113 of 152 | 144 of 152 |
+| Wider check within 10% of calories | 152 | 147 | 151 |
+| Plans with an estimated ingredient (benchmark / wider) | 68 / 52 | 41 / 52 | 0 / 0 |
+| Guardrails as expected | 5 of 5 | 5 of 5 | 5 of 5 |
+
+Every lookup succeeded and none was unusable. The eight wider misses, all but
+one for the older sedentary woman's 350 kcal target, where portions sit at the
+lower scale bound:
+
+- **Avocado** (Hass, 20.3 g fat per 100 g; the local table had 14.7): Salmon
+  Quinoa Plate, Low-Sodium Salmon Salad and Beef Taco Salad (both profiles),
+  fat over 35%.
+- **Store-bought hummus** (17.1 g fat): Chickpea Hummus Wrap, fat over 35% and
+  8.8% over target.
+- **Lean raw chicken breast** (106 kcal): Sweet Potato Chicken Plate, protein
+  39%.
+- **Shrimp Couscous Bowl**: carbs 43%, the fixed 10 g of oil a larger share
+  next to lean farmed shrimp.
+- **Ginger Cod Rice Bowl**: 10.3% under target, the only calorie miss, with
+  Atlantic cod at 66 kcal.
+
+These are recipe questions, not lookup errors. The owner chose to keep Hass
+avocado and store-bought hummus, the foods people buy, rather than pick USDA
+averages that score better.
+
+One baseline attempt had 2 timeouts in 25 detail lookups at the 6 s timeout,
+and one plan fell back to an estimate; the saved run is a clean rerun. A
+timeout falls back to local values as before, so a live request still works.
