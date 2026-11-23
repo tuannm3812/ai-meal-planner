@@ -8409,3 +8409,17 @@ installed in the image and in CI. CI's backend job starts the Firestore emulator
 (firebase-tools 14.27.0, Java 21), so the repository contract suite now runs on JSON, SQLite and
 Firestore. Verified locally against the emulator: `uv run pytest`, 753 passed;
 `firestore_store.py` and `factory.py` at 100%. Without the emulator the Firestore cases skip.
+
+## 2026-11-23 — Claude — user accounts slice 3: account routes and hosted history
+
+New `AccountStore` protocol, implemented by `FirestoreUserProfileRepository`: `get_account`,
+`save_account` and `delete_user`. Routes (`api/routes/accounts.py`): `GET /me/profile` (404
+`profile_not_found`, the first raise of `ProfileNotFound`), `PUT /me/profile` (the React profile's
+own fields only, each bounded, `extra="forbid"`), and `DELETE /me`, which deletes the account's
+plans, their request-id index entries, feedback and profile, in batches. An API-key client gets
+403 on these; a non-Firestore backend gets 501 `accounts_unavailable`. `settings.keeps_history`
+is false only for hosted mode on per-instance storage, so a hosted deployment on Firestore stores
+plans and serves history; `/health` reports it as `history_enabled`, and Streamlit hides history
+only where it is false. Verified on the emulator: a hosted Firestore deployment keeps history; a
+profile round-trips per user; deleting Alice removes only Alice's records and her plan can no
+longer take feedback. `uv run pytest` with the emulator: 772 passed, coverage 97%.

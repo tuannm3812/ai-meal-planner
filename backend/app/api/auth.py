@@ -154,9 +154,9 @@ def _require_history_enabled(container: ContainerDep) -> None:
         container: The application's dependency container.
 
     Raises:
-        HistoryDisabled: When HOSTED_MODE is on.
+        HistoryDisabled: When HOSTED_MODE is on and storage is per instance.
     """
-    if container.settings.hosted_mode:
+    if not container.settings.keeps_history:
         raise HistoryDisabled("history route called on a hosted deployment")
 
 

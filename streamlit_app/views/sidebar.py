@@ -126,6 +126,8 @@ def render_sidebar() -> AppConfig:
         use_demo_mode=use_demo_mode,
         api_base_url=api_base_url,
         gemini_api_key=gemini_api_key,
-        hosted_mode=bool(health_payload.get("services", {}).get("hosted_mode")),
+        # Hosted mode hides history only where the API keeps none (DEC-43).
+        hosted_mode=bool(health_payload.get("services", {}).get("hosted_mode"))
+        and not health_payload.get("services", {}).get("history_enabled", False),
         **profile_fields,
     )

@@ -103,6 +103,15 @@ class AppSettings(BaseSettings):
         return BASE_DIR / "database"
 
     @property
+    def keeps_history(self) -> bool:
+        """Whether plans, history and feedback are kept (G6, DEC-43).
+
+        A hosted deployment on per-instance SQLite keeps nothing (DEC-10). On
+        Firestore every instance shares one store, so it keeps history.
+        """
+        return not self.hosted_mode or self.storage_backend == "firestore"
+
+    @property
     def sqlite_path(self) -> Path:
         """Filesystem location of the SQLite database."""
         return self.data_dir / "ai_meal_planner.db"

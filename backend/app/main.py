@@ -10,7 +10,7 @@ from fastapi import FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from opentelemetry.trace import SpanKind
 
-from backend.app.api.routes import calories, feedback, health, meal_plans
+from backend.app.api.routes import accounts, calories, feedback, health, meal_plans
 from backend.app.core import telemetry
 from backend.app.core.config import AppSettings
 from backend.app.core.container import build_container
@@ -107,6 +107,7 @@ app.include_router(health.router)
 app.include_router(meal_plans.router)
 app.include_router(calories.router)
 app.include_router(feedback.router)
+app.include_router(accounts.router)
 
 
 if __name__ == "__main__":

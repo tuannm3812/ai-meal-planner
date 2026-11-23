@@ -199,3 +199,78 @@ def test_no_api_key_may_claim_the_accounts_namespace() -> None:
 
     with pytest.raises(ValueError, match="reserved"):
         AuthConfig.from_settings(AppSettings(_env_file=None, api_keys=json.dumps(records)))
+
+
+# --- Slice 3: account routes and hosted history ---------------------------------
+
+PROFILE = {
+    "profile": {
+        "goal": "lose",
+        "age": "41",
+        "sex": "female",
+        "heightCm": "165",
+        "weightKg": "70",
+        "activity": "1.375",
+        "workout": "rest",
+        "workoutMinutes": "30",
+        "heartRate": "",
+        "avoid": ["dairy-free"],
+    },
+    "location": "Earlwood, NSW",
+}
+
+
+@pytest.mark.parametrize(
+    ("method", "path"), [("get", "/me/profile"), ("put", "/me/profile"), ("delete", "/me")]
+)
+def test_an_api_key_client_has_no_account(client: TestClient, method: str, path: str) -> None:
+    response = client.request(method, path, json=PROFILE, headers={"X-API-Key": "key-a"})
+
+    assert response.status_code == 403
+    assert response.json()["code"] == "insufficient_scope"
+
+
+@pytest.mark.parametrize(
+    ("method", "path"), [("get", "/me/profile"), ("put", "/me/profile"), ("delete", "/me")]
+)
+def test_account_routes_need_firestore(client: TestClient, method: str, path: str) -> None:
+    response = client.request(method, path, json=PROFILE, headers=_bearer("token-alice"))
+
+    assert response.status_code == 501
+    assert response.json()["code"] == "accounts_unavailable"
+
+
+@pytest.mark.parametrize(
+    "body",
+    [
+        {**PROFILE, "extra": 1},
+        {**PROFILE, "profile": {**PROFILE["profile"], "email": "a@b.c"}},
+        {**PROFILE, "profile": {**PROFILE["profile"], "age": "1" * 9}},
+        {**PROFILE, "profile": {**PROFILE["profile"], "avoid": ["x"] * 17}},
+    ],
+    ids=["unknown-top-level", "unknown-profile-field", "long-value", "too-many-avoids"],
+)
+def test_a_profile_outside_the_apps_fields_is_refused(client: TestClient, body: dict) -> None:
+    response = client.put("/me/profile", json=body, headers=_bearer("token-alice"))
+
+    assert response.status_code == 422
+
+
+def test_hosted_mode_on_firestore_keeps_history_and_says_so() -> None:
+    from backend.app.core.config import AppSettings
+
+    sqlite = AppSettings(_env_file=None, hosted_mode=True)
+    firestore = AppSettings(_env_file=None, hosted_mode=True, storage_backend="firestore")
+    local = AppSettings(_env_file=None)
+
+    assert (sqlite.keeps_history, firestore.keeps_history, local.keeps_history) == (
+        False,
+        True,
+        True,
+    )
+
+
+def test_health_reports_whether_history_is_kept(client: TestClient) -> None:
+    services = client.get("/health").json()["services"]
+
+    assert services["history_enabled"] is True

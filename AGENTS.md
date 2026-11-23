@@ -150,7 +150,9 @@ the hand-offs by watching the log; its header says how to run it.
   anonymous sign-in, Firestore and Firebase Hosting, on free tiers. Spec
   `docs/superpowers/specs/2026-11-22-user-accounts-design.md`, built in five slices. Slice 1:
   the API accepts a Firebase ID token as `Authorization: Bearer` (`FIREBASE_PROJECT_ID`) and
-  acts only for the token's uid, in the `accounts` namespace.
+  acts only for the token's uid, in the `accounts` namespace. Slice 2: `STORAGE_BACKEND=firestore`,
+  whose contract tests run on the Firestore emulator in CI. Slice 3: `GET`/`PUT /me/profile` and
+  `DELETE /me`, and a hosted deployment on Firestore keeps history (`history_enabled`).
 
 ## Open risks
 
@@ -162,8 +164,8 @@ the hand-offs by watching the log; its header says how to run it.
   is invisible until `scripts/migrate_json_to_sqlite.py` runs, which skips
   records already stored. Alembic owns the schema and upgrades at startup
   (DEC-32). That suits one SQLite file per instance; Postgres should revisit it.
-- `ProfileNotFound` in `core/exceptions.py` is wired to a handler but never
-  raised. The other three are raised:
+- `ProfileNotFound` (404, `profile_not_found`) is raised by `GET /me/profile` for an account
+  with no saved profile (DEC-43). The others:
   - `NutritionProviderError` (502, code `unverified_required`) only when
     `REQUIRE_VERIFIED_NUTRITION` is on and an ingredient is estimated. It is off
     by default;

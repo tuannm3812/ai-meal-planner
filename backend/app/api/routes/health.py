@@ -82,6 +82,8 @@ async def health_check(container: ContainerDep) -> HealthResponse:
             ),
             "storage_backend": settings.storage_backend,
             "hosted_mode": settings.hosted_mode,
+            # DEC-43: a hosted deployment on Firestore keeps history after all.
+            "history_enabled": settings.keeps_history,
             "history_store": _store_path(settings, "meal_history.json"),
             "feedback_store": _store_path(settings, "meal_feedback.json"),
             "calorie_model_configured": bool(container.calorie_agent.model),

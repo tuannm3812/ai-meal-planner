@@ -68,8 +68,8 @@ async def generate_meal_plan(
         infeasible_reason=result.infeasible_reason,
     )
     # An infeasible result has no meal to keep, and history views expect one. A
-    # hosted deployment keeps nothing: its instances share no storage (G6).
-    if result.plan_status != "infeasible" and not container.settings.hosted_mode:
+    # hosted deployment keeps nothing unless its instances share Firestore (G6, DEC-43).
+    if result.plan_status != "infeasible" and container.settings.keeps_history:
         await run_in_threadpool(
             container.meal_history.save, response.model_dump(), client_id=principal.client_id
         )

@@ -46,6 +46,9 @@ EXPECTED: dict[tuple[str, str], set[str]] = {
     ("post", "/meal-feedback"): AUTH | {"400", "404", "501"},
     ("get", "/meal-feedback/{user_id}"): AUTH | {"501"},
     ("get", "/saved-meals/{user_id}"): AUTH | {"501"},
+    ("get", "/me/profile"): AUTH | {"404", "501"},
+    ("put", "/me/profile"): AUTH | {"501"},
+    ("delete", "/me"): AUTH | {"501"},
 }
 PUBLIC = {("get", "/"), ("get", "/health")}
 

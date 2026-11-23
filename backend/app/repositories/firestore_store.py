@@ -6,7 +6,7 @@ store for every instance, so a hosted deployment can keep history.
 
 Layout, with every id escaped so no caller value can add a path segment::
 
-    namespaces/{client}/users/{user}                     profile (slice 3)
+    namespaces/{client}/users/{user}                     account profile
     namespaces/{client}/users/{user}/plans/{request_id}
     namespaces/{client}/users/{user}/feedback/{auto id}
     namespaces/{client}/plan_index/{request_id}          -> which user holds it
@@ -33,6 +33,7 @@ from .base import owner_of_feedback, owner_of_meal_plan
 from .sql.repositories import DEFAULT_PROFILE
 
 NAMESPACES = "namespaces"
+_BATCH_LIMIT = 400  # Firestore allows 500 writes per batch
 
 
 def _now() -> str:
@@ -92,8 +93,9 @@ class FirestoreUserProfileRepository(_Namespaced):
     def fetch_user_profile(self, user_id: str) -> dict[str, Any]:
         """Return the default profile, as the SQL backend does.
 
-        The planner's stored-biometrics profile is not written by any route
-        yet; slice 3 adds the account profile (DEC-43).
+        The planner's stored-biometrics profile is not written by any route.
+        A signed-in user's own profile is the separate account record below
+        (``get_account``), which the React app sends with each plan.
 
         Args:
             user_id: Accepted for protocol compatibility; unused.
@@ -102,6 +104,78 @@ class FirestoreUserProfileRepository(_Namespaced):
             A copy of the default profile.
         """
         return dict(DEFAULT_PROFILE)
+
+    def get_account(self, user_id: str, *, client_id: str) -> dict[str, Any] | None:
+        """Return the user's saved profile and location, or None if never saved.
+
+        Args:
+            user_id: The account's uid.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            ``{"profile", "location", "updated_at"}``, or None.
+        """
+        snapshot = self._user(client_id, user_id).get()
+        if not snapshot.exists or snapshot.get("account_json") is None:
+            return None
+        return json.loads(snapshot.get("account_json"))
+
+    def save_account(
+        self, user_id: str, profile: dict[str, Any], location: str | None, *, client_id: str
+    ) -> dict[str, Any]:
+        """Replace the user's saved profile and location.
+
+        Args:
+            user_id: The account's uid.
+            profile: The app's profile fields.
+            location: Where the person shops, if given.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            The stored record, as ``get_account`` would return it.
+        """
+        record = {"profile": profile, "location": location, "updated_at": _now()}
+        self._user(client_id, user_id).set({"account_json": json.dumps(record)})
+        return record
+
+    def delete_user(self, user_id: str, *, client_id: str) -> dict[str, int]:
+        """Delete the user's profile, plans, plan index entries and feedback.
+
+        Firestore does not delete subcollections with their parent, so each
+        record is deleted by name, in batches under Firestore's 500-write limit.
+
+        Args:
+            user_id: The account's uid.
+            client_id: The namespace, ``accounts`` for signed-in users.
+
+        Returns:
+            How many plans and feedback records were deleted.
+        """
+        user = self._user(client_id, user_id)
+        index = self._namespace(client_id).collection("plan_index")
+        writes: list[Any] = []
+        plans = 0
+        for snapshot in user.collection("plans").stream():
+            plans += 1
+            writes.append(snapshot.reference)
+            request_id = _load(snapshot).get("request_id")
+            if isinstance(request_id, str):
+                entry = index.document(_doc_id("r", request_id))
+                held = entry.get()
+                # The index names the latest holder; leave another user's entry.
+                if held.exists and held.get("user_id") == user_id:
+                    writes.append(entry)
+        feedback = 0
+        for snapshot in user.collection("feedback").stream():
+            feedback += 1
+            writes.append(snapshot.reference)
+        writes.append(user)
+        for start in range(0, len(writes), _BATCH_LIMIT):
+            batch = self.client.batch()
+            for reference in writes[start : start + _BATCH_LIMIT]:
+                batch.delete(reference)
+            batch.commit()
+        return {"plans": plans, "feedback": feedback}
 
 
 class FirestoreMealPlanRepository(_Namespaced):

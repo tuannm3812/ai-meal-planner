@@ -91,3 +91,18 @@ class ErrorResponse(BaseModel):
     error: str
     code: str | None = None
     detail: str
+
+
+class AccountResponse(BaseModel):
+    """A signed-in user's saved profile and shopping location (DEC-43)."""
+
+    profile: dict[str, Any]
+    location: str | None
+    updated_at: str
+
+
+class AccountDeletedResponse(BaseModel):
+    """What ``DELETE /me`` removed: every record the account stored."""
+
+    status: Literal["deleted"]
+    deleted: dict[str, int]

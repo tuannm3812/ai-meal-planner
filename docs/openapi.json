@@ -665,10 +665,469 @@
           }
         }
       }
+    },
+    "/me/profile": {
+      "get": {
+        "summary": "Get My Profile",
+        "description": "Return the signed-in user's saved profile and shopping location.\n\nArgs:\n    container: The application's dependency container.\n    principal: The signed-in user.\n\nReturns:\n    The saved profile.\n\nRaises:\n    ProfileNotFound: 404 when the account has never saved one.",
+        "operationId": "get_my_profile_me_profile_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "A valid X-API-Key header or sign-in token is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This API key is not allowed to perform this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry after the time in the Retry-After header.",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until this client may retry.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No profile found for that user.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Accounts are not available on this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Put My Profile",
+        "description": "Save the signed-in user's profile and shopping location, replacing any before.\n\nArgs:\n    request: The profile fields and location.\n    container: The application's dependency container.\n    principal: The signed-in user.\n\nReturns:\n    The saved profile.",
+        "operationId": "put_my_profile_me_profile_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountProfileRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "A valid X-API-Key header or sign-in token is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This API key is not allowed to perform this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry after the time in the Retry-After header.",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until this client may retry.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Accounts are not available on this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
+          }
+        ]
+      }
+    },
+    "/me": {
+      "delete": {
+        "summary": "Delete Me",
+        "description": "Delete everything the signed-in user stored: profile, plans and feedback.\n\nThe browser then deletes the Firebase sign-in itself, so the API needs no\nadmin rights over accounts.\n\nArgs:\n    container: The application's dependency container.\n    principal: The signed-in user.\n\nReturns:\n    How many plans and feedback records were deleted.",
+        "operationId": "delete_me_me_delete",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountDeletedResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "A valid X-API-Key header or sign-in token is required.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "This API key is not allowed to perform this operation.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too many requests. Retry after the time in the Retry-After header.",
+            "headers": {
+              "Retry-After": {
+                "description": "Seconds until this client may retry.",
+                "schema": {
+                  "type": "integer"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "501": {
+            "description": "Accounts are not available on this deployment.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
+          }
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "AccountDeletedResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "const": "deleted",
+            "title": "Status"
+          },
+          "deleted": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "type": "object",
+            "title": "Deleted"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "deleted"
+        ],
+        "title": "AccountDeletedResponse",
+        "description": "What ``DELETE /me`` removed: every record the account stored."
+      },
+      "AccountProfile": {
+        "properties": {
+          "goal": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 40
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Goal"
+          },
+          "age": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age"
+          },
+          "sex": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Sex"
+          },
+          "heightCm": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heightcm"
+          },
+          "weightKg": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weightkg"
+          },
+          "activity": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Activity"
+          },
+          "workout": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 16
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workout"
+          },
+          "workoutMinutes": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Workoutminutes"
+          },
+          "heartRate": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 8
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Heartrate"
+          },
+          "avoid": {
+            "items": {
+              "type": "string",
+              "maxLength": 40
+            },
+            "type": "array",
+            "maxItems": 16,
+            "title": "Avoid"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "title": "AccountProfile",
+        "description": "The React app's profile fields, as it holds them (DEC-36, DEC-43).\n\nNumber inputs are kept as the strings the person typed; the app converts\nthem only when it plans. Every field is bounded and no other field is\naccepted, so an account stores exactly what the Profile page shows."
+      },
+      "AccountProfileRequest": {
+        "properties": {
+          "profile": {
+            "$ref": "#/components/schemas/AccountProfile"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 160
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "profile"
+        ],
+        "title": "AccountProfileRequest",
+        "description": "A signed-in user's profile and shopping location, to save to their account."
+      },
+      "AccountResponse": {
+        "properties": {
+          "profile": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Profile"
+          },
+          "location": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Location"
+          },
+          "updated_at": {
+            "type": "string",
+            "title": "Updated At"
+          }
+        },
+        "type": "object",
+        "required": [
+          "profile",
+          "location",
+          "updated_at"
+        ],
+        "title": "AccountResponse",
+        "description": "A signed-in user's saved profile and shopping location (DEC-43)."
+      },
       "AgentMetadata": {
         "properties": {
           "agent_name": {
