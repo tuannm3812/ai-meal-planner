@@ -18,3 +18,4 @@ The full licence text ships in each package's `LICENSE` file.
 | --- | --- | --- |
 | Lucide icons | `lucide-react` 1.77.0 | ISC (https://lucide.dev/license) |
 | React Router | `react-router-dom` 7.18.6 | MIT |
+| Firebase JS SDK (Auth) | `firebase` 13.2.0 | Apache-2.0 |

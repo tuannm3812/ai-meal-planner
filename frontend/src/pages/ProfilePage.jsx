@@ -5,6 +5,7 @@ import { usePlannerContext } from '../app/PlannerContext'
 import Icon from '../components/icons/Icon'
 import { Calculator, Trash2 } from '../components/icons/glyphs'
 import { card, pageShell, secondaryButton, sectionHeading } from '../components/ui/styles'
+import AccountSection from '../features/account/AccountSection'
 import CaloriesTab from '../features/calories/CaloriesTab'
 import LocationField from '../features/profile/LocationField'
 import ProfileForm from '../features/profile/ProfileForm'
@@ -38,6 +39,8 @@ function ProfilePage() {
           value={planner.location}
         />
       </ProfileForm>
+
+      <AccountSection />
 
       <section aria-labelledby="device-heading" className={card}>
         <h2 className={sectionHeading} id="device-heading">

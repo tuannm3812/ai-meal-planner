@@ -8423,3 +8423,19 @@ plans and serves history; `/health` reports it as `history_enabled`, and Streaml
 only where it is false. Verified on the emulator: a hosted Firestore deployment keeps history; a
 profile round-trips per user; deleting Alice removes only Alice's records and her plan can no
 longer take feedback. `uv run pytest` with the emulator: 772 passed, coverage 97%.
+
+## 2026-11-23 — Claude — user accounts slice 4: React sign-in
+
+`frontend/src/auth/firebase.js` turns accounts on only when the build has `VITE_FIREBASE_API_KEY`,
+`_AUTH_DOMAIN` and `_PROJECT_ID`; without them nothing changes (no header, no Firebase call).
+With them, `api/mealPlanner.js` sends `Authorization: Bearer` on every call and uses the uid as
+the history path and body `user_id`. A visitor is signed in anonymously at the first API call,
+so a first visit still makes no network call before planning (DEC-37). Google sign-in (Profile
+page card and a top-bar button) links the anonymous account, or signs into an existing one when
+Firebase reports `credential-already-in-use`. On sign-in an existing account profile replaces the
+device's; otherwise the device's is saved to the account; later edits save after 800 ms. Sign out
+and "Delete my account and data" (with a confirmation) forget the device; delete calls
+`DELETE /me` first and removes the Firebase sign-in after, re-authenticating if Firebase asks.
+A failed server delete removes nothing locally. `firebase` 13.2.0 (Apache-2.0) adds about 35 kB
+gzipped. Verified: `vitest run` 257 passed (23 new: firebase module, API identity, account
+card); `eslint` clean; `vite build` with and without the config.

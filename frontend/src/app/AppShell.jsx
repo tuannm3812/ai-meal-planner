@@ -1,8 +1,9 @@
 import Icon from '../components/icons/Icon'
-import { Bookmark, History, UserRound } from '../components/icons/glyphs'
+import { Bookmark, History, LogIn, UserRound } from '../components/icons/glyphs'
 import { NavLink, Outlet } from 'react-router-dom'
 
 import logoMark from '../assets/brand/logo-mark.svg'
+import { useAccount } from './AccountContext'
 
 const LINKS = [
   { to: '/meals', label: 'My meals', glyph: Bookmark },
@@ -18,6 +19,7 @@ const linkClass = ({ isActive }) =>
 // The top bar on every page: the logo goes home, and three links with big
 // icons and words (DESIGN.md §5: no tiles behind icons).
 function AppShell() {
+  const account = useAccount()
   return (
     <div className="min-h-screen bg-ground text-ink">
       <header className="bg-ink text-white">
@@ -36,6 +38,17 @@ function AppShell() {
                 {label}
               </NavLink>
             ))}
+            {account.enabled && !account.signedIn && (
+              <button
+                className={linkClass({ isActive: false })}
+                disabled={account.busy}
+                onClick={account.signIn}
+                type="button"
+              >
+                <Icon as={LogIn} tone="ink" />
+                Sign in
+              </button>
+            )}
           </nav>
         </div>
       </header>

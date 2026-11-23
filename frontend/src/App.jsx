@@ -2,6 +2,7 @@ import { Bookmark, History } from './components/icons/glyphs'
 import { Route, Routes } from 'react-router-dom'
 
 import AppShell from './app/AppShell'
+import { AccountProvider } from './app/AccountContext'
 import { PlannerProvider } from './app/PlannerContext'
 import HomePage from './pages/HomePage'
 import ListPage from './pages/ListPage'
@@ -14,6 +15,7 @@ import StoredPlanPage from './pages/StoredPlanPage'
 function App() {
   return (
     <PlannerProvider>
+      <AccountProvider>
       <Routes>
         <Route element={<AppShell />}>
           <Route element={<HomePage />} index />
@@ -47,6 +49,7 @@ function App() {
           <Route element={<HomePage />} path="*" />
         </Route>
       </Routes>
+      </AccountProvider>
     </PlannerProvider>
   )
 }

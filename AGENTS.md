@@ -152,7 +152,9 @@ the hand-offs by watching the log; its header says how to run it.
   the API accepts a Firebase ID token as `Authorization: Bearer` (`FIREBASE_PROJECT_ID`) and
   acts only for the token's uid, in the `accounts` namespace. Slice 2: `STORAGE_BACKEND=firestore`,
   whose contract tests run on the Firestore emulator in CI. Slice 3: `GET`/`PUT /me/profile` and
-  `DELETE /me`, and a hosted deployment on Firestore keeps history (`history_enabled`).
+  `DELETE /me`, and a hosted deployment on Firestore keeps history (`history_enabled`). Slice 4:
+  React signs in with Firebase (anonymous on first API call, Google from the Profile page or
+  the top bar) when built with `VITE_FIREBASE_*`, and sends the token on every call.
 
 ## Open risks
 
@@ -175,9 +177,10 @@ the hand-offs by watching the log; its header says how to run it.
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
-- **In hosted mode the React "My meals" and "Past plans" links stay visible.**
-  Opening them shows a notice instead of history, and a 501 on save or rate hides
-  those controls. React cannot call a keyed production API in v1 anyway (DEC-8).
+- **In hosted mode on SQLite the React "My meals" and "Past plans" links stay visible.**
+  Opening them shows a notice instead of history, and a 501 on save or rate hides those
+  controls. On Firestore with accounts on (DEC-43) they work. A build without the
+  `VITE_FIREBASE_*` config has no accounts and cannot call a keyed API (DEC-8).
 - **G4 limits, by design.**
   - The rate limit is per instance, so N instances allow N times the limit.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production

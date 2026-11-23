@@ -10,6 +10,8 @@ export {
   Flame,
   History,
   Info,
+  LogIn,
+  LogOut,
   MapPin,
   MessageSquareText,
   PieChart,
