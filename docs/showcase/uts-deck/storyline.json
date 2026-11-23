@@ -27742,8 +27742,8 @@
       "notes": {
         "purpose": "Put the limits in one place.",
         "script": [
-          "Plans hit their targets on fixed requests offline, and 50 of 72 with live USDA data, where the misses trace to wrong USDA matches. Most offline plans lean on estimates. Nobody has used it yet.",
-          "Sources: docs/4_next_steps.md \u00a77; docs/7_meal_quality.md \u00a75 and \u00a76; DEC-31."
+          "Plans hit their targets on fixed requests, offline and on USDA data, but those requests guided the fixes. Calorie inputs are modelled. Nobody has used it yet.",
+          "Sources: docs/4_next_steps.md \u00a77; docs/7_meal_quality.md \u00a75 to \u00a77; DEC-31, DEC-42."
         ],
         "references": [
           "sources.md",
@@ -27755,19 +27755,19 @@
           "icon": "check_circle",
           "title": "Measured",
           "items": [
-            "**72 of 72** and **152 of 152**, offline",
-            "**50 of 72** with live USDA data",
+            "**72 of 72** offline and on USDA data",
+            "**144 of 152** in the wider USDA check",
             "But the checks guided the fixes"
           ],
           "strength": 3,
-          "next": "Pin one USDA food per ingredient"
+          "next": "Check requests it was not tuned on"
         },
         {
           "icon": "calculate",
           "title": "Estimated",
           "items": [
-            "**68 of 72** offline plans include an estimate",
             "AMDR is a daily range on one meal",
+            "Workouts are modelled, not measured",
             "Body temperature is a fixed default"
           ],
           "strength": 2,
@@ -28352,7 +28352,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t34",
-          "text": "\u2022  72 of 72 and 152 of 152, offline",
+          "text": "\u2022  72 of 72 offline and on USDA data",
           "x": 50.3,
           "y": 281.0,
           "width": 267.56666666666666,
@@ -28366,7 +28366,7 @@
           "op": "style-paragraph",
           "element": "t34",
           "start": 0,
-          "end": 35,
+          "end": 36,
           "line_spacing": 135
         },
         {
@@ -28378,18 +28378,10 @@
           "color": "#1B2430"
         },
         {
-          "op": "style-text",
-          "element": "t34",
-          "start": 16,
-          "end": 26,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t35",
-          "text": "\u2022  50 of 72 with live USDA data",
+          "text": "\u2022  144 of 152 in the wider USDA check",
           "x": 50.3,
           "y": 298.5,
           "width": 267.56666666666666,
@@ -28403,14 +28395,14 @@
           "op": "style-paragraph",
           "element": "t35",
           "start": 0,
-          "end": 31,
+          "end": 37,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t35",
           "start": 3,
-          "end": 11,
+          "end": 13,
           "bold": true,
           "color": "#1B2430"
         },
@@ -28489,7 +28481,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t40",
-          "text": "Pin one USDA food per ingredient",
+          "text": "Check requests it was not tuned on",
           "x": 58.3,
           "y": 383.8,
           "width": 255.5666666666667,
@@ -28503,14 +28495,14 @@
           "op": "style-paragraph",
           "element": "t40",
           "start": 0,
-          "end": 32,
+          "end": 34,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t40",
           "start": 0,
-          "end": 32,
+          "end": 34,
           "bold": true
         },
         {
@@ -28612,7 +28604,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t48",
-          "text": "\u2022  68 of 72 offline plans include an estimate",
+          "text": "\u2022  AMDR is a daily range on one meal",
           "x": 347.4666666666667,
           "y": 228.5,
           "width": 267.56666666666666,
@@ -28626,22 +28618,14 @@
           "op": "style-paragraph",
           "element": "t48",
           "start": 0,
-          "end": 45,
+          "end": 36,
           "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t48",
-          "start": 3,
-          "end": 11,
-          "bold": true,
-          "color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t49",
-          "text": "\u2022  AMDR is a daily range on one meal",
+          "text": "\u2022  Workouts are modelled, not measured",
           "x": 347.4666666666667,
           "y": 246.0,
           "width": 267.56666666666666,
@@ -28655,7 +28639,7 @@
           "op": "style-paragraph",
           "element": "t49",
           "start": 0,
-          "end": 36,
+          "end": 38,
           "line_spacing": 135
         },
         {
@@ -29045,7 +29029,7 @@
         },
         {
           "date": "Now",
-          "text": "USDA run, next steps"
+          "text": "USDA foods pinned"
         }
       ],
       "columns": [
@@ -29053,11 +29037,11 @@
           "title": "Now",
           "items": [
             "Add user accounts",
-            "Pin one USDA food per ingredient"
+            "Review the 28% meal target"
           ],
           "icons": [
             "person",
-            "fact_check"
+            "rice_bowl"
           ]
         },
         {
@@ -30036,7 +30020,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t53",
-          "text": "USDA run, next steps",
+          "text": "USDA foods pinned",
           "x": 801.8,
           "y": 159.8,
           "width": 154.4,
@@ -30051,7 +30035,7 @@
           "op": "style-paragraph",
           "element": "t53",
           "start": 0,
-          "end": 20,
+          "end": 17,
           "line_spacing": 135
         },
         {
@@ -30167,7 +30151,7 @@
         {
           "op": "add-image",
           "id": "im61",
-          "path": "assets/icons/kit/fact_check-ochre.svg",
+          "path": "assets/icons/kit/rice_bowl-ochre.svg",
           "alt": "",
           "x": 66.5,
           "y": 363.5,
@@ -30178,7 +30162,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t62",
-          "text": "Pin one USDA food per ingredient",
+          "text": "Review the 28% meal target",
           "x": 88.3,
           "y": 358.2,
           "width": 223.5666666666667,
@@ -30192,14 +30176,14 @@
           "op": "style-paragraph",
           "element": "t62",
           "start": 0,
-          "end": 32,
+          "end": 26,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t62",
           "start": 0,
-          "end": 32,
+          "end": 26,
           "bold": true
         },
         {
@@ -37495,9 +37479,9 @@
       "topic": "USDA data",
       "accent": "slate",
       "header_style": "appendix",
-      "title": "A6. With live USDA data, 50 of 72 plans meet both targets",
-      "subtitle": "The same 72 requests, each ingredient looked up in USDA FoodData Central, 23 November 2026.",
-      "takeaway": "The drop measures the lookup, not the recipes: USDA's first search hit is often the wrong food.",
+      "title": "A6. With pinned USDA foods, 72 of 72 plans meet both targets",
+      "subtitle": "The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.",
+      "takeaway": "The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.",
       "question": "Do the plans still hold with independent nutrition data?",
       "chart": {
         "kind": "groups",
@@ -37516,14 +37500,14 @@
         "groups": [
           {
             "label": "Offline",
-            "detail": "local nutrition tables",
+            "detail": "local tables",
             "values": [
               72,
               72
             ]
           },
           {
-            "label": "USDA, first run",
+            "label": "Name search",
             "detail": "energy read in kJ",
             "values": [
               64,
@@ -37531,40 +37515,47 @@
             ]
           },
           {
-            "label": "USDA, kJ fixed",
-            "detail": "energy read in kcal",
+            "label": "Name search",
+            "detail": "kJ fixed",
             "values": [
               72,
               50
+            ]
+          },
+          {
+            "label": "Pinned foods",
+            "detail": "one reviewed USDA ID each",
+            "values": [
+              72,
+              72
             ]
           }
         ]
       },
       "metrics": [
         {
-          "icon": "calculate",
-          "value": "356 kcal",
-          "label": "read for 100 g of shrimp; the real **85 kcal** was listed beside it in kJ. Fixed."
-        },
-        {
           "icon": "search",
           "value": "16 of 22",
-          "label": "remaining misses come from one wrong match: **lean turkey mince** found minced ham"
+          "label": "name-search misses came from one wrong match: **lean turkey mince** found minced ham"
         },
         {
           "icon": "fact_check",
-          "value": "113 of 152",
-          "label": "wider check, up from 108; guardrails **5 of 5**"
+          "value": "0 of 72",
+          "label": "plans use an estimated ingredient, down from **68** offline"
+        },
+        {
+          "icon": "flag",
+          "value": "144 of 152",
+          "label": "wider check; most of the 8 misses are **Hass avocado** and store-bought hummus, kept on purpose"
         }
       ],
       "notes": {
         "purpose": "Appendix: the first benchmark run with independent nutrition data, and what it found.",
         "script": [
-          "The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent. USDA search results are live, so this run is not repeatable and never replaces the offline benchmark.",
-          "The first run read energy in kilojoules for foods that list both units: shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, every plan is back within 10% of its calories, and 50 of 72 meet both targets; the median gap is 0.7%.",
-          "Almost every remaining miss has calories on target and fat too high, because the lookup takes USDA's first search hit: avocado finds avocado dressing, and lean turkey mince finds minced ham. The ham match alone causes 16 of the 22 misses, through the fallback turkey bowl.",
-          "Next: pin one reviewed USDA food per ingredient in the reference data, so the lookup is repeatable, then rerun.",
-          "Sources: docs/7_meal_quality.md \u00a76 (With USDA data), DEC-41; docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59."
+          "The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent.",
+          "Searching USDA by name first read energy in kilojoules for foods that list both units, so shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, 50 of 72 met both targets. Almost every miss had fat too high because the first search hit was the wrong food: avocado found avocado dressing, and lean turkey mince found minced ham, which alone caused 16 of the 22 misses.",
+          "Each of the 41 ingredients now has one reviewed USDA food, fetched by its ID. All 72 plans meet both targets, the median gap is 0.4%, and no plan uses an estimated ingredient. The wider check is 144 of 152: the misses are mostly Hass avocado and store-bought hummus, which Mike kept because they are what people buy.",
+          "Sources: docs/7_meal_quality.md \u00a76 and \u00a77; DEC-41, DEC-42; docs/meal_quality/usda_pinned_baseline.md, usda_pinned_wider.md, usda_lookup_diagnosis.md; PRs #59 and #61."
         ],
         "references": [
           "sources.md",
@@ -37681,7 +37672,7 @@
           "op": "add-textbox",
           "slide": "usda",
           "id": "t8",
-          "text": "A6. With live USDA data, 50 of 72 plans meet both targets",
+          "text": "A6. With pinned USDA foods, 72 of 72 plans meet both targets",
           "x": 36.3,
           "y": 51.8,
           "width": 889.9,
@@ -37695,21 +37686,21 @@
           "op": "style-paragraph",
           "element": "t8",
           "start": 0,
-          "end": 57,
+          "end": 60,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t8",
           "start": 0,
-          "end": 57,
+          "end": 60,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "usda",
           "id": "t9",
-          "text": "The same 72 requests, each ingredient looked up in USDA FoodData Central, 23 November 2026.",
+          "text": "The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.",
           "x": 36.3,
           "y": 92.8,
           "width": 889.9,
@@ -37723,7 +37714,7 @@
           "op": "style-paragraph",
           "element": "t9",
           "start": 0,
-          "end": 91,
+          "end": 92,
           "line_spacing": 135
         },
         {
@@ -37852,7 +37843,7 @@
           "op": "add-textbox",
           "slide": "usda",
           "id": "t17",
-          "text": "The drop measures the lookup, not the recipes: USDA's first search hit is often the wrong food.",
+          "text": "The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.",
           "x": 147.3,
           "y": 442.05,
           "width": 761.9,
@@ -37866,7 +37857,7 @@
           "op": "style-paragraph",
           "element": "t17",
           "start": 0,
-          "end": 95,
+          "end": 109,
           "line_spacing": 135
         },
         {
@@ -37970,9 +37961,9 @@
           "slide": "usda",
           "id": "r24",
           "shape_type": "RECTANGLE",
-          "x": 94.96666666666667,
+          "x": 86.1,
           "y": 194.0,
-          "width": 49.2,
+          "width": 35.9,
           "height": 178.0,
           "background_color": "#21918C"
         },
@@ -37981,9 +37972,9 @@
           "slide": "usda",
           "id": "t25",
           "text": "72",
-          "x": 79.76666666666667,
+          "x": 70.89999999999999,
           "y": 166.8,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38010,9 +38001,9 @@
           "slide": "usda",
           "id": "r26",
           "shape_type": "RECTANGLE",
-          "x": 148.16666666666669,
+          "x": 126.0,
           "y": 194.0,
-          "width": 49.2,
+          "width": 35.9,
           "height": 178.0,
           "background_color": "#3B528B"
         },
@@ -38021,9 +38012,9 @@
           "slide": "usda",
           "id": "t27",
           "text": "72",
-          "x": 132.9666666666667,
+          "x": 110.8,
           "y": 166.8,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38052,7 +38043,7 @@
           "text": "Offline",
           "x": 50.3,
           "y": 370.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -38078,10 +38069,10 @@
           "op": "add-textbox",
           "slide": "usda",
           "id": "t29",
-          "text": "local nutrition tables",
+          "text": "local tables",
           "x": 50.3,
           "y": 384.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -38093,7 +38084,7 @@
           "op": "style-paragraph",
           "element": "t29",
           "start": 0,
-          "end": 22,
+          "end": 12,
           "line_spacing": 135
         },
         {
@@ -38101,9 +38092,9 @@
           "slide": "usda",
           "id": "r30",
           "shape_type": "RECTANGLE",
-          "x": 272.3,
+          "x": 219.1,
           "y": 213.77777777777777,
-          "width": 49.2,
+          "width": 35.9,
           "height": 158.22222222222223,
           "background_color": "#21918C"
         },
@@ -38112,9 +38103,9 @@
           "slide": "usda",
           "id": "t31",
           "text": "64",
-          "x": 257.1,
+          "x": 203.9,
           "y": 186.57777777777778,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38141,9 +38132,9 @@
           "slide": "usda",
           "id": "r32",
           "shape_type": "RECTANGLE",
-          "x": 325.5,
+          "x": 259.0,
           "y": 255.80555555555554,
-          "width": 49.2,
+          "width": 35.9,
           "height": 116.19444444444444,
           "background_color": "#3B528B"
         },
@@ -38152,9 +38143,9 @@
           "slide": "usda",
           "id": "t33",
           "text": "47",
-          "x": 310.3,
+          "x": 243.8,
           "y": 228.60555555555555,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38180,10 +38171,10 @@
           "op": "add-textbox",
           "slide": "usda",
           "id": "t34",
-          "text": "USDA, first run",
-          "x": 227.63333333333335,
+          "text": "Name search",
+          "x": 183.3,
           "y": 370.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -38195,14 +38186,14 @@
           "op": "style-paragraph",
           "element": "t34",
           "start": 0,
-          "end": 15,
+          "end": 11,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t34",
           "start": 0,
-          "end": 15,
+          "end": 11,
           "bold": true
         },
         {
@@ -38210,9 +38201,9 @@
           "slide": "usda",
           "id": "t35",
           "text": "energy read in kJ",
-          "x": 227.63333333333335,
+          "x": 183.3,
           "y": 384.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -38232,9 +38223,9 @@
           "slide": "usda",
           "id": "r36",
           "shape_type": "RECTANGLE",
-          "x": 449.6333333333333,
+          "x": 352.1,
           "y": 194.0,
-          "width": 49.2,
+          "width": 35.9,
           "height": 178.0,
           "background_color": "#21918C"
         },
@@ -38243,9 +38234,9 @@
           "slide": "usda",
           "id": "t37",
           "text": "72",
-          "x": 434.43333333333334,
+          "x": 336.90000000000003,
           "y": 166.8,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38272,9 +38263,9 @@
           "slide": "usda",
           "id": "r38",
           "shape_type": "RECTANGLE",
-          "x": 502.8333333333333,
+          "x": 392.0,
           "y": 248.38888888888889,
-          "width": 49.2,
+          "width": 35.9,
           "height": 123.61111111111111,
           "background_color": "#3B528B"
         },
@@ -38283,9 +38274,9 @@
           "slide": "usda",
           "id": "t39",
           "text": "50",
-          "x": 487.6333333333333,
+          "x": 376.8,
           "y": 221.1888888888889,
-          "width": 79.60000000000001,
+          "width": 66.3,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -38311,10 +38302,10 @@
           "op": "add-textbox",
           "slide": "usda",
           "id": "t40",
-          "text": "USDA, kJ fixed",
-          "x": 404.9666666666667,
+          "text": "Name search",
+          "x": 316.3,
           "y": 370.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 27.9,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -38326,24 +38317,24 @@
           "op": "style-paragraph",
           "element": "t40",
           "start": 0,
-          "end": 14,
+          "end": 11,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t40",
           "start": 0,
-          "end": 14,
+          "end": 11,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "usda",
           "id": "t41",
-          "text": "energy read in kcal",
-          "x": 404.9666666666667,
+          "text": "kJ fixed",
+          "x": 316.3,
           "y": 384.8,
-          "width": 191.73333333333335,
+          "width": 147.4,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -38355,13 +38346,144 @@
           "op": "style-paragraph",
           "element": "t41",
           "start": 0,
-          "end": 19,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r42",
+          "shape_type": "RECTANGLE",
+          "x": 485.1,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t43",
+          "text": "72",
+          "x": 469.90000000000003,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r44",
+          "shape_type": "RECTANGLE",
+          "x": 525.0,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t45",
+          "text": "72",
+          "x": 509.8,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t45",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t45",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t46",
+          "text": "Pinned foods",
+          "x": 449.3,
+          "y": 370.8,
+          "width": 147.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t47",
+          "text": "one reviewed USDA ID each",
+          "x": 449.3,
+          "y": 384.8,
+          "width": 147.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t47",
+          "start": 0,
+          "end": 25,
           "line_spacing": 135
         },
         {
           "op": "add-line",
           "slide": "usda",
-          "id": "l42",
+          "id": "l48",
           "x": 57.5,
           "y": 372.0,
           "width": 532.0,
@@ -38372,7 +38494,7 @@
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r43",
+          "id": "r49",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 132.0,
@@ -38383,7 +38505,7 @@
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r44",
+          "id": "r50",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 132.0,
@@ -38393,8 +38515,8 @@
         },
         {
           "op": "add-image",
-          "id": "im45",
-          "path": "assets/icons/kit/calculate-slate.svg",
+          "id": "im51",
+          "path": "assets/icons/kit/search-slate.svg",
           "alt": "",
           "x": 638.5,
           "y": 149.0,
@@ -38404,8 +38526,8 @@
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t46",
-          "text": "356 kcal",
+          "id": "t52",
+          "text": "16 of 22",
           "x": 664.3,
           "y": 136.8,
           "width": 247.9,
@@ -38417,14 +38539,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t46",
+          "element": "t52",
           "start": 0,
           "end": 8,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t46",
+          "element": "t52",
           "start": 0,
           "end": 8,
           "bold": true
@@ -38432,8 +38554,8 @@
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t47",
-          "text": "read for 100 g of shrimp; the real 85 kcal was listed\nbeside it in kJ. Fixed.",
+          "id": "t53",
+          "text": "name-search misses came from one wrong match:\nlean turkey mince found minced ham",
           "x": 664.3,
           "y": 162.8,
           "width": 247.9,
@@ -38445,23 +38567,23 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t47",
+          "element": "t53",
           "start": 0,
-          "end": 77,
+          "end": 80,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t47",
-          "start": 35,
-          "end": 42,
+          "element": "t53",
+          "start": 46,
+          "end": 63,
           "bold": true,
           "color": "#1B2430"
         },
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r48",
+          "id": "r54",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -38472,7 +38594,7 @@
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r49",
+          "id": "r55",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 232.66666666666669,
@@ -38482,8 +38604,8 @@
         },
         {
           "op": "add-image",
-          "id": "im50",
-          "path": "assets/icons/kit/search-slate.svg",
+          "id": "im56",
+          "path": "assets/icons/kit/fact_check-slate.svg",
           "alt": "",
           "x": 638.5,
           "y": 249.66666666666669,
@@ -38493,8 +38615,8 @@
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t51",
-          "text": "16 of 22",
+          "id": "t57",
+          "text": "0 of 72",
           "x": 664.3,
           "y": 237.4666666666667,
           "width": 247.9,
@@ -38506,23 +38628,23 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t51",
+          "element": "t57",
           "start": 0,
-          "end": 8,
+          "end": 7,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t51",
+          "element": "t57",
           "start": 0,
-          "end": 8,
+          "end": 7,
           "bold": true
         },
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t52",
-          "text": "remaining misses come from one wrong match:\nlean turkey mince found minced ham",
+          "id": "t58",
+          "text": "plans use an estimated ingredient, down from 68\noffline",
           "x": 664.3,
           "y": 263.4666666666667,
           "width": 247.9,
@@ -38534,23 +38656,23 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t52",
+          "element": "t58",
           "start": 0,
-          "end": 78,
+          "end": 55,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t52",
-          "start": 44,
-          "end": 61,
+          "element": "t58",
+          "start": 45,
+          "end": 47,
           "bold": true,
           "color": "#1B2430"
         },
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r53",
+          "id": "r59",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -38561,7 +38683,7 @@
         {
           "op": "add-shape",
           "slide": "usda",
-          "id": "r54",
+          "id": "r60",
           "shape_type": "RECTANGLE",
           "x": 621.5,
           "y": 333.33333333333337,
@@ -38571,8 +38693,8 @@
         },
         {
           "op": "add-image",
-          "id": "im55",
-          "path": "assets/icons/kit/fact_check-slate.svg",
+          "id": "im61",
+          "path": "assets/icons/kit/flag-slate.svg",
           "alt": "",
           "x": 638.5,
           "y": 350.33333333333337,
@@ -38582,8 +38704,8 @@
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t56",
-          "text": "113 of 152",
+          "id": "t62",
+          "text": "144 of 152",
           "x": 664.3,
           "y": 338.1333333333334,
           "width": 247.9,
@@ -38595,14 +38717,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t56",
+          "element": "t62",
           "start": 0,
           "end": 10,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t56",
+          "element": "t62",
           "start": 0,
           "end": 10,
           "bold": true
@@ -38610,12 +38732,12 @@
         {
           "op": "add-textbox",
           "slide": "usda",
-          "id": "t57",
-          "text": "wider check, up from 108; guardrails 5 of 5",
+          "id": "t63",
+          "text": "wider check; most of the 8 misses are Hass\navocado and store-bought hummus, kept on\npurpose",
           "x": 664.3,
           "y": 364.1333333333334,
           "width": 247.9,
-          "height": 27.9,
+          "height": 54.9,
           "font_size": 10,
           "font_family": "Google Sans",
           "color": "#5A6370",
@@ -38623,16 +38745,24 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t57",
+          "element": "t63",
           "start": 0,
-          "end": 43,
+          "end": 91,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t57",
-          "start": 37,
-          "end": 43,
+          "element": "t63",
+          "start": 38,
+          "end": 42,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "style-text",
+          "element": "t63",
+          "start": 43,
+          "end": 50,
           "bold": true,
           "color": "#1B2430"
         }

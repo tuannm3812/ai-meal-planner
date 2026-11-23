@@ -40,3 +40,12 @@
 - Supports: 47 then 50 of 72, 64 then 72 within 10%, 108 then 113 of 152, shrimp 356 vs 85 kcal, 16 of 22 misses from the turkey match
 - Limits: live search results, not repeatable; run on the owner's Mac because the cloud sandbox cannot reach the USDA API
 - Slides: usda, limits, next
+
+- Source ID: usda-pinned
+- Author or organisation: this project
+- Title and date: Meal-quality benchmark with pinned USDA FoodData Central IDs, 23 November 2026, PR #61
+- Path: docs/7_meal_quality.md §7; data/reference/usda_fdc_ids.json; docs/meal_quality/usda_pinned_baseline.md, usda_pinned_wider.md
+- Locator: results table and the eight wider misses
+- Supports: 72 of 72, 144 of 152, 0 of 72 with an estimate
+- Limits: live USDA by ID; run on the owner's Mac; Hass avocado and store-bought hummus kept on purpose
+- Slides: usda, limits, next

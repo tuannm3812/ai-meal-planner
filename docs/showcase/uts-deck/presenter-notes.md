@@ -159,8 +159,8 @@ References:
 
 Put the limits in one place.
 
-Plans hit their targets on fixed requests offline, and 50 of 72 with live USDA data, where the misses trace to wrong USDA matches. Most offline plans lean on estimates. Nobody has used it yet.
-Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5 and §6; DEC-31.
+Plans hit their targets on fixed requests, offline and on USDA data, but those requests guided the fixes. Calorie inputs are modelled. Nobody has used it yet.
+Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5 to §7; DEC-31, DEC-42.
 
 References:
 - sources.md
@@ -241,15 +241,14 @@ References:
 - sources.md
 - claims-register.md
 
-## 22. A6. With live USDA data, 50 of 72 plans meet both targets
+## 22. A6. With pinned USDA foods, 72 of 72 plans meet both targets
 
 Appendix: the first benchmark run with independent nutrition data, and what it found.
 
-The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent. USDA search results are live, so this run is not repeatable and never replaces the offline benchmark.
-The first run read energy in kilojoules for foods that list both units: shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, every plan is back within 10% of its calories, and 50 of 72 meet both targets; the median gap is 0.7%.
-Almost every remaining miss has calories on target and fat too high, because the lookup takes USDA's first search hit: avocado finds avocado dressing, and lean turkey mince finds minced ham. The ham match alone causes 16 of the 22 misses, through the fallback turkey bowl.
-Next: pin one reviewed USDA food per ingredient in the reference data, so the lookup is repeatable, then rerun.
-Sources: docs/7_meal_quality.md §6 (With USDA data), DEC-41; docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59.
+The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent.
+Searching USDA by name first read energy in kilojoules for foods that list both units, so shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, 50 of 72 met both targets. Almost every miss had fat too high because the first search hit was the wrong food: avocado found avocado dressing, and lean turkey mince found minced ham, which alone caused 16 of the 22 misses.
+Each of the 41 ingredients now has one reviewed USDA food, fetched by its ID. All 72 plans meet both targets, the median gap is 0.4%, and no plan uses an estimated ingredient. The wider check is 144 of 152: the misses are mostly Hass avocado and store-bought hummus, which Mike kept because they are what people buy.
+Sources: docs/7_meal_quality.md §6 and §7; DEC-41, DEC-42; docs/meal_quality/usda_pinned_baseline.md, usda_pinned_wider.md, usda_lookup_diagnosis.md; PRs #59 and #61.
 
 References:
 - sources.md

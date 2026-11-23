@@ -671,14 +671,14 @@ Exact face text:
 - TAKEAWAY
 - A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
 - Measured
-- •  72 of 72 and 152 of 152, offline
-- •  50 of 72 with live USDA data
+- •  72 of 72 offline and on USDA data
+- •  144 of 152 in the wider USDA check
 - •  But the checks guided the fixes
 - CLOSES IT
-- Pin one USDA food per ingredient
+- Check requests it was not tuned on
 - Estimated
-- •  68 of 72 offline plans include an estimate
 - •  AMDR is a daily range on one meal
+- •  Workouts are modelled, not measured
 - •  Body temperature is a fixed default
 - CLOSES IT
 - Ask a dietitian to review the rules
@@ -724,10 +724,10 @@ Exact face text:
 - 22 Nov
 - 76 recipes, Cloud Run, workout check
 - Now
-- USDA run, next steps
+- USDA foods pinned
 - NOW
 - Add user accounts
-- Pin one USDA food per ingredient
+- Review the 28% meal target
 - NEXT
 - Connect live store prices
 - Use ratings in ranking
@@ -964,42 +964,46 @@ Exact face text:
 - 1 miss
 - Tuna Pasta Salad at a 378 kcal target: carbs 43%, / with the pasta already at its smallest portion
 
-## 22. A6. With live USDA data, 50 of 72 plans meet both targets
+## 22. A6. With pinned USDA foods, 72 of 72 plans meet both targets
 
 Layout: mp_bench
 
 Reader question: Do the plans still hold with independent nutrition data?
 
-Message: The drop measures the lookup, not the recipes: USDA's first search hit is often the wrong food.
+Message: The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.
 
 Exact face text:
 
 - APPENDIX
 - USDA data
-- A6. With live USDA data, 50 of 72 plans meet both targets
-- The same 72 requests, each ingredient looked up in USDA FoodData Central, 23 November 2026.
+- A6. With pinned USDA foods, 72 of 72 plans meet both targets
+- The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.
 - AI Meal Planner
 - 22
 - TAKEAWAY
-- The drop measures the lookup, not the recipes: USDA's first search hit is often the wrong food.
+- The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.
 - Benchmark plans, out of 72
 - Both targets met
 - Calories within 10%
 - 72
 - 72
 - Offline
-- local nutrition tables
+- local tables
 - 64
 - 47
-- USDA, first run
+- Name search
 - energy read in kJ
 - 72
 - 50
-- USDA, kJ fixed
-- energy read in kcal
-- 356 kcal
-- read for 100 g of shrimp; the real 85 kcal was listed / beside it in kJ. Fixed.
+- Name search
+- kJ fixed
+- 72
+- 72
+- Pinned foods
+- one reviewed USDA ID each
 - 16 of 22
-- remaining misses come from one wrong match: / lean turkey mince found minced ham
-- 113 of 152
-- wider check, up from 108; guardrails 5 of 5
+- name-search misses came from one wrong match: / lean turkey mince found minced ham
+- 0 of 72
+- plans use an estimated ingredient, down from 68 / offline
+- 144 of 152
+- wider check; most of the 8 misses are Hass / avocado and store-bought hummus, kept on / purpose
