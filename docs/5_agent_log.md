@@ -8361,3 +8361,14 @@ older figures, so the poster uses 0.5%, 152 of 152 and 97%. "No database migrati
 
 Verified: the engine reports "no automated problems" (no overflow, type levels only, every number in the register,
 fonts Google Sans and Google Sans Code embedded, one 594 × 841 mm page).
+
+## 2026-11-23 — Claude — Poster: new results and a landscape version
+
+Mike asked for the poster updated, in portrait and landscape. Merged main and the deck A5/A6 branch (PR #60) for its
+claims-register rows, and added a "People plan" row (PR #56). The poster now carries 72 of 72 on pinned USDA foods
+(PR #61, still open), 143 of 144 on workout days (PR #57), the wider check on both data sources, today's workout
+replacing the usual week's exercise, and the dietitian and user-test plan as a limit. `meal-poster-landscape.json`
+lays the same blocks out in three column stacks at 841 × 594 mm; blocks take `vars` so one stylesheet serves both.
+
+Verified: `render_meal_poster.sh` reports "no automated problems" for both orientations (no overflow, type levels
+only, every number in the register, fonts embedded, correct page sizes).

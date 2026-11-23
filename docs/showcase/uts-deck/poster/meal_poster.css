@@ -45,25 +45,25 @@ header .logo { height: 32mm; }
 .mproblem .qrow p { font-size: 22pt; }
 
 /* mplates */
-.mplates .plates { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5mm; flex: 1; align-items: end; }
+.mplates .plates { display: grid; grid-template-columns: repeat(var(--n, 4), 1fr); gap: 5mm; flex: 1; align-items: end; }
 .mplates .plate { display: flex; flex-direction: column; align-items: center; text-align: center; }
-.mplates .pimg { width: 100%; height: 40mm; display: flex; align-items: flex-end; justify-content: center; }
+.mplates .pimg { width: 100%; height: var(--ph, 38mm); display: flex; align-items: flex-end; justify-content: center; }
 .mplates .pimg div { aspect-ratio: 1; }
 .mplates .pimg div img { height: 100%; display: block; }
-.mplates .plate b { font-size: 48pt; color: var(--ink); line-height: 1; margin-top: 1.5mm; white-space: nowrap; }
+.mplates .plate b { font-size: var(--kfs, 48pt); color: var(--ink); line-height: 1; margin-top: 1.5mm; white-space: nowrap; }
 .mplates .pro { font-size: 22pt; color: var(--ink); font-weight: 700; margin-top: 1mm; }
-.mplates .who { font-size: 18pt; white-space: nowrap; }
+.mplates .who { font-size: 18pt; white-space: var(--wrap, nowrap); line-height: 1.2; }
 
 /* mstations */
-.mstations .order { font-family: "Google Sans Code", monospace; font-size: 18pt; color: var(--ink); margin-bottom: 3mm; }
+.mstations .order { display: var(--order, block); font-family: "Google Sans Code", monospace; font-size: 18pt; color: var(--ink); margin-bottom: 3mm; }
 .mstations .order span { font-weight: 700; color: var(--acc); margin-right: 4mm; text-transform: uppercase; letter-spacing: .06em; }
-.mstations .stations { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6mm; }
+.mstations .stations { display: grid; grid-template-columns: repeat(var(--n, 4), 1fr); gap: 6mm; }
 .mstations .station { background: #FFFFFF; padding: 3.5mm 4mm; display: grid; grid-template-columns: 30mm 1fr; gap: 0 3mm;
   grid-template-rows: auto auto 1fr auto; position: relative; }
 .mstations .station:not(:last-child)::after { content: ""; position: absolute; right: -5mm; top: 50%;
   border-left: 3.4mm solid var(--acc); border-top: 2.2mm solid transparent; border-bottom: 2.2mm solid transparent; z-index: 1;
   transform: translateY(-50%); }
-.mstations .sart { grid-row: 1 / 4; width: 30mm; height: 24mm; object-fit: contain; align-self: center; }
+.mstations .sart { grid-row: 1 / 4; width: 30mm; height: var(--sh, 24mm); object-fit: contain; align-self: center; }
 .mstations .role { font-size: 18pt; font-weight: 700; color: var(--acc); text-transform: uppercase; letter-spacing: .05em; }
 .mstations .station b { font-size: 22pt; color: var(--ink); line-height: 1.15; }
 .mstations .station p { grid-column: 1 / -1; font-size: 18pt; margin: 2mm 0 2mm; }
@@ -82,7 +82,7 @@ header .logo { height: 32mm; }
 /* mrings */
 .mrings .rings { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
 .mrings .rg { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 3mm; }
-.mrings .donut { position: relative; width: 40mm; height: 40mm; }
+.mrings .donut { position: relative; width: var(--ds, 40mm); height: var(--ds, 40mm); }
 .mrings .donut svg { width: 100%; height: 100%; display: block; }
 .mrings .dc { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
 .mrings .dc b { font-size: 22pt; color: var(--ink); line-height: 1; }
@@ -94,7 +94,7 @@ header .logo { height: 32mm; }
 .mrings .k i { width: 4.5mm; height: 4.5mm; border-radius: 50%; flex: none; }
 
 /* mresults */
-.mresults .rgrid { display: grid; grid-template-columns: 1fr 72mm; gap: 7mm; flex: 1; }
+.mresults .rgrid { display: grid; grid-template-columns: var(--cols, 1fr 140mm); gap: 7mm; flex: 1; }
 .mresults .ctitle, .mfunnel .ctitle { font-size: 18pt; font-weight: 700; color: var(--ink); margin-bottom: 2mm; }
 .mresults .rbars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
 .mresults .rbar { display: flex; flex-direction: column; text-align: center; position: relative; }
@@ -106,7 +106,7 @@ header .logo { height: 32mm; }
 .mresults .rbar > span { font-size: 18pt; line-height: 1.2; }
 .mresults .rbar em { position: absolute; left: -2mm; top: 0; font-style: normal; font-size: 18pt; font-weight: 700; color: var(--acc);
   transform: translateX(-50%); }
-.mresults .metrics { display: grid; gap: 2.5mm; align-content: center; }
+.mresults .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm 4mm; align-content: center; }
 .mresults .metric { display: grid; grid-template-columns: 12mm 1fr; gap: 3.5mm; align-items: center; }
 .mresults .micon { width: 12mm; height: 12mm; }
 .mresults .metric b { display: block; font-size: 28pt; color: var(--ink); line-height: 1.05; }
@@ -125,7 +125,7 @@ header .logo { height: 32mm; }
 .mfunnel .fout p { font-size: 18pt; }
 
 /* march */
-.march .agrid { display: grid; grid-template-columns: 64mm 10mm 80mm 10mm 1fr; align-items: stretch; }
+.march .agrid { display: grid; grid-template-columns: var(--cols, 64mm 10mm 80mm 10mm 1fr); align-items: stretch; }
 .march .col { display: flex; flex-direction: column; gap: 2.5mm; }
 .march .lab { font-size: 18pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--acc); }
 .march .node { background: #FFFFFF; padding: 2.5mm 4mm; flex: 1; }
@@ -139,8 +139,8 @@ header .logo { height: 32mm; }
 .march .arrow::before { content: ""; position: absolute; left: 1.5mm; right: 3mm; top: 55%; border-top: .5mm solid var(--rule); }
 .march .arrow::after { content: ""; position: absolute; right: 1mm; top: calc(55% - 1.8mm);
   border-left: 3mm solid var(--rule); border-top: 1.8mm solid transparent; border-bottom: 1.8mm solid transparent; }
-.march .agents { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2.5mm; flex: 1; }
-.march .mchecks { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; margin-top: 3mm; border-top: .3mm solid var(--hair);
+.march .agents { display: grid; grid-template-columns: repeat(var(--n, 4), 1fr); gap: 2.5mm; flex: 1; }
+.march .mchecks { display: grid; grid-template-columns: repeat(var(--m, 3), 1fr); gap: 5mm; margin-top: 3mm; border-top: .3mm solid var(--hair);
   padding-top: 3.5mm; }
 .march .chk { display: grid; grid-template-columns: 13mm 1fr; gap: 3mm; align-items: center; }
 .march .cicon { width: 13mm; height: 13mm; }
@@ -148,16 +148,16 @@ header .logo { height: 32mm; }
 .march .chk span { font-size: 18pt; display: block; }
 
 /* minsights */
-.minsights .insights { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6mm; }
+.minsights .insights { display: grid; grid-template-columns: repeat(var(--n, 3), 1fr); gap: 6mm; }
 .minsights .ins { display: grid; grid-template-columns: 14mm 1fr; gap: 3.5mm; align-items: start; }
 .minsights .iicon { width: 14mm; height: 14mm; }
 .minsights .itag { font-size: 18pt; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--acc); display: block; }
 .minsights .ins b { display: block; font-size: 22pt; color: var(--ink); line-height: 1.2; }
-.minsights .ins p { font-size: 18pt; margin-top: 1mm; }
+.minsights .ins p { display: var(--itext, block); font-size: 18pt; margin-top: 1mm; }
 
 /* mtry */
-.mtry .tgrid { display: grid; grid-template-columns: 34mm 1fr; gap: 4mm; align-items: center; }
-.mtry .qr svg { width: 34mm; height: 34mm; display: block; }
+.mtry .tgrid { display: grid; grid-template-columns: var(--qr, 34mm) 1fr; gap: 4mm; align-items: center; }
+.mtry .qr svg { width: var(--qr, 34mm); height: var(--qr, 34mm); display: block; }
 .mtry .tlinks p { font-size: 18pt; }
 .mtry .tlinks span { display: block; font-weight: 700; color: var(--ink); }
 
@@ -165,3 +165,9 @@ header .logo { height: 32mm; }
 .march .agent .nhead { flex-wrap: wrap; }
 .march .agent .lgs { margin-left: 0; }
 .card.m > * { flex-shrink: 0; }
+/* Landscape: blocks set these through "vars" in meal-poster-landscape.json. */
+.march .svc { grid-column: var(--svccol, auto); }
+.march .arrow + .col + .arrow { display: var(--arrow2, block); }
+.stack > .card.m { flex: 1 1 auto; }
+/* The landscape grid: answer band, three column stacks, the limits label, the limits row. */
+.grid:has(> .stack) { grid-template-rows: auto minmax(0, 1fr) auto auto; }

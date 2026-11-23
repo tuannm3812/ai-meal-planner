@@ -45,6 +45,8 @@ def img(base, path, cls='', alt=''):
 def card(kind, block, inner):
     accent = block.get('accent', 'slate')
     style = f'grid-column: span {block.get("span", 12)}; --acc: {ACCENT[accent]}; --accfill: {FILL[accent]}'
+    # "vars": per-block layout variables, so one stylesheet serves portrait and landscape (e.g. {"n": 2}).
+    style += ''.join(f'; --{k}: {v}' for k, v in block.get('vars', {}).items())
     return f'<section class="block card m {kind}" style="{style}">{inner}</section>'
 
 

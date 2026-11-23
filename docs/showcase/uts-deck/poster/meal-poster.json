@@ -30,20 +30,20 @@
       "value_label": "plans meet calorie and macro targets",
       "verdict": "One craving, one meal sized to you, plus a shopping list.",
       "lines": [
-        "From **10 of 72** after three fixes; the API is **live on Cloud Run** in Sydney."
+        "Still **72 of 72** on pinned USDA data, and **143 of 144** on workout days. The API is **live on Cloud Run**."
       ],
       "next": [
         [
-          "USDA",
-          "benchmark with real lookups"
+          "Accounts",
+          "sign in, plans that follow you"
         ],
         [
-          "Accounts",
-          "plans that follow you"
+          "Prices",
+          "live store prices"
         ],
         [
           "People",
-          "a dietitian, then users"
+          "a dietitian, then 5 to 8 users"
         ]
       ]
     },
@@ -132,7 +132,7 @@
           "alt": "Illustration of a kitchen scale",
           "role": "The portion planner",
           "title": "Calorie expenditure",
-          "text": "Burn from body and **today's workout** sets the day's budget.",
+          "text": "Today's workout **replaces** the usual week's exercise; sets the day's budget.",
           "value": "2,469 kcal budget"
         },
         {
@@ -148,7 +148,7 @@
           "alt": "Illustration of a clipboard and magnifier",
           "role": "The taster",
           "title": "Nutrition verification",
-          "text": "Looks up each ingredient and **labels estimates**.",
+          "text": "Fetches each ingredient from **USDA by a reviewed ID**, or labels it.",
           "value": "694 kcal, 3 of 6 estimated"
         },
         {
@@ -198,7 +198,7 @@
       "rings": [
         {
           "centre": "2,469",
-          "centre_label": "kcal a day",
+          "centre_label": "kcal",
           "headline": "Exercise adds **5%**",
           "parts": [
             [
@@ -241,7 +241,7 @@
       "type": "mresults",
       "span": 7,
       "accent": "plum",
-      "heading": "Three fixes took the planner **from 10 to 72 of 72**",
+      "heading": "From **10 to 72 of 72**, and it holds on real data",
       "chart_title": "Plans meeting both targets, out of 72",
       "maximum": 72,
       "bars": [
@@ -268,9 +268,14 @@
       ],
       "metrics": [
         {
-          "icon": "../assets/icons/kit/balance-plum.svg",
-          "value": "0.5%",
-          "label": "median calorie gap"
+          "icon": "../assets/icons/kit/fact_check-plum.svg",
+          "value": "72 of 72",
+          "label": "on pinned USDA foods, none estimated"
+        },
+        {
+          "icon": "../assets/icons/kit/fitness_center-plum.svg",
+          "value": "143 of 144",
+          "label": "plans on stated workout days"
         },
         {
           "icon": "../assets/icons/kit/check_circle-plum.svg",
@@ -278,12 +283,12 @@
           "label": "guardrail cases hold"
         },
         {
-          "icon": "../assets/icons/kit/search-plum.svg",
-          "value": "152 of 152",
-          "label": "wider check, all recipes"
+          "icon": "../assets/icons/kit/balance-plum.svg",
+          "value": "0.5%",
+          "label": "median calorie gap"
         }
       ],
-      "caption": "Calories within 10%, macros inside adult AMDR; tuned on these 72."
+      "caption": "Calories within 10%, macros inside adult AMDR. Wider check: 152 of 152 offline, 144 of 152 on USDA."
     },
     {
       "type": "mfunnel",
@@ -422,20 +427,20 @@
         {
           "icon": "../assets/icons/kit/check_circle-ochre.svg",
           "tag": "Measured",
-          "insight": "On target offline, not with people",
+          "insight": "On target offline and on USDA, not with people",
           "text": "The checks guided the fixes."
         },
         {
           "icon": "../assets/icons/kit/calculate-ochre.svg",
-          "tag": "Estimated",
-          "insight": "68 of 72 plans lean on an estimate",
-          "text": "Each one is labelled in the app."
+          "tag": "Modelled",
+          "insight": "Workouts are modelled, not measured",
+          "text": "Hass avocado and hummus miss on USDA."
         },
         {
           "icon": "../assets/icons/kit/group-ochre.svg",
-          "tag": "Not tested",
-          "insight": "Taste and health are unknown",
-          "text": "No user or clinical review yet."
+          "tag": "Planned",
+          "insight": "A dietitian review, then a user test",
+          "text": "Planned, not run; ethics first."
         }
       ]
     },

@@ -1,0 +1,507 @@
+{
+  "eyebrow": "TD School, University of Technology Sydney | Personal project",
+  "title": "AI Meal Planner",
+  "subtitle": "What should I eat tonight? One craving in, one meal sized to you, and the shopping list ready.",
+  "authors": "Manh Tuan (Mike) Nguyen",
+  "logo": "logo-lockup.svg",
+  "plugin": "meal_poster_blocks.py",
+  "css": "meal_poster.css",
+  "strict": true,
+  "size": "A1",
+  "columns": 12,
+  "scale": {
+    "title": 64,
+    "subtitle": 26,
+    "eyebrow": 20,
+    "figure": 48,
+    "heading": 28,
+    "body": 22,
+    "caption": 18,
+    "marker": 26,
+    "margin_mm": 18,
+    "gap_mm": 5
+  },
+  "footer": "AI Meal Planner · Manh Tuan (Mike) Nguyen  Code: github.com/tuannm3812/ai-meal-planner  Live API: Cloud Run, Sydney  A study project, not medical advice.",
+  "landscape": true,
+  "blocks": [
+    {
+      "type": "ptake",
+      "span": 12,
+      "value": "72 of 72",
+      "value_label": "plans meet calorie and macro targets",
+      "verdict": "One craving, one meal sized to you, plus a shopping list.",
+      "lines": [
+        "Still **72 of 72** on pinned USDA data, and **143 of 144** on workout days. The API is **live on Cloud Run**."
+      ],
+      "next": [
+        [
+          "Accounts",
+          "sign in, plans that follow you"
+        ],
+        [
+          "Prices",
+          "live store prices"
+        ],
+        [
+          "People",
+          "a dietitian, then 5 to 8 users"
+        ]
+      ]
+    },
+    {
+      "type": "stack",
+      "span": 4,
+      "blocks": [
+        {
+          "type": "divider",
+          "span": 12,
+          "label": "Overview"
+        },
+        {
+          "type": "mproblem",
+          "accent": "slate",
+          "heading": "Picking a meal is easy; **sizing it to you** is not",
+          "image": "../assets/figures/problem-pasta.png",
+          "alt": "Illustration of a bowl of pasta",
+          "craving": "“I feel like pasta tonight.”",
+          "rows": [
+            {
+              "icon": "../assets/icons/kit/monitor_weight-slate.svg",
+              "question": "How much?",
+              "fact": "Daily budgets run **1,200 to 4,521 kcal**."
+            },
+            {
+              "icon": "../assets/icons/kit/no_food-slate.svg",
+              "question": "Is it right for me?",
+              "fact": "Limits change the **meal** or an **ingredient**."
+            },
+            {
+              "icon": "../assets/icons/kit/shopping_cart-slate.svg",
+              "question": "What do I buy?",
+              "fact": "One pasta: **five ingredients** to price."
+            }
+          ]
+        },
+        {
+          "type": "mplates",
+          "accent": "slate",
+          "heading": "One craving, **sized to four different people**",
+          "plates": [
+            {
+              "kcal": 363,
+              "protein": "26 g protein",
+              "who": "Older woman, losing",
+              "image": "../assets/figures/plates/plate-363.png",
+              "alt": "Plate of chicken fried rice, 363 kcal"
+            },
+            {
+              "kcal": 694,
+              "protein": "48 g protein",
+              "who": "Active woman, keeping",
+              "image": "../assets/figures/plates/plate-694.png",
+              "alt": "Plate of chicken fried rice, 694 kcal"
+            },
+            {
+              "kcal": 809,
+              "protein": "60 g protein",
+              "who": "Average man, keeping",
+              "image": "../assets/figures/plates/plate-809.png",
+              "alt": "Plate of chicken fried rice, 809 kcal"
+            },
+            {
+              "kcal": 850,
+              "protein": "63 g protein",
+              "who": "Large athlete, gaining",
+              "image": "../assets/figures/plates/plate-850.png",
+              "alt": "Plate of chicken fried rice, 850 kcal"
+            }
+          ],
+          "caption": "Same chicken fried rice, four people. Plate area shows calories.",
+          "vars": {
+            "n": 4,
+            "kfs": "28pt",
+            "ph": "30mm",
+            "wrap": "normal"
+          }
+        },
+        {
+          "type": "mapp",
+          "accent": "blue",
+          "heading": "The React app: **details once**, then one search",
+          "steps": [
+            {
+              "image": "../assets/figures/app-1-profile-zoom.jpg",
+              "alt": "The React app's first-run form",
+              "icon": "../assets/icons/kit/person-blue.svg",
+              "title": "1. You, once",
+              "text": "Goal and **today's workout**."
+            },
+            {
+              "image": "../assets/figures/app-2-craving-zoom.jpg",
+              "alt": "The React home page craving search",
+              "icon": "../assets/icons/kit/search-blue.svg",
+              "title": "2. Craving",
+              "text": "One search box."
+            },
+            {
+              "image": "../assets/figures/app-3-plan-zoom.jpg",
+              "alt": "The React plan page with charts",
+              "icon": "../assets/icons/kit/rice_bowl-blue.svg",
+              "title": "3. Your plan",
+              "text": "Charts and a **shopping list**."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "stack",
+      "span": 4,
+      "blocks": [
+        {
+          "type": "divider",
+          "span": 12,
+          "label": "How it works"
+        },
+        {
+          "type": "mstations",
+          "accent": "blue",
+          "heading": "Four agents work like **one kitchen**, no LLM needed",
+          "order": "chicken fried rice, active woman, maintaining",
+          "stations": [
+            {
+              "image": "../assets/figures/stations/station-scale.png",
+              "alt": "Illustration of a kitchen scale",
+              "role": "The portion planner",
+              "title": "Calorie expenditure",
+              "text": "Today's workout **replaces** the usual week's exercise; sets the day's budget.",
+              "value": "2,469 kcal budget"
+            },
+            {
+              "image": "../assets/figures/stations/station-pan.png",
+              "alt": "Illustration of a pan of fried rice",
+              "role": "The chef",
+              "title": "Meal recommendation",
+              "text": "Rules out recipes by **allergen tags**, then picks and sizes one.",
+              "value": "691 kcal target"
+            },
+            {
+              "image": "../assets/figures/stations/station-taster.png",
+              "alt": "Illustration of a clipboard and magnifier",
+              "role": "The taster",
+              "title": "Nutrition verification",
+              "text": "Fetches each ingredient from **USDA by a reviewed ID**, or labels it.",
+              "value": "694 kcal, 3 of 6 estimated"
+            },
+            {
+              "image": "../assets/figures/stations/station-basket.png",
+              "alt": "Illustration of a shopping basket",
+              "role": "The shopper",
+              "title": "Supermarket",
+              "text": "Matches ingredients to **store items** or prices.",
+              "value": "$24.50 estimated"
+            }
+          ],
+          "vars": {
+            "n": 2,
+            "order": "none",
+            "sh": "18mm"
+          }
+        },
+        {
+          "type": "mrings",
+          "accent": "blue",
+          "heading": "From her body to **one meal's target**",
+          "rings": [
+            {
+              "centre": "2,469",
+              "centre_label": "kcal",
+              "headline": "Exercise adds **5%**",
+              "parts": [
+                [
+                  2344,
+                  "#3B528B",
+                  "Body and activity, 2,344"
+                ],
+                [
+                  125,
+                  "#5EC962",
+                  "Exercise model, +125"
+                ]
+              ]
+            },
+            {
+              "centre": "691",
+              "centre_label": "kcal meal",
+              "headline": "This meal is **28%** of her day",
+              "parts": [
+                [
+                  691,
+                  "#21918C",
+                  "This meal, 691"
+                ],
+                [
+                  1778,
+                  "#D8DEE3",
+                  "Rest of the day, 1,778"
+                ]
+              ]
+            }
+          ],
+          "vars": {
+            "ds": "32mm"
+          }
+        },
+        {
+          "type": "mfunnel",
+          "accent": "plum",
+          "heading": "Hard limits first, **then relevance**",
+          "title": "A vegan asks for chicken fried rice; allergen tags decide what is safe",
+          "rows": [
+            {
+              "label": "All recipes",
+              "value": 76,
+              "text": "76"
+            },
+            {
+              "label": "Safe for a vegan",
+              "value": 30,
+              "text": "30"
+            },
+            {
+              "label": "Relevant",
+              "value": 6,
+              "text": "6"
+            },
+            {
+              "label": "Served",
+              "value": 1,
+              "text": "Tofu Fried Rice"
+            }
+          ],
+          "outcomes": [
+            {
+              "icon": "../assets/icons/kit/flag-plum.svg",
+              "title": "No close match",
+              "text": "A **standard meal**, with a note."
+            },
+            {
+              "icon": "../assets/icons/kit/block-plum.svg",
+              "title": "Nothing safe",
+              "text": "The plan is **refused**, not guessed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "stack",
+      "span": 4,
+      "blocks": [
+        {
+          "type": "divider",
+          "span": 12,
+          "label": "Evidence"
+        },
+        {
+          "type": "mresults",
+          "accent": "plum",
+          "heading": "From **10 to 72 of 72**, and it holds on real data",
+          "chart_title": "Plans meeting both targets, out of 72",
+          "maximum": 72,
+          "bars": [
+            {
+              "label": "First run",
+              "change": "Before any fix",
+              "value": 10
+            },
+            {
+              "label": "Portions",
+              "change": "Ingredients resized",
+              "value": 41
+            },
+            {
+              "label": "Fallback",
+              "change": "Off-menu moved",
+              "value": 47
+            },
+            {
+              "label": "Cooking fat",
+              "change": "Oil, then retry",
+              "value": 72
+            }
+          ],
+          "metrics": [
+            {
+              "icon": "../assets/icons/kit/fact_check-plum.svg",
+              "value": "72 of 72",
+              "label": "on pinned USDA foods, none estimated"
+            },
+            {
+              "icon": "../assets/icons/kit/fitness_center-plum.svg",
+              "value": "143 of 144",
+              "label": "plans on stated workout days"
+            },
+            {
+              "icon": "../assets/icons/kit/check_circle-plum.svg",
+              "value": "5 of 5",
+              "label": "guardrail cases hold"
+            },
+            {
+              "icon": "../assets/icons/kit/balance-plum.svg",
+              "value": "0.5%",
+              "label": "median calorie gap"
+            }
+          ],
+          "caption": "Calories within 10%, macros inside adult AMDR. Wider check: 152 of 152 offline, 144 of 152 on USDA.",
+          "vars": {
+            "cols": "1fr"
+          }
+        },
+        {
+          "type": "march",
+          "accent": "plum",
+          "heading": "One service, two clients, **live on Cloud Run**",
+          "clients": [
+            {
+              "title": "React",
+              "text": "Kitchen app",
+              "logos": [
+                "react",
+                "vite",
+                "tailwindcss"
+              ]
+            },
+            {
+              "title": "Streamlit",
+              "text": "Backup demo",
+              "logos": [
+                "streamlit"
+              ]
+            }
+          ],
+          "api": {
+            "title": "FastAPI",
+            "text": "Keys, rate limits, Docker",
+            "logos": [
+              "fastapi",
+              "docker",
+              "googlecloud"
+            ]
+          },
+          "service": "Planning service",
+          "agents": [
+            {
+              "icon": "../assets/icons/kit/monitor_weight-plum.svg",
+              "title": "Calorie model",
+              "text": "Trained HistGradientBoosting",
+              "logos": [
+                "scikitlearn"
+              ]
+            },
+            {
+              "icon": "../assets/icons/kit/skillet-plum.svg",
+              "title": "Recipe search",
+              "text": "TF-IDF, allergen rules",
+              "logos": [
+                "scikitlearn"
+              ]
+            },
+            {
+              "icon": "../assets/icons/kit/fact_check-plum.svg",
+              "title": "Nutrition",
+              "text": "Local tables; USDA with keys"
+            },
+            {
+              "icon": "../assets/icons/kit/balance-plum.svg",
+              "title": "Portions",
+              "text": "Linear programme",
+              "logos": [
+                "scipy"
+              ]
+            }
+          ],
+          "checks": [
+            {
+              "icon": "../assets/icons/kit/science-plum.svg",
+              "value": "662",
+              "label": "Python tests, all passing"
+            },
+            {
+              "icon": "../assets/icons/kit/verified-plum.svg",
+              "value": "97%",
+              "label": "coverage; CI fails below 89%"
+            },
+            {
+              "icon": "../assets/icons/kit/visibility-plum.svg",
+              "value": "5 spans",
+              "label": "per plan in Cloud Trace, no health data"
+            }
+          ],
+          "vars": {
+            "cols": "1fr 8mm 1fr",
+            "svccol": "1 / -1",
+            "arrow2": "none",
+            "n": 2,
+            "m": 3
+          }
+        }
+      ]
+    },
+    {
+      "type": "divider",
+      "span": 12,
+      "label": "Limits"
+    },
+    {
+      "type": "minsights",
+      "span": 9,
+      "accent": "ochre",
+      "heading": "What it **does not prove yet**",
+      "items": [
+        {
+          "icon": "../assets/icons/kit/check_circle-ochre.svg",
+          "tag": "Measured",
+          "insight": "On target offline and on USDA, not with people",
+          "text": "The checks guided the fixes."
+        },
+        {
+          "icon": "../assets/icons/kit/calculate-ochre.svg",
+          "tag": "Modelled",
+          "insight": "Workouts are modelled, not measured",
+          "text": "Hass avocado and hummus miss on USDA."
+        },
+        {
+          "icon": "../assets/icons/kit/group-ochre.svg",
+          "tag": "Planned",
+          "insight": "A dietitian review, then a user test",
+          "text": "Planned, not run; ethics first."
+        }
+      ],
+      "vars": {
+        "n": 3
+      }
+    },
+    {
+      "type": "mtry",
+      "span": 3,
+      "accent": "ochre",
+      "heading": "Try it",
+      "qr": "https://tuannm3812-ai-meal-planner.streamlit.app",
+      "links": [
+        [
+          "Demo",
+          "Scan for the live demo"
+        ],
+        [
+          "Code",
+          "github.com/tuannm3812"
+        ]
+      ],
+      "vars": {
+        "qr": "28mm"
+      }
+    }
+  ],
+  "authors_top": true
+}
