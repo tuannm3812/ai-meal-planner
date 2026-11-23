@@ -4,7 +4,9 @@ import Icon from '../../components/icons/Icon'
 import { ArrowLeft, ArrowRight, Flame, Info, PieChart } from '../../components/icons/glyphs'
 import BlobShape from '../../components/illustrations/BlobShape'
 import DishIllustration from '../../components/illustrations/DishIllustration'
+import PriceTag from '../../components/ui/PriceTag'
 import { card, ghostButton, pageShell, sectionHeading } from '../../components/ui/styles'
+import { formatCurrency } from '../../lib/format'
 import CalorieRing from './charts/CalorieRing'
 import CalorieSources from './charts/CalorieSources'
 import MacroDonut from './charts/MacroDonut'
@@ -22,21 +24,8 @@ import {
 import RatingCard from './RatingCard'
 import { runnersUp } from './runnersUp'
 import SaveButton from './SaveButton'
+import { total } from './shopping'
 import ShoppingList from './ShoppingList'
-
-const TONES = {
-  good: 'bg-success-bg text-success-fg',
-  warn: 'bg-estimate-bg text-estimate-fg',
-  info: 'bg-white/10 text-white',
-}
-
-function Badge({ tone = 'info', children }) {
-  return (
-    <span className={`rounded-full px-3.5 py-1.5 text-sm font-semibold ${TONES[tone]}`}>
-      {children}
-    </span>
-  )
-}
 
 // The plan page body (spec §4.3). It renders one response, top to bottom, and
 // keeps plan_status, the balance outcome, the final nutrition and the
@@ -61,6 +50,7 @@ function PlanDetail({
   const items = ingredients(plan)
   const notes = howItWasMade(plan)
   const others = onPlanRunnerUp ? runnersUp(plan) : []
+  const cost = total(plan?.shopping_list)
   const mealName = plan?.meal_plan?.meal_definition?.structured_meal_name || 'Untitled meal'
 
   return (
@@ -85,9 +75,14 @@ function PlanDetail({
                 {mealName}
               </h1>
               <div className="flex flex-wrap gap-2">
-                {match && <Badge tone={match.tone}>{match.label}</Badge>}
-                {outcome && <Badge tone={outcome.tone}>{outcome.label}</Badge>}
-                {estimated && <Badge tone="warn">Some nutrition estimated</Badge>}
+                {match && <PriceTag tone={match.tone}>{match.label}</PriceTag>}
+                {outcome && <PriceTag tone={outcome.tone}>{outcome.label}</PriceTag>}
+                {estimated && <PriceTag tone="warn">Some nutrition estimated</PriceTag>}
+                {cost !== null && (
+                  <PriceTag className="font-mono" tone="accent">
+                    About {formatCurrency(cost)} to shop
+                  </PriceTag>
+                )}
               </div>
               <div className="mt-2 flex flex-wrap items-start gap-3 print:hidden">
                 {feedback && !feedback.off && (
@@ -235,7 +230,10 @@ function PlanDetail({
           )}
         </div>
 
-        <aside className="flex min-w-0 flex-[2_1_340px] flex-col gap-6" aria-label="Shopping and rating">
+        <aside
+          aria-label="Shopping and rating"
+          className="flex min-w-0 flex-[2_1_340px] flex-col gap-6 xl:sticky xl:top-6 xl:max-h-[calc(100vh-3rem)] xl:overflow-y-auto print:static print:max-h-none print:overflow-visible"
+        >
           <ShoppingList
             location={location}
             mealName={mealName}

@@ -46,7 +46,10 @@ describe('Shopping list', () => {
     expect(rice.closest('label')).toHaveTextContent('Rough estimate')
     expect(rice.closest('label')).not.toHaveTextContent(/Generic|For cooked white rice/)
 
+    expect(within(list).getByText('6 items')).toBeInTheDocument()
     expect(within(list).getByText('Estimated total').parentElement).toHaveTextContent('$24.50')
+    // The banner carries the same total as a price tag.
+    expect(screen.getByText('About $24.50 to shop')).toBeInTheDocument()
     expect(
       within(list).getByText('Prices are estimates from a local reference list, not live store prices.'),
     ).toBeInTheDocument()

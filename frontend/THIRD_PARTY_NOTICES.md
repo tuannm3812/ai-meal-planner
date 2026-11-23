@@ -9,6 +9,7 @@ makes no request to a font service.
 | --- | --- | --- | --- |
 | Inter (400, 500, 600) | `@fontsource/inter` 5.3.0 | 2016 The Inter Project Authors (https://github.com/rsms/inter) | SIL Open Font License 1.1 |
 | Unbounded (700, 800) | `@fontsource/unbounded` 5.3.0 | 2022 The Unbounded Project Authors (https://github.com/googlefonts/unbounded) | SIL Open Font License 1.1 |
+| JetBrains Mono (400, 500, 700) | `@fontsource/jetbrains-mono` 5.3.0 | 2020 The JetBrains Mono Project Authors (https://github.com/JetBrains/JetBrainsMono) | SIL Open Font License 1.1 |
 
 The full licence text ships in each package's `LICENSE` file.
 

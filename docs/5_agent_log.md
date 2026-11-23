@@ -8595,3 +8595,24 @@ less plain, clearer notes and warnings, and text alignment checked.
 Verified: vitest 265 of 265, eslint clean, `vite build` passes; screenshots at 1,440 and
 390 px; no horizontal scroll at 390 px.
 
+
+## 2026-11-24 — Claude — receipt shopping list, price tags, Home workspace
+
+Mike said "do next" after the welcome page went live. This is the next slice of the
+Market Receipt redesign (DEC-44).
+
+- The shopping list is a till receipt: JetBrains Mono (self-hosted, new dependency
+  `@fontsource/jetbrains-mono` 5.3.0), the store centred at the top, dashed rules, dotted
+  leaders to each price and a torn bottom edge. From 1,280 px it stays in view while the
+  report scrolls. Its words, ticks, copy and print are unchanged.
+- New `components/ui/PriceTag`. The plan banner's three badges are tags, plus a coral
+  "About $X to shop" tag showing the service's own total.
+- Home: today's workout is three chips under the craving (the profile's own field, with the
+  minutes when "I worked out" is chosen); the six suggestions are dish cards; below, saved
+  meals and past plans sit beside a context column with the plan in hand or the latest
+  plan and three counts (plans made, meals saved, average meal). The column comes first on
+  narrow screens, so "Back to your plan" stays near the top.
+- The mode switch from the proposal is not built: Calories is already a tab in the rail.
+
+Verified: vitest 267 of 267 (two new Home workout tests), eslint clean, `vite build`
+passes; screenshots at 1,440 and 390 px with no horizontal scroll on Home or the plan page.

@@ -31,6 +31,8 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Unbounded', 'Inter', 'system-ui', 'sans-serif'],
+        // The receipt and price tags only (DESIGN.md §4).
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       // The sticker shadow on primary buttons and outlined cards (DESIGN.md §6).
       boxShadow: {
