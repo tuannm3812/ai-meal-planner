@@ -16,6 +16,8 @@ from ..schemas.requests import Ingredient
 
 logger = logging.getLogger(__name__)
 
+KJ_PER_KCAL = 4.184
+
 Verification = Literal["verified_external", "trusted_local", "estimated"]
 
 # G3: each data source maps to one verification level. Any source not listed
@@ -265,7 +267,7 @@ class NutritionVerificationAgent:
         by_name = {nutrient.get("nutrientName", "").lower(): nutrient for nutrient in nutrients}
 
         return {
-            "calories": self._nutrient_value(by_name, "energy", "Energy"),
+            "calories": self._energy_kcal(nutrients),
             "protein": self._nutrient_value(by_name, "protein", "Protein"),
             "carbs": self._nutrient_value(by_name, "carbohydrate", "Carbohydrate, by difference"),
             "fat": self._nutrient_value(by_name, "total lipid", "Total lipid (fat)"),
@@ -382,6 +384,34 @@ class NutritionVerificationAgent:
             estimate = {"calories": 120, "protein": 4, "carbs": 14, "fat": 5}
 
         return {**estimate, "source": "category_estimate", "confidence": 0.45}
+
+    @staticmethod
+    def _energy_kcal(nutrients: list[dict[str, Any]]) -> float:
+        """Energy per 100 g in kcal, read by unit rather than by name.
+
+        Many USDA foods list "Energy" twice, once in kcal and once in kJ. Keyed
+        by name, the last entry won, so shrimp read 356 "kcal" instead of 85
+        (P4, 2026-11-23). A kcal entry is preferred, the plain "Energy" one
+        first; kJ is converted only when no kcal entry exists. An entry with no
+        unit is read as kcal, as before.
+        """
+        kcal: list[dict[str, Any]] = []
+        kilojoules: list[dict[str, Any]] = []
+        for nutrient in nutrients:
+            name = nutrient.get("nutrientName", "").lower()
+            if "energy" not in name:
+                continue
+            unit = (nutrient.get("unitName") or "kcal").lower()
+            if unit == "kcal":
+                kcal.append(nutrient)
+            elif unit == "kj":
+                kilojoules.append(nutrient)
+        if kcal:
+            plain = [n for n in kcal if n.get("nutrientName", "").lower() == "energy"]
+            return float((plain or kcal)[0].get("value", 0))
+        if kilojoules:
+            return float(kilojoules[0].get("value", 0)) / KJ_PER_KCAL
+        return 0.0
 
     @staticmethod
     def _nutrient_value(by_name: dict[str, Any], partial_key: str, fallback_key: str) -> float:

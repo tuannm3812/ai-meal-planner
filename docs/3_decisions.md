@@ -761,3 +761,22 @@ high activity level who states a modest workout gets far less than one who answe
 physical job, which the activity level also covers, is no longer counted on stated
 days. Ruled out: keeping the weekly average and adding only a workout's excess over
 it, which would make a rest day count the average again.
+### DEC-41 — The benchmark can run on USDA data; USDA energy is read by unit
+
+2026-11-23, P4. Mike asked for the meal-quality benchmark to run with real USDA data.
+`scripts/meal_quality_baseline.py --usda` passes `USDA_API_KEY` (shell or `backend/.env`,
+never an argument) to the production nutrition agent. The run's provenance records
+`nutrition_source` and counts USDA lookups, failures and unusable answers, and the script
+exits 2 when no key is set or no lookup succeeded, so a run that quietly fell back to the
+local tables cannot pass as a USDA run. USDA search is live, so these runs are recorded
+apart from the deterministic offline baseline, which stays the reference for every change.
+
+The first run showed `_query_usda_database` keyed nutrients by name, so when a food listed
+`Energy` in both kcal and kJ the kJ value could win (shrimp 356 "kcal" instead of 85).
+`_energy_kcal` now prefers a kcal entry, then converts kJ at 4.184, and reads an entry
+with no unit as kcal as before. Results and the per-ingredient diagnosis:
+`docs/7_meal_quality.md` §6.
+
+Rules out a dataType filter (Foundation, SR Legacy) as the fix for wrong matches: it was
+measured and matched worse foods. Pinned FoodData Central IDs per ingredient are the
+proposed next step, not done here.

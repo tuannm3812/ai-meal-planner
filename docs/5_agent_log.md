@@ -8335,3 +8335,15 @@ count both. Consequence noted in DEC-40: a high activity level with a stated mod
 far less than "not sure".
 
 Verified: `uv run pytest` and frontend `npm test` / `npm run lint` pass; ruff clean.
+## 2026-11-23 — Claude — P4: meal-quality benchmark with USDA data
+
+Added `--usda` to `scripts/meal_quality_baseline.py` (DEC-41): the key is read from
+`USDA_API_KEY`, provenance counts lookups, and the script exits 2 with no key or no
+successful lookup. Ran it on Mike's Mac (the cloud sandbox's proxy refuses
+`api.nal.usda.gov`); the key stayed in `backend/.env` and is in no committed file. The
+first run found energy read in kJ (shrimp, tuna, broth); fixed in `_energy_kcal` with
+tests for both entry orders and kJ-only foods. After the fix: 50 of 72 benchmark plans and
+113 of 152 wider plans meet the targets, 72 of 72 within 10% of calories, guardrails 5 of 5.
+Remaining misses are fat-heavy wrong matches from USDA's top search hit (turkey mince →
+ham, avocado → dressing); `docs/meal_quality/usda_lookup_diagnosis.md` lists every
+ingredient. Proposed next: pin a FoodData Central ID per ingredient. Full test suite passes.

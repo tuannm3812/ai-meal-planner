@@ -137,6 +137,10 @@ the hand-offs by watching the log; its header says how to run it.
 - 2026-11-22: `docs/9_dietitian_review_and_user_tests.md` plans P9's people work: a
   dietitian checklist of every diet rule, then a five-to-eight-person usability test.
   Neither has run; ethics approval is to be checked with the supervisor first.
+- 2026-11-23: the benchmark runs on USDA data with `--usda` (P4, DEC-41), apart from the
+  deterministic offline baseline. USDA energy is now read in kcal, not kJ. With USDA, 50 of 72
+  meet the targets and all 72 are within 10% of calories; the misses come from USDA's top
+  search hit being the wrong food (`docs/7_meal_quality.md` §6).
 
 ## Open risks
 

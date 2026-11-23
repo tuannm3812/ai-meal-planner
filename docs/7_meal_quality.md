@@ -60,7 +60,8 @@ set's numbers stay comparable from one change to the next. The script exits
 ```bash
 uv run python scripts/meal_quality_baseline.py                      # Markdown report
 uv run python scripts/meal_quality_baseline.py --json out.json      # plus rows as JSON
-uv run python scripts/meal_quality_baseline.py --wider              # 68-request recipe check
+uv run python scripts/meal_quality_baseline.py --wider              # 152-request recipe check
+uv run python scripts/meal_quality_baseline.py --usda               # nutrition from USDA (§6)
 ```
 
 ## 2. Baseline, 2026-10-15 (rerun 2026-10-17 with the targets and the calorie floor)
@@ -146,7 +147,9 @@ median calorie deviation is 0.4%. Every other figure in the last column stands.
    plans have at least one ingredient whose macros are estimated. So the
    tolerance result says the planner is consistent with its own tables, not
    that the meals truly have those calories. A run with a USDA key would
-   test that, but it would no longer be deterministic.
+   test that, but it would no longer be deterministic. Run on 2026-11-23
+   (P4, §6): calories hold, 72 of 72 within 10%, but 22 plans miss on fat,
+   because the USDA lookup often matches the wrong food.
 
 ## 4. Suggested order of work
 
@@ -165,6 +168,9 @@ Each item is a separate PR that reruns the baseline and reports the change.
    match today.
 4. **Meal target at the extremes** (finding 3), once the owner decides how
    many meals a day the target assumes.
+5. **Pin USDA food IDs per ingredient** (§6, finding 2). Search by name
+   returns the wrong food for at least 8 of the 41 ingredients USDA is asked
+   about. Each ingredient gets a reviewed FoodData Central ID, looked up by ID.
 
 ## 5. Workout days, 2026-11-22
 
@@ -207,3 +213,68 @@ Findings:
    41.5 °C). A 20-minute walk at 95 bpm adds 63 kcal, less than the 115 kcal
    default it replaces, and short workouts at 37 °C score oddly high. The
    clients never ask for body temperature, so every request uses the default.
+
+## 6. With USDA data, 2026-11-23 (P4)
+
+`--usda` runs the same requests with ingredient nutrition looked up in USDA
+FoodData Central (DEC-41). The key comes from `USDA_API_KEY` in the shell or
+`backend/.env`, never the command line. USDA search results are live, so a
+USDA run is not deterministic and never replaces the offline baseline above.
+Its report says `nutrition_source: usda_fooddata_central` and counts the
+lookups; the script exits 2 when no key is set or no lookup succeeded.
+Ingredients with a trusted local value (19 of the corpus's ingredients) are
+never sent to USDA.
+
+Run on the owner's Mac, because the cloud sandbox cannot reach the USDA API.
+Reports and rows: [`usda_baseline.md`](meal_quality/usda_baseline.md),
+[`usda_wider.md`](meal_quality/usda_wider.md), each with a `.json`; the first
+run, before the fix below, is kept as `*_before_kcal_fix.*`. Every ingredient's
+USDA match is in [`usda_lookup_diagnosis.md`](meal_quality/usda_lookup_diagnosis.md).
+
+| | Offline | USDA, first run | USDA, kcal fix |
+|---|---:|---:|---:|
+| Benchmark plans meeting the targets | 72 of 72 | 47 of 72 | 50 of 72 |
+| Benchmark plans within 10% of calories | 72 | 64 | 72 |
+| Benchmark median / max calorie deviation | 0.5% / 9.9% | 0.8% / 103.5% | 0.7% / 9.9% |
+| Wider check meeting the targets | 152 of 152 | 108 of 152 | 113 of 152 |
+| Wider check within 10% of calories | 152 | 140 | 147 |
+| Plans with a USDA-verified ingredient (benchmark / wider) | 0 / 0 | 68 / 148 | 68 / 148 |
+| Guardrails as expected | 5 of 5 | 5 of 5 | 5 of 5 |
+
+What it found:
+
+1. **Energy was read in kilojoules. Fixed (DEC-41).** Many USDA foods list
+   `Energy` twice, in kcal and in kJ. The lookup keyed nutrients by name, so
+   the last one won: shrimp read 356 kcal per 100 g instead of 85, tuna 376
+   instead of 90, low-sodium chicken broth 67 instead of 16. That made the
+   Shrimp Taco Bowl miss its calories by up to 104% and the tuna bowls by up
+   to 82%. Energy is now read by unit. This also affected the live API
+   whenever a USDA key was set.
+2. **The first search result is often the wrong food.** The lookup takes
+   USDA's top hit with no check. Avocado matches avocado dressing (43 g fat
+   per 100 g), lean turkey mince matches minced ham, potato a potato patty,
+   cod fillet a breaded cod product, chicken thigh the skin-on cut, red
+   capsicum red sangria, and brown rice the dry grain where the recipe means
+   cooked. The usability check only needs one nutrient above zero, so all of
+   these are accepted. This is why almost every remaining miss has calories on
+   target and fat too high: the portion balancer works from wrong macros.
+   - The turkey-as-ham match alone causes 16 of the 22 benchmark misses,
+     because the pizza, chocolate dessert and kidney-safe curry requests fall
+     back to the High-Protein Turkey Burger Bowl.
+   - Tuna Pasta Salad's six `creamy pasta` plans passed in the first run and
+     miss now (37–42% fat). Not yet traced; likely the corrected tuna energy
+     changes how the balancer splits the portions.
+   - Restricting the search to Foundation and SR Legacy foods is worse, not
+     better: cod fillet becomes cod liver oil, avocado avocado oil, tomato
+     tomato powder.
+3. **Tomato never matches.** Its top hit is a branded item with no nutrients,
+   so it falls back to the local estimate. Unusable answers are not cached, so
+   it is looked up again for every plan; it is all of the 83 and 104
+   "no usable match" lookups. The plans "with an estimated ingredient" in a
+   USDA run are exactly the plans with tomato.
+
+So the drop measures the lookup, not the recipes: the local tables were
+closer to the right foods than USDA's top search hit. Next (§4, item 5): pin
+one USDA FoodData Central ID per ingredient in the reference data, reviewed
+once, instead of searching by name at request time. That makes USDA runs
+repeatable and removes the wrong matches; then rerun this section.
