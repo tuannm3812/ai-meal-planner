@@ -215,3 +215,10 @@ export function profileErrorsFrom422(detail) {
   }
   return Object.keys(errors).length ? errors : null
 }
+
+// What happens to the details, said wherever they are asked for (docs/8_design.md §3.1).
+export const PROFILE_DISCLOSURE =
+  "We use this to estimate how much energy you burn in a day and size your meal to fit your goal. " +
+  "This browser keeps your details so you don't retype them. They go with each plan request, and " +
+  'when the app runs locally the server keeps a history of the plans it makes, including these ' +
+  'details.'

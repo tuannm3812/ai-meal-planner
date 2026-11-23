@@ -8469,3 +8469,17 @@ live check. The index was created by hand; run 45121738187 passed both jobs. Its
 first saw a 404 from the brand-new site and passed on a re-run. Fix: the deploy job now
 publishes rules and indexes and waits for every index to be READY before deploying the API,
 and the hosting check retries for a minute. Needs Mike: turn on the sign-in providers.
+
+## 2026-11-23 — Claude — welcome page as a landing page
+
+Mike found the first-visit screen boring and wordy. `frontend/src/pages/WelcomePage.jsx` now
+opens with a hero (headline as the h1, "Get started" and "How it works" anchors, three short
+points, the rice-bowl drawing with an example plan card from the real Chicken Fried Rice
+response in `docs/8_design.md` §2), then "How it works" in three steps, a strip of six corpus
+meals with their dish drawings, three promises on ink with "A planning aid, not medical advice",
+and the details form under `#get-started`. `ProfileForm` takes `headingLevel`, `intro` and
+`showSizing`, so on this page its heading is an h2, its intro is one line and the sizing panel
+is left out; the full disclosure (`PROFILE_DISCLOSURE`) sits under the save button. The Profile
+page is unchanged. `Icon` gains an `xl` 48 px size for the feature lists (DESIGN.md §5).
+`WelcomePage.test.jsx` checks the stated recipe count against `data/meal_corpus/meals.json`.
+Verified: vitest 260 of 260, eslint clean, `vite build` passes; screenshots at 1280 and 390 px.

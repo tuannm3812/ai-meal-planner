@@ -6,6 +6,7 @@ export {
   BookOpenCheck,
   Bookmark,
   Calculator,
+  Check,
   Copy,
   Flame,
   History,

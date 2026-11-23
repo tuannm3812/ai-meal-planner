@@ -122,8 +122,9 @@ always through the `Icon` component in `frontend/src/components/icons/` (DEC-38)
 fixes the rest:
 
 - One stroke, 1.75, with round caps and joins.
-- Three sizes: `sm` 20 px inside buttons and links, `md` 24 px for navigation, field
-  labels and notices, `lg` 32 px beside section headings, list headings and stars.
+- Four sizes: `sm` 20 px inside buttons and links, `md` 24 px for navigation, field
+  labels and notices, `lg` 32 px beside section headings, list headings and stars, and
+  `xl` 48 px for the feature lists on the welcome page.
 - Colour comes from the surface, never from the meaning: `light` is `leaf` on ground,
   tint and white cards; `ink` is `lime` on the dark banners and top bar; `current` takes
   the text colour inside a button or notice. Never a macro colour, never tomato.
