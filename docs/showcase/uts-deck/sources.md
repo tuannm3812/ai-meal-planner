@@ -35,7 +35,7 @@
 - Source ID: usda-run
 - Author or organisation: this project
 - Title and date: Meal-quality benchmark with USDA FoodData Central, 23 November 2026, PR #59
-- Path: docs/7_meal_quality.md §5 (With USDA data); docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md
+- Path: docs/7_meal_quality.md §6 (With USDA data), DEC-41; docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md
 - Locator: results table and "What it found"
 - Supports: 47 then 50 of 72, 64 then 72 within 10%, 108 then 113 of 152, shrimp 356 vs 85 kcal, 16 of 22 misses from the turkey match
 - Limits: live search results, not repeatable; run on the owner's Mac because the cloud sandbox cannot reach the USDA API

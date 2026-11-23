@@ -160,7 +160,7 @@ References:
 Put the limits in one place.
 
 Plans hit their targets on fixed requests offline, and 50 of 72 with live USDA data, where the misses trace to wrong USDA matches. Most offline plans lean on estimates. Nobody has used it yet.
-Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5; DEC-31.
+Sources: docs/4_next_steps.md §7; docs/7_meal_quality.md §5 and §6; DEC-31.
 
 References:
 - sources.md
@@ -249,7 +249,7 @@ The same 72 requests, with each ingredient's nutrition from USDA FoodData Centra
 The first run read energy in kilojoules for foods that list both units: shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, every plan is back within 10% of its calories, and 50 of 72 meet both targets; the median gap is 0.7%.
 Almost every remaining miss has calories on target and fat too high, because the lookup takes USDA's first search hit: avocado finds avocado dressing, and lean turkey mince finds minced ham. The ham match alone causes 16 of the 22 misses, through the fallback turkey bowl.
 Next: pin one reviewed USDA food per ingredient in the reference data, so the lookup is repeatable, then rerun.
-Sources: docs/7_meal_quality.md §5 (With USDA data); docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59.
+Sources: docs/7_meal_quality.md §6 (With USDA data), DEC-41; docs/meal_quality/usda_baseline.md, usda_wider.md, usda_lookup_diagnosis.md; PR #59.
 
 References:
 - sources.md
