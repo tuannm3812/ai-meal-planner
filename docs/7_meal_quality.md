@@ -61,7 +61,7 @@ set's numbers stay comparable from one change to the next. The script exits
 uv run python scripts/meal_quality_baseline.py                      # Markdown report
 uv run python scripts/meal_quality_baseline.py --json out.json      # plus rows as JSON
 uv run python scripts/meal_quality_baseline.py --wider              # 152-request recipe check
-uv run python scripts/meal_quality_baseline.py --usda               # nutrition from USDA (§5)
+uv run python scripts/meal_quality_baseline.py --usda               # nutrition from USDA (§6)
 ```
 
 ## 2. Baseline, 2026-10-15 (rerun 2026-10-17 with the targets and the calorie floor)
@@ -148,7 +148,7 @@ median calorie deviation is 0.4%. Every other figure in the last column stands.
    tolerance result says the planner is consistent with its own tables, not
    that the meals truly have those calories. A run with a USDA key would
    test that, but it would no longer be deterministic. Run on 2026-11-23
-   (P4, §5): calories hold, 72 of 72 within 10%, but 22 plans miss on fat,
+   (P4, §6): calories hold, 72 of 72 within 10%, but 22 plans miss on fat,
    because the USDA lookup often matches the wrong food.
 
 ## 4. Suggested order of work
@@ -168,14 +168,56 @@ Each item is a separate PR that reruns the baseline and reports the change.
    match today.
 4. **Meal target at the extremes** (finding 3), once the owner decides how
    many meals a day the target assumes.
-5. **Pin USDA food IDs per ingredient** (§5, finding 2). Search by name
+5. **Pin USDA food IDs per ingredient** (§6, finding 2). Search by name
    returns the wrong food for at least 8 of the 41 ingredients USDA is asked
    about. Each ingredient gets a reviewed FoodData Central ID, looked up by ID.
 
-## 5. With USDA data, 2026-11-23 (P4)
+## 5. Workout days, 2026-11-22
+
+The fixed 72 send no workout, so each assumes the model's default (30 minutes
+at 100 bpm). The workout check sends six stated workouts (not given, rest day,
+a 20-minute walk at 95 bpm, a 30-minute jog at 120, a 60-minute run at 140 and a
+90-minute ride at 135) for each of the four profiles on six matched cravings:
+144 plans, reported apart from the 72.
+
+```bash
+uv run python scripts/meal_quality_baseline.py --workouts           # 144-request workout check
+```
+
+Report: [`meal_quality/workouts.md`](meal_quality/workouts.md); rows:
+[`meal_quality/workouts.json`](meal_quality/workouts.json).
+
+Findings:
+
+1. **143 of 144 plans meet the targets.** Daily budgets run from 1,200 to
+   5,094 kcal. The miss is Tuna Pasta Salad at a 378 kcal target (the
+   sedentary woman's 60-minute run day): carbs reach 43%, and the balancer
+   reverts because the pasta is already at its 0.5x floor. Targets between
+   about 360 and 390 kcal miss the same way; the fixed 72 never ask for one,
+   because that profile sits on the 1,200 kcal floor.
+2. **Workouts past 30 minutes were counted as 30** (fixed, DEC-39). The model
+   was trained on 1 to 30 minutes, so 45, 60 and 90 minutes all added 238 kcal
+   for the average man. They now add 357, 477 and 715. Heart rates past 128 bpm
+   are still read as 128, with a warning.
+3. **The activity level and today's workout overlapped** (fixed, DEC-40). The
+   clients describe the activity levels as exercise days a week, so BMR times
+   the multiplier already holds an average day's exercise: 626 kcal for the
+   average man (x1.55), 714 for the active woman (x1.725) and 1,534 for the
+   athlete (x1.9). Today's workout was added on top, on 15 of 24 profile-days.
+   A stated workout now replaces it: the average man's 60-minute run day goes
+   from 3,251 to 2,625 kcal, and his rest day from 2,774 to 2,148. A workout
+   left out still adds the 30-minute default (108 to 142 kcal) to the activity
+   level, so 3 of 24 days still count both. The report's "Added on top"
+   column keeps the old budgets. 143 of 144 still meet the targets.
+4. **The 37 °C body-temperature default is below the training range** (37.1 to
+   41.5 °C). A 20-minute walk at 95 bpm adds 63 kcal, less than the 115 kcal
+   default it replaces, and short workouts at 37 °C score oddly high. The
+   clients never ask for body temperature, so every request uses the default.
+
+## 6. With USDA data, 2026-11-23 (P4)
 
 `--usda` runs the same requests with ingredient nutrition looked up in USDA
-FoodData Central (DEC-39). The key comes from `USDA_API_KEY` in the shell or
+FoodData Central (DEC-41). The key comes from `USDA_API_KEY` in the shell or
 `backend/.env`, never the command line. USDA search results are live, so a
 USDA run is not deterministic and never replaces the offline baseline above.
 Its report says `nutrition_source: usda_fooddata_central` and counts the
@@ -201,7 +243,7 @@ USDA match is in [`usda_lookup_diagnosis.md`](meal_quality/usda_lookup_diagnosis
 
 What it found:
 
-1. **Energy was read in kilojoules. Fixed (DEC-39).** Many USDA foods list
+1. **Energy was read in kilojoules. Fixed (DEC-41).** Many USDA foods list
    `Energy` twice, in kcal and in kJ. The lookup keyed nutrients by name, so
    the last one won: shrimp read 356 kcal per 100 g instead of 85, tuna 376
    instead of 90, low-sodium chicken broth 67 instead of 16. That made the

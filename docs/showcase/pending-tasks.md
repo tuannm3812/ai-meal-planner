@@ -32,15 +32,15 @@ update when a task is done.
 
 - [x] **P2 Storage:** add database migrations (Alembic). Done 7 November 2026, DEC-32.
 - [ ] **P3 Hosting:** create the GCP project and deploy to Cloud Run, then confirm a real trace arrives. `docs/6_deployment.md` §1.
-- [x] **P4 Data:** run the benchmark with USDA keys, so nutrition is checked independently of the local tables. Done 23 November 2026, DEC-39: 50 of 72 meet the targets with USDA data, all 72 within 10% of calories; the misses come from wrong USDA matches (`docs/7_meal_quality.md` §5). Follow-up: pin USDA food IDs per ingredient.
+- [x] **P4 Data:** run the benchmark with USDA keys, so nutrition is checked independently of the local tables. Done 23 November 2026, DEC-41: 50 of 72 meet the targets with USDA data, all 72 within 10% of calories; the misses come from wrong USDA matches (`docs/7_meal_quality.md` §6). Follow-up: pin USDA food IDs per ingredient.
 - [x] **P7 Recipes:** grow the library from 34 to 75–100 recipes. Done 22 November 2026: 76 recipes, DEC-35. The deck's "34 recipes" now reads 76.
 - [ ] **P8 Prices:** connect live store prices. 4 of 6 items in the example plan use category prices.
 - [ ] **P9 Learning:** use saved meals and ratings in ranking. They are collected but unused. `docs/4_next_steps.md` §7.10.
-- [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets.
+- [ ] **P9 People:** test with users, and ask a dietitian to review the rules and targets. The plan, a dietitian checklist and a user-test protocol, is in `docs/9_dietitian_review_and_user_tests.md` (22 November 2026).
 
 ## Accuracy
 
-- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A workout day can still overlap the activity level.
+- [x] **P5 Calorie model:** ask for real exercise details. Done 22 November 2026, DEC-33: step 1 asks for today's workout, and a rest day adds none. A stated workout now replaces the activity level's exercise (DEC-40).
 - [x] **P6 Diet rules:** move from matching ingredient names to tagged allergens. Done 22 November 2026, DEC-34. New recipes must tag their ingredients.
 - [ ] **Meal target:** record why it is 28% of the day, and review the cap for large budgets. The large athlete's meal is 19% of the day.
 - [ ] **Low-carb preference:** it favours no meal now, because no recipe is low-carb (DEC-30).

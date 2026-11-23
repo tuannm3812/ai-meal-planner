@@ -85,6 +85,15 @@ class Profile:
 
 
 @dataclass(frozen=True)
+class Workout:
+    """Today's workout as a request states it (DEC-33); None leaves a detail to the model."""
+
+    name: str
+    duration_minutes: float | None = None
+    heart_rate_bpm: float | None = None
+
+
+@dataclass(frozen=True)
 class Scenario:
     """One request in the fixed set."""
 
@@ -92,13 +101,16 @@ class Scenario:
     profile: Profile
     health_conditions: tuple[str, ...] = ()
     dietary_preferences: tuple[str, ...] = ()
+    workout: Workout | None = None
+    """None sends no workout, as the fixed 72 do, so the model's 30-minute default applies."""
 
     @property
     def label(self) -> str:
         """A stable, human-readable id for the scenario."""
         constraints = [*self.dietary_preferences, *self.health_conditions]
         suffix = f" [{', '.join(constraints)}]" if constraints else ""
-        return f"{self.craving} / {self.profile.name}{suffix}"
+        workout = f" / {self.workout.name}" if self.workout else ""
+        return f"{self.craving} / {self.profile.name}{workout}{suffix}"
 
     def to_request(self) -> MealRequest:
         """Build the API request this scenario stands for."""
@@ -111,6 +123,8 @@ class Scenario:
             height_cm=self.profile.height_cm,
             weight_kg=self.profile.weight_kg,
             activity_multiplier=self.profile.activity_multiplier,
+            duration_minutes=self.workout.duration_minutes if self.workout else None,
+            heart_rate_bpm=self.workout.heart_rate_bpm if self.workout else None,
             goal=self.profile.goal,
         )
 

@@ -190,7 +190,8 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
               value={profile.workout}
             />
             <p className="mt-1.5 text-sm text-muted">
-              Your activity level covers a usual week. Today's workout is added on top of it.
+              Your activity level covers a usual week. When you give today's workout, it takes the
+              place of that week's exercise, so a rest day counts as one.
             </p>
             {profile.workout === 'trained' && (
               <div className="mt-4 grid max-w-md grid-cols-2 gap-4">
