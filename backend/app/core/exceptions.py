@@ -75,7 +75,7 @@ class AuthenticationRequired(MealPlanningError):
     """Raised when keys are configured and the request has no valid key (G4)."""
 
     status_code = 401
-    client_message = "A valid X-API-Key header is required."
+    client_message = "A valid X-API-Key header or sign-in token is required."
     error_code = "missing_or_invalid_api_key"
 
 

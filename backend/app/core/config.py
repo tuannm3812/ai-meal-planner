@@ -79,6 +79,9 @@ class AppSettings(BaseSettings):
     # open local mode, which production refuses (see core/auth.py).
     api_keys: str = ""
     rate_limit_per_minute: int = 60
+    # DEC-43: the Firebase project whose ID tokens are accepted as
+    # "Authorization: Bearer". Empty turns signed-in accounts off.
+    firebase_project_id: str = ""
 
     # G6: on a hosted, multi-instance deployment, history and feedback are
     # refused with 501 (history_disabled_stateless) and nothing is stored.

@@ -70,7 +70,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -141,6 +141,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ]
       }
@@ -153,6 +156,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ],
         "parameters": [
@@ -188,7 +194,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -275,7 +281,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -326,6 +332,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ]
       }
@@ -357,7 +366,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -438,6 +447,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ]
       }
@@ -450,6 +462,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ],
         "parameters": [
@@ -485,7 +500,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -553,6 +568,9 @@
         "security": [
           {
             "ApiKeyAuth": []
+          },
+          {
+            "FirebaseAuth": []
           }
         ],
         "parameters": [
@@ -588,7 +606,7 @@
             }
           },
           "401": {
-            "description": "A valid X-API-Key header is required.",
+            "description": "A valid X-API-Key header or sign-in token is required.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2061,6 +2079,11 @@
         "description": "A client application's API key (README §8.1).",
         "in": "header",
         "name": "X-API-Key"
+      },
+      "FirebaseAuth": {
+        "type": "http",
+        "description": "A signed-in user's Firebase ID token (DEC-43).",
+        "scheme": "bearer"
       }
     }
   }

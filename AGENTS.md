@@ -146,6 +146,12 @@ the hand-offs by watching the log; its header says how to run it.
   unless it is a trusted local value. On USDA data 72 of 72 meet the targets and 144 of
   152 in the wider check (`docs/7_meal_quality.md` §7).
 
+- 2026-11-23: user accounts (DEC-43, Mike's choice): Firebase Auth with Google and
+  anonymous sign-in, Firestore and Firebase Hosting, on free tiers. Spec
+  `docs/superpowers/specs/2026-11-22-user-accounts-design.md`, built in five slices. Slice 1:
+  the API accepts a Firebase ID token as `Authorization: Bearer` (`FIREBASE_PROJECT_ID`) and
+  acts only for the token's uid, in the `accounts` namespace.
+
 ## Open risks
 
 - `.streamlit/secrets.toml` is now gitignored (PR #7). Local

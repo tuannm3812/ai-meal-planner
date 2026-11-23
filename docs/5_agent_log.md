@@ -8378,3 +8378,19 @@ Mike approved the design with both recommendations: anonymous sign-in for signed
 visitors to the hosted app, and Google as the only named sign-in. The spec records the
 answers and how an anonymous account links to Google; DEC-43 records the decision. Next is
 slice 1, bearer-token auth.
+
+## 2026-11-23 — Claude — user accounts slice 1: bearer-token auth
+
+`Authorization: Bearer <Firebase ID token>` is accepted on every protected route when
+`FIREBASE_PROJECT_ID` is set (`core/firebase_auth.py`). The token is checked with `google-auth`
+(now a direct dependency) against Google's certificates, cached for an hour and refetched once
+for an unseen key id, plus audience, issuer, expiry and a 1-128 character subject. A valid
+token is the principal `accounts` with `user_id=<uid>` and all three scopes. Routes use the uid:
+a body `user_id` is replaced (`body_for`), a path naming another user is 403
+(`user_for`), and feedback must reference the same user's plan (found while testing: the
+shared namespace alone let one account rate another's meal). Both credentials at once is 401;
+`accounts` is a reserved client_id; the rate limit keys on client and uid, and applies to
+accounts in open local mode too. OpenAPI declares `FirebaseAuth` beside `ApiKeyAuth`.
+Verified: `test_firebase_auth.py` signs real RS256 tokens with a generated key;
+`test_api_accounts.py` covers the route rules with a fake verifier. `uv run pytest`: 715
+passed, coverage 97%. Hosted mode still refuses history until Firestore (slice 3).

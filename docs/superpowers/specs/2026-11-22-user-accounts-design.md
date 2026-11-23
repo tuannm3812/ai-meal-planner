@@ -43,16 +43,19 @@ every instance, and a host for React.
 
 - The browser signs in with the Firebase JS SDK (`firebase/auth`): anonymously on a
   first hosted visit, then with the Google provider in a popup (`linkWithPopup`). It sends the Firebase ID token as `Authorization: Bearer <token>`.
-- The API verifies it with `google.oauth2.id_token.verify_firebase_token`, from
-  `google-auth`, which is already a dependency. It checks the signature against Google's
-  cached public certificates, the audience (the project ID) and the issuer. No
-  `firebase-admin` dependency is needed.
+- The API verifies it with `google-auth`, already installed through `google-genai` and now
+  a direct dependency. It checks the signature against Google's public certificates,
+  cached for an hour and refetched once for an unseen key id, then the audience (the
+  project ID), the issuer and the expiry. (`google.oauth2.id_token.verify_firebase_token`
+  would refetch the certificates on every call.) No `firebase-admin` dependency is needed.
 - An anonymous token is treated like a Google one. Anyone can mint anonymous uids, so the
   per-uid rate limit is not a cap on one person; the one-instance cap still bounds cost.
 - A verified token becomes a `Principal` with `client_id="accounts"`, the new field
   `user_id=<Firebase uid>`, and the three existing scopes. The rate limit keys on the uid.
 - For an account principal the server **ignores any `user_id` in the body** and uses the
   uid. A path `user_id` that is not the uid gets `403`. This is what closes §7.7.
+- Feedback must name a plan that belongs to the same uid. The namespace alone is not
+  enough, because every account shares `accounts`.
 - `X-API-Key` keeps working unchanged for Streamlit, scripts and `live_check.sh`. A request
   carrying both is refused as ambiguous.
 - The server stores only the uid. It never stores the email, name or photo. A Firebase uid

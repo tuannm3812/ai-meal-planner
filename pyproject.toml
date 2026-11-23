@@ -7,6 +7,8 @@ requires-python = ">=3.11,<3.13"
 dependencies = [
   "alembic>=1.16,<2",
   "fastapi",
+  # DEC-43: verifies signed-in users' Firebase ID tokens.
+  "google-auth>=2.40,<3",
   "google-genai",
   "joblib>=1.4,<2",
   "numpy>=1.26,<3",
