@@ -162,6 +162,11 @@ soft blob shape may sit behind a banner illustration.
   the receipt. The active tab is an ink pill, as in the rail. Overview shows the calorie
   ring, the macro split and three readings, each a big share over a scale that shades the
   recommended range and marks the meal.
+- **Past plans is a dated list**: a mono day heading (Today, Yesterday, then the date) over
+  one row per plan with its drawing, craving, calories against the target, macro strip and
+  result tag. My meals stays a card grid. Both have a count tag and a search box.
+- **Profile** puts the form beside a side column on wide screens: how a meal is sized, the
+  account, and what the device remembers.
 - **Home** is a workspace: the craving, today's workout as three chips, six dish cards from
   the menu, then saved meals and past plans beside a context column (the plan in hand or
   the latest one, and the device's counts).

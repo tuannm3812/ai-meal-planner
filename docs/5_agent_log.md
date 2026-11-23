@@ -8632,3 +8632,20 @@ three tabs beside the receipt.
 Verified: vitest 267 of 267 (two tests now reach ingredients and notes through their tabs),
 eslint clean, `vite build` passes; screenshots at 1,440 and 390 px with no horizontal scroll
 on any tab.
+
+## 2026-11-24 — Claude — Past plans, My meals and Profile
+
+Mike said "do the next thing"; this is on the same branch as the tabbed plan page.
+
+- Past plans is a dated list (`features/meals/PlanRows`, `byDay`): Today, Yesterday, then
+  the date, one row per plan with calories against the target and the service's result.
+  The date is the record's `saved_at`, else `generated_at`; plans without one go under
+  "Earlier".
+- My meals and Past plans show a count tag and, with two or more entries, a search box
+  that filters by meal name or craving on the device (`searchMeals`). Nothing is sent.
+- Profile is two columns from 1,280 px: the form, then a side column with the sizing
+  panel (now `features/profile/SizingPanel`), the account card and the device card.
+- Goal cards put the icon above the label, so they fit the narrower form.
+
+Verified: vitest 270 of 270 (three new tests), eslint clean, `vite build` passes;
+screenshots of Past plans, My meals and Profile at 1,440 and 390 px, no horizontal scroll.

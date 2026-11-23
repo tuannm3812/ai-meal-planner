@@ -16,5 +16,8 @@ export const card = 'rounded-3xl bg-surface p-6 sm:p-7'
 export const sectionHeading =
   'flex items-center gap-3 font-display text-[26px] font-extrabold tracking-tight text-ink'
 
+// A card's heading in a narrow side column.
+export const sideHeading = 'font-display text-[20px] font-extrabold tracking-tight text-ink'
+
 // Wide screens use their width (DEC-44): up to 1,440 px beside the rail.
 export const pageShell = 'mx-auto w-full max-w-6xl px-4 sm:px-6 xl:max-w-[1440px] xl:px-10'

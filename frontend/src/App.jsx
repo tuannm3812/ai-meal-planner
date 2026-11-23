@@ -49,7 +49,9 @@ function App() {
                     ? 'Every meal you planned, newest first. Sign in with Google to keep them on any device.'
                     : 'Every meal planned on this device, newest first. Plans are kept by the server you are connected to, and can be lost if it is replaced.'
                 }
+                noun="plan"
                 pick={(lists) => lists.history}
+                rows
                 title="Past plans"
               />
             }

@@ -1,3 +1,4 @@
+import SizingPanel from './SizingPanel'
 import { useId } from 'react'
 
 import Icon from '../../components/icons/Icon'
@@ -166,7 +167,7 @@ function ProfileForm({
 
         <div className="divide-y divide-dashed divide-line px-6 sm:px-8">
           <Step group number={1} title="Your goal">
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-3">
               {GOAL_OPTIONS.map((option) => {
                 const checked = profile.goal === option.value
                 return (
@@ -176,19 +177,17 @@ function ProfileForm({
                     }`}
                     key={option.value}
                   >
-                    <span className="flex items-center justify-between gap-2">
-                      <span className="flex items-center gap-2 font-semibold text-ink">
-                        <input
-                          checked={checked}
-                          className="h-4 w-4 accent-ink"
-                          name="goal"
-                          onChange={() => set('goal')(option.value)}
-                          type="radio"
-                          value={option.value}
-                        />
-                        {option.label}
-                      </span>
-                      <Icon as={GOAL_GLYPHS[option.value]} tone="light" />
+                    <Icon as={GOAL_GLYPHS[option.value]} tone="light" />
+                    <span className="flex items-center gap-2 font-semibold text-ink">
+                      <input
+                        checked={checked}
+                        className="h-4 w-4 shrink-0 accent-ink"
+                        name="goal"
+                        onChange={() => set('goal')(option.value)}
+                        type="radio"
+                        value={option.value}
+                      />
+                      {option.label}
                     </span>
                     <span className="text-sm leading-5 text-muted">{option.description}</span>
                   </label>
@@ -314,26 +313,7 @@ function ProfileForm({
         )}
       </div>
 
-      {showSizing && (
-      <aside
-        aria-label="How your meal is sized"
-        className="self-start rounded-3xl bg-ink p-7 text-ground"
-      >
-        <p className="text-sm text-ground/75">How your meal is sized</p>
-        <ol className="mt-4 grid list-decimal gap-x-10 gap-y-3.5 pl-5 text-base leading-6 md:grid-cols-2 2xl:grid-cols-1">
-          <li>
-            Your body and activity level set the energy you burn in a day, and a trained model adds
-            today's workout.
-          </li>
-          <li>Your goal sets the calories for this meal, with a safe floor when losing weight.</li>
-          <li>Portions are resized so protein, carbs and fat sit inside recommended ranges.</li>
-          <li>Nutrition is checked against food data, and anything estimated is labelled.</li>
-        </ol>
-        <p className="mt-6 border-t border-ground/20 pt-4 text-sm text-ground/75">
-          A planning aid, not medical advice.
-        </p>
-      </aside>
-      )}
+      {showSizing && <SizingPanel />}
     </section>
   )
 }

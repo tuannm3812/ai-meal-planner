@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useAccount } from '../../app/AccountContext'
 import Icon from '../../components/icons/Icon'
 import { LogIn, LogOut, Trash2 } from '../../components/icons/glyphs'
-import { card, primaryButton, secondaryButton, sectionHeading } from '../../components/ui/styles'
+import { card, primaryButton, secondaryButton, sideHeading } from '../../components/ui/styles'
 
 // The Profile page's account card (DEC-43): sign in with Google, sign out, or
 // delete the account and everything it stored. Shown only with accounts on.
@@ -17,7 +17,7 @@ function AccountSection() {
 
   return (
     <section aria-labelledby="account-heading" className={card}>
-      <h2 className={sectionHeading} id="account-heading">
+      <h2 className={sideHeading} id="account-heading">
         Your account
       </h2>
       {signedIn ? (
