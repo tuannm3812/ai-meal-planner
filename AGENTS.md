@@ -132,8 +132,11 @@ the hand-offs by watching the log; its header says how to run it.
   `ai-meal-planner-515508`, australia-southeast1), deployed by `deploy.yml` with
   its live check passing. `GCP_MAX_INSTANCES=1` caps it at one instance (#52), and
   a billing budget of about A$1 alerts the owner. A full `POST /generate-meal-plan`
-  trace with all five stage spans reached Cloud Trace. G6's two-instance and
-  revocation runs (`docs/6_deployment.md` §3) have not been run on the real service.
+  trace with all five stage spans reached Cloud Trace.
+- 2026-11-23: G6's two-instance and revocation checks passed on the real service
+  (`docs/6_deployment.md` §3): every check was answered by 2 instances and a revoked
+  key got 401 from both. The live-check key was rotated; the service is back at min 0,
+  max 1.
 - 2026-11-22: `docs/9_dietitian_review_and_user_tests.md` plans P9's people work: a
   dietitian checklist of every diet rule, then a five-to-eight-person usability test.
   Neither has run; ethics approval is to be checked with the supervisor first.

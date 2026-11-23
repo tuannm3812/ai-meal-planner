@@ -8347,3 +8347,23 @@ tests for both entry orders and kJ-only foods. After the fix: 50 of 72 benchmark
 Remaining misses are fat-heavy wrong matches from USDA's top search hit (turkey mince →
 ham, avocado → dressing); `docs/meal_quality/usda_lookup_diagnosis.md` lists every
 ingredient. Proposed next: pin a FoodData Central ID per ingredient. Full test suite passes.
+
+## 2026-11-23 — Claude — G6 live acceptance
+
+Ran `docs/6_deployment.md` §3 on the live Cloud Run service with Mike's go-ahead. The
+two-instance check
+([45113984547](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45113984547))
+and the redeploy with the rotated key
+([45114275295](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45114275295))
+passed, every check answered by 2 instances. A local `live_check.sh` with
+`OLD_KEY` then got 401 from both instances for the revoked key.
+
+The original live-check raw key was not kept, so I first added a known key (K1) beside
+it, proved K1 on both instances, and then replaced the list with K2 alone. That revoked
+K1 and the original key. The restore deploy
+([45114529723](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45114529723))
+passed with min 0, and `GCP_MAX_INSTANCES` is back to 1 (`maxScale=1`). No raw key is
+in any committed file. Secret versions 1 and 2 are left enabled but unused.
+
+Docs only, so no tests were run.
+

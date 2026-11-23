@@ -187,6 +187,36 @@ not that no other instance or revision exists. Afterwards, redeploy normally
 
 This requires `min_instances=2` to still be in effect.
 
+**Run on the real service, 2026-11-23.** Both checks passed against
+`ai-meal-planner-api` (australia-southeast1), with `GCP_MAX_INSTANCES` raised to 2 for
+the run.
+
+The original live-check raw key was not kept anywhere, so revocation was proven with a
+key that was known to be valid. Every key used the client_id `live-check`.
+
+1. A known key, K1, was added beside the original key (secret version 2), and K1
+   became `MEAL_PLANNER_SMOKE_KEY`.
+2. Two-instance deploy,
+   [run 45113984547](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45113984547):
+   live check passed with K1. All four history and feedback routes (501) and the
+   anonymous call (401) were each answered by 2 distinct `X-Instance-Id` values, and
+   the keyed meal plan returned 200.
+3. The list was replaced by a new key, K2, alone (secret version 3), which revoked both
+   K1 and the original key. K2 became `MEAL_PLANNER_SMOKE_KEY`.
+4. Redeploy at two instances,
+   [run 45114275295](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45114275295):
+   live check passed with K2, every check from 2 instances.
+5. While min 2 was still in effect, a local `live_check.sh` with `OLD_KEY=K1` and
+   `EXPECT_INSTANCES=2` passed. The revoked key got `401 missing_or_invalid_api_key`
+   x12 from 2 instances.
+6. Restore deploy,
+   [run 45114529723](https://github.com/tuannm3812/ai-meal-planner/actions/runs/45114529723):
+   min 0, `GCP_MAX_INSTANCES` back to 1. The live check passed from 1 instance, and
+   revision `ai-meal-planner-api-00004-bss` serves 100% with `maxScale=1`.
+
+Secret versions 1 and 2 are still enabled but unused, because each revision reads
+`latest` at startup.
+
 ## 4. Operations
 
 - **Roll back:**
