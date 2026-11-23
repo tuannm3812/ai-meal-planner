@@ -93,10 +93,10 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
                         >
                           {item.product}
                         </span>
-                        {(item.ingredient !== item.product || item.roughEstimate) && (
+                        {(item.named || item.roughEstimate) && (
                           <span className="block text-xs text-muted">
-                            {item.ingredient !== item.product && `For ${item.ingredient}`}
-                            {item.ingredient !== item.product && item.roughEstimate && ' · '}
+                            {item.named && `For ${item.ingredient}`}
+                            {item.named && item.roughEstimate && ' · '}
                             {item.roughEstimate && 'Rough estimate'}
                           </span>
                         )}

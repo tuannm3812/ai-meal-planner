@@ -59,6 +59,10 @@ describe('App', () => {
     renderApp()
     expect(axios.get).not.toHaveBeenCalled()
     expect(axios.post).not.toHaveBeenCalled()
+    // It starts from the stored profile, not an example person.
+    expect(screen.getByLabelText('Age')).toHaveValue(34)
+    expect(screen.getByLabelText('Sex')).toHaveValue('female')
+    expect(screen.getByLabelText('Weight (kg)')).toHaveValue(64)
   })
 
   it('asks for nothing but the plan until the person plans', async () => {
@@ -219,7 +223,7 @@ describe('App', () => {
 
   it('opens a returning visit straight on the craving search', () => {
     renderApp({ stored: STORED })
-    expect(screen.getByRole('heading', { level: 1, name: /Say what you crave/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'What do you feel like eating?' })).toBeInTheDocument()
     expect(cravingInput()).toBeInTheDocument()
   })
 })

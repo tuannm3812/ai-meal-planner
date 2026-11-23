@@ -8553,3 +8553,22 @@ promises repeated on Home, and "Sized for you" shown in both the banner and the 
 product names such as "Generic whole egg" come from the service, not the client.
 
 Verified: vitest 264 of 264, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — the rest of the wording review
+
+Mike asked for every remaining item from the content review to be fixed.
+
+- Home is headed "What do you feel like eating?" and no longer repeats the welcome page's
+  three promises. The banner's "Sized for you" line hides from 1,280 px, where the rail card
+  says it; the card now also gives the last plan's calorie target.
+- Welcome page: the pill reads "One meal at a time", step 3 and the first check are reworded,
+  and the check that repeated "tested recipe" is gone.
+- The Calories page starts from the stored profile (`CaloriesTab` takes `initial`), and still
+  changes nothing in it.
+- The supermarket agent names an unknown product after its ingredient, not "Generic
+  <ingredient>". The client strips the old prefix from stored plans and drops the "For
+  <ingredient>" line when it would repeat the name.
+
+Verified: vitest 265 of 265, eslint clean, `vite build` passes; backend pytest exits 0 and
+ruff is clean. `docs/openapi.json` is unaffected.
+

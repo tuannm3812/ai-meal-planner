@@ -21,16 +21,18 @@ const SEX_OPTIONS = [
   { value: 'female', label: 'Female' },
 ]
 
-function CaloriesTab() {
-  const [age, setAge] = useState(28)
-  const [sex, setSex] = useState('male')
-  const [heightCm, setHeightCm] = useState(180)
-  const [weightKg, setWeightKg] = useState(80)
-  const [activityMultiplier, setActivityMultiplier] = useState(1.55)
+// `initial` lets the Calories page start from the person's own profile; the
+// form keeps its own state, so nothing typed here changes that profile.
+function CaloriesTab({ initial = {} }) {
+  const [age, setAge] = useState(initial.age ?? 28)
+  const [sex, setSex] = useState(initial.sex ?? 'male')
+  const [heightCm, setHeightCm] = useState(initial.heightCm ?? 180)
+  const [weightKg, setWeightKg] = useState(initial.weightKg ?? 80)
+  const [activityMultiplier, setActivityMultiplier] = useState(initial.activity ?? 1.55)
   const [durationMinutes, setDurationMinutes] = useState(30)
   const [heartRateBpm, setHeartRateBpm] = useState(100)
   const [bodyTempC, setBodyTempC] = useState(37)
-  const [goal, setGoal] = useState('maintain')
+  const [goal, setGoal] = useState(initial.goal ?? 'maintain')
   const [healthConditionsInput, setHealthConditionsInput] = useState('')
   const {
     data: result,

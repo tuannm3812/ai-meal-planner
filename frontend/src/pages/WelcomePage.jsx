@@ -3,7 +3,6 @@ import logoMark from '../assets/brand/logo-mark.svg'
 import Icon from '../components/icons/Icon'
 import {
   ArrowRight,
-  BookOpenCheck,
   CircleCheck,
   Flame,
   MessageSquareText,
@@ -45,14 +44,13 @@ const MENU_SIZE = 76
 const STEPS = [
   { glyph: UserRound, title: 'Tell us about you', body: 'Your body, goal and activity, once.' },
   { glyph: Search, title: 'Say what you crave', body: 'Type it the way you would say it.' },
-  { glyph: ShoppingBasket, title: 'Cook and shop', body: 'One meal sized for you, plus the shopping list.' },
+  { glyph: ShoppingBasket, title: 'Cook and shop', body: 'Get the meal and its shopping list.' },
 ]
 
 // No claim that a standard (fallback) meal is balanced or a good match.
 const CHECKS = [
-  { glyph: Flame, text: 'Calories sized to your body and goal' },
+  { glyph: Flame, text: 'Calories against your own target' },
   { glyph: CircleCheck, text: 'Says whether protein, carbs and fat landed in range' },
-  { glyph: BookOpenCheck, text: 'Every meal from a tested recipe, never made up' },
   { glyph: MessageSquareText, text: 'An honest note when nothing on the menu is close' },
 ]
 
@@ -82,7 +80,7 @@ function Hero() {
       <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-24`}>
         <div className="flex flex-col gap-6">
           <p className="w-fit rounded-full border border-white/25 px-4 py-1.5 text-sm font-semibold text-peach">
-            Meal planning, sized to you
+            One meal at a time
           </p>
           <h1
             className="font-display text-[44px] font-extrabold leading-[1.02] tracking-tight sm:text-[64px]"

@@ -41,10 +41,10 @@ describe('Shopping list', () => {
     expect(within(meat).getByText('$7.80')).toBeInTheDocument()
     expect(within(meat).queryByText(/guessed/)).not.toBeInTheDocument()
 
-    const rice = within(list).getByRole('checkbox', { name: /Generic cooked white rice/ })
-    expect(rice.closest('label')).toHaveTextContent(
-      'For cooked white rice · Rough estimate',
-    )
+    // An unknown product is named after its ingredient, once, without "Generic".
+    const rice = within(list).getByRole('checkbox', { name: /Cooked white rice/ })
+    expect(rice.closest('label')).toHaveTextContent('Rough estimate')
+    expect(rice.closest('label')).not.toHaveTextContent(/Generic|For cooked white rice/)
 
     expect(within(list).getByText('Estimated total').parentElement).toHaveTextContent('$24.50')
     expect(

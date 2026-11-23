@@ -31,7 +31,8 @@ const labelFor = (options, value) => options.find((option) => option.value === v
 
 // Who the plans are sized for, at the foot of the rail (wide screens only).
 function SizedFor() {
-  const { hasProfile, profile, location } = usePlannerContext()
+  const { hasProfile, profile, location, plan } = usePlannerContext()
+  const target = plan?.macro_balance?.target_meal_calories
   if (!hasProfile) return null
   const details = [profile.age, labelFor(SEX_OPTIONS, profile.sex), labelFor(GOAL_OPTIONS, profile.goal)]
     .filter(Boolean)
@@ -46,6 +47,7 @@ function SizedFor() {
       </h2>
       <p className="mt-1 text-muted">{details}</p>
       {location && <p className="text-muted">{location}</p>}
+      {typeof target === 'number' && <p className="text-muted">About {Math.round(target)} kcal a meal</p>}
       <Link
         className="mt-2 inline-flex min-h-[44px] items-center font-semibold text-cobalt underline underline-offset-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-cobalt"
         to="/profile"
