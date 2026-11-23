@@ -780,3 +780,23 @@ with no unit as kcal as before. Results and the per-ingredient diagnosis:
 Rules out a dataType filter (Foundation, SR Legacy) as the fix for wrong matches: it was
 measured and matched worse foods. Pinned FoodData Central IDs per ingredient are the
 proposed next step, not done here.
+
+### DEC-42 — Corpus ingredients are looked up in USDA by a reviewed FDC ID
+
+2026-11-23, Mike's choice after DEC-41's run. Name search took USDA's top hit, which was
+the wrong food for many ingredients (lean turkey mince as minced ham, avocado as avocado
+dressing, cod as breaded cod), and a dataType filter matched worse. Each of the 41 corpus
+ingredients without a trusted local value is now pinned in
+`data/reference/usda_fdc_ids.json` to one Foundation, SR Legacy or Survey food, chosen for
+the state the recipe's weight implies, and fetched from `/fdc/v1/food/{fdcId}`. A test
+fails when a corpus ingredient is neither trusted nor pinned. An unpinned name still falls
+back to search, which no corpus ingredient reaches.
+
+Energy is read as plain Energy (208) in kcal, then "Energy (Atwater General Factors)"
+(957), which is what Foundation foods carry; entries with no amount are skipped. With the
+pins, 72 of 72 benchmark plans and 144 of 152 wider plans meet the targets on USDA data
+(`docs/7_meal_quality.md` §7).
+
+Rules out tuning pins to the score: Hass avocado and store-bought hummus stay although
+USDA averages would clear about five misses.
+

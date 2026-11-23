@@ -141,6 +141,10 @@ the hand-offs by watching the log; its header says how to run it.
   deterministic offline baseline. USDA energy is now read in kcal, not kJ. With USDA, 50 of 72
   meet the targets and all 72 are within 10% of calories; the misses come from USDA's top
   search hit being the wrong food (`docs/7_meal_quality.md` §6).
+- 2026-11-23: corpus ingredients are looked up in USDA by a reviewed FDC ID
+  (`data/reference/usda_fdc_ids.json`, DEC-42); a new ingredient must be pinned there
+  unless it is a trusted local value. On USDA data 72 of 72 meet the targets and 144 of
+  152 in the wider check (`docs/7_meal_quality.md` §7).
 
 ## Open risks
 

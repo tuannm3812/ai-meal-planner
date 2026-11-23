@@ -8347,3 +8347,16 @@ tests for both entry orders and kJ-only foods. After the fix: 50 of 72 benchmark
 Remaining misses are fat-heavy wrong matches from USDA's top search hit (turkey mince →
 ham, avocado → dressing); `docs/meal_quality/usda_lookup_diagnosis.md` lists every
 ingredient. Proposed next: pin a FoodData Central ID per ingredient. Full test suite passes.
+
+## 2026-11-23 — Claude — DEC-42: pinned USDA food IDs
+
+Mike approved pinning a USDA food per ingredient. On his Mac, each of the 41 looked-up
+ingredients was matched to a Foundation, SR Legacy or Survey food by several filtered
+searches and confirmed with `/fdc/v1/food/{id}`; `data/reference/usda_fdc_ids.json` holds
+the picks. `_query_usda_database` fetches pinned names by ID, `_flat_nutrients` reads both
+the search and the detail shapes, and energy prefers 208 then Atwater General 957. New
+tests: fetch by ID with a Foundation payload, SR Legacy kcal-not-kJ, and a guard that
+every non-trusted corpus ingredient is pinned. Full suite passes, coverage 97%. USDA reruns
+on the Mac: 72 of 72 benchmark, 144 of 152 wider, no estimated ingredient, guardrails 5
+of 5. Seen once: 2 of 25 detail lookups timed out at 6 s on a first attempt.
+
