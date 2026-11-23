@@ -129,6 +129,10 @@ the hand-offs by watching the log; its header says how to run it.
   a billing budget of about A$1 alerts the owner. A full `POST /generate-meal-plan`
   trace with all five stage spans reached Cloud Trace. G6's two-instance and
   revocation runs (`docs/6_deployment.md` §3) have not been run on the real service.
+- 2026-11-23: the benchmark runs on USDA data with `--usda` (P4, DEC-39), apart from the
+  deterministic offline baseline. USDA energy is now read in kcal, not kJ. With USDA, 50 of 72
+  meet the targets and all 72 are within 10% of calories; the misses come from USDA's top
+  search hit being the wrong food (`docs/7_meal_quality.md` §5).
 
 ## Open risks
 
