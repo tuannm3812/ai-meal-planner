@@ -127,7 +127,8 @@ describe('Craving search', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     // The result still names the store area it was made for.
     expect(screen.getByText('For shopping near “Earlwood, NSW”')).toBeInTheDocument()
-    expect(screen.queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
+    // (The rail's "Sized for you" card shows the live details, so look in the page only.)
+    expect(within(screen.getByRole('main')).queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
 
     await goHome(user)
     await user.clear(cravingInput())

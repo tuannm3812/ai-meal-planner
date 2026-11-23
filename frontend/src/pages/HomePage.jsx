@@ -33,18 +33,18 @@ function CravingBanner() {
   }
 
   return (
-    <section aria-labelledby="home-heading" className="relative overflow-hidden bg-ink text-white">
+    <section aria-labelledby="home-heading" className="relative overflow-hidden bg-cobalt text-white">
       <div className={`${pageShell} relative flex flex-wrap items-center gap-8 pb-16 pt-10`}>
         <div className="flex min-w-0 flex-[3_1_480px] flex-col gap-5">
           <h1
             className="font-display text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-[58px]"
             id="home-heading"
           >
-            Say what you crave. <span className="text-lime">Get a meal that fits you.</span>
+            Say what you crave. <span className="text-peach">Get a meal that fits you.</span>
           </h1>
           <form className="flex flex-col gap-3" noValidate onSubmit={submit}>
             <div className="flex flex-wrap gap-3">
-              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-lime">
+              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-peach">
                 <Icon as={Search} tone="light" />
                 <label className="sr-only" htmlFor="craving-input">
                   Your craving
@@ -91,7 +91,7 @@ function CravingBanner() {
               {CRAVING_SUGGESTIONS.map((suggestion) => (
                 <li key={suggestion.meal}>
                   <button
-                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-peach"
                     onClick={() => setCraving(suggestion.label.toLowerCase())}
                     type="button"
                   >
@@ -152,7 +152,7 @@ function HomePage() {
       <div className={`${pageShell} flex flex-col gap-10 py-10`}>
         {planner.submitted && (
           <Link
-            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             to="/plan"
           >
             <span>

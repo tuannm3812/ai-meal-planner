@@ -48,7 +48,7 @@ describe('App', () => {
     expect(screen.getByRole('link', { name: 'AI Meal Planner' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { level: 2, name: 'Tell us about you' })).toBeInTheDocument()
     const nav = screen.getByRole('navigation', { name: 'Main' })
-    for (const name of ['My meals', 'Past plans', 'Profile']) {
+    for (const name of ['Plan a meal', 'My meals', 'Past plans', 'Calories', 'Profile']) {
       expect(within(nav).getByRole('link', { name })).toBeInTheDocument()
     }
     expect(screen.queryByLabelText(/Your craving/i)).not.toBeInTheDocument()
@@ -177,14 +177,28 @@ describe('App', () => {
     }
   })
 
-  it('opens the calorie estimate from the profile page', async () => {
+  it('shows who plans are sized for in the rail once there is a profile', () => {
+    renderApp({ stored: STORED })
+    const card = screen.getByRole('region', { name: 'Sized for you' })
+    expect(card).toHaveTextContent('34 · Female · Maintain')
+    expect(card).toHaveTextContent('Earlwood, NSW')
+    expect(within(card).getByRole('link', { name: 'Edit details' })).toHaveAttribute('href', '/profile')
+  })
+
+  it('leaves the rail summary out on a first visit', () => {
+    renderApp()
+    expect(screen.queryByRole('region', { name: 'Sized for you' })).not.toBeInTheDocument()
+  })
+
+  it('opens the calorie estimate from its own tab, not from the profile page', async () => {
     const user = userEvent.setup()
     renderApp({ stored: STORED })
     await goToProfile(user)
-
     expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Open the calorie estimate' }))
+
+    await user.click(screen.getByRole('link', { name: 'Calories' }))
     expect(screen.getByRole('heading', { name: 'Calorie Expenditure' })).toBeInTheDocument()
+    expect(axios.post).not.toHaveBeenCalled()
   })
 
   it('forgets this device after a confirmation, back to the first visit', async () => {

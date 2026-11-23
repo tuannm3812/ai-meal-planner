@@ -2,6 +2,7 @@ import { Bookmark, History } from './components/icons/glyphs'
 import { Route, Routes } from 'react-router-dom'
 
 import AppShell from './app/AppShell'
+import CaloriesPage from './pages/CaloriesPage'
 import { AccountProvider } from './app/AccountContext'
 import { accountsEnabled } from './auth/firebase'
 import { PlannerProvider } from './app/PlannerContext'
@@ -12,7 +13,7 @@ import ProfilePage from './pages/ProfilePage'
 import StoredPlanPage from './pages/StoredPlanPage'
 
 // The kitchen app (spec 2026-11-22): home, the plan, saved meals, past plans
-// and the profile. URLs carry a request ID at most, never a health detail.
+// the calorie estimate and the profile. URLs carry a request ID at most, never a health detail.
 function App() {
   return (
     <PlannerProvider>
@@ -54,6 +55,7 @@ function App() {
             }
             path="history"
           />
+          <Route element={<CaloriesPage />} path="calories" />
           <Route element={<ProfilePage />} path="profile" />
           <Route element={<HomePage />} path="*" />
         </Route>

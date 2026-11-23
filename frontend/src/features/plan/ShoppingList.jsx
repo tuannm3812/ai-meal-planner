@@ -73,7 +73,7 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
         <div className="mt-4 flex flex-col gap-5">
           {groups.map((group) => (
             <fieldset key={group.name}>
-              <legend className="text-xs font-semibold uppercase tracking-wider text-leaf">
+              <legend className="text-xs font-semibold uppercase tracking-wider text-cobalt">
                 {group.name}
               </legend>
               <ul className="mt-1 divide-y divide-tint">

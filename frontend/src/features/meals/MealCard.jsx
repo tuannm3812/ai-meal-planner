@@ -8,7 +8,7 @@ import { MACROS } from '../plan/plan'
 function MealCard({ meal }) {
   return (
     <Link
-      className="flex flex-col gap-2.5 rounded-3xl bg-surface p-5 text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+      className="flex flex-col gap-2.5 rounded-3xl bg-surface p-5 text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
       to={`/plans/${encodeURIComponent(meal.requestId)}`}
     >
       <DishIllustration

@@ -78,17 +78,17 @@ function FloatingChip({ className = '', children }) {
 
 function Hero() {
   return (
-    <section aria-labelledby="welcome-heading" className="relative overflow-hidden bg-ink text-white">
+    <section aria-labelledby="welcome-heading" className="relative overflow-hidden bg-cobalt text-white">
       <div className={`${pageShell} grid grid-cols-[minmax(0,1fr)] items-center gap-12 py-14 lg:grid-cols-[1.1fr_1fr] lg:py-24`}>
         <div className="flex flex-col gap-6">
-          <p className="w-fit rounded-full border border-white/25 px-4 py-1.5 text-sm font-semibold text-lime">
+          <p className="w-fit rounded-full border border-white/25 px-4 py-1.5 text-sm font-semibold text-peach">
             Meal planning, sized to you
           </p>
           <h1
             className="font-display text-[44px] font-extrabold leading-[1.02] tracking-tight sm:text-[64px]"
             id="welcome-heading"
           >
-            Say what you crave. <span className="text-lime">Get a meal that fits you.</span>
+            Say what you crave. <span className="text-peach">Get a meal that fits you.</span>
           </h1>
           <p className="max-w-xl text-lg leading-8 text-on-ink-muted">
             One tested recipe, sized to your body and goal, with a shopping list to match.

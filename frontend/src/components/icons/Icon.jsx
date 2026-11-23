@@ -5,8 +5,8 @@ const ICON_SIZES = { sm: 20, md: 24, lg: 32, xl: 48 }
 const ICON_STROKE = 1.75
 
 const TONES = {
-  light: 'text-leaf', // on ground, tint or a white card
-  ink: 'text-lime', // on the ink banners and top bar
+  light: 'text-cobalt', // on ground, tint or a white card
+  ink: 'text-peach', // on the ink or cobalt banners and the top bar
   current: '', // inside a button or notice: the text colour
 }
 

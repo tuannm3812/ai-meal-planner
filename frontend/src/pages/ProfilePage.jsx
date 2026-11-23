@@ -3,20 +3,18 @@ import { Navigate, useNavigate } from 'react-router-dom'
 
 import { usePlannerContext } from '../app/PlannerContext'
 import Icon from '../components/icons/Icon'
-import { Calculator, Trash2 } from '../components/icons/glyphs'
+import { Trash2 } from '../components/icons/glyphs'
 import { card, pageShell, secondaryButton, sectionHeading } from '../components/ui/styles'
 import AccountSection from '../features/account/AccountSection'
-import CaloriesTab from '../features/calories/CaloriesTab'
 import LocationField from '../features/profile/LocationField'
 import ProfileForm from '../features/profile/ProfileForm'
 
-// Your details, what this device remembers, and the separate calorie
-// estimate (docs/8_design.md §7 question 7).
+// Your details and what this device remembers. The calorie estimate has its
+// own Calories tab (DEC-44).
 function ProfilePage() {
   const planner = usePlannerContext()
   const navigate = useNavigate()
   const [confirming, setConfirming] = useState(false)
-  const [showEstimate, setShowEstimate] = useState(false)
 
   if (!planner.hasProfile) return <Navigate replace to="/" />
 
@@ -78,24 +76,6 @@ function ProfilePage() {
         )}
       </section>
 
-      <section aria-labelledby="estimate-heading" className={card}>
-        <h2 className={sectionHeading} id="estimate-heading">
-          <Icon as={Calculator} size="lg" tone="light" />
-          Calorie estimate
-        </h2>
-        <p className="mt-2 max-w-3xl text-muted">
-          Try the calorie model on its own, with any details. Nothing here changes your profile.
-        </p>
-        {showEstimate ? (
-          <div className="mt-5">
-            <CaloriesTab />
-          </div>
-        ) : (
-          <button className={`${secondaryButton} mt-4`} onClick={() => setShowEstimate(true)} type="button">
-            Open the calorie estimate
-          </button>
-        )}
-      </section>
     </main>
   )
 }

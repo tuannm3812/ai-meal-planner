@@ -6,7 +6,11 @@
 the three-step wizard became a home page, a plan page, My meals, Past plans and a
 Profile page; the profile is remembered on the device; and the look moved to
 "Flat kitchen" (Viridis charts, icons, illustrations). The states in §3.3 and the
-rules in §6 still hold, except where noted. Revised after
+rules in §6 still hold, except where noted.
+**Look and navigation replaced on 2026-11-23** (DEC-44): "Market Receipt" (cobalt, coral,
+Unbounded) replaces Kitchen green, so §4's palette, mark and type are history; DESIGN.md
+holds the current ones. From 1,280 px the app has a left rail with five tabs, and the
+calorie estimate (§7 question 7) is a Calories tab instead of a link. Revised after
 Codex's review; nothing is built yet. §7 records the answers.
 The owner and Codex review it in `docs/5_agent_log.md` first. Once it is
 agreed, the decisions it settles go to `docs/3_decisions.md` and the work

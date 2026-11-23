@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       // Every colour comes from src/theme/tokens.js (DESIGN.md §3, DEC-38).
-      // Components use these names (bg-ink, text-leaf, ...), never raw hex
+      // Components use these names (bg-ink, text-cobalt, ...), never raw hex
       // or Tailwind's stock palette.
       colors: {
         ink: { DEFAULT: neutral.ink, raised: neutral.inkRaised },
@@ -16,9 +16,9 @@ export default {
         ground: neutral.ground,
         tint: neutral.tint,
         surface: neutral.surface,
-        accent: { DEFAULT: brand.tomato, text: brand.tomatoText },
-        leaf: brand.leaf,
-        lime: brand.lime,
+        accent: { DEFAULT: brand.coral, text: brand.coralText },
+        cobalt: { DEFAULT: brand.cobalt, raised: brand.cobaltRaised },
+        peach: brand.peach,
         success: { bg: status.successBg, fg: status.successFg },
         estimate: { bg: status.estimateBg, fg: status.estimateFg },
         danger: { bg: status.dangerBg, fg: status.dangerFg, 'on-ink': status.dangerOnInk },
@@ -30,7 +30,11 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        display: ['"Bricolage Grotesque"', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['Unbounded', 'Inter', 'system-ui', 'sans-serif'],
+      },
+      // The sticker shadow on primary buttons and outlined cards (DESIGN.md §6).
+      boxShadow: {
+        sticker: `3px 3px 0 ${neutral.ink}`,
       },
     },
   },

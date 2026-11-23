@@ -60,7 +60,8 @@ describe('tokens', () => {
   it('are what Tailwind maps its class names to', () => {
     const colors = tailwindConfig.theme.extend.colors
     expect(colors.ink.DEFAULT).toBe(neutral.ink)
-    expect(colors.leaf).toBe(brand.leaf)
+    expect(colors.cobalt.DEFAULT).toBe(brand.cobalt)
+    expect(colors.accent.DEFAULT).toBe(brand.coral)
     expect(colors.danger.fg).toBe(status.dangerFg)
     expect(colors.viridis[6]).toBe(VIRIDIS[5])
   })

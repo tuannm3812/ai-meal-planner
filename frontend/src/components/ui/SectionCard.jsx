@@ -3,7 +3,7 @@ function SectionCard({ eyebrow, title, children, className = '' }) {
     <section className={`rounded-3xl border border-transparent bg-surface p-6 ${className}`}>
       <div>
         {eyebrow && (
-          <p className="text-xs font-semibold uppercase tracking-wider text-leaf">
+          <p className="text-xs font-semibold uppercase tracking-wider text-cobalt">
             {eyebrow}
           </p>
         )}
