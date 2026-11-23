@@ -298,7 +298,7 @@ Reports: [`usda_pinned_baseline.md`](meal_quality/usda_pinned_baseline.md) and
 | Benchmark median / max calorie deviation | 0.5% / 9.9% | 0.7% / 9.9% | 0.4% / 9.9% |
 | Wider check meeting the targets | 152 of 152 | 113 of 152 | 144 of 152 |
 | Wider check within 10% of calories | 152 | 147 | 151 |
-| Plans with an estimated ingredient (benchmark / wider) | 68 / 52 | 41 / 52 | 0 / 0 |
+| Plans with an estimated ingredient (benchmark / wider) | 68 / 148 | 41 / 52 | 0 / 0 |
 | Guardrails as expected | 5 of 5 | 5 of 5 | 5 of 5 |
 
 Every lookup succeeded and none was unusable. The eight wider misses, all but
