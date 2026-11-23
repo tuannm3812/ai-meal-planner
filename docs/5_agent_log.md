@@ -8469,3 +8469,31 @@ live check. The index was created by hand; run 45121738187 passed both jobs. Its
 first saw a 404 from the brand-new site and passed on a re-run. Fix: the deploy job now
 publishes rules and indexes and waits for every index to be READY before deploying the API,
 and the hosting check retries for a minute. Needs Mike: turn on the sign-in providers.
+
+## 2026-11-23 — Claude — welcome page: A and B mixed
+
+Mike compared two landing-page versions for the first visit: A (PR #64) and B (commit 050c6be,
+never pushed). He chose a mix. This branch replaces #64.
+
+From A:
+- `ProfileForm`'s `headingLevel`, `intro` and `showSizing` props;
+- `PROFILE_DISCLOSURE` under the save button, so the form keeps one short intro and no sizing
+  panel;
+- `Icon`'s `xl` size and its DESIGN.md §5 note;
+- "How it works" in three short steps;
+- the six named recipe cards, with the menu size checked against `data/meal_corpus/meals.json`.
+
+From B:
+- the hero's floating cards from the real Chicken Fried Rice response;
+- "Every plan shows its working", with the plan page's `CalorieRing` and `MacroDonut`, labelled
+  "Example plan".
+
+A's "Built to be trusted" band is dropped because it repeats B's checklist. Its medical-advice
+line moves to a slim footer. "Get started" and "How it works" are buttons that scroll and move
+focus without changing the URL. Colours come from tokens and icons go through `Icon`.
+
+Verified:
+- vitest 262 of 262 (5 in `WelcomePage.test.jsx`);
+- eslint is clean and `vite build` passes;
+- there is no horizontal scroll at 1440 px or on an iPhone 14;
+- screenshots are in `~/Desktop/welcome-compare/C-mix-*.png`.

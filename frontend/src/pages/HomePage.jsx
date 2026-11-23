@@ -17,54 +17,7 @@ import { pageShell, primaryButton, sectionHeading } from '../components/ui/style
 import { CRAVING_SUGGESTIONS } from '../features/craving/craving'
 import MealGrid from '../features/meals/MealGrid'
 import { useMealLists } from '../features/meals/useMealLists'
-import LocationField from '../features/profile/LocationField'
-import ProfileForm from '../features/profile/ProfileForm'
-
-// The first visit (spec §4.1): the details every meal is sized from, then the
-// normal home page. Nothing is sent until the person plans a meal.
-function Welcome() {
-  const planner = usePlannerContext()
-  const { profile, setProfile, fieldErrors, profileIsValid, location, setLocation, requestFieldErrors } =
-    planner
-  const locationOk = !requestFieldErrors.location
-
-  const start = (event) => {
-    event.preventDefault()
-    if (profileIsValid && locationOk) planner.confirmProfile()
-  }
-
-  return (
-    <main>
-      <section className="bg-ink text-white">
-        <div className={`${pageShell} py-10`}>
-          <p className="text-[15px] font-semibold text-lime">Welcome</p>
-          <p className="mt-2 max-w-3xl font-display text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            Say what you crave. Get a meal that fits you.
-          </p>
-          <p className="mt-3 max-w-2xl text-on-ink-muted">
-            First, a few details so every meal is sized for you. You only do this once on this
-            device.
-          </p>
-        </div>
-      </section>
-      <form className={`${pageShell} flex flex-col gap-6 py-8`} noValidate onSubmit={start}>
-        <ProfileForm errors={fieldErrors} onChange={setProfile} profile={profile}>
-          <LocationField error={requestFieldErrors.location} onChange={setLocation} value={location} />
-        </ProfileForm>
-        <div className="flex flex-wrap items-center gap-4">
-          <button className={primaryButton} disabled={!profileIsValid || !locationOk} type="submit">
-            Save and start planning
-          </button>
-          <span className="text-sm text-muted">
-            {profileIsValid && locationOk
-              ? 'You can change these at any time on your profile.'
-              : 'Fix the highlighted details to continue.'}
-          </span>
-        </div>
-      </form>
-    </main>
-  )
-}
+import WelcomePage from './WelcomePage'
 
 function CravingBanner() {
   const planner = usePlannerContext()
@@ -191,7 +144,7 @@ function HomePage() {
   const planner = usePlannerContext()
   const lists = useMealLists(planner.userId, { enabled: planner.hasProfile })
 
-  if (!planner.hasProfile) return <Welcome />
+  if (!planner.hasProfile) return <WelcomePage />
 
   return (
     <main>
