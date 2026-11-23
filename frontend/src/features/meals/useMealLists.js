@@ -5,7 +5,7 @@ import { isNotImplemented } from '../plan/feedback'
 import { dedupeSaved, pastMeals } from './meals'
 
 const LOAD_ERROR =
-  'Could not load your meals. Check that the FastAPI backend is running on port 8000.'
+  'Could not load your meals. Check your connection and try again.'
 
 // Saved meals and past plans for this device's user ID. A hosted API answers
 // 501 (G6), which is a state to explain, not an error.

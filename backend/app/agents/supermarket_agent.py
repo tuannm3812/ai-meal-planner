@@ -113,7 +113,8 @@ class SupermarketAgent:
 
         aisle, price = self._estimate_category_and_price(item_name)
         return {
-            "sku": f"Generic {item_name}",
+            # No product is known, so the list names the ingredient itself.
+            "sku": item_name[:1].upper() + item_name[1:],
             "aisle": aisle,
             "price": price,
             "source": "category_price_estimate",

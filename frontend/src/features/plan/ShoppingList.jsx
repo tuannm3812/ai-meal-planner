@@ -18,6 +18,7 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
   const groups = aisles(shopping)
   const sum = total(shopping)
   const count = groups.reduce((n, group) => n + group.items.length, 0)
+  const anyRough = groups.some((group) => group.items.some((item) => item.roughEstimate))
 
   const copy = async () => {
     try {
@@ -73,7 +74,7 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
         <div className="mt-4 flex flex-col gap-5">
           {groups.map((group) => (
             <fieldset key={group.name}>
-              <legend className="text-xs font-semibold uppercase tracking-wider text-leaf">
+              <legend className="text-xs font-semibold uppercase tracking-wider text-cobalt">
                 {group.name}
               </legend>
               <ul className="mt-1 divide-y divide-tint">
@@ -92,11 +93,11 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
                         >
                           {item.product}
                         </span>
-                        {(item.ingredient !== item.product || item.roughEstimate) && (
+                        {(item.named || item.roughEstimate) && (
                           <span className="block text-xs text-muted">
-                            {item.ingredient !== item.product && `For ${item.ingredient}`}
-                            {item.ingredient !== item.product && item.roughEstimate && ' · '}
-                            {item.roughEstimate && 'Product and price guessed from its category'}
+                            {item.named && `For ${item.ingredient}`}
+                            {item.named && item.roughEstimate && ' · '}
+                            {item.roughEstimate && 'Rough estimate'}
                           </span>
                         )}
                       </span>
@@ -122,6 +123,11 @@ function ShoppingList({ shopping, location, ticked, onToggle, mealName }) {
       {count > 0 && (
         <p className="mt-2 text-sm text-muted">
           Prices are estimates from a local reference list, not live store prices.
+        </p>
+      )}
+      {anyRough && (
+        <p className="mt-1 text-sm text-muted">
+          A rough estimate means the product and price were guessed from the item&rsquo;s category.
         </p>
       )}
 

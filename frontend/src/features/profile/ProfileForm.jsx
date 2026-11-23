@@ -83,6 +83,7 @@ function ProfileForm({
   errors = {},
   onChange,
   eyebrow = 'Your details',
+  title = 'Tell us about you',
   headingLevel = 1,
   intro = PROFILE_DISCLOSURE,
   showSizing = true,
@@ -112,7 +113,7 @@ function ProfileForm({
           id="profile-heading"
           tabIndex={-1}
         >
-          Tell us about you
+          {title}
         </Heading>
         <p className="mt-3 max-w-2xl text-base leading-7 text-muted">{intro}</p>
 

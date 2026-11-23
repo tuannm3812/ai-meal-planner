@@ -8497,3 +8497,78 @@ Verified:
 - eslint is clean and `vite build` passes;
 - there is no horizontal scroll at 1440 px or on an iPhone 14;
 - screenshots are in `~/Desktop/welcome-compare/C-mix-*.png`.
+
+## 2026-11-23 — Claude — Market Receipt brand and desktop side rail (slice 1)
+
+Mike said the desktop app wasted the space either side of its 1,152 px column, the home
+page and its tabs needed work, and the dark green was not attractive. He pointed at
+FarmLens as a reference. A proposal (layouts A, B, C) and three brand directions were
+shared as artifacts; he chose layout B, a side rail, and brand direction 2, Market Receipt
+(DEC-44).
+
+Changed in this slice:
+- `theme/tokens.js` and `tailwind.config.js`: Market Receipt values. `leaf` becomes `cobalt`
+  and `lime` becomes `peach`; `accent` is coral with `ink` text; a `shadow-sticker` utility;
+  food gets `lettuce` for the drawings' greens. The guard test checks the new names.
+- Unbounded replaces Bricolage Grotesque (self-hosted, OFL; THIRD_PARTY_NOTICES updated).
+- New coral plate-sticker mark, wordmark and favicon.
+- `AppShell`: one nav that is an ink top bar below 1,280 px and a white left rail above it,
+  with Plan a meal and Calories tabs and a "Sized for you" card. `pageShell` widens to
+  1,440 px beside the rail.
+- Banners on Home, the welcome page and the plan page are cobalt.
+- The calorie estimate moves out of Profile into `pages/CaloriesPage.jsx` at `/calories`.
+- DESIGN.md §1, §3 to §7 and `docs/8_design.md` describe the new look.
+
+Verified:
+- vitest 264 of 264, two of them new rail tests. One craving test now scopes its "old
+  location is gone" check to the page, because the rail shows the live location.
+- eslint is clean and `vite build` passes.
+- Screenshots of the local build, with a real plan response replayed, at 1,440, 1,920 and
+  390 px.
+- Contrast: coral with ink text 5.2:1, `muted` on paper 5.8:1, peach on cobalt 5.4:1, and
+  `on-ink-muted` on cobalt 5.8:1.
+
+Not done here: the receipt shopping list, price-tag badges, Home workspace, tabbed plan page,
+card outlines elsewhere and the showcase. Not deployed.
+
+
+## 2026-11-24 — Claude — wording pass after a content review
+
+Mike asked for a check of the text on every screen for duplicates and rough wording. Fixed
+on the same branch as slice 1:
+
+- Profile is headed "Your details" (`ProfileForm` takes a `title`), with a one-line intro.
+  The storage note now appears once, in "Remembered on this device".
+- Calories reads in plain words: "Details for this estimate", "Activity level", "Body
+  temperature (°C)", "Estimate my calories", "Calories you burn". Its health-conditions hint
+  no longer suggests diabetes, which the rules do not handle.
+- Plan page: the back link is "Plan a meal", matching the tab. A rough shopping estimate is
+  explained once under the list, not on every row. Three technical lines are reworded.
+- Past plans (no accounts) no longer mentions "the API".
+- Five error messages said to check the FastAPI backend on port 8000. They now say "Check
+  your connection and try again."
+
+Left for the Home slice: the hero headline shared by Home and the welcome page, the three
+promises repeated on Home, and "Sized for you" shown in both the banner and the rail. Store
+product names such as "Generic whole egg" come from the service, not the client.
+
+Verified: vitest 264 of 264, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — the rest of the wording review
+
+Mike asked for every remaining item from the content review to be fixed.
+
+- Home is headed "What do you feel like eating?" and no longer repeats the welcome page's
+  three promises. The banner's "Sized for you" line hides from 1,280 px, where the rail card
+  says it; the card now also gives the last plan's calorie target.
+- Welcome page: the pill reads "One meal at a time", step 3 and the first check are reworded,
+  and the check that repeated "tested recipe" is gone.
+- The Calories page starts from the stored profile (`CaloriesTab` takes `initial`), and still
+  changes nothing in it.
+- The supermarket agent names an unknown product after its ingredient, not "Generic
+  <ingredient>". The client strips the old prefix from stored plans and drops the "For
+  <ingredient>" line when it would repeat the name.
+
+Verified: vitest 265 of 265, eslint clean, `vite build` passes; backend pytest exits 0 and
+ruff is clean. `docs/openapi.json` is unaffected.
+

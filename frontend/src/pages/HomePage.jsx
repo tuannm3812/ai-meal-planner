@@ -4,12 +4,9 @@ import { usePlannerContext } from '../app/PlannerContext'
 import Icon from '../components/icons/Icon'
 import {
   ArrowRight,
-  BookOpenCheck,
   Bookmark,
   History,
-  MessageSquareText,
   Search,
-  ShoppingBasket,
 } from '../components/icons/glyphs'
 import BlobShape from '../components/illustrations/BlobShape'
 import DishIllustration from '../components/illustrations/DishIllustration'
@@ -33,18 +30,18 @@ function CravingBanner() {
   }
 
   return (
-    <section aria-labelledby="home-heading" className="relative overflow-hidden bg-ink text-white">
+    <section aria-labelledby="home-heading" className="relative overflow-hidden bg-cobalt text-white">
       <div className={`${pageShell} relative flex flex-wrap items-center gap-8 pb-16 pt-10`}>
         <div className="flex min-w-0 flex-[3_1_480px] flex-col gap-5">
           <h1
             className="font-display text-4xl font-extrabold leading-[1.02] tracking-tight sm:text-[58px]"
             id="home-heading"
           >
-            Say what you crave. <span className="text-lime">Get a meal that fits you.</span>
+            What do you feel like <span className="text-peach">eating?</span>
           </h1>
           <form className="flex flex-col gap-3" noValidate onSubmit={submit}>
             <div className="flex flex-wrap gap-3">
-              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-lime">
+              <div className="flex min-h-[64px] flex-[1_1_320px] items-center gap-3 rounded-2xl bg-surface px-5 text-ink focus-within:ring-2 focus-within:ring-peach">
                 <Icon as={Search} tone="light" />
                 <label className="sr-only" htmlFor="craving-input">
                   Your craving
@@ -91,7 +88,7 @@ function CravingBanner() {
               {CRAVING_SUGGESTIONS.map((suggestion) => (
                 <li key={suggestion.meal}>
                   <button
-                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-lime"
+                    className="min-h-[44px] rounded-full border border-white/40 px-4 text-sm text-white hover:bg-white/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-peach"
                     onClick={() => setCraving(suggestion.label.toLowerCase())}
                     type="button"
                   >
@@ -101,7 +98,8 @@ function CravingBanner() {
               ))}
             </ul>
           </div>
-          <p className="text-sm text-on-ink-muted">
+          {/* From 1,280 px the rail's "Sized for you" card says this. */}
+          <p className="text-sm text-on-ink-muted xl:hidden">
             {typeof target === 'number' ? `Sized for you: about ${Math.round(target)} kcal a meal. ` : 'Sized for you. '}
             Shopping near {location.trim() || 'your area'}.{' '}
             <Link className="text-white underline underline-offset-4" to="/profile">
@@ -118,28 +116,9 @@ function CravingBanner() {
   )
 }
 
-// Three promises, each true today: no claim that the standard meal is
-// balanced or a good match.
-const PROMISES = [
-  {
-    title: 'Matched to a real menu',
-    body: 'Every meal comes from a tested recipe, never made up on the spot.',
-    glyph: BookOpenCheck,
-  },
-  {
-    title: 'Honest when it misses',
-    body: 'No close match? You get a standard meal and a note saying so.',
-    glyph: MessageSquareText,
-  },
-  {
-    title: 'Shopping list included',
-    body: 'Ingredients mapped to store aisles, with estimated prices.',
-    glyph: ShoppingBasket,
-  },
-]
-
 // Home (spec §4.2, layout B): the craving search, then this device's saved
-// meals and past plans.
+// meals and past plans. The welcome page makes the app's promises; a returning
+// visitor is not shown them again.
 function HomePage() {
   const planner = usePlannerContext()
   const lists = useMealLists(planner.userId, { enabled: planner.hasProfile })
@@ -152,7 +131,7 @@ function HomePage() {
       <div className={`${pageShell} flex flex-col gap-10 py-10`}>
         {planner.submitted && (
           <Link
-            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
+            className="flex min-h-[56px] items-center justify-between gap-3 rounded-2xl bg-tint px-5 font-semibold text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
             to="/plan"
           >
             <span>
@@ -163,17 +142,6 @@ function HomePage() {
             <Icon as={ArrowRight} size="sm" />
           </Link>
         )}
-        <ul className="grid gap-5 sm:grid-cols-3">
-          {PROMISES.map(({ title, body, glyph }) => (
-            <li className="flex gap-4" key={title}>
-              <Icon as={glyph} size="lg" tone="light" />
-              <div>
-                <p className="font-semibold text-ink">{title}</p>
-                <p className="mt-0.5 text-sm text-muted">{body}</p>
-              </div>
-            </li>
-          ))}
-        </ul>
         <section aria-labelledby="home-meals" className="flex flex-col gap-4">
           <div className="flex items-baseline justify-between gap-3">
             <h2 className={sectionHeading} id="home-meals">

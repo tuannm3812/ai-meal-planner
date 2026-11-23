@@ -26,4 +26,5 @@ export {
   Timer,
   Trash2,
   UserRound,
+  Utensils,
 } from 'lucide-react'

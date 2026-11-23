@@ -159,6 +159,14 @@ the hand-offs by watching the log; its header says how to run it.
   `ACCOUNTS_ENABLED` variable is `true`; the one-time setup is `docs/6_deployment.md` §5 (not
   yet done).
 
+- 2026-11-23: the React app's look is **Market Receipt** (DEC-44, Mike's choice): cobalt and
+  coral on white, navy ink, Unbounded and Inter, a coral plate-sticker mark. From 1,280 px a
+  left rail holds five tabs (Plan a meal, My meals, Past plans, Calories, Profile) and a
+  "Sized for you" card, and pages widen to 1,440 px; the calorie estimate is its own tab.
+  This is slice 1; the receipt shopping list, Home workspace and tabbed plan page follow.
+  Proposal and brand directions: https://claude.ai/artifact/G6u3yyorQwSTfVoXBoWjnu and
+  https://claude.ai/artifact/TVCREvoW1BcsCFTa9ScWSS. The showcase keeps Kitchen green for now.
+
 ## Open risks
 
 - `.streamlit/secrets.toml` is now gitignored (PR #7). Local

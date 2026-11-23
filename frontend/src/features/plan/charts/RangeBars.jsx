@@ -1,6 +1,6 @@
 import { AMDR_PERCENT, MACROS, inRange } from '../plan'
 
-// Each macro's share on a track, over a green band for its recommended range.
+// Each macro's share on a track, over a shaded band for its recommended range.
 // The verdict is the service's, never read from these bars.
 function RangeBars({ split }) {
   return (

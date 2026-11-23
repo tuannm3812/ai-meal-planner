@@ -13,8 +13,8 @@
     "test:coverage": "vitest run --coverage"
   },
   "dependencies": {
-    "@fontsource/bricolage-grotesque": "5.3.0",
     "@fontsource/inter": "5.3.0",
+    "@fontsource/unbounded": "5.3.0",
     "axios": "^1.16.0",
     "firebase": "13.2.0",
     "lucide-react": "1.77.0",

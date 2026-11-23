@@ -160,7 +160,7 @@ describe('Plan page', () => {
     await backToPlan(user)
     expect(screen.getByText('No meal fits these constraints')).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Change your details' }))
-    expect(screen.getByRole('heading', { name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Your details' })).toBeInTheDocument()
   })
 
   it('shows an indeterminate loading state with no invented stages', async () => {

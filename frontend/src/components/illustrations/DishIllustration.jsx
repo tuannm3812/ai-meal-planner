@@ -8,8 +8,8 @@ const C = {
   ink: neutral.ink,
   teal: VIRIDIS[2],
   green: VIRIDIS[3],
-  lime: brand.lime,
-  tomato: brand.tomato,
+  lime: food.lettuce,
+  tomato: brand.coral,
   ...food,
 }
 

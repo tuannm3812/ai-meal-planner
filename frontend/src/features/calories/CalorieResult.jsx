@@ -7,7 +7,7 @@ function CalorieResult({ result }) {
     <>
       <SuccessBanner>Calorie expenditure predicted using {result.model_version}.</SuccessBanner>
 
-      <SectionCard eyebrow="Forecast" title="Calorie Expenditure">
+      <SectionCard eyebrow="Estimate" title="Calories you burn">
         <div className="grid gap-4 sm:grid-cols-3">
           <StatCard
             label="Daily expenditure"

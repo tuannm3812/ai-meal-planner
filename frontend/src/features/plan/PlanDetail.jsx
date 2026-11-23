@@ -65,16 +65,16 @@ function PlanDetail({
 
   return (
     <>
-      <section aria-labelledby="plan-heading" className="bg-ink text-white">
+      <section aria-labelledby="plan-heading" className="bg-cobalt text-white">
         <div className={`${pageShell} relative overflow-hidden pb-8 pt-5`}>
           <div className="relative flex flex-wrap items-center gap-8">
             <div className="flex min-w-0 flex-[3_1_480px] flex-col gap-3.5">
               <Link
-                className="inline-flex min-h-[44px] w-fit items-center gap-1.5 rounded-xl text-sm text-on-ink-muted hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-lime print:hidden"
+                className="inline-flex min-h-[44px] w-fit items-center gap-1.5 rounded-xl text-sm text-on-ink-muted hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-peach print:hidden"
                 to="/"
               >
                 <Icon as={ArrowLeft} size="sm" />
-                Home
+                Plan a meal
               </Link>
               {craving && <p className="text-[15px] text-on-ink-muted">For your craving &ldquo;{craving}&rdquo;</p>}
               <h1
@@ -126,7 +126,7 @@ function PlanDetail({
                 {estimated.estimated} of {estimated.of} ingredients use estimated nutrition from
                 local tables, so these numbers are approximate.
                 {outcome &&
-                  ' “On target” is measured against those same tables, so it is not an independent check.'}
+                  ' “On target” is measured against those same tables, so treat it as a guide.'}
               </span>
             </p>
           )}
@@ -170,8 +170,8 @@ function PlanDetail({
                     </div>
                     {outcome && (
                       <p className="mt-3 text-sm text-muted">
-                        The green band is the recommended range. The verdict above is the
-                        service&rsquo;s, not read from these bars.
+                        The shaded band is the recommended range. The badge at the top of the page gives
+                        the overall result.
                       </p>
                     )}
                   </>
@@ -204,7 +204,7 @@ function PlanDetail({
                 {others.map((meal) => (
                   <li key={meal.id}>
                     <button
-                      className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-surface px-4 font-semibold text-ink hover:ring-2 hover:ring-leaf focus:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed disabled:opacity-60"
+                      className="inline-flex min-h-[48px] items-center gap-2 rounded-2xl bg-surface px-4 font-semibold text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink disabled:cursor-not-allowed disabled:opacity-60"
                       disabled={runnerUpDisabled}
                       onClick={() => onPlanRunnerUp(meal.name)}
                       type="button"

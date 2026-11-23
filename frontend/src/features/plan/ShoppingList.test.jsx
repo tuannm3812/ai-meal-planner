@@ -41,15 +41,17 @@ describe('Shopping list', () => {
     expect(within(meat).getByText('$7.80')).toBeInTheDocument()
     expect(within(meat).queryByText(/guessed/)).not.toBeInTheDocument()
 
-    const rice = within(list).getByRole('checkbox', { name: /Generic cooked white rice/ })
-    expect(rice.closest('label')).toHaveTextContent(
-      'For cooked white rice · Product and price guessed from its category',
-    )
+    // An unknown product is named after its ingredient, once, without "Generic".
+    const rice = within(list).getByRole('checkbox', { name: /Cooked white rice/ })
+    expect(rice.closest('label')).toHaveTextContent('Rough estimate')
+    expect(rice.closest('label')).not.toHaveTextContent(/Generic|For cooked white rice/)
 
     expect(within(list).getByText('Estimated total').parentElement).toHaveTextContent('$24.50')
     expect(
       within(list).getByText('Prices are estimates from a local reference list, not live store prices.'),
     ).toBeInTheDocument()
+    // The rough-estimate wording is explained once, under the list, not on every row.
+    expect(within(list).getAllByText(/guessed from the item.s category/)).toHaveLength(1)
   })
 
   it('ticks items by mouse and keyboard, sending nothing', async () => {

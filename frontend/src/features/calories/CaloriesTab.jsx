@@ -21,16 +21,18 @@ const SEX_OPTIONS = [
   { value: 'female', label: 'Female' },
 ]
 
-function CaloriesTab() {
-  const [age, setAge] = useState(28)
-  const [sex, setSex] = useState('male')
-  const [heightCm, setHeightCm] = useState(180)
-  const [weightKg, setWeightKg] = useState(80)
-  const [activityMultiplier, setActivityMultiplier] = useState(1.55)
+// `initial` lets the Calories page start from the person's own profile; the
+// form keeps its own state, so nothing typed here changes that profile.
+function CaloriesTab({ initial = {} }) {
+  const [age, setAge] = useState(initial.age ?? 28)
+  const [sex, setSex] = useState(initial.sex ?? 'male')
+  const [heightCm, setHeightCm] = useState(initial.heightCm ?? 180)
+  const [weightKg, setWeightKg] = useState(initial.weightKg ?? 80)
+  const [activityMultiplier, setActivityMultiplier] = useState(initial.activity ?? 1.55)
   const [durationMinutes, setDurationMinutes] = useState(30)
   const [heartRateBpm, setHeartRateBpm] = useState(100)
   const [bodyTempC, setBodyTempC] = useState(37)
-  const [goal, setGoal] = useState('maintain')
+  const [goal, setGoal] = useState(initial.goal ?? 'maintain')
   const [healthConditionsInput, setHealthConditionsInput] = useState('')
   const {
     data: result,
@@ -40,7 +42,7 @@ function CaloriesTab() {
     reset: clearResult,
   } = useAsyncRequest(
     predictCalorieExpenditure,
-    'Could not predict calorie expenditure. Check that the FastAPI backend is running on port 8000.',
+    'Could not estimate your calories. Check your connection and try again.',
   )
 
   const handleSubmit = async (event) => {
@@ -63,9 +65,9 @@ function CaloriesTab() {
   return (
     <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
       <aside className="rounded-3xl border border-transparent bg-surface p-6 lg:sticky lg:top-6 lg:self-start">
-        <h2 className="text-lg font-semibold text-ink">Calorie Expenditure</h2>
+        <h2 className="text-lg font-semibold text-ink">Details for this estimate</h2>
         <p className="mt-1 text-sm leading-6 text-muted">
-          Calls the promoted Kaggle calorie model artifact.
+          The same calorie model that sizes your meals.
         </p>
 
         <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
@@ -99,8 +101,8 @@ function CaloriesTab() {
             />
           </div>
           <InputField
-            helperText="Typical values: 1.2 sedentary, 1.375 light, 1.55 moderate, 1.725 very active, 1.9 extra active."
-            label="Activity multiplier"
+            helperText="1.2 mostly sitting, 1.375 lightly active, 1.55 moderately active, 1.725 very active, 1.9 extra active."
+            label="Activity level"
             max={2.5}
             min={1.0}
             onChange={(event) => setActivityMultiplier(event.target.value)}
@@ -127,7 +129,7 @@ function CaloriesTab() {
             />
           </div>
           <InputField
-            label="Body temp (C)"
+            label="Body temperature (°C)"
             max={45}
             min={30}
             onChange={(event) => setBodyTempC(event.target.value)}
@@ -137,7 +139,7 @@ function CaloriesTab() {
           />
           <SelectField label="Goal" onChange={(event) => setGoal(event.target.value)} options={GOAL_OPTIONS} value={goal} />
           <InputField
-            helperText="Comma separated, e.g. 'diabetes, hypertension'."
+            helperText="Optional. Separate with commas."
             label="Health conditions"
             onChange={(event) => setHealthConditionsInput(event.target.value)}
             value={healthConditionsInput}
@@ -145,9 +147,9 @@ function CaloriesTab() {
 
           <SubmitButton
             disabled={isLoading}
-            idleLabel="Predict Expenditure"
+            idleLabel="Estimate my calories"
             isLoading={isLoading}
-            loadingLabel="Predicting..."
+            loadingLabel="Estimating…"
           />
         </form>
 
@@ -157,11 +159,11 @@ function CaloriesTab() {
       <div className="grid content-start gap-6">
         {!result && (
           <EmptyState
-            idleBody="Fill in the biometrics on the left to estimate daily calorie expenditure and a meal budget."
-            idleTitle="Predict your calorie expenditure"
+            idleBody="Fill in the details to estimate the calories you burn in a day and a budget for one meal."
+            idleTitle="Estimate the calories you burn"
             isLoading={isLoading}
             loadingBody="Running the calorie forecasting model."
-            loadingTitle="Predicting expenditure"
+            loadingTitle="Estimating your calories"
           />
         )}
 

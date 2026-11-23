@@ -46,6 +46,7 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
 | 40 | A stated workout replaces the activity level's exercise | 2026-11-22 |
 | 43 | User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers | 2026-11-23 |
+| 44 | Market Receipt brand and a desktop side rail replace Kitchen green | 2026-11-23 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -821,3 +822,27 @@ when storage is Firestore; DEC-10's refusal stays for hosted SQLite.
 Rules out Supabase (a second vendor whose free project sleeps after a week idle), Cloud
 SQL (about A$15 or more a month) and staying device-only. Supersedes DEC-36's "no
 accounts" and lifts DEC-8's limit that React cannot call the hosted API.
+
+### DEC-44 — Market Receipt brand and a desktop side rail replace Kitchen green
+
+2026-11-23, Mike's choice. He found the dark green unattractive and the desktop app too
+narrow (one 1,152 px column, about 384 px empty each side on a 1,920 px screen). From a
+proposal with three layouts he chose a side rail; from three brand directions he chose
+**Market Receipt**: cobalt (#2448C9) and coral (#FF5A36) on white and paper, navy ink
+(#14213D), Unbounded for display type and Inter for reading.
+
+- Coral marks the one main action and carries ink text, not white (5.2:1; white is 3.1:1).
+  Primary buttons get a hard navy "sticker" shadow.
+- Banners are cobalt; ink stays for dark panels and the footer. Peach (#FFD3C7) colours
+  icons, focus rings and highlights on cobalt and ink.
+- Viridis stays for data (DEC-37), and the macro colours keep their meaning.
+- From 1,280 px the top bar becomes a white rail on the left with five tabs (Plan a meal,
+  My meals, Past plans, Calories, Profile) and a "Sized for you" card; pages widen to
+  1,440 px. Phones and tablets keep the top bar.
+- The calorie estimate moves from a button inside Profile to its own Calories tab.
+
+Later slices bring the receipt-style shopping list, price-tag badges, a Home workspace
+and a tabbed plan page. Rules out widening only (sides still empty on big screens) and a
+FarmLens split screen (no map to fill the fixed half). Supersedes DEC-37's "Flat kitchen"
+look; DEC-38's single tokens file and Icon component stay.
+

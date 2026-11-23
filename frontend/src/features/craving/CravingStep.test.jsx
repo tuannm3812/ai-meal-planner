@@ -127,7 +127,8 @@ describe('Craving search', () => {
     expect(screen.getByRole('status')).toHaveTextContent('Made for your previous details.')
     // The result still names the store area it was made for.
     expect(screen.getByText('For shopping near “Earlwood, NSW”')).toBeInTheDocument()
-    expect(screen.queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
+    // (The rail's "Sized for you" card shows the live details, so look in the page only.)
+    expect(within(screen.getByRole('main')).queryByText(/Earlwood, NSW West/)).not.toBeInTheDocument()
 
     await goHome(user)
     await user.clear(cravingInput())
@@ -213,14 +214,16 @@ describe('Craving search', () => {
     expect(screen.queryByText(/Plan set aside/)).not.toBeInTheDocument()
   })
 
-  it('makes only promises that hold today', () => {
-    renderApp({ stored: STORED })
-    expect(screen.getByText('Matched to a real menu')).toBeInTheDocument()
-    expect(
-      screen.getByText('No close match? You get a standard meal and a note saying so.'),
-    ).toBeInTheDocument()
-    expect(screen.getByText('Shopping list included')).toBeInTheDocument()
+  it('makes only promises that hold today, and makes them on the welcome page only', () => {
+    renderApp()
+    expect(screen.getByText('An honest note when nothing on the menu is close')).toBeInTheDocument()
     // No claim that the standard meal is balanced or a good match.
+    expect(screen.queryByText(/balanced/i)).not.toBeInTheDocument()
+  })
+
+  it('does not repeat the promises to a returning visitor', () => {
+    renderApp({ stored: STORED })
+    expect(screen.queryByText(/An honest note|Honest when it misses/)).not.toBeInTheDocument()
     expect(screen.queryByText(/balanced/i)).not.toBeInTheDocument()
   })
 })
