@@ -68,6 +68,29 @@ jobs:
           docker push "$IMAGE"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
 
+      # DEC-43: Firestore rules and indexes go first, and the deploy waits until
+      # every index is READY. The live check below lists saved meals, a query
+      # that fails without its index, so on a fresh project it must exist before
+      # the new revision is checked (seen on the first real deploy, 2026-11-23).
+      - name: Deploy Firestore rules and indexes
+        if: vars.ACCOUNTS_ENABLED == 'true'
+        run: >-
+          npx --yes firebase-tools@14.27.0 deploy
+          --only firestore:rules,firestore:indexes
+          --project "$PROJECT_ID" --non-interactive
+
+      - name: Wait for the Firestore indexes to be ready
+        if: vars.ACCOUNTS_ENABLED == 'true'
+        timeout-minutes: 15
+        run: |
+          while true; do
+            states="$(gcloud firestore indexes composite list --project "$PROJECT_ID" \
+              --format='value(state)')"
+            echo "index states: ${states:-none}"
+            if ! grep -qv '^READY$' <<< "$states"; then break; fi
+            sleep 15
+          done
+
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v3
@@ -109,7 +132,7 @@ jobs:
         run: scripts/live_check.sh "${{ steps.deploy.outputs.url }}"
 
   # DEC-43: the React app on Firebase Hosting, built against the API just
-  # deployed, plus the Firestore rules (no browser access) and indexes.
+  # deployed. The Firestore rules and indexes went out with the deploy job.
   hosting:
     needs: deploy
     if: vars.ACCOUNTS_ENABLED == 'true'
@@ -148,13 +171,21 @@ jobs:
           npm ci
           npm run build
 
-      - name: Deploy hosting, Firestore rules and indexes
+      - name: Deploy hosting
         run: >-
-          npx --yes firebase-tools@14.27.0 deploy
-          --only hosting,firestore:rules,firestore:indexes
+          npx --yes firebase-tools@14.27.0 deploy --only hosting
           --project "$PROJECT_ID" --non-interactive
 
+      # A brand-new site can answer 404 for a few seconds after its first
+      # release (seen 2026-11-23), so this retries for up to a minute.
       - name: The hosted app answers
         run: |
-          curl -fsS --max-time 30 "https://${PROJECT_ID}.web.app/" | grep -q '<div id="root">'
-          echo "https://${PROJECT_ID}.web.app is serving the app"
+          for attempt in $(seq 1 12); do
+            if curl -fsS --max-time 30 "https://${PROJECT_ID}.web.app/" | grep -q '<div id="root">'; then
+              echo "https://${PROJECT_ID}.web.app is serving the app"
+              exit 0
+            fi
+            echo "attempt $attempt: not serving yet"
+            sleep 5
+          done
+          exit 1

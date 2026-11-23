@@ -8455,3 +8455,17 @@ shared-storage path. `docs/6_deployment.md` §5 is the one-time setup (APIs, Fir
 project, Firestore in australia-southeast1, a web app, IAM roles, Google and Anonymous
 providers) and a by-hand check. The React list pages no longer say "on this device" when
 accounts are on. Not run against the real project: that needs Mike's setup. Needs Mike.
+
+## 2026-11-23 — Claude — accounts live; deploy order fix
+
+PR #58 merged (ede2b42). From Mike's Mac: the §5 APIs, Firebase on the project (REST
+`addFirebase`), Firestore `(default)` in australia-southeast1, the web app and its GitHub
+variables, and the IAM roles. Anonymous and Google sign-in were not switched on: Firebase Auth's
+config API answers `404 CONFIGURATION_NOT_FOUND` until Auth is initialised, and the only API
+that initialises it upgrades to Identity Platform (ruled out), so Mike does it in the console.
+Deploy run 45120758132 failed its live check with a 500 from saved-meals (`The query requires an
+index`), because the hosting job, which published the indexes, ran after the deploy job's
+live check. The index was created by hand; run 45121738187 passed both jobs. Its hosting check
+first saw a 404 from the brand-new site and passed on a re-run. Fix: the deploy job now
+publishes rules and indexes and waits for every index to be READY before deploying the API,
+and the hosting check retries for a minute. Needs Mike: turn on the sign-in providers.
