@@ -6,6 +6,8 @@ export {
   BookOpenCheck,
   Bookmark,
   Calculator,
+  Check,
+  CircleCheck,
   Copy,
   Flame,
   History,
@@ -21,6 +23,7 @@ export {
   ShoppingCart,
   Sparkles,
   Star,
+  Timer,
   Trash2,
   UserRound,
 } from 'lucide-react'

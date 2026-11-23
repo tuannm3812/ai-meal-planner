@@ -46,7 +46,7 @@ describe('App', () => {
   it('opens a first visit on the details form, with the brand and the main links', () => {
     renderApp()
     expect(screen.getByRole('link', { name: 'AI Meal Planner' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Tell us about you' })).toBeInTheDocument()
     const nav = screen.getByRole('navigation', { name: 'Main' })
     for (const name of ['My meals', 'Past plans', 'Profile']) {
       expect(within(nav).getByRole('link', { name })).toBeInTheDocument()
@@ -200,7 +200,7 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Forget me on this device' }))
     await user.click(screen.getByRole('button', { name: 'Yes, forget me' }))
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
-    expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Tell us about you' })).toBeInTheDocument()
   })
 
   it('opens a returning visit straight on the craving search', () => {

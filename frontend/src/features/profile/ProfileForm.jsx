@@ -4,6 +4,7 @@ import {
   ACTIVITY_OPTIONS,
   AVOID_OPTIONS,
   GOAL_OPTIONS,
+  PROFILE_DISCLOSURE,
   SEX_OPTIONS,
   WORKOUT_OPTIONS,
 } from './profile'
@@ -74,8 +75,20 @@ function ChoiceField({ label, value, options, error, onChange, className = '' })
 
 // The profile of docs/8_design.md §3.1, on the first visit and the Profile
 // page. Controlled: the profile and its errors
-// belong to the caller, which sends them with the meal request.
-function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details', children }) {
+// belong to the caller, which sends them with the meal request. The welcome
+// page passes a shorter intro, an h2 under its own h1, and no sizing panel,
+// because the page around it already says how a meal is sized.
+function ProfileForm({
+  profile,
+  errors = {},
+  onChange,
+  eyebrow = 'Your details',
+  headingLevel = 1,
+  intro = PROFILE_DISCLOSURE,
+  showSizing = true,
+  children,
+}) {
+  const Heading = headingLevel === 2 ? 'h2' : 'h1'
   const set = (key) => (value) => onChange({ ...profile, [key]: value })
 
   const toggleAvoid = (id) => {
@@ -88,25 +101,20 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
   return (
     <section
       aria-labelledby="profile-heading"
-      className="grid gap-8 rounded-3xl bg-surface p-6 sm:p-8 lg:grid-cols-[1fr_300px]"
+      className={`grid gap-8 rounded-3xl bg-surface p-6 sm:p-8 ${showSizing ? 'lg:grid-cols-[1fr_300px]' : ''}`}
     >
       <div className="min-w-0">
         <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">
           {eyebrow}
         </p>
-        <h1
+        <Heading
           className="mt-2 font-display text-4xl font-extrabold tracking-tight text-ink"
           id="profile-heading"
           tabIndex={-1}
         >
           Tell us about you
-        </h1>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
-          We use this to estimate how much energy you burn in a day and size your meal to fit
-          your goal. This browser keeps your details so you don't retype them. They go with each
-          plan request, and when the app runs locally the server keeps a history of the plans it
-          makes, including these details.
-        </p>
+        </Heading>
+        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">{intro}</p>
 
         <div className="mt-8 flex flex-col gap-7">
           <fieldset>
@@ -243,6 +251,7 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
         </div>
       </div>
 
+      {showSizing && (
       <aside
         aria-label="How your meal is sized"
         className="self-start rounded-3xl bg-ink p-7 text-ground"
@@ -261,6 +270,7 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
           A planning aid, not medical advice.
         </p>
       </aside>
+      )}
     </section>
   )
 }
