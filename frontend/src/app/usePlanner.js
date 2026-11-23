@@ -80,7 +80,7 @@ export function usePlanner() {
     reset: clearPlan,
   } = useAsyncRequest(
     generateMealPlan,
-    'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
+    'Could not generate a meal plan. Check your connection and try again.',
   )
 
   // Remember on this device once the person has given their details, on

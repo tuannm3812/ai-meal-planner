@@ -87,7 +87,7 @@ describe('My meals and past plans', () => {
     })
     renderApp({ stored: STORED, route: '/history' })
     expect(await screen.findAllByRole('link', { name: /Chicken Fried Rice/ })).toHaveLength(1)
-    expect(screen.getByText(/lost when that server is replaced/)).toBeInTheDocument()
+    expect(screen.getByText(/can be lost if it is replaced/)).toBeInTheDocument()
   })
 
   it('says when a plan is no longer in history', async () => {
@@ -108,7 +108,7 @@ describe('My meals and past plans', () => {
     serve({ fail: new Error('Network Error') })
     renderApp({ stored: STORED, route: '/history' })
     expect(await screen.findByRole('alert')).toHaveTextContent(
-      'Could not load your meals. Check that the FastAPI backend is running on port 8000.',
+      'Could not load your meals. Check your connection and try again.',
     )
   })
 

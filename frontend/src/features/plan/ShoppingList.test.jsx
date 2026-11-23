@@ -43,13 +43,15 @@ describe('Shopping list', () => {
 
     const rice = within(list).getByRole('checkbox', { name: /Generic cooked white rice/ })
     expect(rice.closest('label')).toHaveTextContent(
-      'For cooked white rice · Product and price guessed from its category',
+      'For cooked white rice · Rough estimate',
     )
 
     expect(within(list).getByText('Estimated total').parentElement).toHaveTextContent('$24.50')
     expect(
       within(list).getByText('Prices are estimates from a local reference list, not live store prices.'),
     ).toBeInTheDocument()
+    // The rough-estimate wording is explained once, under the list, not on every row.
+    expect(within(list).getAllByText(/guessed from the item.s category/)).toHaveLength(1)
   })
 
   it('ticks items by mouse and keyboard, sending nothing', async () => {

@@ -43,7 +43,7 @@ function CalorieRing({ total, target }) {
         </text>
       </svg>
       <figcaption className="max-w-[140px] text-sm text-muted">
-        {target === null ? 'This meal' : 'This meal against its target'}
+        {target === null ? 'This meal' : 'This meal against your target'}
       </figcaption>
     </figure>
   )

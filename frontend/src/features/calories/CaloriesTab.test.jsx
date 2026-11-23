@@ -27,11 +27,11 @@ describe('CaloriesTab error text', () => {
     const user = userEvent.setup()
     render(<CaloriesTab />)
 
-    await user.click(screen.getByRole('button', { name: 'Predict Expenditure' }))
+    await user.click(screen.getByRole('button', { name: 'Estimate my calories' }))
 
     expect(
       await screen.findByText(
-        'Could not predict calorie expenditure. Check that the FastAPI backend is running on port 8000.',
+        'Could not estimate your calories. Check your connection and try again.',
       ),
     ).toBeInTheDocument()
   })
@@ -41,7 +41,7 @@ describe('CaloriesTab error text', () => {
     const user = userEvent.setup()
     render(<CaloriesTab />)
 
-    await user.click(screen.getByRole('button', { name: 'Predict Expenditure' }))
+    await user.click(screen.getByRole('button', { name: 'Estimate my calories' }))
 
     expect(await screen.findByText('Age out of range')).toBeInTheDocument()
   })

@@ -52,7 +52,7 @@ describe('App', () => {
       expect(within(nav).getByRole('link', { name })).toBeInTheDocument()
     }
     expect(screen.queryByLabelText(/Your craving/i)).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Details for this estimate' })).not.toBeInTheDocument()
   })
 
   it('never calls the network on a first visit', () => {
@@ -194,10 +194,10 @@ describe('App', () => {
     const user = userEvent.setup()
     renderApp({ stored: STORED })
     await goToProfile(user)
-    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Details for this estimate' })).not.toBeInTheDocument()
 
     await user.click(screen.getByRole('link', { name: 'Calories' }))
-    expect(screen.getByRole('heading', { name: 'Calorie Expenditure' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Details for this estimate' })).toBeInTheDocument()
     expect(axios.post).not.toHaveBeenCalled()
   })
 

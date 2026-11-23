@@ -8531,3 +8531,25 @@ Verified:
 Not done here: the receipt shopping list, price-tag badges, Home workspace, tabbed plan page,
 card outlines elsewhere and the showcase. Not deployed.
 
+
+## 2026-11-24 — Claude — wording pass after a content review
+
+Mike asked for a check of the text on every screen for duplicates and rough wording. Fixed
+on the same branch as slice 1:
+
+- Profile is headed "Your details" (`ProfileForm` takes a `title`), with a one-line intro.
+  The storage note now appears once, in "Remembered on this device".
+- Calories reads in plain words: "Details for this estimate", "Activity level", "Body
+  temperature (°C)", "Estimate my calories", "Calories you burn". Its health-conditions hint
+  no longer suggests diabetes, which the rules do not handle.
+- Plan page: the back link is "Plan a meal", matching the tab. A rough shopping estimate is
+  explained once under the list, not on every row. Three technical lines are reworded.
+- Past plans (no accounts) no longer mentions "the API".
+- Five error messages said to check the FastAPI backend on port 8000. They now say "Check
+  your connection and try again."
+
+Left for the Home slice: the hero headline shared by Home and the welcome page, the three
+promises repeated on Home, and "Sized for you" shown in both the banner and the rail. Store
+product names such as "Generic whole egg" come from the service, not the client.
+
+Verified: vitest 264 of 264, eslint clean, `vite build` passes.

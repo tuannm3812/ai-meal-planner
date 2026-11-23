@@ -32,7 +32,7 @@ describe('Plan request and quality', () => {
 
     expect(
       await screen.findByText(
-        'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
+        'Could not generate a meal plan. Check your connection and try again.',
       ),
     ).toBeInTheDocument()
   })

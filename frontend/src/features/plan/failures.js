@@ -7,7 +7,7 @@
 export const DEFAULT_RETRY_SECONDS = 10
 
 export const UNREACHABLE_MESSAGE =
-  'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.'
+  'Could not generate a meal plan. Check your connection and try again.'
 
 function retryAfterSeconds(header) {
   const seconds = Number(header)

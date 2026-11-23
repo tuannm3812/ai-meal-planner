@@ -74,7 +74,7 @@ function PlanDetail({
                 to="/"
               >
                 <Icon as={ArrowLeft} size="sm" />
-                Home
+                Plan a meal
               </Link>
               {craving && <p className="text-[15px] text-on-ink-muted">For your craving &ldquo;{craving}&rdquo;</p>}
               <h1
@@ -126,7 +126,7 @@ function PlanDetail({
                 {estimated.estimated} of {estimated.of} ingredients use estimated nutrition from
                 local tables, so these numbers are approximate.
                 {outcome &&
-                  ' “On target” is measured against those same tables, so it is not an independent check.'}
+                  ' “On target” is measured against those same tables, so treat it as a guide.'}
               </span>
             </p>
           )}
@@ -170,8 +170,8 @@ function PlanDetail({
                     </div>
                     {outcome && (
                       <p className="mt-3 text-sm text-muted">
-                        The shaded band is the recommended range. The verdict above is the
-                        service&rsquo;s, not read from these bars.
+                        The shaded band is the recommended range. The badge at the top of the page gives
+                        the overall result.
                       </p>
                     )}
                   </>

@@ -28,6 +28,8 @@ function ProfilePage() {
       <ProfileForm
         errors={planner.fieldErrors}
         eyebrow="Your profile"
+        intro="Every meal is sized from these details. A change applies from your next plan."
+        title="Your details"
         onChange={planner.setProfile}
         profile={planner.profile}
       >
