@@ -24,6 +24,8 @@ def build_repositories(
     Returns:
         The profile, meal-plan and feedback stores, in that order.
     """
+    if settings.storage_backend == "firestore":
+        return _firestore_repositories(settings)
     directory = data_dir or settings.data_dir
     if settings.storage_backend == "json":
         return (
@@ -33,8 +35,8 @@ def build_repositories(
         )
 
     # Imported here, inside the branch, so the JSON backend never pays
-    # SQLAlchemy's import cost. This is the one permitted function-level
-    # import in the codebase, and it is for cost, not to dodge a cycle.
+    # SQLAlchemy's import cost. These function-level imports (here and
+    # in _firestore_repositories) are for cost, not to dodge a cycle.
     from .sql import (
         SqlMealFeedbackRepository,
         SqlMealPlanRepository,
@@ -47,4 +49,28 @@ def build_repositories(
         SqlUserProfileRepository(engine),
         SqlMealPlanRepository(engine),
         SqlMealFeedbackRepository(engine),
+    )
+
+
+def _firestore_repositories(
+    settings: AppSettings,
+) -> tuple[UserProfileStore, MealPlanStore, MealFeedbackStore]:
+    """Build the Firestore trio (DEC-43), shared by every hosted instance.
+
+    Imported here for the same cost reason as SQL above, and because the
+    Firestore client is an optional extra.
+    """
+    from google.cloud import firestore
+
+    from .firestore_store import (
+        FirestoreMealFeedbackRepository,
+        FirestoreMealPlanRepository,
+        FirestoreUserProfileRepository,
+    )
+
+    client = firestore.Client(project=settings.firebase_project_id.strip() or None)
+    return (
+        FirestoreUserProfileRepository(client),
+        FirestoreMealPlanRepository(client),
+        FirestoreMealFeedbackRepository(client),
     )

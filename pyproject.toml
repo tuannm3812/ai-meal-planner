@@ -32,6 +32,10 @@ semantic-rag = [
   "faiss-cpu>=1.8,<2",
   "sentence-transformers>=3,<4",
 ]
+# DEC-43: STORAGE_BACKEND=firestore, the hosted store for signed-in accounts.
+firestore = [
+  "google-cloud-firestore>=2.20,<3",
+]
 # G10b: export allowlisted spans to Cloud Trace over OTLP (TRACING_EXPORTER).
 tracing = [
   "google-auth>=2.40,<3",

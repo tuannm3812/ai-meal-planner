@@ -8394,3 +8394,18 @@ accounts in open local mode too. OpenAPI declares `FirebaseAuth` beside `ApiKeyA
 Verified: `test_firebase_auth.py` signs real RS256 tokens with a generated key;
 `test_api_accounts.py` covers the route rules with a fake verifier. `uv run pytest`: 715
 passed, coverage 97%. Hosted mode still refuses history until Firestore (slice 3).
+
+## 2026-11-23 — Claude — user accounts slice 2: Firestore repositories
+
+`STORAGE_BACKEND=firestore` builds `repositories/firestore_store.py`, which implements the three
+storage protocols (DEC-4) on Firestore. Layout: `namespaces/{client}/users/{user}/plans|feedback`
+plus `namespaces/{client}/plan_index/{request_id}` for `find_by_request_id`. Every id is escaped
+(`c:`, `u:`, `r:` prefix plus URL quoting), so a `/` or a reserved-looking id cannot reach another
+path. A record is stored as one JSON string beside the queried fields, because Firestore cannot
+hold every JSON shape (an array of arrays); `sort_key` is a per-process increasing nanosecond key.
+`saved_only` is a query filter before the limit, backed by the composite index in
+`firestore.indexes.json` (deployed in slice 5). The client is the optional `firestore` extra,
+installed in the image and in CI. CI's backend job starts the Firestore emulator
+(firebase-tools 14.27.0, Java 21), so the repository contract suite now runs on JSON, SQLite and
+Firestore. Verified locally against the emulator: `uv run pytest`, 753 passed;
+`firestore_store.py` and `factory.py` at 100%. Without the emulator the Firestore cases skip.

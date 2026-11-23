@@ -1,0 +1,13 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "feedback",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "saved", "order": "ASCENDING" },
+        { "fieldPath": "sort_key", "order": "DESCENDING" }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

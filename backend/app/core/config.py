@@ -93,7 +93,9 @@ class AppSettings(BaseSettings):
     tracing_exporter: Literal["none", "console", "cloud_trace"] = "none"
     trace_sample_ratio: float = Field(default=1.0, ge=0.0, le=1.0)
 
-    storage_backend: Literal["json", "sqlite"] = "sqlite"
+    # DEC-43: "firestore" is the store every hosted instance shares. It needs the
+    # firestore extra, and uses FIREBASE_PROJECT_ID (or the runtime's project).
+    storage_backend: Literal["json", "sqlite", "firestore"] = "sqlite"
 
     @property
     def data_dir(self) -> Path:

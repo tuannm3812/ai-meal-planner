@@ -4,8 +4,10 @@ Both backends must satisfy this identically. When they diverge, this is the
 file that says which one is wrong.
 """
 
+import os
 from pathlib import Path
 from typing import Any
+from uuid import uuid4
 
 import pytest
 
@@ -21,13 +23,38 @@ from backend.app.repositories.sql import (
     build_engine,
 )
 
-BACKENDS = ["json", "sqlite"]
+BACKENDS = [
+    "json",
+    "sqlite",
+    pytest.param(
+        "firestore",
+        marks=[
+            pytest.mark.skipif(
+                not os.environ.get("FIRESTORE_EMULATOR_HOST"),
+                reason="needs the Firestore emulator (FIRESTORE_EMULATOR_HOST); CI runs it",
+            ),
+            # The local emulator only; nothing leaves the machine.
+            pytest.mark.allow_network,
+        ],
+    ),
+]
+
+
+def _firestore_client() -> Any:
+    """A client on a fresh emulator project, so every test starts empty."""
+    from google.cloud import firestore
+
+    return firestore.Client(project=f"contract-{uuid4().hex[:12]}")
 
 
 @pytest.fixture(params=BACKENDS)
 def profile_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
     if request.param == "json":
         return UserProfileRepository(tmp_path)
+    if request.param == "firestore":
+        from backend.app.repositories.firestore_store import FirestoreUserProfileRepository
+
+        return FirestoreUserProfileRepository(_firestore_client())
     return SqlUserProfileRepository(build_engine(tmp_path / "t.db"))
 
 
@@ -35,6 +62,10 @@ def profile_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
 def plan_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
     if request.param == "json":
         return MealPlanRepository(tmp_path)
+    if request.param == "firestore":
+        from backend.app.repositories.firestore_store import FirestoreMealPlanRepository
+
+        return FirestoreMealPlanRepository(_firestore_client())
     return SqlMealPlanRepository(build_engine(tmp_path / "t.db"))
 
 
@@ -42,6 +73,10 @@ def plan_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
 def feedback_store(request: pytest.FixtureRequest, tmp_path: Path) -> Any:
     if request.param == "json":
         return MealFeedbackRepository(tmp_path)
+    if request.param == "firestore":
+        from backend.app.repositories.firestore_store import FirestoreMealFeedbackRepository
+
+        return FirestoreMealFeedbackRepository(_firestore_client())
     return SqlMealFeedbackRepository(build_engine(tmp_path / "t.db"))
 
 
