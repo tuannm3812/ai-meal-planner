@@ -42,6 +42,32 @@ describe('Craving search', () => {
     expect(axios.post.mock.calls[0][1]).toMatchObject({ craving: 'salmon quinoa' })
   })
 
+  it("sends today's workout chosen on Home", async () => {
+    const user = userEvent.setup()
+    renderApp({ stored: STORED })
+
+    const workout = screen.getByRole('group', { name: /Today.s workout/ })
+    expect(within(workout).getByRole('radio', { name: 'Not sure' })).toBeChecked()
+    await user.click(within(workout).getByRole('radio', { name: 'Rest day' }))
+    await user.type(cravingInput(), 'salmon quinoa')
+    await user.click(planButton())
+    expect(axios.post.mock.calls[0][1]).toMatchObject({ duration_minutes: 0 })
+  })
+
+  it('asks for the minutes of a workout and refuses a bad value', async () => {
+    const user = userEvent.setup()
+    renderApp({ stored: STORED })
+
+    await user.click(screen.getByRole('radio', { name: 'I worked out' }))
+    const minutes = screen.getByRole('textbox', { name: 'Workout minutes' })
+    await user.clear(minutes)
+    await user.type(cravingInput(), 'salmon quinoa')
+    expect(planButton()).toBeDisabled()
+    await user.type(minutes, '45')
+    await user.click(planButton())
+    expect(axios.post.mock.calls[0][1]).toMatchObject({ duration_minutes: 45 })
+  })
+
   it('picks a suggestion from the keyboard', async () => {
     const user = userEvent.setup()
     renderApp({ stored: STORED })

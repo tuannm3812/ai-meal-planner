@@ -90,8 +90,8 @@ and a white canvas.
 ## 4. Type
 
 - **App:** Unbounded ExtraBold (800) for headlines and big numbers; Inter for everything
-  read. Both are self-hosted (SIL Open Font License). JetBrains Mono is planned for the
-  receipt-style shopping list only.
+  read. Both are self-hosted (SIL Open Font License). JetBrains Mono (self-hosted, same licence)
+  sets the receipt-style shopping list, price-tag numbers and the Home stat rows, nowhere else.
 - **Showcase (deck, poster, LinkedIn image):** Google Sans, chosen by Mike for a professional
   portfolio look, with Google Sans Code for code spans.
 - No other typefaces. Authentic app screenshots keep their own type.
@@ -152,7 +152,15 @@ soft blob shape may sit behind a banner illustration.
 - Cards: white with no border on the paper ground in the app (a 1 px `line` border on
   the showcase's white canvas), 24 px corners, no soft shadows, no gradients, no accent
   stripes along an edge, no rules under titles. A card that is an object you hold (the
-  "Sized for you" card, later the receipt) gets a navy outline.
+  "Sized for you" card, the latest plan on Home, the receipt) gets a navy outline.
+- The **shopping list is a till receipt**: mono type, the store centred at the top, dashed
+  rules, dotted leaders to each price, and a torn bottom edge. On wide screens it stays in
+  view while the report scrolls.
+- **Price tags** (a pointed end and a punched hole) carry a plan's result in words, and a
+  coral one with ink text carries a shelf number (the cost to shop, a meal's kcal).
+- **Home** is a workspace: the craving, today's workout as three chips, six dish cards from
+  the menu, then saved meals and past plans beside a context column (the plan in hand or
+  the latest one, and the device's counts).
 - The **sticker shadow**, a hard 3 px navy offset (`shadow-sticker`), sits under coral
   primary buttons only; disabled buttons drop it.
 - Cobalt banners open Home, the welcome page and the plan page and carry the headline;
