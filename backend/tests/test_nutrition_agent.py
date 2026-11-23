@@ -488,3 +488,53 @@ def test_the_cooldown_constants_are_what_the_docs_claim() -> None:
     """
     assert NutritionVerificationAgent._FAILURE_THRESHOLD == 3
     assert NutritionVerificationAgent._COOLDOWN_SECONDS == 120
+
+
+# P4, 2026-11-23: USDA lists energy in kcal and kJ under the same name.
+
+
+def _usda_with_energy(*energy: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "foods": [
+            {
+                "foodNutrients": [
+                    *energy,
+                    {"nutrientName": "Protein", "value": 20.0, "unitName": "G"},
+                    {"nutrientName": "Carbohydrate, by difference", "value": 0.0, "unitName": "G"},
+                    {"nutrientName": "Total lipid (fat)", "value": 1.0, "unitName": "G"},
+                ]
+            }
+        ]
+    }
+
+
+@pytest.mark.parametrize(
+    "energy",
+    [
+        # kJ listed last used to win, reading 356 "kcal" for shrimp.
+        (
+            {"nutrientName": "Energy", "value": 85.0, "unitName": "KCAL"},
+            {"nutrientName": "Energy", "value": 356.0, "unitName": "kJ"},
+        ),
+        (
+            {"nutrientName": "Energy", "value": 356.0, "unitName": "kJ"},
+            {"nutrientName": "Energy", "value": 85.0, "unitName": "KCAL"},
+        ),
+        ({"nutrientName": "Energy (Atwater General Factors)", "value": 85.0, "unitName": "KCAL"},),
+    ],
+)
+def test_usda_energy_is_read_in_kcal_whatever_the_order(
+    monkeypatch: pytest.MonkeyPatch, energy: tuple[dict[str, Any], ...]
+) -> None:
+    monkeypatch.setattr(module, "urlopen", _fake_urlopen(_usda_with_energy(*energy)))
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("shrimp")
+
+    assert result["calories"] == 85.0
+
+
+def test_usda_energy_only_in_kilojoules_is_converted(monkeypatch: pytest.MonkeyPatch) -> None:
+    payload = _usda_with_energy({"nutrientName": "Energy", "value": 418.4, "unitName": "kJ"})
+    monkeypatch.setattr(module, "urlopen", _fake_urlopen(payload))
+    result = NutritionVerificationAgent(usda_api_key="k")._query_usda_database("shrimp")
+
+    assert result["calories"] == pytest.approx(100.0)

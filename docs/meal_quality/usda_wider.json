@@ -1,0 +1,4456 @@
+{
+  "provenance": {
+    "calorie_model_version": "hist_gradient_boosting_deep_v0.1.0",
+    "calorie_model_sha256": "33a154b3d5807af1e2dd53ee69dc250e3f9a4429bfed90260e27671eac168c95",
+    "meal_corpus_sha256": "cebde36f88214e2bb08e21243f64c99046e13c131ea038931209dc2d4423b33c",
+    "meal_count": 76,
+    "retriever": "tfidf_vector_retriever_v0.1",
+    "nutrition_source": "usda_fooddata_central",
+    "usda_lookups": 142,
+    "usda_lookup_failures": 0,
+    "usda_no_usable_match": 104,
+    "usda_ingredients_cached": 38
+  },
+  "summary": {
+    "plans": 152,
+    "status_counts": {
+      "matched": 152
+    },
+    "scaled_plans": 152,
+    "within_tolerance": 149,
+    "within_calorie_target": 147,
+    "meets_targets": 113,
+    "median_deviation": 0.0114,
+    "p90_deviation": 0.0697,
+    "max_deviation": 0.3294,
+    "rescaled": 38,
+    "scale_clamped": 67,
+    "target_share_of_budget": {
+      "min": 0.28,
+      "max": 0.292
+    },
+    "macros_in_range": {
+      "protein": 151,
+      "carbs": 116,
+      "fat": 113
+    },
+    "all_macros_in_range": 113,
+    "with_estimated_ingredients": 52,
+    "with_usda_ingredients": 148,
+    "weak_matches": 0,
+    "daily_budget_kcal": {
+      "min": 1200.0,
+      "max": 2889.4
+    }
+  },
+  "plans": [
+    {
+      "scenario": "Chicken Fried Rice / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Fried Rice",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 353.0,
+      "calorie_deviation": 0.008571428571428572,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 25.7,
+      "macro_percent": {
+        "protein": 29.04775360271263,
+        "carbs": 45.77564283695959,
+        "fat": 25.176603560327774
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.999
+    },
+    {
+      "scenario": "Tofu Fried Rice / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tofu Fried Rice",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 316.3,
+      "calorie_deviation": 0.09628571428571425,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 16.3,
+      "macro_percent": {
+        "protein": 21.265492498369213,
+        "carbs": 49.967384213959555,
+        "fat": 28.767123287671236
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.842
+    },
+    {
+      "scenario": "High-Protein Turkey Burger Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Turkey Burger Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 350.5,
+      "calorie_deviation": 0.0014285714285714286,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.57,
+      "scale_clamped": false,
+      "protein_g": 20.1,
+      "macro_percent": {
+        "protein": 23.136690647482016,
+        "carbs": 24.287769784172664,
+        "fat": 52.57553956834533
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.988
+    },
+    {
+      "scenario": "High-Protein Tomato Turkey Pasta / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Tomato Turkey Pasta",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 358.4,
+      "calorie_deviation": 0.023999999999999935,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.5,
+      "scale_clamped": true,
+      "protein_g": 17.7,
+      "macro_percent": {
+        "protein": 20.19971469329529,
+        "carbs": 23.0527817403709,
+        "fat": 56.74750356633381
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.94
+    },
+    {
+      "scenario": "Chicken Avocado Power Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Avocado Power Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 365.7,
+      "calorie_deviation": 0.044857142857142825,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 19.2,
+      "macro_percent": {
+        "protein": 20.376757760679226,
+        "carbs": 52.639957548421336,
+        "fat": 26.983284690899445
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.971
+    },
+    {
+      "scenario": "High-Protein Asian Tofu Noodle Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Asian Tofu Noodle Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 343.4,
+      "calorie_deviation": 0.018857142857142923,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 23.3,
+      "macro_percent": {
+        "protein": 28.182642878742058,
+        "carbs": 50.31750831569398,
+        "fat": 21.499848805563953
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.971
+    },
+    {
+      "scenario": "Chicken Vegetable Stir Fry / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Vegetable Stir Fry",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 360.8,
+      "calorie_deviation": 0.03085714285714289,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.45,
+      "scale_clamped": true,
+      "protein_g": 25.2,
+      "macro_percent": {
+        "protein": 26.90870261612387,
+        "carbs": 54.351308061932734,
+        "fat": 18.73998932194341
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.125
+    },
+    {
+      "scenario": "Vegetarian Spinach Omelette / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Vegetarian Spinach Omelette",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.3,
+      "calorie_deviation": 0.006571428571428604,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.56,
+      "scale_clamped": false,
+      "protein_g": 14.5,
+      "macro_percent": {
+        "protein": 15.938444627644959,
+        "carbs": 28.909040945314647,
+        "fat": 55.1525144270404
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.84
+    },
+    {
+      "scenario": "Tuna Brown Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tuna Brown Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 363.8,
+      "calorie_deviation": 0.03942857142857146,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.8,
+      "scale_clamped": false,
+      "protein_g": 18.2,
+      "macro_percent": {
+        "protein": 19.649122807017545,
+        "carbs": 49.014844804318486,
+        "fat": 31.336032388663966
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.984
+    },
+    {
+      "scenario": "Chicken Salad Wrap / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Salad Wrap",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 398.4,
+      "calorie_deviation": 0.13828571428571423,
+      "within_tolerance": true,
+      "within_calorie_target": false,
+      "meets_targets": false,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 29.8,
+      "macro_percent": {
+        "protein": 29.681274900398403,
+        "carbs": 26.39442231075697,
+        "fat": 43.92430278884462
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.875
+    },
+    {
+      "scenario": "Low-Sodium Chicken Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Low-Sodium Chicken Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 346.2,
+      "calorie_deviation": 0.01085714285714289,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 27.3,
+      "macro_percent": {
+        "protein": 30.56255247691016,
+        "carbs": 46.011754827875734,
+        "fat": 23.425692695214106
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 1.056
+    },
+    {
+      "scenario": "Vegan Burrito Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Vegan Burrito Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 337.8,
+      "calorie_deviation": 0.03485714285714282,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": false,
+      "protein_g": 11.8,
+      "macro_percent": {
+        "protein": 13.785046728971961,
+        "carbs": 53.6214953271028,
+        "fat": 32.59345794392523
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.813
+    },
+    {
+      "scenario": "Lean Steak Rice Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Lean Steak Rice Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 343.0,
+      "calorie_deviation": 0.02,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 28.7,
+      "macro_percent": {
+        "protein": 32.29254571026723,
+        "carbs": 45.68213783403657,
+        "fat": 22.025316455696203
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.996
+    },
+    {
+      "scenario": "Steak Salad Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Steak Salad Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 347.1,
+      "calorie_deviation": 0.008285714285714221,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 21.2,
+      "macro_percent": {
+        "protein": 23.89405466328543,
+        "carbs": 46.43561566638489,
+        "fat": 29.670329670329668
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.824
+    },
+    {
+      "scenario": "Salmon Quinoa Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Salmon Quinoa Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.0,
+      "calorie_deviation": 0.005714285714285714,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.51,
+      "scale_clamped": true,
+      "protein_g": 21.4,
+      "macro_percent": {
+        "protein": 24.506155167477814,
+        "carbs": 21.64328657314629,
+        "fat": 53.8505582593759
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.997
+    },
+    {
+      "scenario": "Shrimp Taco Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Taco Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 361.8,
+      "calorie_deviation": 0.033714285714285745,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.86,
+      "scale_clamped": false,
+      "protein_g": 20.4,
+      "macro_percent": {
+        "protein": 21.923696937130575,
+        "carbs": 47.60881246641591,
+        "fat": 30.467490596453526
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.013
+    },
+    {
+      "scenario": "Chickpea Curry Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chickpea Curry Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 350.1,
+      "calorie_deviation": 0.0002857142857143507,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 13.4,
+      "macro_percent": {
+        "protein": 14.656822532130162,
+        "carbs": 64.42439157779602,
+        "fat": 20.91878589007383
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.823
+    },
+    {
+      "scenario": "Lentil Bolognese Pasta / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Lentil Bolognese Pasta",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.6,
+      "calorie_deviation": 0.0011428571428570779,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 15.9,
+      "macro_percent": {
+        "protein": 18.26012058570198,
+        "carbs": 53.057708871662356,
+        "fat": 28.682170542635657
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.842
+    },
+    {
+      "scenario": "Greek Chicken Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Greek Chicken Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 347.7,
+      "calorie_deviation": 0.006571428571428604,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 25.6,
+      "macro_percent": {
+        "protein": 29.148875604896098,
+        "carbs": 46.000569313976655,
+        "fat": 24.85055508112724
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.772
+    },
+    {
+      "scenario": "Turkey Chili Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Turkey Chili Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 333.3,
+      "calorie_deviation": 0.04771428571428568,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 17.0,
+      "macro_percent": {
+        "protein": 20.606060606060606,
+        "carbs": 48.848484848484844,
+        "fat": 30.545454545454547
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.955
+    },
+    {
+      "scenario": "Beef Taco Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Beef Taco Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 356.0,
+      "calorie_deviation": 0.017142857142857144,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.42,
+      "scale_clamped": true,
+      "protein_g": 16.5,
+      "macro_percent": {
+        "protein": 18.64406779661017,
+        "carbs": 21.355932203389827,
+        "fat": 60.0
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.025
+    },
+    {
+      "scenario": "Banana Oat Protein Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Banana Oat Protein Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 384.5,
+      "calorie_deviation": 0.09857142857142857,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.82,
+      "scale_clamped": false,
+      "protein_g": 15.5,
+      "macro_percent": {
+        "protein": 15.676359039190897,
+        "carbs": 63.61567635903919,
+        "fat": 20.70796460176991
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 0,
+      "retrieval_score": 0.732
+    },
+    {
+      "scenario": "Vegan Oat Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Vegan Oat Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 340.7,
+      "calorie_deviation": 0.026571428571428603,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.86,
+      "scale_clamped": false,
+      "protein_g": 14.2,
+      "macro_percent": {
+        "protein": 15.88366890380313,
+        "carbs": 57.94183445190156,
+        "fat": 26.1744966442953
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 0,
+      "retrieval_score": 0.817
+    },
+    {
+      "scenario": "Egg Breakfast Wrap / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Egg Breakfast Wrap",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 340.0,
+      "calorie_deviation": 0.02857142857142857,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.9,
+      "scale_clamped": false,
+      "protein_g": 16.6,
+      "macro_percent": {
+        "protein": 19.483568075117372,
+        "carbs": 46.71361502347417,
+        "fat": 33.80281690140845
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.94
+    },
+    {
+      "scenario": "Turkey Meatball Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Turkey Meatball Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 465.3,
+      "calorie_deviation": 0.32942857142857146,
+      "within_tolerance": false,
+      "within_calorie_target": false,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.49,
+      "scale_clamped": false,
+      "protein_g": 21.2,
+      "macro_percent": {
+        "protein": 18.154570755726823,
+        "carbs": 45.04388781845429,
+        "fat": 36.80154142581888
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.002
+    },
+    {
+      "scenario": "Falafel Salad Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Falafel Salad Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 374.4,
+      "calorie_deviation": 0.06971428571428565,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 14.2,
+      "macro_percent": {
+        "protein": 14.86910994764398,
+        "carbs": 51.204188481675395,
+        "fat": 33.92670157068063
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 1,
+      "retrieval_score": 0.792
+    },
+    {
+      "scenario": "Tuna Sushi Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tuna Sushi Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 339.1,
+      "calorie_deviation": 0.031142857142857076,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.73,
+      "scale_clamped": false,
+      "protein_g": 22.0,
+      "macro_percent": {
+        "protein": 26.378896882494004,
+        "carbs": 46.642685851318944,
+        "fat": 26.978417266187048
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.912
+    },
+    {
+      "scenario": "Peanut Tofu Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Peanut Tofu Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 346.1,
+      "calorie_deviation": 0.011142857142857078,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 19.2,
+      "macro_percent": {
+        "protein": 21.80579216354344,
+        "carbs": 45.99659284497445,
+        "fat": 32.19761499148211
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.869
+    },
+    {
+      "scenario": "Chicken Vegetable Soup Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Vegetable Soup Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 350.2,
+      "calorie_deviation": 0.0005714285714285389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 29.1,
+      "macro_percent": {
+        "protein": 32.03082003302146,
+        "carbs": 46.67033571821684,
+        "fat": 21.298844248761693
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.99
+    },
+    {
+      "scenario": "Sweet Potato Chicken Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Sweet Potato Chicken Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 343.1,
+      "calorie_deviation": 0.01971428571428565,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.79,
+      "scale_clamped": true,
+      "protein_g": 35.6,
+      "macro_percent": {
+        "protein": 40.52361980648833,
+        "carbs": 39.49914627205464,
+        "fat": 19.977233921457028
+      },
+      "macros_in_range": {
+        "protein": false,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.042
+    },
+    {
+      "scenario": "Black Bean Burrito Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Black Bean Burrito Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 330.5,
+      "calorie_deviation": 0.055714285714285716,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.72,
+      "scale_clamped": false,
+      "protein_g": 10.9,
+      "macro_percent": {
+        "protein": 12.834854283191051,
+        "carbs": 60.406240800706506,
+        "fat": 26.758904916102445
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.951
+    },
+    {
+      "scenario": "Turkey Sweet Potato Hash / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Turkey Sweet Potato Hash",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 353.0,
+      "calorie_deviation": 0.008571428571428572,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.59,
+      "scale_clamped": false,
+      "protein_g": 18.9,
+      "macro_percent": {
+        "protein": 21.325811001410436,
+        "carbs": 27.64456981664316,
+        "fat": 51.0296191819464
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.142
+    },
+    {
+      "scenario": "Cottage Cheese Toast Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Cottage Cheese Toast Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.5,
+      "calorie_deviation": 0.007142857142857143,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.94,
+      "scale_clamped": false,
+      "protein_g": 15.0,
+      "macro_percent": {
+        "protein": 16.25575724735844,
+        "carbs": 49.85098889189921,
+        "fat": 33.89325386074234
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.08
+    },
+    {
+      "scenario": "Low-Sodium Salmon Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Low-Sodium Salmon Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.8,
+      "calorie_deviation": 0.0005714285714285389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.42,
+      "scale_clamped": true,
+      "protein_g": 18.6,
+      "macro_percent": {
+        "protein": 21.43474503025065,
+        "carbs": 26.96629213483146,
+        "fat": 51.598962834917884
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.03
+    },
+    {
+      "scenario": "Lemon Cod Potato Traybake / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Lemon Cod Potato Traybake",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 410.0,
+      "calorie_deviation": 0.17142857142857143,
+      "within_tolerance": false,
+      "within_calorie_target": false,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.47,
+      "scale_clamped": false,
+      "protein_g": 11.9,
+      "macro_percent": {
+        "protein": 12.34119782214156,
+        "carbs": 31.423386051335232,
+        "fat": 56.2354161265232
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.01
+    },
+    {
+      "scenario": "Pork Stir Fry Noodles / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Pork Stir Fry Noodles",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 341.0,
+      "calorie_deviation": 0.025714285714285714,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 23.5,
+      "macro_percent": {
+        "protein": 28.825513646120818,
+        "carbs": 49.92333639987734,
+        "fat": 21.25114995400184
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.013
+    },
+    {
+      "scenario": "Tempeh Quinoa Power Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tempeh Quinoa Power Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 351.3,
+      "calorie_deviation": 0.0037142857142857468,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 18.1,
+      "macro_percent": {
+        "protein": 20.04984768762116,
+        "carbs": 46.30296316809748,
+        "fat": 33.64718914428136
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Edamame Brown Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Edamame Brown Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.0,
+      "calorie_deviation": 0.002857142857142857,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.72,
+      "scale_clamped": false,
+      "protein_g": 14.5,
+      "macro_percent": {
+        "protein": 15.654520917678813,
+        "carbs": 60.78272604588394,
+        "fat": 23.562753036437247
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    },
+    {
+      "scenario": "Moroccan Chicken Couscous / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Moroccan Chicken Couscous",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 362.8,
+      "calorie_deviation": 0.0365714285714286,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.49,
+      "scale_clamped": true,
+      "protein_g": 17.6,
+      "macro_percent": {
+        "protein": 18.5997357992074,
+        "carbs": 35.508586525759576,
+        "fat": 45.89167767503302
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Almond Crusted Chicken Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Almond Crusted Chicken Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 330.9,
+      "calorie_deviation": 0.05457142857142864,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 17.9,
+      "macro_percent": {
+        "protein": 20.990911756083257,
+        "carbs": 47.6106713573732,
+        "fat": 31.398416886543533
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.064
+    },
+    {
+      "scenario": "Cashew Chicken Stir Fry / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Cashew Chicken Stir Fry",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 341.1,
+      "calorie_deviation": 0.025428571428571363,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 17.8,
+      "macro_percent": {
+        "protein": 22.326748196926935,
+        "carbs": 46.91125744747569,
+        "fat": 30.761994355597363
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.983
+    },
+    {
+      "scenario": "Beef Mushroom Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Beef Mushroom Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 353.3,
+      "calorie_deviation": 0.009428571428571461,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 15.6,
+      "macro_percent": {
+        "protein": 17.086527929901425,
+        "carbs": 49.397590361445786,
+        "fat": 33.51588170865279
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.022
+    },
+    {
+      "scenario": "Pumpkin Lentil Soup / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Pumpkin Lentil Soup",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 378.9,
+      "calorie_deviation": 0.0825714285714285,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 16.0,
+      "macro_percent": {
+        "protein": 16.264294790343076,
+        "carbs": 56.518424396442185,
+        "fat": 27.21728081321474
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.989
+    },
+    {
+      "scenario": "Salmon Potato Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Salmon Potato Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 356.8,
+      "calorie_deviation": 0.01942857142857146,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.49,
+      "scale_clamped": false,
+      "protein_g": 18.0,
+      "macro_percent": {
+        "protein": 20.23040179825794,
+        "carbs": 18.319752739533577,
+        "fat": 61.449845462208486
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.04
+    },
+    {
+      "scenario": "Turkey Zucchini Pasta / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Turkey Zucchini Pasta",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.2,
+      "calorie_deviation": 0.0022857142857143184,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.56,
+      "scale_clamped": true,
+      "protein_g": 16.6,
+      "macro_percent": {
+        "protein": 19.500734214390604,
+        "carbs": 25.25697503671072,
+        "fat": 55.242290748898675
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.085
+    },
+    {
+      "scenario": "Chickpea Hummus Wrap / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chickpea Hummus Wrap",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 354.8,
+      "calorie_deviation": 0.013714285714285747,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.54,
+      "scale_clamped": true,
+      "protein_g": 10.7,
+      "macro_percent": {
+        "protein": 11.945297236952277,
+        "carbs": 45.1018699413899,
+        "fat": 42.952832821657836
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    },
+    {
+      "scenario": "Tofu Mushroom Noodle Soup / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tofu Mushroom Noodle Soup",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 335.8,
+      "calorie_deviation": 0.040571428571428536,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 15.2,
+      "macro_percent": {
+        "protein": 18.280216476247748,
+        "carbs": 55.20144317498497,
+        "fat": 26.51834034876729
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.965
+    },
+    {
+      "scenario": "Chicken Pumpkin Soup / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Pumpkin Soup",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 359.4,
+      "calorie_deviation": 0.02685714285714279,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.58,
+      "scale_clamped": false,
+      "protein_g": 25.7,
+      "macro_percent": {
+        "protein": 27.83644733279177,
+        "carbs": 29.027890603845115,
+        "fat": 43.13566206336312
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.943
+    },
+    {
+      "scenario": "Pork Sweet Potato Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Pork Sweet Potato Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 353.6,
+      "calorie_deviation": 0.010285714285714351,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.69,
+      "scale_clamped": false,
+      "protein_g": 30.4,
+      "macro_percent": {
+        "protein": 33.151581243184296,
+        "carbs": 46.23773173391494,
+        "fat": 20.610687022900766
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.101
+    },
+    {
+      "scenario": "Cod Fish Tacos / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Cod Fish Tacos",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 356.4,
+      "calorie_deviation": 0.01828571428571422,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.54,
+      "scale_clamped": false,
+      "protein_g": 10.9,
+      "macro_percent": {
+        "protein": 12.230014025245442,
+        "carbs": 41.06591865357644,
+        "fat": 46.70406732117812
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.975
+    },
+    {
+      "scenario": "Shrimp Couscous Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Couscous Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.8,
+      "calorie_deviation": 0.008000000000000033,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.79,
+      "scale_clamped": false,
+      "protein_g": 19.8,
+      "macro_percent": {
+        "protein": 24.48979591836735,
+        "carbs": 46.01113172541745,
+        "fat": 29.499072356215216
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.986
+    },
+    {
+      "scenario": "Beef Potato Hash / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Beef Potato Hash",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 374.3,
+      "calorie_deviation": 0.06942857142857146,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.43,
+      "scale_clamped": false,
+      "protein_g": 15.6,
+      "macro_percent": {
+        "protein": 17.478991596638654,
+        "carbs": 18.48739495798319,
+        "fat": 64.03361344537815
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.071
+    },
+    {
+      "scenario": "Mushroom Egg Toast / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Mushroom Egg Toast",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.8,
+      "calorie_deviation": 0.0005714285714285389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.74,
+      "scale_clamped": false,
+      "protein_g": 19.0,
+      "macro_percent": {
+        "protein": 20.479655079493398,
+        "carbs": 45.80975478307734,
+        "fat": 33.710590137429264
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.937
+    },
+    {
+      "scenario": "Almond Banana Overnight Oats / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Almond Banana Overnight Oats",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 376.5,
+      "calorie_deviation": 0.07571428571428572,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 12.4,
+      "macro_percent": {
+        "protein": 12.753921316533813,
+        "carbs": 58.31833376189251,
+        "fat": 28.927744921573666
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 1,
+      "retrieval_score": 0.917
+    },
+    {
+      "scenario": "Tempeh Taco Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tempeh Taco Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 340.8,
+      "calorie_deviation": 0.026285714285714253,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 16.1,
+      "macro_percent": {
+        "protein": 17.98882681564246,
+        "carbs": 56.87150837988827,
+        "fat": 25.139664804469273
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.75
+    },
+    {
+      "scenario": "Chicken Quinoa Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Quinoa Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 348.8,
+      "calorie_deviation": 0.0034285714285713963,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 25.8,
+      "macro_percent": {
+        "protein": 29.202037351443124,
+        "carbs": 45.840407470288625,
+        "fat": 24.957555178268255
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.055
+    },
+    {
+      "scenario": "Tuna Pasta Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tuna Pasta Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 367.5,
+      "calorie_deviation": 0.05,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.88,
+      "scale_clamped": true,
+      "protein_g": 26.1,
+      "macro_percent": {
+        "protein": 28.5792499315631,
+        "carbs": 29.78373939228032,
+        "fat": 41.63701067615659
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.088
+    },
+    {
+      "scenario": "Pork Fried Rice / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Pork Fried Rice",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.3,
+      "calorie_deviation": 0.006571428571428604,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 24.7,
+      "macro_percent": {
+        "protein": 27.823148408898906,
+        "carbs": 46.071529146719236,
+        "fat": 26.105322444381866
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.027
+    },
+    {
+      "scenario": "Ginger Cod Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Ginger Cod Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 378.0,
+      "calorie_deviation": 0.08,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.7,
+      "scale_clamped": false,
+      "protein_g": 12.2,
+      "macro_percent": {
+        "protein": 12.642487046632125,
+        "carbs": 62.17616580310881,
+        "fat": 25.181347150259068
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.872
+    },
+    {
+      "scenario": "Edamame Noodle Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Edamame Noodle Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 349.0,
+      "calorie_deviation": 0.002857142857142857,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 12.5,
+      "macro_percent": {
+        "protein": 14.619883040935672,
+        "carbs": 62.22222222222222,
+        "fat": 23.157894736842106
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.845
+    },
+    {
+      "scenario": "Glazed Chicken Thigh Rice Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Glazed Chicken Thigh Rice Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 361.7,
+      "calorie_deviation": 0.0334285714285714,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.6,
+      "scale_clamped": false,
+      "protein_g": 18.4,
+      "macro_percent": {
+        "protein": 19.39393939393939,
+        "carbs": 28.669301712779973,
+        "fat": 51.93675889328063
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.133
+    },
+    {
+      "scenario": "Lentil Potato Curry / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Lentil Potato Curry",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 350.5,
+      "calorie_deviation": 0.0014285714285714286,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 13.7,
+      "macro_percent": {
+        "protein": 15.63034797490017,
+        "carbs": 50.998288648031945,
+        "fat": 33.37136337706788
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.964
+    },
+    {
+      "scenario": "Black Bean Quinoa Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Black Bean Quinoa Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 357.1,
+      "calorie_deviation": 0.02028571428571435,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.5,
+      "scale_clamped": false,
+      "protein_g": 9.6,
+      "macro_percent": {
+        "protein": 11.185551995339354,
+        "carbs": 42.411884648995056,
+        "fat": 46.4025633556656
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.89
+    },
+    {
+      "scenario": "Turkey Couscous Meatballs / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Turkey Couscous Meatballs",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 364.2,
+      "calorie_deviation": 0.040571428571428536,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.52,
+      "scale_clamped": false,
+      "protein_g": 16.8,
+      "macro_percent": {
+        "protein": 18.90827236916151,
+        "carbs": 28.925154755205405,
+        "fat": 52.16657287563309
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.071
+    },
+    {
+      "scenario": "Steak and Potato Wedges / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Steak and Potato Wedges",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 356.8,
+      "calorie_deviation": 0.01942857142857146,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.51,
+      "scale_clamped": true,
+      "protein_g": 23.7,
+      "macro_percent": {
+        "protein": 26.369958275382476,
+        "carbs": 19.80528511821975,
+        "fat": 53.82475660639778
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.157
+    },
+    {
+      "scenario": "Salmon Noodle Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Salmon Noodle Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 345.1,
+      "calorie_deviation": 0.013999999999999934,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 17.7,
+      "macro_percent": {
+        "protein": 20.563462097008422,
+        "carbs": 46.23874528027882,
+        "fat": 33.19779262271275
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.86
+    },
+    {
+      "scenario": "Chicken Sweet Potato Tacos / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Sweet Potato Tacos",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 341.4,
+      "calorie_deviation": 0.024571428571428636,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 25.0,
+      "macro_percent": {
+        "protein": 28.72737719046251,
+        "carbs": 46.193622522263716,
+        "fat": 25.07900028727377
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.072
+    },
+    {
+      "scenario": "Tofu Scramble Toast / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Tofu Scramble Toast",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 352.0,
+      "calorie_deviation": 0.005714285714285714,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.66,
+      "scale_clamped": false,
+      "protein_g": 20.3,
+      "macro_percent": {
+        "protein": 22.167622167622167,
+        "carbs": 48.594048594048594,
+        "fat": 29.238329238329236
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Peanut Butter Banana Toast / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Peanut Butter Banana Toast",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 354.3,
+      "calorie_deviation": 0.012285714285714318,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.7,
+      "scale_clamped": false,
+      "protein_g": 16.3,
+      "macro_percent": {
+        "protein": 17.005738132498696,
+        "carbs": 48.72196139801774,
+        "fat": 34.27230046948357
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 1,
+      "retrieval_score": 1.069
+    },
+    {
+      "scenario": "Cashew Tofu Curry / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Cashew Tofu Curry",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 353.4,
+      "calorie_deviation": 0.00971428571428565,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 14.0,
+      "macro_percent": {
+        "protein": 16.180294712510833,
+        "carbs": 49.23432533949725,
+        "fat": 34.58537994799191
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.84
+    },
+    {
+      "scenario": "Mediterranean Couscous Salad / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Mediterranean Couscous Salad",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 345.8,
+      "calorie_deviation": 0.011999999999999967,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.72,
+      "scale_clamped": false,
+      "protein_g": 12.3,
+      "macro_percent": {
+        "protein": 14.859559045605556,
+        "carbs": 64.75385080036243,
+        "fat": 20.386590154032014
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.865
+    },
+    {
+      "scenario": "Pork Burrito Bowl / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Pork Burrito Bowl",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 354.1,
+      "calorie_deviation": 0.01171428571428578,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.67,
+      "scale_clamped": false,
+      "protein_g": 18.3,
+      "macro_percent": {
+        "protein": 19.918367346938776,
+        "carbs": 57.795918367346935,
+        "fat": 22.285714285714285
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.91
+    },
+    {
+      "scenario": "Chicken Hummus Plate / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Chicken Hummus Plate",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 348.5,
+      "calorie_deviation": 0.004285714285714286,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.66,
+      "scale_clamped": false,
+      "protein_g": 20.8,
+      "macro_percent": {
+        "protein": 22.7198252321136,
+        "carbs": 46.313489896231566,
+        "fat": 30.966684871654834
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.036
+    },
+    {
+      "scenario": "Shrimp Noodle Stir Fry / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Noodle Stir Fry",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 360.9,
+      "calorie_deviation": 0.031142857142857076,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": true,
+      "scale_factor": 0.54,
+      "scale_clamped": true,
+      "protein_g": 20.3,
+      "macro_percent": {
+        "protein": 23.62525458248472,
+        "carbs": 47.83241198719813,
+        "fat": 28.542333430317132
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.007
+    },
+    {
+      "scenario": "Potato Zucchini Frittata / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Potato Zucchini Frittata",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 361.3,
+      "calorie_deviation": 0.03228571428571432,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.63,
+      "scale_clamped": false,
+      "protein_g": 16.7,
+      "macro_percent": {
+        "protein": 18.591706095185085,
+        "carbs": 19.03701642081826,
+        "fat": 62.37127748399667
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.044
+    },
+    {
+      "scenario": "Mushroom Tempeh Noodles / older sedentary woman, losing",
+      "plan_status": "matched",
+      "meal_name": "Mushroom Tempeh Noodles",
+      "daily_budget_kcal": 1200.0,
+      "target_meal_kcal": 350,
+      "verified_kcal": 384.3,
+      "calorie_deviation": 0.09800000000000003,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 0.65,
+      "scale_clamped": true,
+      "protein_g": 20.0,
+      "macro_percent": {
+        "protein": 19.960079840319363,
+        "carbs": 49.500998003992024,
+        "fat": 30.538922155688628
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    },
+    {
+      "scenario": "Chicken Fried Rice / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Fried Rice",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 808.8,
+      "calorie_deviation": 0.00024721878862799196,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.11,
+      "scale_clamped": false,
+      "protein_g": 60.5,
+      "macro_percent": {
+        "protein": 30.047181524708215,
+        "carbs": 47.82716662527936,
+        "fat": 22.125651850012414
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.999
+    },
+    {
+      "scenario": "Tofu Fried Rice / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tofu Fried Rice",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 810.3,
+      "calorie_deviation": 0.001606922126081526,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.28,
+      "scale_clamped": false,
+      "protein_g": 36.2,
+      "macro_percent": {
+        "protein": 18.43177189409369,
+        "carbs": 58.65580448065173,
+        "fat": 22.912423625254583
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.842
+    },
+    {
+      "scenario": "High-Protein Turkey Burger Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Turkey Burger Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 813.7,
+      "calorie_deviation": 0.005809641532756545,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.32,
+      "scale_clamped": true,
+      "protein_g": 46.7,
+      "macro_percent": {
+        "protein": 23.121673474439906,
+        "carbs": 23.963361802203245,
+        "fat": 52.91496472335685
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.988
+    },
+    {
+      "scenario": "High-Protein Tomato Turkey Pasta / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Tomato Turkey Pasta",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 772.8,
+      "calorie_deviation": 0.04474660074165642,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.14,
+      "scale_clamped": false,
+      "protein_g": 36.3,
+      "macro_percent": {
+        "protein": 19.584569732937684,
+        "carbs": 46.66846506609118,
+        "fat": 33.74696520097114
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.94
+    },
+    {
+      "scenario": "Chicken Avocado Power Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Avocado Power Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 811.6,
+      "calorie_deviation": 0.0032138442521631927,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.28,
+      "scale_clamped": false,
+      "protein_g": 53.0,
+      "macro_percent": {
+        "protein": 25.471584765108734,
+        "carbs": 46.52168689174576,
+        "fat": 28.006728343145497
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.971
+    },
+    {
+      "scenario": "High-Protein Asian Tofu Noodle Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "High-Protein Asian Tofu Noodle Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 806.7,
+      "calorie_deviation": 0.0028430160692212046,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.27,
+      "scale_clamped": false,
+      "protein_g": 52.5,
+      "macro_percent": {
+        "protein": 27.156342945816633,
+        "carbs": 51.778093883357045,
+        "fat": 21.06556317082633
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.971
+    },
+    {
+      "scenario": "Chicken Vegetable Stir Fry / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Vegetable Stir Fry",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 813.8,
+      "calorie_deviation": 0.0059332509270704015,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.28,
+      "scale_clamped": false,
+      "protein_g": 64.4,
+      "macro_percent": {
+        "protein": 30.50686878256751,
+        "carbs": 46.470866887730935,
+        "fat": 23.022264329701564
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.125
+    },
+    {
+      "scenario": "Vegetarian Spinach Omelette / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Vegetarian Spinach Omelette",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 795.9,
+      "calorie_deviation": 0.016192830655129817,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.3,
+      "scale_clamped": true,
+      "protein_g": 33.9,
+      "macro_percent": {
+        "protein": 16.538602268569335,
+        "carbs": 29.56458104646908,
+        "fat": 53.89681668496157
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.84
+    },
+    {
+      "scenario": "Tuna Brown Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tuna Brown Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 821.4,
+      "calorie_deviation": 0.015327564894931986,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 52.9,
+      "macro_percent": {
+        "protein": 25.4632972322503,
+        "carbs": 45.7280385078219,
+        "fat": 28.8086642599278
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.984
+    },
+    {
+      "scenario": "Chicken Salad Wrap / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Salad Wrap",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 869.5,
+      "calorie_deviation": 0.07478368355995056,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": false,
+      "scale_factor": 1.38,
+      "scale_clamped": false,
+      "protein_g": 62.5,
+      "macro_percent": {
+        "protein": 28.55837331505597,
+        "carbs": 25.999543066026956,
+        "fat": 45.44208361891706
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.875
+    },
+    {
+      "scenario": "Low-Sodium Chicken Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Low-Sodium Chicken Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 804.5,
+      "calorie_deviation": 0.005562422744128554,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.44,
+      "scale_clamped": false,
+      "protein_g": 63.3,
+      "macro_percent": {
+        "protein": 30.46564793646974,
+        "carbs": 45.81879436890868,
+        "fat": 23.715557694621584
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 1.056
+    },
+    {
+      "scenario": "Vegan Burrito Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Vegan Burrito Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 803.8,
+      "calorie_deviation": 0.006427688504326385,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.51,
+      "scale_clamped": false,
+      "protein_g": 26.8,
+      "macro_percent": {
+        "protein": 13.156602847324496,
+        "carbs": 53.70643102601865,
+        "fat": 33.136966126656844
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.813
+    },
+    {
+      "scenario": "Lean Steak Rice Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Lean Steak Rice Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 815.9,
+      "calorie_deviation": 0.008529048207663755,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.37,
+      "scale_clamped": false,
+      "protein_g": 61.9,
+      "macro_percent": {
+        "protein": 29.23948984411904,
+        "carbs": 46.10297590930563,
+        "fat": 24.657534246575345
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.996
+    },
+    {
+      "scenario": "Steak Salad Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Steak Salad Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 809.1,
+      "calorie_deviation": 0.00012360939431399598,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.47,
+      "scale_clamped": false,
+      "protein_g": 51.4,
+      "macro_percent": {
+        "protein": 24.791993247317013,
+        "carbs": 46.014711202218734,
+        "fat": 29.193295550464246
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.824
+    },
+    {
+      "scenario": "Salmon Quinoa Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Salmon Quinoa Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 920.8,
+      "calorie_deviation": 0.138195302843016,
+      "within_tolerance": true,
+      "within_calorie_target": false,
+      "meets_targets": false,
+      "rescaled": false,
+      "scale_factor": 1.31,
+      "scale_clamped": false,
+      "protein_g": 55.9,
+      "macro_percent": {
+        "protein": 24.421144604630847,
+        "carbs": 21.712538226299696,
+        "fat": 53.86631716906947
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.997
+    },
+    {
+      "scenario": "Shrimp Taco Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Taco Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 814.9,
+      "calorie_deviation": 0.007292954264524075,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 56.1,
+      "macro_percent": {
+        "protein": 26.83568524276489,
+        "carbs": 45.3958383161923,
+        "fat": 27.76847644104281
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.013
+    },
+    {
+      "scenario": "Chickpea Curry Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chickpea Curry Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 818.5,
+      "calorie_deviation": 0.011742892459826947,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 30.1,
+      "macro_percent": {
+        "protein": 14.111579934364745,
+        "carbs": 61.83778715424285,
+        "fat": 24.050632911392405
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.823
+    },
+    {
+      "scenario": "Lentil Bolognese Pasta / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Lentil Bolognese Pasta",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 808.9,
+      "calorie_deviation": 0.00012360939431399598,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": true,
+      "scale_factor": 1.56,
+      "scale_clamped": false,
+      "protein_g": 38.2,
+      "macro_percent": {
+        "protein": 19.019168533731644,
+        "carbs": 55.663430420711975,
+        "fat": 25.317401045556387
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.842
+    },
+    {
+      "scenario": "Greek Chicken Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Greek Chicken Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 766.7,
+      "calorie_deviation": 0.052286773794808346,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.45,
+      "scale_clamped": false,
+      "protein_g": 48.8,
+      "macro_percent": {
+        "protein": 25.11256914962048,
+        "carbs": 46.05686350186543,
+        "fat": 28.830567348514084
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.772
+    },
+    {
+      "scenario": "Turkey Chili Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Turkey Chili Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 798.1,
+      "calorie_deviation": 0.01347342398022247,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.45,
+      "scale_clamped": false,
+      "protein_g": 41.1,
+      "macro_percent": {
+        "protein": 20.702682281828483,
+        "carbs": 49.71666037023045,
+        "fat": 29.580657347941063
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.955
+    },
+    {
+      "scenario": "Beef Taco Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Beef Taco Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 804.0,
+      "calorie_deviation": 0.006180469715698393,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.94,
+      "scale_clamped": false,
+      "protein_g": 36.3,
+      "macro_percent": {
+        "protein": 18.197769144003008,
+        "carbs": 22.80987592430129,
+        "fat": 58.9923549316957
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.025
+    },
+    {
+      "scenario": "Banana Oat Protein Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Banana Oat Protein Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 771.1,
+      "calorie_deviation": 0.04684796044499379,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 30.9,
+      "macro_percent": {
+        "protein": 15.523737754333082,
+        "carbs": 62.54709871891484,
+        "fat": 21.92916352675207
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 0,
+      "retrieval_score": 0.732
+    },
+    {
+      "scenario": "Vegan Oat Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Vegan Oat Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 739.0,
+      "calorie_deviation": 0.0865265760197775,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 31.3,
+      "macro_percent": {
+        "protein": 16.213416213416213,
+        "carbs": 59.77725977725977,
+        "fat": 24.009324009324008
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 0,
+      "retrieval_score": 0.817
+    },
+    {
+      "scenario": "Egg Breakfast Wrap / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Egg Breakfast Wrap",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 803.2,
+      "calorie_deviation": 0.00716934487021008,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 38.2,
+      "macro_percent": {
+        "protein": 18.903872324631948,
+        "carbs": 46.9132747742175,
+        "fat": 34.18285290115057
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.94
+    },
+    {
+      "scenario": "Turkey Meatball Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Turkey Meatball Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 808.2,
+      "calorie_deviation": 0.0009888751545116866,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 36.8,
+      "macro_percent": {
+        "protein": 18.342679127725855,
+        "carbs": 47.45171339563863,
+        "fat": 34.205607476635514
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.002
+    },
+    {
+      "scenario": "Falafel Salad Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Falafel Salad Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 811.7,
+      "calorie_deviation": 0.0033374536464771884,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.43,
+      "scale_clamped": false,
+      "protein_g": 31.6,
+      "macro_percent": {
+        "protein": 15.208759475394057,
+        "carbs": 52.41246540729155,
+        "fat": 32.378775117314404
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 1,
+      "retrieval_score": 0.792
+    },
+    {
+      "scenario": "Tuna Sushi Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tuna Sushi Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 818.6,
+      "calorie_deviation": 0.011866501854140944,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 53.4,
+      "macro_percent": {
+        "protein": 26.623457559516392,
+        "carbs": 45.66870248036894,
+        "fat": 27.707839960114672
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.912
+    },
+    {
+      "scenario": "Peanut Tofu Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Peanut Tofu Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 814.1,
+      "calorie_deviation": 0.006304079110012389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.42,
+      "scale_clamped": false,
+      "protein_g": 44.2,
+      "macro_percent": {
+        "protein": 21.365558912386707,
+        "carbs": 49.16012084592145,
+        "fat": 29.474320241691842
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.869
+    },
+    {
+      "scenario": "Chicken Vegetable Soup Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Vegetable Soup Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 808.5,
+      "calorie_deviation": 0.0006180469715698393,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.46,
+      "scale_clamped": false,
+      "protein_g": 61.9,
+      "macro_percent": {
+        "protein": 29.469174006189,
+        "carbs": 45.8938348012378,
+        "fat": 24.636991192573195
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.99
+    },
+    {
+      "scenario": "Sweet Potato Chicken Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Sweet Potato Chicken Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 807.8,
+      "calorie_deviation": 0.0014833127317676706,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.4,
+      "scale_clamped": false,
+      "protein_g": 66.0,
+      "macro_percent": {
+        "protein": 31.938059520929112,
+        "carbs": 46.068231308976536,
+        "fat": 21.993709170094366
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.042
+    },
+    {
+      "scenario": "Black Bean Burrito Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Black Bean Burrito Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 822.1,
+      "calorie_deviation": 0.016192830655129817,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 27.7,
+      "macro_percent": {
+        "protein": 13.095378796832525,
+        "carbs": 59.9929086396407,
+        "fat": 26.91171256352677
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.951
+    },
+    {
+      "scenario": "Turkey Sweet Potato Hash / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Turkey Sweet Potato Hash",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 811.3,
+      "calorie_deviation": 0.0028430160692212046,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 35.5,
+      "macro_percent": {
+        "protein": 17.27493917274939,
+        "carbs": 48.564476885644766,
+        "fat": 34.160583941605836
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.142
+    },
+    {
+      "scenario": "Cottage Cheese Toast Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Cottage Cheese Toast Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 815.9,
+      "calorie_deviation": 0.008529048207663755,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 33.2,
+      "macro_percent": {
+        "protein": 15.483269208347908,
+        "carbs": 49.994170455870346,
+        "fat": 34.52256033578173
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.08
+    },
+    {
+      "scenario": "Low-Sodium Salmon Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Low-Sodium Salmon Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 812.3,
+      "calorie_deviation": 0.0040791100123608835,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.99,
+      "scale_clamped": false,
+      "protein_g": 42.0,
+      "macro_percent": {
+        "protein": 20.8307501549907,
+        "carbs": 27.27836329820211,
+        "fat": 51.89088654680719
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.03
+    },
+    {
+      "scenario": "Lemon Cod Potato Traybake / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Lemon Cod Potato Traybake",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 962.2,
+      "calorie_deviation": 0.1893695920889988,
+      "within_tolerance": false,
+      "within_calorie_target": false,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.04,
+      "scale_clamped": true,
+      "protein_g": 26.7,
+      "macro_percent": {
+        "protein": 11.814159292035399,
+        "carbs": 30.442477876106196,
+        "fat": 57.743362831858406
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.01
+    },
+    {
+      "scenario": "Pork Stir Fry Noodles / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Pork Stir Fry Noodles",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 823.0,
+      "calorie_deviation": 0.0173053152039555,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.18,
+      "scale_clamped": false,
+      "protein_g": 44.8,
+      "macro_percent": {
+        "protein": 22.428035043804755,
+        "carbs": 54.81852315394243,
+        "fat": 22.753441802252816
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.013
+    },
+    {
+      "scenario": "Tempeh Quinoa Power Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tempeh Quinoa Power Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 809.3,
+      "calorie_deviation": 0.00037082818294184735,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.41,
+      "scale_clamped": false,
+      "protein_g": 43.7,
+      "macro_percent": {
+        "protein": 20.97432205423566,
+        "carbs": 45.98032157427405,
+        "fat": 33.04535637149028
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Edamame Brown Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Edamame Brown Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 810.1,
+      "calorie_deviation": 0.0013597033374536747,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 31.5,
+      "macro_percent": {
+        "protein": 14.754098360655737,
+        "carbs": 59.11007025761124,
+        "fat": 26.13583138173302
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    },
+    {
+      "scenario": "Moroccan Chicken Couscous / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Moroccan Chicken Couscous",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 803.9,
+      "calorie_deviation": 0.006304079110012389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.34,
+      "scale_clamped": false,
+      "protein_g": 34.6,
+      "macro_percent": {
+        "protein": 16.743285748850713,
+        "carbs": 49.50399225744012,
+        "fat": 33.752721993709166
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Almond Crusted Chicken Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Almond Crusted Chicken Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 810.7,
+      "calorie_deviation": 0.00210135970333751,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.26,
+      "scale_clamped": false,
+      "protein_g": 50.5,
+      "macro_percent": {
+        "protein": 24.25552353506244,
+        "carbs": 45.91738712776177,
+        "fat": 29.827089337175796
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.064
+    },
+    {
+      "scenario": "Cashew Chicken Stir Fry / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Cashew Chicken Stir Fry",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 808.4,
+      "calorie_deviation": 0.0007416563658838353,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.16,
+      "scale_clamped": false,
+      "protein_g": 54.6,
+      "macro_percent": {
+        "protein": 28.363636363636363,
+        "carbs": 47.324675324675326,
+        "fat": 24.31168831168831
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.983
+    },
+    {
+      "scenario": "Beef Mushroom Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Beef Mushroom Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 800.5,
+      "calorie_deviation": 0.010506798516687269,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.45,
+      "scale_clamped": false,
+      "protein_g": 37.4,
+      "macro_percent": {
+        "protein": 18.13773035887488,
+        "carbs": 47.8176527643065,
+        "fat": 34.04461687681862
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.022
+    },
+    {
+      "scenario": "Pumpkin Lentil Soup / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Pumpkin Lentil Soup",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 803.7,
+      "calorie_deviation": 0.0065512978986402405,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.44,
+      "scale_clamped": false,
+      "protein_g": 34.6,
+      "macro_percent": {
+        "protein": 16.55304389427102,
+        "carbs": 57.505083124028225,
+        "fat": 25.941872981700755
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.989
+    },
+    {
+      "scenario": "Salmon Potato Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Salmon Potato Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 787.5,
+      "calorie_deviation": 0.02657601977750309,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.12,
+      "scale_clamped": false,
+      "protein_g": 43.6,
+      "macro_percent": {
+        "protein": 22.30179028132992,
+        "carbs": 19.232736572890026,
+        "fat": 58.46547314578005
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.04
+    },
+    {
+      "scenario": "Turkey Zucchini Pasta / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Turkey Zucchini Pasta",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 797.6,
+      "calorie_deviation": 0.014091470951792308,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.27,
+      "scale_clamped": false,
+      "protein_g": 36.4,
+      "macro_percent": {
+        "protein": 18.980576196063097,
+        "carbs": 47.347151609959596,
+        "fat": 33.67227219397732
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.085
+    },
+    {
+      "scenario": "Chickpea Hummus Wrap / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chickpea Hummus Wrap",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 805.7,
+      "calorie_deviation": 0.0040791100123608835,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.5,
+      "scale_clamped": false,
+      "protein_g": 27.2,
+      "macro_percent": {
+        "protein": 13.683813356810466,
+        "carbs": 52.47138724688719,
+        "fat": 33.84479939630235
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    },
+    {
+      "scenario": "Tofu Mushroom Noodle Soup / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tofu Mushroom Noodle Soup",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 806.2,
+      "calorie_deviation": 0.003461063040791044,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.36,
+      "scale_clamped": false,
+      "protein_g": 33.9,
+      "macro_percent": {
+        "protein": 16.95423855963991,
+        "carbs": 60.31507876969243,
+        "fat": 22.73068267066767
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.965
+    },
+    {
+      "scenario": "Chicken Pumpkin Soup / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Pumpkin Soup",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 787.4,
+      "calorie_deviation": 0.026699629171817087,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.58,
+      "scale_clamped": false,
+      "protein_g": 41.8,
+      "macro_percent": {
+        "protein": 20.387757590537742,
+        "carbs": 45.70174368979393,
+        "fat": 33.91049871966833
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.943
+    },
+    {
+      "scenario": "Pork Sweet Potato Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Pork Sweet Potato Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 807.9,
+      "calorie_deviation": 0.0013597033374536747,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": false,
+      "protein_g": 56.6,
+      "macro_percent": {
+        "protein": 27.068388330942135,
+        "carbs": 50.1195600191296,
+        "fat": 22.812051649928264
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.101
+    },
+    {
+      "scenario": "Cod Fish Tacos / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Cod Fish Tacos",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 809.8,
+      "calorie_deviation": 0.0009888751545116866,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.2,
+      "scale_clamped": true,
+      "protein_g": 24.2,
+      "macro_percent": {
+        "protein": 11.977233358079683,
+        "carbs": 40.138579559514966,
+        "fat": 47.88418708240534
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.975
+    },
+    {
+      "scenario": "Shrimp Couscous Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Couscous Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 803.8,
+      "calorie_deviation": 0.006427688504326385,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 61.8,
+      "macro_percent": {
+        "protein": 33.2124143490528,
+        "carbs": 46.59411527609835,
+        "fat": 20.19347037484885
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.986
+    },
+    {
+      "scenario": "Beef Potato Hash / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Beef Potato Hash",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 809.0,
+      "calorie_deviation": 0.0,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 0.99,
+      "scale_clamped": false,
+      "protein_g": 36.1,
+      "macro_percent": {
+        "protein": 18.833963740706924,
+        "carbs": 19.773053345506717,
+        "fat": 61.392982913786355
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.071
+    },
+    {
+      "scenario": "Mushroom Egg Toast / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Mushroom Egg Toast",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 813.4,
+      "calorie_deviation": 0.005438813349814558,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 49.5,
+      "macro_percent": {
+        "protein": 23.023255813953487,
+        "carbs": 46.0,
+        "fat": 30.976744186046517
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.937
+    },
+    {
+      "scenario": "Almond Banana Overnight Oats / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Almond Banana Overnight Oats",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 868.4,
+      "calorie_deviation": 0.07342398022249688,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.48,
+      "scale_clamped": false,
+      "protein_g": 29.0,
+      "macro_percent": {
+        "protein": 12.924791086350975,
+        "carbs": 59.0974930362117,
+        "fat": 27.977715877437326
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 1,
+      "retrieval_score": 0.917
+    },
+    {
+      "scenario": "Tempeh Taco Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tempeh Taco Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 790.3,
+      "calorie_deviation": 0.023114956736712048,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.36,
+      "scale_clamped": false,
+      "protein_g": 36.6,
+      "macro_percent": {
+        "protein": 17.734706238643245,
+        "carbs": 55.33615990308904,
+        "fat": 26.929133858267715
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.75
+    },
+    {
+      "scenario": "Chicken Quinoa Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Quinoa Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 809.0,
+      "calorie_deviation": 0.0,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.44,
+      "scale_clamped": false,
+      "protein_g": 52.4,
+      "macro_percent": {
+        "protein": 25.529841656516442,
+        "carbs": 46.187576126674784,
+        "fat": 28.28258221680877
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.055
+    },
+    {
+      "scenario": "Tuna Pasta Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tuna Pasta Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 814.1,
+      "calorie_deviation": 0.006304079110012389,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 2.07,
+      "scale_clamped": false,
+      "protein_g": 59.9,
+      "macro_percent": {
+        "protein": 29.671826625387,
+        "carbs": 32.09907120743034,
+        "fat": 38.22910216718266
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.088
+    },
+    {
+      "scenario": "Pork Fried Rice / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Pork Fried Rice",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 811.2,
+      "calorie_deviation": 0.0027194066749073494,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.35,
+      "scale_clamped": false,
+      "protein_g": 55.6,
+      "macro_percent": {
+        "protein": 27.36557155161806,
+        "carbs": 48.38193675402977,
+        "fat": 24.25249169435216
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.027
+    },
+    {
+      "scenario": "Ginger Cod Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Ginger Cod Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 851.2,
+      "calorie_deviation": 0.0521631644004945,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 27.7,
+      "macro_percent": {
+        "protein": 12.781174299227132,
+        "carbs": 63.44445726150652,
+        "fat": 23.77436843926635
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.872
+    },
+    {
+      "scenario": "Edamame Noodle Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Edamame Noodle Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 812.3,
+      "calorie_deviation": 0.0040791100123608835,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.47,
+      "scale_clamped": false,
+      "protein_g": 28.9,
+      "macro_percent": {
+        "protein": 14.572040842052186,
+        "carbs": 63.9858817597378,
+        "fat": 21.442077398210007
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.845
+    },
+    {
+      "scenario": "Glazed Chicken Thigh Rice Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Glazed Chicken Thigh Rice Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 822.3,
+      "calorie_deviation": 0.016440049443757668,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 32.5,
+      "macro_percent": {
+        "protein": 15.441263808053211,
+        "carbs": 49.6020905095617,
+        "fat": 34.95664568238508
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.133
+    },
+    {
+      "scenario": "Lentil Potato Curry / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Lentil Potato Curry",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 813.2,
+      "calorie_deviation": 0.005191594561186706,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.45,
+      "scale_clamped": false,
+      "protein_g": 32.1,
+      "macro_percent": {
+        "protein": 15.760402602184852,
+        "carbs": 49.8833926598748,
+        "fat": 34.356204737940345
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.964
+    },
+    {
+      "scenario": "Black Bean Quinoa Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Black Bean Quinoa Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 791.7,
+      "calorie_deviation": 0.021384425216316384,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 27.0,
+      "macro_percent": {
+        "protein": 14.457831325301205,
+        "carbs": 53.01204819277108,
+        "fat": 32.53012048192771
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.89
+    },
+    {
+      "scenario": "Turkey Couscous Meatballs / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Turkey Couscous Meatballs",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 801.4,
+      "calorie_deviation": 0.009394313967861586,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.19,
+      "scale_clamped": false,
+      "protein_g": 37.4,
+      "macro_percent": {
+        "protein": 19.118210862619808,
+        "carbs": 29.69968051118211,
+        "fat": 51.18210862619808
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.071
+    },
+    {
+      "scenario": "Steak and Potato Wedges / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Steak and Potato Wedges",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 789.4,
+      "calorie_deviation": 0.024227441285537728,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.13,
+      "scale_clamped": false,
+      "protein_g": 53.2,
+      "macro_percent": {
+        "protein": 26.902654867256636,
+        "carbs": 20.075853350189636,
+        "fat": 53.02149178255373
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.157
+    },
+    {
+      "scenario": "Salmon Noodle Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Salmon Noodle Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 747.4,
+      "calorie_deviation": 0.07614338689740423,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.26,
+      "scale_clamped": false,
+      "protein_g": 43.2,
+      "macro_percent": {
+        "protein": 23.304113283884018,
+        "carbs": 47.20161834120027,
+        "fat": 29.494268374915713
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.86
+    },
+    {
+      "scenario": "Chicken Sweet Potato Tacos / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Sweet Potato Tacos",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 812.7,
+      "calorie_deviation": 0.004573547589616867,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.35,
+      "scale_clamped": false,
+      "protein_g": 43.0,
+      "macro_percent": {
+        "protein": 20.727886237647628,
+        "carbs": 46.083393588816584,
+        "fat": 33.1887201735358
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.072
+    },
+    {
+      "scenario": "Tofu Scramble Toast / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Tofu Scramble Toast",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 806.5,
+      "calorie_deviation": 0.0030902348578491965,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.52,
+      "scale_clamped": false,
+      "protein_g": 49.5,
+      "macro_percent": {
+        "protein": 23.415326395458845,
+        "carbs": 53.169347209082304,
+        "fat": 23.415326395458845
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 1.004
+    },
+    {
+      "scenario": "Peanut Butter Banana Toast / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Peanut Butter Banana Toast",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 786.1,
+      "calorie_deviation": 0.02830655129789861,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 36.2,
+      "macro_percent": {
+        "protein": 17.00328792860498,
+        "carbs": 50.44621888210427,
+        "fat": 32.55049318929074
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 1,
+      "retrieval_score": 1.069
+    },
+    {
+      "scenario": "Cashew Tofu Curry / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Cashew Tofu Curry",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 807.2,
+      "calorie_deviation": 0.002224969097651365,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.4,
+      "scale_clamped": false,
+      "protein_g": 32.1,
+      "macro_percent": {
+        "protein": 16.317194052611512,
+        "carbs": 57.94891345787266,
+        "fat": 25.73389248951582
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 5,
+      "retrieval_score": 0.84
+    },
+    {
+      "scenario": "Mediterranean Couscous Salad / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Mediterranean Couscous Salad",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 812.3,
+      "calorie_deviation": 0.0040791100123608835,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.6,
+      "scale_clamped": true,
+      "protein_g": 27.6,
+      "macro_percent": {
+        "protein": 14.179296172617518,
+        "carbs": 62.008733624454145,
+        "fat": 23.811970202928332
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 0.865
+    },
+    {
+      "scenario": "Pork Burrito Bowl / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Pork Burrito Bowl",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 817.0,
+      "calorie_deviation": 0.009888751545117428,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.55,
+      "scale_clamped": false,
+      "protein_g": 42.2,
+      "macro_percent": {
+        "protein": 19.89862077095367,
+        "carbs": 59.83732170222798,
+        "fat": 20.26405752681834
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 3,
+      "retrieval_score": 0.91
+    },
+    {
+      "scenario": "Chicken Hummus Plate / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Chicken Hummus Plate",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 802.3,
+      "calorie_deviation": 0.008281829419035902,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.53,
+      "scale_clamped": false,
+      "protein_g": 47.9,
+      "macro_percent": {
+        "protein": 22.71218587008061,
+        "carbs": 46.13560929350403,
+        "fat": 31.152204836415365
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 1,
+      "usda_ingredients": 2,
+      "retrieval_score": 1.036
+    },
+    {
+      "scenario": "Shrimp Noodle Stir Fry / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Shrimp Noodle Stir Fry",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 858.5,
+      "calorie_deviation": 0.06118665018541409,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.29,
+      "scale_clamped": false,
+      "protein_g": 50.2,
+      "macro_percent": {
+        "protein": 24.460957485686443,
+        "carbs": 51.30953831160921,
+        "fat": 24.229504202704348
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.007
+    },
+    {
+      "scenario": "Potato Zucchini Frittata / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Potato Zucchini Frittata",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 833.0,
+      "calorie_deviation": 0.029666254635352288,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": false,
+      "rescaled": true,
+      "scale_factor": 1.39,
+      "scale_clamped": true,
+      "protein_g": 36.9,
+      "macro_percent": {
+        "protein": 17.843326885880078,
+        "carbs": 18.181818181818183,
+        "fat": 63.97485493230174
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": false,
+        "fat": false
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 3,
+      "retrieval_score": 1.044
+    },
+    {
+      "scenario": "Mushroom Tempeh Noodles / average man, maintaining",
+      "plan_status": "matched",
+      "meal_name": "Mushroom Tempeh Noodles",
+      "daily_budget_kcal": 2889.4,
+      "target_meal_kcal": 809,
+      "verified_kcal": 823.0,
+      "calorie_deviation": 0.0173053152039555,
+      "within_tolerance": true,
+      "within_calorie_target": true,
+      "meets_targets": true,
+      "rescaled": false,
+      "scale_factor": 1.36,
+      "scale_clamped": false,
+      "protein_g": 43.1,
+      "macro_percent": {
+        "protein": 20.065176908752328,
+        "carbs": 50.18621973929236,
+        "fat": 29.748603351955307
+      },
+      "macros_in_range": {
+        "protein": true,
+        "carbs": true,
+        "fat": true
+      },
+      "estimated_ingredients": 0,
+      "usda_ingredients": 4,
+      "retrieval_score": 0.859
+    }
+  ]
+}

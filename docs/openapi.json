@@ -916,6 +916,11 @@
             },
             "type": "array",
             "title": "Defaulted"
+          },
+          "replaces_activity_exercise": {
+            "type": "boolean",
+            "title": "Replaces Activity Exercise",
+            "default": false
           }
         },
         "type": "object",
@@ -926,7 +931,7 @@
           "kcal"
         ],
         "title": "ExerciseEstimate",
-        "description": "The workout the trained model added to the daily estimate (DEC-33).\n\nAttributes:\n    duration_minutes: Minutes of exercise; 0 is a rest day.\n    heart_rate_bpm: Average heart rate during the workout.\n    body_temp_c: Body temperature during the workout.\n    kcal: Calories the workout added to the daily estimate.\n    defaulted: The details the request left out, filled from EXERCISE_DEFAULTS."
+        "description": "The workout the trained model added to the daily estimate (DEC-33).\n\nAttributes:\n    duration_minutes: Minutes of exercise; 0 is a rest day.\n    heart_rate_bpm: Average heart rate during the workout.\n    body_temp_c: Body temperature during the workout.\n    kcal: Calories the workout added to the daily estimate.\n    defaulted: The details the request left out, filled from EXERCISE_DEFAULTS.\n    replaces_activity_exercise: True when the request stated today's workout,\n        so the day counts it in place of the activity level's usual exercise\n        (DEC-40). False when the workout was not given, and the default is\n        added to the activity level as before."
       },
       "FeedbackListResponse": {
         "properties": {

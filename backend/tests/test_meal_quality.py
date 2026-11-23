@@ -15,6 +15,8 @@ from pathlib import Path
 import pytest
 
 from backend.app.agents.calorie_expenditure_agent import CalorieExpenditureResponse
+from backend.app.agents.nutrition_verification_agent import NutritionVerificationAgent
+from backend.app.core.config import AppSettings
 from backend.app.evaluation import meal_quality
 from backend.app.evaluation.meal_quality import (
     GUARDRAIL_CORPUS,
@@ -395,3 +397,87 @@ def test_render_guardrails_counts_the_outcomes() -> None:
     ]
 
     assert "As expected: 1 of 2." in render_guardrails(results)
+
+
+# P4: an opt-in USDA run, with the USDA API mocked.
+
+
+def _load_script():
+    spec = importlib.util.spec_from_file_location(
+        "meal_quality_baseline", REPO / "scripts" / "meal_quality_baseline.py"
+    )
+    script = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(script)
+    return script
+
+
+def _fake_usda(self, item_name: str) -> dict | None:
+    if "rice" not in item_name:
+        return None
+    return {
+        "calories": 130.0,
+        "protein": 2.7,
+        "carbs": 28.0,
+        "fat": 0.3,
+        "source": "usda_fooddata_central",
+        "confidence": 0.9,
+    }
+
+
+def test_a_usda_run_counts_its_lookups_and_usda_ingredients(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(NutritionVerificationAgent, "_query_usda_database", _fake_usda)
+    rows, provenance = meal_quality.run(
+        [Scenario("chicken and rice bowl", PROFILES[1])], usda_api_key="test-key"
+    )
+
+    assert provenance["nutrition_source"] == "usda_fooddata_central"
+    assert provenance["usda_lookups"] >= 1
+    assert provenance["usda_lookup_failures"] == 0
+    assert provenance["usda_ingredients_cached"] >= 1
+    assert rows[0].usda_ingredients >= 1
+    assert meal_quality.summarise(rows).with_usda_ingredients == 1
+
+
+def test_an_offline_run_makes_no_usda_lookups(monkeypatch: pytest.MonkeyPatch) -> None:
+    def refuse(self, item_name: str) -> None:
+        raise AssertionError("offline run called USDA")
+
+    monkeypatch.setattr(NutritionVerificationAgent, "_query_usda_database", refuse)
+    rows, provenance = meal_quality.run([Scenario("chicken and rice bowl", PROFILES[1])])
+
+    assert provenance["nutrition_source"] == "local_tables"
+    assert "usda_lookups" not in provenance
+    assert rows[0].usda_ingredients == 0
+
+
+def test_the_usda_flag_without_a_key_stops(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    script = _load_script()
+    monkeypatch.setattr(
+        script, "AppSettings", lambda: AppSettings(_env_file=None, usda_api_key=None)
+    )
+
+    assert script.main(["--usda"]) == 2
+    assert "USDA_API_KEY" in capsys.readouterr().err
+
+
+def test_a_usda_run_where_every_lookup_fails_stops(
+    monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]
+) -> None:
+    def fail(self, item_name: str) -> None:
+        raise OSError("network down")
+
+    script = _load_script()
+    monkeypatch.setattr(
+        script, "AppSettings", lambda: AppSettings(_env_file=None, usda_api_key="k")
+    )
+    monkeypatch.setattr(NutritionVerificationAgent, "_query_usda_database", fail)
+    monkeypatch.setattr(
+        meal_quality, "default_scenarios", lambda: [Scenario("chicken and rice bowl", PROFILES[1])]
+    )
+
+    assert script.main(["--usda"]) == 2
+    assert "No USDA lookup succeeded" in capsys.readouterr().err

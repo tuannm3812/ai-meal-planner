@@ -136,6 +136,27 @@ describe('howItWasMade', () => {
     )
   })
 
+  it('says a stated workout took the place of the usual exercise (DEC-40)', () => {
+    const withExercise = (exercise) => ({
+      ...SAMPLE_PLAN,
+      calorie_budget: { ...SAMPLE_PLAN.calorie_budget, exercise },
+    })
+    const given = {
+      duration_minutes: 45,
+      heart_rate_bpm: 130,
+      body_temp_c: 37,
+      kcal: 310,
+      defaulted: ['body_temp_c'],
+      replaces_activity_exercise: true,
+    }
+    expect(howItWasMade(withExercise(given))[1]).toBe(
+      "That estimate includes your 45-minute workout at 130 bpm, adding 310 kcal, in place of your activity level's usual exercise.",
+    )
+    expect(howItWasMade(withExercise({ ...given, duration_minutes: 0, kcal: 0 }))[1]).toBe(
+      "No workout was added, because today is a rest day, and your activity level's usual exercise is left out.",
+    )
+  })
+
   it('keeps the default note for a plan saved before workouts were reported', () => {
     const oldBudget = { ...SAMPLE_PLAN.calorie_budget }
     delete oldBudget.exercise
