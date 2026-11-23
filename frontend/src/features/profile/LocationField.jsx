@@ -16,15 +16,15 @@ function LocationField({ value, error, onChange }) {
       <input
         aria-describedby={error ? errorId : `${id}-help`}
         aria-invalid={error ? 'true' : undefined}
-        className={`mt-1.5 h-12 w-full rounded-[12px] border bg-surface px-3.5 text-base text-ink outline-none focus:ring-2 focus:ring-ink ${
-          error ? 'border-accent-text' : 'border-line'
+        className={`mt-1.5 h-12 w-full rounded-[10px] border bg-surface px-3.5 text-base text-ink outline-none focus:ring-2 focus:ring-ink ${
+          error ? 'border-danger-fg' : 'border-line'
         }`}
         id={id}
         onChange={(event) => onChange(event.target.value)}
         value={value}
       />
       {error ? (
-        <p className="mt-1.5 text-sm text-accent-text" id={errorId}>
+        <p className="mt-1.5 text-sm font-medium text-danger-fg" id={errorId}>
           {error}
         </p>
       ) : (

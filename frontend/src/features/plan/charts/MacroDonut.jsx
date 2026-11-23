@@ -9,7 +9,7 @@ function MacroDonut({ split, grams }) {
   const segments = donutSegments(split, R)
   const label = MACROS.map((macro) => `${macro.label} ${Math.round(split[macro.key])}%`).join(', ')
   return (
-    <figure className="m-0 flex items-center gap-5">
+    <figure className="m-0 flex flex-wrap items-center gap-5">
       <svg aria-label={`${label} of calories`} className="h-[150px] w-[150px] shrink-0" role="img" viewBox="0 0 140 140">
         {segments.map((segment) => (
           <circle
