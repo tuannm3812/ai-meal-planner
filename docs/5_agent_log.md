@@ -8616,3 +8616,19 @@ Market Receipt redesign (DEC-44).
 
 Verified: vitest 267 of 267 (two new Home workout tests), eslint clean, `vite build`
 passes; screenshots at 1,440 and 390 px with no horizontal scroll on Home or the plan page.
+
+## 2026-11-24 — Claude — tabbed plan page
+
+Mike said "do next" after the receipt and Home went live. The plan page's report is now
+three tabs beside the receipt.
+
+- New `components/ui/Tabs` (a tablist with arrow, Home and End keys). `PlanDetail` shows
+  Overview (nutrition, balance, runners-up), Ingredients (where the calories come from) and
+  How it was made (the service's notes as a numbered list, no longer a collapsed expander).
+  A tab with nothing to show is left out, and a new plan opens on Overview.
+- `RangeBars` is a three-reading row: each macro's share as a big number over a scale with
+  the recommended band and a marker for the meal. The verdict is still the service's.
+
+Verified: vitest 267 of 267 (two tests now reach ingredients and notes through their tabs),
+eslint clean, `vite build` passes; screenshots at 1,440 and 390 px with no horizontal scroll
+on any tab.

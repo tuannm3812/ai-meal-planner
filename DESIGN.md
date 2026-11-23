@@ -158,6 +158,10 @@ soft blob shape may sit behind a banner illustration.
   view while the report scrolls.
 - **Price tags** (a pointed end and a punched hole) carry a plan's result in words, and a
   coral one with ink text carries a shelf number (the cost to shop, a meal's kcal).
+- **The plan page is a report with tabs** (Overview, Ingredients, How it was made) beside
+  the receipt. The active tab is an ink pill, as in the rail. Overview shows the calorie
+  ring, the macro split and three readings, each a big share over a scale that shades the
+  recommended range and marks the meal.
 - **Home** is a workspace: the craving, today's workout as three chips, six dish cards from
   the menu, then saved meals and past plans beside a context column (the plan in hand or
   the latest one, and the device's counts).
