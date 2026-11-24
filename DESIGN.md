@@ -77,8 +77,8 @@ outside the plan feature. The tokens fall into five groups.
 | `viridis-1` to `viridis-6` | #440154 #414487 #2A788E #22A884 #7AD151 #FDE725 | Categorical chart series, in order; the calorie ring is `viridis-2` |
 | `band` | #C9D6F5 | The recommended range behind the balance bars |
 
-Aim for about 60% paper and white, 25% cobalt and ink, under 10% coral. Coral carries
-`ink` text (5.2:1), never white (3.1:1). Charts use Viridis,
+Aim for about 60% paper and white, 25% cobalt and ink, under 10% coral. Bright coral never
+carries text (white on it is 3.1:1); text sits on `accent-fill` in white (4.65:1). Charts use Viridis,
 the owner's choice: the macro colours are its three darker stops, each at least 3:1
 on white, and a categorical series takes `viridis-1` onward in order, always with a
 text label. `viridis-5` and `viridis-6` are fills on `ink` or next to a label, never
