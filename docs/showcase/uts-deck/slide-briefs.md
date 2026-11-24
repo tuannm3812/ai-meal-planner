@@ -12,11 +12,16 @@ Message: Introduce the app through the question everyone asks.
 
 Exact face text:
 
-- PERSONAL PROJECT | MULTI-AGENT MEAL PLANNER
-- What should I eat tonight?
-- One meal sized to your body and goal, each ingredient's source shown, and the shopping / list ready.
-- Manh Tuan (Mike) Nguyen
-- TD School, University of Technology Sydney
+- MANH TUAN (MIKE) NGUYEN | TD SCHOOL, UNIVERSITY OF TECHNOLOGY SYDNEY
+- What should I
+- eat tonight?
+- One meal sized to your body and goal, each ingredient's source shown, and the / shopping list ready.
+- 72 of 72
+- plans meet calorie and macro / targets
+- 76
+- tested recipes; no LLM needed
+- Live
+- on Cloud Run, with Google sign-in
 - November 2026
 - Chicken breast, 100 g
 - Estimated
@@ -695,7 +700,7 @@ Layout: mp_next
 
 Reader question: What comes next?
 
-Message: Accounts and better inputs first, then people; each step answers a limit on the previous page.
+Message: Ratings and better inputs first, then people; each step answers a limit on the previous page.
 
 Exact face text:
 
@@ -710,7 +715,7 @@ Exact face text:
 - AI Meal Planner
 - 15
 - TAKEAWAY
-- Accounts and better inputs first, then people; each step answers a limit on the previous page.
+- Ratings and better inputs first, then people; each step answers a limit on the previous page.
 - 8 Oct
 - Refactor on main
 - 11 Oct
@@ -723,17 +728,17 @@ Exact face text:
 - 68 of 68, gluten fix
 - 22 Nov
 - 76 recipes, Cloud Run, workout check
-- Now
-- USDA foods pinned
+- 23 Nov
+- USDA foods pinned, accounts live
 - NOW
-- Add user accounts
+- Use ratings in ranking
 - Review the 28% meal target
 - NEXT
 - Connect live store prices
-- Use ratings in ranking
-- LATER
 - Ask a dietitian to review the rules
+- LATER
 - Test with people
+- Run on two instances
 
 ## 16. Thank you
 

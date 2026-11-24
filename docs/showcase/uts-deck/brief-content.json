@@ -8,7 +8,7 @@
     {
       "id": "cover",
       "layout": "mp_cover",
-      "section": "Personal project | Multi-agent meal planner",
+      "section": "Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney",
       "title": "What should I eat tonight?",
       "subtitle": "One meal sized to your body and goal, each ingredient's source shown, and the shopping list ready.",
       "accent": "slate",
@@ -101,7 +101,25 @@
           "total": "$24.50"
         }
       },
-      "header_style": "appendix"
+      "header_style": "appendix",
+      "title_lines": [
+        "What should I",
+        "eat tonight?"
+      ],
+      "chips": [
+        {
+          "value": "72 of 72",
+          "label": "plans meet calorie and macro targets"
+        },
+        {
+          "value": "76",
+          "label": "tested recipes; no LLM needed"
+        },
+        {
+          "value": "Live",
+          "label": "on Cloud Run, with Google sign-in"
+        }
+      ]
     },
     {
       "id": "agenda",
@@ -1380,12 +1398,12 @@
       "accent": "ochre",
       "title": "What comes next, in priority order",
       "subtitle": "How the project got here, and the work still ahead.",
-      "takeaway": "Accounts and better inputs first, then people; each step answers a limit on the previous page.",
+      "takeaway": "Ratings and better inputs first, then people; each step answers a limit on the previous page.",
       "question": "What comes next?",
       "notes": {
         "purpose": "Pair the limits with the work that answers them.",
         "script": [
-          "Foundations first: migrations are done and accounts are next; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.",
+          "Foundations first: migrations are done and accounts went live on 23 November, with Google sign-in on Firestore; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.",
           "Sources: docs/4_next_steps.md §6 and §7."
         ],
         "references": [
@@ -1419,19 +1437,19 @@
           "text": "76 recipes, Cloud Run, workout check"
         },
         {
-          "date": "Now",
-          "text": "USDA foods pinned"
+          "date": "23 Nov",
+          "text": "USDA foods pinned, accounts live"
         }
       ],
       "columns": [
         {
           "title": "Now",
           "items": [
-            "Add user accounts",
+            "Use ratings in ranking",
             "Review the 28% meal target"
           ],
           "icons": [
-            "person",
+            "restaurant",
             "rice_bowl"
           ]
         },
@@ -1439,22 +1457,22 @@
           "title": "Next",
           "items": [
             "Connect live store prices",
-            "Use ratings in ranking"
+            "Ask a dietitian to review the rules"
           ],
           "icons": [
             "storefront",
-            "restaurant"
+            "verified"
           ]
         },
         {
           "title": "Later",
           "items": [
-            "Ask a dietitian to review the rules",
-            "Test with people"
+            "Test with people",
+            "Run on two instances"
           ],
           "icons": [
-            "verified",
-            "group"
+            "group",
+            "cloud_upload"
           ]
         }
       ]

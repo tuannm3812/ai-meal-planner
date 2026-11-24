@@ -1,8 +1,7 @@
 {
-  "eyebrow": "TD School, University of Technology Sydney | Personal project",
+  "eyebrow": "Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney",
   "title": "AI Meal Planner",
   "subtitle": "What should I eat tonight? One craving in, one meal sized to you, and the shopping list ready.",
-  "authors": "Manh Tuan (Mike) Nguyen",
   "logo": "logo-lockup.svg",
   "plugin": "meal_poster_blocks.py",
   "css": "meal_poster.css",

@@ -170,7 +170,7 @@ References:
 
 Pair the limits with the work that answers them.
 
-Foundations first: migrations are done and accounts are next; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.
+Foundations first: migrations are done and accounts went live on 23 November, with Google sign-in on Firestore; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.
 Sources: docs/4_next_steps.md §6 and §7.
 
 References:

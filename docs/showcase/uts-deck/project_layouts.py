@@ -804,23 +804,32 @@ def logos(L, p, x, y, size):
 
 
 def mp_cover(L, p, slide):
+    """The app's home banner as a cover: a full-height cobalt half with the question, three proof
+    chips and the presenter, beside the labelled plate (Market Receipt, DEC-44)."""
     p.ops.clear()
     slide.pop('chapter_badges', None)
-    logos(L, p, LEFT, 39, 62)
-    title_h = need(L, slide['title'], 490, 30, True)
-    sub_h = need(L, slide['subtitle'], 490, 12)
-    panel_h = 14 + 17 + 6 + title_h + 10 + sub_h + 18
-    y = 150
-    p.rect(0, y, 560, panel_h, ACCENT['slate'][1])
-    p.rect(0, y, 8, panel_h, ACCENT['slate'][0])
-    put(L, p, slide['section'].upper(), LEFT, y + 14, 490, 9, 'secondary', True)
-    put(L, p, slide['title'], LEFT, y + 37, 490, 30, 'ink', True)
-    put(L, p, slide['subtitle'], LEFT, y + 37 + title_h + 10, 490, 12, 'ink')
-    ay = y + panel_h + 18
-    put(L, p, L.content['author'], LEFT, ay, 490, 12, 'ink', True)
-    put(L, p, L.content['affiliation'], LEFT, ay + 19, 490, 10, 'body')
-    put(L, p, L.content['date'], LEFT, ay + 35, 490, 10, 'body')
-    img(L, p, slide['motif']['path'], slide['motif']['alt'], LEFT, 440, 478, 46)
+    COBALT, PEACH, ON_INK = '#2448C9', '#FFD3C7', '#DCE4FF'
+    p.rect(0, 0, 560, 540, COBALT)
+    logos(L, p, LEFT, 36, 56)
+    w = 560 - LEFT - 40
+    y = 140
+    y += paint(L, p, slide['section'].upper(), LEFT, y, w, 9.5, PEACH, True) + 16
+    first, second = slide['title_lines']
+    y += paint(L, p, first, LEFT, y, w, 50, WHITE, True)
+    y += paint(L, p, second, LEFT, y - 6, w, 50, PEACH, True) + 6
+    y += paint(L, p, slide['subtitle'], LEFT, y, w, 13, ON_INK) + 26
+    chips = slide['chips']
+    gap = 10
+    cw = (w - gap * (len(chips) - 1)) / len(chips)
+    ch = 84
+    y = max(y, 476 - ch - 14)  # the chips sit on the bottom margin, so the half fills
+    for i, chip in enumerate(chips):
+        x = LEFT + i * (cw + gap)
+        p.rect(x, y, cw, ch, WHITE)
+        p.rect(x, y, 4, ch, '#D63C1A')
+        paint(L, p, chip['value'], x + 14, y + 12, cw - 22, 22, INK, True)
+        paint(L, p, chip['label'], x + 14, y + 44, cw - 22, 8.5, BODY)
+    paint(L, p, L.content['date'], LEFT, 490, w, 10, ON_INK)
     # The labelled plate: the cover's own illustration, with native tags and a native receipt.
     art = slide['art']
     img(L, p, art['image'], art['alt'], 560, 0, 400, 540)

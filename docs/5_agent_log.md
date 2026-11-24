@@ -8393,3 +8393,12 @@ Follow-up, same day: Mike agreed to refresh the poster's Next box. Accounts have
 API reports `storage_backend: firestore`), so the poster's headline line now says the app is live
 "with Google sign-in", and Next lists Ratings, Prices and People. Both posters re-render with no
 automated problems.
+
+Second follow-up: Mike asked for a cover that uses its space, slide 15 updated, and no "Personal
+project" in the header. The cover's left half is now the app's cobalt home banner: the presenter
+and school as the kicker, the question in 50 pt with "eat tonight?" in peach, the subtitle, and three
+proof chips (72 of 72, 76 recipes, live with Google sign-in) on the bottom margin; the motif strip
+is gone. Slide 15 moves accounts to done (23 Nov milestone) and lists ratings and the 28% target
+now, prices and a dietitian next, people and a two-instance run later. Both posters' eyebrow reads
+"Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney", with the separate author
+line removed. Deck check and poster renders report no problems.
