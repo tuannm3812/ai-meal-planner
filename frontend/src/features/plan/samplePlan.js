@@ -76,7 +76,7 @@ export const SAMPLE_PLAN = {
       "source": "local_vector_rag_meal_corpus",
       "confidence": 0.95,
       "warnings": [
-        "Retrieved meal template chicken_fried_rice using local vector RAG.",
+        "Picked Chicken Fried Rice as the menu recipe closest to the craving.",
         "Matched terms: chicken, fried, rice",
         "Scaled portions from 726 kcal toward 625 kcal.",
         "Rebalanced ingredient portions toward the recommended protein, carbohydrate and fat split."

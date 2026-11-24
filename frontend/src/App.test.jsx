@@ -106,6 +106,18 @@ describe('App', () => {
     ).toHaveFocus()
   })
 
+  it('keeps "Plan a meal" marked as the current page on the plan page', async () => {
+    axios.post.mockResolvedValueOnce(PLAN)
+    const user = userEvent.setup()
+    renderApp({ stored: STORED })
+    await planMeal(user)
+    await screen.findByRole('heading', { level: 1, name: 'Grilled Chicken Bowl' })
+
+    const nav = screen.getByRole('navigation', { name: 'Main' })
+    expect(within(nav).getByRole('link', { name: 'Plan a meal' })).toHaveAttribute('aria-current', 'page')
+    expect(within(nav).getByRole('link', { name: 'Past plans' })).not.toHaveAttribute('aria-current')
+  })
+
   it('shows the error and retries it', async () => {
     axios.post.mockRejectedValueOnce({ response: { data: { detail: 'Backend exploded' } } })
     axios.post.mockResolvedValueOnce(PLAN)

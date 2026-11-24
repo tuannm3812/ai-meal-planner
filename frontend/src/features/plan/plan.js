@@ -74,6 +74,14 @@ export function mealTarget(plan) {
   return candidates.find(isNumber) ?? null
 }
 
+// One meal's share of the daily budget, as the service sizes it
+// (meal_recommendation_agent.py: 28% of the day, kept between 350 and 850 kcal).
+// The Calories page shows it so its numbers read like the plan page's.
+export function mealSizeFromDaily(dailyKcal) {
+  if (!isNumber(dailyKcal)) return null
+  return Math.max(350, Math.min(850, Math.round(dailyKcal * 0.28)))
+}
+
 export function calories(plan) {
   const nutrition = plan?.nutrition
   if (!nutrition || !isNumber(nutrition.total_calories)) return null
@@ -154,7 +162,7 @@ const kcal = (value) => `${Math.round(value).toLocaleString('en-AU')} kcal`
 // What the trained model added for today's workout, from the service's own
 // `calorie_budget.exercise` (DEC-33). The rule-based fallback adds none and
 // reports none.
-function workoutNote(budget) {
+export function workoutNote(budget) {
   const exercise = budget.exercise
   if (!exercise || typeof exercise !== 'object') {
     // A plan saved before DEC-33 says nothing; its model used the defaults.

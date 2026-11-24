@@ -1,16 +1,18 @@
 import Icon from '../components/icons/Icon'
 import { Bookmark, Calculator, History, LogIn, UserRound, Utensils } from '../components/icons/glyphs'
-import { Link, NavLink, Outlet } from 'react-router-dom'
+import { Link, NavLink, Outlet, useLocation } from 'react-router-dom'
 
 import logoMark from '../assets/brand/logo-mark.svg'
 import { GOAL_OPTIONS, SEX_OPTIONS } from '../features/profile/profile'
 import { useAccount } from './AccountContext'
 import { usePlannerContext } from './PlannerContext'
 
+// `also` lists the pages that belong to a tab without sharing its path: the
+// plan you just made is part of "Plan a meal", a stored plan part of "Past plans".
 const LINKS = [
-  { to: '/', label: 'Plan a meal', glyph: Utensils, end: true },
+  { to: '/', label: 'Plan a meal', glyph: Utensils, end: true, also: ['/plan'] },
   { to: '/meals', label: 'My meals', glyph: Bookmark },
-  { to: '/history', label: 'Past plans', glyph: History },
+  { to: '/history', label: 'Past plans', glyph: History, also: ['/plans/'] },
   { to: '/calories', label: 'Calories', glyph: Calculator },
   { to: '/profile', label: 'Profile', glyph: UserRound },
 ]
@@ -18,12 +20,20 @@ const LINKS = [
 // Below 1280 px the shell is an ink top bar; from 1280 px it is a white rail
 // down the left (DEC-44), so wide screens use their full width. One nav
 // element serves both, so there is a single "Main" landmark.
+// Below 640 px the five tabs share one row, icon over label, so the bar stays
+// one line tall instead of wrapping into three.
 const linkClass = ({ isActive }) =>
-  `flex min-h-[44px] items-center gap-2.5 rounded-xl px-3 text-[15px] font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-peach xl:min-h-[48px] xl:focus-visible:ring-cobalt ${
+  `flex min-h-[52px] flex-col items-center justify-center gap-1 rounded-xl px-1 text-center text-[11px] font-medium leading-tight focus:outline-none focus-visible:ring-2 focus-visible:ring-peach sm:min-h-[44px] sm:flex-row sm:gap-2.5 sm:px-3 sm:text-left sm:text-[15px] xl:min-h-[48px] xl:justify-start xl:focus-visible:ring-cobalt ${
     isActive
       ? 'bg-white/10 text-white xl:bg-ink xl:text-white'
       : 'text-white hover:bg-white/10 xl:text-ink xl:hover:bg-tint'
   }`
+
+const isCurrent = (pathname, to, end) =>
+  end ? pathname === to : pathname === to || pathname.startsWith(`${to}/`)
+
+const inSection = (pathname, also = []) =>
+  also.some((path) => (path.endsWith('/') ? pathname.startsWith(path) : pathname === path))
 
 const iconClass = (isActive) => (isActive ? 'text-peach' : 'text-peach xl:text-cobalt')
 
@@ -60,6 +70,7 @@ function SizedFor() {
 
 function AppShell() {
   const account = useAccount()
+  const { pathname } = useLocation()
   return (
     <div className="min-h-screen bg-ground text-ink xl:grid xl:grid-cols-[256px_minmax(0,1fr)]">
       <header className="bg-ink text-white xl:sticky xl:top-0 xl:h-screen xl:overflow-y-auto xl:border-r xl:border-line xl:bg-surface xl:text-ink">
@@ -71,17 +82,24 @@ function AppShell() {
             <img alt="" height="32" src={logoMark} width="32" />
             <span className="whitespace-nowrap font-display text-lg font-extrabold xl:text-[17px]">AI Meal Planner</span>
           </NavLink>
-          <nav aria-label="Main" className="flex flex-wrap gap-1 xl:flex-col xl:gap-1.5">
-            {LINKS.map(({ to, label, glyph, end }) => (
-              <NavLink className={linkClass} end={end} key={to} to={to}>
-                {({ isActive }) => (
-                  <>
-                    <Icon as={glyph} className={iconClass(isActive)} />
-                    {label}
-                  </>
-                )}
-              </NavLink>
-            ))}
+          <nav
+            aria-label="Main"
+            className="grid w-full auto-cols-fr grid-flow-col gap-1 sm:flex sm:w-auto sm:flex-wrap xl:flex-col xl:gap-1.5"
+          >
+            {LINKS.map(({ to, label, glyph, end, also }) => {
+              const active = isCurrent(pathname, to, end) || inSection(pathname, also)
+              return (
+                <Link
+                  aria-current={active ? 'page' : undefined}
+                  className={linkClass({ isActive: active })}
+                  key={to}
+                  to={to}
+                >
+                  <Icon as={glyph} className={iconClass(active)} />
+                  {label}
+                </Link>
+              )
+            })}
             {account.enabled && !account.signedIn && (
               <button
                 className={linkClass({ isActive: false })}

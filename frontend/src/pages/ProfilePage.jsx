@@ -36,7 +36,7 @@ function ProfilePage() {
   }
 
   return (
-    <main className={`${pageShell} grid gap-6 py-8 xl:grid-cols-[minmax(0,1fr)_360px] xl:items-start`}>
+    <main className={`${pageShell} grid gap-6 py-8 2xl:grid-cols-[minmax(0,1fr)_360px] 2xl:items-start`}>
       <ProfileForm
         errors={planner.fieldErrors}
         eyebrow="Your profile"
@@ -53,9 +53,10 @@ function ProfilePage() {
         />
       </ProfileForm>
 
-      {/* Beside the form on wide screens: how a meal is sized, the account,
-          and what this device keeps. */}
-      <div className="flex min-w-0 flex-col gap-6">
+      {/* Beside the form from 1536 px: how a meal is sized, the account,
+          and what this device keeps. Narrower, a side column squeezed the
+          form until its dropdowns cut off, so the cards sit below it. */}
+      <div className="grid min-w-0 items-start gap-6 lg:grid-cols-2 2xl:grid-cols-1">
       <SizingPanel stacked />
       <AccountSection />
 

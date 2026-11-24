@@ -8691,3 +8691,29 @@ because each Phosphor icon ships all of its weights.
 
 Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
 390 px with no horizontal scroll.
+
+## 2026-11-24 — Claude — UI bug pass from a full screenshot sweep
+
+Mike asked for screenshots and UI fixes before the poster and deck refresh. Every page was
+captured at 1,440 and 390 px against a local stack. Fixed:
+
+- **Calories page numbers.** It always sent a 30-minute workout, which replaces the activity
+  level's exercise (DEC-40), so it showed 2,267 kcal where the plan page showed 2,895 for the
+  same profile. It now takes the profile's own fields (activity and today's workout as
+  dropdowns, goal in the profile's words) and sends the workout as a plan does. The result
+  reads "You burn about", "Daily target for your goal" (the service's
+  `meal_calorie_budget_kcal`, which is a daily figure but was labelled "Meal budget") and
+  "One meal is sized to" (28% of the day, 350 to 850 kcal, as the meal agent sizes it). Whole
+  kcal, no model name; body temperature and free-text health conditions are left out. Restyled
+  to the Market Receipt look.
+- **Nav state.** "Plan a meal" is current on `/plan` and "Past plans" on `/plans/:id`.
+- **Phone nav** is one row, icon over label, instead of three wrapped rows.
+- **Plan tabs** stay on one row on a phone; a long label wraps inside its tab.
+- **Profile** puts its side cards below the form until 1,536 px, so the activity and
+  workout dropdowns are no longer cut off. Wherever the form runs (the welcome page too),
+  those two dropdowns sit side by side only when 360 px each fits, and stack otherwise.
+- **"How it was made"** says "Picked <meal> as the menu recipe closest to the craving"
+  instead of the internal template ID and "local vector RAG".
+
+Verified: vitest 273 of 273 (three new tests), eslint clean, backend pytest; screenshots
+retaken at both widths with no console errors.
