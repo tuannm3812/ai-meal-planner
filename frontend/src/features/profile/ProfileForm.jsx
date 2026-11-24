@@ -231,7 +231,9 @@ function ProfileForm({
           </Step>
 
           <Step number={3} title="Your activity">
-            <div className="grid gap-4 sm:grid-cols-2">
+            {/* Side by side only where both long option labels fit; narrower,
+                they stack rather than cut off. */}
+            <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))]">
               <ChoiceField
                 error={errors.activity}
                 label="How active are you?"

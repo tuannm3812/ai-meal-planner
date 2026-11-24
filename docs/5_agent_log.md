@@ -8710,7 +8710,8 @@ captured at 1,440 and 390 px against a local stack. Fixed:
 - **Phone nav** is one row, icon over label, instead of three wrapped rows.
 - **Plan tabs** stay on one row on a phone; a long label wraps inside its tab.
 - **Profile** puts its side cards below the form until 1,536 px, so the activity and
-  workout dropdowns are no longer cut off.
+  workout dropdowns are no longer cut off. Wherever the form runs (the welcome page too),
+  those two dropdowns sit side by side only when 360 px each fits, and stack otherwise.
 - **"How it was made"** says "Picked <meal> as the menu recipe closest to the craving"
   instead of the internal template ID and "local vector RAG".
 
