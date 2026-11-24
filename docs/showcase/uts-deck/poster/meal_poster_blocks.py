@@ -29,9 +29,9 @@ UTS = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(UTS)
 
 # Viridis, dark to light, and palette A section accents (deck-kit.json).
-VIR = ['#440154', '#3B528B', '#21918C', '#5EC962', '#FDE725']
-ACCENT = {'slate': '#526174', 'blue': '#32658A', 'plum': '#825578', 'ochre': '#896521'}
-FILL = {'slate': '#EDF0F3', 'blue': '#EAF0F6', 'plum': '#F3EDF3', 'ochre': '#F6F1E5'}
+VIR = ['#440154', '#414487', '#2A788E', '#22A884', '#FDE725']
+ACCENT = {'slate': '#22325A', 'blue': '#2448C9', 'plum': '#C2361A', 'ochre': '#6B4A00'}
+FILL = {'slate': '#EEF1F7', 'blue': '#E7EDFB', 'plum': '#FFEDE7', 'ochre': '#FFF1C2'}
 
 
 def rich(text, t):
@@ -186,7 +186,7 @@ def mtry(block, base, t):
     import segno
     q = segno.make(block['qr'], error='m')
     size = q.symbol_size(scale=1, border=0)[0]
-    code = q.svg_inline(scale=1, border=0, dark='#1B2430', light=None).replace(
+    code = q.svg_inline(scale=1, border=0, dark='#14213D', light=None).replace(
         'class="segno"', f'class="segno" viewBox="0 0 {size} {size}"', 1)
     links = ''.join(f'<p><span>{html.escape(a)}</span>{html.escape(b)}</p>' for a, b in block['links'])
     return card('mtry', block, head(block, t) + f'<div class="tgrid"><div class="qr">{code}</div>'

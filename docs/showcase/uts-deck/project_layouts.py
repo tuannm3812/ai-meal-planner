@@ -11,11 +11,11 @@ sys.dont_write_bytecode = True
 
 LEFT, RIGHT, TOP, END = 43.5, 919.0, 132.0, 476.0
 W = RIGHT - LEFT
-INK, BODY, CARD, HAIR, WHITE = '#1B2430', '#5A6370', '#F4F5F6', '#D8DEE3', '#FFFFFF'
-ACCENT = {'slate': ('#526174', '#EDF0F3'), 'blue': ('#32658A', '#EAF0F6'), 'plum': ('#825578', '#F3EDF3'),
-          'ochre': ('#896521', '#F6F1E5')}
+INK, BODY, CARD, HAIR, WHITE = '#14213D', '#55607A', '#F4F6FB', '#D5DBE8', '#FFFFFF'
+ACCENT = {'slate': ('#22325A', '#EEF1F7'), 'blue': ('#2448C9', '#E7EDFB'), 'plum': ('#C2361A', '#FFEDE7'),
+          'ochre': ('#6B4A00', '#FFF1C2')}
 # Data colours (Viridis), one meaning each across the deck: see DESIGN.project.md.
-V_DARK, V_BLUE, V_TEAL, V_GREEN = '#440154', '#3B528B', '#21918C', '#5EC962'
+V_DARK, V_BLUE, V_TEAL, V_GREEN = '#440154', '#414487', '#2A788E', '#22A884'
 ESTIMATED, REFERENCE = V_DARK, V_TEAL
 VIRIDIS4 = [V_DARK, V_BLUE, V_TEAL, V_GREEN]
 
@@ -68,8 +68,8 @@ def img(L, p, path, alt, x, y, w, h):
     L.image(p, {'path': path, 'alt': alt}, x, y, w, h)
 
 
-TONE = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'ochre', '#21918C': 'teal',
-        '#89949D': 'grey', '#FFFFFF': 'white', '#1B2430': 'ink'}
+TONE = {'#22325A': 'slate', '#2448C9': 'blue', '#C2361A': 'plum', '#6B4A00': 'ochre', '#2A788E': 'teal',
+        '#8A93A8': 'grey', '#FFFFFF': 'white', '#14213D': 'ink'}
 
 
 def dot_icon(L, p, glyph, colour, x, y, d=24, size=18):
@@ -423,19 +423,19 @@ def mp_good(L, p, slide):
     w = RIGHT - x0
     bh = 132
     p.rect(x0, TOP, w, bh, INK)
-    paint(L, p, slide['calorie_label'], x0 + 14, TOP + 14, w - 28, 10, '#C9D3CC', True)
+    paint(L, p, slide['calorie_label'], x0 + 14, TOP + 14, w - 28, 10, '#C9D6F5', True)
     paint(L, p, slide['calorie_value'], x0 + 14, TOP + 30, w - 28, 30, WHITE, True)
-    paint(L, p, slide['calorie_text'], x0 + 14, TOP + 70, w - 28, 10, '#C9D3CC')
+    paint(L, p, slide['calorie_text'], x0 + 14, TOP + 70, w - 28, 10, '#C9D6F5')
     # The pass band, with the worked example's meal on it.
     ex = slide['calorie_example']
     tx, tw, ty = x0 + 14, w - 28, TOP + 100
     span = ex['limit'] * 1.5
     sx = lambda v: tx + (v + span) / (2 * span) * tw
-    p.rect(tx, ty, tw, 8, '#3A4452')
+    p.rect(tx, ty, tw, 8, '#22325A')
     p.rect(sx(-ex['limit']), ty, sx(ex['limit']) - sx(-ex['limit']), 8, V_GREEN)
     p.rect(sx(ex['value']) - 5, ty - 1, 10, 10, WHITE, 'ELLIPSE')
-    paint(L, p, f"-{ex['limit']}%", sx(-ex['limit']) - 20, ty + 11, 40, 8, '#C9D3CC', False, 'center')
-    paint(L, p, f"+{ex['limit']}%", sx(ex['limit']) - 20, ty + 11, 40, 8, '#C9D3CC', False, 'center')
+    paint(L, p, f"-{ex['limit']}%", sx(-ex['limit']) - 20, ty + 11, 40, 8, '#C9D6F5', False, 'center')
+    paint(L, p, f"+{ex['limit']}%", sx(ex['limit']) - 20, ty + 11, 40, 8, '#C9D6F5', False, 'center')
     paint(L, p, ex['label'], sx(ex['value']) + 8, ty - 14, 140, 8, WHITE, True)
     y = TOP + bh + 14
     card(p, x0, y, w, bottom - y, accent(slide))
@@ -538,7 +538,7 @@ def mp_architecture(L, p, slide):
         for k, lg in enumerate(r.get('logos', [])):
             logo(L, p, lg, RIGHT - 34 - k * 22, y + rh / 2 - 9)
     p.rect(LEFT, stack_y, W, 30, INK)
-    paint(L, p, a['stack_label'], LEFT + 10, stack_y + 9, 70, 8, '#C9D3CC', True)
+    paint(L, p, a['stack_label'], LEFT + 10, stack_y + 9, 70, 8, '#C9D6F5', True)
     x = LEFT + 84
     for name, label in a['stack']:
         tw = L.metrics.fonts[(True, False)].getlength(label) / 120 * 9 + 34
@@ -550,8 +550,8 @@ def mp_architecture(L, p, slide):
 
 
 # -- 12: architecture as a stage flow ----------------------------------------------------------
-LANE_TONE = {'slate': ACCENT['slate'], 'blue': ACCENT['blue'], 'plum': ACCENT['plum'], 'teal': (V_TEAL, '#E6F2F1'),
-             'ochre': ACCENT['ochre'], 'red': ('#B3261E', '#F9E8E6')}
+LANE_TONE = {'slate': ACCENT['slate'], 'blue': ACCENT['blue'], 'plum': ACCENT['plum'], 'teal': (V_TEAL, '#E3F4E8'),
+             'ochre': ACCENT['ochre'], 'red': ('#A1260E', '#FDE3DC')}
 
 
 def badge_n(L, p, n, x, y, colour, r=7):
@@ -690,13 +690,13 @@ def mp_engineering(L, p, slide):
     ly = TOP + 74
     for i, s in enumerate(steps):
         x = LEFT + 60 + i * step
-        colour = V_TEAL if s['live'] else '#89949D'
+        colour = V_TEAL if s['live'] else '#8A93A8'
         if i < len(steps) - 1:
             nxt = steps[i + 1]['live']
-            p.line(x, ly, x + step, ly, V_TEAL if nxt else '#89949D', 3, dash=None if nxt else 'DASH')
+            p.line(x, ly, x + step, ly, V_TEAL if nxt else '#8A93A8', 3, dash=None if nxt else 'DASH')
     for i, s in enumerate(steps):
         x = LEFT + 60 + i * step
-        colour = V_TEAL if s['live'] else '#89949D'
+        colour = V_TEAL if s['live'] else '#8A93A8'
         p.rect(x - 6, ly - 6, 12, 12, colour, 'ELLIPSE')
         dot_icon(L, p, s['icon'], colour, x - 13, ly - 38, 26, 22)
         put(L, p, s['title'], x - 60, ly + 26, 120, 10, 'ink', True, 'center')
@@ -770,10 +770,10 @@ def mp_next(L, p, slide):
     for i in range(len(ms) - 1):
         x = LEFT + 40 + i * step
         last = i == len(ms) - 2
-        p.line(x, ly, x + step, ly, '#89949D' if last else V_TEAL, 2.5, dash='DASH' if last else None)
+        p.line(x, ly, x + step, ly, '#8A93A8' if last else V_TEAL, 2.5, dash='DASH' if last else None)
     for i, m in enumerate(ms):
         x = LEFT + 40 + i * step
-        colour = '#89949D' if i == len(ms) - 1 else V_TEAL
+        colour = '#8A93A8' if i == len(ms) - 1 else V_TEAL
         p.rect(x - 7, ly - 7, 14, 14, colour, 'ELLIPSE')
         put(L, p, m['date'], x - 70, ly + 12, 140, 10, 'ink', True, 'center')
         put(L, p, m['text'], x - 70, ly + 27, 140, 8, 'body', False, 'center')

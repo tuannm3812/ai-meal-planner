@@ -6,19 +6,19 @@
 .eyebrow::before { display: none; }
 header { align-items: start; }
 header .logo { align-self: start; margin-top: 0; }
-.ptake { background: #1B2430; color: #FFFFFF; display: grid; grid-template-columns: auto 1fr auto; gap: 0 8mm; padding: 4mm 7mm; align-items: center; }
-.ptake .tkfig { border-right: .3mm solid #5A6370; padding-right: 8mm; }
+.ptake { background: #14213D; color: #FFFFFF; display: grid; grid-template-columns: auto 1fr auto; gap: 0 8mm; padding: 4mm 7mm; align-items: center; }
+.ptake .tkfig { border-right: .3mm solid #55607A; padding-right: 8mm; }
 .ptake .tkfig b { display: block; font-size: 48pt; line-height: 1; color: #FDE725; }
-.ptake .tkfig span { display: block; font-size: 18pt; color: #D8DEE3; margin-top: 1mm; }
+.ptake .tkfig span { display: block; font-size: 18pt; color: #D5DBE8; margin-top: 1mm; }
 .ptake .tkmain b { display: block; font-size: 28pt; line-height: 1.15; }
-.ptake .tkmain span { display: block; font-size: 22pt; color: #D8DEE3; margin-top: 1mm; }
+.ptake .tkmain span { display: block; font-size: 22pt; color: #D5DBE8; margin-top: 1mm; }
 .ptake .tkmain strong, .ptake .tkfig strong { color: #FFFFFF; }
-.ptake .tknext { border-left: .3mm solid #5A6370; padding-left: 8mm; }
+.ptake .tknext { border-left: .3mm solid #55607A; padding-left: 8mm; }
 .ptake .tknext > b { font-size: 20pt; letter-spacing: .06em; text-transform: uppercase; color: #FDE725; }
 .ptake ol { list-style: none; margin: 1.5mm 0 0; padding: 0; }
 .ptake li { font-size: 18pt; display: flex; gap: 2.5mm; align-items: center; margin-bottom: 1mm; }
 .ptake li i { font-style: normal; font-weight: 700; display: inline-grid; place-items: center; width: 7mm; height: 7mm; line-height: 1;
-  border-radius: 50%; background: #FDE725; color: #1B2430; font-size: 18pt; flex: none; }
+  border-radius: 50%; background: #FDE725; color: #14213D; font-size: 18pt; flex: none; }
 footer { display: flex; }
 code { font-family: "Google Sans Code", ui-monospace, monospace; }
 
@@ -30,7 +30,7 @@ header .logo { height: 32mm; }
 .card.m .caption { margin-top: auto; padding-top: 3mm; }
 .divider > b { background: var(--secondary); }
 .ptake .tkmain b { color: #FFFFFF; }
-.ptake li em { font-style: normal; color: #D8DEE3; margin-left: 1.5mm; }
+.ptake li em { font-style: normal; color: #D5DBE8; margin-left: 1.5mm; }
 .ptake li span { color: #FFFFFF; font-weight: 700; }
 
 /* mproblem */

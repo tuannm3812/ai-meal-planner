@@ -2,20 +2,20 @@
   "name": "UTS palette A — slate, blue, plum and ochre",
   "font": "Google Sans",
   "colors": {
-    "ink": "#1B2430",
-    "body": "#5A6370",
-    "secondary": "#526174",
-    "accent": "#526174",
-    "card": "#F4F5F6",
+    "ink": "#14213D",
+    "body": "#55607A",
+    "secondary": "#22325A",
+    "accent": "#22325A",
+    "card": "#F4F6FB",
     "ground": "#FFFFFF",
-    "neutral": "#5A6370",
-    "marker": "#B8452E",
-    "rule": "#89949D",
-    "hair": "#D8DEE3",
-    "takeaway_fill": "#F6F1E5",
-    "takeaway_rule": "#B89245",
-    "takeaway_label": "#765718",
-    "accent_pale": "#EDF0F3"
+    "neutral": "#55607A",
+    "marker": "#D63C1A",
+    "rule": "#8A93A8",
+    "hair": "#D5DBE8",
+    "takeaway_fill": "#FFF1C2",
+    "takeaway_rule": "#E0A100",
+    "takeaway_label": "#6B4A00",
+    "accent_pale": "#EEF1F7"
   },
   "on": {
     "marker": "ground",
@@ -54,20 +54,20 @@
   },
   "accents": {
     "slate": {
-      "ink": "#526174",
-      "fill": "#EDF0F3"
+      "ink": "#22325A",
+      "fill": "#EEF1F7"
     },
     "blue": {
-      "ink": "#32658A",
-      "fill": "#EAF0F6"
+      "ink": "#2448C9",
+      "fill": "#E7EDFB"
     },
     "plum": {
-      "ink": "#825578",
-      "fill": "#F3EDF3"
+      "ink": "#C2361A",
+      "fill": "#FFEDE7"
     },
     "ochre": {
-      "ink": "#896521",
-      "fill": "#F6F1E5"
+      "ink": "#6B4A00",
+      "fill": "#FFF1C2"
     }
   }
 }

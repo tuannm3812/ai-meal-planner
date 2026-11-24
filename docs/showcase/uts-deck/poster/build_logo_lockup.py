@@ -23,7 +23,7 @@ H, GAP, RULE = 32, 8, 1
 W = H + GAP + RULE + GAP + H
 out = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}mm" height="{H}mm">'
        f'<svg x="0" y="0" width="{H}" height="{H}" viewBox="{mark_view}">{mark}</svg>'
-       f'<rect x="{H + GAP}" y="0" width="{RULE}" height="{H}" fill="#D8DEE3"/>'
+       f'<rect x="{H + GAP}" y="0" width="{RULE}" height="{H}" fill="#D5DBE8"/>'
        f'<svg x="{H + GAP + RULE + GAP}" y="0" width="{H}" height="{H}" viewBox="{uts_view}">{uts}</svg></svg>\n')
 (HERE / 'logo-lockup.svg').write_text(out)
 print('wrote', HERE / 'logo-lockup.svg')

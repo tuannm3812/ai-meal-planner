@@ -8372,3 +8372,19 @@ lays the same blocks out in three column stacks at 841 × 594 mm; blocks take `v
 
 Verified: `render_meal_poster.sh` reports "no automated problems" for both orientations (no overflow, type levels
 only, every number in the register, fonts embedded, correct page sizes).
+
+## 2026-11-24 — Claude — deck and poster in the Market Receipt colours
+
+Mike asked for the poster and deck in the app's new palette, with the new UI for the demo
+walkthrough. `docs/showcase/uts-deck/recolour_market_receipt.py` maps every UTS palette A
+colour to a Market Receipt token (`frontend/src/theme/tokens.js`): section accents become
+raised ink, cobalt, coral and the estimate yellow, and the Viridis stops snap to the app's
+macro colours. The icon kit was rebuilt, the logo mark and poster lockup now use the app's
+coral plate sticker, and Google Sans stays as the deck font. Slide 5 and appendix A1 to A4 use
+fresh captures of the app with PR #70 (`slides/captures/capture_walk_2026-11-24.py`, pins in
+`2026-11-24-pins.json`); A2 and A4 callouts now describe the rail, workout chips, tabs and
+receipt. Numbers on A3 and A4 were read from the new capture (694 of 691 kcal, 3 of 6
+estimated, $24.50).
+
+Verified: deck builds 22 slides, `check_deck.py` reports no problems; both posters render
+with no automated problems.

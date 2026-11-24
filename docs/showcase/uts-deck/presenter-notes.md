@@ -50,7 +50,7 @@ Walk through the real app: details once, then search, then the plan page.
 The first visit asks for your details once and keeps them on this device, including today's workout.
 After that the home page is one search box: say what you feel like eating, or pick a suggestion.
 The plan page shows the meal against its target, a macro donut, where the calories come from and a shopping list. You can save the meal and rate it.
-Sources: Captures: docs/showcase/slides/captures/2026-11-22-plan.json; React app on main (ac4d44d), local run, 22 November 2026.
+Sources: docs/showcase/slides/captures/capture_walk_2026-11-24.py; React app with PR #70, local run with no provider keys, 24 November 2026.
 
 References:
 - sources.md
@@ -192,7 +192,7 @@ References:
 Appendix: a closer look at one screen of the React app.
 
 The first visit asks for these details once. Each field maps to one step of the calorie target or the safety rules.
-Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+Sources: docs/showcase/slides/captures/capture_walk_2026-11-24.py (walkthrough at 1,600 px) and 2026-11-24-pins.json; React app with PR #70, local run with no provider keys, 24 November 2026.
 
 References:
 - sources.md
@@ -202,7 +202,7 @@ References:
 Appendix: a closer look at one screen of the React app.
 
 Three meals were planned and saved before this capture, so the cards are filled.
-Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+Sources: docs/showcase/slides/captures/capture_walk_2026-11-24.py (walkthrough at 1,600 px) and 2026-11-24-pins.json; React app with PR #70, local run with no provider keys, 24 November 2026.
 
 References:
 - sources.md
@@ -212,17 +212,17 @@ References:
 Appendix: a closer look at one screen of the React app.
 
 Ring, donut and bars use the app's Viridis macro colours: protein, carbs, fat.
-Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+Sources: docs/showcase/slides/captures/capture_walk_2026-11-24.py (walkthrough at 1,600 px) and 2026-11-24-pins.json; React app with PR #70, local run with no provider keys, 24 November 2026.
 
 References:
 - sources.md
 
-## 20. A4. Below the plan: sources, feedback and other options
+## 20. A4. Ingredients, the receipt total and your rating
 
 Appendix: a closer look at one screen of the React app.
 
 The rating here was 4 of 5 stars, given during the capture.
-Sources: docs/showcase/slides/captures/2026-11-22-plan.json and capture_walk_2026-11-22.py; React app on main (ac4d44d), local run with no provider keys, 22 November 2026.
+Sources: docs/showcase/slides/captures/capture_walk_2026-11-24.py (walkthrough at 1,600 px) and 2026-11-24-pins.json; React app with PR #70, local run with no provider keys, 24 November 2026.
 
 References:
 - sources.md

@@ -13,8 +13,8 @@ GLYPHS = ['balance', 'block', 'calculate', 'check_circle', 'cloud_upload', 'fact
           'flag', 'group', 'inventory_2', 'lock', 'monitor_weight', 'no_food', 'person', 'rice_bowl', 'science',
           'search', 'shopping_basket', 'shopping_cart', 'skillet', 'verified', 'visibility', 'receipt_long',
           'restaurant', 'menu_book', 'egg', 'nutrition', 'grocery', 'soup_kitchen', 'storefront']
-TONES = {'#526174': 'slate', '#32658A': 'blue', '#825578': 'plum', '#896521': 'ochre', '#21918C': 'teal',
-         '#89949D': 'grey', '#FFFFFF': 'white', '#1B2430': 'ink'}
+TONES = {'#22325A': 'slate', '#2448C9': 'blue', '#C2361A': 'plum', '#6B4A00': 'ochre', '#2A788E': 'teal',
+         '#8A93A8': 'grey', '#FFFFFF': 'white', '#14213D': 'ink'}
 
 
 def glyph(name):
