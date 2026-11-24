@@ -4,7 +4,7 @@ import Icon from '../../components/icons/Icon'
 import { ArrowRight } from '../../components/icons/glyphs'
 import DishIllustration from '../../components/illustrations/DishIllustration'
 import PriceTag from '../../components/ui/PriceTag'
-import { MACROS } from '../plan/plan'
+import MacroBar from '../plan/charts/MacroBar'
 import { byDay } from './meals'
 
 // Past plans as a dated list: a heading per day, then one row per plan with
@@ -52,15 +52,8 @@ function PlanRows({ meals }) {
                     </span>
                   </span>
                   {meal.split ? (
-                    <span className="col-span-2 flex flex-col gap-1.5 md:col-span-1">
-                      <span aria-hidden="true" className="flex h-2.5 overflow-hidden rounded-full">
-                        {MACROS.map((macro) => (
-                          <span className={macro.bar} key={macro.key} style={{ width: `${meal.split[macro.key]}%` }} />
-                        ))}
-                      </span>
-                      <span className="text-[13px] text-muted">
-                        {MACROS.map((macro) => `${macro.label} ${Math.round(meal.split[macro.key])}%`).join(' · ')}
-                      </span>
+                    <span className="col-span-2 md:col-span-1">
+                      <MacroBar split={meal.split} />
                     </span>
                   ) : (
                     <span className="hidden md:block" />

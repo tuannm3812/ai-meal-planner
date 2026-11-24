@@ -16,7 +16,7 @@ export default {
         ground: neutral.ground,
         tint: neutral.tint,
         surface: neutral.surface,
-        accent: { DEFAULT: brand.coral, text: brand.coralText },
+        accent: { DEFAULT: brand.coral, fill: brand.coralFill, text: brand.coralText },
         cobalt: { DEFAULT: brand.cobalt, raised: brand.cobaltRaised },
         peach: brand.peach,
         success: { bg: status.successBg, fg: status.successFg },

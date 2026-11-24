@@ -267,8 +267,8 @@ function ProfileForm({
               </div>
             )}
             <Note className="mt-4">
-              Your activity level covers a usual week. When you give today's workout, it takes the
-              place of that week's exercise, so a rest day counts as one.
+              Today&rsquo;s workout replaces your usual week&rsquo;s exercise, so a rest day counts
+              as one.
             </Note>
           </Step>
 

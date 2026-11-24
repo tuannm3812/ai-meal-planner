@@ -3,7 +3,7 @@
 export const focusRing =
   'focus:outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2'
 
-export const primaryButton = `inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-accent px-7 shadow-sticker text-[17px] font-semibold text-white ${focusRing} disabled:cursor-not-allowed disabled:bg-line disabled:text-muted disabled:shadow-none`
+export const primaryButton = `inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-accent-fill px-7 shadow-sticker text-[17px] font-semibold text-white ${focusRing} disabled:cursor-not-allowed disabled:bg-line disabled:text-muted disabled:shadow-none`
 
 export const secondaryButton = `inline-flex min-h-[48px] items-center justify-center gap-2 rounded-2xl border border-ink bg-surface px-5 font-semibold text-ink hover:bg-tint ${focusRing} disabled:cursor-not-allowed disabled:opacity-60`
 

@@ -8649,3 +8649,24 @@ Mike said "do the next thing"; this is on the same branch as the tabbed plan pag
 
 Verified: vitest 270 of 270 (three new tests), eslint clean, `vite build` passes;
 screenshots of Past plans, My meals and Profile at 1,440 and 390 px, no horizontal scroll.
+
+## 2026-11-24 — Claude — coral contrast, numbers in the macro bars, lighter helper panels
+
+Mike's feedback on PR #69: dark text on the orange blocks reads badly, put the numbers in
+the bars, the helper blocks are a lot of text, and why were the plans' numbers alike.
+
+- New token `accent-fill` (#D63C1A). Primary buttons, Save meal and coral price tags use it
+  with white text, 4.65:1. Bright coral (#FF5A36) stays for the logo. Before this the
+  primary button had white on bright coral at 3.1:1, and tags had ink on coral.
+- New `charts/MacroBar`: the split as a 28 px bar with each share inside its segment and a
+  colour key, used on meal cards, past-plan rows and Home's latest plan. The full sentence
+  stays for screen readers.
+- `SizingPanel` and the "Remembered on this device" card are icon steps with one line each;
+  the activity note is one sentence.
+- The receipt no longer sticks on wide screens: it clipped the rating card under it.
+- The earlier screenshots repeated one stored response under different names. New ones use
+  five real responses from the live service. Calories still sit near 625 kcal on all of
+  them, because one profile gives one meal target; the macro splits and prices differ.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.

@@ -61,7 +61,8 @@ outside the plan feature. The tokens fall into five groups.
 | `on-ink-muted` | #DCE4FF | Secondary text on `ink` or `cobalt` |
 | `muted` | #55607A | Supporting text |
 | `line` | #D5DBE8 | Borders and dividers |
-| `accent` | #FF5A36 | Coral: logo tile and the one primary action, always with `ink` text |
+| `accent` | #FF5A36 | Coral: the logo tile and decoration. Never a ground for text |
+| `accent-fill` | #D63C1A | Deeper coral for the one primary action and coral price tags, always with white text (4.65:1) |
 | `accent-text` | #C2361A | Small coral text on light backgrounds |
 | `cobalt` | #2448C9 | Page banners; icons, eyebrows and links on light grounds |
 | `cobalt-raised` | #3557D6 | A raised shape on a cobalt banner |
@@ -154,10 +155,9 @@ soft blob shape may sit behind a banner illustration.
   stripes along an edge, no rules under titles. A card that is an object you hold (the
   "Sized for you" card, the latest plan on Home, the receipt) gets a navy outline.
 - The **shopping list is a till receipt**: mono type, the store centred at the top, dashed
-  rules, dotted leaders to each price, and a torn bottom edge. On wide screens it stays in
-  view while the report scrolls.
+  rules, dotted leaders to each price, and a torn bottom edge.
 - **Price tags** (a pointed end and a punched hole) carry a plan's result in words, and a
-  coral one with ink text carries a shelf number (the cost to shop, a meal's kcal).
+  coral one (`accent-fill`, white text) carries a shelf number (the cost to shop, a meal's kcal).
 - **The plan page is a report with tabs** (Overview, Ingredients, How it was made) beside
   the receipt. The active tab is an ink pill, as in the rail. Overview shows the calorie
   ring, the macro split and three readings, each a big share over a scale that shades the
@@ -167,6 +167,10 @@ soft blob shape may sit behind a banner illustration.
   result tag. My meals stays a card grid. Both have a count tag and a search box.
 - **Profile** puts the form beside a side column on wide screens: how a meal is sized, the
   account, and what the device remembers.
+- **Macro bars** on cards and rows are 28 px tall with each share written inside its
+  segment (white on protein and carbs, ink on fat) over a colour key.
+- **Helper panels** are icon steps, not paragraphs: an icon tile, a short name and one line
+  each ("How your meal is sized", "Remembered on this device").
 - **Home** is a workspace: the craving, today's workout as three chips, six dish cards from
   the menu, then saved meals and past plans beside a context column (the plan in hand or
   the latest one, and the device's counts).

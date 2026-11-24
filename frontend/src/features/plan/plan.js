@@ -10,9 +10,9 @@ export const AMDR_PERCENT = { protein: [10, 35], carbs: [45, 65], fat: [20, 35] 
 const KCAL_PER_GRAM = { protein: 4, carbs: 4, fat: 9 }
 
 export const MACROS = [
-  { key: 'protein', label: 'Protein', total: 'total_protein', bar: 'bg-protein' },
-  { key: 'carbs', label: 'Carbs', total: 'total_carbs', bar: 'bg-carbs' },
-  { key: 'fat', label: 'Fat', total: 'total_fat', bar: 'bg-fat' },
+  { key: 'protein', label: 'Protein', total: 'total_protein', bar: 'bg-protein', on: 'text-white' },
+  { key: 'carbs', label: 'Carbs', total: 'total_carbs', bar: 'bg-carbs', on: 'text-white' },
+  { key: 'fat', label: 'Fat', total: 'total_fat', bar: 'bg-fat', on: 'text-ink' },
 ]
 
 const isNumber = (value) => typeof value === 'number' && Number.isFinite(value)

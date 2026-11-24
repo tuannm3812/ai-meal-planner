@@ -62,6 +62,7 @@ describe('tokens', () => {
     expect(colors.ink.DEFAULT).toBe(neutral.ink)
     expect(colors.cobalt.DEFAULT).toBe(brand.cobalt)
     expect(colors.accent.DEFAULT).toBe(brand.coral)
+    expect(colors.accent.fill).toBe(brand.coralFill)
     expect(colors.danger.fg).toBe(status.dangerFg)
     expect(colors.viridis[6]).toBe(VIRIDIS[5])
   })

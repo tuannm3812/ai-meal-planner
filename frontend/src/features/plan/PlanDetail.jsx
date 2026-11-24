@@ -81,7 +81,7 @@ function PlanDetail({
               </Link>
               {craving && <p className="text-[15px] text-on-ink-muted">For your craving &ldquo;{craving}&rdquo;</p>}
               <h1
-                className="font-display text-4xl font-extrabold leading-none tracking-tight sm:text-[56px]"
+                className="font-display text-4xl font-extrabold leading-none tracking-tight focus:outline-none sm:text-[56px]"
                 id="plan-heading"
                 tabIndex={-1}
               >
@@ -277,7 +277,7 @@ function PlanDetail({
 
         <aside
           aria-label="Shopping and rating"
-          className="flex min-w-0 flex-[2_1_340px] flex-col gap-6 xl:sticky xl:top-6 xl:max-h-[calc(100vh-3rem)] xl:overflow-y-auto print:static print:max-h-none print:overflow-visible"
+          className="flex min-w-0 flex-[2_1_340px] flex-col gap-6"
         >
           <ShoppingList
             location={location}

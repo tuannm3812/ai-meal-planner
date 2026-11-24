@@ -15,11 +15,13 @@ export const neutral = {
   surface: '#FFFFFF',
 }
 
-// Brand: coral is the one call to action (with ink text on it); cobalt is the
+// Brand: coral is the logo's colour, and coralFill, a deeper coral that white
+// text passes 4.5:1 on, fills the one call to action and price tags; cobalt is the
 // brand ground for banners and colours icons on light grounds; peach colours
 // icons, focus rings and highlights on ink or cobalt.
 export const brand = {
   coral: '#FF5A36',
+  coralFill: '#D63C1A',
   coralText: '#C2361A',
   cobalt: '#2448C9',
   cobaltRaised: '#3557D6',
