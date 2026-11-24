@@ -8,7 +8,7 @@ callers go through ``record_feedback``.
 from typing import Any
 
 from backend.app.core.exceptions import FeedbackSignalRequired, MealPlanNotFound
-from backend.app.repositories.base import MealFeedbackStore, MealPlanStore
+from backend.app.repositories.base import MealFeedbackStore, MealPlanStore, owner_of_meal_plan
 from backend.app.schemas.requests import MealFeedbackRequest
 
 
@@ -18,6 +18,7 @@ def record_feedback(
     meal_history: MealPlanStore,
     meal_feedback: MealFeedbackStore,
     client_id: str,
+    owner: str | None = None,
 ) -> dict[str, Any]:
     """Validate one feedback record against the client's own plans, then save it.
 
@@ -26,16 +27,21 @@ def record_feedback(
         meal_history: The client's stored meal plans.
         meal_feedback: Where feedback is saved.
         client_id: The namespace to read plans from and write feedback to.
+        owner: When set, the plan must also belong to this user. A signed-in
+            user's namespace holds every account (DEC-43), so the namespace
+            alone does not stop one user rating another's meal.
 
     Returns:
         The saved feedback record.
 
     Raises:
         FeedbackSignalRequired: 400 when none of liked, rating or saved is given.
-        MealPlanNotFound: 404 when the client has no plan with that request_id.
+        MealPlanNotFound: 404 when the client (or ``owner``) has no plan with that
+            request_id.
     """
     if feedback.liked is None and feedback.rating is None and not feedback.saved:
         raise FeedbackSignalRequired("feedback with no liked, rating or saved")
-    if meal_history.find_by_request_id(feedback.request_id, client_id=client_id) is None:
+    plan = meal_history.find_by_request_id(feedback.request_id, client_id=client_id)
+    if plan is None or (owner is not None and owner_of_meal_plan(plan) != owner):
         raise MealPlanNotFound(f"client {client_id!r} has no plan {feedback.request_id!r}")
     return meal_feedback.save(feedback.model_dump(), client_id=client_id)

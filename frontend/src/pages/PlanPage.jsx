@@ -99,7 +99,7 @@ function PlanPage() {
                 details or craving have changed since this plan was made.
               </p>
               <button
-                className="min-h-[44px] rounded-xl bg-accent px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
+                className="min-h-[44px] rounded-xl bg-accent-fill px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
                 disabled={!canSubmit}
                 onClick={() => submitPlan()}
                 type="button"
@@ -114,7 +114,7 @@ function PlanPage() {
             <section className="flex min-h-[360px] flex-col items-center justify-center gap-4 rounded-3xl bg-surface p-8 text-center">
               <span
                 aria-hidden="true"
-                className="h-12 w-12 animate-spin rounded-full border-4 border-leaf border-t-transparent"
+                className="h-12 w-12 animate-spin rounded-full border-4 border-cobalt border-t-transparent"
               />
               <h1 className="font-display text-2xl font-extrabold">Planning your meal…</h1>
               <p className="text-sm text-muted">This can take a few seconds.</p>

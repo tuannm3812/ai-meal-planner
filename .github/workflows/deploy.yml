@@ -5,6 +5,11 @@
 # the job is skipped while the GCP_PROJECT_ID repository variable is unset. No
 # long-lived credentials are stored; GitHub authenticates through Workload
 # Identity Federation.
+#
+# User accounts (DEC-43) switch on with the ACCOUNTS_ENABLED variable, set to
+# "true" after docs/6_deployment.md §5. Then the API runs on Firestore with
+# Firebase sign-in, and the hosting job publishes the React app to Firebase
+# Hosting. Until then the API deploys exactly as before and the job is skipped.
 name: Deploy to Cloud Run
 
 on:
@@ -32,6 +37,8 @@ jobs:
     if: vars.GCP_PROJECT_ID != ''
     runs-on: ubuntu-latest
     environment: production
+    outputs:
+      url: ${{ steps.deploy.outputs.url }}
     env:
       PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
       REGION: ${{ vars.GCP_REGION }}
@@ -61,6 +68,29 @@ jobs:
           docker push "$IMAGE"
           echo "IMAGE=$IMAGE" >> "$GITHUB_ENV"
 
+      # DEC-43: Firestore rules and indexes go first, and the deploy waits until
+      # every index is READY. The live check below lists saved meals, a query
+      # that fails without its index, so on a fresh project it must exist before
+      # the new revision is checked (seen on the first real deploy, 2026-11-23).
+      - name: Deploy Firestore rules and indexes
+        if: vars.ACCOUNTS_ENABLED == 'true'
+        run: >-
+          npx --yes firebase-tools@14.27.0 deploy
+          --only firestore:rules,firestore:indexes
+          --project "$PROJECT_ID" --non-interactive
+
+      - name: Wait for the Firestore indexes to be ready
+        if: vars.ACCOUNTS_ENABLED == 'true'
+        timeout-minutes: 15
+        run: |
+          while true; do
+            states="$(gcloud firestore indexes composite list --project "$PROJECT_ID" \
+              --format='value(state)')"
+            echo "index states: ${states:-none}"
+            if ! grep -qv '^READY$' <<< "$states"; then break; fi
+            sleep 15
+          done
+
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v3
@@ -79,10 +109,14 @@ jobs:
             --min-instances=${{ env.MIN_INSTANCES }}
             --max-instances=${{ vars.GCP_MAX_INSTANCES || '3' }}
           env_vars_update_strategy: overwrite
+          # With accounts on: shared Firestore storage, Firebase ID tokens for
+          # this project, and the hosted React app as the one browser origin.
           env_vars: |-
             APP_ENV=production
             HOSTED_MODE=true
-            STORAGE_BACKEND=sqlite
+            STORAGE_BACKEND=${{ vars.ACCOUNTS_ENABLED == 'true' && 'firestore' || 'sqlite' }}
+            FIREBASE_PROJECT_ID=${{ vars.ACCOUNTS_ENABLED == 'true' && vars.GCP_PROJECT_ID || '' }}
+            ALLOWED_ORIGINS=${{ vars.ACCOUNTS_ENABLED == 'true' && format('https://{0}.web.app', vars.GCP_PROJECT_ID) || 'http://localhost:5173' }}
             REQUIRE_VERIFIED_NUTRITION=0
             TRACING_EXPORTER=cloud_trace
           secrets_update_strategy: overwrite
@@ -96,3 +130,62 @@ jobs:
         env:
           MEAL_PLANNER_KEY: ${{ secrets.MEAL_PLANNER_SMOKE_KEY }}
         run: scripts/live_check.sh "${{ steps.deploy.outputs.url }}"
+
+  # DEC-43: the React app on Firebase Hosting, built against the API just
+  # deployed. The Firestore rules and indexes went out with the deploy job.
+  hosting:
+    needs: deploy
+    if: vars.ACCOUNTS_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    env:
+      PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v3
+        with:
+          project_id: ${{ vars.GCP_PROJECT_ID }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_DEPLOY_SERVICE_ACCOUNT }}
+
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Build the React app
+        working-directory: frontend
+        env:
+          VITE_API_URL: ${{ needs.deploy.outputs.url }}
+          # The Firebase web config is public by design (frontend/.env.example).
+          VITE_FIREBASE_API_KEY: ${{ vars.FIREBASE_WEB_API_KEY }}
+          VITE_FIREBASE_AUTH_DOMAIN: ${{ vars.GCP_PROJECT_ID }}.firebaseapp.com
+          VITE_FIREBASE_PROJECT_ID: ${{ vars.GCP_PROJECT_ID }}
+          VITE_FIREBASE_APP_ID: ${{ vars.FIREBASE_WEB_APP_ID }}
+        run: |
+          npm ci
+          npm run build
+
+      - name: Deploy hosting
+        run: >-
+          npx --yes firebase-tools@14.27.0 deploy --only hosting
+          --project "$PROJECT_ID" --non-interactive
+
+      # A brand-new site can answer 404 for a few seconds after its first
+      # release (seen 2026-11-23), so this retries for up to a minute.
+      - name: The hosted app answers
+        run: |
+          for attempt in $(seq 1 12); do
+            if curl -fsS --max-time 30 "https://${PROJECT_ID}.web.app/" | grep -q '<div id="root">'; then
+              echo "https://${PROJECT_ID}.web.app is serving the app"
+              exit 0
+            fi
+            echo "attempt $attempt: not serving yet"
+            sleep 5
+          done
+          exit 1

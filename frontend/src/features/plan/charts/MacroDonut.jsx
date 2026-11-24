@@ -4,12 +4,13 @@ import { MACRO_COLORS, donutSegments } from './geometry'
 const R = 48
 
 // The served split as a donut, with grams and shares written beside it, so
-// colour is never the only way to read it.
-function MacroDonut({ split, grams }) {
+// colour is never the only way to read it. `legend={false}` leaves that to a
+// reading row next to it.
+function MacroDonut({ split, grams, legend = true }) {
   const segments = donutSegments(split, R)
   const label = MACROS.map((macro) => `${macro.label} ${Math.round(split[macro.key])}%`).join(', ')
   return (
-    <figure className="m-0 flex items-center gap-5">
+    <figure className="m-0 flex flex-wrap items-center gap-5">
       <svg aria-label={`${label} of calories`} className="h-[150px] w-[150px] shrink-0" role="img" viewBox="0 0 140 140">
         {segments.map((segment) => (
           <circle
@@ -26,6 +27,7 @@ function MacroDonut({ split, grams }) {
           />
         ))}
       </svg>
+      {legend && (
       <figcaption className="flex flex-col gap-2 text-[15px] text-ink">
         {MACROS.map((macro) => (
           <span className="flex items-center gap-2 whitespace-nowrap" key={macro.key}>
@@ -41,6 +43,7 @@ function MacroDonut({ split, grams }) {
           </span>
         ))}
       </figcaption>
+      )}
     </figure>
   )
 }

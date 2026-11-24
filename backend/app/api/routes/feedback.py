@@ -3,7 +3,7 @@
 from fastapi import APIRouter
 from fastapi.concurrency import run_in_threadpool
 
-from backend.app.api.auth import FeedbackWrite, HistoryEnabled, HistoryRead
+from backend.app.api.auth import FeedbackWrite, HistoryEnabled, HistoryRead, body_for, user_for
 from backend.app.api.errors import AUTH_ERRORS, error_responses
 from backend.app.core.container import ContainerDep
 from backend.app.core.exceptions import FeedbackSignalRequired, HistoryDisabled, MealPlanNotFound
@@ -47,10 +47,11 @@ async def save_meal_feedback(
     # The same rules the in-process Streamlit demo applies (services/feedback.py).
     record = await run_in_threadpool(
         record_feedback,
-        request,
+        body_for(principal, request),
         meal_history=container.meal_history,
         meal_feedback=container.meal_feedback,
         client_id=principal.client_id,
+        owner=principal.user_id,
     )
     return FeedbackResponse(
         status="success",
@@ -81,6 +82,7 @@ async def list_meal_feedback(
     Returns:
         The clamped limit and the matching stored feedback records.
     """
+    user_id = user_for(principal, user_id)
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(
         container.meal_feedback.list_for_user,
@@ -118,6 +120,7 @@ async def list_saved_meals(
     Returns:
         The clamped limit and the matching saved-meal records.
     """
+    user_id = user_for(principal, user_id)
     safe_limit = max(1, min(limit, 100))
     items = await run_in_threadpool(
         container.meal_feedback.list_for_user,

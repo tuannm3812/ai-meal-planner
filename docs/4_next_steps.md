@@ -286,7 +286,9 @@ From spec §12.
    `core/portions.py`, with unchanged behaviour (`test_portions.py`).
 6. **Closed 2026-10-12.** `backend/app/ml/` was an empty package that spec §6
    item 10 said to use or remove. It is removed (owner decision).
-7. **Authentication and user accounts.** The endpoints that take a `user_id` take it on trust.
+7. **Authentication and user accounts.** *In progress 2026-11-23 (DEC-43,
+   `docs/superpowers/specs/2026-11-22-user-accounts-design.md`), which also closes items 2
+   and 3. Slices 1 to 3, the API half, are built.* The endpoints that take a `user_id` take it on trust.
    Also a README roadmap item; it blocks real multi-user use, which DEC-1 places
    after the portfolio milestone.
 8. **Postgres.** Phase 2's Protocol boundary reduces this to a config change plus one

@@ -16,6 +16,13 @@ export function storeOf(shopping) {
   }
 }
 
+// Plans stored before 2026-11-24 named an unknown product "Generic <ingredient>";
+// show the ingredient's name instead, as the service does now.
+function productName(name) {
+  const plain = String(name ?? '').replace(/^Generic /, '')
+  return plain.slice(0, 1).toUpperCase() + plain.slice(1)
+}
+
 // Items grouped by aisle, aisles in the order the list first reaches them, so
 // the list reads in the service's order. Each item keeps its position as its
 // id, since two ingredients can map to the same product.
@@ -26,10 +33,13 @@ export function aisles(shopping) {
   items.forEach((item, index) => {
     const aisle = item.category_or_aisle || 'Other'
     if (!groups.has(aisle)) groups.set(aisle, [])
+    const product = productName(item.store_product_name || item.original_item_name)
     groups.get(aisle).push({
       id: index,
-      product: item.store_product_name || item.original_item_name,
+      product,
       ingredient: item.original_item_name,
+      // False when the product is just the ingredient's own name.
+      named: product.toLowerCase() !== String(item.original_item_name ?? '').toLowerCase(),
       price: isNumber(item.estimated_price) ? item.estimated_price : null,
       // The reference list has a product and price for it; otherwise the
       // service guessed both from the ingredient's category.

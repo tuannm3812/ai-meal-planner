@@ -79,6 +79,9 @@ class AppSettings(BaseSettings):
     # open local mode, which production refuses (see core/auth.py).
     api_keys: str = ""
     rate_limit_per_minute: int = 60
+    # DEC-43: the Firebase project whose ID tokens are accepted as
+    # "Authorization: Bearer". Empty turns signed-in accounts off.
+    firebase_project_id: str = ""
 
     # G6: on a hosted, multi-instance deployment, history and feedback are
     # refused with 501 (history_disabled_stateless) and nothing is stored.
@@ -90,12 +93,23 @@ class AppSettings(BaseSettings):
     tracing_exporter: Literal["none", "console", "cloud_trace"] = "none"
     trace_sample_ratio: float = Field(default=1.0, ge=0.0, le=1.0)
 
-    storage_backend: Literal["json", "sqlite"] = "sqlite"
+    # DEC-43: "firestore" is the store every hosted instance shares. It needs the
+    # firestore extra, and uses FIREBASE_PROJECT_ID (or the runtime's project).
+    storage_backend: Literal["json", "sqlite", "firestore"] = "sqlite"
 
     @property
     def data_dir(self) -> Path:
         """Directory holding the JSON stores and the SQLite database."""
         return BASE_DIR / "database"
+
+    @property
+    def keeps_history(self) -> bool:
+        """Whether plans, history and feedback are kept (G6, DEC-43).
+
+        A hosted deployment on per-instance SQLite keeps nothing (DEC-10). On
+        Firestore every instance shares one store, so it keeps history.
+        """
+        return not self.hosted_mode or self.storage_backend == "firestore"
 
     @property
     def sqlite_path(self) -> Path:

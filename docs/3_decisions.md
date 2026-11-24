@@ -45,6 +45,8 @@ records *what was decided and why*, briefly enough to read in one sitting.
 | 35 | The corpus grows to 76 recipes; new ingredients are estimates until USDA checks them | 2026-11-22 |
 | 39 | A workout past the model's 30-minute range is counted per minute; past 128 bpm it is flagged | 2026-11-22 |
 | 40 | A stated workout replaces the activity level's exercise | 2026-11-22 |
+| 43 | User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers | 2026-11-23 |
+| 44 | Market Receipt brand and a desktop side rail replace Kitchen green | 2026-11-23 |
 
 ## 2026-09-10 — Refactor and standards alignment
 
@@ -780,3 +782,80 @@ with no unit as kcal as before. Results and the per-ingredient diagnosis:
 Rules out a dataType filter (Foundation, SR Legacy) as the fix for wrong matches: it was
 measured and matched worse foods. Pinned FoodData Central IDs per ingredient are the
 proposed next step, not done here.
+
+### DEC-42 — Corpus ingredients are looked up in USDA by a reviewed FDC ID
+
+2026-11-23, Mike's choice after DEC-41's run. Name search took USDA's top hit, which was
+the wrong food for many ingredients (lean turkey mince as minced ham, avocado as avocado
+dressing, cod as breaded cod), and a dataType filter matched worse. Each of the 41 corpus
+ingredients without a trusted local value is now pinned in
+`data/reference/usda_fdc_ids.json` to one Foundation, SR Legacy or Survey food, chosen for
+the state the recipe's weight implies, and fetched from `/fdc/v1/food/{fdcId}`. A test
+fails when a corpus ingredient is neither trusted nor pinned. An unpinned name still falls
+back to search, which no corpus ingredient reaches.
+
+Energy is read as plain Energy (208) in kcal, then "Energy (Atwater General Factors)"
+(957), which is what Foundation foods carry; entries with no amount are skipped. With the
+pins, 72 of 72 benchmark plans and 144 of 152 wider plans meet the targets on USDA data
+(`docs/7_meal_quality.md` §7).
+
+Rules out tuning pins to the score: Hass avocado and store-bought hummus stay although
+USDA averages would clear about five misses.
+
+## 2026-11-23 — User accounts
+
+Source: `docs/superpowers/specs/2026-11-22-user-accounts-design.md`.
+
+### DEC-43 — User accounts: Firebase Auth, Firestore and Firebase Hosting on free tiers
+
+Mike chose Google sign-in through Firebase Auth, Firestore for profiles, plans and
+feedback, and Firebase Hosting for the React app, all on free tiers in the existing GCP
+project and its A$1 budget alert. A signed-out visitor to the hosted app is signed in
+anonymously, so planning and history work without a Google account; Google is the only
+named sign-in for now.
+
+The API verifies Firebase ID tokens with `google-auth`, stores only the uid, and for an
+account caller ignores any body `user_id` and refuses a path `user_id` that is not the
+caller's. API keys keep working for Streamlit and scripts. Hosted mode serves history
+when storage is Firestore; DEC-10's refusal stays for hosted SQLite.
+
+Rules out Supabase (a second vendor whose free project sleeps after a week idle), Cloud
+SQL (about A$15 or more a month) and staying device-only. Supersedes DEC-36's "no
+accounts" and lifts DEC-8's limit that React cannot call the hosted API.
+
+### DEC-44 — Market Receipt brand and a desktop side rail replace Kitchen green
+
+2026-11-23, Mike's choice. He found the dark green unattractive and the desktop app too
+narrow (one 1,152 px column, about 384 px empty each side on a 1,920 px screen). From a
+proposal with three layouts he chose a side rail; from three brand directions he chose
+**Market Receipt**: cobalt (#2448C9) and coral (#FF5A36) on white and paper, navy ink
+(#14213D), Unbounded for display type and Inter for reading.
+
+- Coral marks the one main action and carries ink text, not white (5.2:1; white is 3.1:1).
+  Primary buttons get a hard navy "sticker" shadow.
+- Banners are cobalt; ink stays for dark panels and the footer. Peach (#FFD3C7) colours
+  icons, focus rings and highlights on cobalt and ink.
+- Viridis stays for data (DEC-37), and the macro colours keep their meaning.
+- From 1,280 px the top bar becomes a white rail on the left with five tabs (Plan a meal,
+  My meals, Past plans, Calories, Profile) and a "Sized for you" card; pages widen to
+  1,440 px. Phones and tablets keep the top bar.
+- The calorie estimate moves from a button inside Profile to its own Calories tab.
+
+Later slices bring the receipt-style shopping list, price-tag badges, a Home workspace
+and a tabbed plan page. Rules out widening only (sides still empty on big screens) and a
+FarmLens split screen (no map to fill the fixed half). Supersedes DEC-37's "Flat kitchen"
+look; DEC-38's single tokens file and Icon component stay.
+
+### DEC-45 — Phosphor two-tone icons, and white text on a deeper coral
+
+2026-11-24, Mike's choices while reviewing the Market Receipt pages.
+
+- **Icons.** He wanted a better-looking set than Lucide's thin outline. From Phosphor
+  two-tone, a heavier Lucide, and Phosphor bold or filled, he chose **Phosphor two-tone**
+  (`@phosphor-icons/react`, MIT): an outline with a soft fill of the same colour. The
+  solid weight marks a state that is on. `lucide-react` is removed. DEC-38's rule stands:
+  one `Icon` component, one folder that imports the package.
+- **Coral.** He found dark text on the orange blocks a poor pairing. Text-bearing coral
+  fills (the primary button, Save meal, coral price tags) now use `accent-fill` #D63C1A
+  with white text, 4.65:1. Bright coral #FF5A36 stays for the logo and never carries text.
+  This replaces DEC-44's "coral carries ink text".

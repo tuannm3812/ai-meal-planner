@@ -58,6 +58,8 @@ def test_the_contract_documents_every_route() -> None:
         "/generate-meal-plan",
         "/meal-plans/{user_id}",
         "/calorie-expenditure/predict",
+        "/me/profile",
+        "/me",
         "/meal-feedback",
         "/meal-feedback/{user_id}",
         "/saved-meals/{user_id}",

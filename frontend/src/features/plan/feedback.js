@@ -19,5 +19,5 @@ export function feedbackErrorMessage(error) {
   const detail = error?.response?.data?.detail
   return typeof detail === 'string' && detail
     ? detail
-    : 'Could not save that. Check that the FastAPI backend is running on port 8000.'
+    : 'Could not save that. Check your connection and try again.'
 }

@@ -51,7 +51,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
           <legend className="sr-only">Rating</legend>
           <div className="flex gap-1">
             {STARS.map((n) => (
-              <label className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl focus-within:ring-2 focus-within:ring-lime" key={n}>
+              <label className="flex h-12 w-12 cursor-pointer items-center justify-center rounded-xl focus-within:ring-2 focus-within:ring-peach" key={n}>
                 <input
                   checked={shown === n}
                   className="sr-only"
@@ -71,7 +71,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
                 A note (optional)
               </label>
               <textarea
-                className="mt-1.5 w-full rounded-xl border-0 px-3 py-2.5 text-base text-ink focus:outline-none focus:ring-2 focus:ring-lime"
+                className="mt-1.5 w-full rounded-xl border-0 px-3 py-2.5 text-base text-ink focus:outline-none focus:ring-2 focus:ring-peach"
                 id={noteId}
                 maxLength={500}
                 onChange={(event) => setNotes(event.target.value)}
@@ -80,7 +80,7 @@ function RatingCard({ plan, userId, sentRating, onRated, onHosted }) {
                 value={notes}
               />
               <button
-                className="mt-3 min-h-[48px] rounded-2xl bg-surface px-5 font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-lime disabled:cursor-not-allowed disabled:opacity-60"
+                className="mt-3 min-h-[48px] rounded-2xl bg-surface px-5 font-semibold text-ink focus:outline-none focus-visible:ring-2 focus-visible:ring-peach disabled:cursor-not-allowed disabled:opacity-60"
                 disabled={!rating || sending}
                 type="submit"
               >

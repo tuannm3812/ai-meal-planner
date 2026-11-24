@@ -80,7 +80,7 @@ export function usePlanner() {
     reset: clearPlan,
   } = useAsyncRequest(
     generateMealPlan,
-    'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
+    'Could not generate a meal plan. Check your connection and try again.',
   )
 
   // Remember on this device once the person has given their details, on
@@ -201,6 +201,16 @@ export function usePlanner() {
     setHasProfile(false)
   }
 
+  // A signed-in account's saved details replace this device's (DEC-43).
+  const adoptAccount = (accountProfile, accountLocation) => {
+    const next = { ...DEFAULT_PROFILE, ...accountProfile }
+    const nextLocation = accountLocation || location
+    setProfileValue(next)
+    setLocationValue(nextLocation)
+    setHasProfile(true)
+    persist({ profile: next, location: nextLocation }, true)
+  }
+
   return {
     userId,
     profile,
@@ -216,6 +226,7 @@ export function usePlanner() {
     },
     canRemember,
     forget,
+    adoptAccount,
     plan,
     isLoading,
     error,

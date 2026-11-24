@@ -33,6 +33,7 @@ class ProfileNotFound(MealPlanningError):
 
     status_code = 404
     client_message = "No profile found for that user."
+    error_code = "profile_not_found"
 
 
 class RetrievalUnavailable(MealPlanningError):
@@ -75,7 +76,7 @@ class AuthenticationRequired(MealPlanningError):
     """Raised when keys are configured and the request has no valid key (G4)."""
 
     status_code = 401
-    client_message = "A valid X-API-Key header is required."
+    client_message = "A valid X-API-Key header or sign-in token is required."
     error_code = "missing_or_invalid_api_key"
 
 
@@ -143,6 +144,18 @@ class HistoryDisabled(MealPlanningError):
         "no state between requests."
     )
     error_code = "history_disabled_stateless"
+
+
+class AccountsUnavailable(MealPlanningError):
+    """Raised for account routes on a deployment with no account store (DEC-43).
+
+    Profiles and account deletion are kept in Firestore only. Under the JSON or
+    SQLite backend these routes are refused rather than half-served.
+    """
+
+    status_code = 501
+    client_message = "Accounts are not available on this deployment."
+    error_code = "accounts_unavailable"
 
 
 def register_exception_handlers(app: FastAPI) -> None:

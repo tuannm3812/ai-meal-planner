@@ -127,7 +127,8 @@ the hand-offs by watching the log; its header says how to run it.
   and plan are in `docs/superpowers/`.
 - 2026-11-22: every React colour lives in `frontend/src/theme/tokens.js`, and icons
   render through one `Icon` component (DEC-38). A guard test fails on raw hex, stock
-  Tailwind colours or a stray Lucide import. The frontend has 233 tests.
+  Tailwind colours or a stray icon-package import. Icons are Phosphor two-tone since
+  2026-11-24 (DEC-45). The frontend has 270 tests.
 - 2026-11-22: the API is live on Cloud Run (GCP free tier, project
   `ai-meal-planner-515508`, australia-southeast1), deployed by `deploy.yml` with
   its live check passing. `GCP_MAX_INSTANCES=1` caps it at one instance (#52), and
@@ -141,6 +142,31 @@ the hand-offs by watching the log; its header says how to run it.
   deterministic offline baseline. USDA energy is now read in kcal, not kJ. With USDA, 50 of 72
   meet the targets and all 72 are within 10% of calories; the misses come from USDA's top
   search hit being the wrong food (`docs/7_meal_quality.md` §6).
+- 2026-11-23: corpus ingredients are looked up in USDA by a reviewed FDC ID
+  (`data/reference/usda_fdc_ids.json`, DEC-42); a new ingredient must be pinned there
+  unless it is a trusted local value. On USDA data 72 of 72 meet the targets and 144 of
+  152 in the wider check (`docs/7_meal_quality.md` §7).
+
+- 2026-11-23: user accounts (DEC-43, Mike's choice): Firebase Auth with Google and
+  anonymous sign-in, Firestore and Firebase Hosting, on free tiers. Spec
+  `docs/superpowers/specs/2026-11-22-user-accounts-design.md`, built in five slices. Slice 1:
+  the API accepts a Firebase ID token as `Authorization: Bearer` (`FIREBASE_PROJECT_ID`) and
+  acts only for the token's uid, in the `accounts` namespace. Slice 2: `STORAGE_BACKEND=firestore`,
+  whose contract tests run on the Firestore emulator in CI. Slice 3: `GET`/`PUT /me/profile` and
+  `DELETE /me`, and a hosted deployment on Firestore keeps history (`history_enabled`). Slice 4:
+  React signs in with Firebase (anonymous on first API call, Google from the Profile page or
+  the top bar) when built with `VITE_FIREBASE_*`, and sends the token on every call. Slice 5:
+  `deploy.yml` switches to Firestore and publishes React to Firebase Hosting when the
+  `ACCOUNTS_ENABLED` variable is `true`; the one-time setup is `docs/6_deployment.md` §5 (not
+  yet done).
+
+- 2026-11-23: the React app's look is **Market Receipt** (DEC-44, Mike's choice): cobalt and
+  coral on white, navy ink, Unbounded and Inter, a coral plate-sticker mark. From 1,280 px a
+  left rail holds five tabs (Plan a meal, My meals, Past plans, Calories, Profile) and a
+  "Sized for you" card, and pages widen to 1,440 px; the calorie estimate is its own tab.
+  This is slice 1; the receipt shopping list, Home workspace and tabbed plan page follow.
+  Proposal and brand directions: https://claude.ai/artifact/G6u3yyorQwSTfVoXBoWjnu and
+  https://claude.ai/artifact/TVCREvoW1BcsCFTa9ScWSS. The showcase keeps Kitchen green for now.
 
 ## Open risks
 
@@ -152,8 +178,8 @@ the hand-offs by watching the log; its header says how to run it.
   is invisible until `scripts/migrate_json_to_sqlite.py` runs, which skips
   records already stored. Alembic owns the schema and upgrades at startup
   (DEC-32). That suits one SQLite file per instance; Postgres should revisit it.
-- `ProfileNotFound` in `core/exceptions.py` is wired to a handler but never
-  raised. The other three are raised:
+- `ProfileNotFound` (404, `profile_not_found`) is raised by `GET /me/profile` for an account
+  with no saved profile (DEC-43). The others:
   - `NutritionProviderError` (502, code `unverified_required`) only when
     `REQUIRE_VERIFIED_NUTRITION` is on and an ingredient is estimated. It is off
     by default;
@@ -163,9 +189,10 @@ the hand-offs by watching the log; its header says how to run it.
     exhausted. It is an internal signal: `MealPlanningService` turns it into a
     successful response with `plan_status: "infeasible"`, so it never reaches
     HTTP as a 422.
-- **In hosted mode the React "My meals" and "Past plans" links stay visible.**
-  Opening them shows a notice instead of history, and a 501 on save or rate hides
-  those controls. React cannot call a keyed production API in v1 anyway (DEC-8).
+- **In hosted mode on SQLite the React "My meals" and "Past plans" links stay visible.**
+  Opening them shows a notice instead of history, and a 501 on save or rate hides those
+  controls. On Firestore with accounts on (DEC-43) they work. A build without the
+  `VITE_FIREBASE_*` config has no accounts and cannot call a keyed API (DEC-8).
 - **G4 limits, by design.**
   - The rate limit is per instance, so N instances allow N times the limit.
   - Open local mode (no `API_KEYS`) is unauthenticated, though production

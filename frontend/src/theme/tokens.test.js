@@ -37,12 +37,14 @@ describe('palette guard', () => {
     ).toEqual([])
   })
 
-  it('imports Lucide only through the Icon folder', () => {
-    expect(offenders(/from ['"]lucide-react['"]/, (p) => p.startsWith('components/icons/'))).toEqual([])
+  it('imports icons only through the Icon folder', () => {
+    expect(
+      offenders(/from ['"](?:@phosphor-icons\/react|lucide-react)[^'"]*['"]/, (p) => p.startsWith('components/icons/')),
+    ).toEqual([])
   })
 
   it('sizes icons through Icon, never by hand', () => {
-    expect(offenders(/strokeWidth=\{1\.[0-9]+\}|\bsize=\{\d+\}/, (p) => p.startsWith('components/icons/'))).toEqual([])
+    expect(offenders(/strokeWidth=\{1\.[0-9]+\}|\bsize=\{\d+\}|\bweight=["{]/, (p) => p.startsWith('components/icons/'))).toEqual([])
   })
 })
 
@@ -60,7 +62,9 @@ describe('tokens', () => {
   it('are what Tailwind maps its class names to', () => {
     const colors = tailwindConfig.theme.extend.colors
     expect(colors.ink.DEFAULT).toBe(neutral.ink)
-    expect(colors.leaf).toBe(brand.leaf)
+    expect(colors.cobalt.DEFAULT).toBe(brand.cobalt)
+    expect(colors.accent.DEFAULT).toBe(brand.coral)
+    expect(colors.accent.fill).toBe(brand.coralFill)
     expect(colors.danger.fg).toBe(status.dangerFg)
     expect(colors.viridis[6]).toBe(VIRIDIS[5])
   })

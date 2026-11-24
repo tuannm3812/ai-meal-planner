@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 
 import { SAMPLE_PLAN } from '../plan/samplePlan'
-import { dedupeSaved, findPlan, pastMeals, planSummary } from './meals'
+import { dedupeSaved, findPlan, pastMeals, planSummary, byDay, searchMeals } from './meals'
 
 describe('meals', () => {
   it('keeps the newest saved record per plan and drops unsaved ones', () => {
@@ -44,5 +44,45 @@ describe('meals', () => {
       { ...SAMPLE_PLAN, saved_at: '1' },
     ]
     expect(pastMeals(items).map((meal) => meal.requestId)).toEqual(['sample-request'])
+  })
+})
+
+describe('byDay', () => {
+  const now = new Date(2026, 10, 24, 10)
+  const at = (day, hour = 9) => new Date(2026, 10, day, hour).toISOString()
+
+  it('groups plans under Today, Yesterday, a date, then undated ones', () => {
+    const groups = byDay(
+      [
+        { requestId: 'a', date: at(24) },
+        { requestId: 'b', date: at(24, 8) },
+        { requestId: 'c', date: at(23) },
+        { requestId: 'd', date: at(20) },
+        { requestId: 'e', date: null },
+        { requestId: 'f', date: 'not a date' },
+      ],
+      now,
+    )
+    expect(groups.map((group) => [group.label, group.meals.map((meal) => meal.requestId)])).toEqual([
+      ['Today', ['a', 'b']],
+      ['Yesterday', ['c']],
+      [expect.stringMatching(/20 Nov 2026/), ['d']],
+      ['Earlier', ['e', 'f']],
+    ])
+  })
+})
+
+describe('searchMeals', () => {
+  const meals = [
+    { name: 'Chicken Fried Rice', craving: 'something warm' },
+    { name: 'Chickpea Curry Bowl', craving: null },
+  ]
+
+  it('matches every word against the name or the craving', () => {
+    expect(searchMeals(meals, 'rice chicken')).toEqual([meals[0]])
+    expect(searchMeals(meals, 'WARM')).toEqual([meals[0]])
+    expect(searchMeals(meals, 'chick')).toEqual(meals)
+    expect(searchMeals(meals, '  ')).toEqual(meals)
+    expect(searchMeals(meals, 'pasta')).toEqual([])
   })
 })

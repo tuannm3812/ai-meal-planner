@@ -46,19 +46,23 @@ describe('App', () => {
   it('opens a first visit on the details form, with the brand and the main links', () => {
     renderApp()
     expect(screen.getByRole('link', { name: 'AI Meal Planner' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Tell us about you' })).toBeInTheDocument()
     const nav = screen.getByRole('navigation', { name: 'Main' })
-    for (const name of ['My meals', 'Past plans', 'Profile']) {
+    for (const name of ['Plan a meal', 'My meals', 'Past plans', 'Calories', 'Profile']) {
       expect(within(nav).getByRole('link', { name })).toBeInTheDocument()
     }
     expect(screen.queryByLabelText(/Your craving/i)).not.toBeInTheDocument()
-    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
+    expect(screen.queryByRole('heading', { name: 'Details for this estimate' })).not.toBeInTheDocument()
   })
 
   it('never calls the network on a first visit', () => {
     renderApp()
     expect(axios.get).not.toHaveBeenCalled()
     expect(axios.post).not.toHaveBeenCalled()
+    // It starts from the stored profile, not an example person.
+    expect(screen.getByLabelText('Age')).toHaveValue(34)
+    expect(screen.getByLabelText('Sex')).toHaveValue('female')
+    expect(screen.getByLabelText('Weight (kg)')).toHaveValue(64)
   })
 
   it('asks for nothing but the plan until the person plans', async () => {
@@ -100,6 +104,18 @@ describe('App', () => {
     expect(
       await screen.findByRole('heading', { level: 1, name: 'Grilled Chicken Bowl' }),
     ).toHaveFocus()
+  })
+
+  it('keeps "Plan a meal" marked as the current page on the plan page', async () => {
+    axios.post.mockResolvedValueOnce(PLAN)
+    const user = userEvent.setup()
+    renderApp({ stored: STORED })
+    await planMeal(user)
+    await screen.findByRole('heading', { level: 1, name: 'Grilled Chicken Bowl' })
+
+    const nav = screen.getByRole('navigation', { name: 'Main' })
+    expect(within(nav).getByRole('link', { name: 'Plan a meal' })).toHaveAttribute('aria-current', 'page')
+    expect(within(nav).getByRole('link', { name: 'Past plans' })).not.toHaveAttribute('aria-current')
   })
 
   it('shows the error and retries it', async () => {
@@ -177,14 +193,28 @@ describe('App', () => {
     }
   })
 
-  it('opens the calorie estimate from the profile page', async () => {
+  it('shows who plans are sized for in the rail once there is a profile', () => {
+    renderApp({ stored: STORED })
+    const card = screen.getByRole('region', { name: 'Sized for you' })
+    expect(card).toHaveTextContent('34 · Female · Maintain')
+    expect(card).toHaveTextContent('Earlwood, NSW')
+    expect(within(card).getByRole('link', { name: 'Edit details' })).toHaveAttribute('href', '/profile')
+  })
+
+  it('leaves the rail summary out on a first visit', () => {
+    renderApp()
+    expect(screen.queryByRole('region', { name: 'Sized for you' })).not.toBeInTheDocument()
+  })
+
+  it('opens the calorie estimate from its own tab, not from the profile page', async () => {
     const user = userEvent.setup()
     renderApp({ stored: STORED })
     await goToProfile(user)
+    expect(screen.queryByRole('heading', { name: 'Details for this estimate' })).not.toBeInTheDocument()
 
-    expect(screen.queryByRole('heading', { name: 'Calorie Expenditure' })).not.toBeInTheDocument()
-    await user.click(screen.getByRole('button', { name: 'Open the calorie estimate' }))
-    expect(screen.getByRole('heading', { name: 'Calorie Expenditure' })).toBeInTheDocument()
+    await user.click(screen.getByRole('link', { name: 'Calories' }))
+    expect(screen.getByRole('heading', { name: 'Details for this estimate' })).toBeInTheDocument()
+    expect(axios.post).not.toHaveBeenCalled()
   })
 
   it('forgets this device after a confirmation, back to the first visit', async () => {
@@ -200,12 +230,12 @@ describe('App', () => {
     await user.click(screen.getByRole('button', { name: 'Forget me on this device' }))
     await user.click(screen.getByRole('button', { name: 'Yes, forget me' }))
     expect(localStorage.getItem(STORAGE_KEY)).toBeNull()
-    expect(screen.getByRole('heading', { level: 1, name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 2, name: 'Tell us about you' })).toBeInTheDocument()
   })
 
   it('opens a returning visit straight on the craving search', () => {
     renderApp({ stored: STORED })
-    expect(screen.getByRole('heading', { level: 1, name: /Say what you crave/ })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { level: 1, name: 'What do you feel like eating?' })).toBeInTheDocument()
     expect(cravingInput()).toBeInTheDocument()
   })
 })

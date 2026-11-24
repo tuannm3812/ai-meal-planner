@@ -8348,6 +8348,376 @@ Remaining misses are fat-heavy wrong matches from USDA's top search hit (turkey 
 ham, avocado → dressing); `docs/meal_quality/usda_lookup_diagnosis.md` lists every
 ingredient. Proposed next: pin a FoodData Central ID per ingredient. Full test suite passes.
 
+## 2026-11-23 — Claude — DEC-42: pinned USDA food IDs
+
+Mike approved pinning a USDA food per ingredient. On his Mac, each of the 41 looked-up
+ingredients was matched to a Foundation, SR Legacy or Survey food by several filtered
+searches and confirmed with `/fdc/v1/food/{id}`; `data/reference/usda_fdc_ids.json` holds
+the picks. `_query_usda_database` fetches pinned names by ID, `_flat_nutrients` reads both
+the search and the detail shapes, and energy prefers 208 then Atwater General 957. New
+tests: fetch by ID with a Foundation payload, SR Legacy kcal-not-kJ, and a guard that
+every non-trusted corpus ingredient is pinned. Full suite passes, coverage 97%. USDA reruns
+on the Mac: 72 of 72 benchmark, 144 of 152 wider, no estimated ingredient, guardrails 5
+of 5. Seen once: 2 of 25 detail lookups timed out at 6 s on a first attempt.
+
+## 2026-11-22 — Claude — user accounts: design draft
+
+Mike chose Firebase for user accounts: Google sign-in through Firebase Auth, Firestore for
+profiles, plans and feedback, and Firebase Hosting for React, all on free tiers in
+`ai-meal-planner-515508`. Supabase (second vendor, free project sleeps) and Cloud SQL (about
+A$15 a month) were ruled out. The draft is
+`docs/superpowers/specs/2026-11-22-user-accounts-design.md`. It verifies Firebase ID tokens
+with the existing `google-auth` dependency, ignores a body `user_id` for account callers, adds
+a Firestore repository behind the DEC-4 boundary, and lifts DEC-10's 501 only on Firestore.
+Docs only; nothing is built. Needs Mike: approve the spec, and answer whether signed-out
+visitors may use the hosted app (anonymous sign-in recommended).
+
+## 2026-11-23 — Claude — user accounts: design approved
+
+Mike approved the design with both recommendations: anonymous sign-in for signed-out
+visitors to the hosted app, and Google as the only named sign-in. The spec records the
+answers and how an anonymous account links to Google; DEC-43 records the decision. Next is
+slice 1, bearer-token auth.
+
+## 2026-11-23 — Claude — user accounts slice 1: bearer-token auth
+
+`Authorization: Bearer <Firebase ID token>` is accepted on every protected route when
+`FIREBASE_PROJECT_ID` is set (`core/firebase_auth.py`). The token is checked with `google-auth`
+(now a direct dependency) against Google's certificates, cached for an hour and refetched once
+for an unseen key id, plus audience, issuer, expiry and a 1-128 character subject. A valid
+token is the principal `accounts` with `user_id=<uid>` and all three scopes. Routes use the uid:
+a body `user_id` is replaced (`body_for`), a path naming another user is 403
+(`user_for`), and feedback must reference the same user's plan (found while testing: the
+shared namespace alone let one account rate another's meal). Both credentials at once is 401;
+`accounts` is a reserved client_id; the rate limit keys on client and uid, and applies to
+accounts in open local mode too. OpenAPI declares `FirebaseAuth` beside `ApiKeyAuth`.
+Verified: `test_firebase_auth.py` signs real RS256 tokens with a generated key;
+`test_api_accounts.py` covers the route rules with a fake verifier. `uv run pytest`: 715
+passed, coverage 97%. Hosted mode still refuses history until Firestore (slice 3).
+
+## 2026-11-23 — Claude — user accounts slice 2: Firestore repositories
+
+`STORAGE_BACKEND=firestore` builds `repositories/firestore_store.py`, which implements the three
+storage protocols (DEC-4) on Firestore. Layout: `namespaces/{client}/users/{user}/plans|feedback`
+plus `namespaces/{client}/plan_index/{request_id}` for `find_by_request_id`. Every id is escaped
+(`c:`, `u:`, `r:` prefix plus URL quoting), so a `/` or a reserved-looking id cannot reach another
+path. A record is stored as one JSON string beside the queried fields, because Firestore cannot
+hold every JSON shape (an array of arrays); `sort_key` is a per-process increasing nanosecond key.
+`saved_only` is a query filter before the limit, backed by the composite index in
+`firestore.indexes.json` (deployed in slice 5). The client is the optional `firestore` extra,
+installed in the image and in CI. CI's backend job starts the Firestore emulator
+(firebase-tools 14.27.0, Java 21), so the repository contract suite now runs on JSON, SQLite and
+Firestore. Verified locally against the emulator: `uv run pytest`, 753 passed;
+`firestore_store.py` and `factory.py` at 100%. Without the emulator the Firestore cases skip.
+
+## 2026-11-23 — Claude — user accounts slice 3: account routes and hosted history
+
+New `AccountStore` protocol, implemented by `FirestoreUserProfileRepository`: `get_account`,
+`save_account` and `delete_user`. Routes (`api/routes/accounts.py`): `GET /me/profile` (404
+`profile_not_found`, the first raise of `ProfileNotFound`), `PUT /me/profile` (the React profile's
+own fields only, each bounded, `extra="forbid"`), and `DELETE /me`, which deletes the account's
+plans, their request-id index entries, feedback and profile, in batches. An API-key client gets
+403 on these; a non-Firestore backend gets 501 `accounts_unavailable`. `settings.keeps_history`
+is false only for hosted mode on per-instance storage, so a hosted deployment on Firestore stores
+plans and serves history; `/health` reports it as `history_enabled`, and Streamlit hides history
+only where it is false. Verified on the emulator: a hosted Firestore deployment keeps history; a
+profile round-trips per user; deleting Alice removes only Alice's records and her plan can no
+longer take feedback. `uv run pytest` with the emulator: 772 passed, coverage 97%.
+
+## 2026-11-23 — Claude — user accounts slice 4: React sign-in
+
+`frontend/src/auth/firebase.js` turns accounts on only when the build has `VITE_FIREBASE_API_KEY`,
+`_AUTH_DOMAIN` and `_PROJECT_ID`; without them nothing changes (no header, no Firebase call).
+With them, `api/mealPlanner.js` sends `Authorization: Bearer` on every call and uses the uid as
+the history path and body `user_id`. A visitor is signed in anonymously at the first API call,
+so a first visit still makes no network call before planning (DEC-37). Google sign-in (Profile
+page card and a top-bar button) links the anonymous account, or signs into an existing one when
+Firebase reports `credential-already-in-use`. On sign-in an existing account profile replaces the
+device's; otherwise the device's is saved to the account; later edits save after 800 ms. Sign out
+and "Delete my account and data" (with a confirmation) forget the device; delete calls
+`DELETE /me` first and removes the Firebase sign-in after, re-authenticating if Firebase asks.
+A failed server delete removes nothing locally. `firebase` 13.2.0 (Apache-2.0) adds about 35 kB
+gzipped. Verified: `vitest run` 257 passed (23 new: firebase module, API identity, account
+card); `eslint` clean; `vite build` with and without the config.
+
+## 2026-11-23 — Claude — user accounts slice 5: Firebase Hosting deploy
+
+`deploy.yml` reads `vars.ACCOUNTS_ENABLED`. Unset, the API deploys as before. `true` sets
+`STORAGE_BACKEND=firestore`, `FIREBASE_PROJECT_ID` and `ALLOWED_ORIGINS=https://<project>.web.app`,
+and a new `hosting` job builds React against the new revision (Firebase web config from
+`FIREBASE_WEB_API_KEY` and `FIREBASE_WEB_APP_ID`), then deploys hosting, `firestore.rules` (deny
+all browser access; only the API's service account uses Firestore) and `firestore.indexes.json`
+with firebase-tools 14.27.0 over the existing Workload Identity Federation. `firebase.json` serves
+`frontend/dist` as a single-page app. `live_check.sh` reads `history_enabled` from `/health`: on
+shared storage it expects 200 from history routes, 404 for feedback on an unknown plan, and 401
+for an invalid bearer token; otherwise it keeps the 501 checks. Two new fixture tests cover the
+shared-storage path. `docs/6_deployment.md` §5 is the one-time setup (APIs, Firebase on the
+project, Firestore in australia-southeast1, a web app, IAM roles, Google and Anonymous
+providers) and a by-hand check. The React list pages no longer say "on this device" when
+accounts are on. Not run against the real project: that needs Mike's setup. Needs Mike.
+
+## 2026-11-23 — Claude — accounts live; deploy order fix
+
+PR #58 merged (ede2b42). From Mike's Mac: the §5 APIs, Firebase on the project (REST
+`addFirebase`), Firestore `(default)` in australia-southeast1, the web app and its GitHub
+variables, and the IAM roles. Anonymous and Google sign-in were not switched on: Firebase Auth's
+config API answers `404 CONFIGURATION_NOT_FOUND` until Auth is initialised, and the only API
+that initialises it upgrades to Identity Platform (ruled out), so Mike does it in the console.
+Deploy run 45120758132 failed its live check with a 500 from saved-meals (`The query requires an
+index`), because the hosting job, which published the indexes, ran after the deploy job's
+live check. The index was created by hand; run 45121738187 passed both jobs. Its hosting check
+first saw a 404 from the brand-new site and passed on a re-run. Fix: the deploy job now
+publishes rules and indexes and waits for every index to be READY before deploying the API,
+and the hosting check retries for a minute. Needs Mike: turn on the sign-in providers.
+
+## 2026-11-23 — Claude — welcome page: A and B mixed
+
+Mike compared two landing-page versions for the first visit: A (PR #64) and B (commit 050c6be,
+never pushed). He chose a mix. This branch replaces #64.
+
+From A:
+- `ProfileForm`'s `headingLevel`, `intro` and `showSizing` props;
+- `PROFILE_DISCLOSURE` under the save button, so the form keeps one short intro and no sizing
+  panel;
+- `Icon`'s `xl` size and its DESIGN.md §5 note;
+- "How it works" in three short steps;
+- the six named recipe cards, with the menu size checked against `data/meal_corpus/meals.json`.
+
+From B:
+- the hero's floating cards from the real Chicken Fried Rice response;
+- "Every plan shows its working", with the plan page's `CalorieRing` and `MacroDonut`, labelled
+  "Example plan".
+
+A's "Built to be trusted" band is dropped because it repeats B's checklist. Its medical-advice
+line moves to a slim footer. "Get started" and "How it works" are buttons that scroll and move
+focus without changing the URL. Colours come from tokens and icons go through `Icon`.
+
+Verified:
+- vitest 262 of 262 (5 in `WelcomePage.test.jsx`);
+- eslint is clean and `vite build` passes;
+- there is no horizontal scroll at 1440 px or on an iPhone 14;
+- screenshots are in `~/Desktop/welcome-compare/C-mix-*.png`.
+
+## 2026-11-23 — Claude — Market Receipt brand and desktop side rail (slice 1)
+
+Mike said the desktop app wasted the space either side of its 1,152 px column, the home
+page and its tabs needed work, and the dark green was not attractive. He pointed at
+FarmLens as a reference. A proposal (layouts A, B, C) and three brand directions were
+shared as artifacts; he chose layout B, a side rail, and brand direction 2, Market Receipt
+(DEC-44).
+
+Changed in this slice:
+- `theme/tokens.js` and `tailwind.config.js`: Market Receipt values. `leaf` becomes `cobalt`
+  and `lime` becomes `peach`; `accent` is coral with `ink` text; a `shadow-sticker` utility;
+  food gets `lettuce` for the drawings' greens. The guard test checks the new names.
+- Unbounded replaces Bricolage Grotesque (self-hosted, OFL; THIRD_PARTY_NOTICES updated).
+- New coral plate-sticker mark, wordmark and favicon.
+- `AppShell`: one nav that is an ink top bar below 1,280 px and a white left rail above it,
+  with Plan a meal and Calories tabs and a "Sized for you" card. `pageShell` widens to
+  1,440 px beside the rail.
+- Banners on Home, the welcome page and the plan page are cobalt.
+- The calorie estimate moves out of Profile into `pages/CaloriesPage.jsx` at `/calories`.
+- DESIGN.md §1, §3 to §7 and `docs/8_design.md` describe the new look.
+
+Verified:
+- vitest 264 of 264, two of them new rail tests. One craving test now scopes its "old
+  location is gone" check to the page, because the rail shows the live location.
+- eslint is clean and `vite build` passes.
+- Screenshots of the local build, with a real plan response replayed, at 1,440, 1,920 and
+  390 px.
+- Contrast: coral with ink text 5.2:1, `muted` on paper 5.8:1, peach on cobalt 5.4:1, and
+  `on-ink-muted` on cobalt 5.8:1.
+
+Not done here: the receipt shopping list, price-tag badges, Home workspace, tabbed plan page,
+card outlines elsewhere and the showcase. Not deployed.
+
+
+## 2026-11-24 — Claude — wording pass after a content review
+
+Mike asked for a check of the text on every screen for duplicates and rough wording. Fixed
+on the same branch as slice 1:
+
+- Profile is headed "Your details" (`ProfileForm` takes a `title`), with a one-line intro.
+  The storage note now appears once, in "Remembered on this device".
+- Calories reads in plain words: "Details for this estimate", "Activity level", "Body
+  temperature (°C)", "Estimate my calories", "Calories you burn". Its health-conditions hint
+  no longer suggests diabetes, which the rules do not handle.
+- Plan page: the back link is "Plan a meal", matching the tab. A rough shopping estimate is
+  explained once under the list, not on every row. Three technical lines are reworded.
+- Past plans (no accounts) no longer mentions "the API".
+- Five error messages said to check the FastAPI backend on port 8000. They now say "Check
+  your connection and try again."
+
+Left for the Home slice: the hero headline shared by Home and the welcome page, the three
+promises repeated on Home, and "Sized for you" shown in both the banner and the rail. Store
+product names such as "Generic whole egg" come from the service, not the client.
+
+Verified: vitest 264 of 264, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — the rest of the wording review
+
+Mike asked for every remaining item from the content review to be fixed.
+
+- Home is headed "What do you feel like eating?" and no longer repeats the welcome page's
+  three promises. The banner's "Sized for you" line hides from 1,280 px, where the rail card
+  says it; the card now also gives the last plan's calorie target.
+- Welcome page: the pill reads "One meal at a time", step 3 and the first check are reworded,
+  and the check that repeated "tested recipe" is gone.
+- The Calories page starts from the stored profile (`CaloriesTab` takes `initial`), and still
+  changes nothing in it.
+- The supermarket agent names an unknown product after its ingredient, not "Generic
+  <ingredient>". The client strips the old prefix from stored plans and drops the "For
+  <ingredient>" line when it would repeat the name.
+
+Verified: vitest 265 of 265, eslint clean, `vite build` passes; backend pytest exits 0 and
+ruff is clean. `docs/openapi.json` is unaffected.
+
+## 2026-11-24 — Claude — welcome page: form sooner, ticket-style details form
+
+Mike found the welcome page too dense, wanted Get started easier to reach, the details form
+less plain, clearer notes and warnings, and text alignment checked.
+
+- Page order is now hero, a one-strip "How it works" over the hero's edge, Get started, the
+  menu, the example plan. The form starts about 900 px down at 1,440 px wide, where it used
+  to start past 2,200 px. The hero's second button opens the example plan, which has a
+  "Fill in my details" button back to the form.
+- `ProfileForm` is an order ticket: a tinted header with an "About a minute" badge, five
+  numbered rows (goal, body, activity, avoid, store) on a shared left edge with dashed
+  dividers, goal cards with icons, and a footer holding the button and the storage note.
+- New `components/ui/Note`. Field errors use the danger pair with an alert icon, not coral.
+- Alignment: "How it works" was the page's only centred block and is now left-aligned; the
+  activity and workout selects share a row; section headings share one size; the example
+  card has the same outline as the form.
+- On the Profile page the "How your meal is sized" panel sits under the form below 1,536 px,
+  so the form keeps its width.
+- Fixed a 1 px sideways scroll on phones from the macro donut.
+
+Verified: vitest 265 of 265, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px; no horizontal scroll at 390 px.
+
+
+## 2026-11-24 — Claude — receipt shopping list, price tags, Home workspace
+
+Mike said "do next" after the welcome page went live. This is the next slice of the
+Market Receipt redesign (DEC-44).
+
+- The shopping list is a till receipt: JetBrains Mono (self-hosted, new dependency
+  `@fontsource/jetbrains-mono` 5.3.0), the store centred at the top, dashed rules, dotted
+  leaders to each price and a torn bottom edge. From 1,280 px it stays in view while the
+  report scrolls. Its words, ticks, copy and print are unchanged.
+- New `components/ui/PriceTag`. The plan banner's three badges are tags, plus a coral
+  "About $X to shop" tag showing the service's own total.
+- Home: today's workout is three chips under the craving (the profile's own field, with the
+  minutes when "I worked out" is chosen); the six suggestions are dish cards; below, saved
+  meals and past plans sit beside a context column with the plan in hand or the latest
+  plan and three counts (plans made, meals saved, average meal). The column comes first on
+  narrow screens, so "Back to your plan" stays near the top.
+- The mode switch from the proposal is not built: Calories is already a tab in the rail.
+
+Verified: vitest 267 of 267 (two new Home workout tests), eslint clean, `vite build`
+passes; screenshots at 1,440 and 390 px with no horizontal scroll on Home or the plan page.
+
+## 2026-11-24 — Claude — tabbed plan page
+
+Mike said "do next" after the receipt and Home went live. The plan page's report is now
+three tabs beside the receipt.
+
+- New `components/ui/Tabs` (a tablist with arrow, Home and End keys). `PlanDetail` shows
+  Overview (nutrition, balance, runners-up), Ingredients (where the calories come from) and
+  How it was made (the service's notes as a numbered list, no longer a collapsed expander).
+  A tab with nothing to show is left out, and a new plan opens on Overview.
+- `RangeBars` is a three-reading row: each macro's share as a big number over a scale with
+  the recommended band and a marker for the meal. The verdict is still the service's.
+
+Verified: vitest 267 of 267 (two tests now reach ingredients and notes through their tabs),
+eslint clean, `vite build` passes; screenshots at 1,440 and 390 px with no horizontal scroll
+on any tab.
+
+## 2026-11-24 — Claude — Past plans, My meals and Profile
+
+Mike said "do the next thing"; this is on the same branch as the tabbed plan page.
+
+- Past plans is a dated list (`features/meals/PlanRows`, `byDay`): Today, Yesterday, then
+  the date, one row per plan with calories against the target and the service's result.
+  The date is the record's `saved_at`, else `generated_at`; plans without one go under
+  "Earlier".
+- My meals and Past plans show a count tag and, with two or more entries, a search box
+  that filters by meal name or craving on the device (`searchMeals`). Nothing is sent.
+- Profile is two columns from 1,280 px: the form, then a side column with the sizing
+  panel (now `features/profile/SizingPanel`), the account card and the device card.
+- Goal cards put the icon above the label, so they fit the narrower form.
+
+Verified: vitest 270 of 270 (three new tests), eslint clean, `vite build` passes;
+screenshots of Past plans, My meals and Profile at 1,440 and 390 px, no horizontal scroll.
+
+## 2026-11-24 — Claude — coral contrast, numbers in the macro bars, lighter helper panels
+
+Mike's feedback on PR #69: dark text on the orange blocks reads badly, put the numbers in
+the bars, the helper blocks are a lot of text, and why were the plans' numbers alike.
+
+- New token `accent-fill` (#D63C1A). Primary buttons, Save meal and coral price tags use it
+  with white text, 4.65:1. Bright coral (#FF5A36) stays for the logo. Before this the
+  primary button had white on bright coral at 3.1:1, and tags had ink on coral.
+- New `charts/MacroBar`: the split as a 28 px bar with each share inside its segment and a
+  colour key, used on meal cards, past-plan rows and Home's latest plan. The full sentence
+  stays for screen readers.
+- `SizingPanel` and the "Remembered on this device" card are icon steps with one line each;
+  the activity note is one sentence.
+- The receipt no longer sticks on wide screens: it clipped the rating card under it.
+- The earlier screenshots repeated one stored response under different names. New ones use
+  five real responses from the live service. Calories still sit near 625 kcal on all of
+  them, because one profile gives one meal target; the macro splits and prices differ.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.
+
+## 2026-11-24 — Claude — fewer macro legends
+
+Mike found the legends repeated. Lists now show one colour key above the cards or rows
+(`MacroKey`), not one under every bar; Home shows it once, in the latest-plan card. On the
+plan page the donut drops its side legend and the three readings carry the grams, so each
+macro's name, grams and share appear once.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — Phosphor two-tone icons (DEC-45)
+
+Mike chose Phosphor two-tone from three options. `components/icons/glyphs.js` re-exports
+the Phosphor glyphs under the names the app already used, so no caller changed, and `Icon`
+sets the two-tone weight (solid for `filled`). `lucide-react` is removed. The guard test
+now fails on either icon package outside the icons folder and on a hand-set weight.
+DEC-45 also records the coral change. The main bundle grew from 159.6 to 174.6 kB gzipped,
+because each Phosphor icon ships all of its weights.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.
+
+## 2026-11-24 — Claude — UI bug pass from a full screenshot sweep
+
+Mike asked for screenshots and UI fixes before the poster and deck refresh. Every page was
+captured at 1,440 and 390 px against a local stack. Fixed:
+
+- **Calories page numbers.** It always sent a 30-minute workout, which replaces the activity
+  level's exercise (DEC-40), so it showed 2,267 kcal where the plan page showed 2,895 for the
+  same profile. It now takes the profile's own fields (activity and today's workout as
+  dropdowns, goal in the profile's words) and sends the workout as a plan does. The result
+  reads "You burn about", "Daily target for your goal" (the service's
+  `meal_calorie_budget_kcal`, which is a daily figure but was labelled "Meal budget") and
+  "One meal is sized to" (28% of the day, 350 to 850 kcal, as the meal agent sizes it). Whole
+  kcal, no model name; body temperature and free-text health conditions are left out. Restyled
+  to the Market Receipt look.
+- **Nav state.** "Plan a meal" is current on `/plan` and "Past plans" on `/plans/:id`.
+- **Phone nav** is one row, icon over label, instead of three wrapped rows.
+- **Plan tabs** stay on one row on a phone; a long label wraps inside its tab.
+- **Profile** puts its side cards below the form until 1,536 px, so the activity and
+  workout dropdowns are no longer cut off. Wherever the form runs (the welcome page too),
+  those two dropdowns sit side by side only when 360 px each fits, and stack otherwise.
+- **"How it was made"** says "Picked <meal> as the menu recipe closest to the craving"
+  instead of the internal template ID and "local vector RAG".
+
+Verified: vitest 273 of 273 (three new tests), eslint clean, backend pytest; screenshots
+retaken at both widths with no console errors.
+
 ## 2026-11-23 — Claude — UTS A1 poster for the AI Meal Planner
 
 Mike asked for a project poster that matches the UTS deck kit. New files in `docs/showcase/uts-deck/poster/`

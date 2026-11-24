@@ -50,19 +50,24 @@ def _check_of(method: str, path: str, key: str | None) -> str:
     return path.split("/")[1]
 
 
-def _answer(check: str) -> tuple[int, dict[str, object]]:
-    """What a correct hosted deployment returns."""
+def _answer(check: str, shared: bool = False) -> tuple[int, dict[str, object]]:
+    """What a correct hosted deployment returns; `shared` is one on Firestore (DEC-43)."""
     if check == "health":
-        return 200, {"environment": "production", "services": {"hosted_mode": True}}
+        services = {"hosted_mode": True, "history_enabled": shared}
+        return 200, {"environment": "production", "services": services}
     if check == "generate":
         return 200, {"status": "success"}
     if check in {"anonymous", "revoked"}:
         return 401, {"code": "missing_or_invalid_api_key"}
+    if shared:
+        return (404, {"code": "meal_not_found"}) if check == "post-feedback" else (200, {})
     return 501, {"code": "history_disabled_stateless"}
 
 
 @contextmanager
-def _deployment(behaviour: dict[str, str], default: str = "both") -> Iterator[str]:
+def _deployment(
+    behaviour: dict[str, str], default: str = "both", shared: bool = False
+) -> Iterator[str]:
     """Serve a hosted deployment; `behaviour` maps a check to how it is answered.
 
     - both: alternate instances a and b (every response correct);
@@ -98,7 +103,7 @@ def _deployment(behaviour: dict[str, str], default: str = "both") -> Iterator[st
             instance = {"only-a": "a", "only-b": "b"}.get(mode, "b" if second else "a")
             if mode == "missing" and second:
                 instance = None
-            status, body = _answer(check)
+            status, body = _answer(check, shared)
             payload = json.dumps(body).encode()
             short = mode in {"late-stall", "truncate"} and third
             try:
@@ -260,3 +265,22 @@ def test_a_probe_that_dies_fails_the_check(tmp_path: Path) -> None:
     assert result.returncode != 0, result.stdout
     assert "meal-plans: 1 probe(s) did not finish" in result.stdout
     assert "live check passed" not in result.stdout
+
+
+def test_a_deployment_on_shared_storage_serves_history_and_refuses_a_bad_token() -> None:
+    """DEC-43: on Firestore, history routes answer 200 and a bad bearer token 401."""
+    with _deployment({}, shared=True) as url:
+        result = _live_check(url)
+
+    assert result.returncode == 0, result.stdout + result.stderr
+    assert "history is shared storage" in result.stdout
+    assert "invalid sign-in token -> 401" in result.stdout
+
+
+def test_a_shared_deployments_history_check_still_needs_every_instance() -> None:
+    """The shared-storage checks keep the instance-count rule."""
+    with _deployment({"meal-plans": "only-a"}, shared=True) as url:
+        result = _live_check(url, revocation=False)
+
+    assert result.returncode != 0, result.stdout
+    assert "meal-plans: only 1 instance(s) answered" in result.stdout

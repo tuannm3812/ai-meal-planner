@@ -74,13 +74,17 @@ describe('Plan page', () => {
     expect(screen.getByTestId('band-carbs')).toHaveStyle({ left: '45%', width: '20%' })
   })
 
-  it('tags each served ingredient and keeps the notes collapsed', async () => {
+  it('tags each served ingredient and keeps the notes on their own tab', async () => {
     axios.post.mockResolvedValueOnce({ data: SAMPLE_PLAN })
     const user = userEvent.setup()
     renderApp({ stored: STORED })
     await plan(user)
 
-    const list = await screen.findByRole('region', { name: 'Where the calories come from' })
+    // The report opens on Overview; ingredients and notes are tabs of their own.
+    expect(await screen.findByRole('tab', { name: 'Overview' })).toHaveAttribute('aria-selected', 'true')
+    await user.click(screen.getByRole('tab', { name: /Ingredients/ }))
+    expect(screen.queryByRole('region', { name: 'Nutrition' })).not.toBeInTheDocument()
+    const list = screen.getByRole('region', { name: 'Where the calories come from' })
     const rows = within(list).getAllByRole('listitem')
     // Largest share of the calories first.
     expect(rows[0]).toHaveTextContent('cooked white rice')
@@ -91,11 +95,12 @@ describe('Plan page', () => {
     const egg = within(list).getByText('whole egg').closest('li')
     expect(within(egg).getByText('Reference')).toBeInTheDocument()
 
-    const details = screen.getByText('How this plan was made').closest('details')
-    expect(details).not.toHaveAttribute('open')
-    await user.click(screen.getByText('How this plan was made'))
-    expect(details).toHaveAttribute('open')
-    expect(within(details).getByText(/default 30-minute workout/)).toBeVisible()
+    expect(screen.queryByText(/default 30-minute workout/)).not.toBeInTheDocument()
+    // Arrow keys move along the tabs.
+    await user.keyboard('{ArrowRight}')
+    expect(screen.getByRole('tab', { name: 'How it was made' })).toHaveFocus()
+    const made = screen.getByRole('region', { name: 'How this plan was made' })
+    expect(within(made).getByText(/default 30-minute workout/)).toBeVisible()
   })
 
   it('marks a macro outside its range and keeps the service verdict', async () => {
@@ -160,7 +165,7 @@ describe('Plan page', () => {
     await backToPlan(user)
     expect(screen.getByText('No meal fits these constraints')).toBeInTheDocument()
     await user.click(screen.getByRole('link', { name: 'Change your details' }))
-    expect(screen.getByRole('heading', { name: 'Tell us about you' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'Your details' })).toBeInTheDocument()
   })
 
   it('shows an indeterminate loading state with no invented stages', async () => {

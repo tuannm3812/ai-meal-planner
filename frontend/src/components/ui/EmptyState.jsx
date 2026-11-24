@@ -7,7 +7,7 @@ function EmptyState({ isLoading, loadingTitle, loadingBody, idleTitle, idleBody 
       <div className="mx-auto max-w-md text-center">
         <div className="flex justify-center">
           {isLoading ? (
-            <span className="h-8 w-8 animate-spin rounded-full border-2 border-leaf border-t-transparent" />
+            <span className="h-8 w-8 animate-spin rounded-full border-2 border-cobalt border-t-transparent" />
           ) : (
             <Icon as={Sparkles} size="lg" tone="light" />
           )}

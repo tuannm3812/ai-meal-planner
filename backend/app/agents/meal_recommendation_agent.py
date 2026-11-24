@@ -302,7 +302,7 @@ class MealRecommendationAgent:
             target_calories,
         )
         warnings = [
-            f"Retrieved meal template {result.meal.meal_id} using local vector RAG.",
+            f"Picked {result.meal.name} as the menu recipe closest to the craving.",
             *result.warnings,
         ]
         if result.matched_terms:

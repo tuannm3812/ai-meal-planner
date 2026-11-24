@@ -139,7 +139,7 @@ def test_the_category_price_fallback_carries_confidence_0_46() -> None:
     result = agent._map_inventory_and_price("zzz unheard of item")
     assert result["source"] == "category_price_estimate"
     assert result["confidence"] == 0.46
-    assert result["sku"] == "Generic zzz unheard of item"
+    assert result["sku"] == "Zzz unheard of item"
 
 
 def test_a_matched_ingredient_carries_confidence_0_82_and_not_the_fallback() -> None:

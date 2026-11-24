@@ -1,9 +1,14 @@
+import SizingPanel from './SizingPanel'
 import { useId } from 'react'
 
+import Icon from '../../components/icons/Icon'
+import { CircleAlert, Scale, Timer, TrendingDown, TrendingUp } from '../../components/icons/glyphs'
+import Note from '../../components/ui/Note'
 import {
   ACTIVITY_OPTIONS,
   AVOID_OPTIONS,
   GOAL_OPTIONS,
+  PROFILE_DISCLOSURE,
   SEX_OPTIONS,
   WORKOUT_OPTIONS,
 } from './profile'
@@ -14,7 +19,8 @@ const fieldClass =
 function FieldError({ id, message }) {
   if (!message) return null
   return (
-    <p className="mt-1.5 text-sm text-accent-text" id={id}>
+    <p className="mt-1.5 flex items-start gap-1.5 text-sm font-medium text-danger-fg" id={id}>
+      <Icon as={CircleAlert} className="mt-px" size="sm" />
       {message}
     </p>
   )
@@ -31,7 +37,7 @@ function NumberField({ name, label, value, error, onChange, ...inputProps }) {
       <input
         aria-describedby={error ? errorId : undefined}
         aria-invalid={error ? 'true' : undefined}
-        className={`${fieldClass} ${error ? 'border-accent-text' : 'border-line'}`}
+        className={`${fieldClass} ${error ? 'border-danger-fg' : 'border-line'}`}
         id={id}
         inputMode="decimal"
         name={name}
@@ -56,7 +62,7 @@ function ChoiceField({ label, value, options, error, onChange, className = '' })
       <select
         aria-describedby={error ? errorId : undefined}
         aria-invalid={error ? 'true' : undefined}
-        className={`${fieldClass} ${error ? 'border-accent-text' : 'border-line'}`}
+        className={`${fieldClass} ${error ? 'border-danger-fg' : 'border-line'}`}
         id={id}
         onChange={(event) => onChange(event.target.value)}
         value={value}
@@ -72,10 +78,58 @@ function ChoiceField({ label, value, options, error, onChange, className = '' })
   )
 }
 
+// One numbered row of the form: the step's name on the left, its fields on
+// the right, so every field starts on the same edge.
+function Step({ number, title, hint, group = false, children }) {
+  const id = useId()
+  return (
+    <div
+      aria-labelledby={group ? id : undefined}
+      className="grid gap-x-8 gap-y-4 py-7 md:grid-cols-[220px_minmax(0,1fr)]"
+      role={group ? 'group' : undefined}
+    >
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden="true"
+          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint font-display text-sm font-extrabold text-cobalt"
+        >
+          {number}
+        </span>
+        <div className="pt-1.5">
+          <p className="font-semibold leading-6 text-ink" id={id}>
+            {title}
+          </p>
+          {hint && <p className="mt-1 text-sm leading-5 text-muted">{hint}</p>}
+        </div>
+      </div>
+      <div className="min-w-0">{children}</div>
+    </div>
+  )
+}
+
+const GOAL_GLYPHS = { lose: TrendingDown, maintain: Scale, gain: TrendingUp }
+
 // The profile of docs/8_design.md §3.1, on the first visit and the Profile
-// page. Controlled: the profile and its errors
-// belong to the caller, which sends them with the meal request.
-function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details', children }) {
+// page, drawn as an order ticket (DEC-44): a tinted header, numbered rows
+// split by dashed lines, and an optional footer for the caller's button.
+// Controlled: the profile and its errors belong to the caller, which sends
+// them with the meal request. The welcome page passes a shorter intro, an h2
+// under its own h1, and no sizing panel, because the page around it already
+// says how a meal is sized.
+function ProfileForm({
+  profile,
+  errors = {},
+  onChange,
+  eyebrow = 'Your details',
+  title = 'Tell us about you',
+  headingLevel = 1,
+  intro = PROFILE_DISCLOSURE,
+  badge = null,
+  footer = null,
+  showSizing = true,
+  children,
+}) {
+  const Heading = headingLevel === 2 ? 'h2' : 'h1'
   const set = (key) => (value) => onChange({ ...profile, [key]: value })
 
   const toggleAvoid = (id) => {
@@ -88,43 +142,46 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
   return (
     <section
       aria-labelledby="profile-heading"
-      className="grid gap-8 rounded-3xl bg-surface p-6 sm:p-8 lg:grid-cols-[1fr_300px]"
+      className={`grid gap-8 ${showSizing ? '2xl:grid-cols-[minmax(0,1fr)_300px]' : ''}`}
     >
-      <div className="min-w-0">
-        <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">
-          {eyebrow}
-        </p>
-        <h1
-          className="mt-2 font-display text-4xl font-extrabold tracking-tight text-ink"
-          id="profile-heading"
-          tabIndex={-1}
-        >
-          Tell us about you
-        </h1>
-        <p className="mt-3 max-w-2xl text-base leading-7 text-muted">
-          We use this to estimate how much energy you burn in a day and size your meal to fit
-          your goal. This browser keeps your details so you don't retype them. They go with each
-          plan request, and when the app runs locally the server keeps a history of the plans it
-          makes, including these details.
-        </p>
+      <div className="min-w-0 overflow-hidden rounded-3xl border border-ink bg-surface">
+        <header className="flex flex-wrap items-end justify-between gap-x-8 gap-y-4 bg-tint px-6 py-7 sm:px-8">
+          <div className="min-w-0">
+            <p className="text-sm font-semibold uppercase tracking-wider text-accent-text">{eyebrow}</p>
+            <Heading
+              className="mt-2 font-display text-3xl font-extrabold tracking-tight text-ink sm:text-4xl"
+              id="profile-heading"
+              tabIndex={-1}
+            >
+              {title}
+            </Heading>
+            <p className="mt-3 max-w-2xl text-base leading-7 text-muted">{intro}</p>
+          </div>
+          {badge && (
+            <p className="flex items-center gap-2 rounded-full bg-surface px-4 py-2 text-sm font-semibold text-ink">
+              <Icon as={Timer} size="sm" tone="light" />
+              {badge}
+            </p>
+          )}
+        </header>
 
-        <div className="mt-8 flex flex-col gap-7">
-          <fieldset>
-            <legend className="mb-3 font-semibold text-ink">Your goal</legend>
-            <div className="grid gap-3 sm:grid-cols-3">
+        <div className="divide-y divide-dashed divide-line px-6 sm:px-8">
+          <Step group number={1} title="Your goal">
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(118px,1fr))] gap-3">
               {GOAL_OPTIONS.map((option) => {
                 const checked = profile.goal === option.value
                 return (
                   <label
-                    className={`flex cursor-pointer flex-col gap-1 rounded-[14px] bg-surface p-4 focus-within:ring-2 focus-within:ring-ink ${
-                      checked ? 'border-2 border-ink' : 'border border-line'
+                    className={`flex cursor-pointer flex-col gap-1.5 rounded-2xl border-2 p-4 focus-within:ring-2 focus-within:ring-ink focus-within:ring-offset-2 ${
+                      checked ? 'border-ink bg-tint' : 'border-line bg-surface hover:border-muted'
                     }`}
                     key={option.value}
                   >
+                    <Icon as={GOAL_GLYPHS[option.value]} tone="light" />
                     <span className="flex items-center gap-2 font-semibold text-ink">
                       <input
                         checked={checked}
-                        className="h-4 w-4 accent-ink"
+                        className="h-4 w-4 shrink-0 accent-ink"
                         name="goal"
                         onChange={() => set('goal')(option.value)}
                         type="radio"
@@ -132,69 +189,68 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
                       />
                       {option.label}
                     </span>
-                    <span className="text-sm text-muted">{option.description}</span>
+                    <span className="text-sm leading-5 text-muted">{option.description}</span>
                   </label>
                 )
               })}
             </div>
             <FieldError message={errors.goal} />
-          </fieldset>
+          </Step>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <NumberField
-              error={errors.age}
-              label="Age"
-              name="age"
-              onChange={set('age')}
-              value={profile.age}
-            />
-            <ChoiceField
-              error={errors.sex}
-              label="Sex"
-              onChange={set('sex')}
-              options={SEX_OPTIONS}
-              value={profile.sex}
-            />
-            <NumberField
-              error={errors.heightCm}
-              label="Height (cm)"
-              name="height_cm"
-              onChange={set('heightCm')}
-              value={profile.heightCm}
-            />
-            <NumberField
-              error={errors.weightKg}
-              label="Weight (kg)"
-              name="weight_kg"
-              onChange={set('weightKg')}
-              value={profile.weightKg}
-            />
-          </div>
+          <Step number={2} title="Your body">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <NumberField
+                error={errors.age}
+                label="Age"
+                name="age"
+                onChange={set('age')}
+                value={profile.age}
+              />
+              <ChoiceField
+                error={errors.sex}
+                label="Sex"
+                onChange={set('sex')}
+                options={SEX_OPTIONS}
+                value={profile.sex}
+              />
+              <NumberField
+                error={errors.heightCm}
+                label="Height (cm)"
+                name="height_cm"
+                onChange={set('heightCm')}
+                value={profile.heightCm}
+              />
+              <NumberField
+                error={errors.weightKg}
+                label="Weight (kg)"
+                name="weight_kg"
+                onChange={set('weightKg')}
+                value={profile.weightKg}
+              />
+            </div>
+          </Step>
 
-          <ChoiceField
-            className="max-w-md"
-            error={errors.activity}
-            label="How active are you?"
-            onChange={set('activity')}
-            options={ACTIVITY_OPTIONS}
-            value={profile.activity}
-          />
-
-          <div>
-            <ChoiceField
-              className="max-w-md"
-              error={errors.workout}
-              label="Today's workout"
-              onChange={set('workout')}
-              options={WORKOUT_OPTIONS}
-              value={profile.workout}
-            />
-            <p className="mt-1.5 text-sm text-muted">
-              Your activity level covers a usual week. When you give today's workout, it takes the
-              place of that week's exercise, so a rest day counts as one.
-            </p>
+          <Step number={3} title="Your activity">
+            {/* Side by side only where both long option labels fit; narrower,
+                they stack rather than cut off. */}
+            <div className="grid gap-4 [grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr))]">
+              <ChoiceField
+                error={errors.activity}
+                label="How active are you?"
+                onChange={set('activity')}
+                options={ACTIVITY_OPTIONS}
+                value={profile.activity}
+              />
+              <ChoiceField
+                error={errors.workout}
+                label="Today's workout"
+                onChange={set('workout')}
+                options={WORKOUT_OPTIONS}
+                value={profile.workout}
+              />
+            </div>
             {profile.workout === 'trained' && (
-              <div className="mt-4 grid max-w-md grid-cols-2 gap-4">
+              <div className="mt-4 grid gap-4 sm:grid-cols-2">
                 <NumberField
                   error={errors.workoutMinutes}
                   label="Minutes"
@@ -212,19 +268,26 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
                 />
               </div>
             )}
-          </div>
+            <Note className="mt-4">
+              Today&rsquo;s workout replaces your usual week&rsquo;s exercise, so a rest day counts
+              as one.
+            </Note>
+          </Step>
 
-          <fieldset>
-            <legend className="font-semibold text-ink">
-              Anything to avoid? <span className="font-normal text-muted">(optional)</span>
-            </legend>
-            <p className="mb-3 mt-1 text-sm text-muted">
-              Meals with a conflicting ingredient are left out.
-            </p>
+          <Step
+            group
+            hint="Meals with a conflicting ingredient are left out."
+            number={4}
+            title={
+              <>
+                Anything to avoid? <span className="font-normal text-muted">(optional)</span>
+              </>
+            }
+          >
             <div className="flex flex-wrap gap-2">
               {AVOID_OPTIONS.map((option) => (
                 <label
-                  className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-sm text-ink focus-within:ring-2 focus-within:ring-ink has-[:checked]:border-ink has-[:checked]:bg-success-bg"
+                  className="flex min-h-[44px] cursor-pointer items-center gap-2 rounded-full border-2 border-line bg-surface px-4 text-sm font-medium text-ink hover:border-muted focus-within:ring-2 focus-within:ring-ink focus-within:ring-offset-2 has-[:checked]:border-ink has-[:checked]:bg-tint"
                   key={option.id}
                 >
                   <input
@@ -238,29 +301,21 @@ function ProfileForm({ profile, errors = {}, onChange, eyebrow = 'Your details',
               ))}
             </div>
             <FieldError message={errors.avoid} />
-          </fieldset>
-          {children}
+          </Step>
+
+          {children && (
+            <Step number={5} title="Your store">
+              {children}
+            </Step>
+          )}
         </div>
+
+        {footer && (
+          <div className="border-t-2 border-dashed border-line bg-ground px-6 py-7 sm:px-8">{footer}</div>
+        )}
       </div>
 
-      <aside
-        aria-label="How your meal is sized"
-        className="self-start rounded-3xl bg-ink p-7 text-ground"
-      >
-        <p className="text-sm text-ground/75">How your meal is sized</p>
-        <ol className="mt-4 flex list-decimal flex-col gap-3.5 pl-5 text-base leading-6">
-          <li>
-            Your body and activity level set the energy you burn in a day, and a trained model adds
-            today's workout.
-          </li>
-          <li>Your goal sets the calories for this meal, with a safe floor when losing weight.</li>
-          <li>Portions are resized so protein, carbs and fat sit inside recommended ranges.</li>
-          <li>Nutrition is checked against food data, and anything estimated is labelled.</li>
-        </ol>
-        <p className="mt-6 border-t border-ground/20 pt-4 text-sm text-ground/75">
-          A planning aid, not medical advice.
-        </p>
-      </aside>
+      {showSizing && <SizingPanel />}
     </section>
   )
 }

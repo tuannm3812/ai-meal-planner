@@ -32,7 +32,7 @@ describe('Plan request and quality', () => {
 
     expect(
       await screen.findByText(
-        'Could not generate a meal plan. Check that the FastAPI backend is running on port 8000.',
+        'Could not generate a meal plan. Check your connection and try again.',
       ),
     ).toBeInTheDocument()
   })
@@ -141,10 +141,11 @@ describe('Plan request and quality', () => {
     expect(screen.getByText('23%')).toBeInTheDocument()
     expect(screen.queryByText('41%')).not.toBeInTheDocument()
     expect(screen.getByRole('img', { name: /against a 700 kcal meal target/ })).toBeInTheDocument()
+    expect(screen.queryByText(/Nothing on the menu/)).not.toBeInTheDocument()
+    await user.click(screen.getByRole('tab', { name: 'How it was made' }))
     expect(
       screen.getByText('Rebalanced ingredient portions toward the recommended split.'),
     ).toBeInTheDocument()
-    expect(screen.queryByText(/Nothing on the menu/)).not.toBeInTheDocument()
   })
 
   it('says when an off-menu craving got a standard meal instead', async () => {

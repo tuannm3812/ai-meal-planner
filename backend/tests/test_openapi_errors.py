@@ -35,6 +35,7 @@ from backend.app.schemas.responses import ErrorResponse
 
 CONTRACT = Path(__file__).resolve().parents[2] / "docs" / "openapi.json"
 SCHEME = "ApiKeyAuth"
+BEARER = "FirebaseAuth"
 AUTH = {"401", "403", "429"}
 EXPECTED: dict[tuple[str, str], set[str]] = {
     ("get", "/"): set(),
@@ -45,6 +46,9 @@ EXPECTED: dict[tuple[str, str], set[str]] = {
     ("post", "/meal-feedback"): AUTH | {"400", "404", "501"},
     ("get", "/meal-feedback/{user_id}"): AUTH | {"501"},
     ("get", "/saved-meals/{user_id}"): AUTH | {"501"},
+    ("get", "/me/profile"): AUTH | {"404", "501"},
+    ("put", "/me/profile"): AUTH | {"501"},
+    ("delete", "/me"): AUTH | {"501"},
 }
 PUBLIC = {("get", "/"), ("get", "/health")}
 
@@ -54,14 +58,21 @@ def _contract() -> dict[str, object]:
     return json.loads(CONTRACT.read_text())
 
 
-def test_the_api_key_is_a_declared_security_scheme(contract: dict) -> None:
+def test_the_api_key_and_the_sign_in_token_are_declared_security_schemes(
+    contract: dict,
+) -> None:
     assert contract["components"]["securitySchemes"] == {
         SCHEME: {
             "type": "apiKey",
             "in": "header",
             "name": "X-API-Key",
             "description": "A client application's API key (README §8.1).",
-        }
+        },
+        BEARER: {
+            "type": "http",
+            "scheme": "bearer",
+            "description": "A signed-in user's Firebase ID token (DEC-43).",
+        },
     }
 
 
@@ -76,7 +87,8 @@ def test_each_route_declares_its_security_and_error_responses(
     if (method, path) in PUBLIC:
         assert "security" not in operation
     else:
-        assert operation["security"] == [{SCHEME: []}]
+        # Either one: an API key or a signed-in user's token (DEC-43).
+        assert operation["security"] == [{SCHEME: []}, {BEARER: []}]
     for status in errors:
         schema = operation["responses"][status]["content"]["application/json"]["schema"]
         # Every error, the feedback 400 included (owner decision, 2026-10-12).

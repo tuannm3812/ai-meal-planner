@@ -28,8 +28,8 @@ function SaveButton({ plan, userId, saved, onSaved, onHosted }) {
   return (
     <div className="flex flex-col gap-1">
       <button
-        className={`inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl px-6 text-base font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-lime disabled:cursor-default ${
-          saved ? 'bg-lime text-ink' : 'bg-accent text-white'
+        className={`inline-flex min-h-[52px] items-center gap-2.5 rounded-2xl px-6 text-base font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-peach disabled:cursor-default ${
+          saved ? 'bg-peach text-ink' : 'bg-accent-fill text-white shadow-sticker'
         }`}
         disabled={saved || sending}
         onClick={save}

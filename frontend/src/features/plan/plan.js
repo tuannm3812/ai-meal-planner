@@ -10,9 +10,9 @@ export const AMDR_PERCENT = { protein: [10, 35], carbs: [45, 65], fat: [20, 35] 
 const KCAL_PER_GRAM = { protein: 4, carbs: 4, fat: 9 }
 
 export const MACROS = [
-  { key: 'protein', label: 'Protein', total: 'total_protein', bar: 'bg-protein' },
-  { key: 'carbs', label: 'Carbs', total: 'total_carbs', bar: 'bg-carbs' },
-  { key: 'fat', label: 'Fat', total: 'total_fat', bar: 'bg-fat' },
+  { key: 'protein', label: 'Protein', total: 'total_protein', bar: 'bg-protein', on: 'text-white' },
+  { key: 'carbs', label: 'Carbs', total: 'total_carbs', bar: 'bg-carbs', on: 'text-white' },
+  { key: 'fat', label: 'Fat', total: 'total_fat', bar: 'bg-fat', on: 'text-ink' },
 ]
 
 const isNumber = (value) => typeof value === 'number' && Number.isFinite(value)
@@ -72,6 +72,14 @@ export function mealTarget(plan) {
     plan?.meal_plan?.portion_scaling?.target_meal_calories,
   ]
   return candidates.find(isNumber) ?? null
+}
+
+// One meal's share of the daily budget, as the service sizes it
+// (meal_recommendation_agent.py: 28% of the day, kept between 350 and 850 kcal).
+// The Calories page shows it so its numbers read like the plan page's.
+export function mealSizeFromDaily(dailyKcal) {
+  if (!isNumber(dailyKcal)) return null
+  return Math.max(350, Math.min(850, Math.round(dailyKcal * 0.28)))
 }
 
 export function calories(plan) {
@@ -154,7 +162,7 @@ const kcal = (value) => `${Math.round(value).toLocaleString('en-AU')} kcal`
 // What the trained model added for today's workout, from the service's own
 // `calorie_budget.exercise` (DEC-33). The rule-based fallback adds none and
 // reports none.
-function workoutNote(budget) {
+export function workoutNote(budget) {
   const exercise = budget.exercise
   if (!exercise || typeof exercise !== 'object') {
     // A plan saved before DEC-33 says nothing; its model used the defaults.

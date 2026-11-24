@@ -53,7 +53,7 @@ def test_every_route_declares_a_response_model(client: TestClient) -> None:
         if "$ref" not in operation["responses"]["200"]["content"]["application/json"]["schema"]
     ]
     assert undocumented == [], f"routes without a response schema: {undocumented}"
-    assert len(spec["paths"]) == 8, f"expected 8 documented paths, got {len(spec['paths'])}"
+    assert len(spec["paths"]) == 10, f"expected 10 documented paths, got {len(spec['paths'])}"
 
 
 def test_openapi_documents_the_meal_plan_response(client: TestClient) -> None:

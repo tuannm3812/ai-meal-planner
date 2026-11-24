@@ -1,5 +1,5 @@
 import { dishType } from '../../components/illustrations/dishType'
-import { servedSplit } from '../plan/plan'
+import { balanceOutcome, mealTarget, servedSplit } from '../plan/plan'
 
 const newestFirst = (items) =>
   [...(items || [])].sort((a, b) => String(b?.saved_at ?? '').localeCompare(String(a?.saved_at ?? '')))
@@ -34,6 +34,10 @@ export function planSummary(plan) {
     split: servedSplit(plan?.nutrition),
     dish: dishType(name),
     status: plan?.plan_status ?? null,
+    // When it was made, for the dated list; null when the record says nothing.
+    date: plan?.saved_at ?? plan?.generated_at ?? null,
+    target: typeof mealTarget(plan) === 'number' ? Math.round(mealTarget(plan)) : null,
+    outcome: balanceOutcome(plan),
   }
 }
 
@@ -42,4 +46,40 @@ export function pastMeals(items) {
   return newestFirst(items)
     .filter((item) => item?.plan_status !== 'infeasible' && item?.meal_plan)
     .map(planSummary)
+}
+
+const dayKey = (date) => `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`
+
+// Meals grouped by the day they were made, in the order given (newest first).
+// "Today" and "Yesterday" are by this device's clock; undated plans go last.
+export function byDay(meals, now = new Date()) {
+  const today = dayKey(now)
+  const yesterday = dayKey(new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1))
+  const groups = new Map()
+  for (const meal of meals) {
+    const parsed = meal.date ? new Date(meal.date) : null
+    const valid = parsed && !Number.isNaN(parsed.getTime())
+    const key = valid ? dayKey(parsed) : 'undated'
+    if (!groups.has(key)) {
+      let label = 'Earlier'
+      if (key === today) label = 'Today'
+      else if (key === yesterday) label = 'Yesterday'
+      else if (valid) {
+        label = parsed.toLocaleDateString('en-AU', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })
+      }
+      groups.set(key, { key, label, meals: [] })
+    }
+    groups.get(key).meals.push(meal)
+  }
+  return [...groups.values()]
+}
+
+// The meals whose name or craving holds every word typed.
+export function searchMeals(meals, query) {
+  const words = String(query ?? '').toLowerCase().split(/\s+/).filter(Boolean)
+  if (!words.length) return meals
+  return meals.filter((meal) => {
+    const text = `${meal.name ?? ''} ${meal.craving ?? ''}`.toLowerCase()
+    return words.every((word) => text.includes(word))
+  })
 }

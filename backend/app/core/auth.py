@@ -47,6 +47,19 @@ class Principal:
 
     client_id: str
     scopes: frozenset[str]
+    user_id: str | None = None
+    """The signed-in user's Firebase uid (DEC-43), or None for an API-key client."""
+
+    @property
+    def rate_key(self) -> str:
+        """What the rate limit counts against: the user for an account, else the client."""
+        return f"{self.client_id}:{self.user_id}" if self.user_id else self.client_id
+
+
+ACCOUNTS_CLIENT_ID = "accounts"
+"""The namespace every signed-in user's records live in (DEC-43). No key may claim it."""
+
+RESERVED_CLIENT_IDS = frozenset({ACCOUNTS_CLIENT_ID})
 
 
 LOCAL_PRINCIPAL = Principal(client_id="local", scopes=frozenset(SCOPES))
@@ -156,6 +169,8 @@ def _parse_record(item: Any) -> ApiKeyRecord:
     scopes = item.get("scopes")
     if not isinstance(client_id, str) or not client_id.strip():
         raise ValueError("Each API_KEYS entry needs a non-empty client_id.")
+    if client_id in RESERVED_CLIENT_IDS:
+        raise ValueError(f"API_KEYS entry {client_id!r} uses a reserved client_id.")
     if not isinstance(key_sha256, str) or not _SHA256_HEX.match(key_sha256):
         raise ValueError(f"API_KEYS entry {client_id!r} needs a 64-char hex key_sha256.")
     if not isinstance(scopes, list) or not set(scopes) <= set(SCOPES):
