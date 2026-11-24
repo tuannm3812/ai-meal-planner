@@ -1,7 +1,7 @@
 {
   "version": "0.6.0",
   "kit": {
-    "commit": "dc2f12fcef4aa4bc886141e9bb2f1ce53ce57d69",
+    "commit": "9a6654f0f5d4bc0650eb26dcbf48cc8ff9104420",
     "dirty": false,
     "files": {
       "uts_kit/__init__.py": "d1b304f2671749ddf6f65333bccf7effb3a367b22fcf9b8cf438cc2511e78403",
@@ -20,7 +20,7 @@
       "uts_kit/palette.py": "f80942a9564596df3aa85d56caa65554b7308ab0a68aae074b35fb2aff550f0d",
       "uts_kit/project.py": "36f11ce8cbf9619879e94c90afd7d958ecb8e5a74ce07af5798d7fad19360360",
       "uts_kit/qa.py": "2b458e38fc4bd5e67a8463c6c11bb517b46c4b17ebc0b4f5193d35be5e026da3",
-      "uts_kit/render.py": "b4e15404a626e320ddb5c58705484665ffbb44c4f52da05b774866d6c61b4672",
+      "uts_kit/render.py": "54c853875620950441d5e4935cb7a7ad69c49df14c18d54c1e5b3a9d88ffafb5",
       "uts_kit/sql_story.py": "d26add13a8209ff655cc3f7ace5cd74f76db378b4f5a798c2f9320b0a61b6fee",
       "uts_kit/story_layouts.py": "f2705ec108a0ae22ebb02c8db9b2866ca5a7ad264b60fc1254a06b019cc64ffc",
       "uts_kit/summary.py": "85a2efdb9a4cdd624b771c1e9946c75fa05382aa60437ed3e0d78bfd7c3af9c4",

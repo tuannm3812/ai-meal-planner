@@ -20,3 +20,14 @@ Tick a step after recording evidence. For a partial delivery or an inapplicable 
 - [ ] **Handoff.** Open the requested deliverables. Record paths, companion files, outstanding checks and their impact.
 
 See the [agent workflow](https://github.com/tuannm3812/uts-deck-kit/blob/main/AGENT-WORKFLOW.md) in the private kit for the decision paths and commands.
+
+## Review, 23 November 2026: appendix A5 and A6
+
+- **Scope.** Mike asked for the important results of the latest runs in the appendix. Added A5 (workout check, PR #57) and A6 (USDA benchmark, PR #59, DEC-41, §6 of docs/7_meal_quality.md). The dietitian and user-test plan (PR #56) is a plan, not a result, so it is not on a slide.
+- **Project.** Kit `uts-deck-kit` 9a6654f (0.6.0 plus the merged HTML counter fix; kit-pin.json updated for `uts_kit/render.py`). Engine: the Mac's `deck-kit` files copied unchanged; every file matches the hashes in kit-pin.json, so the engine commit reads null in build-manifest.json only because the copy had no git history. Built in a cloud session with Chrome and Poppler.
+- **Evidence.** New rows in claims-register.md and sources.md (`workouts`, `usda-run`). USDA numbers are from branch `claude/project-thread-u7ncjg` (PR #59, 55f12c5), not yet on main.
+- **Authoring.** New layout `mp_bench`: chart left with its key above it, three numbers right, takeaway band. Viridis only: body #3B528B, workout #21918C, removed exercise #440154 outline. Stale lines updated: slide 14 (USDA result, migrations done, body-temperature default), slide 15 (columns, milestones, takeaway), A1 (a stated workout replaces the usual week's exercise).
+- **Build and export.** build, export_pdf, check_deck, audit_layout and check_markers: 0 problems, 0 findings, 0 marker findings. 22 pages. PDF SHA-256 `13cd61bab05a87713623efc07130a4ae9597b3fa2a742fc024a38c05360bdd57`.
+- **Visual review.** Pages 14, 15, 17, 21 and 22 inspected at 110 dpi. Agenda unchanged (the appendix is not on it).
+- **HTML.** Arrow-key navigation reaches 22 / 22 in output/deck.html.
+- **Update, 23 November 2026.** A6 now ends on pinned USDA foods (PR #61, DEC-42, §7): 72 of 72, wider 144 of 152, no estimated ingredient. Slide 14 and 15 follow it (USDA foods pinned; "Review the 28% meal target" from pending-tasks.md replaces the done pin task; Measured closes with "Check requests it was not tuned on"). Checks clean; pages 14, 15 and 22 inspected.

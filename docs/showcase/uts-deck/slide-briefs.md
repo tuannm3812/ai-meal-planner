@@ -366,10 +366,10 @@ Exact face text:
 - "chicken fried rice" gets that recipe, / sized to you.
 - 61 of 72 benchmark plans
 - No close match
-- "pizza" gets a standard meal and a / note saying so.
+- "pizza" gets a standard meal and a note / saying so.
 - 11 of 72 benchmark plans
 - Nothing safe
-- Too many limits: the plan is refused, / not guessed.
+- Too many limits: the plan is refused, not / guessed.
 - 2 of 5 guardrail cases
 - Or a safe swap
 - A coeliac who asks for pasta keeps the / recipe with gluten-free pasta.
@@ -665,27 +665,26 @@ Exact face text:
 - LIMITS AND NEXT STEPS
 - Limits
 - What this project does not prove yet
-- The numbers are measured offline; how people use it is untested.
+- The numbers are measured on fixed requests; how people use it is untested.
 - AI Meal Planner
 - 14
 - TAKEAWAY
 - A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.
 - Measured
-- •  72 of 72 and 152 of 152, offline
+- •  72 of 72 offline and on USDA data
+- •  144 of 152 in the wider USDA check
 - •  But the checks guided the fixes
-- •  11 of 72 fall back
 - CLOSES IT
-- Run the benchmark with USDA keys
+- Check requests it was not tuned on
 - Estimated
-- •  68 of 72 plans include an estimate
 - •  AMDR is a daily range on one meal
-- •  The benchmark uses default workouts
+- •  Workouts are modelled, not measured
+- •  Body temperature is a fixed default
 - CLOSES IT
-- Real workouts in the benchmark
+- Ask a dietitian to review the rules
 - Not tested
 - •  No user testing
 - •  No clinical review
-- •  No database migrations
 - •  Taste and health outcomes unknown
 - CLOSES IT
 - Test with people
@@ -696,7 +695,7 @@ Layout: mp_next
 
 Reader question: What comes next?
 
-Message: Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.
+Message: Accounts and better inputs first, then people; each step answers a limit on the previous page.
 
 Exact face text:
 
@@ -711,7 +710,7 @@ Exact face text:
 - AI Meal Planner
 - 15
 - TAKEAWAY
-- Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.
+- Accounts and better inputs first, then people; each step answers a limit on the previous page.
 - 8 Oct
 - Refactor on main
 - 11 Oct
@@ -723,19 +722,18 @@ Exact face text:
 - 7 Nov
 - 68 of 68, gluten fix
 - 22 Nov
-- 76 recipes, kitchen app, Cloud Run
+- 76 recipes, Cloud Run, workout check
 - Now
-- Next steps
+- USDA foods pinned
 - NOW
-- Add database migrations
 - Add user accounts
+- Review the 28% meal target
 - NEXT
-- Run the benchmark with USDA keys
-- Benchmark with real workouts
 - Connect live store prices
+- Use ratings in ranking
 - LATER
 - Ask a dietitian to review the rules
-- Use feedback, then test with people
+- Test with people
 
 ## 16. Thank you
 
@@ -787,7 +785,7 @@ Exact face text:
 - Age, sex, height and weight give the daily energy estimate.
 - 3
 - Activity and today's workout
-- The usual week, plus today's session from the trained model.
+- The usual week; today's workout, from the trained model, replaces its exercise.
 - 4
 - Anything to avoid
 - Diets and allergies become hard limits, checked against allergen tags.
@@ -916,3 +914,96 @@ Exact face text:
 - 6
 - How this plan was made
 - The service's notes on how the meal was chosen and checked.
+
+## 21. A5. Workout days: today's workout replaces the usual week
+
+Layout: mp_bench
+
+Reader question: What happens when people say what exercise they did today?
+
+Message: Workout days counted the usual week's exercise twice; budgets now drop by it, and plans still meet their targets.
+
+Exact face text:
+
+- APPENDIX
+- Workout days
+- A5. Workout days: today's workout replaces the usual week
+- Workout check, 22 November 2026: 4 profiles × 6 workouts × 6 cravings, 144 plans, apart from the 72.
+- AI Meal Planner
+- 21
+- TAKEAWAY
+- Workout days counted the usual week's exercise twice; budgets now drop by it, and plans still meet their targets.
+- Average man, maintaining: daily budget, kcal
+- Usual week's exercise, no longer added
+- Today's workout
+- Body (BMR × 1.2)
+- was 2,774
+- 2,148
+- Rest day
+- no workout
+- was 2,838
+- 2,211
+- Walk
+- 20 min, 95 bpm
+- was 3,005
+- 2,378
+- Jog
+- 30 min, 120 bpm
+- was 3,251
+- 2,625
+- Run
+- 60 min, 140 bpm
+- was 3,490
+- 2,863
+- Ride
+- 90 min, 135 bpm
+- 143 of 144
+- plans meet both targets: 6 workouts, 4 profiles
+- 477 kcal
+- for a 60-minute run, up from 238: past 30 minutes, / each minute now counts
+- 1 miss
+- Tuna Pasta Salad at a 378 kcal target: carbs 43%, / with the pasta already at its smallest portion
+
+## 22. A6. With pinned USDA foods, 72 of 72 plans meet both targets
+
+Layout: mp_bench
+
+Reader question: Do the plans still hold with independent nutrition data?
+
+Message: The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.
+
+Exact face text:
+
+- APPENDIX
+- USDA data
+- A6. With pinned USDA foods, 72 of 72 plans meet both targets
+- The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.
+- AI Meal Planner
+- 22
+- TAKEAWAY
+- The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.
+- Benchmark plans, out of 72
+- Both targets met
+- Calories within 10%
+- 72
+- 72
+- Offline
+- local tables
+- 64
+- 47
+- Name search
+- energy read in kJ
+- 72
+- 50
+- Name search
+- kJ fixed
+- 72
+- 72
+- Pinned foods
+- one reviewed USDA ID each
+- 16 of 22
+- name-search misses came from one wrong match: / lean turkey mince found minced ham
+- 0 of 72
+- plans use an estimated ingredient, down from 68 / offline
+- 144 of 152
+- wider check; most of the 8 misses are Hass / avocado and store-bought hummus, kept on / purpose

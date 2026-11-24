@@ -3145,7 +3145,7 @@
           "text": "OVERVIEW",
           "x": 36.3,
           "y": 22.3,
-          "width": 69.4,
+          "width": 69.13828125,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -3170,7 +3170,7 @@
           "op": "add-line",
           "slide": "summary",
           "id": "l11",
-          "x": 104.5,
+          "x": 104.23828125,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -3182,9 +3182,9 @@
           "slide": "summary",
           "id": "t12",
           "text": "One-page summary",
-          "x": 105.3,
+          "x": 105.03828125,
           "y": 22.3,
-          "width": 596.9,
+          "width": 597.16171875,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -6369,7 +6369,7 @@
           "text": "OVERVIEW",
           "x": 36.3,
           "y": 22.3,
-          "width": 69.4,
+          "width": 69.13828125,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -6394,7 +6394,7 @@
           "op": "add-line",
           "slide": "problem",
           "id": "l11",
-          "x": 104.5,
+          "x": 104.23828125,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -6406,9 +6406,9 @@
           "slide": "problem",
           "id": "t12",
           "text": "Why it matters",
-          "x": 105.3,
+          "x": 105.03828125,
           "y": 22.3,
-          "width": 596.9,
+          "width": 597.16171875,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -8413,7 +8413,7 @@
           "text": "HOW IT WORKS",
           "x": 36.3,
           "y": 22.3,
-          "width": 92.73333333333335,
+          "width": 92.26067708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -8438,7 +8438,7 @@
           "op": "add-line",
           "slide": "flow",
           "id": "l11",
-          "x": 127.83333333333334,
+          "x": 127.36067708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -8450,9 +8450,9 @@
           "slide": "flow",
           "id": "t12",
           "text": "The flow",
-          "x": 128.63333333333335,
+          "x": 128.16067708333333,
           "y": 22.3,
-          "width": 573.5666666666666,
+          "width": 574.0393229166667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -9417,7 +9417,7 @@
           "text": "HOW IT WORKS",
           "x": 36.3,
           "y": 22.3,
-          "width": 92.73333333333335,
+          "width": 92.26067708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -9442,7 +9442,7 @@
           "op": "add-line",
           "slide": "agents",
           "id": "l11",
-          "x": 127.83333333333334,
+          "x": 127.36067708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -9454,9 +9454,9 @@
           "slide": "agents",
           "id": "t12",
           "text": "Four agents",
-          "x": 128.63333333333335,
+          "x": 128.16067708333333,
           "y": 22.3,
-          "width": 573.5666666666666,
+          "width": 574.0393229166667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -12282,7 +12282,7 @@
           "text": "HOW IT WORKS",
           "x": 36.3,
           "y": 22.3,
-          "width": 92.73333333333335,
+          "width": 92.26067708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -12307,7 +12307,7 @@
           "op": "add-line",
           "slide": "calories",
           "id": "l11",
-          "x": 127.83333333333334,
+          "x": 127.36067708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -12319,9 +12319,9 @@
           "slide": "calories",
           "id": "t12",
           "text": "Calorie target",
-          "x": 128.63333333333335,
+          "x": 128.16067708333333,
           "y": 22.3,
-          "width": 573.5666666666666,
+          "width": 574.0393229166667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13446,7 +13446,7 @@
           "text": "HOW IT WORKS",
           "x": 36.3,
           "y": 22.3,
-          "width": 92.73333333333335,
+          "width": 92.26067708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -13471,7 +13471,7 @@
           "op": "add-line",
           "slide": "choosing",
           "id": "l11",
-          "x": 127.83333333333334,
+          "x": 127.36067708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -13483,9 +13483,9 @@
           "slide": "choosing",
           "id": "t12",
           "text": "Choosing the meal",
-          "x": 128.63333333333335,
+          "x": 128.16067708333333,
           "y": 22.3,
-          "width": 573.5666666666666,
+          "width": 574.0393229166667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -17875,7 +17875,7 @@
           "op": "add-textbox",
           "slide": "choosing",
           "id": "t351",
-          "text": "\"pizza\" gets a standard meal and a\nnote saying so.",
+          "text": "\"pizza\" gets a standard meal and a note\nsaying so.",
           "x": 273.175,
           "y": 330.8,
           "width": 193.275,
@@ -17992,7 +17992,7 @@
           "op": "add-textbox",
           "slide": "choosing",
           "id": "t357",
-          "text": "Too many limits: the plan is refused,\nnot guessed.",
+          "text": "Too many limits: the plan is refused, not\nguessed.",
           "x": 496.05,
           "y": 330.8,
           "width": 193.275,
@@ -18452,7 +18452,7 @@
           "text": "HOW IT WORKS",
           "x": 36.3,
           "y": 22.3,
-          "width": 92.73333333333335,
+          "width": 92.26067708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -18477,7 +18477,7 @@
           "op": "add-line",
           "slide": "nutrition",
           "id": "l11",
-          "x": 127.83333333333334,
+          "x": 127.36067708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -18489,9 +18489,9 @@
           "slide": "nutrition",
           "id": "t12",
           "text": "Nutrition",
-          "x": 128.63333333333335,
+          "x": 128.16067708333333,
           "y": 22.3,
-          "width": 573.5666666666666,
+          "width": 574.0393229166667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -20177,7 +20177,7 @@
           "text": "EVIDENCE",
           "x": 36.3,
           "y": 22.3,
-          "width": 65.9,
+          "width": 66.02760416666668,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -20202,7 +20202,7 @@
           "op": "add-line",
           "slide": "good",
           "id": "l11",
-          "x": 101.0,
+          "x": 101.12760416666667,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -20214,9 +20214,9 @@
           "slide": "good",
           "id": "t12",
           "text": "What good means",
-          "x": 101.8,
+          "x": 101.92760416666667,
           "y": 22.3,
-          "width": 600.4,
+          "width": 600.2723958333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -22250,7 +22250,7 @@
           "text": "EVIDENCE",
           "x": 36.3,
           "y": 22.3,
-          "width": 65.9,
+          "width": 66.02760416666668,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -22275,7 +22275,7 @@
           "op": "add-line",
           "slide": "results",
           "id": "l11",
-          "x": 101.0,
+          "x": 101.12760416666667,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -22287,9 +22287,9 @@
           "slide": "results",
           "id": "t12",
           "text": "Results",
-          "x": 101.8,
+          "x": 101.92760416666667,
           "y": 22.3,
-          "width": 600.4,
+          "width": 600.2723958333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -23817,7 +23817,7 @@
           "text": "EVIDENCE",
           "x": 36.3,
           "y": 22.3,
-          "width": 65.9,
+          "width": 66.02760416666668,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -23842,7 +23842,7 @@
           "op": "add-line",
           "slide": "architecture",
           "id": "l11",
-          "x": 101.0,
+          "x": 101.12760416666667,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -23854,9 +23854,9 @@
           "slide": "architecture",
           "id": "t12",
           "text": "Architecture",
-          "x": 101.8,
+          "x": 101.92760416666667,
           "y": 22.3,
-          "width": 600.4,
+          "width": 600.2723958333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -24122,7 +24122,7 @@
           "text": "Ask",
           "x": 44.3,
           "y": 130.8,
-          "width": 39.800000000000004,
+          "width": 39.784375,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -24148,9 +24148,9 @@
           "slide": "architecture",
           "id": "t29",
           "text": "two clients",
-          "x": 71.7,
+          "x": 71.684375,
           "y": 133.8,
-          "width": 99.0,
+          "width": 99.015625,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -24182,7 +24182,7 @@
           "text": "API",
           "x": 180.3,
           "y": 130.8,
-          "width": 38.0,
+          "width": 37.9234375,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -24208,9 +24208,9 @@
           "slide": "architecture",
           "id": "t32",
           "text": "FastAPI",
-          "x": 205.9,
+          "x": 205.8234375,
           "y": 133.8,
-          "width": 104.80000000000001,
+          "width": 104.8765625,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -24242,7 +24242,7 @@
           "text": "Plan",
           "x": 320.3,
           "y": 130.8,
-          "width": 42.699999999999996,
+          "width": 42.6640625,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -24268,9 +24268,9 @@
           "slide": "architecture",
           "id": "t35",
           "text": "MealPlanningService, four agents",
-          "x": 350.6,
+          "x": 350.56406250000003,
           "y": 133.8,
-          "width": 388.09999999999997,
+          "width": 388.13593749999995,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -24302,7 +24302,7 @@
           "text": "Answer",
           "x": 748.3,
           "y": 130.8,
-          "width": 62.4,
+          "width": 62.1875,
           "height": 30.6,
           "font_size": 12,
           "font_family": "Google Sans",
@@ -24328,9 +24328,9 @@
           "slide": "architecture",
           "id": "t38",
           "text": "for the person",
-          "x": 798.3,
+          "x": 798.0875,
           "y": 133.8,
-          "width": 119.9,
+          "width": 120.11250000000001,
           "height": 25.200000000000003,
           "font_size": 8,
           "font_family": "Google Sans",
@@ -26464,7 +26464,7 @@
           "text": "EVIDENCE",
           "x": 36.3,
           "y": 22.3,
-          "width": 65.9,
+          "width": 66.02760416666668,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -26489,7 +26489,7 @@
           "op": "add-line",
           "slide": "engineering",
           "id": "l11",
-          "x": 101.0,
+          "x": 101.12760416666667,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -26501,9 +26501,9 @@
           "slide": "engineering",
           "id": "t12",
           "text": "Engineering",
-          "x": 101.8,
+          "x": 101.92760416666667,
           "y": 22.3,
-          "width": 600.4,
+          "width": 600.2723958333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -27736,14 +27736,14 @@
       "topic": "Limits",
       "accent": "ochre",
       "title": "What this project does not prove yet",
-      "subtitle": "The numbers are measured offline; how people use it is untested.",
+      "subtitle": "The numbers are measured on fixed requests; how people use it is untested.",
       "takeaway": "A planning aid, not medical advice: plans hit their targets, but nobody has used it yet.",
       "question": "What is unproven?",
       "notes": {
         "purpose": "Put the limits in one place.",
         "script": [
-          "Plans hit their targets on fixed requests. Most lean on estimates. Nobody has used it yet.",
-          "Sources: docs/4_next_steps.md \u00a77; docs/7_meal_quality.md; DEC-31."
+          "Plans hit their targets on fixed requests, offline and on USDA data, but those requests guided the fixes. Calorie inputs are modelled. Nobody has used it yet.",
+          "Sources: docs/4_next_steps.md \u00a77; docs/7_meal_quality.md \u00a75 to \u00a77; DEC-31, DEC-42."
         ],
         "references": [
           "sources.md",
@@ -27755,23 +27755,23 @@
           "icon": "check_circle",
           "title": "Measured",
           "items": [
-            "**72 of 72** and **152 of 152**, offline",
-            "But the checks guided the fixes",
-            "11 of 72 fall back"
+            "**72 of 72** offline and on USDA data",
+            "**144 of 152** in the wider USDA check",
+            "But the checks guided the fixes"
           ],
           "strength": 3,
-          "next": "Run the benchmark with USDA keys"
+          "next": "Check requests it was not tuned on"
         },
         {
           "icon": "calculate",
           "title": "Estimated",
           "items": [
-            "**68 of 72** plans include an estimate",
             "AMDR is a daily range on one meal",
-            "The benchmark uses default workouts"
+            "Workouts are modelled, not measured",
+            "Body temperature is a fixed default"
           ],
           "strength": 2,
-          "next": "Real workouts in the benchmark"
+          "next": "Ask a dietitian to review the rules"
         },
         {
           "icon": "group",
@@ -27779,7 +27779,6 @@
           "items": [
             "No user testing",
             "No clinical review",
-            "No database migrations",
             "Taste and health outcomes unknown"
           ],
           "strength": 1,
@@ -27969,7 +27968,7 @@
           "text": "LIMITS AND NEXT STEPS",
           "x": 36.3,
           "y": 22.3,
-          "width": 132.65,
+          "width": 132.31927083333332,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -27994,7 +27993,7 @@
           "op": "add-line",
           "slide": "limits",
           "id": "l11",
-          "x": 167.75,
+          "x": 167.41927083333331,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -28006,9 +28005,9 @@
           "slide": "limits",
           "id": "t12",
           "text": "Limits",
-          "x": 168.55,
+          "x": 168.21927083333333,
           "y": 22.3,
-          "width": 533.65,
+          "width": 533.9807291666667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -28096,7 +28095,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t18",
-          "text": "The numbers are measured offline; how people use it is untested.",
+          "text": "The numbers are measured on fixed requests; how people use it is untested.",
           "x": 36.3,
           "y": 92.8,
           "width": 889.9,
@@ -28110,7 +28109,7 @@
           "op": "style-paragraph",
           "element": "t18",
           "start": 0,
-          "end": 64,
+          "end": 74,
           "line_spacing": 135
         },
         {
@@ -28353,7 +28352,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t34",
-          "text": "\u2022  72 of 72 and 152 of 152, offline",
+          "text": "\u2022  72 of 72 offline and on USDA data",
           "x": 50.3,
           "y": 281.0,
           "width": 267.56666666666666,
@@ -28367,7 +28366,7 @@
           "op": "style-paragraph",
           "element": "t34",
           "start": 0,
-          "end": 35,
+          "end": 36,
           "line_spacing": 135
         },
         {
@@ -28379,18 +28378,10 @@
           "color": "#1B2430"
         },
         {
-          "op": "style-text",
-          "element": "t34",
-          "start": 16,
-          "end": 26,
-          "bold": true,
-          "color": "#1B2430"
-        },
-        {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t35",
-          "text": "\u2022  But the checks guided the fixes",
+          "text": "\u2022  144 of 152 in the wider USDA check",
           "x": 50.3,
           "y": 298.5,
           "width": 267.56666666666666,
@@ -28404,14 +28395,22 @@
           "op": "style-paragraph",
           "element": "t35",
           "start": 0,
-          "end": 34,
+          "end": 37,
           "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t35",
+          "start": 3,
+          "end": 13,
+          "bold": true,
+          "color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t36",
-          "text": "\u2022  11 of 72 fall back",
+          "text": "\u2022  But the checks guided the fixes",
           "x": 50.3,
           "y": 316.0,
           "width": 267.56666666666666,
@@ -28425,7 +28424,7 @@
           "op": "style-paragraph",
           "element": "t36",
           "start": 0,
-          "end": 21,
+          "end": 34,
           "line_spacing": 135
         },
         {
@@ -28482,7 +28481,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t40",
-          "text": "Run the benchmark with USDA keys",
+          "text": "Check requests it was not tuned on",
           "x": 58.3,
           "y": 383.8,
           "width": 255.5666666666667,
@@ -28496,14 +28495,14 @@
           "op": "style-paragraph",
           "element": "t40",
           "start": 0,
-          "end": 32,
+          "end": 34,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t40",
           "start": 0,
-          "end": 32,
+          "end": 34,
           "bold": true
         },
         {
@@ -28605,7 +28604,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t48",
-          "text": "\u2022  68 of 72 plans include an estimate",
+          "text": "\u2022  AMDR is a daily range on one meal",
           "x": 347.4666666666667,
           "y": 228.5,
           "width": 267.56666666666666,
@@ -28619,22 +28618,14 @@
           "op": "style-paragraph",
           "element": "t48",
           "start": 0,
-          "end": 37,
+          "end": 36,
           "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t48",
-          "start": 3,
-          "end": 11,
-          "bold": true,
-          "color": "#1B2430"
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t49",
-          "text": "\u2022  AMDR is a daily range on one meal",
+          "text": "\u2022  Workouts are modelled, not measured",
           "x": 347.4666666666667,
           "y": 246.0,
           "width": 267.56666666666666,
@@ -28648,14 +28639,14 @@
           "op": "style-paragraph",
           "element": "t49",
           "start": 0,
-          "end": 36,
+          "end": 38,
           "line_spacing": 135
         },
         {
           "op": "add-textbox",
           "slide": "limits",
           "id": "t50",
-          "text": "\u2022  The benchmark uses default workouts",
+          "text": "\u2022  Body temperature is a fixed default",
           "x": 347.4666666666667,
           "y": 263.5,
           "width": 267.56666666666666,
@@ -28726,7 +28717,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t54",
-          "text": "Real workouts in the benchmark",
+          "text": "Ask a dietitian to review the rules",
           "x": 355.4666666666667,
           "y": 383.8,
           "width": 255.5666666666667,
@@ -28740,14 +28731,14 @@
           "op": "style-paragraph",
           "element": "t54",
           "start": 0,
-          "end": 30,
+          "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t54",
           "start": 0,
-          "end": 30,
+          "end": 35,
           "bold": true
         },
         {
@@ -28893,7 +28884,7 @@
           "op": "add-textbox",
           "slide": "limits",
           "id": "t64",
-          "text": "\u2022  No database migrations",
+          "text": "\u2022  Taste and health outcomes unknown",
           "x": 644.6333333333333,
           "y": 211.0,
           "width": 267.56666666666666,
@@ -28907,34 +28898,13 @@
           "op": "style-paragraph",
           "element": "t64",
           "start": 0,
-          "end": 25,
-          "line_spacing": 135
-        },
-        {
-          "op": "add-textbox",
-          "slide": "limits",
-          "id": "t65",
-          "text": "\u2022  Taste and health outcomes unknown",
-          "x": 644.6333333333333,
-          "y": 228.5,
-          "width": 267.56666666666666,
-          "height": 27.9,
-          "font_size": 10,
-          "font_family": "Google Sans",
-          "color": "#5A6370",
-          "bold": false
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t65",
-          "start": 0,
           "end": 36,
           "line_spacing": 135
         },
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r66",
+          "id": "r65",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 372.0,
@@ -28945,7 +28915,7 @@
         {
           "op": "add-shape",
           "slide": "limits",
-          "id": "r67",
+          "id": "r66",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 372.0,
@@ -28956,7 +28926,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t68",
+          "id": "t67",
           "text": "CLOSES IT",
           "x": 652.6333333333333,
           "y": 370.8,
@@ -28969,14 +28939,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t68",
+          "element": "t67",
           "start": 0,
           "end": 9,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t68",
+          "element": "t67",
           "start": 0,
           "end": 9,
           "bold": true
@@ -28984,7 +28954,7 @@
         {
           "op": "add-textbox",
           "slide": "limits",
-          "id": "t69",
+          "id": "t68",
           "text": "Test with people",
           "x": 652.6333333333333,
           "y": 383.8,
@@ -28997,14 +28967,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t69",
+          "element": "t68",
           "start": 0,
           "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t69",
+          "element": "t68",
           "start": 0,
           "end": 16,
           "bold": true
@@ -29019,12 +28989,12 @@
       "accent": "ochre",
       "title": "What comes next, in priority order",
       "subtitle": "How the project got here, and the work still ahead.",
-      "takeaway": "Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.",
+      "takeaway": "Accounts and better inputs first, then people; each step answers a limit on the previous page.",
       "question": "What comes next?",
       "notes": {
         "purpose": "Pair the limits with the work that answers them.",
         "script": [
-          "Foundations first: migrations and accounts; the API went live on Cloud Run on 22 November. Then better inputs. Then scale and testing with people.",
+          "Foundations first: migrations are done and accounts are next; the API went live on Cloud Run on 22 November, and the workout and USDA runs are in the appendix. Then better inputs. Then testing with people.",
           "Sources: docs/4_next_steps.md \u00a76 and \u00a77."
         ],
         "references": [
@@ -29055,43 +29025,41 @@
         },
         {
           "date": "22 Nov",
-          "text": "76 recipes, kitchen app, Cloud Run"
+          "text": "76 recipes, Cloud Run, workout check"
         },
         {
           "date": "Now",
-          "text": "Next steps"
+          "text": "USDA foods pinned"
         }
       ],
       "columns": [
         {
           "title": "Now",
           "items": [
-            "Add database migrations",
-            "Add user accounts"
+            "Add user accounts",
+            "Review the 28% meal target"
           ],
           "icons": [
-            "inventory_2",
-            "person"
+            "person",
+            "rice_bowl"
           ]
         },
         {
           "title": "Next",
           "items": [
-            "Run the benchmark with USDA keys",
-            "Benchmark with real workouts",
-            "Connect live store prices"
+            "Connect live store prices",
+            "Use ratings in ranking"
           ],
           "icons": [
-            "fact_check",
-            "fitness_center",
-            "storefront"
+            "storefront",
+            "restaurant"
           ]
         },
         {
           "title": "Later",
           "items": [
             "Ask a dietitian to review the rules",
-            "Use feedback, then test with people"
+            "Test with people"
           ],
           "icons": [
             "verified",
@@ -29282,7 +29250,7 @@
           "text": "LIMITS AND NEXT STEPS",
           "x": 36.3,
           "y": 22.3,
-          "width": 132.65,
+          "width": 132.31927083333332,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -29307,7 +29275,7 @@
           "op": "add-line",
           "slide": "next",
           "id": "l11",
-          "x": 167.75,
+          "x": 167.41927083333331,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -29319,9 +29287,9 @@
           "slide": "next",
           "id": "t12",
           "text": "Next steps",
-          "x": 168.55,
+          "x": 168.21927083333333,
           "y": 22.3,
-          "width": 533.65,
+          "width": 533.9807291666667,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -29552,7 +29520,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t26",
-          "text": "Foundations first, then better inputs, then scale and people; each step answers a limit on the previous page.",
+          "text": "Accounts and better inputs first, then people; each step answers a limit on the previous page.",
           "x": 147.3,
           "y": 442.05,
           "width": 761.9,
@@ -29566,7 +29534,7 @@
           "op": "style-paragraph",
           "element": "t26",
           "start": 0,
-          "end": 109,
+          "end": 94,
           "line_spacing": 135
         },
         {
@@ -29990,7 +29958,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t50",
-          "text": "76 recipes, kitchen app, Cloud Run",
+          "text": "76 recipes, Cloud Run, workout check",
           "x": 669.2166666666667,
           "y": 159.8,
           "width": 154.4,
@@ -30005,7 +29973,7 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 34,
+          "end": 36,
           "line_spacing": 135
         },
         {
@@ -30052,7 +30020,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t53",
-          "text": "Next steps",
+          "text": "USDA foods pinned",
           "x": 801.8,
           "y": 159.8,
           "width": 154.4,
@@ -30067,7 +30035,7 @@
           "op": "style-paragraph",
           "element": "t53",
           "start": 0,
-          "end": 10,
+          "end": 17,
           "line_spacing": 135
         },
         {
@@ -30134,7 +30102,7 @@
         {
           "op": "add-image",
           "id": "im58",
-          "path": "assets/icons/kit/inventory_2-ochre.svg",
+          "path": "assets/icons/kit/person-ochre.svg",
           "alt": "",
           "x": 66.5,
           "y": 270.5,
@@ -30145,7 +30113,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t59",
-          "text": "Add database migrations",
+          "text": "Add user accounts",
           "x": 88.3,
           "y": 265.2,
           "width": 223.5666666666667,
@@ -30159,14 +30127,14 @@
           "op": "style-paragraph",
           "element": "t59",
           "start": 0,
-          "end": 23,
+          "end": 17,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t59",
           "start": 0,
-          "end": 23,
+          "end": 17,
           "bold": true
         },
         {
@@ -30183,7 +30151,7 @@
         {
           "op": "add-image",
           "id": "im61",
-          "path": "assets/icons/kit/person-ochre.svg",
+          "path": "assets/icons/kit/rice_bowl-ochre.svg",
           "alt": "",
           "x": 66.5,
           "y": 363.5,
@@ -30194,7 +30162,7 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t62",
-          "text": "Add user accounts",
+          "text": "Review the 28% meal target",
           "x": 88.3,
           "y": 358.2,
           "width": 223.5666666666667,
@@ -30208,14 +30176,14 @@
           "op": "style-paragraph",
           "element": "t62",
           "start": 0,
-          "end": 17,
+          "end": 26,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t62",
           "start": 0,
-          "end": 17,
+          "end": 26,
           "bold": true
         },
         {
@@ -30276,16 +30244,16 @@
           "x": 350.6666666666667,
           "y": 238.0,
           "width": 261.1666666666667,
-          "height": 54.0,
+          "height": 85.0,
           "background_color": "#FFFFFF"
         },
         {
           "op": "add-image",
           "id": "im67",
-          "path": "assets/icons/kit/fact_check-ochre.svg",
+          "path": "assets/icons/kit/storefront-ochre.svg",
           "alt": "",
           "x": 363.6666666666667,
-          "y": 255.0,
+          "y": 270.5,
           "width": 20,
           "height": 20
         },
@@ -30293,9 +30261,9 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t68",
-          "text": "Run the benchmark with USDA keys",
+          "text": "Connect live store prices",
           "x": 385.4666666666667,
-          "y": 249.7,
+          "y": 265.2,
           "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
@@ -30307,14 +30275,14 @@
           "op": "style-paragraph",
           "element": "t68",
           "start": 0,
-          "end": 32,
+          "end": 25,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t68",
           "start": 0,
-          "end": 32,
+          "end": 25,
           "bold": true
         },
         {
@@ -30323,18 +30291,18 @@
           "id": "r69",
           "shape_type": "RECTANGLE",
           "x": 350.6666666666667,
-          "y": 300.0,
+          "y": 331.0,
           "width": 261.1666666666667,
-          "height": 54.0,
+          "height": 85.0,
           "background_color": "#FFFFFF"
         },
         {
           "op": "add-image",
           "id": "im70",
-          "path": "assets/icons/kit/fitness_center-ochre.svg",
+          "path": "assets/icons/kit/restaurant-ochre.svg",
           "alt": "",
           "x": 363.6666666666667,
-          "y": 317.0,
+          "y": 363.5,
           "width": 20,
           "height": 20
         },
@@ -30342,9 +30310,9 @@
           "op": "add-textbox",
           "slide": "next",
           "id": "t71",
-          "text": "Benchmark with real workouts",
+          "text": "Use ratings in ranking",
           "x": 385.4666666666667,
-          "y": 311.7,
+          "y": 358.2,
           "width": 223.5666666666667,
           "height": 30.6,
           "font_size": 12,
@@ -30356,69 +30324,20 @@
           "op": "style-paragraph",
           "element": "t71",
           "start": 0,
-          "end": 28,
+          "end": 22,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t71",
           "start": 0,
-          "end": 28,
+          "end": 22,
           "bold": true
         },
         {
           "op": "add-shape",
           "slide": "next",
           "id": "r72",
-          "shape_type": "RECTANGLE",
-          "x": 350.6666666666667,
-          "y": 362.0,
-          "width": 261.1666666666667,
-          "height": 54.0,
-          "background_color": "#FFFFFF"
-        },
-        {
-          "op": "add-image",
-          "id": "im73",
-          "path": "assets/icons/kit/storefront-ochre.svg",
-          "alt": "",
-          "x": 363.6666666666667,
-          "y": 379.0,
-          "width": 20,
-          "height": 20
-        },
-        {
-          "op": "add-textbox",
-          "slide": "next",
-          "id": "t74",
-          "text": "Connect live store prices",
-          "x": 385.4666666666667,
-          "y": 373.7,
-          "width": 223.5666666666667,
-          "height": 30.6,
-          "font_size": 12,
-          "font_family": "Google Sans",
-          "color": "#1B2430",
-          "bold": true
-        },
-        {
-          "op": "style-paragraph",
-          "element": "t74",
-          "start": 0,
-          "end": 25,
-          "line_spacing": 135
-        },
-        {
-          "op": "style-text",
-          "element": "t74",
-          "start": 0,
-          "end": 25,
-          "bold": true
-        },
-        {
-          "op": "add-shape",
-          "slide": "next",
-          "id": "r75",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -30429,7 +30348,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r76",
+          "id": "r73",
           "shape_type": "RECTANGLE",
           "x": 637.8333333333334,
           "y": 204.0,
@@ -30440,7 +30359,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t77",
+          "id": "t74",
           "text": "LATER",
           "x": 644.6333333333333,
           "y": 208.8,
@@ -30453,14 +30372,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t77",
+          "element": "t74",
           "start": 0,
           "end": 5,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t77",
+          "element": "t74",
           "start": 0,
           "end": 5,
           "bold": true
@@ -30468,7 +30387,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r78",
+          "id": "r75",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 238.0,
@@ -30478,7 +30397,7 @@
         },
         {
           "op": "add-image",
-          "id": "im79",
+          "id": "im76",
           "path": "assets/icons/kit/verified-ochre.svg",
           "alt": "",
           "x": 660.8333333333334,
@@ -30489,7 +30408,7 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t80",
+          "id": "t77",
           "text": "Ask a dietitian to review the rules",
           "x": 682.6333333333333,
           "y": 265.2,
@@ -30502,14 +30421,14 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t80",
+          "element": "t77",
           "start": 0,
           "end": 35,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t80",
+          "element": "t77",
           "start": 0,
           "end": 35,
           "bold": true
@@ -30517,7 +30436,7 @@
         {
           "op": "add-shape",
           "slide": "next",
-          "id": "r81",
+          "id": "r78",
           "shape_type": "RECTANGLE",
           "x": 647.8333333333334,
           "y": 331.0,
@@ -30527,7 +30446,7 @@
         },
         {
           "op": "add-image",
-          "id": "im82",
+          "id": "im79",
           "path": "assets/icons/kit/group-ochre.svg",
           "alt": "",
           "x": 660.8333333333334,
@@ -30538,8 +30457,8 @@
         {
           "op": "add-textbox",
           "slide": "next",
-          "id": "t83",
-          "text": "Use feedback, then test with people",
+          "id": "t80",
+          "text": "Test with people",
           "x": 682.6333333333333,
           "y": 358.2,
           "width": 223.5666666666667,
@@ -30551,16 +30470,16 @@
         },
         {
           "op": "style-paragraph",
-          "element": "t83",
+          "element": "t80",
           "start": 0,
-          "end": 35,
+          "end": 16,
           "line_spacing": 135
         },
         {
           "op": "style-text",
-          "element": "t83",
+          "element": "t80",
           "start": 0,
-          "end": 35,
+          "end": 16,
           "bold": true
         }
       ]
@@ -31001,7 +30920,7 @@
         },
         {
           "title": "Activity and today's workout",
-          "text": "The usual week, plus **today's session** from the trained model."
+          "text": "The usual week; **today's workout**, from the trained model, replaces its exercise."
         },
         {
           "title": "Anything to avoid",
@@ -31037,7 +30956,7 @@
           "text": "APPENDIX",
           "x": 36.3,
           "y": 22.3,
-          "width": 66.23333333333333,
+          "width": 66.19817708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -31062,7 +30981,7 @@
           "op": "add-line",
           "slide": "walk1",
           "id": "l2",
-          "x": 101.33333333333334,
+          "x": 101.29817708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -31074,9 +30993,9 @@
           "slide": "walk1",
           "id": "t3",
           "text": "First visit",
-          "x": 102.13333333333334,
+          "x": 102.09817708333333,
           "y": 22.3,
-          "width": 780.0666666666666,
+          "width": 780.1018229166666,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -31893,7 +31812,7 @@
           "op": "add-textbox",
           "slide": "walk1",
           "id": "t50",
-          "text": "The usual week, plus today's session from the trained model.",
+          "text": "The usual week; today's workout, from the trained model, replaces its exercise.",
           "x": 431.5523364485981,
           "y": 259.8,
           "width": 494.64766355140193,
@@ -31907,14 +31826,14 @@
           "op": "style-paragraph",
           "element": "t50",
           "start": 0,
-          "end": 60,
+          "end": 79,
           "line_spacing": 135
         },
         {
           "op": "style-text",
           "element": "t50",
-          "start": 21,
-          "end": 36,
+          "start": 16,
+          "end": 31,
           "bold": true,
           "color": "#1B2430"
         },
@@ -32341,7 +32260,7 @@
           "text": "APPENDIX",
           "x": 36.3,
           "y": 22.3,
-          "width": 66.23333333333333,
+          "width": 66.19817708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -32366,7 +32285,7 @@
           "op": "add-line",
           "slide": "walk2",
           "id": "l2",
-          "x": 101.33333333333334,
+          "x": 101.29817708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -32378,9 +32297,9 @@
           "slide": "walk2",
           "id": "t3",
           "text": "Home",
-          "x": 102.13333333333334,
+          "x": 102.09817708333333,
           "y": 22.3,
-          "width": 780.0666666666666,
+          "width": 780.1018229166666,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -33483,7 +33402,7 @@
           "text": "APPENDIX",
           "x": 36.3,
           "y": 22.3,
-          "width": 66.23333333333333,
+          "width": 66.19817708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -33508,7 +33427,7 @@
           "op": "add-line",
           "slide": "walk3",
           "id": "l2",
-          "x": 101.33333333333334,
+          "x": 101.29817708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -33520,9 +33439,9 @@
           "slide": "walk3",
           "id": "t3",
           "text": "Plan page",
-          "x": 102.13333333333334,
+          "x": 102.09817708333333,
           "y": 22.3,
-          "width": 780.0666666666666,
+          "width": 780.1018229166666,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -34795,7 +34714,7 @@
           "text": "APPENDIX",
           "x": 36.3,
           "y": 22.3,
-          "width": 66.23333333333333,
+          "width": 66.19817708333333,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -34820,7 +34739,7 @@
           "op": "add-line",
           "slide": "walk4",
           "id": "l2",
-          "x": 101.33333333333334,
+          "x": 101.29817708333333,
           "y": 31,
           "width": 0.0,
           "height": 11,
@@ -34832,9 +34751,9 @@
           "slide": "walk4",
           "id": "t3",
           "text": "After the plan",
-          "x": 102.13333333333334,
+          "x": 102.09817708333333,
           "y": 22.3,
-          "width": 780.0666666666666,
+          "width": 780.1018229166666,
           "height": 28.4,
           "font_size": 10,
           "font_family": "Google Sans",
@@ -36016,6 +35935,2836 @@
           "start": 0,
           "end": 59,
           "line_spacing": 135
+        }
+      ]
+    },
+    {
+      "id": "workouts",
+      "layout": "mp_bench",
+      "section": "Appendix",
+      "topic": "Workout days",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A5. Workout days: today's workout replaces the usual week",
+      "subtitle": "Workout check, 22 November 2026: 4 profiles \u00d7 6 workouts \u00d7 6 cravings, 144 plans, apart from the 72.",
+      "takeaway": "Workout days counted the usual week's exercise twice; budgets now drop by it, and plans still meet their targets.",
+      "question": "What happens when people say what exercise they did today?",
+      "chart": {
+        "kind": "stack",
+        "title": "Average man, maintaining: daily budget, kcal",
+        "maximum": 3600,
+        "keys": [
+          {
+            "label": "Body (BMR \u00d7 1.2)",
+            "colour": "#3B528B"
+          },
+          {
+            "label": "Today's workout",
+            "colour": "#21918C"
+          },
+          {
+            "label": "Usual week's exercise, no longer added",
+            "colour": "#440154",
+            "outline": true
+          }
+        ],
+        "bars": [
+          {
+            "label": "Rest day",
+            "detail": "no workout",
+            "body": 2148,
+            "workout": 0,
+            "removed": 626,
+            "now": 2148,
+            "before": 2774
+          },
+          {
+            "label": "Walk",
+            "detail": "20 min, 95 bpm",
+            "body": 2148,
+            "workout": 63,
+            "removed": 626,
+            "now": 2211,
+            "before": 2838
+          },
+          {
+            "label": "Jog",
+            "detail": "30 min, 120 bpm",
+            "body": 2148,
+            "workout": 230,
+            "removed": 626,
+            "now": 2378,
+            "before": 3005
+          },
+          {
+            "label": "Run",
+            "detail": "60 min, 140 bpm",
+            "body": 2148,
+            "workout": 477,
+            "removed": 626,
+            "now": 2625,
+            "before": 3251
+          },
+          {
+            "label": "Ride",
+            "detail": "90 min, 135 bpm",
+            "body": 2148,
+            "workout": 715,
+            "removed": 626,
+            "now": 2863,
+            "before": 3490
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "icon": "check_circle",
+          "value": "143 of 144",
+          "label": "plans meet both targets: **6 workouts**, **4 profiles**"
+        },
+        {
+          "icon": "fitness_center",
+          "value": "477 kcal",
+          "label": "for a 60-minute run, up from 238: past **30 minutes**, each minute now counts"
+        },
+        {
+          "icon": "flag",
+          "value": "1 miss",
+          "label": "Tuna Pasta Salad at a **378 kcal** target: carbs 43%, with the pasta already at its smallest portion"
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: what the workout check measured and the two fixes it led to.",
+        "script": [
+          "The fixed 72 requests send no workout. This check sends six: not given, rest day, a walk, a jog, a run and a ride, for each of the four profiles on six cravings.",
+          "The activity level already holds an average day's exercise: 626 kcal for this man. Before the fix, today's workout was added on top on 15 of 24 profile-days. Now a stated workout replaces it, so his run day falls from 3,251 to 2,625 kcal. A workout left out still adds the 30-minute default to the activity level.",
+          "The model was trained on 1 to 30 minutes, so 60 and 90 minutes used to count as 30. They now count per minute. Heart rates above 128 bpm are still read as 128, and every request uses the 37 \u00b0C body-temperature default, which is just below the training range.",
+          "The one miss: targets between about 360 and 390 kcal push Tuna Pasta Salad's carbs to 43%, because the pasta cannot shrink below half a portion.",
+          "Sources: docs/7_meal_quality.md \u00a75 (Workout days); docs/meal_quality/workouts.md; DEC-39, DEC-40; PR #57."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "n": 21,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.19817708333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "workouts",
+          "id": "l2",
+          "x": 101.29817708333333,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t3",
+          "text": "Workout days",
+          "x": 102.09817708333333,
+          "y": 22.3,
+          "width": 780.1018229166666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "workouts",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t8",
+          "text": "A5. Workout days: today's workout replaces the usual week",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 57,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 57,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t9",
+          "text": "Workout check, 22 November 2026: 4 profiles \u00d7 6 workouts \u00d7 6 cravings, 144 plans, apart from the 72.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 100,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "workouts",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t13",
+          "text": "21",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 436,
+          "width": 875.5,
+          "height": 40,
+          "background_color": "#F6F1E5"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r15",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 436,
+          "width": 3,
+          "height": 40,
+          "background_color": "#B89245"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t16",
+          "text": "TAKEAWAY",
+          "x": 50.3,
+          "y": 444.05,
+          "width": 99.4,
+          "height": 26.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#765718",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t16",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t16",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t17",
+          "text": "Workout days counted the usual week's exercise twice; budgets now drop by it, and plans still meet their targets.",
+          "x": 147.3,
+          "y": 442.05,
+          "width": 761.9,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t17",
+          "start": 0,
+          "end": 113,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r18",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 560,
+          "height": 290.0,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t19",
+          "text": "Average man, maintaining: daily budget, kcal",
+          "x": 50.3,
+          "y": 134.8,
+          "width": 546.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t19",
+          "start": 0,
+          "end": 44,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t20",
+          "text": "Usual week's exercise, no longer added",
+          "x": 438.0947916666667,
+          "y": 152.8,
+          "width": 158.60520833333334,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t20",
+          "start": 0,
+          "end": 38,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r21",
+          "shape_type": "RECTANGLE",
+          "x": 431.2947916666667,
+          "y": 162.0,
+          "width": 10,
+          "height": 8,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t22",
+          "text": "Today's workout",
+          "x": 347.43125000000003,
+          "y": 152.8,
+          "width": 77.06354166666667,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t22",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r23",
+          "shape_type": "RECTANGLE",
+          "x": 340.63125,
+          "y": 162.0,
+          "width": 10,
+          "height": 8,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t24",
+          "text": "Body (BMR \u00d7 1.2)",
+          "x": 255.83958333333334,
+          "y": 152.8,
+          "width": 77.99166666666667,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t24",
+          "start": 0,
+          "end": 16,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r25",
+          "shape_type": "RECTANGLE",
+          "x": 249.03958333333333,
+          "y": 162.0,
+          "width": 10,
+          "height": 8,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r26",
+          "shape_type": "RECTANGLE",
+          "x": 80.908,
+          "y": 265.79333333333335,
+          "width": 59.58400000000001,
+          "height": 106.20666666666666,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r27",
+          "shape_type": "RECTANGLE",
+          "x": 81.408,
+          "y": 234.84111111111113,
+          "width": 58.58400000000001,
+          "height": 30.952222222222222,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t28",
+          "text": "was 2,774",
+          "x": 73.708,
+          "y": 232.64111111111114,
+          "width": 73.98400000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t28",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t28",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t29",
+          "text": "2,148",
+          "x": 73.708,
+          "y": 263.59333333333336,
+          "width": 73.98400000000001,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t29",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t29",
+          "start": 0,
+          "end": 5,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t30",
+          "text": "Rest day",
+          "x": 50.3,
+          "y": 370.8,
+          "width": 120.80000000000001,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t30",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t30",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t31",
+          "text": "no workout",
+          "x": 50.3,
+          "y": 384.8,
+          "width": 120.80000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t31",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r32",
+          "shape_type": "RECTANGLE",
+          "x": 187.308,
+          "y": 265.79333333333335,
+          "width": 59.58400000000001,
+          "height": 106.20666666666666,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r33",
+          "shape_type": "RECTANGLE",
+          "x": 187.308,
+          "y": 262.67833333333334,
+          "width": 59.58400000000001,
+          "height": 3.1149999999999998,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r34",
+          "shape_type": "RECTANGLE",
+          "x": 187.808,
+          "y": 231.72611111111112,
+          "width": 58.58400000000001,
+          "height": 30.952222222222222,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t35",
+          "text": "was 2,838",
+          "x": 180.108,
+          "y": 229.52611111111113,
+          "width": 73.98400000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t35",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t35",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t36",
+          "text": "2,211",
+          "x": 180.108,
+          "y": 260.47833333333335,
+          "width": 73.98400000000001,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t36",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t36",
+          "start": 0,
+          "end": 5,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t37",
+          "text": "Walk",
+          "x": 156.70000000000002,
+          "y": 370.8,
+          "width": 120.80000000000001,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t37",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t37",
+          "start": 0,
+          "end": 4,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t38",
+          "text": "20 min, 95 bpm",
+          "x": 156.70000000000002,
+          "y": 384.8,
+          "width": 120.80000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t38",
+          "start": 0,
+          "end": 14,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r39",
+          "shape_type": "RECTANGLE",
+          "x": 293.708,
+          "y": 265.79333333333335,
+          "width": 59.58400000000001,
+          "height": 106.20666666666666,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r40",
+          "shape_type": "RECTANGLE",
+          "x": 293.708,
+          "y": 254.42111111111112,
+          "width": 59.58400000000001,
+          "height": 11.372222222222222,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r41",
+          "shape_type": "RECTANGLE",
+          "x": 294.208,
+          "y": 223.4688888888889,
+          "width": 58.58400000000001,
+          "height": 30.952222222222222,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t42",
+          "text": "was 3,005",
+          "x": 286.50800000000004,
+          "y": 221.2688888888889,
+          "width": 73.98400000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t42",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t42",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t43",
+          "text": "2,378",
+          "x": 286.50800000000004,
+          "y": 252.22111111111116,
+          "width": 73.98400000000001,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 5,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t44",
+          "text": "Jog",
+          "x": 263.1,
+          "y": 370.8,
+          "width": 120.80000000000001,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t44",
+          "start": 0,
+          "end": 3,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t44",
+          "start": 0,
+          "end": 3,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t45",
+          "text": "30 min, 120 bpm",
+          "x": 263.1,
+          "y": 384.8,
+          "width": 120.80000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t45",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r46",
+          "shape_type": "RECTANGLE",
+          "x": 400.10800000000006,
+          "y": 265.79333333333335,
+          "width": 59.58400000000001,
+          "height": 106.20666666666666,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r47",
+          "shape_type": "RECTANGLE",
+          "x": 400.10800000000006,
+          "y": 242.20833333333334,
+          "width": 59.58400000000001,
+          "height": 23.585,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r48",
+          "shape_type": "RECTANGLE",
+          "x": 400.60800000000006,
+          "y": 211.25611111111112,
+          "width": 58.58400000000001,
+          "height": 30.952222222222222,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t49",
+          "text": "was 3,251",
+          "x": 392.9080000000001,
+          "y": 209.05611111111114,
+          "width": 73.98400000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t49",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t49",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t50",
+          "text": "2,625",
+          "x": 392.9080000000001,
+          "y": 240.00833333333335,
+          "width": 73.98400000000001,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t50",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t50",
+          "start": 0,
+          "end": 5,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t51",
+          "text": "Run",
+          "x": 369.50000000000006,
+          "y": 370.8,
+          "width": 120.80000000000001,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t51",
+          "start": 0,
+          "end": 3,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t51",
+          "start": 0,
+          "end": 3,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t52",
+          "text": "60 min, 140 bpm",
+          "x": 369.50000000000006,
+          "y": 384.8,
+          "width": 120.80000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t52",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r53",
+          "shape_type": "RECTANGLE",
+          "x": 506.50800000000004,
+          "y": 265.79333333333335,
+          "width": 59.58400000000001,
+          "height": 106.20666666666666,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r54",
+          "shape_type": "RECTANGLE",
+          "x": 506.50800000000004,
+          "y": 230.4405555555556,
+          "width": 59.58400000000001,
+          "height": 35.352777777777774,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r55",
+          "shape_type": "RECTANGLE",
+          "x": 507.00800000000004,
+          "y": 199.48833333333337,
+          "width": 58.58400000000001,
+          "height": 30.952222222222222,
+          "background_color": "transparent",
+          "outline": "#440154",
+          "outline_weight": 1
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t56",
+          "text": "was 3,490",
+          "x": 499.30800000000005,
+          "y": 197.28833333333338,
+          "width": 73.98400000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#440154",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t56",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t56",
+          "start": 0,
+          "end": 9,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t57",
+          "text": "2,863",
+          "x": 499.30800000000005,
+          "y": 228.2405555555556,
+          "width": 73.98400000000001,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#FFFFFF",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t57",
+          "start": 0,
+          "end": 5,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t57",
+          "start": 0,
+          "end": 5,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t58",
+          "text": "Ride",
+          "x": 475.90000000000003,
+          "y": 370.8,
+          "width": 120.80000000000001,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t58",
+          "start": 0,
+          "end": 4,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t58",
+          "start": 0,
+          "end": 4,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t59",
+          "text": "90 min, 135 bpm",
+          "x": 475.90000000000003,
+          "y": 384.8,
+          "width": 120.80000000000001,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t59",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "workouts",
+          "id": "l60",
+          "x": 57.5,
+          "y": 372.0,
+          "width": 532.0,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r61",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 132.0,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r62",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 132.0,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im63",
+          "path": "assets/icons/kit/check_circle-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 149.0,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t64",
+          "text": "143 of 144",
+          "x": 664.3,
+          "y": 136.8,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t64",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t64",
+          "start": 0,
+          "end": 10,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t65",
+          "text": "plans meet both targets: 6 workouts, 4 profiles",
+          "x": 664.3,
+          "y": 162.8,
+          "width": 247.9,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t65",
+          "start": 0,
+          "end": 47,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t65",
+          "start": 25,
+          "end": 35,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "style-text",
+          "element": "t65",
+          "start": 37,
+          "end": 47,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r66",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 232.66666666666669,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r67",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 232.66666666666669,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im68",
+          "path": "assets/icons/kit/fitness_center-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 249.66666666666669,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t69",
+          "text": "477 kcal",
+          "x": 664.3,
+          "y": 237.4666666666667,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t69",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t69",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t70",
+          "text": "for a 60-minute run, up from 238: past 30 minutes,\neach minute now counts",
+          "x": 664.3,
+          "y": 263.4666666666667,
+          "width": 247.9,
+          "height": 41.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t70",
+          "start": 0,
+          "end": 73,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t70",
+          "start": 39,
+          "end": 49,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r71",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 333.33333333333337,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "workouts",
+          "id": "r72",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 333.33333333333337,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im73",
+          "path": "assets/icons/kit/flag-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 350.33333333333337,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t74",
+          "text": "1 miss",
+          "x": 664.3,
+          "y": 338.1333333333334,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t74",
+          "start": 0,
+          "end": 6,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t74",
+          "start": 0,
+          "end": 6,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "workouts",
+          "id": "t75",
+          "text": "Tuna Pasta Salad at a 378 kcal target: carbs 43%,\nwith the pasta already at its smallest portion",
+          "x": 664.3,
+          "y": 364.1333333333334,
+          "width": 247.9,
+          "height": 41.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t75",
+          "start": 0,
+          "end": 96,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t75",
+          "start": 22,
+          "end": 30,
+          "bold": true,
+          "color": "#1B2430"
+        }
+      ]
+    },
+    {
+      "id": "usda",
+      "layout": "mp_bench",
+      "section": "Appendix",
+      "topic": "USDA data",
+      "accent": "slate",
+      "header_style": "appendix",
+      "title": "A6. With pinned USDA foods, 72 of 72 plans meet both targets",
+      "subtitle": "The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.",
+      "takeaway": "The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.",
+      "question": "Do the plans still hold with independent nutrition data?",
+      "chart": {
+        "kind": "groups",
+        "title": "Benchmark plans, out of 72",
+        "maximum": 72,
+        "keys": [
+          {
+            "label": "Calories within 10%",
+            "colour": "#21918C"
+          },
+          {
+            "label": "Both targets met",
+            "colour": "#3B528B"
+          }
+        ],
+        "groups": [
+          {
+            "label": "Offline",
+            "detail": "local tables",
+            "values": [
+              72,
+              72
+            ]
+          },
+          {
+            "label": "Name search",
+            "detail": "energy read in kJ",
+            "values": [
+              64,
+              47
+            ]
+          },
+          {
+            "label": "Name search",
+            "detail": "kJ fixed",
+            "values": [
+              72,
+              50
+            ]
+          },
+          {
+            "label": "Pinned foods",
+            "detail": "one reviewed USDA ID each",
+            "values": [
+              72,
+              72
+            ]
+          }
+        ]
+      },
+      "metrics": [
+        {
+          "icon": "search",
+          "value": "16 of 22",
+          "label": "name-search misses came from one wrong match: **lean turkey mince** found minced ham"
+        },
+        {
+          "icon": "fact_check",
+          "value": "0 of 72",
+          "label": "plans use an estimated ingredient, down from **68** offline"
+        },
+        {
+          "icon": "flag",
+          "value": "144 of 152",
+          "label": "wider check; most of the 8 misses are **Hass avocado** and store-bought hummus, kept on purpose"
+        }
+      ],
+      "notes": {
+        "purpose": "Appendix: the first benchmark run with independent nutrition data, and what it found.",
+        "script": [
+          "The same 72 requests, with each ingredient's nutrition from USDA FoodData Central instead of the local tables. Nineteen ingredients with a trusted local value are never sent.",
+          "Searching USDA by name first read energy in kilojoules for foods that list both units, so shrimp came out at 356 kcal per 100 g instead of 85. With that fixed, 50 of 72 met both targets. Almost every miss had fat too high because the first search hit was the wrong food: avocado found avocado dressing, and lean turkey mince found minced ham, which alone caused 16 of the 22 misses.",
+          "Each of the 41 ingredients now has one reviewed USDA food, fetched by its ID. All 72 plans meet both targets, the median gap is 0.4%, and no plan uses an estimated ingredient. The wider check is 144 of 152: the misses are mostly Hass avocado and store-bought hummus, which Mike kept because they are what people buy.",
+          "Sources: docs/7_meal_quality.md \u00a76 and \u00a77; DEC-41, DEC-42; docs/meal_quality/usda_pinned_baseline.md, usda_pinned_wider.md, usda_lookup_diagnosis.md; PRs #59 and #61."
+        ],
+        "references": [
+          "sources.md",
+          "claims-register.md"
+        ]
+      },
+      "n": 22,
+      "takeaways": [],
+      "marker_pairs": [],
+      "ops": [
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t1",
+          "text": "APPENDIX",
+          "x": 36.3,
+          "y": 22.3,
+          "width": 66.19817708333333,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t1",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-line",
+          "slide": "usda",
+          "id": "l2",
+          "x": 101.29817708333333,
+          "y": 31,
+          "width": 0.0,
+          "height": 11,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t3",
+          "text": "USDA data",
+          "x": 102.09817708333333,
+          "y": 22.3,
+          "width": 780.1018229166666,
+          "height": 28.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t3",
+          "start": 0,
+          "end": 9,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r4",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 43,
+          "width": 28,
+          "height": 2,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im5",
+          "path": "assets/brand/uts-logo.svg",
+          "alt": "University of Technology Sydney",
+          "x": 887,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-line",
+          "slide": "usda",
+          "id": "l6",
+          "x": 879,
+          "y": 22,
+          "width": 0,
+          "height": 28,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-image",
+          "id": "im7",
+          "path": "assets/brand/ai-meal-planner-mark.svg",
+          "alt": "AI Meal Planner logo",
+          "x": 843,
+          "y": 20,
+          "width": 32,
+          "height": 32
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t8",
+          "text": "A6. With pinned USDA foods, 72 of 72 plans meet both targets",
+          "x": 36.3,
+          "y": 51.8,
+          "width": 889.9,
+          "height": 48.4,
+          "font_size": 24,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t8",
+          "start": 0,
+          "end": 60,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t8",
+          "start": 0,
+          "end": 60,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t9",
+          "text": "The same 72 requests with ingredient nutrition from USDA FoodData Central, 23 November 2026.",
+          "x": 36.3,
+          "y": 92.8,
+          "width": 889.9,
+          "height": 42.4,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t9",
+          "start": 0,
+          "end": 92,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "usda",
+          "id": "l10",
+          "x": 0,
+          "y": 492,
+          "width": 960,
+          "height": 0,
+          "color": "#1B2430",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r11",
+          "shape_type": "RECTANGLE",
+          "x": 0,
+          "y": 489,
+          "width": 43.5,
+          "height": 3,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t12",
+          "text": "AI Meal Planner",
+          "x": 36.3,
+          "y": 493.8,
+          "width": 834.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t12",
+          "start": 0,
+          "end": 15,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t13",
+          "text": "22",
+          "x": 881.8,
+          "y": 493.8,
+          "width": 44.4,
+          "height": 27.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "right"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t13",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r14",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 436,
+          "width": 875.5,
+          "height": 40,
+          "background_color": "#F6F1E5"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r15",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 436,
+          "width": 3,
+          "height": 40,
+          "background_color": "#B89245"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t16",
+          "text": "TAKEAWAY",
+          "x": 50.3,
+          "y": 444.05,
+          "width": 99.4,
+          "height": 26.4,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#765718",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t16",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t16",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t17",
+          "text": "The early drop measured the lookup, not the recipes: pinned to the right foods, every plan meets its targets.",
+          "x": 147.3,
+          "y": 442.05,
+          "width": 761.9,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t17",
+          "start": 0,
+          "end": 109,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r18",
+          "shape_type": "RECTANGLE",
+          "x": 43.5,
+          "y": 132.0,
+          "width": 560,
+          "height": 290.0,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t19",
+          "text": "Benchmark plans, out of 72",
+          "x": 50.3,
+          "y": 134.8,
+          "width": 546.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t19",
+          "start": 0,
+          "end": 26,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t20",
+          "text": "Both targets met",
+          "x": 517.7135416666666,
+          "y": 152.8,
+          "width": 78.98645833333333,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t20",
+          "start": 0,
+          "end": 16,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r21",
+          "shape_type": "RECTANGLE",
+          "x": 510.9135416666667,
+          "y": 162.0,
+          "width": 10,
+          "height": 8,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t22",
+          "text": "Calories within 10%",
+          "x": 416.08333333333337,
+          "y": 152.8,
+          "width": 88.03020833333333,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t22",
+          "start": 0,
+          "end": 19,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r23",
+          "shape_type": "RECTANGLE",
+          "x": 409.28333333333336,
+          "y": 162.0,
+          "width": 10,
+          "height": 8,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r24",
+          "shape_type": "RECTANGLE",
+          "x": 86.1,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t25",
+          "text": "72",
+          "x": 70.89999999999999,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t25",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t25",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r26",
+          "shape_type": "RECTANGLE",
+          "x": 126.0,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t27",
+          "text": "72",
+          "x": 110.8,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t27",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t27",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t28",
+          "text": "Offline",
+          "x": 50.3,
+          "y": 370.8,
+          "width": 147.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t28",
+          "start": 0,
+          "end": 7,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t28",
+          "start": 0,
+          "end": 7,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t29",
+          "text": "local tables",
+          "x": 50.3,
+          "y": 384.8,
+          "width": 147.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t29",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r30",
+          "shape_type": "RECTANGLE",
+          "x": 219.1,
+          "y": 213.77777777777777,
+          "width": 35.9,
+          "height": 158.22222222222223,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t31",
+          "text": "64",
+          "x": 203.9,
+          "y": 186.57777777777778,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t31",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t31",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r32",
+          "shape_type": "RECTANGLE",
+          "x": 259.0,
+          "y": 255.80555555555554,
+          "width": 35.9,
+          "height": 116.19444444444444,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t33",
+          "text": "47",
+          "x": 243.8,
+          "y": 228.60555555555555,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t33",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t33",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t34",
+          "text": "Name search",
+          "x": 183.3,
+          "y": 370.8,
+          "width": 147.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t34",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t34",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t35",
+          "text": "energy read in kJ",
+          "x": 183.3,
+          "y": 384.8,
+          "width": 147.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t35",
+          "start": 0,
+          "end": 17,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r36",
+          "shape_type": "RECTANGLE",
+          "x": 352.1,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t37",
+          "text": "72",
+          "x": 336.90000000000003,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t37",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t37",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r38",
+          "shape_type": "RECTANGLE",
+          "x": 392.0,
+          "y": 248.38888888888889,
+          "width": 35.9,
+          "height": 123.61111111111111,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t39",
+          "text": "50",
+          "x": 376.8,
+          "y": 221.1888888888889,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t39",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t39",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t40",
+          "text": "Name search",
+          "x": 316.3,
+          "y": 370.8,
+          "width": 147.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t40",
+          "start": 0,
+          "end": 11,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t40",
+          "start": 0,
+          "end": 11,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t41",
+          "text": "kJ fixed",
+          "x": 316.3,
+          "y": 384.8,
+          "width": 147.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t41",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r42",
+          "shape_type": "RECTANGLE",
+          "x": 485.1,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#21918C"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t43",
+          "text": "72",
+          "x": 469.90000000000003,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t43",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t43",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r44",
+          "shape_type": "RECTANGLE",
+          "x": 525.0,
+          "y": 194.0,
+          "width": 35.9,
+          "height": 178.0,
+          "background_color": "#3B528B"
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t45",
+          "text": "72",
+          "x": 509.8,
+          "y": 166.8,
+          "width": 66.3,
+          "height": 30.6,
+          "font_size": 12,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t45",
+          "start": 0,
+          "end": 2,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t45",
+          "start": 0,
+          "end": 2,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t46",
+          "text": "Pinned foods",
+          "x": 449.3,
+          "y": 370.8,
+          "width": 147.4,
+          "height": 27.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t46",
+          "start": 0,
+          "end": 12,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t47",
+          "text": "one reviewed USDA ID each",
+          "x": 449.3,
+          "y": 384.8,
+          "width": 147.4,
+          "height": 25.200000000000003,
+          "font_size": 8,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false,
+          "alignment": "center"
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t47",
+          "start": 0,
+          "end": 25,
+          "line_spacing": 135
+        },
+        {
+          "op": "add-line",
+          "slide": "usda",
+          "id": "l48",
+          "x": 57.5,
+          "y": 372.0,
+          "width": 532.0,
+          "height": 0.0,
+          "color": "#D8DEE3",
+          "line_weight": 0.75
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r49",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 132.0,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r50",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 132.0,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im51",
+          "path": "assets/icons/kit/search-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 149.0,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t52",
+          "text": "16 of 22",
+          "x": 664.3,
+          "y": 136.8,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t52",
+          "start": 0,
+          "end": 8,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t52",
+          "start": 0,
+          "end": 8,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t53",
+          "text": "name-search misses came from one wrong match:\nlean turkey mince found minced ham",
+          "x": 664.3,
+          "y": 162.8,
+          "width": 247.9,
+          "height": 41.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t53",
+          "start": 0,
+          "end": 80,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t53",
+          "start": 46,
+          "end": 63,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r54",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 232.66666666666669,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r55",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 232.66666666666669,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im56",
+          "path": "assets/icons/kit/fact_check-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 249.66666666666669,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t57",
+          "text": "0 of 72",
+          "x": 664.3,
+          "y": 237.4666666666667,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t57",
+          "start": 0,
+          "end": 7,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t57",
+          "start": 0,
+          "end": 7,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t58",
+          "text": "plans use an estimated ingredient, down from 68\noffline",
+          "x": 664.3,
+          "y": 263.4666666666667,
+          "width": 247.9,
+          "height": 41.4,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t58",
+          "start": 0,
+          "end": 55,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t58",
+          "start": 45,
+          "end": 47,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r59",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 333.33333333333337,
+          "width": 297.5,
+          "height": 88.66666666666667,
+          "background_color": "#EDF0F3"
+        },
+        {
+          "op": "add-shape",
+          "slide": "usda",
+          "id": "r60",
+          "shape_type": "RECTANGLE",
+          "x": 621.5,
+          "y": 333.33333333333337,
+          "width": 3,
+          "height": 88.66666666666667,
+          "background_color": "#526174"
+        },
+        {
+          "op": "add-image",
+          "id": "im61",
+          "path": "assets/icons/kit/flag-slate.svg",
+          "alt": "",
+          "x": 638.5,
+          "y": 350.33333333333337,
+          "width": 18,
+          "height": 18
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t62",
+          "text": "144 of 152",
+          "x": 664.3,
+          "y": 338.1333333333334,
+          "width": 247.9,
+          "height": 38.7,
+          "font_size": 18,
+          "font_family": "Google Sans",
+          "color": "#1B2430",
+          "bold": true
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t62",
+          "start": 0,
+          "end": 10,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t62",
+          "start": 0,
+          "end": 10,
+          "bold": true
+        },
+        {
+          "op": "add-textbox",
+          "slide": "usda",
+          "id": "t63",
+          "text": "wider check; most of the 8 misses are Hass\navocado and store-bought hummus, kept on\npurpose",
+          "x": 664.3,
+          "y": 364.1333333333334,
+          "width": 247.9,
+          "height": 54.9,
+          "font_size": 10,
+          "font_family": "Google Sans",
+          "color": "#5A6370",
+          "bold": false
+        },
+        {
+          "op": "style-paragraph",
+          "element": "t63",
+          "start": 0,
+          "end": 91,
+          "line_spacing": 135
+        },
+        {
+          "op": "style-text",
+          "element": "t63",
+          "start": 38,
+          "end": 42,
+          "bold": true,
+          "color": "#1B2430"
+        },
+        {
+          "op": "style-text",
+          "element": "t63",
+          "start": 43,
+          "end": 50,
+          "bold": true,
+          "color": "#1B2430"
         }
       ]
     }
