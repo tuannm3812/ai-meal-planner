@@ -21,9 +21,9 @@ import re
 
 from deck_kit import poster as P
 
-T2, CUSTOM, DIFF = '#375A8C', '#3BBB75', '#440154'
+T2, CUSTOM, DIFF = '#2448C9', '#22A884', '#440154'
 PAGE_REF = re.compile(r' ?\(page \{p:[^}]+\}\)')
-LEVEL = {'easy': ('E', '#FDE725', '#1D2229'), 'medium': ('M', '#21918C', '#FFFFFF'), 'hard': ('H', '#440154', '#FFFFFF')}
+LEVEL = {'easy': ('E', '#FDE725', '#14213D'), 'medium': ('M', '#2A788E', '#FFFFFF'), 'hard': ('H', '#440154', '#FFFFFF')}
 
 
 def rich(text, t):
@@ -72,9 +72,9 @@ def ptasks(block, base, t):
         rows.append(f'<div class="trow2 tsum"><span class="tname"><b>{html.escape(sm["label"])}</b></span>'
                     + (f'<span></span><span></span>' if sm.get('no_boxes') else boxes(['f', 'f', 'f'], T2) + boxes(['f', 'f', 'f'], CUSTOM))
                     + f'<span class="tbar"><b>{html.escape(sm["ratio"])}</b></span><span class="tnote">{rich(sm["note"], t)}</span></div>')
-    heads = ('<div class="thead2"><b>Task</b><b class="c" style="color:#375A8C">T2</b><b class="c" style="color:#1F7A4F">Custom</b>'
+    heads = ('<div class="thead2"><b>Task</b><b class="c" style="color:#2448C9">T2</b><b class="c" style="color:#2448C9">Custom</b>'
              '<b>Custom input ÷ T2 <span>(line at 1×)</span></b><b>What the logs show</b></div>')
-    key = ''.join(f'<span class="k"><i class="ob {c}" style="--c:#526174"></i>{l}</span>'
+    key = ''.join(f'<span class="k"><i class="ob {c}" style="--c:#22325A"></i>{l}</span>'
                   for c, l in (('s', 'Solved'), ('c', 'Ran out of turns'), ('f', 'Finished, tests failed')))
     key += '<span class="k"><i class="kdec"></i>Decides the gap</span>'
     return card('ptasks', block, head(block, t) + f'<div class="pkey">{key}</div>' + heads + ''.join(rows)
@@ -132,7 +132,7 @@ def pscale(block, base, t):
     key = ('<span class="k"><i class="kdot open"></i>Interval includes zero</span>'
            '<span class="k"><i class="kdot"></i>Excludes zero</span>')
     heads = ('<div class="chead"><b>Comparison</b><b>Gap, Custom minus T2, pp, 95% interval</b><b></b>'
-             '<b>Solved, <span style="color:#375A8C">T2</span> · Custom</b></div>')
+             '<b>Solved, <span style="color:#2448C9">T2</span> · Custom</b></div>')
     return card('pscale', block, head(block, t) + f'<div class="pkey">{key}</div>' + heads
                 + f'<div class="cbody"><u class="czero" style="--z:{zero / 100:.4f}"></u>{"".join(rows)}</div>'
                 + f'<div class="caxis"><span></span><span class="cticks">{ticks}</span></div>'
@@ -256,7 +256,7 @@ def ptrade(block, base, t):
     rows = []
     for st in block['steps']:
         icon = f'<img class="ti" src="{P.data_uri((base / st["icon"]).expanduser())}" alt="">' if st.get('icon') else ''
-        rows.append(f'<div class="trrow{" cand" if st.get("candidate") else ""}"><div class="trstep">{icon}<b class="chip" style="--c:{st.get("colour", "#5A6370")}">{html.escape(st["step"])}</b></div>'
+        rows.append(f'<div class="trrow{" cand" if st.get("candidate") else ""}"><div class="trstep">{icon}<b class="chip" style="--c:{st.get("colour", "#55607A")}">{html.escape(st["step"])}</b></div>'
                     + side(st['t2']) + side(st['ours']) + '</div>')
     key = (f'<span class="k"><img src="{yes}" alt="">Offers</span><span class="k"><img src="{no}" alt="">Costs or risks</span>'
            '<span class="k"><i class="kcand2"></i>Candidate explanation for the gap, not a measured cause</span>')
@@ -286,7 +286,7 @@ def pmatrix(block, base, t):
     ratio and cost per solve; the better value bold in its arm colour; the highlighted row tinted."""
     lo, hi = block['domain']
     x = lambda v: (max(lo, min(hi, v)) - lo) / (hi - lo) * 100
-    col = {'t2': '#375A8C', 'ours': '#1F7A4F'}
+    col = {'t2': '#2448C9', 'ours': '#2448C9'}
     fmt = lambda v: '0.0' if v == 0 else f'{v:+.1f}'.replace('-', '−')
     def pair(vals, better, key):
         if not vals:
@@ -300,11 +300,11 @@ def pmatrix(block, base, t):
         inp_style = f' style="color:{col[b["input"]]}"' if b.get('input') else ''
         rows.append(f'<div class="mxrow{" hl" if r.get("hl") else ""}"><span class="mxname"><b>{rich(r["name"], t)}</b>'
                     f'<span>{rich(r["short"], t)}</span></span>'
-                    f'<b class="mxv" style="color:{"#375A8C" if r["gap"] < 0 else "#1F7A4F"}">{fmt(r["gap"])}</b>'
+                    f'<b class="mxv" style="color:{"#2448C9" if r["gap"] < 0 else "#2448C9"}">{fmt(r["gap"])}</b>'
                     f'<span class="mxplot"><u style="left:{x(0):.2f}%"></u>'
-                    + (f'<i style="left:{x(r["low"]):.2f}%;width:{x(min(r["high"], 0)) - x(r["low"]):.2f}%;background:#375A8C"></i>' if r["low"] < 0 else '')
-                    + (f'<i style="left:{x(max(r["low"], 0)):.2f}%;width:{x(r["high"]) - x(max(r["low"], 0)):.2f}%;background:#3BBB75"></i>' if r["high"] > 0 else '')
-                    + f'<em style="left:{x(r["gap"]):.2f}%;background:{"#375A8C" if r["gap"] < 0 else "#3BBB75"}"></em></span>'
+                    + (f'<i style="left:{x(r["low"]):.2f}%;width:{x(min(r["high"], 0)) - x(r["low"]):.2f}%;background:#2448C9"></i>' if r["low"] < 0 else '')
+                    + (f'<i style="left:{x(max(r["low"], 0)):.2f}%;width:{x(r["high"]) - x(max(r["low"], 0)):.2f}%;background:#22A884"></i>' if r["high"] > 0 else '')
+                    + f'<em style="left:{x(r["gap"]):.2f}%;background:{"#2448C9" if r["gap"] < 0 else "#22A884"}"></em></span>'
                     f'<span class="mxci">[{fmt(r["low"])}, {fmt(r["high"])}]</span>'
                     + pair(r.get('solved'), b, 'solved') + f'<b class="mxin"{inp_style}>{html.escape(r["input"])}</b>'
                     + pair(r.get('per'), b, 'per') + '</div>')
@@ -344,7 +344,7 @@ def parrows(block, base, t):
         rows = []
         for r in p['rows']:
             a, b = r['from'], r['to']
-            c0, c1 = r.get('c0', '#BCC3CA'), r.get('c1', '#440154')
+            c0, c1 = r.get('c0', '#C3CADB'), r.get('c1', '#440154')
             left, right = min(X(a), X(b)), max(X(a), X(b))
             arrow = (f'<i class="ar" style="left:{left:.2f}%;width:{right - left:.2f}%;--c:{c1}" data-dir="{"r" if b >= a else "l"}"></i>'
                      if abs(b - a) > 1e-9 else '')

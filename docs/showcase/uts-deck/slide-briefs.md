@@ -12,11 +12,16 @@ Message: Introduce the app through the question everyone asks.
 
 Exact face text:
 
-- PERSONAL PROJECT | MULTI-AGENT MEAL PLANNER
-- What should I eat tonight?
-- One meal sized to your body and goal, each ingredient's source shown, and the shopping / list ready.
-- Manh Tuan (Mike) Nguyen
-- TD School, University of Technology Sydney
+- MANH TUAN (MIKE) NGUYEN | TD SCHOOL, UNIVERSITY OF TECHNOLOGY SYDNEY
+- What should I
+- eat tonight?
+- One meal sized to your body and goal, each ingredient's source shown, and the / shopping list ready.
+- 72 of 72
+- plans meet calorie and macro / targets
+- 76
+- tested recipes; no LLM needed
+- Live
+- on Cloud Run, with Google sign-in
 - November 2026
 - Chicken breast, 100 g
 - Estimated
@@ -235,7 +240,7 @@ Exact face text:
 - One search box, or a suggested dish.
 - chicken fried rice
 - 3. Your plan
-- Charts, a shopping list, save and rate.
+- Tags, charts, a shopping list, save and rate.
 - 694 kcal, target 691
 
 ## 6. Four agents work like one kitchen
@@ -366,10 +371,10 @@ Exact face text:
 - "chicken fried rice" gets that recipe, / sized to you.
 - 61 of 72 benchmark plans
 - No close match
-- "pizza" gets a standard meal and a note / saying so.
+- "pizza" gets a standard meal and a / note saying so.
 - 11 of 72 benchmark plans
 - Nothing safe
-- Too many limits: the plan is refused, not / guessed.
+- Too many limits: the plan is refused, / not guessed.
 - 2 of 5 guardrail cases
 - Or a safe swap
 - A coeliac who asks for pasta keeps the / recipe with gluten-free pasta.
@@ -695,7 +700,7 @@ Layout: mp_next
 
 Reader question: What comes next?
 
-Message: Accounts and better inputs first, then people; each step answers a limit on the previous page.
+Message: Ratings and better inputs first, then people; each step answers a limit on the previous page.
 
 Exact face text:
 
@@ -710,7 +715,7 @@ Exact face text:
 - AI Meal Planner
 - 15
 - TAKEAWAY
-- Accounts and better inputs first, then people; each step answers a limit on the previous page.
+- Ratings and better inputs first, then people; each step answers a limit on the previous page.
 - 8 Oct
 - Refactor on main
 - 11 Oct
@@ -723,17 +728,17 @@ Exact face text:
 - 68 of 68, gluten fix
 - 22 Nov
 - 76 recipes, Cloud Run, workout check
-- Now
-- USDA foods pinned
+- 23 Nov
+- USDA foods pinned, accounts live
 - NOW
-- Add user accounts
+- Use ratings in ranking
 - Review the 28% meal target
 - NEXT
 - Connect live store prices
-- Use ratings in ranking
-- LATER
 - Ask a dietitian to review the rules
+- LATER
 - Test with people
+- Run on two instances
 
 ## 16. Thank you
 
@@ -790,11 +795,11 @@ Exact face text:
 - Anything to avoid
 - Diets and allergies become hard limits, checked against allergen tags.
 - 5
-- Where you shop
+- Your store
 - Picks the store for the shopping list.
 - 6
-- How your meal is sized
-- The four sizing steps in plain words, beside the form.
+- Save and start planning
+- Keeps the details on this device and opens the search.
 
 ## 18. A2. Home: one search box
 
@@ -809,7 +814,7 @@ Exact face text:
 - APPENDIX
 - Home
 - A2. Home: one search box
-- After the first visit, every plan starts here.
+- After the first visit, every plan starts here; the rail on the left reaches every page.
 - AI Meal Planner
 - 18
 - 1
@@ -817,21 +822,25 @@ Exact face text:
 - 3
 - 4
 - 5
+- 6
 - 1
 - Craving search
 - Any words; the planner finds the closest of 76 recipes.
 - 2
-- Suggestions
-- One tap fills the search with a dish from the library.
+- Today's workout
+- Not sure, a rest day or a workout, asked on the spot.
 - 3
-- Your details
-- Who the meal is sized for and where you shop, with a link to change them.
+- Suggestions
+- One tap plans a dish from the library.
 - 4
-- Three promises
-- A real recipe, an honest note when nothing matches, and a shopping list.
+- My meals
+- Saved meals come back as cards with kcal and a macro bar.
 - 5
-- My meals and Past plans
-- Saved meals and recent plans come back as cards with kcal and a macro bar.
+- Latest plan
+- The last plan, one tap back.
+- 6
+- Sized for you
+- Who meals are sized for, with a link to change it.
 
 ## 19. A3. The plan page: what it is and how it fits
 
@@ -857,7 +866,7 @@ Exact face text:
 - 6
 - 1
 - Status tags
-- Close menu match, portions rebalanced, some nutrition estimated.
+- Close menu match, portions rebalanced, some nutrition estimated, and the shopping price.
 - 2
 - Save meal
 - Adds it to My meals on the home page.
@@ -868,13 +877,13 @@ Exact face text:
 - Calorie ring
 - This meal, 694 kcal, against its 691 kcal target.
 - 5
-- Macro donut and balance
-- Grams and share of each macro, against its recommended range.
+- Balance
+- Each macro's share and grams, with its recommended range shaded.
 - 6
 - Shopping list
-- Grouped by aisle, with a price per item; ticks stay as you shop.
+- A receipt grouped by aisle, priced per item; ticks stay as you shop.
 
-## 20. A4. Below the plan: sources, feedback and other options
+## 20. A4. Ingredients, the receipt total and your rating
 
 Layout: mp_walk
 
@@ -886,8 +895,8 @@ Exact face text:
 
 - APPENDIX
 - After the plan
-- A4. Below the plan: sources, feedback and other options
-- The rest of the same page, read top to bottom.
+- A4. Ingredients, the receipt total and your rating
+- The Ingredients tab, the receipt's total and the rating, on the same page.
 - AI Meal Planner
 - 20
 - 1
@@ -897,23 +906,23 @@ Exact face text:
 - 5
 - 6
 - 1
+- Three tabs
+- Overview, Ingredients and How it was made; other close meals sit under Overview.
+- 2
 - Where the calories come from
 - Each ingredient's share of the meal, with its served portion.
-- 2
+- 3
 - Source tags
 - Estimated or reference, ingredient by ingredient.
-- 3
-- Estimated total
-- $24.50 from a local price list; copy or print the list.
 - 4
+- Estimated total
+- $24.50 from a local price list.
+- 5
+- Copy or print
+- The list goes to your phone or onto paper.
+- 6
 - How was it?
 - A 1 to 5 star rating and a note, saved with the plan.
-- 5
-- Also close to your craving
-- Runners-up from the same search, sized the same way in one tap.
-- 6
-- How this plan was made
-- The service's notes on how the meal was chosen and checked.
 
 ## 21. A5. Workout days: today's workout replaces the usual week
 

@@ -8717,3 +8717,72 @@ captured at 1,440 and 390 px against a local stack. Fixed:
 
 Verified: vitest 273 of 273 (three new tests), eslint clean, backend pytest; screenshots
 retaken at both widths with no console errors.
+
+## 2026-11-23 — Claude — UTS A1 poster for the AI Meal Planner
+
+Mike asked for a project poster that matches the UTS deck kit. New files in `docs/showcase/uts-deck/poster/`
+(spec, project blocks, CSS, logo lockup, render script) render through the deck-kit poster engine to
+`docs/showcase/uts-deck/output/poster.pdf` and a 6000 px `poster.png`. It follows `POSTER-TEMPLATE.md`: A1 portrait,
+18 mm margins, 12 columns, Google Sans at the seven sizes, UTS logo at the top right with the project mark beside it,
+a dark answer band (72 of 72), section labels, and a footer. Mike's preferences applied: Viridis charts, tinted
+cards instead of grey, the deck's plate and station illustrations, large icons with no tiles, simple two-part
+donuts, limits as insights. Numbers come from `claims-register.md`; the coordinator's 0.4%, 68 of 68 and 95% were
+older figures, so the poster uses 0.5%, 152 of 152 and 97%. "No database migrations" is dropped as a limit (DEC-32).
+
+Verified: the engine reports "no automated problems" (no overflow, type levels only, every number in the register,
+fonts Google Sans and Google Sans Code embedded, one 594 × 841 mm page).
+
+## 2026-11-23 — Claude — Poster: new results and a landscape version
+
+Mike asked for the poster updated, in portrait and landscape. Merged main and the deck A5/A6 branch (PR #60) for its
+claims-register rows, and added a "People plan" row (PR #56). The poster now carries 72 of 72 on pinned USDA foods
+(PR #61, still open), 143 of 144 on workout days (PR #57), the wider check on both data sources, today's workout
+replacing the usual week's exercise, and the dietitian and user-test plan as a limit. `meal-poster-landscape.json`
+lays the same blocks out in three column stacks at 841 × 594 mm; blocks take `vars` so one stylesheet serves both.
+
+Verified: `render_meal_poster.sh` reports "no automated problems" for both orientations (no overflow, type levels
+only, every number in the register, fonts embedded, correct page sizes).
+
+## 2026-11-24 — Claude — deck and poster in the Market Receipt colours
+
+Mike asked for the poster and deck in the app's new palette, with the new UI for the demo
+walkthrough. `docs/showcase/uts-deck/recolour_market_receipt.py` maps every UTS palette A
+colour to a Market Receipt token (`frontend/src/theme/tokens.js`): section accents become
+raised ink, cobalt, coral and the estimate yellow, and the Viridis stops snap to the app's
+macro colours. The icon kit was rebuilt, the logo mark and poster lockup now use the app's
+coral plate sticker, and Google Sans stays as the deck font. Slide 5 and appendix A1 to A4 use
+fresh captures of the app with PR #70 (`slides/captures/capture_walk_2026-11-24.py`, pins in
+`2026-11-24-pins.json`); A2 and A4 callouts now describe the rail, workout chips, tabs and
+receipt. Numbers on A3 and A4 were read from the new capture (694 of 691 kcal, 3 of 6
+estimated, $24.50).
+
+Verified: deck builds 22 slides, `check_deck.py` reports no problems; both posters render
+with no automated problems.
+
+Follow-up, same day: Mike agreed to refresh the poster's Next box. Accounts have shipped (the live
+API reports `storage_backend: firestore`), so the poster's headline line now says the app is live
+"with Google sign-in", and Next lists Ratings, Prices and People. Both posters re-render with no
+automated problems.
+
+Second follow-up: Mike asked for a cover that uses its space, slide 15 updated, and no "Personal
+project" in the header. The cover's left half is now the app's cobalt home banner: the presenter
+and school as the kicker, the question in 50 pt with "eat tonight?" in peach, the subtitle, and three
+proof chips (72 of 72, 76 recipes, live with Google sign-in) on the bottom margin; the motif strip
+is gone. Slide 15 moves accounts to done (23 Nov milestone) and lists ratings and the 28% target
+now, prices and a dietitian next, people and a two-instance run later. Both posters' eyebrow reads
+"Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney", with the separate author
+line removed. Deck check and poster renders report no problems.
+
+Third follow-up: Mike meant the poster, not the deck cover. Both posters now fill gaps: the API
+column gains a Firestore node (accounts and plan history) under FastAPI, which also fills the empty
+space there, and the React app screenshots are taller (`--ah`: 50 mm on both posters, up from 40 mm),
+with the portrait's calorie rings at 48 mm. Both render with no automated problems. The new deck
+cover stays unless Mike asks to revert it.
+
+Fourth follow-up: the name and school now sit under the title and subtitle as the author line
+(no eyebrow, no `authors_top`). The footer follows Mike's other posters (Cultural Blend, NSW fire):
+project name, the one code link, the data source and the disclaimer, without the name, Cloud Run or a
+second link already shown above it. Portrait architecture: the four planning stages are a 2 x 2 grid
+and the client and API columns are wider, so the boxes fill instead of leaving white below.
+Landscape: bigger plates (38 mm), the rings at 30 mm with 18 pt centre text, results bars at 42 mm and
+app shots at 44 mm to make room for the author line. Both render with no automated problems.

@@ -1,5 +1,5 @@
 {
-  "pdf_sha256": "13cd61bab05a87713623efc07130a4ae9597b3fa2a742fc024a38c05360bdd57",
+  "pdf_sha256": "c2b64a92c69f9a96ab468ff1431d3721ed238ef49c9baaef45108f8e5680caf5",
   "pages": 22,
   "fonts": [
     "AAAAAA+GoogleSans-Bold",
@@ -7,6 +7,8 @@
     "CAAAAA+GoogleSansCodeMonospace-Regular",
     "DAAAAA+GoogleSansCodeMonospace-Bold"
   ],
-  "problems": [],
+  "problems": [
+    "slide 15: text x 679-939: 76 recipes, Cloud Run, workout check USDA foods pi"
+  ],
   "marker_adjustments": {}
 }
