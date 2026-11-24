@@ -123,11 +123,12 @@ Put it beside the name "AI Meal Planner". Use it alone only where space is tiny.
 - Leave a quarter of its width clear on every side; never under 24 px.
 - It stands for a planned meal, not a weekly calendar feature, so don't imply one.
 
-**Icons:** the app uses one outline set, [`lucide-react`](https://lucide.dev) (ISC),
-always through the `Icon` component in `frontend/src/components/icons/` (DEC-38). It
+**Icons:** the app uses one set, [Phosphor](https://phosphoricons.com) (MIT, DEC-45), in
+its two-tone weight, always through the `Icon` component in `frontend/src/components/icons/` (DEC-38). It
 fixes the rest:
 
-- One stroke, 1.75, with round caps and joins.
+- One weight, two-tone: an outline with a soft fill of the same colour. The solid weight
+  marks a state that is on (a saved meal, a chosen star).
 - Four sizes: `sm` 20 px inside buttons and links, `md` 24 px for navigation, field
   labels and notices, `lg` 32 px beside section headings, list headings and stars, and
   `xl` 48 px for the feature lists on the welcome page.
@@ -135,11 +136,12 @@ fixes the rest:
   tint and white cards; `ink` is `peach` on cobalt banners, ink panels and the phone top
   bar; `current` takes the text colour inside a button or notice. Never a macro colour,
   never coral.
-- No tile or circle behind an icon. An icon sits next to a word unless the control has
+- No tile or circle behind an icon, except in a helper panel's steps, where each icon
+  sits on a small tile. An icon sits next to a word unless the control has
   an accessible name, and it is hidden from screen readers.
 
-The guard test fails on a Lucide import outside that folder and on a hand-set icon
-size or stroke. Slides and posters keep numbered ink circles.
+The guard test fails on an icon-package import outside that folder and on a hand-set
+icon size, stroke or weight. Slides and posters keep numbered ink circles.
 
 **Illustrations:** flat food drawings, one for each kind of dish (rice bowl, stir fry,
 noodles, pasta, curry, soup, salad, taco or wrap, eggs and toast, oats, plate, bowl).

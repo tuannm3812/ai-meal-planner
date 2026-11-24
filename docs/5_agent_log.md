@@ -8679,3 +8679,15 @@ plan page the donut drops its side legend and the three readings carry the grams
 macro's name, grams and share appear once.
 
 Verified: vitest 270 of 270, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — Phosphor two-tone icons (DEC-45)
+
+Mike chose Phosphor two-tone from three options. `components/icons/glyphs.js` re-exports
+the Phosphor glyphs under the names the app already used, so no caller changed, and `Icon`
+sets the two-tone weight (solid for `filled`). `lucide-react` is removed. The guard test
+now fails on either icon package outside the icons folder and on a hand-set weight.
+DEC-45 also records the coral change. The main bundle grew from 159.6 to 174.6 kB gzipped,
+because each Phosphor icon ships all of its weights.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.
