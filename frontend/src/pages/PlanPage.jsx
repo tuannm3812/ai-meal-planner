@@ -99,7 +99,7 @@ function PlanPage() {
                 details or craving have changed since this plan was made.
               </p>
               <button
-                className="min-h-[44px] rounded-xl bg-accent px-4 text-sm font-semibold text-ink disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
+                className="min-h-[44px] rounded-xl bg-accent-fill px-4 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:bg-line disabled:text-muted"
                 disabled={!canSubmit}
                 onClick={() => submitPlan()}
                 type="button"

@@ -61,7 +61,8 @@ outside the plan feature. The tokens fall into five groups.
 | `on-ink-muted` | #DCE4FF | Secondary text on `ink` or `cobalt` |
 | `muted` | #55607A | Supporting text |
 | `line` | #D5DBE8 | Borders and dividers |
-| `accent` | #FF5A36 | Coral: logo tile and the one primary action, always with `ink` text |
+| `accent` | #FF5A36 | Coral: the logo tile and decoration. Never a ground for text |
+| `accent-fill` | #D63C1A | Deeper coral for the one primary action and coral price tags, always with white text (4.65:1) |
 | `accent-text` | #C2361A | Small coral text on light backgrounds |
 | `cobalt` | #2448C9 | Page banners; icons, eyebrows and links on light grounds |
 | `cobalt-raised` | #3557D6 | A raised shape on a cobalt banner |
@@ -76,8 +77,8 @@ outside the plan feature. The tokens fall into five groups.
 | `viridis-1` to `viridis-6` | #440154 #414487 #2A788E #22A884 #7AD151 #FDE725 | Categorical chart series, in order; the calorie ring is `viridis-2` |
 | `band` | #C9D6F5 | The recommended range behind the balance bars |
 
-Aim for about 60% paper and white, 25% cobalt and ink, under 10% coral. Coral carries
-`ink` text (5.2:1), never white (3.1:1). Charts use Viridis,
+Aim for about 60% paper and white, 25% cobalt and ink, under 10% coral. Bright coral never
+carries text (white on it is 3.1:1); text sits on `accent-fill` in white (4.65:1). Charts use Viridis,
 the owner's choice: the macro colours are its three darker stops, each at least 3:1
 on white, and a categorical series takes `viridis-1` onward in order, always with a
 text label. `viridis-5` and `viridis-6` are fills on `ink` or next to a label, never
@@ -122,11 +123,12 @@ Put it beside the name "AI Meal Planner". Use it alone only where space is tiny.
 - Leave a quarter of its width clear on every side; never under 24 px.
 - It stands for a planned meal, not a weekly calendar feature, so don't imply one.
 
-**Icons:** the app uses one outline set, [`lucide-react`](https://lucide.dev) (ISC),
-always through the `Icon` component in `frontend/src/components/icons/` (DEC-38). It
+**Icons:** the app uses one set, [Phosphor](https://phosphoricons.com) (MIT, DEC-45), in
+its two-tone weight, always through the `Icon` component in `frontend/src/components/icons/` (DEC-38). It
 fixes the rest:
 
-- One stroke, 1.75, with round caps and joins.
+- One weight, two-tone: an outline with a soft fill of the same colour. The solid weight
+  marks a state that is on (a saved meal, a chosen star).
 - Four sizes: `sm` 20 px inside buttons and links, `md` 24 px for navigation, field
   labels and notices, `lg` 32 px beside section headings, list headings and stars, and
   `xl` 48 px for the feature lists on the welcome page.
@@ -134,11 +136,12 @@ fixes the rest:
   tint and white cards; `ink` is `peach` on cobalt banners, ink panels and the phone top
   bar; `current` takes the text colour inside a button or notice. Never a macro colour,
   never coral.
-- No tile or circle behind an icon. An icon sits next to a word unless the control has
+- No tile or circle behind an icon, except in a helper panel's steps, where each icon
+  sits on a small tile. An icon sits next to a word unless the control has
   an accessible name, and it is hidden from screen readers.
 
-The guard test fails on a Lucide import outside that folder and on a hand-set icon
-size or stroke. Slides and posters keep numbered ink circles.
+The guard test fails on an icon-package import outside that folder and on a hand-set
+icon size, stroke or weight. Slides and posters keep numbered ink circles.
 
 **Illustrations:** flat food drawings, one for each kind of dish (rice bowl, stir fry,
 noodles, pasta, curry, soup, salad, taco or wrap, eggs and toast, oats, plate, bowl).
@@ -154,10 +157,22 @@ soft blob shape may sit behind a banner illustration.
   stripes along an edge, no rules under titles. A card that is an object you hold (the
   "Sized for you" card, the latest plan on Home, the receipt) gets a navy outline.
 - The **shopping list is a till receipt**: mono type, the store centred at the top, dashed
-  rules, dotted leaders to each price, and a torn bottom edge. On wide screens it stays in
-  view while the report scrolls.
+  rules, dotted leaders to each price, and a torn bottom edge.
 - **Price tags** (a pointed end and a punched hole) carry a plan's result in words, and a
-  coral one with ink text carries a shelf number (the cost to shop, a meal's kcal).
+  coral one (`accent-fill`, white text) carries a shelf number (the cost to shop, a meal's kcal).
+- **The plan page is a report with tabs** (Overview, Ingredients, How it was made) beside
+  the receipt. The active tab is an ink pill, as in the rail. Overview shows the calorie
+  ring, the macro split and three readings, each a big share over a scale that shades the
+  recommended range and marks the meal.
+- **Past plans is a dated list**: a mono day heading (Today, Yesterday, then the date) over
+  one row per plan with its drawing, craving, calories against the target, macro strip and
+  result tag. My meals stays a card grid. Both have a count tag and a search box.
+- **Profile** puts the form beside a side column on wide screens: how a meal is sized, the
+  account, and what the device remembers.
+- **Macro bars** on cards and rows are 28 px tall with each share written inside its
+  segment (white on protein and carbs, ink on fat) over a colour key.
+- **Helper panels** are icon steps, not paragraphs: an icon tile, a short name and one line
+  each ("How your meal is sized", "Remembered on this device").
 - **Home** is a workspace: the craving, today's workout as three chips, six dish cards from
   the menu, then saved meals and past plans beside a context column (the plan in hand or
   the latest one, and the device's counts).

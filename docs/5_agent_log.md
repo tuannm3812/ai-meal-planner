@@ -8616,3 +8616,78 @@ Market Receipt redesign (DEC-44).
 
 Verified: vitest 267 of 267 (two new Home workout tests), eslint clean, `vite build`
 passes; screenshots at 1,440 and 390 px with no horizontal scroll on Home or the plan page.
+
+## 2026-11-24 — Claude — tabbed plan page
+
+Mike said "do next" after the receipt and Home went live. The plan page's report is now
+three tabs beside the receipt.
+
+- New `components/ui/Tabs` (a tablist with arrow, Home and End keys). `PlanDetail` shows
+  Overview (nutrition, balance, runners-up), Ingredients (where the calories come from) and
+  How it was made (the service's notes as a numbered list, no longer a collapsed expander).
+  A tab with nothing to show is left out, and a new plan opens on Overview.
+- `RangeBars` is a three-reading row: each macro's share as a big number over a scale with
+  the recommended band and a marker for the meal. The verdict is still the service's.
+
+Verified: vitest 267 of 267 (two tests now reach ingredients and notes through their tabs),
+eslint clean, `vite build` passes; screenshots at 1,440 and 390 px with no horizontal scroll
+on any tab.
+
+## 2026-11-24 — Claude — Past plans, My meals and Profile
+
+Mike said "do the next thing"; this is on the same branch as the tabbed plan page.
+
+- Past plans is a dated list (`features/meals/PlanRows`, `byDay`): Today, Yesterday, then
+  the date, one row per plan with calories against the target and the service's result.
+  The date is the record's `saved_at`, else `generated_at`; plans without one go under
+  "Earlier".
+- My meals and Past plans show a count tag and, with two or more entries, a search box
+  that filters by meal name or craving on the device (`searchMeals`). Nothing is sent.
+- Profile is two columns from 1,280 px: the form, then a side column with the sizing
+  panel (now `features/profile/SizingPanel`), the account card and the device card.
+- Goal cards put the icon above the label, so they fit the narrower form.
+
+Verified: vitest 270 of 270 (three new tests), eslint clean, `vite build` passes;
+screenshots of Past plans, My meals and Profile at 1,440 and 390 px, no horizontal scroll.
+
+## 2026-11-24 — Claude — coral contrast, numbers in the macro bars, lighter helper panels
+
+Mike's feedback on PR #69: dark text on the orange blocks reads badly, put the numbers in
+the bars, the helper blocks are a lot of text, and why were the plans' numbers alike.
+
+- New token `accent-fill` (#D63C1A). Primary buttons, Save meal and coral price tags use it
+  with white text, 4.65:1. Bright coral (#FF5A36) stays for the logo. Before this the
+  primary button had white on bright coral at 3.1:1, and tags had ink on coral.
+- New `charts/MacroBar`: the split as a 28 px bar with each share inside its segment and a
+  colour key, used on meal cards, past-plan rows and Home's latest plan. The full sentence
+  stays for screen readers.
+- `SizingPanel` and the "Remembered on this device" card are icon steps with one line each;
+  the activity note is one sentence.
+- The receipt no longer sticks on wide screens: it clipped the rating card under it.
+- The earlier screenshots repeated one stored response under different names. New ones use
+  five real responses from the live service. Calories still sit near 625 kcal on all of
+  them, because one profile gives one meal target; the macro splits and prices differ.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.
+
+## 2026-11-24 — Claude — fewer macro legends
+
+Mike found the legends repeated. Lists now show one colour key above the cards or rows
+(`MacroKey`), not one under every bar; Home shows it once, in the latest-plan card. On the
+plan page the donut drops its side legend and the three readings carry the grams, so each
+macro's name, grams and share appear once.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes.
+
+## 2026-11-24 — Claude — Phosphor two-tone icons (DEC-45)
+
+Mike chose Phosphor two-tone from three options. `components/icons/glyphs.js` re-exports
+the Phosphor glyphs under the names the app already used, so no caller changed, and `Icon`
+sets the two-tone weight (solid for `filled`). `lucide-react` is removed. The guard test
+now fails on either icon package outside the icons folder and on a hand-set weight.
+DEC-45 also records the coral change. The main bundle grew from 159.6 to 174.6 kB gzipped,
+because each Phosphor icon ships all of its weights.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
+390 px with no horizontal scroll.

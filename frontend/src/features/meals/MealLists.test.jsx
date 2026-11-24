@@ -90,6 +90,34 @@ describe('My meals and past plans', () => {
     expect(screen.getByText(/can be lost if it is replaced/)).toBeInTheDocument()
   })
 
+  it('shows past plans by day with calories against the target, and searches them', async () => {
+    const user = userEvent.setup()
+    serve({
+      plans: [
+        STORED_PLAN,
+        {
+          ...SAMPLE_PLAN,
+          request_id: 'req-00000003',
+          saved_at: '2026-11-20T02:00:00Z',
+          request: { ...SAMPLE_PLAN.request, craving: 'something warm' },
+        },
+      ],
+    })
+    renderApp({ stored: STORED, route: '/history' })
+
+    expect(await screen.findByText('2 plans')).toBeInTheDocument()
+    expect(screen.getAllByText('629 of 625 kcal')).toHaveLength(2)
+    expect(screen.getAllByText('Portions rebalanced')).toHaveLength(2)
+    // One heading per day.
+    expect(within(screen.getByRole('main')).getAllByRole('heading', { level: 2 })).toHaveLength(2)
+
+    await user.type(screen.getByRole('searchbox', { name: 'Search past plans' }), 'warm')
+    expect(screen.getAllByRole('link', { name: /Chicken Fried Rice/ })).toHaveLength(1)
+    expect(screen.getByRole('status')).toHaveTextContent('1 of 2 match “warm”.')
+    await user.type(screen.getByRole('searchbox'), 'zzz')
+    expect(screen.getByText('Nothing matches that search.')).toBeInTheDocument()
+  })
+
   it('says when a plan is no longer in history', async () => {
     serve({ plans: [STORED_PLAN] })
     renderApp({ stored: STORED, route: '/plans/req-gone-0001' })

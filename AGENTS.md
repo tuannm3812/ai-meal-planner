@@ -127,7 +127,8 @@ the hand-offs by watching the log; its header says how to run it.
   and plan are in `docs/superpowers/`.
 - 2026-11-22: every React colour lives in `frontend/src/theme/tokens.js`, and icons
   render through one `Icon` component (DEC-38). A guard test fails on raw hex, stock
-  Tailwind colours or a stray Lucide import. The frontend has 233 tests.
+  Tailwind colours or a stray icon-package import. Icons are Phosphor two-tone since
+  2026-11-24 (DEC-45). The frontend has 270 tests.
 - 2026-11-22: the API is live on Cloud Run (GCP free tier, project
   `ai-meal-planner-515508`, australia-southeast1), deployed by `deploy.yml` with
   its live check passing. `GCP_MAX_INSTANCES=1` caps it at one instance (#52), and

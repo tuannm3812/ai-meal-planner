@@ -16,7 +16,7 @@ import PriceTag from '../components/ui/PriceTag'
 import { pageShell, primaryButton, sectionHeading } from '../components/ui/styles'
 import { CRAVING_SUGGESTIONS } from '../features/craving/craving'
 import { planSummary } from '../features/meals/meals'
-import { MACROS } from '../features/plan/plan'
+import MacroBar from '../features/plan/charts/MacroBar'
 import MealGrid from '../features/meals/MealGrid'
 import { useMealLists } from '../features/meals/useMealLists'
 import WelcomePage from './WelcomePage'
@@ -222,18 +222,7 @@ function ContextColumn({ lists }) {
                 {latest.kcal} kcal
               </PriceTag>
             )}
-            {latest.split && (
-              <>
-                <span aria-hidden="true" className="flex h-2.5 overflow-hidden rounded-full">
-                  {MACROS.map((macro) => (
-                    <span className={macro.bar} key={macro.key} style={{ width: `${latest.split[macro.key]}%` }} />
-                  ))}
-                </span>
-                <p className="text-[13px] text-muted">
-                  {MACROS.map((macro) => `${macro.label} ${Math.round(latest.split[macro.key])}%`).join(' · ')}
-                </p>
-              </>
-            )}
+            {latest.split && <MacroBar split={latest.split} withKey />}
             <Link
               className="inline-flex min-h-[48px] items-center justify-between gap-3 rounded-2xl bg-tint px-4 font-semibold text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
               to={current ? '/plan' : `/plans/${encodeURIComponent(latest.requestId)}`}
@@ -307,6 +296,7 @@ function HomePage() {
             lists={lists}
             max={4}
             meals={lists.saved}
+            showKey={false}
           />
         </section>
         <section aria-labelledby="home-history" className="flex flex-col gap-4">
@@ -319,7 +309,7 @@ function HomePage() {
               See all
             </Link>
           </div>
-          <MealGrid empty="Plans you make show up here." lists={lists} max={4} meals={lists.history} />
+          <MealGrid empty="Plans you make show up here." lists={lists} max={4} meals={lists.history} showKey={false} />
         </section>
         </div>
       </div>

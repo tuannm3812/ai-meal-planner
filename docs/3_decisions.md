@@ -846,3 +846,16 @@ and a tabbed plan page. Rules out widening only (sides still empty on big screen
 FarmLens split screen (no map to fill the fixed half). Supersedes DEC-37's "Flat kitchen"
 look; DEC-38's single tokens file and Icon component stay.
 
+### DEC-45 — Phosphor two-tone icons, and white text on a deeper coral
+
+2026-11-24, Mike's choices while reviewing the Market Receipt pages.
+
+- **Icons.** He wanted a better-looking set than Lucide's thin outline. From Phosphor
+  two-tone, a heavier Lucide, and Phosphor bold or filled, he chose **Phosphor two-tone**
+  (`@phosphor-icons/react`, MIT): an outline with a soft fill of the same colour. The
+  solid weight marks a state that is on. `lucide-react` is removed. DEC-38's rule stands:
+  one `Icon` component, one folder that imports the package.
+- **Coral.** He found dark text on the orange blocks a poor pairing. Text-bearing coral
+  fills (the primary button, Save meal, coral price tags) now use `accent-fill` #D63C1A
+  with white text, 4.65:1. Bright coral #FF5A36 stays for the logo and never carries text.
+  This replaces DEC-44's "coral carries ink text".

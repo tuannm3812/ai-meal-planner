@@ -1,11 +1,11 @@
 // A price tag (DESIGN.md §6): a label with a pointed end and a punched hole.
 // It marks a plan's result or a number you would read off a shelf, always in
-// words. `accent` is coral with ink text; white on coral fails contrast.
+// words. `accent` is the deeper coral fill with white text (4.65:1).
 const TONES = {
   good: 'bg-success-bg text-success-fg',
   warn: 'bg-estimate-bg text-estimate-fg',
   info: 'bg-surface text-ink',
-  accent: 'bg-accent text-ink',
+  accent: 'bg-accent-fill text-white',
 }
 
 function PriceTag({ tone = 'info', children, className = '' }) {
