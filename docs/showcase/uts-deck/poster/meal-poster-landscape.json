@@ -31,12 +31,12 @@
       "value_label": "plans meet calorie and macro targets",
       "verdict": "One craving, one meal sized to you, plus a shopping list.",
       "lines": [
-        "Still **72 of 72** on pinned USDA data, and **143 of 144** on workout days. The API is **live on Cloud Run**."
+        "Still **72 of 72** on pinned USDA data, and **143 of 144** on workout days. The app is **live on Cloud Run**, with **Google sign-in**."
       ],
       "next": [
         [
-          "Accounts",
-          "sign in, plans that follow you"
+          "Ratings",
+          "your stars shape the next pick"
         ],
         [
           "Prices",

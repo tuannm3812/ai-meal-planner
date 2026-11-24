@@ -8388,3 +8388,8 @@ estimated, $24.50).
 
 Verified: deck builds 22 slides, `check_deck.py` reports no problems; both posters render
 with no automated problems.
+
+Follow-up, same day: Mike agreed to refresh the poster's Next box. Accounts have shipped (the live
+API reports `storage_backend: firestore`), so the poster's headline line now says the app is live
+"with Google sign-in", and Next lists Ratings, Prices and People. Both posters re-render with no
+automated problems.
