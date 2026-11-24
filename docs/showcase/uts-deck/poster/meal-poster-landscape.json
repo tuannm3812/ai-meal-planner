@@ -149,7 +149,10 @@
               "title": "3. Your plan",
               "text": "Charts and a **shopping list**."
             }
-          ]
+          ],
+          "vars": {
+            "ah": "50mm"
+          }
         }
       ]
     },
@@ -443,6 +446,13 @@
             "arrow2": "none",
             "n": 2,
             "m": 3
+          },
+          "store": {
+            "title": "Firestore",
+            "text": "Accounts, plan history",
+            "logos": [
+              "googlecloud"
+            ]
           }
         }
       ]

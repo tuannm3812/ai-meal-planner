@@ -187,7 +187,10 @@
           "title": "3. Your plan",
           "text": "Charts and a **shopping list**."
         }
-      ]
+      ],
+      "vars": {
+        "ah": "50mm"
+      }
     },
     {
       "type": "mrings",
@@ -229,7 +232,10 @@
             ]
           ]
         }
-      ]
+      ],
+      "vars": {
+        "ds": "48mm"
+      }
     },
     {
       "type": "divider",
@@ -410,7 +416,14 @@
           "value": "5 spans",
           "label": "per plan in Cloud Trace, no health data"
         }
-      ]
+      ],
+      "store": {
+        "title": "Firestore",
+        "text": "Accounts, plan history",
+        "logos": [
+          "googlecloud"
+        ]
+      }
     },
     {
       "type": "divider",

@@ -72,7 +72,7 @@ header .logo { height: 32mm; }
 
 /* mapp */
 .mapp .asteps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5mm; }
-.mapp .ashot { background: #FFFFFF; height: 40mm; overflow: hidden; border: .3mm solid var(--hair); }
+.mapp .ashot { background: #FFFFFF; height: var(--ah, 40mm); overflow: hidden; border: .3mm solid var(--hair); }
 .mapp .ashot img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
 .mapp .ahead { display: flex; align-items: center; gap: 2.5mm; margin-top: 3mm; }
 .mapp .aicon { width: 11mm; height: 11mm; }

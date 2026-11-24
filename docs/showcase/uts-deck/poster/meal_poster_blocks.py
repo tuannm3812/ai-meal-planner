@@ -170,7 +170,8 @@ def march(block, base, t):
         f'<span>{rich(c["label"], t)}</span></div></div>' for c in block['checks'])
     return card('march', block, head(block, t)
                 + f'<div class="agrid"><div class="col"><span class="lab">Clients</span>{clients}</div>'
-                f'<div class="arrow"></div><div class="col"><span class="lab">API</span>{node(block["api"], "node api")}</div>'
+                f'<div class="arrow"></div><div class="col"><span class="lab">API</span>{node(block["api"], "node api")}'
+                f'{node(block["store"], "node store") if block.get("store") else ""}</div>'
                 f'<div class="arrow"></div><div class="col svc"><span class="lab">{html.escape(block["service"])}</span>'
                 f'<div class="agents">{agents}</div></div></div><div class="mchecks">{checks}</div>' + note(block, t))
 

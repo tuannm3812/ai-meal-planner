@@ -8402,3 +8402,9 @@ is gone. Slide 15 moves accounts to done (23 Nov milestone) and lists ratings an
 now, prices and a dietitian next, people and a two-instance run later. Both posters' eyebrow reads
 "Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney", with the separate author
 line removed. Deck check and poster renders report no problems.
+
+Third follow-up: Mike meant the poster, not the deck cover. Both posters now fill gaps: the API
+column gains a Firestore node (accounts and plan history) under FastAPI, which also fills the empty
+space there, and the React app screenshots are taller (`--ah`: 50 mm on both posters, up from 40 mm),
+with the portrait's calorie rings at 48 mm. Both render with no automated problems. The new deck
+cover stays unless Mike asks to revert it.
