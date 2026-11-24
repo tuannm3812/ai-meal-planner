@@ -174,7 +174,7 @@ function PlanDetail({
                   {energy && (
                     <div className="mt-5 flex flex-wrap items-center gap-8">
                       <CalorieRing target={energy.target} total={energy.total} />
-                      {split && <MacroDonut grams={energy.grams} split={split} />}
+                      {split && <MacroDonut grams={energy.grams} legend={false} split={split} />}
                     </div>
                   )}
 
@@ -191,7 +191,7 @@ function PlanDetail({
                     {split ? (
                       <>
                         <div className="mt-4">
-                          <RangeBars split={split} />
+                          <RangeBars grams={energy?.grams} split={split} />
                         </div>
                         {outcome && (
                           <p className="mt-3 text-sm text-muted">

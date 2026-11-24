@@ -8670,3 +8670,12 @@ the bars, the helper blocks are a lot of text, and why were the plans' numbers a
 
 Verified: vitest 270 of 270, eslint clean, `vite build` passes; screenshots at 1,440 and
 390 px with no horizontal scroll.
+
+## 2026-11-24 — Claude — fewer macro legends
+
+Mike found the legends repeated. Lists now show one colour key above the cards or rows
+(`MacroKey`), not one under every bar; Home shows it once, in the latest-plan card. On the
+plan page the donut drops its side legend and the three readings carry the grams, so each
+macro's name, grams and share appear once.
+
+Verified: vitest 270 of 270, eslint clean, `vite build` passes.

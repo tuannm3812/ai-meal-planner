@@ -222,7 +222,7 @@ function ContextColumn({ lists }) {
                 {latest.kcal} kcal
               </PriceTag>
             )}
-            {latest.split && <MacroBar split={latest.split} />}
+            {latest.split && <MacroBar split={latest.split} withKey />}
             <Link
               className="inline-flex min-h-[48px] items-center justify-between gap-3 rounded-2xl bg-tint px-4 font-semibold text-ink hover:ring-2 hover:ring-cobalt focus:outline-none focus-visible:ring-2 focus-visible:ring-ink"
               to={current ? '/plan' : `/plans/${encodeURIComponent(latest.requestId)}`}
@@ -296,6 +296,7 @@ function HomePage() {
             lists={lists}
             max={4}
             meals={lists.saved}
+            showKey={false}
           />
         </section>
         <section aria-labelledby="home-history" className="flex flex-col gap-4">
@@ -308,7 +309,7 @@ function HomePage() {
               See all
             </Link>
           </div>
-          <MealGrid empty="Plans you make show up here." lists={lists} max={4} meals={lists.history} />
+          <MealGrid empty="Plans you make show up here." lists={lists} max={4} meals={lists.history} showKey={false} />
         </section>
         </div>
       </div>

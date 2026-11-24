@@ -3,7 +3,7 @@ import { AMDR_PERCENT, MACROS, inRange } from '../plan'
 // Three readings side by side: each macro's share of the calories, with a
 // scale that shades its recommended range and marks where the meal sits.
 // The verdict is the service's, never read from these scales.
-function RangeBars({ split }) {
+function RangeBars({ split, grams = null }) {
   return (
     <div className="grid gap-y-5 md:grid-cols-3 md:divide-x md:divide-line">
       {MACROS.map((macro) => {
@@ -15,6 +15,9 @@ function RangeBars({ split }) {
             <p className="flex items-center gap-2 text-sm font-semibold text-ink">
               <span aria-hidden="true" className={`h-3 w-3 rounded ${macro.bar}`} />
               {macro.label}
+              {typeof grams?.[macro.key] === 'number' && (
+                <span className="ml-auto font-mono font-bold text-ink">{Math.round(grams[macro.key])} g</span>
+              )}
             </p>
             <p className="mt-1 flex flex-wrap items-baseline gap-x-2">
               <strong className="font-display text-[30px] font-extrabold leading-none text-ink">
