@@ -164,7 +164,7 @@ export function profileToRequest(profile) {
 }
 
 // The workout fields, sent only when the person gave them.
-function workoutToRequest(profile) {
+export function workoutToRequest(profile) {
   if (profile.workout === 'rest') return { duration_minutes: 0 }
   if (profile.workout !== 'trained') return {}
   const heartRate = String(profile.heartRate ?? '').trim()

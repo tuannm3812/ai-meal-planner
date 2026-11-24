@@ -6,21 +6,11 @@ import CaloriesTab from '../features/calories/CaloriesTab'
 
 // The calorie model on its own (docs/8_design.md §7 question 7), now a tab of
 // its own in the shell (DEC-44) instead of a button inside Profile.
-// The estimate's goal names differ from the profile's.
-const GOAL = { lose: 'weight_loss', maintain: 'maintain', gain: 'muscle_gain' }
-
 function CaloriesPage() {
   const { hasProfile, profile } = usePlannerContext()
-  const initial = hasProfile
-    ? {
-        age: profile.age,
-        sex: profile.sex,
-        heightCm: profile.heightCm,
-        weightKg: profile.weightKg,
-        activity: profile.activity,
-        goal: GOAL[profile.goal],
-      }
-    : {}
+  // The form starts from the whole profile, today's workout included, so its
+  // numbers match the plan page's for the same details.
+  const initial = hasProfile ? profile : {}
   return (
     <main className={`${pageShell} flex flex-col gap-5 py-10`}>
       <div>
