@@ -85,8 +85,8 @@ header .logo { height: 32mm; }
 .mrings .donut { position: relative; width: var(--ds, 40mm); height: var(--ds, 40mm); }
 .mrings .donut svg { width: 100%; height: 100%; display: block; }
 .mrings .dc { position: absolute; inset: 0; display: grid; place-content: center; text-align: center; }
-.mrings .dc b { font-size: 22pt; color: var(--ink); line-height: 1; }
-.mrings .dc span { font-size: 18pt; }
+.mrings .dc b { font-size: var(--dcs, 22pt); color: var(--ink); line-height: 1; }
+.mrings .dc span { font-size: var(--dcl, 18pt); }
 .mrings .rgtext > b { display: block; font-size: 22pt; color: var(--ink); margin-bottom: 2mm; }
 .mrings .rgtext strong { color: var(--acc); }
 .mrings .rkey { display: grid; gap: 1mm; justify-items: start; text-align: left; }
@@ -98,7 +98,7 @@ header .logo { height: 32mm; }
 .mresults .ctitle, .mfunnel .ctitle { font-size: 18pt; font-weight: 700; color: var(--ink); margin-bottom: 2mm; }
 .mresults .rbars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
 .mresults .rbar { display: flex; flex-direction: column; text-align: center; position: relative; }
-.mresults .rcol { height: 48mm; display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch;
+.mresults .rcol { height: var(--rch, 48mm); display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch;
   border-bottom: .5mm solid var(--ink); }
 .mresults .rcol i { display: block; }
 .mresults .rv { font-size: 48pt; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 1.5mm; }

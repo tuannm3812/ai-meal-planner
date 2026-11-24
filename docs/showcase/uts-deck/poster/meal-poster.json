@@ -1,5 +1,5 @@
 {
-  "eyebrow": "Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney",
+  "eyebrow": "",
   "title": "AI Meal Planner",
   "subtitle": "What should I eat tonight? One craving in, one meal sized to you, and the shopping list ready.",
   "logo": "logo-lockup.svg",
@@ -20,7 +20,7 @@
     "margin_mm": 18,
     "gap_mm": 5
   },
-  "footer": "AI Meal Planner · Manh Tuan (Mike) Nguyen  Code: github.com/tuannm3812/ai-meal-planner  Live API: Cloud Run, Sydney  A study project, not medical advice.",
+  "footer": "AI Meal Planner   Code, tests and every number: github.com/tuannm3812/ai-meal-planner   Nutrition: USDA FoodData Central and local reference tables   A planning aid, not medical advice.",
   "blocks": [
     {
       "type": "ptake",
@@ -423,6 +423,10 @@
         "logos": [
           "googlecloud"
         ]
+      },
+      "vars": {
+        "n": 2,
+        "cols": "84mm 10mm 100mm 10mm 1fr"
       }
     },
     {
@@ -486,5 +490,6 @@
     "auto",
     "auto",
     "auto"
-  ]
+  ],
+  "authors": "Manh Tuan (Mike) Nguyen | TD School, University of Technology Sydney"
 }

@@ -8408,3 +8408,11 @@ column gains a Firestore node (accounts and plan history) under FastAPI, which a
 space there, and the React app screenshots are taller (`--ah`: 50 mm on both posters, up from 40 mm),
 with the portrait's calorie rings at 48 mm. Both render with no automated problems. The new deck
 cover stays unless Mike asks to revert it.
+
+Fourth follow-up: the name and school now sit under the title and subtitle as the author line
+(no eyebrow, no `authors_top`). The footer follows Mike's other posters (Cultural Blend, NSW fire):
+project name, the one code link, the data source and the disclaimer, without the name, Cloud Run or a
+second link already shown above it. Portrait architecture: the four planning stages are a 2 x 2 grid
+and the client and API columns are wider, so the boxes fill instead of leaving white below.
+Landscape: bigger plates (38 mm), the rings at 30 mm with 18 pt centre text, results bars at 42 mm and
+app shots at 44 mm to make room for the author line. Both render with no automated problems.
